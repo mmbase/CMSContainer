@@ -4,14 +4,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <head>
-<cmscedit:head title="changelanguage.title">
-	<script>
-		function messageAndRefresh() {
-			top.location.href = "../index.jsp";
-		}
-	</script>
-</cmscedit:head>
-<body onload="messageAndRefresh()">
-</body>
+	<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<title><fmt:message key="changelanguage.title" /></title>
+</head>
+
+
+<script>
+	function messageAndRefresh() {
+		alert('<fmt:message key="changelanguage.succeeded" />')
+		top.location.href = "../index.jsp";
+	}
+</script>
+      <body onload="messageAndRefresh()">
+      </body>
 </html:html>
 </mm:content>

@@ -19,37 +19,50 @@ package com.finalist.pluto.portalImpl.core;
 import org.apache.pluto.om.window.PortletWindow;
 import org.apache.pluto.services.information.ResourceURLProvider;
 
-public class ResourceURLProviderImpl implements ResourceURLProvider {
+public class ResourceURLProviderImpl implements ResourceURLProvider
+{
 
-   private String stringUrl = "";
-   private String base = "";
+    private String stringUrl = "";
+    private String base = "";
 
+    public ResourceURLProviderImpl(DynamicInformationProviderImpl provider,
+                                   PortletWindow portletWindow)
+    {
+//        this.base = PortalURL.getBaseURLexcludeContext();
+    }
 
-   public ResourceURLProviderImpl(DynamicInformationProviderImpl provider, PortletWindow portletWindow) {
-      // this.base = PortalURL.getBaseURLexcludeContext();
-   }
+    // ResourceURLProvider implementation.
 
+    public void setAbsoluteURL(String path)
+    {
+        stringUrl = path;
+    }
+    
+    public void setFullPath(String path)
+    {
+        stringUrl = base + path;
+    }
+    
+    public String toString()
+    {
+/*
+        URL url = null;
 
-   // ResourceURLProvider implementation.
+        if (!"".equals(stringUrl))
+        {
+            try 
+            {
+                url = new URL(stringUrl);
+            } 
+            catch (MalformedURLException e) 
+            {
+                throw new java.lang.IllegalArgumentException("A malformed URL has occured");                  
+            }
+        }
 
-   public void setAbsoluteURL(String path) {
-      stringUrl = path;
-   }
-
-
-   public void setFullPath(String path) {
-      stringUrl = base + path;
-   }
-
-
-   public String toString() {
-      /*
-       * URL url = null; if (!"".equals(stringUrl)) { try { url = new
-       * URL(stringUrl); } catch (MalformedURLException e) { throw new
-       * java.lang.IllegalArgumentException("A malformed URL has occured"); } }
-       * return ((url==null)?"":url.toString());
-       */
-      return stringUrl;
-   }
+        return ((url==null)?"":url.toString());
+*/
+        return stringUrl;
+    }
 
 }

@@ -12,15 +12,13 @@ import com.finalist.cmsc.security.UserRole;
  * @author Nico Klasens
  */
 public class ContentRolesRenderer extends RolesRenderer {
-
+    
    public ContentRolesRenderer(HttpServletRequest request, Cloud cloud, RolesForm form) {
-      super(request, cloud, form);
-   }
+        super(request, cloud, form);
+    }
 
-
-   @Override
    protected UserRole getRole(Node channel) {
-      return RepositoryUtil.getRole(user, channel);
+       return RepositoryUtil.getRole(user, channel);
    }
 
 }

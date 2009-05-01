@@ -1,6 +1,6 @@
-<%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp"
-%><c:choose>
+<%@page language="java" contentType="text/html;charset=utf-8" %>
+<%@include file="globals.jsp"  %>
+<c:choose>
 <c:when test="${done}">
 <script>
 	top.document.location = "../index.jsp";
@@ -11,9 +11,15 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="changelanguage.title" />
+<head>
+	<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<title><fmt:message key="changelanguage.title" /></title>
+</head>
+
 <body>
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
+	
+
       <div class="tabs">
          <!-- actieve TAB -->
          <div class="tab_active">
@@ -36,12 +42,12 @@
 	<html:form action="/editors/usermanagement/ChangeLanguageAction">
 	   <table class="formcontent">
 	      <tr>
-	         <td class="fieldname" nowrap width="100"><fmt:message key="changelanguage.language" /></td>
+	         <td class="fieldname" nowrap width="150"><fmt:message key="changelanguage.language" /></td>
 		      <td class="fieldname">
 		      	<html:select property="language">
+		      		<option value=""><fmt:message key="changelanguage.default" /></option>
 		      		<option value="en" <c:if test="${language == 'en'}">selected</c:if>><fmt:message key="changelanguage.english" /></option>
 		      		<option value="nl" <c:if test="${language == 'nl'}">selected</c:if>><fmt:message key="changelanguage.dutch" /></option>
-		      		<option value="zh" <c:if test="${language == 'zh'}">selected</c:if>><fmt:message key="changelanguage.chinese" /></option>
 		      	</html:select>
 		      </td>
 		   </tr>

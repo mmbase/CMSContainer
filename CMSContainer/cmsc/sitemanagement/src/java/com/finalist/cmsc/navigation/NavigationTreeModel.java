@@ -2,7 +2,6 @@ package com.finalist.cmsc.navigation;
 
 import org.mmbase.bridge.*;
 
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.tree.TreeModel;
 
 /**
@@ -15,60 +14,45 @@ import com.finalist.tree.TreeModel;
  */
 public class NavigationTreeModel implements TreeModel {
    private Node site;
-   private boolean strictPageOnly = false;
 
    public NavigationTreeModel(Node site) {
       this.site = site;
    }
    
-   public NavigationTreeModel(Node site, boolean strictPageOnly) {
-      this.site = site;
-      this.strictPageOnly = strictPageOnly;
-   }
-   
    /**
-    * @see com.finalist.tree.TreeModel#getRoot()
+    * @see javax.swing.tree.TreeModel#getRoot()
     */
    public Object getRoot() {
       return site;
    }
 
    /**
-    * @see com.finalist.tree.TreeModel#getChildCount(java.lang.Object)
+    * @see javax.swing.tree.TreeModel#getChildCount(java.lang.Object)
     */
    public int getChildCount(Object parent) {
-       if (strictPageOnly) {
-          return NavigationUtil.getStrictPageChildCount((Node) parent);
-       }
-       else {
-          return NavigationUtil.getChildCount((Node) parent);
-       }
+      return NavigationUtil.getChildCount((Node) parent);
    }
  
    /**
-    * @see com.finalist.tree.TreeModel#isLeaf(java.lang.Object)
+    * @see javax.swing.tree.TreeModel#isLeaf(java.lang.Object)
     */
    public boolean isLeaf(Object node) {
       return getChildCount(node) == 0;
    }
 
    /**
-    * @see com.finalist.tree.TreeModel#getChild(java.lang.Object, int)
+    * @see javax.swing.tree.TreeModel#getChild(java.lang.Object, int)
     */
    public Object getChild(Object parent, int index) {
       Node parentNode = (Node)parent;
       NodeList pages = NavigationUtil.getOrderedChildren(parentNode); 
-      if (strictPageOnly) {
-         pages = NavigationUtil.getStrictPageOrderedChildren(parentNode);
-      }
-      else {
-         pages = NavigationUtil.getOrderedChildren(parentNode); 
-      }
 
       if (pages.size() > index) {
          return pages.get(index);
       }
-      throw new IndexOutOfBoundsException("Child " + index + " is not available. Node " + parentNode.getNumber() + " has " + pages.size() + " children.");
+      else {
+          throw new IndexOutOfBoundsException("Child " + index + " is not available. Node " + parentNode.getNumber() + " has " + pages.size() + " children.");
+      }
    }
 
     public Object getNode(String id) {

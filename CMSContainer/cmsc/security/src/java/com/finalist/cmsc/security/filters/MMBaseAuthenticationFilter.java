@@ -20,12 +20,12 @@ import java.security.Principal;
  */
 public class MMBaseAuthenticationFilter implements Filter {
 
+   private String domainName;
+
    public void init(FilterConfig filterConfig) throws ServletException {
    }
 
-
-   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-         throws IOException, ServletException {
+   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
       if (servletRequest instanceof HttpServletRequest) {
          HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -37,8 +37,7 @@ public class MMBaseAuthenticationFilter implements Filter {
             remoteUser = ntlmPasswordAuthentication.getUsername();
          }
          HttpSession session = httpServletRequest.getSession(false);
-         boolean logout = session != null && session.getAttribute("logout") != null
-               && (Boolean) session.getAttribute("logout");
+         boolean logout = session != null && session.getAttribute("logout") != null && (Boolean) session.getAttribute("logout");
          if (remoteUser != null && !logout) {
             if (!CloudUtil.hasCloud(httpServletRequest)) {
                ThreadLocalAuthenticate.bind(remoteUser);
@@ -57,7 +56,6 @@ public class MMBaseAuthenticationFilter implements Filter {
 
       filterChain.doFilter(servletRequest, servletResponse);
    }
-
 
    public void destroy() {
 

@@ -9,13 +9,10 @@
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletConfig;
 
 import net.sf.mmapps.commons.bridge.CloudUtil;
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -37,225 +34,190 @@ import com.finalist.cmsc.services.Properties;
  * @author Wouter Heijke
  */
 public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminService {
-   private static Log log = LogFactory.getLog(SiteManagementAdminServiceMMBaseImpl.class);
+	private static Log log = LogFactory.getLog(SiteManagementAdminServiceMMBaseImpl.class);
 
-   private CloudProvider cloudProvider;
-   private SiteModelManager siteModelManager;
+	private CloudProvider cloudProvider;
+    private SiteModelManager siteModelManager;
 
+	public void init(ServletConfig config, Properties aProperties) throws Exception {
+		this.cloudProvider = CloudProviderFactory.getCloudProvider();
+		log.info("SiteManagementService STARTED");
+        
+        siteModelManager = new SiteModelManager();
+	}
 
-   @Override
-   public void init(ServletConfig config, Properties aProperties) throws Exception {
-      this.cloudProvider = CloudProviderFactory.getCloudProvider();
-      log.info("SiteManagementService STARTED");
+	public boolean setPortletParameter(String portletId, PortletParameter param) {
+		boolean result = false;
 
-      siteModelManager = new SiteModelManager();
-   }
+		if (param != null) {
+            String key = param.getKey();
+            String value = param.getValue();
+            Cloud cloud = getUserCloud();
 
+            PortletUtil.updatePortletParameter(cloud, portletId, key, value);
+            updatePageForPortlet(portletId);
 
-   @Override
-   public boolean setPortletParameter(String portletId, PortletParameter param) {
-      boolean result = false;
+            siteModelManager.clearPortlet(portletId);
+		}
+        
+		log.debug("++++ Param for portlet:'" + portletId + "'");
+		return result;
+	}
 
-      if (param != null) {
-         String key = param.getKey();
-         List<String> values = param.getValues();
-         Cloud cloud = getUserCloud();
+    public boolean setPortletNodeParameter(String portletId, PortletParameter param) {
+        boolean result = false;
 
-         PortletUtil.updatePortletParameter(cloud, portletId, key, values);
-         updatePageForPortlet(portletId);
-
-         siteModelManager.clearPortlet(portletId);
-      }
-
-      log.debug("++++ Param for portlet:'" + portletId + "'");
-      return result;
-   }
-
-
-   @Override
-   public boolean setPortletNodeParameter(String portletId, PortletParameter param) {
-      boolean result = false;
-
-      if (param != null) {
-         String key = param.getKey();
-         List<String> values = param.getValues();
-         Cloud cloud = getUserCloud();
-         List<Node> nodeList = new ArrayList<Node>();
-
-         Node node = null;
-         if (!values.isEmpty()) {
-            for (String value : values) {
-               if (StringUtils.isNotBlank(value)) {
-                  node = cloud.getNode(value);
-                  nodeList.add(node);
-               }
+        if (param != null) {
+            String key = param.getKey();
+            String value = param.getValue();
+            Cloud cloud = getUserCloud();
+            Node node = null;
+            if (!StringUtil.isEmptyOrWhitespace(value)) {
+                node = cloud.getNode(value);
             }
-         }
-         PortletUtil.updateNodeParameter(cloud, portletId, key, nodeList);
-         updatePageForPortlet(portletId);
+            PortletUtil.updatePortletParameter(cloud, portletId, key, node);
+            updatePageForPortlet(portletId);
 
-         siteModelManager.clearPortlet(portletId);
-      }
+            siteModelManager.clearPortlet(portletId);
+        }
 
-      log.debug("++++ Param for portlet:'" + portletId + "'");
-      return result;
-   }
+        log.debug("++++ Param for portlet:'" + portletId + "'");
+        return result;
+    }
 
+    
+	public boolean setPortletView(String portletId, String viewId) {
+		boolean result = true;
+		log.debug("setPortletView portlet='" + portletId + "' view='" + viewId + "'");
+		try {
+			Cloud cloud = getUserCloud();
+			PortletUtil.updatePortletView(cloud, portletId, viewId);
+            updatePageForPortlet(portletId);
 
-   @Override
-   public boolean setPortletView(String portletId, String viewId) {
-      boolean result = true;
-      log.debug("setPortletView portlet='" + portletId + "' view='" + viewId + "'");
-      try {
-         Cloud cloud = getUserCloud();
-         PortletUtil.updatePortletView(cloud, portletId, viewId);
-         updatePageForPortlet(portletId);
+            siteModelManager.clearPortlet(portletId);
+		} catch (Exception e) {
+			log.error("something went wrong while setting view (" + viewId + ") for portlet (" + portletId + ")");
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+			result = false;
+		}
 
-         siteModelManager.clearPortlet(portletId);
-      }
-      catch (Exception e) {
-         log.error("something went wrong while setting view (" + viewId + ") for portlet (" + portletId + ")");
-         if (log.isDebugEnabled()) {
-            log.debug(e);
-         }
-         result = false;
-      }
+		return result;
+	}
 
-      return result;
-   }
+    public boolean setPagePortlet(String pageId, String portletId, String id) {
+        boolean result = true;
+        log.debug("page:'" + pageId + "' portlet:'" + portletId + "'");
+        try {
+            Cloud cloud = getUserCloud();
+            PortletUtil.setPagePortlet(cloud, pageId, portletId, id);
+            updatePage(pageId);
 
+            siteModelManager.clearPage(pageId);
+        } catch (Exception e) {
+            log.error("something went wrong while adding portlet (" + portletId + ")", e);
+            result = false;
+        }
+        return result;
+    }
+    
+	public boolean createPagePortlet(String pageId, String portletName, String definitionName, String layoutId,
+			String viewId) {
+        boolean result = true;
+        log.debug("page:'" + pageId + "' portlet:'" + portletName +
+                  "' definition:'" + definitionName + "'");
+        try {
+    		Cloud cloud = getUserCloud();
+    		Node newNode = PortletUtil.createPortlet(cloud, portletName, definitionName, viewId);
+            PortletUtil.setPagePortlet(cloud, pageId, newNode, layoutId);
+            updatePage(pageId);
 
-   @Override
-   public boolean setPagePortlet(String pageId, String portletId, String id) {
-      boolean result = true;
-      log.debug("page:'" + pageId + "' portlet:'" + portletId + "'");
-      try {
-         Cloud cloud = getUserCloud();
-         PortletUtil.setPagePortlet(cloud, pageId, portletId, id);
-         updatePage(pageId);
+            siteModelManager.clearPage(pageId);
+        } catch (Exception e) {
+            log.error("something went wrong while creating portlet (" + portletName + ")", e);
+            result = false;
+        }
 
-         siteModelManager.clearItem(pageId);
-      }
-      catch (Exception e) {
-         log.error("something went wrong while adding portlet (" + portletId + ")", e);
-         result = false;
-      }
-      return result;
-   }
+        return result;
+	}
 
+	public void deletePagePortlet(Page page, Portlet portlet, String layoutId) {
+		if (page != null && portlet != null) {
+			PortletUtil.deletePagePortlet(getUserCloud(), page.getId(), portlet.getId(), layoutId);
+            updatePage(page.getId());
 
-   @Override
-   public boolean createPagePortlet(String pageId, String portletName, String definitionName, String layoutId,
-         String viewId) {
-      boolean result = true;
-      log.debug("page:'" + pageId + "' portlet:'" + portletName + "' definition:'" + definitionName + "'");
-      try {
-         Cloud cloud = getUserCloud();
-         Node newNode = PortletUtil.createPortlet(cloud, portletName, definitionName, viewId);
-         PortletUtil.setPagePortlet(cloud, pageId, newNode, layoutId);
-         updatePage(pageId);
+            siteModelManager.clearPage(page.getId());
+		}
+	}
 
-         siteModelManager.clearItem(pageId);
-      }
-      catch (Exception e) {
-         log.error("something went wrong while creating portlet (" + portletName + ")", e);
-         result = false;
-      }
+    public boolean mayEdit(Page page) {
+        boolean result = false;
+        try {
+            Cloud cloud = getUserCloud();
+            UserRole role = NavigationUtil.getRole(cloud, page.getId());
+            result = role != null && SecurityUtil.isWriter(role);
+        } catch (Exception e) {
+            log.error("something went wrong checking page edit (" + page.getId() + ")");
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+        }
+        return result;
+    }
 
-      return result;
-   }
-
-
-   @Override
-   public void deletePagePortlet(Page page, Portlet portlet, String layoutId) {
-      if (page != null && portlet != null) {
-         PortletUtil.deletePagePortlet(getUserCloud(), page.getId(), portlet.getId(), layoutId);
-         updatePage(page.getId());
-
-         siteModelManager.clearItem(page.getId());
-      }
-   }
-
-
-   @Override
-   public boolean mayEdit(NavigationItem item) {
-      boolean result = false;
-      try {
-         Cloud cloud = getUserCloud();
-         if (cloud != null) {
-             UserRole role = NavigationUtil.getRole(cloud, item.getId());
-             result = role != null && SecurityUtil.isWriter(role);
-         }
-      }
-      catch (Exception e) {
-         log.error("something went wrong checking page edit (" + item.getId() + ")");
-         if (log.isDebugEnabled()) {
-            log.debug(e);
-         }
-      }
-      return result;
-   }
-
-
-   @Override
-   public boolean mayEdit(Portlet portlet) {
-      boolean result = false;
-      try {
-         Cloud cloud = getUserCloud();
-         if (cloud != null) {
-             PortletDefinition definition = siteModelManager.getPortletDefinition(portlet.getDefinition());
-             if (definition.isSingle()) {
+    public boolean mayEdit(Portlet portlet) {
+        boolean result = false;
+        try {
+            Cloud cloud = getUserCloud();
+            PortletDefinition definition = 
+                siteModelManager.getPortletDefinition(portlet.getDefinition());
+            if (definition.isSingle()) {
                 result = cloud.getUser().getRank().getInt() >= definition.getRank();
-             }
-             else {
+            }
+            else {
                 result = true;
-             }
-         }
-      }
-      catch (Exception e) {
-         log.error("something went wrong checking portlet edit (" + portlet.getId() + ")");
-         if (log.isDebugEnabled()) {
-            log.debug(e);
-         }
-      }
-      return result;
-   }
+            }
+        } catch (Exception e) {
+            log.error("something went wrong checking portlet edit (" + portlet.getId() + ")");
+            if (log.isDebugEnabled()) {
+                log.debug(e);
+            }
+        }
+        return result;
+    }
 
-   protected void updatePageForPortlet(String portletId) {
-      Cloud cloud = getUserCloud();
-      Node portlet = cloud.getNode(portletId);
-      Node page = PagesUtil.getPage(portlet);
-      if (page != null) {
-         updatePage(page);
-      }
-   }
+    protected void updatePageForPortlet(String portletId) {
+        Cloud cloud = getUserCloud();
+        Node portlet = cloud.getNode(portletId);
+        Node page = PagesUtil.getPage(portlet);
+        if (page != null) {
+            updatePage(page);
+        }
+    }
 
-
-   protected void updatePage(String pageId) {
-      updatePage(Integer.parseInt(pageId));
-   }
-
-
-   protected void updatePage(int pageId) {
-      Cloud cloud = getUserCloud();
-      Node page = cloud.getNode(pageId);
-      updatePage(page);
-   }
-
-
-   protected void updatePage(Node page) {
-      // trigger system field processing like dates
-      page.commit();
-   }
-
-
-   protected Cloud getUserCloud() {
-      Cloud cloud = CloudUtil.getCloudFromThread();
-      if (cloud == null) {
-         log.warn("User cloud not found in thread; make sure that the user cloud is bound");
-         cloud = cloudProvider.getAdminCloud();
-      }
-      return cloud;
-   }
+    protected void updatePage(String pageId) {
+        updatePage(Integer.parseInt(pageId));
+    }
+        
+    protected void updatePage(int pageId) {
+        Cloud cloud = getUserCloud();
+        Node page = cloud.getNode(pageId);
+        updatePage(page);
+    }
+    
+    protected void updatePage(Node page) {
+        // trigger system field processing like dates
+        page.commit();
+    }
+    
+	protected Cloud getUserCloud() {
+        Cloud cloud = CloudUtil.getCloudFromThread();
+        if (cloud == null) {
+            log.warn("User cloud not found in thread; make sure that the user cloud is bound");
+            cloud = cloudProvider.getAdminCloud();
+        }
+		return cloud;
+	}
 
 }

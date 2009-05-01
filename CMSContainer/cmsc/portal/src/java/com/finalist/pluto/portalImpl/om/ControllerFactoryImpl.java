@@ -27,23 +27,21 @@ import com.finalist.pluto.portalImpl.om.common.impl.UnmodifiableSet;
 
 public class ControllerFactoryImpl implements ControllerFactory {
 
-   // ControllerFactory implementation.
+	// ControllerFactory implementation.
 
-   public void init(javax.servlet.ServletConfig config, java.util.Map properties) throws Exception {
-   }
+	public void init(javax.servlet.ServletConfig config, java.util.Map properties) throws Exception {
+	}
 
+	// additional methods.
 
-   // additional methods.
+	public void destroy() throws Exception {
+	}
 
-   public void destroy() throws Exception {
-   }
-
-
-   public Controller get(Model model) {
-      if (model instanceof UnmodifiableSet) {
-         model = (Model) ((UnmodifiableSet) model).getModifiableSet();
-      }
-      return (Controller) model;
-   }
+	public Controller get(Model model) {
+		if (model instanceof UnmodifiableSet) {
+			model = (Model) ((UnmodifiableSet) model).getModifiableSet();
+		}
+		return (Controller) model;
+	}
 
 }
