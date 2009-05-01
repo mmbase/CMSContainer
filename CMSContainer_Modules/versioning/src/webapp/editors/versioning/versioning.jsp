@@ -52,7 +52,6 @@
                      <tr>
                         <th nowrap="true"><fmt:message key="versioning.date"/></th>
                         <th><fmt:message key="versioning.author"/></th>
-                        <th><fmt:message key="versioning.publish"/></th>
                         <th>&nbsp;</th>
                      </tr>
                   </thead>
@@ -72,8 +71,6 @@
                   <mm:node number="${author_number}" notfound="skipbody">
                      <mm:field name="firstname"/> <mm:field name="prefix"/>  <mm:field name="surname"/> (<mm:field name="username"/>)
                   </mm:node>
-               </td>
-               <td><mm:field name="publish"/>
                </td>
                <td>
                   <c:url value="/editors/versioning/RestoreAction.do" var="restoreUrl">

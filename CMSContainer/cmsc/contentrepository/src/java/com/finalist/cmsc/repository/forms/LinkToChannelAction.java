@@ -9,25 +9,20 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.repository.forms;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.*;
 
-import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
+import com.finalist.cmsc.struts.MMBaseFormlessAction;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
-import com.finalist.cmsc.struts.MMBaseFormlessAction;
+
+import java.util.*;
 
 public class LinkToChannelAction extends MMBaseFormlessAction {
 
@@ -46,28 +41,10 @@ public class LinkToChannelAction extends MMBaseFormlessAction {
          if (RepositoryUtil.isCreationChannel(objectNode, channelNode)) {
             NodeList contentchannels = RepositoryUtil.getContentChannelsForContent(objectNode);
             if (contentchannels.size() <= 1) {
-               List<NodeManager> types = AssetElementUtil.getAssetTypes(cloud);
-               List<String> hiddenTypes = AssetElementUtil.getHiddenAssetTypes();
-               boolean isAssetObject = false;
-               for (NodeManager manager : types) {
-                  String name = manager.getName();
-                  if (!hiddenTypes.contains(name)) {
-                     if(name.equals(objectNode.getNodeManager().getName())) {
-                        isAssetObject = true;
-                        break;
-                     }
-                  }
-               }
-               if (isAssetObject) { 
-                  RepositoryUtil.removeAssetFromChannel(objectNode, channelNode);
-                  RepositoryUtil.removeCreationRelForAsset(objectNode);
-                  RepositoryUtil.addAssetToChannel(objectNode, RepositoryUtil.getTrashNode(cloud));
-               }
-               else {
-                  RepositoryUtil.removeContentFromChannel(objectNode, channelNode);
-                  RepositoryUtil.removeCreationRelForContent(objectNode);
-                  RepositoryUtil.addContentToChannel(objectNode, RepositoryUtil.getTrash(cloud));
-               }
+               RepositoryUtil.removeContentFromChannel(objectNode, channelNode);
+               RepositoryUtil.removeCreationRelForContent(objectNode);
+               RepositoryUtil.addContentToChannel(objectNode, RepositoryUtil.getTrash(cloud));
+
                // unpublish and remove from workflow
                Publish.remove(objectNode);
                Workflow.remove(objectNode);

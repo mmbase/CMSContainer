@@ -376,28 +376,3 @@ function resetCalendar(calendarType,fieldName) {
       document.getElementById(fieldName).value='';
    }
 }
-
-function selectAssets(ele,type){
-    Data[type] = ele.value;
-}
-
-var Data = {
-    attachments: "",
-	images:"",
-	urls:""
-}
-
-function getAssets(type, channelid){    
-    //alert(Data[type]);
-	var iWidth=800; 
-    var iHeight=200;
-	var xposition = 0;
-            var yposition = 0;
-            if ((parseInt(navigator.appVersion) >= 4)) {
-                xposition = (screen.width-iWidth ) / 2;
-                yposition = (screen.height-iHeight - 25) / 2;
-            }
-	var url='../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assettypes='+type+'&strict='+type;
-	window.open(url, 
-	'contentselector', 'width=730,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,left='+xposition+',top='+yposition+',menubar=no');
-}

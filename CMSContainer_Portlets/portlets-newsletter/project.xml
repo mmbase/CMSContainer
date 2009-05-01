@@ -5,9 +5,27 @@
    <name>Newsletter bundle</name>
    <shortDescription>Newsletter bundle</shortDescription>
    <dependencies>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-contentrepository</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-sitemanagement</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
 	  <dependency>
          <groupId>finalist</groupId>
          <artifactId>cmsc-edit-webapp</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-contentrepository</artifactId>
          <version>${cmsc.version}</version>
          <type>jar</type>
       </dependency>
@@ -17,23 +35,99 @@
          <version>${cmsc.version}</version>
          <type>jar</type>
       </dependency>
-	  <!-- workflow -->
       <dependency>
          <groupId>finalist</groupId>
-         <artifactId>cmsc-portlets-login</artifactId>
+         <artifactId>cmsc-modules-publish-remote</artifactId>
          <version>${cmsc.version}</version>
          <type>jar</type>
       </dependency>
-	  <!-- hibernate -->
-	    <dependency>
-	        <groupId>hibernate</groupId>
-	        <artifactId>ejb3-persistence</artifactId>
-	        <version>3.0</version>
-	        <type>jar</type>
-	        <properties>
-	            <war.bundle>${war.bundle}</war.bundle>
-	        </properties>
-	    </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-contentrepository</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-portal</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-portlets</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-taglib</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>hibernate</groupId>
+         <artifactId>ejb3-persistence</artifactId>
+         <version>3.0</version>
+         <type>jar</type>
+         <properties>
+            <war.bundle>${war.bundle}</war.bundle>
+         </properties>
+      </dependency>
+<dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>ejb3-persistence</artifactId>
+      <version>3.0</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>3.2.5.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>3.3.1.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.3.0.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>3.0.0.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+      <dependency>
+         <groupId>acegisecurity</groupId>
+         <artifactId>acegi-security</artifactId>
+         <version>1.0.6</version>
+         <type>jar</type>
+         <properties>
+            <war.bundle>${war.bundle}</war.bundle>
+         </properties>
+      </dependency>
       <!-- Spring dependencies -->
       <dependency>
          <groupId>springframework</groupId>
@@ -62,15 +156,6 @@
             <war.bundle>${war.bundle}</war.bundle>
          </properties>
       </dependency>
-      <dependency>
-         <groupId>acegisecurity</groupId>
-         <artifactId>acegi-security</artifactId>
-         <version>1.0.6</version>
-         <type>jar</type>
-         <properties>
-            <war.bundle>${war.bundle}</war.bundle>
-         </properties>
-      </dependency>
       <!-- XStream dependencies -->
       <dependency>
          <groupId>com.thoughtworks.xstream</groupId>
@@ -86,6 +171,19 @@
          <properties>
             <war.bundle>${war.bundle}</war.bundle>
          </properties>
+      </dependency>
+	  <!-- workflow -->
+	  <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-servicemanagement</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-portlets-login</artifactId>
+         <version>${cmsc.version}</version>
+         <type>jar</type>
       </dependency>
    </dependencies>
 </project>

@@ -45,7 +45,6 @@ public class ContentRepository {
             maxNumbers, year, month, day);
    }
 
-
    public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day) {
@@ -79,10 +78,14 @@ public class ContentRepository {
       return cService.getContentElement(elementId);
    }
 
+
    public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day , int maxDays) {
       return cService.getContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumbers, year, month, day, maxDays);
    }
+
+
+
 }

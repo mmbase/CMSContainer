@@ -17,7 +17,7 @@ public class UrlInitAction extends SearchInitAction {
       UrlForm searchForm = (UrlForm) actionForm;
 
       if (StringUtils.isEmpty(searchForm.getOrder())) {
-         searchForm.setOrder("title");
+         searchForm.setOrder("name");
       }
       return super.execute(actionMapping, actionForm, httpServletRequest, httpServletResponse);
    }

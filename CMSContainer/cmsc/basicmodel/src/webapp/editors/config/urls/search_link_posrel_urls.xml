@@ -6,24 +6,24 @@
 	<title xml:lang="zh">Url</title>
 
 	<item>
-		<field name="title" ftype="data">
-			<prompt xml:lang="en">Title</prompt>
-         	<prompt xml:lang="nl">Titel</prompt>
-         	<prompt xml:lang="zh">标题</prompt>
+		<field name="name">
+			<prompt xml:lang="en">Name</prompt>
+			<prompt xml:lang="nl">Naam</prompt>
+			<prompt xml:lang="zh">名称</prompt>
 		</field>
-		<field name="url" dtpattern="\://|javascript\:|mailto\:" dtrequired="true" ftype="data">
+		<field name="url" dtpattern="\://|javascript\:|mailto\:" dtrequired="true">
 			<prompt xml:lang="en">Url</prompt>
 			<prompt xml:lang="nl">Url</prompt>
 			<prompt xml:lang="zh">Url</prompt>
 		</field>
-		<field name="description" dtrequired="false" ftype="data" rows="3">
+		<field dtrequired="false" ftype="text" name="description" rows="3">
 			<prompt xml:lang="en">Description</prompt>
 			<prompt xml:lang="nl">Omschrijving</prompt>
 			<prompt xml:lang="zh">描述</prompt>
 		</field>
 	</item>
 
-	<command name="assetsselector" nodepath="urls" age="-1" fields="title,url,description">
+	<command name="search" nodepath="urls" age="-1" fields="name,url,description">
 		<prompt xml:lang="en">Search url</prompt>
 		<prompt xml:lang="nl">Zoek url</prompt>
 		<prompt xml:lang="zh">查找Url</prompt>
@@ -31,13 +31,13 @@
 			<name xml:lang="en">Name / Description</name>
 			<name xml:lang="nl">Naam / Omschrijving</name>
 			<name xml:lang="zh">名称 / 描述</name>
-			<search-fields>[title]|[description]</search-fields>
+			<search-fields>[name]|[description]</search-fields>
 		</search-filter>
 		<search-filter>
 			<name xml:lang="en">Name contains</name>
 			<name xml:lang="nl">Naam bevat</name>
 			<name xml:lang="zh">名称包含</name>
-			<search-fields>[title]</search-fields>
+			<search-fields>[name]</search-fields>
 		</search-filter>
 		<search-filter>
 			<name xml:lang="en">Url contains</name>
@@ -53,7 +53,7 @@
 		</search-filter>
 	</command>
 	
-   <command name="startwizard" inline="true" wizardname="config/urls/urls" objectnumber="new">
+	<command name="insert" objectnumber="new">
 		<prompt xml:lang="en">New</prompt>
 		<prompt xml:lang="nl">Nieuw</prompt>
 		<prompt xml:lang="zh">新建</prompt>
@@ -62,6 +62,7 @@
 	<action type="create">
 		<relation destinationtype="urls" role="posrel">
 			<field name="pos">{sum(//relation[@role='posrel' and @lastitem='true']/object[@type='urls']/../field[@name='pos'])+{$pos}}</field>
+			<object type="urls" />
 		</relation>
 	</action>
 </list>

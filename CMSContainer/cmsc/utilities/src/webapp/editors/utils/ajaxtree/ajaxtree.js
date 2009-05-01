@@ -307,11 +307,7 @@ AjaxTreeAction.prototype.buildChildren = function(request) {
 }
 
 AjaxTreeAction.prototype.errorRequest = function(request) {
-   if (request.status == 401 /* unauthorized */) {
-      window.location = '../login.jsp?reason=failed';
-   } else {
-      alert(request.responseText);
-   }
+	alert(request.responseText);
 }
 
 AjaxTreeAction.prototype.createTree = function(treeXml) {
