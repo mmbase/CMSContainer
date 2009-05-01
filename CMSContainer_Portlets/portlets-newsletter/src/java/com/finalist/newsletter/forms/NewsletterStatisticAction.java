@@ -90,7 +90,7 @@ public class NewsletterStatisticAction extends MappingDispatchAction {
          request.setAttribute("newsletterName", transToNewsName(request, newsletterService, newsletterId));
          request.setAttribute("result", result);
       } else if (!isAll && !hasDate && !isDetail) {
-         result = service.statisticSummaryByNewsletter(newsletterId);
+         result = service.StatisticSummaryByNewsletter(newsletterId);
          request.setAttribute("result", result);
          request.setAttribute("newsletterName", transToNewsName(request, newsletterService, newsletterId));
       } else if (isAll && !hasDate && !isDetail) {
@@ -101,7 +101,7 @@ public class NewsletterStatisticAction extends MappingDispatchAction {
          request.setAttribute("result", result);
       } else if (!isAll && hasDate && isDetail) {
          List<StatisticResult> records = service
-                  .statisticDetailByNewsletterPeriod(newsletterId, startDate,
+                  .StatisticDetailByNewsletterPeriod(newsletterId, startDate,
                            endDate);
          transferShowingFromDB(records, newsletterService);
          request.setAttribute("records", addPagingCondition(request, records, holder));

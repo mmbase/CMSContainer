@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
 <%@include file="globals.jsp"%>
-<%@page import="com.finalist.cmsc.util.ServerUtil"%>
+<%@page import="com.finalist.cmsc.navigation.ServerUtil"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -69,10 +69,6 @@
                <li class="advancedpublish">
                   <c:url var="publishQueueUrl" value="/editors/maintenance/staging/remove-publishqueue.jsp"/>
                   <a href="${publishQueueUrl}" target="rightpane"><fmt:message key="maintenance.publish.remove-publishqueue" /></a>
-               </li>
-               <li class="advancedpublish">
-                  <c:url var="repairStagingUrlsUrl" value="/editors/maintenance/richtext/repair-staging-urls.jsp"/>
-                  <a href="${repairStagingUrlsUrl}" target="rightpane"><fmt:message key="maintenance.richtext.repairStagingUrls" /></a>
                </li>
             <% } %>
          </mm:haspage>

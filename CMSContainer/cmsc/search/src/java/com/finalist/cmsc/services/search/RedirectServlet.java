@@ -21,11 +21,10 @@ import org.mmbase.servlet.BridgeServlet;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
@@ -193,12 +192,6 @@ public class RedirectServlet extends BridgeServlet {
         @Override
         public String getServletPath() {
             return pagePath;
-        }
-        
-        @Override
-        public StringBuffer getRequestURL() {
-          String webapp = HttpUtil.getWebappUri(this);
-          return new StringBuffer(webapp).append(pagePath.substring(1));
         }
     }
 }

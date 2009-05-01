@@ -26,7 +26,6 @@ import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class SearchServiceMMBaseImpl extends SearchService {
 

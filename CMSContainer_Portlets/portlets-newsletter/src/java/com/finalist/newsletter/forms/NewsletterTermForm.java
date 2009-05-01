@@ -3,10 +3,10 @@ package com.finalist.newsletter.forms;
 import org.apache.struts.action.ActionForm;
 
 /**
- * newsletter term form
- *
- * @author Lisa
- */
+  *
+  * newsletter term form
+  * @author Lisa
+  */
 public class NewsletterTermForm extends ActionForm {
 
    private static final long serialVersionUID = 1L;
@@ -25,7 +25,8 @@ public class NewsletterTermForm extends ActionForm {
    }
 
    /**
-    * @param name the name to set
+    * @param name
+    *           the name to set
     */
    public void setName(String name) {
       this.name = name;
@@ -39,7 +40,8 @@ public class NewsletterTermForm extends ActionForm {
    }
 
    /**
-    * @param number the number to set
+    * @param number
+    *           the number to set
     */
    public void setNumber(String number) {
       this.number = number;
@@ -53,22 +55,19 @@ public class NewsletterTermForm extends ActionForm {
    }
 
    /**
-    * @param offset the offset to set
+    * @param offset
+    *           the offset to set
     */
    public void setOffset(String offset) {
       this.offset = offset;
    }
 
-   /**
-    * reset the name
-    */
+   /** reset the name */
    public void reset() {
       name = null;
    }
 
-   /**
-    * reset all
-    */
+   /** reset all */
    public void clear() {
       name = null;
       offset = null;

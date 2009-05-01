@@ -40,19 +40,18 @@ public class InstallAction extends Command {
 
    private static Logger logger = Logger.getLogger(InstallAction.class);
 
-   public InstallAction() {
-
+   public InstallAction(){
+      
    }
-
-   public InstallAction(RequestContext request, SimpleHash context) {
+   
+   public InstallAction(RequestContext request,SimpleHash context) {
       this.request = request;
       this.context = context;
    }
-
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    public void welcome() throws Exception {
       this.checkLanguage();
@@ -74,9 +73,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    public void doInstall() throws Exception {
       Connection conn = null;
@@ -136,20 +135,20 @@ public class InstallAction extends Command {
 
       simpleConnection.releaseConnection(conn);
 
-      // JForumExecutionContext.setRedirect(this.request.getContextPath() + "/install/install"
-      //       + SystemGlobals.getValue(ConfigKeys.SERVLET_EXTENSION)
-      //       + "?module=install&action=finished");
+   // JForumExecutionContext.setRedirect(this.request.getContextPath() + "/install/install"
+   //       + SystemGlobals.getValue(ConfigKeys.SERVLET_EXTENSION)
+   //       + "?module=install&action=finished");
 
    }
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    public void finished() throws Exception {
-      // this.setTemplateName(TemplateKeys.INSTALL_FINISHED);
+   // this.setTemplateName(TemplateKeys.INSTALL_FINISHED);
 
       this.context.put("clickHere", I18n.getMessage("Install.clickHere"));
       this.context.put("forumLink", this.getFromSession("forumLink"));
@@ -172,9 +171,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    public void checkInformation() throws Exception {
       //this.setTemplateName(TemplateKeys.INSTALL_CHECK_INFO);
@@ -230,26 +229,28 @@ public class InstallAction extends Command {
       //this.context.put("moduleAction", "install_check_info.htm");
    }
 
+
    /**
-    *@throws Exception
-    * @exception Exception  Description of Exception
+    *@throws Exception 
+    * @exception  Exception  Description of Exception
     *@see                   net.jforum.Command#list()
     */
+
 
    /**
     *@param  request        Description of Parameter
     *@param  response       Description of Parameter
     *@param  context        Description of Parameter
-    *@return Description of the Returned Value
-    *@exception Exception  Description of Exception
+    *@return                Description of the Returned Value
+    *@exception  Exception  Description of Exception
     *@see                   net.jforum.Command#process()
     */
 
    /**
-    * Gets the FromSession attribute of the InstallAction object
+    *  Gets the FromSession attribute of the InstallAction object
     *
-    * @param key Description of Parameter
-    * @return The FromSession value
+    *@param  key  Description of Parameter
+    *@return      The FromSession value
     */
    private String getFromSession(String key) {
       return (String) this.request.getSessionContext().getAttribute(key);
@@ -257,9 +258,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws IOException Description of Exception
+    *@exception  IOException  Description of Exception
     */
    private void checkLanguage() throws IOException {
       String lang = this.request.getParameter("l");
@@ -278,7 +279,7 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     */
    private void error() {
       this.setTemplateName(TemplateKeys.INSTALL_ERROR);
@@ -286,7 +287,7 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     */
    private void removeUserConfig() {
       File f = new File(SystemGlobals.getValue(ConfigKeys.INSTALLATION_CONFIG));
@@ -302,7 +303,7 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     */
    private void doFinalSteps() {
       try {
@@ -350,13 +351,13 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    private void configureSystemGlobals() throws Exception {
       SystemGlobals.setValue(ConfigKeys.USER_HASH_SEQUENCE, MD5.crypt(this.getFromSession("dbPassword")
-               + System.currentTimeMillis()));
+            + System.currentTimeMillis()));
 
       SystemGlobals.setValue(ConfigKeys.FORUM_LINK, this.getFromSession("forumLink"));
       SystemGlobals.setValue(ConfigKeys.HOMEPAGE_LINK, this.getFromSession("siteLink"));
@@ -369,11 +370,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param conn Description of Parameter
-    * @return Description of the Returned Value
-    * @throws Exception Description of Exception
+    *@param  conn           Description of Parameter
+    *@return                Description of the Returned Value
+    *@exception  Exception  Description of Exception
     */
    private boolean importTablesData(Connection conn) throws Exception {
       boolean status = true;
@@ -383,11 +384,11 @@ public class InstallAction extends Command {
       String dbType = this.getFromSession("database");
 
       List statements = ParseDBDumpFile.parse(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR)
-               + "/database/"
-               + dbType
-               + "/" + dbType + "_data_dump.sql");
+            + "/database/"
+            + dbType
+            + "/" + dbType + "_data_dump.sql");
 
-      for (Iterator iter = statements.iterator(); iter.hasNext();) {
+      for (Iterator iter = statements.iterator(); iter.hasNext(); ) {
          String query = (String) iter.next();
 
          if (query == null || "".equals(query.trim())) {
@@ -400,11 +401,13 @@ public class InstallAction extends Command {
 
          try {
             if (query.startsWith("UPDATE") || query.startsWith("INSERT")
-                     || query.startsWith("SET")) {
+                  || query.startsWith("SET")) {
                s.executeUpdate(query);
-            } else if (query.startsWith("SELECT")) {
+            }
+            else if (query.startsWith("SELECT")) {
                s.executeQuery(query);
-            } else {
+            }
+            else {
                throw new Exception("Invalid query: " + query);
             }
          }
@@ -426,11 +429,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param conn Description of Parameter
-    * @return Description of the Returned Value
-    * @throws Exception Description of Exception
+    *@param  conn           Description of Parameter
+    *@return                Description of the Returned Value
+    *@exception  Exception  Description of Exception
     */
    private boolean createTables(Connection conn) throws Exception {
       logger.info("Going to create tables...");
@@ -438,18 +441,19 @@ public class InstallAction extends Command {
 
       if ("postgresql".equals(dbType)) {
          this.dropPostgresqlTables(conn);
-      } else if ("oracle".equals(dbType)) {
+      }
+      else if ("oracle".equals(dbType)) {
          this.dropOracleTables(conn);
       }
 
       boolean status = true;
 
       List statements = ParseDBStructFile.parse(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR)
-               + "/database/"
-               + dbType
-               + "/" + dbType + "_db_struct.sql");
+            + "/database/"
+            + dbType
+            + "/" + dbType + "_db_struct.sql");
 
-      for (Iterator iter = statements.iterator(); iter.hasNext();) {
+      for (Iterator iter = statements.iterator(); iter.hasNext(); ) {
          String query = (String) iter.next();
 
          if (query == null || "".equals(query.trim())) {
@@ -479,18 +483,18 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param conn Description of Parameter
+    *@param  conn  Description of Parameter
     */
    private void dropOracleTables(Connection conn) {
       Statement s = null;
 
       try {
          List statements = ParseDBStructFile.parse(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR)
-                  + "/database/oracle/oracle_db_struct_drop.sql");
+               + "/database/oracle/oracle_db_struct_drop.sql");
 
-         for (Iterator iter = statements.iterator(); iter.hasNext();) {
+         for (Iterator iter = statements.iterator(); iter.hasNext(); ) {
             try {
                String query = (String) iter.next();
 
@@ -523,9 +527,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @return Description of the Returned Value
+    *@return    Description of the Returned Value
     */
    private boolean checkForWritableDir() {
       boolean canWriteToWebInf = this.canWriteToWebInf();
@@ -543,9 +547,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @return Description of the Returned Value
+    *@return    Description of the Returned Value
     */
    private boolean canWriteToWebInf() {
       return new File(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR) + "/modulesMapping.properties").canWrite();
@@ -553,9 +557,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @return Description of the Returned Value
+    *@return    Description of the Returned Value
     */
    private boolean canWriteToIndex() {
       return new File(SystemGlobals.getApplicationPath() + "/index.htm").canWrite();
@@ -563,9 +567,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    private void configureJDBCConnection() throws Exception {
       String username = this.getFromSession("dbUser");
@@ -578,7 +582,7 @@ public class InstallAction extends Command {
 
       Properties p = new Properties();
       p.load(new FileInputStream(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR)
-               + "/database/" + type + "/" + type + ".properties"));
+            + "/database/" + type + "/" + type + ".properties"));
 
       // Write database information to the respective file
       p.setProperty(ConfigKeys.DATABASE_CONNECTION_HOST, host);
@@ -591,7 +595,7 @@ public class InstallAction extends Command {
 
       try {
          fos = new FileOutputStream(SystemGlobals.getValue(ConfigKeys.CONFIG_DIR)
-                  + "/database/" + type + "/" + type + ".properties");
+               + "/database/" + type + "/" + type + ".properties");
          p.store(fos, null);
       }
       catch (Exception e) {
@@ -604,7 +608,7 @@ public class InstallAction extends Command {
       }
 
       // Proceed to SystemGlobals / jforum-custom.conf configuration
-      for (Enumeration e = p.keys(); e.hasMoreElements();) {
+      for (Enumeration e = p.keys(); e.hasMoreElements(); ) {
          String key = (String) e.nextElement();
          SystemGlobals.setValue(key, p.getProperty(key));
       }
@@ -619,11 +623,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param from Description of Parameter
-    * @param to   Description of Parameter
-    * @throws Exception Description of Exception
+    *@param  from           Description of Parameter
+    *@param  to             Description of Parameter
+    *@exception  Exception  Description of Exception
     */
    private void copyFile(String from, String to) throws Exception {
       FileChannel source = new FileInputStream(new File(from)).getChannel();
@@ -636,10 +640,10 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @return Description of the Returned Value
-    * @throws Exception Description of Exception
+    *@return                Description of the Returned Value
+    *@exception  Exception  Description of Exception
     */
    private Connection configureDatabase() throws Exception {
       String database = this.getFromSession("database");
@@ -649,11 +653,12 @@ public class InstallAction extends Command {
 
       if ("JDBC".equals(connectionType)) {
          implementation = "yes".equals(this.getFromSession("usePool")) && !"hsqldb".equals(database)
-                  ? "net.jforum.PooledConnection"
-                  : "net.jforum.SimpleConnection";
+               ? "net.jforum.PooledConnection"
+               : "net.jforum.SimpleConnection";
 
          this.configureJDBCConnection();
-      } else {
+      }
+      else {
          isDs = true;
          implementation = "net.jforum.DataSourceConnection";
          SystemGlobals.setValue(ConfigKeys.DATABASE_DATASOURCE_NAME, this.getFromSession("dbdatasource"));
@@ -667,7 +672,7 @@ public class InstallAction extends Command {
       int fileChangesDelay = SystemGlobals.getIntValue(ConfigKeys.FILECHANGES_DELAY);
       if (fileChangesDelay > 0) {
          FileMonitor.getInstance().addFileChangeListener(new SystemGlobalsListener(),
-                  SystemGlobals.getValue(ConfigKeys.INSTALLATION_CONFIG), fileChangesDelay);
+               SystemGlobals.getValue(ConfigKeys.INSTALLATION_CONFIG), fileChangesDelay);
       }
 
       Connection conn = null;
@@ -677,7 +682,8 @@ public class InstallAction extends Command {
 
          if (!isDs) {
             s = new SimpleConnection();
-         } else {
+         }
+         else {
             s = new DataSourceConnection();
          }
 
@@ -696,9 +702,9 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @throws Exception Description of Exception
+    *@exception  Exception  Description of Exception
     */
    private void restartSystemGlobals() throws Exception {
       String appPath = SystemGlobals.getApplicationPath();
@@ -712,11 +718,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param conn Description of Parameter
-    * @return Description of the Returned Value
-    * @throws Exception Description of Exception
+    *@param  conn           Description of Parameter
+    *@return                Description of the Returned Value
+    *@exception  Exception  Description of Exception
     */
    private boolean updateAdminPassword(Connection conn) throws Exception {
       logger.info("Going to update the administrator's password");
@@ -741,30 +747,30 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param conn Description of Parameter
-    * @throws Exception Description of Exception
+    *@param  conn           Description of Parameter
+    *@exception  Exception  Description of Exception
     */
    private void dropPostgresqlTables(Connection conn) throws Exception {
       String[] tables = {"jforum_banlist", "jforum_banlist_seq", "jforum_categories",
-               "jforum_categories_order_seq", "jforum_categories_seq", "jforum_config",
-               "jforum_config_seq", "jforum_forums", "jforum_forums_seq", "jforum_groups",
-               "jforum_groups_seq", "jforum_posts", "jforum_posts_seq", "jforum_posts_text",
-               "jforum_privmsgs", "jforum_privmsgs_seq", "jforum_privmsgs_text",
-               "jforum_ranks", "jforum_ranks_seq", "jforum_role_values", "jforum_roles",
-               "jforum_roles_seq", "jforum_search_results", "jforum_search_topics",
-               "jforum_search_wordmatch", "jforum_search_words", "jforum_search_words_seq", "jforum_sessions",
-               "jforum_smilies", "jforum_smilies_seq", "jforum_themes", "jforum_themes_seq",
-               "jforum_topics", "jforum_topics_seq", "jforum_topics_watch", "jforum_user_groups",
-               "jforum_users", "jforum_users_seq", "jforum_vote_desc", "jforum_vote_desc_seq",
-               "jforum_vote_results", "jforum_vote_voters", "jforum_words", "jforum_words_seq",
-               "jforum_karma_seq", "jforum_karma", "jforum_bookmarks_seq", "jforum_bookmarks",
-               "jforum_quota_limit", "jforum_quota_limit_seq", "jforum_extension_groups_seq",
-               "jforum_extension_groups", "jforum_extensions_seq", "jforum_extensions",
-               "jforum_attach_seq", "jforum_attach", "jforum_attach_desc_seq", "jforum_attach_desc",
-               "jforum_attach_quota_seq", "jforum_attach_quota", "jforum_banner", "jforum_banner_seq",
-               "jforum_forums_watch"};
+            "jforum_categories_order_seq", "jforum_categories_seq", "jforum_config",
+            "jforum_config_seq", "jforum_forums", "jforum_forums_seq", "jforum_groups",
+            "jforum_groups_seq", "jforum_posts", "jforum_posts_seq", "jforum_posts_text",
+            "jforum_privmsgs", "jforum_privmsgs_seq", "jforum_privmsgs_text",
+            "jforum_ranks", "jforum_ranks_seq", "jforum_role_values", "jforum_roles",
+            "jforum_roles_seq", "jforum_search_results", "jforum_search_topics",
+            "jforum_search_wordmatch", "jforum_search_words", "jforum_search_words_seq", "jforum_sessions",
+            "jforum_smilies", "jforum_smilies_seq", "jforum_themes", "jforum_themes_seq",
+            "jforum_topics", "jforum_topics_seq", "jforum_topics_watch", "jforum_user_groups",
+            "jforum_users", "jforum_users_seq", "jforum_vote_desc", "jforum_vote_desc_seq",
+            "jforum_vote_results", "jforum_vote_voters", "jforum_words", "jforum_words_seq",
+            "jforum_karma_seq", "jforum_karma", "jforum_bookmarks_seq", "jforum_bookmarks",
+            "jforum_quota_limit", "jforum_quota_limit_seq", "jforum_extension_groups_seq",
+            "jforum_extension_groups", "jforum_extensions_seq", "jforum_extensions",
+            "jforum_attach_seq", "jforum_attach", "jforum_attach_desc_seq", "jforum_attach_desc",
+            "jforum_attach_quota_seq", "jforum_attach_quota", "jforum_banner", "jforum_banner_seq",
+            "jforum_forums_watch"};
 
       for (int i = 0; i < tables.length; i++) {
          Statement s = conn.createStatement();
@@ -784,11 +790,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Adds a feature to the ToSessionAndContext attribute of the InstallAction
-    * object
+    *  Adds a feature to the ToSessionAndContext attribute of the InstallAction
+    *  object
     *
-    * @param key   The feature to be added to the ToSessionAndContext attribute
-    * @param value The feature to be added to the ToSessionAndContext attribute
+    *@param  key    The feature to be added to the ToSessionAndContext attribute
+    *@param  value  The feature to be added to the ToSessionAndContext attribute
     */
    private void addToSessionAndContext(String key, String value) {
       this.request.getSessionContext().setAttribute(key, value);
@@ -797,11 +803,11 @@ public class InstallAction extends Command {
 
 
    /**
-    * Description of the Method
+    *  Description of the Method
     *
-    * @param value      Description of Parameter
-    * @param useDefault Description of Parameter
-    * @return Description of the Returned Value
+    *@param  value       Description of Parameter
+    *@param  useDefault  Description of Parameter
+    *@return             Description of the Returned Value
     */
    private String notNullDefault(String value, String useDefault) {
       if (value == null || value.trim().equals("")) {
@@ -810,15 +816,14 @@ public class InstallAction extends Command {
 
       return value;
    }
-
    public void ignoreAction() {
       super.ignoreAction();
-   }
+  }
 
    @Override
    public void list() {
       // TODO Auto-generated method stub
-
+      
    }
 
 }

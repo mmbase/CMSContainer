@@ -53,7 +53,7 @@
 			</properties>
 		</dependency>
 <!--begin dependency by JForum portlet. -->
-<!--
+<!-- 
         <dependency>
             <groupId>freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -136,6 +136,6 @@
                 <war.bundle>${war.bundle}</war.bundle>
            </properties>
         </dependency>
-        -->
+ -->
 	</dependencies>
 </project>

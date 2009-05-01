@@ -16,5 +16,4 @@ public interface NewsletterStatisticService {
    public StatisticResult statisticSummery();
 
    public StatisticResult statisticSummeryPeriod(String start, String end) throws ServiceException;
-   
 }

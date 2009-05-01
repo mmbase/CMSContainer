@@ -19,10 +19,10 @@ import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.beans.om.ContentElement;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.services.contentrepository.ContentRepository;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * Portlet to edit content elements
@@ -251,13 +251,21 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       }
    }
 
-
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,
          boolean useLifecycleBool, int maxDays) {
       int totalItems = ContentRepository.countContentElements(channel, contenttypes, orderby, direction,
             useLifecycleBool, archive, offset, elementsPerPage, year, month, day, maxDays);
       return totalItems;
+   }
+
+
+   protected List<ContentElement> getContentElements(RenderRequest req, List<String> contenttypes, String channel,
+         int offset, String orderby, String direction, String archive, int elementsPerPage, int year, int month,
+         int day, boolean useLifecycleBool) {
+      List<ContentElement> elements = ContentRepository.getContentElements(channel, contenttypes, orderby, direction,
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day);
+      return elements;
    }
    
    protected List<ContentElement> getContentElements(RenderRequest req, List<String> contenttypes, String channel,
@@ -267,7 +275,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
             useLifecycleBool, archive, offset, elementsPerPage, year, month, day,maxDays);
       return elements;
    }
-   
    public int getOffset(int currentPage, int pageSize) {
       return ((currentPage - 1) * pageSize) + 1;
    }

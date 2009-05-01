@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE form-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <form-schema id="edit_pagealias">
    <title xml:lang="nl">Alias</title>
@@ -10,8 +10,8 @@
       <prompt xml:lang="nl">Titel</prompt>
       <prompt xml:lang="zh">标题</prompt>
    </field>
-   <field name="urlfragment"
-      dtpattern="^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,253}[a-zA-Z0-9]$">
+   <field name="urlfragment" dtmaxlength="40"
+      dtpattern="^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,38}[a-zA-Z0-9]$">
       <prompt xml:lang="en">URL-fragment</prompt>
       <prompt xml:lang="nl">URL-fragment</prompt>
       <prompt xml:lang="zh">URL片段</prompt>

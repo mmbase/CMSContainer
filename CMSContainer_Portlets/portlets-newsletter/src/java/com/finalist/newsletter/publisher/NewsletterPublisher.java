@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -34,8 +35,8 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.NewsletterSendFailException;
+import com.finalist.newsletter.domain.EditionStatus;
 import com.finalist.newsletter.domain.Newsletter;
 import com.finalist.newsletter.domain.Publication;
 import com.finalist.newsletter.domain.Subscription;
@@ -65,10 +66,11 @@ public class NewsletterPublisher {
          Node newsletterEditionNode = cloud.getNode(publication.getId());
          // if needed to prompt user this validate will be remove to Action
          String originalBody  = "";
+         String status = newsletterEditionNode.getStringValue("process_status");
          String static_html = null;
          if (newsletterEditionNode.getValueWithoutProcess("static_html") != null)
             static_html = (String)newsletterEditionNode.getValueWithoutProcess("static_html");
-         if (StringUtils.isEmpty(static_html)) {
+         if (EditionStatus.INITIAL.value().equals(status) && StringUtils.isEmpty(static_html)) {
             originalBody = getBody(publication, subscription);
          }
          else {
@@ -95,9 +97,7 @@ public class NewsletterPublisher {
          // setBody(publication, subscription, message);
          setTitle(message, newsletter.getTitle());
          // setMIME(message, subscription.getMimeType());
-         if(ServerUtil.isProduction()){
-            Transport.send(message);
-         }
+         Transport.send(message);
 
          log.debug(String.format("mail send! publication %s to %s in %s format", publication.getId(), subscription
                .getId(), subscription.getMimeType()));
@@ -115,12 +115,7 @@ public class NewsletterPublisher {
       Node newsletterPublicationNode = cloud.getNode(publication.getId());
       NodeList attachmentNodes = newsletterPublicationNode.getRelatedNodes("attachments");
       Multipart multipart = new MimeMultipart();
-      if("text/plain".equals(subscription.getMimeType())){
-         setBody(publication, subscription, multipart,originalBody);
-      }
-      else {
-         setMultipartBody(publication, subscription, multipart,originalBody);
-      }
+      setBody(publication, subscription, multipart,originalBody);
       setAttachment(multipart, attachmentNodes, MimeType.attachment);
       NodeList imageNodes = newsletterPublicationNode.getRelatedNodes("images");
       setAttachment(multipart, imageNodes, MimeType.image);
@@ -138,31 +133,6 @@ public class NewsletterPublisher {
          String type=subscription.getMimeType();
          mdp.setContent(originalBody, type+";charset=utf-8");
          mdp.addHeader("Content-Transfer-Encoding", "quoted-printable");
-         multipart.addBodyPart(mdp);
-      }
-      catch (MessagingException e) {
-         log.error(e);
-      }
-   }
-
-   private void setMultipartBody(Publication publication, Subscription subscription, Multipart multipart,String originalBody) {
-      MimeBodyPart mdp = new MimeBodyPart();
-      Multipart subMultipart = new MimeMultipart("alternative");
-      MimeBodyPart textMdp = new MimeBodyPart();
-      MimeBodyPart htmlMdp = new MimeBodyPart();
-      try {
-         
-         String url = NewsletterUtil.getTermURL(publication.getUrl(), subscription.getTerms(), publication.getId());
-         textMdp.setText(url);
-         subMultipart.addBodyPart(textMdp);
-         
-         String type=subscription.getMimeType();
-         htmlMdp.addHeader("Content-Transfer-Encoding", "quoted-printable");
-         htmlMdp.setContent(originalBody, type+";charset=utf-8");
-         subMultipart.addBodyPart(htmlMdp);
-         
-         mdp.setContent(subMultipart);
-         
          multipart.addBodyPart(mdp);
       }
       catch (MessagingException e) {
@@ -201,7 +171,7 @@ public class NewsletterPublisher {
       }
    }
 
-   private String getBody(Publication publication, Subscription subscription) {
+   private String getBody(Publication publication, Subscription subscription) throws MessagingException {
 
       String url = NewsletterUtil.getTermURL(publication.getUrl(), subscription.getTerms(), publication.getId());
       ICache cache = null;
@@ -215,7 +185,7 @@ public class NewsletterPublisher {
       if ((subscription.getTerms() == null) || (subscription.getTerms().size() == 0) || !cache.contains(url)) {
          if (null != getPersonalise()) {
             content = getPersonalise().personalise(content, subscription, publication);
-            log.debug("the content sent is Personalized:" + content);
+            log.info("the content sended is Personalised :" + content);
          }else {
             log.info("url---->" + url);
             content = NewsletterGenerator.generate(url, subscription.getMimeType());
@@ -223,7 +193,7 @@ public class NewsletterPublisher {
          cache.add(url, content);
       } else {
          content = (String) cache.get(url);
-         log.debug("the content sent is from cache:" + content);
+         log.info("the content sended is from the cache" + content);
       }
       return content + "\n";
    }
@@ -246,6 +216,13 @@ public class NewsletterPublisher {
       InternetAddress senderAddress = new InternetAddress(emailFrom);
       senderAddress.setPersonal(nameFrom);
       message.setFrom(senderAddress);
+   }
+
+   private void setMIME(Message message, String mime) throws MessagingException {
+      message.setHeader("MIME-Version", "1.0");
+      message.setHeader("Content-Type", mime);
+      message.setHeader("X-Mailer", "Recommend-It Mailer V2.03c02");
+      message.setSentDate(new Date());
    }
 
    private void setTitle(Message message, String title)
@@ -297,16 +274,26 @@ public class NewsletterPublisher {
 
          String verpFrom = String.format("%s-%s@%s", sender[0], toEmail.replaceAll("@", "="), sender[1]);
          properties.put("mail.smtp.from", verpFrom);
+//         properties.put("mail.smtp.from", "dguo-mark.guo=gmail.com@cpier.pku.edu.cn");
+//         properties.put("mail.smtp.from", senderEmail);
          properties.putAll(session.getProperties());
 
+/*
+session = Session.getInstance(properties,
+new javax.mail.Authenticator() {
+   protected PasswordAuthentication getPasswordAuthentication() {
+      return new PasswordAuthentication("dguo@cpier.pku.edu.cn", "lgs9000");
+   }
+});
+*/
       }
       catch (NamingException e) {
          log.fatal("Configured dataSource '" + datasource + "' of context '" + context + "' is not a Session ");
       }
       return session;
    }
-   private static String getParameter(String name) {
 
+   private static String getParameter(String name) {
       Module sendmailModule = Module.getModule("sendmail");
       if (sendmailModule == null) {
          log

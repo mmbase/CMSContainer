@@ -19,7 +19,6 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class StatusCronJob extends AbstractCronJob implements CronJob {
 
@@ -75,10 +74,6 @@ public class StatusCronJob extends AbstractCronJob implements CronJob {
    @Override
    public void run() {
 
-      if (ServerUtil.isReadonly()) {
-         return;
-      }
-      
       long startTime = System.currentTimeMillis();
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeManager nodeManager = cloud.getNodeManager(TYPE_CONTENTELEMENT);
@@ -159,8 +154,8 @@ public class StatusCronJob extends AbstractCronJob implements CronJob {
                log.debug("Altered MMObjectNode " + objectNode.getNumber());
                resultOk++;
             }
-            else if (node != null) {
-                  log.debug("Node " + node.getNumber() + " is not a contentelement!");
+            else {
+               log.debug("Node " + node.getNumber() + " is not a contentelement!");
             }
          }
          catch (Exception e) {

@@ -16,8 +16,8 @@ import org.mmbase.bridge.NodeManager;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.navigation.PortletUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.cao.impl.NewsletterPublicationCAOImpl;
 import com.finalist.newsletter.domain.EditionStatus;
 import com.finalist.newsletter.domain.Newsletter;
@@ -144,9 +144,6 @@ public abstract class NewsletterPublicationUtil {
       Node node = relatedNewsletters.get(0);
       new POConvertUtils<Newsletter>().convert(newsletter, node);
       newsletter.setReplyAddress(node.getStringValue("replyto_mail"));
-      newsletter.setReplyName(node.getStringValue("replyto_name"));
-      newsletter.setFromAddress(node.getStringValue("from_mail"));
-      newsletter.setFromName(node.getStringValue("from_name"));
       pub.setNewsletter(newsletter);
 
       return pub;
@@ -182,7 +179,7 @@ public abstract class NewsletterPublicationUtil {
     * @throws MessagingException 
     */
    public static void freezeEdition(Node edition) throws MessagingException {
-      //publish(edition);
+      publish(edition);
       String static_html = getStaticHtml(edition.getNumber());
       edition.setStringValue("process_status", EditionStatus.FROZEN.value());
 //      edition.setValue("static_html", StringEscapeUtils.escapeHtml(static_html));

@@ -12,7 +12,6 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -27,25 +26,20 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.security.Authentication;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
 
 public abstract class AbstractLoginPortlet extends CmscPortlet{
-   
-   protected String DEFAULT_EMAIL_CONFIRM_TEMPLATE = "../templates/view/login/confirmation.txt";
+   protected String DEFAULT_EMAIL_CONFIRM_TEMPLATE_DIR = "../templates/view/login/confirmation.txt";
    protected static final String EMAIL_SUBJECT = "emailSubject";
    protected static final String EMAIL_TEXT = "emailText";
    protected static final String EMAIL_FROMEMAIL = "emailFromEmail";
    protected static final String EMAIL_FROMNAME = "emailFromName";
-   protected static final String REGISTRATIONPAGE = "registrationpage";
-   protected static final String REGISTRATIONPAGEPATH = "registrationpagepath";
-   protected static final String PAGE = "page";
-   public static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
+   
+   protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
    
    private static final Log log = LogFactory.getLog(AbstractLoginPortlet.class);
@@ -58,13 +52,7 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
       setAttribute(req, EMAIL_TEXT, preferences.getValue(EMAIL_TEXT,getConfirmationTemplate()));
       setAttribute(req, EMAIL_FROMEMAIL, preferences.getValue(EMAIL_FROMEMAIL,""));
       setAttribute(req, EMAIL_FROMNAME, preferences.getValue(EMAIL_FROMNAME,""));
-      String pageid = preferences.getValue(PAGE, null);
-      if (StringUtils.isNotEmpty(pageid)) {
-         String pagepath = SiteManagement.getPath(Integer.valueOf(pageid), true);
-         if (pagepath != null) {
-            setAttribute(req, "pagepath", pagepath);
-         }
-      }
+      
       super.doEditDefaults(req, res);
    }
    
@@ -73,50 +61,25 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
          ActionResponse response) throws PortletException, IOException {
       PortletPreferences preferences = request.getPreferences();
       String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
-      if (portletId != null) {
-         // get the values submitted with the form
-         setPortletNodeParameter(portletId, PAGE, request.getParameter(PAGE));
-         String registrationpage = request.getParameter(REGISTRATIONPAGE);
-         setPortletNodeParameter(portletId, REGISTRATIONPAGE, registrationpage);
-         if(StringUtils.isNotEmpty(registrationpage)){
-            Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-            String registrationpagepath = NavigationUtil.getNavigationItemUrl((HttpServletRequest)request, (HttpServletResponse)response, cloud.getNode(Integer.valueOf(registrationpage)));
-            if(registrationpagepath != null){
-               setPortletParameter(portletId, REGISTRATIONPAGEPATH, registrationpagepath);
-            }
-         } else {
-            setPortletParameter(portletId, REGISTRATIONPAGEPATH, "");
-         }
-         setPortletParameter(portletId, EMAIL_SUBJECT, request.getParameter(EMAIL_SUBJECT));
-         setPortletParameter(portletId, EMAIL_TEXT, request.getParameter(EMAIL_TEXT));
-         setPortletParameter(portletId, EMAIL_FROMEMAIL, request.getParameter(EMAIL_FROMEMAIL));
-         setPortletParameter(portletId, EMAIL_FROMNAME, request.getParameter(EMAIL_FROMNAME));
-      }
+      setPortletParameter(portletId, EMAIL_SUBJECT, request.getParameter(EMAIL_SUBJECT));
+      setPortletParameter(portletId, EMAIL_TEXT, request.getParameter(EMAIL_TEXT));
+      setPortletParameter(portletId, EMAIL_FROMEMAIL, request.getParameter(EMAIL_FROMEMAIL));
+      setPortletParameter(portletId, EMAIL_FROMNAME, request.getParameter(EMAIL_FROMNAME));
+
       super.processEditDefaults(request, response);
    }
-   
-   protected String getEmailBody(String emailText,ActionRequest request, 
+   protected String getEmailBody(String emailText,ActionRequest request,
          Authentication authentication, Person person) {
-
       Cloud cloud = getCloudForAnonymousUpdate(false);
       String pageId = request.getParameter("page");
-
-      if (cloud.hasNode(pageId)) {
-         String url = getConfirmationLink(cloud, Integer.parseInt(pageId));
-         String confirmUrl = HttpUtil.getWebappUri((HttpServletRequest) request)
-               + "login/confirm.do?s=" + authentication.getId() + url;
-         
-         return formatConfirmationText(emailText, authentication, person, confirmUrl);
-      }
-      return null;
-   }
-
-   protected String formatConfirmationText(String emailText, Authentication authentication, Person person, String confirmUrl) {
+      String url = getConfirmationLink(cloud,pageId);
+      String confirmUrl = HttpUtil.getWebappUri((HttpServletRequest) request)
+            + "login/confirm.do?s=" + authentication.getId() + url;
+      
       return String.format(emailText == null?getConfirmationTemplate():emailText, authentication
             .getUserId(), authentication.getPassword(), person.getFirstName(),
             person.getInfix(), person.getLastName(), confirmUrl);
    }
-
    protected Cloud getCloudForAnonymousUpdate(boolean isRemote) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       if (isRemote) {
@@ -124,8 +87,10 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
       }
       return cloud;
    }
+   
 
-   protected String getConfirmationLink(Cloud cloud, int pageNode) {
+
+   protected String getConfirmationLink(Cloud cloud,String pageId) {
       String link = null;
       NodeList portletDefinations = SearchUtil.findNodeList(cloud,
             "portletdefinition", "definition", this.getPortletName());
@@ -138,12 +103,7 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
             "definitionrel", SearchUtil.SOURCE);
       Node portlet = null;
       Relation relation = null;
-      Node page = cloud.getNode(pageNode);
-      
-      if (page == null) {
-         return null;
-      }
-      
+      Node page = cloud.getNode(Integer.parseInt(pageId));
       NodeList nodeList = page.getRelatedNodes("portlet", "portletrel", SearchUtil.DESTINATION);
       for (int i =0 ; i < nodeList.size() ; i++) {
          for (int j = 0 ; j < portlets.size() ; j++) {
@@ -152,48 +112,37 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
             }
          }
       }
-      
       relation = RelationUtil.getRelation(cloud.getRelationManager("portletrel"), page.getNumber(), portlet.getNumber());
-      link = "&pn=" + page.getNumber();  
-      if (relation != null) {
-         String name = relation.getStringValue("name");
-         if (name != null) {
-            link += "&nm=" + name;
+      if (page != null) {
+         link = "&pn=" + page.getNumber();  
+         if (relation != null) {
+            String name = relation.getStringValue("name");
+            if (name != null) {
+               link += "&nm=" + name;
+            }
          }
       }
-      
       return link;
    }
-   
    protected String getConfirmationTemplate() {
       InputStream is = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream(getEmailConfirmTemplate());
-
+            .getResourceAsStream(DEFAULT_EMAIL_CONFIRM_TEMPLATE_DIR);
       if (is == null) {
          throw new NullPointerException(
                "The confirmation template file confirmation.txt in directory 'templates/view/login' does't exist.");
       }
-      
       BufferedReader reader = new BufferedReader(new InputStreamReader(is));
       StringBuilder sb = new StringBuilder();
-      
+      String strLine;
       try {
-         String strLine;
          while ((strLine = reader.readLine()) != null) {
             sb.append(strLine + "\n");
          }
-         is.close();
       } catch (IOException e) {
-         log.error("error happened when reading email template", e);
+         log.error("error happen when reading email template", e);
       }
-
       return sb.toString();
    }
-   
-   protected String getEmailConfirmTemplate() {
-      return DEFAULT_EMAIL_CONFIRM_TEMPLATE;
-   }
-   
    protected boolean isEmailAddress(String emailAddress) {
       if (emailAddress == null) {
          return false;

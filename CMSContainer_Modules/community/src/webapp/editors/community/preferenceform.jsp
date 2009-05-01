@@ -1,4 +1,4 @@
- <mm:hasrank minvalue="siteadmin">
+ <mm:hasrank minvalue="administrator">
    <ul class="shortcuts">
     <li class="new" style="text-decoration: none;"><a href="#" onclick="create()" ><fmt:message key="community.preference.new" /></a>
     </li>

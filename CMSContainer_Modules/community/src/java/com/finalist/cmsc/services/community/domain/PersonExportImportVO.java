@@ -10,8 +10,6 @@ public class PersonExportImportVO extends Person {
    private Authentication authentication;
 
    private List < Preference > preferences;
-   
-   private Long authorityId = new Long(0);
 
    public Authentication getAuthentication() {
       return authentication;
@@ -32,16 +30,5 @@ public class PersonExportImportVO extends Person {
    public Long getAuthenticationId() {
       return authentication.getId();
    }
-   public void clean(){
-      this.authentication = null;
-      this.preferences.clear();
-   }
 
-   public Long getAuthorityId() {
-      return authorityId;
-   }
-
-   public void setAuthorityId(Long authorityId) {
-      this.authorityId = authorityId;
-   }
 }

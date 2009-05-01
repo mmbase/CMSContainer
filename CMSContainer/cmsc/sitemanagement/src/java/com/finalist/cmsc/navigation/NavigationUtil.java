@@ -23,7 +23,6 @@ import com.finalist.cmsc.mmbase.TreeUtil;
 import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.security.forms.RolesInfo;
 import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
 public final class NavigationUtil {
 
@@ -317,16 +316,6 @@ public final class NavigationUtil {
         return children;
     }
 
-    /**
-     * Get sorted StrictPage child nodes
-     * 
-     * @param parentNode
-     *           - parent
-     * @return list of sorted children
-     */
-    public static NodeList getStrictPageOrderedChildren(Node parentNode) {
-       return SearchUtil.findRelatedOrderedNodeList(parentNode, "page", NAVREL, NAVREL + ".pos");
-    }
 
     public static NodeList getOrderedChildren(Node parentNode) {
         return SearchUtil.findRelatedOrderedNodeList(parentNode, null, NAVREL, NAVREL + ".pos");
@@ -338,17 +327,6 @@ public final class NavigationUtil {
 
     public static int getChildCount(Node parent) {
         return TreeUtil.getChildCount(parent, "object", NAVREL);
-    }
-
-    /**
-     * Get number of strict page children
-     * 
-     * @param parent
-     *           - parent
-     * @return number of children
-     */
-    public static int getStrictPageChildCount(Node parent) {
-       return TreeUtil.getChildCount(parent, "page", NAVREL);
     }
 
     public static void movePage(Node sourcePage, Node destPage) {

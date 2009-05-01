@@ -15,7 +15,6 @@ import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.portalImpl.InternalDispatchNavigationRequest;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
