@@ -3,6 +3,8 @@ package com.finalist.cmsc.publish;
 import java.util.*;
 
 import org.mmbase.bridge.*;
+import org.mmbase.remotepublishing.PublishManager;
+import org.mmbase.remotepublishing.util.PublishUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.workflow.Workflow;
 
@@ -21,22 +23,36 @@ public class ChannelPublisher extends Publisher{
    }
 
    @Override
+   public void publish(Node node) {
+      PublishUtil.publishOrUpdateNode(cloud, node.getNumber());
+   }
+
+   @Override
    public void publish(Node channel, NodeList contentnodes) {
        List<Integer> relatedNodes = new ArrayList<Integer>();
        for (Iterator<Node> iterator = contentnodes.iterator(); iterator.hasNext();) {
            Node content = iterator.next();
-           if (isPublished(content)) {
+           if (PublishManager.isPublished(content)) {
                relatedNodes.add(content.getNumber());
            }
        }
-       if (!relatedNodes.isEmpty()) {
-           publishNode(channel, relatedNodes);
-       }
+      if (!relatedNodes.isEmpty()) {
+	       PublishUtil.publishOrUpdateRelations(cloud, channel.getNumber(), relatedNodes);
+	   }
        else {
            if (Workflow.isWorkflowElement(channel)) {
                Workflow.complete(channel);
             }
        }
    }
-
+   
+    @Override
+    public void remove(Node node) {
+        PublishUtil.removeFromQueue(node);
+    }
+    
+    @Override
+    public void unpublish(Node node) {
+        PublishUtil.removeNode(cloud, node.getNumber());
+    }
 }

@@ -1,11 +1,14 @@
 <%@page language="java" contentType="text/html; charset=utf-8" 
 %><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" 
-%><%@taglib uri="http://finalist.com/cmsc" prefix="cmsc" 
+%><%@taglib uri="http://finalist.com/csmc" prefix="cmsc" 
 %><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
-%><%@ taglib tagdir="/WEB-INF/tags/" prefix="cmscf" 
-%><mm:content type="text/html" encoding="UTF-8">
+%>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="cmscf" %>
+
+<mm:content type="text/html" encoding="UTF-8">
 <cmsc:location var="cur" sitevar="site" />
 <cmsc:screen>
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
@@ -25,11 +28,19 @@
 	<script src="<cmsc:staticurl page='/js/start.js' />" type="text/javascript"></script>
 	<script src="<cmsc:staticurl page='/js/nav.js' />" type="text/javascript"></script>
 	
-   <cmsc:google-analytics />
-   	
+	<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		var pageTracker = _gat._getTracker("UA-1766626-1");
+		pageTracker._initData();
+		pageTracker._trackPageview();
+	</script>
+	
 	<cmscf:editresources />
 </head>
-<body>
+	<body>
     <div id="houder">
     	<div id="header">
 	        <cmsc:insert-portlet layoutid="header" />
@@ -58,7 +69,7 @@
         	<cmsc:insert-portlet layoutid="footer" />
         </div>        
     </div><!-- /#houder -->
-</body>
+    </body>
 </html>
 </cmsc:screen>
 </mm:content>

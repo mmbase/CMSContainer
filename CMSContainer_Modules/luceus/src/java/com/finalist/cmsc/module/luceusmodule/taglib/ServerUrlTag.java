@@ -12,6 +12,7 @@ package com.finalist.cmsc.module.luceusmodule.taglib;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
@@ -25,35 +26,31 @@ import com.finalist.cmsc.module.luceusmodule.LuceusModule;
  * @author Wouter Heijke
  */
 public class ServerUrlTag extends LuceusmoduleTag {
-   private static Log log = LogFactory.getLog(ServerUrlTag.class);
+	private static Log log = LogFactory.getLog(ServerUrlTag.class);
 
+	@Override
+	public void doTag() throws JspException, IOException {
+		PageContext ctx = (PageContext) getJspContext();
+		HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
 
-   @Override
-   public void doTag() throws IOException {
-      PageContext ctx = (PageContext) getJspContext();
-      HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
+		LuceusModule module = getModule();
+		if (module != null) {
+			String url = module.getServerUrl();
 
-      LuceusModule module = getModule();
-      if (module != null) {
-         String url = module.getServerUrl();
-
-         // handle result
-         if (var != null) {
-            // put in variable
-            if (url != null) {
-               request.setAttribute(var, url);
-            }
-            else {
-               request.removeAttribute(var);
-            }
-         }
-         else {
-            // write
-            ctx.getOut().print(url);
-         }
-      }
-      else {
-         log.warn("Luceusmodule not running");
-      }
-   }
+			// handle result
+			if (var != null) {
+				// put in variable
+				if (url != null) {
+					request.setAttribute(var, url);
+				} else {
+					request.removeAttribute(var);
+				}
+			} else {
+				// write
+				ctx.getOut().print(url);
+			}
+		} else {
+			log.warn("Luceusmodule not running");
+		}
+	}
 }

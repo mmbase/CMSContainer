@@ -21,13 +21,10 @@
 	 		<mm:node number="${param.number}" jspvar="channel">
             <p>
                <br/>
-               <b><fmt:message key="rights.groupson">
-               	    <fmt:param><mm:nodeinfo type="guitype"/></fmt:param>
-                      <fmt:param>
-			               <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
-			               <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
-                      </fmt:param>
-               </fmt:message></b>
+               <b><fmt:message key="rights.content.groupson" /> 
+               <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
+               <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
+               </b>: 
                <br/>
             </p>
             <div style="padding: 5px">
@@ -35,18 +32,18 @@
                   <mm:listnodes type="mmbasegroups" jspvar="group" orderby="name">
                      <c:choose>
                         <c:when test="${mode == 'page'}">
-                           <c:set var="role"><%=com.finalist.cmsc.navigation.NavigationUtil.getRole(group, channel).getRole().getName()%></c:set>
+                           <c:set var="rank"><%=com.finalist.cmsc.navigation.NavigationUtil.getRole(group, channel).getRole().getName()%></c:set>
                         </c:when>
                         <c:otherwise>
-                           <c:set var="role"><%=com.finalist.cmsc.repository.RepositoryUtil.getRole(group, channel).getRole().getName()%></c:set>
+                           <c:set var="rank"><%=com.finalist.cmsc.repository.RepositoryUtil.getRole(group, channel).getRole().getName()%></c:set>
                         </c:otherwise>
                      </c:choose>
                         
-                     <c:if test="${role != 'none'}">
+                     <c:if test="${rank != 'none'}">
                         <tr>
                            <td>
-                              <img src="<cmsc:staticurl page="/editors/gfx/icons/type/group_${role}.png"/>" alt="<fmt:message key="role.${role}" />" title="<fmt:message key="role.${role}" />" align="top"/>
-                              <font style="color: #999">(<fmt:message key="role.${role}" />)</font>
+                              <img src="<cmsc:staticurl page="/editors/gfx/icons/type/group_${rank}.png"/>" alt="<fmt:message key="role.${rank}" />" title="<fmt:message key="role.${rank}" />" align="top"/>
+                              <font style="color: #999">(<fmt:message key="role.${rank}" />)</font>
                            </td>
                            <td>
                               <mm:field name="name"/>
@@ -56,34 +53,31 @@
                   </mm:listnodes>
                </table>
             </div>
-            <p>
-               <br/>
-               <b><fmt:message key="rights.userson" >
-                        <fmt:param><mm:nodeinfo type="guitype"/></fmt:param>
-                        <fmt:param>
-                           <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
-                           <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
-                        </fmt:param>
-               </fmt:message></b>
-               <br/>
-            </p>
+				<p>
+					<br/>
+					<b><fmt:message key="rights.content.userson" /> 
+					<c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
+					<c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
+					</b>:	
+					<br/>
+				</p>
 				<div style="padding: 5px">
 					<table class="compact">
 						<mm:listnodes type="mmbaseusers" jspvar="user" orderby="username">
 							<c:choose>
 								<c:when test="${mode == 'page'}">
-									<c:set var="role"><%=com.finalist.cmsc.navigation.NavigationUtil.getUserRole(channel, user).getRole().getName()%></c:set>
+									<c:set var="rank"><%=com.finalist.cmsc.navigation.NavigationUtil.getUserRole(channel, user).getRole().getName()%></c:set>
 								</c:when>
 								<c:otherwise>
-									<c:set var="role"><%=com.finalist.cmsc.repository.RepositoryUtil.getUserRole(channel, user).getRole().getName()%></c:set>
+									<c:set var="rank"><%=com.finalist.cmsc.repository.RepositoryUtil.getUserRole(channel, user).getRole().getName()%></c:set>
 								</c:otherwise>
 							</c:choose>
-
-							<c:if test="${role != 'none'}">
+								
+							<c:if test="${rank != 'none'}">
 								<tr>
 									<td>
-										<img src="<cmsc:staticurl page="/editors/gfx/icons/type/user_${role}.png"/>" alt="<fmt:message key="role.${role}" />" title="<fmt:message key="role.${role}" />" align="top"/>
-										<font style="color: #999">(<fmt:message key="role.${role}" />)</font>
+										<img src="<cmsc:staticurl page="/editors/gfx/icons/type/user_${rank}.png"/>" alt="<fmt:message key="role.${rank}" />" title="<fmt:message key="role.${rank}" />" align="top"/>
+										<font style="color: #999">(<fmt:message key="role.${rank}" />)</font>
 									</td>
 									<td>
 										<mm:field name="username"/>

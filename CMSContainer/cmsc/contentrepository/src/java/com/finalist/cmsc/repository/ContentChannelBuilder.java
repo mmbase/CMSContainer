@@ -9,15 +9,18 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.repository;
 
-import java.util.LinkedHashMap;
+import com.finalist.cmsc.builders.ChannelBuilder;
 
-import com.finalist.cmsc.builders.TreeBuilder;
-
-public class ContentChannelBuilder extends TreeBuilder {
+public class ContentChannelBuilder extends ChannelBuilder {
 
     @Override
     protected String getNameFieldname() {
         return RepositoryUtil.TITLE_FIELD;
+    }
+    
+    @Override
+    protected String[] getFragmentFieldname() {
+        return RepositoryUtil.fragmentFieldnames;
     }
 
     @Override
@@ -26,23 +29,8 @@ public class ContentChannelBuilder extends TreeBuilder {
     }
 
     @Override
-    protected LinkedHashMap<String,String> getPathManagers() {
-        return RepositoryUtil.getTreeManagers();
-    }
-
-    @Override
-    protected String getFragmentField() {
-        return RepositoryUtil.FRAGMENT_FIELD;
-    }
-
-    @Override
-    protected boolean isRoot() {
-        return RepositoryUtil.CONTENTCHANNEL.equals(getTableName());
-    }
-
-    @Override
-    protected void registerTreeManager() {
-        RepositoryUtil.registerTreeManager(getTableName(), getFragmentField(), isRoot());
+    protected String[] getPathManagers() {
+        return RepositoryUtil.treeManagers;
     }
 
 }

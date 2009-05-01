@@ -12,16 +12,13 @@
 	<field name="description" />
 	<field name="inmenu" />
 	<field name="secure" />
-	
 	<field name="externalurl"/>
 	
 	<relation destination="images" role="namedrel" />
+	<relation destination="layout" role="allowrel" />
 	<relation destination="layout" role="layoutrel" />
-	<relation destination="stylesheet" role="stylerel" />
-<!--
 	<relation destination="page" role="navrel" />
 	<relation destination="portlet" role="portletrel" />
-	<relation destination="layout" role="allowrel" />
 	<relation destination="stylesheet" role="allowrel" />
- -->
+	<relation destination="stylesheet" role="stylerel" />
 </action>

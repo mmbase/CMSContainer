@@ -1,15 +1,15 @@
 Migration document:
 
 Part: core
-From version: 1.1
-To version: 1.2
+From versie: 1.1
+To versie: 1.2
 
 
 Execute the following steps below in the given order:
 
 
 Name: Create new column (modules) for properties
-Goal: So separate module specific properties can be stored
+Goal: So seperate module specific properties can be stored
 Type: sql-script
 --- Start script ---
 alter table mm_properties add column module varchar(255);
