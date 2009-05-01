@@ -14,13 +14,13 @@ import org.w3c.dom.NodeList;
 
 public class Parserfactory {
 
-    public Node creatNode(Document doc, HashMap<String, String> hs, Node node) {
+    public Node creatNode(Document doc, HashMap hs, Node node) {
         Node NewNode = null;
         String style = null;
-        Set<String> tag = hs.keySet();
-        Iterator<String> it = tag.iterator();
+        Set tag = hs.keySet();
+        Iterator it = tag.iterator();
         while (it.hasNext()) {
-            style = it.next();
+            style = it.next().toString();
             Element theNewNode = doc.createElement(style);
             NewNode = theNewNode.cloneNode(true);
             NewNode.appendChild(node.cloneNode(true));
@@ -29,7 +29,7 @@ public class Parserfactory {
     }
 
     public void process(Document doc, Node node, HashMap hs,Map mapping) {
-        HashMap<String, String> styleMap = new HashMap<String, String>();
+        HashMap styleMap = new HashMap();
         String nodeName = node.getNodeName();
         if (nodeName.equals("p")) {
             styleMap = changePnode(node, hs);
@@ -90,9 +90,9 @@ public class Parserfactory {
 		}
     }
 
-    public HashMap<String, String> changePnode(Node node, HashMap hs) {
+    public HashMap changePnode(Node node, HashMap hs) {
         String classStyle = null;
-        HashMap<String, String> styleHs = new HashMap<String, String>();
+        HashMap styleHs = new HashMap();
         if (node.getAttributes().getNamedItem("class") != null) {
             classStyle = node.getAttributes().getNamedItem("class").getNodeValue();
         }
@@ -104,8 +104,8 @@ public class Parserfactory {
         return styleHs;
     }
 
-    public HashMap<String, String> changeSpannode(Node node, HashMap hs) {
-        HashMap<String, String> styleHs = new HashMap<String, String>();
+    public HashMap changeSpannode(Node node, HashMap hs) {
+        HashMap styleHs = new HashMap();
         String classStyle = "";
         Node styleNode = node.getAttributes().getNamedItem("class");
         if (null != styleNode) {
@@ -118,8 +118,8 @@ public class Parserfactory {
         }
         return styleHs;
     }
-    public HashMap<String, String> getTagFormStyle(String style) {
-        HashMap<String, String> tag = new HashMap<String, String>();
+    public HashMap getTagFormStyle(String style) {
+        HashMap tag = new HashMap();
         if (style != null) {
             String bold = String.valueOf(style.charAt(0));
             String italics = String.valueOf(style.charAt(1));

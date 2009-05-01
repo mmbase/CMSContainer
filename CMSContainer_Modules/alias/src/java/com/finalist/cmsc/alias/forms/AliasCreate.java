@@ -43,7 +43,6 @@ public class AliasCreate extends MMBaseFormlessAction {
             NavigationUtil.appendChild(cloud, parentpage, ewnodelastedited);
 
             addToRequest(request, "showalias", ewnodelastedited);
-            addToRequest(request, "refreshChannels", "true");
             if(!stacked) {
 	            return mapping.findForward(SUCCESS);
             }

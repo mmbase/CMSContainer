@@ -1,7 +1,9 @@
 package com.finalist.cmsc.directreaction.taglib;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.finalist.cmsc.directreaction.util.*;
@@ -17,7 +19,7 @@ public class GetTag extends SimpleTagSupport {
    private String var;
 
 
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       List<Reaction> reactions = ReactionUtil.getReactions(number);
       getJspContext().setAttribute(var, reactions);
    }

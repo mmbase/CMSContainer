@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.NodeManager;
@@ -17,7 +18,9 @@ import org.mmbase.storage.search.implementation.BasicFieldValueConstraint;
 import org.mmbase.storage.search.implementation.NodeSearchQuery;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.finalist.cmsc.richtext.RichText;
 
@@ -29,7 +32,7 @@ import com.finalist.cmsc.richtext.RichText;
 public class RichTextBuilder extends MMObjectBuilder {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(RichTextBuilder.class.getName());
+   private static Logger log = Logging.getLoggerInstance(RichTextBuilder.class.getName());
 
    /** list of html text fields to clean */
    protected List<String> htmlFields = new ArrayList<String>();
@@ -55,18 +58,19 @@ public class RichTextBuilder extends MMObjectBuilder {
 
       Map<String, String> map = getInitParameters("cmsc/richtext");
       String download = map.get("downloadImages");
-      if (StringUtils.isNotEmpty(download)) {
+      if (!StringUtil.isEmpty(download)) {
          downloadImages = Boolean.valueOf(download);
       }
       String resolve = map.get("resolveIds");
-      if (StringUtils.isNotEmpty(resolve)) {
+      if (!StringUtil.isEmpty(resolve)) {
          resolveIds = Boolean.valueOf(resolve);
       }
 
       Collection<CoreField> fields = getFields();
-      for (CoreField field : fields) {
+      for (Iterator<CoreField> iter = fields.iterator(); iter.hasNext();) {
+         CoreField field = iter.next();
          DataType dataType = field.getDataType();
-         while (StringUtils.isEmpty(dataType.getName())) {
+         while (StringUtil.isEmpty(dataType.getName())) {
             dataType = dataType.getOrigin();
          }
 
@@ -82,7 +86,7 @@ public class RichTextBuilder extends MMObjectBuilder {
 
    /**
     * override this method if you have your own rich text fields!
-    *
+    * 
     * @param name
     * @return
     */
@@ -95,7 +99,7 @@ public class RichTextBuilder extends MMObjectBuilder {
       if (inlinerelBuilder == null) {
          inlinerelBuilder = mmb.getMMObject(RichText.INLINEREL_NM);
          if (inlinerelBuilder == null) {
-            throw new IllegalStateException("Builder '" + RichText.INLINEREL_NM + "' does not exist.");
+            throw new RuntimeException("Builder '" + RichText.INLINEREL_NM + "' does not exist.");
          }
          inlinerelNumber = mmb.getRelDef().getNumberByName(RichText.INLINEREL_NM);
       }
@@ -103,7 +107,7 @@ public class RichTextBuilder extends MMObjectBuilder {
       if (imagerelBuilder == null) {
          imagerelBuilder = mmb.getMMObject(RichText.IMAGEINLINEREL_NM);
          if (imagerelBuilder == null) {
-            throw new IllegalStateException("Builder '" + RichText.IMAGEINLINEREL_NM + "' does not exist.");
+            throw new RuntimeException("Builder '" + RichText.IMAGEINLINEREL_NM + "' does not exist.");
          }
          imagerelNumber = mmb.getRelDef().getNumberByName(RichText.IMAGEINLINEREL_NM);
       }
@@ -209,7 +213,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                if (isSnsert || node.getChanged().contains(fieldName)) {
                   // Persistent string field.
                   String fieldValue = (String) node.getValues().get(fieldName);
-                  if (StringUtils.isNotEmpty(fieldValue)) {
+                  if (!StringUtil.isEmpty(fieldValue)) {
                      try {
                         if (RichText.hasRichtextItems(fieldValue)) {
                            Document doc = RichText.getRichTextDocument(fieldValue);
@@ -230,7 +234,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                }
                else {
                   String fieldValue = (String) node.getValues().get(fieldName);
-                  if (StringUtils.isNotEmpty(fieldValue) && RichText.hasRichtextItems(fieldValue)) {
+                  if (!StringUtil.isEmpty(fieldValue) && RichText.hasRichtextItems(fieldValue)) {
                      Document doc = RichText.getRichTextDocument(fieldValue);
                      fillIdFromLinks(doc, idsList);
                      fillIdFromImages(doc, idsList);
@@ -357,7 +361,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                else {
                   if (link.hasAttribute(RichText.HREF_ATTR)) {
                      String href = link.getAttribute(RichText.HREF_ATTR);
-                     String name = link.getAttribute("name");
+                     String name = link.getAttribute("title");
                      String owner = mmObj.getStringValue("owner");
                      MMObjectNode urlNode = createUrl(owner, href, name);
 
@@ -582,7 +586,8 @@ public class RichTextBuilder extends MMObjectBuilder {
       NodeSearchQuery query = getQuery(id, builder, idField);
       try {
          List<MMObjectNode> nodes = builder.getNodes(query);
-         for (MMObjectNode imagerel : nodes) {
+         for (Iterator<MMObjectNode> iter = nodes.iterator(); iter.hasNext();) {
+            MMObjectNode imagerel = iter.next();
             return imagerel;
          }
       }
@@ -639,13 +644,13 @@ public class RichTextBuilder extends MMObjectBuilder {
 
 
    protected void setImageIdRelFields(MMObjectNode imagerel, String height, String width, String legend) {
-      if (StringUtils.isNotEmpty(height)) {
+      if (!StringUtil.isEmpty(height)) {
          imagerel.setValue("height", height);
       }
-      if (StringUtils.isNotEmpty(width)) {
+      if (!StringUtil.isEmpty(width)) {
          imagerel.setValue("width", width);
       }
-      if (StringUtils.isNotEmpty(legend)) {
+      if (!StringUtil.isEmpty(legend)) {
          imagerel.setValue("legend", legend);
       }
    }
@@ -688,11 +693,11 @@ public class RichTextBuilder extends MMObjectBuilder {
 
    protected MMObjectNode createUrl(String owner, String href, String name) {
       MMObjectNode urlNode = mmb.getMMObject("urls").getNewNode(owner);
-      if (StringUtils.isNotEmpty(name)) {
-         urlNode.setValue("title", name);
+      if (!StringUtil.isEmpty(name)) {
+         urlNode.setValue("name", name);
       }
       else {
-         urlNode.setValue("title", href);
+         urlNode.setValue("name", href);
       }
       urlNode.setValue("url", href);
       urlNode.insert(owner);

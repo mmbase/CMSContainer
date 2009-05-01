@@ -1,23 +1,18 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp"%>
-<div class="responseform">
+<%@ page import="net.sf.mmapps.modules.cloudprovider.CloudProviderFactory,net.sf.mmapps.modules.cloudprovider.CloudProvider,org.mmbase.bridge.*;"%>
+<div class="kolombestel">
 <mm:cloud method="asis">
 	<mm:import externid="elementId" required="true" from="request" />		
 	<mm:node number="${elementId}" notfound="skip">	
 	
 	<cmsc:portletmode name="edit">
-      <%@include file="/WEB-INF/templates/edit/itemheader.jsp" %>
-	</cmsc:portletmode>
+      	<%@include file="/WEB-INF/templates/edit/itemheader.jsp" %>
+   	</cmsc:portletmode>
    		
 	<h2><mm:field name="title"/></h2>
-   
-	<mm:field name="intro">
-		<mm:isnotempty><div class="intro"><mm:write escape="none"/></div></mm:isnotempty>
-	</mm:field>
-   
-   <mm:field name="body">
-      <mm:isnotempty><div class="body"><mm:write escape="none"/></div></mm:isnotempty>
-   </mm:field>
-   
+		<mm:field name="description">
+			<mm:isnotempty><p><mm:write escape="none"/></p></mm:isnotempty>
+		</mm:field>				
 	</mm:node>	
 	<c:set var="isConfirmPage">
 		<c:out value="${confirm}"/>
@@ -86,7 +81,9 @@
 		                    						cols="<mm:field name="columns" write="true"/>">${fieldvalue}</textarea>
 						                        <c:if test="${not empty errormessagekey}">
 								                  <font size="1" color="${error_style == ''?'':'red'}">
-							                      <fmt:message key="${errormessagekey}" />
+							                      <fmt:message key="view.formfield.maxlength">
+										           <fmt:param value="${errormessagekey}"/>
+								                  </fmt:message>
 								                  </font>
 							                    </c:if>
 										</c:when>
@@ -205,23 +202,23 @@
 		<c:otherwise>
 			<%
 				int eleId=Integer.parseInt((String)pageContext.getAttribute("elementId"));
-				net.sf.mmapps.modules.cloudprovider.CloudProvider mmprovider = net.sf.mmapps.modules.cloudprovider.CloudProviderFactory.getCloudProvider();
-				org.mmbase.bridge.Cloud mmCloud = mmprovider.getCloud();
-				org.mmbase.bridge.Node eleNode=mmCloud.getNode(eleId);
+				CloudProvider mmprovider = CloudProviderFactory.getCloudProvider();
+				Cloud mmCloud = mmprovider.getCloud();
+				Node eleNode=mmCloud.getNode(eleId);
 				String tkHtml=eleNode.getStringValue("thank_text").trim();
 				request.setAttribute("tkHtml",tkHtml);
 			%>
 			<mm:node number="${elementId}" notfound="skip">
 				<mm:field name="confirmation">
-				<mm:isnotempty><div class="confirmation"><mm:write escape="none"/></div></mm:isnotempty></mm:field>	
-			</mm:node>		
+				<mm:isnotempty><p class="body"><mm:write escape="none"/></p></mm:isnotempty></mm:field>	
+			</mm:node>
 			${tkHtml}
 		</c:otherwise>
 	</c:choose>		
 	
 	<cmsc:portletmode name="edit">
     	<%@include file="/WEB-INF/templates/edit/itemfooter.jsp" %>
-   </cmsc:portletmode>	
+    </cmsc:portletmode>	
     
 </mm:cloud>
 </div>
