@@ -6,13 +6,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -39,7 +37,7 @@ public class DownloadSavedFormAction extends MMBaseAction {
       String nodeNumber = request.getParameter("nodenumber");
       String formTitle;
       // construct headers
-      if (StringUtils.isNotBlank(nodeNumber) && cloud.hasNode(nodeNumber)) {
+      if (!StringUtil.isEmptyOrWhitespace(nodeNumber) && cloud.hasNode(nodeNumber)) {
          Node responseForm = cloud.getNode(nodeNumber);
          formTitle = responseForm.getStringValue("title");
          NodeList savedFormNodeList = responseForm.getRelatedNodes("savedform");
@@ -81,27 +79,17 @@ public class DownloadSavedFormAction extends MMBaseAction {
             }
          }
          response.setContentType("application/vnd.ms-excel");
-         
-         formTitle = formTitle.replace(" ", "_"); //Replace spaces with _ before our pattern matching.
-
-         //Remove all non normal characters
-         Pattern pattern = Pattern.compile("[^\\w].*?", Pattern.DOTALL);
-         Matcher matcher = pattern.matcher(formTitle);
-         formTitle = matcher.replaceAll("");
-         
-         if (formTitle.length() > 31) { //POI does not accept sheet titles > 31 chars
-            formTitle = formTitle.substring(0, 31); 
-         }
-         String filename = formTitle + ".xls";
+         String filename = formTitle.replace(" ", "_") + ".xls";
          response.addHeader("Content-disposition", "attachment; filename=" + filename);
          ExcelUtils.getInstance().generate(formTitle, response.getOutputStream(), headers.values(),
                savedFormNodeList.size(), values);
          return null;
       }
-      
-      String message = getResources(request, "SAVEDFORM").getMessage(locale, "incorrect.nodenumber", nodeNumber);
-      request.setAttribute("error", message);
-      String returnurl = request.getParameter("returnurl");
-      return new ActionForward(returnurl);
+      else {
+         String message = getResources(request, "SAVEDFORM").getMessage(locale, "incorrect.nodenumber", nodeNumber);
+         request.setAttribute("error", message);
+         String returnurl = request.getParameter("returnurl");
+         return new ActionForward(returnurl);
+      }
    }
 }

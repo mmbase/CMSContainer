@@ -32,31 +32,31 @@
 <html:form action="/editors/usermanagement/ChangePasswordAction">
    <table class="formcontent">
       <tr>
-         <td class="fieldname" nowrap width="105px"><fmt:message key="changepassword.current" /></td>
+         <td class="fieldname" nowrap width="150"><fmt:message key="changepassword.current" /></td>
 	      <td class="fieldname">
-	         <html:password property="password1" size='15' maxlength='15' style="width:200px"/>
+	         <html:password property="password1" size='15' maxlength='15'/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="password1"/></span>
 	      </td>
 	   </tr>
 	   <tr>
          <td class="fieldname" nowrap><fmt:message key="changepassword.new" /></td>
 	      <td class="fieldname">
-	         <html:password property="newpassword" size='15' maxlength='15'  style="width:200px"/>
+	         <html:password property="newpassword" size='15' maxlength='15'/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="newpassword"/></span>
 	      </td>
 	   </tr>
       <tr>
    	   <td class="fieldname" nowrap><fmt:message key="changepassword.confirm" /></td>
 	      <td class="fieldname">
-	         <html:password property="confirmnewpassword" size='15' maxlength='15'  style="width:200px"/>
+	         <html:password property="confirmnewpassword" size='15' maxlength='15'/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="confirmnewpassword"/></span>
          </td>
 	   </tr>
 	   <tr>
-	      <td >&nbsp;</td>
+	      <td>&nbsp;</td>
 	      <td>
-	      <html:submit ><fmt:message key="changepassword.submit" /></html:submit>
- 		  <html:cancel ><fmt:message key="user.cancel"/></html:cancel>
+	      <html:submit style="width:90"><fmt:message key="changepassword.submit" /></html:submit>
+ 		  <html:cancel style="width:90"><fmt:message key="user.cancel"/></html:cancel>
 	      </td>
 	   </tr>
 	</table>

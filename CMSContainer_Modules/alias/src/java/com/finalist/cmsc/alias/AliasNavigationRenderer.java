@@ -15,7 +15,6 @@ import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.portalImpl.InternalDispatchNavigationRequest;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
@@ -23,10 +22,8 @@ public class AliasNavigationRenderer implements NavigationItemRenderer {
 
     /** MMbase logging system */
    private static final Logger log = Logging.getLoggerInstance(AliasNavigationRenderer.class.getName());
-
-   public String getContentType() {
-       return "text/html";
-   }
+    
+   protected static String CONTENT_TYPE = "text/html";
 
    public void render(NavigationItem item, HttpServletRequest request, HttpServletResponse response,
            ServletConfig servletConfig) throws IOException {
@@ -90,16 +87,11 @@ public class AliasNavigationRenderer implements NavigationItemRenderer {
 
        NavigationItemRenderer manager = NavigationManager.getRenderer(pageItem);
        if (manager != null) {
-           String contentType = manager.getContentType();
-           String charset = servletConfig.getInitParameter("charset");
-           if (charset != null && charset.length() > 0) {
-               contentType += "; charset=" + charset;
-           }
-           response.setContentType(contentType);
+          response.setContentType(CONTENT_TYPE); 
 
-           HttpServletRequest aliasRequest = new InternalDispatchNavigationRequest(request, pageItem);
-           PortalEnvironment aliasEnv = new PortalEnvironment(aliasRequest, response);
-           manager.render(pageItem, aliasRequest, response, servletConfig);
+          HttpServletRequest aliasRequest = new InternalDispatchNavigationRequest(request, pageItem); 
+          PortalEnvironment aliasEnv = new PortalEnvironment(aliasRequest, response, servletConfig);
+          manager.render(pageItem, aliasRequest, response, servletConfig);
        }
    }
 }

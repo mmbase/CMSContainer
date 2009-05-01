@@ -1,14 +1,16 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- * 
+
+ This software is OSI Certified Open Source Software.
+ OSI Certified is a certification mark of the Open Source Initiative.
+
+ The license (Mozilla version 1.0) can be read at the MMBase site.
+ See http://www.MMBase.org/license
+
  */
 package com.finalist.cmsc.community.forms;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -39,11 +41,11 @@ public class GroupInitAction extends AbstractCommunityAction {
    public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request,
          HttpServletResponse httpServletResponse) throws Exception {
 
-      List < LabelValueBean > usersList = new ArrayList < LabelValueBean > ();
-      List < LabelValueBean > membersList = new ArrayList < LabelValueBean > ();
+      List<LabelValueBean> usersList = new ArrayList<LabelValueBean>();
+      List<LabelValueBean> membersList = new ArrayList<LabelValueBean>();
 
       AuthenticationService as = getAuthenticationService();
-      List < Authentication > users = as.findAuthentications();
+      List<Authentication> users = as.findAuthentications();
 
       AuthorityService aus = getAuthorityService();
 
@@ -55,8 +57,9 @@ public class GroupInitAction extends AbstractCommunityAction {
          Authority auth = aus.findAuthorityByName(id);
          if (auth != null) {
             groupForm.setName(auth.getName());
-            for (Authentication user : users) {
-               Set < String > names = aus.getAuthorityNamesForUser(user.getUserId());
+            for (Iterator<Authentication> iter = users.iterator(); iter.hasNext();) {
+               Authentication user = iter.next();
+               Set<String> names = aus.getAuthorityNamesForUser(user.getUserId());
                String label = user.getUserId();
                LabelValueBean bean = new LabelValueBean(label, label);
                if (names.contains(id)) {
@@ -72,7 +75,8 @@ public class GroupInitAction extends AbstractCommunityAction {
          // new
          groupForm.setAction(GroupForm.ACTION_ADD);
          groupForm.reset(actionMapping, request);
-         for (Authentication user : users) {
+         for (Iterator<Authentication> iter = users.iterator(); iter.hasNext();) {
+            Authentication user = iter.next();
             String label = user.getUserId();
             LabelValueBean bean = new LabelValueBean(label, label);
             usersList.add(bean);

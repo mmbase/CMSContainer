@@ -5,6 +5,7 @@ import com.finalist.cmsc.module.glossary.GlossaryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class GlossaryTag extends BodyTagSupport {
    }
 
 
-   public int doAfterBody() {
+   public int doAfterBody() throws JspException {
       BodyContent bc = getBodyContent();
       String content = bc.getString();
       Glossary glossary = GlossaryFactory.getGlossary();

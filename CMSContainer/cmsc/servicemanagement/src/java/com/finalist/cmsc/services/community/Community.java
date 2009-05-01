@@ -6,18 +6,16 @@ import java.util.Map;
 import com.finalist.cmsc.services.ServiceManager;
 
 /**
- * Community, this is a CMSc service class.
- * This class is the abstract service class that wil be implemented
- * by the "CommunityServiceMysqlImpl".
- * In this class comes the request from a portlet or module and will be
- * redirected to the "CommunityServiceMysqlImpl".
+ * Community, this is a CMSc service class. This class is the abstract service
+ * class that wil be implemented by the "CommunityServiceMysqlImpl". In this
+ * class comes the request from a portlet or module and will be redirected to
+ * the "CommunityServiceMysqlImpl".
  *
  * @author menno menninga
  */
 public class Community {
 
-	private final static CommunityService communityService =
-	   (CommunityService) ServiceManager.getService(CommunityService.class);
+   private final static CommunityService communityService = (CommunityService) ServiceManager.getService(CommunityService.class);
 
    public static void login(String userName, String password) {
       communityService.login(userName, password);
@@ -47,19 +45,19 @@ public class Community {
       return communityService.getPreferenceValues(module, userId, key);
    }
 
-   public static Map<String, Map<String,List<String>>> getPreferences(String module, String userId, String key, String value){
+   public static Map<String, Map<String, List<String>>> getPreferences(String module, String userId, String key, String value) {
       return communityService.getPreferences(module, userId, key, value);
    }
 
-   public static void createPreference(String module, String userId, String key, List<String> values){
+   public static void createPreference(String module, String userId, String key, List<String> values) {
       communityService.createPreference(module, userId, key, values);
    }
 
-   public static void removePreferences(String module, String userId, String key){
+   public static void removePreferences(String module, String userId, String key) {
       communityService.removePreferences(module, userId, key);
    }
 
-   public static Map<String, Map<String, String>> getUserProperty(String userName){
+   public static Map<String, Map<String, String>> getUserProperty(String userName) {
       return communityService.getUserProperty(userName);
    }
 

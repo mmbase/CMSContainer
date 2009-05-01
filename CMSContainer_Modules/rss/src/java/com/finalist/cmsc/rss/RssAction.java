@@ -16,10 +16,10 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * Provides an RSS feed of a channel in the repository. The request parameter
@@ -38,7 +38,7 @@ import com.finalist.cmsc.util.ServerUtil;
  */
 public class RssAction extends MMBaseAction {
 
-   private static final Logger log = Logging.getLoggerInstance(RssAction.class.getName());
+   private static Logger log = Logging.getLoggerInstance(RssAction.class.getName());
 
    private static final String PREFIX = "rss.";
    private static final String DEFAULT_CONTENTTYPE = "article";
@@ -117,7 +117,7 @@ public class RssAction extends MMBaseAction {
     */
    private Node getParentChannel(Cloud cloud, String feed) {
       String channel = getProperty(feed, "rubriek", DEFAULT_CHANNEL);
-      if (StringUtils.isNotEmpty(channel)) {
+      if (!StringUtils.isEmpty(channel)) {
          Node parentNode = RepositoryUtil.getChannelFromPath(cloud, channel);
          if (parentNode != null) {
             return parentNode;
@@ -150,7 +150,7 @@ public class RssAction extends MMBaseAction {
 
    private int getProperty(String feed, String key, int defaultValue) {
       String value = getProperty(feed, key, "");
-      if (StringUtils.isNotEmpty(value)) {
+      if (!StringUtils.isEmpty(value)) {
          try {
             return Integer.parseInt(value);
          }

@@ -3,12 +3,14 @@ package com.finalist.cmsc.resources.forms;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
+import org.mmbase.remotepublishing.CloudManager;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 public class DeleteReactionAction extends DeleteSecondaryContentAction {
@@ -25,7 +27,7 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
       String number = deleteForm.getObjectnumber();
       if (MMBaseAction.ADMINISTRATOR.equals(cloud.getUser().getRank().toString())) {
          log.debug("deleting secondary content: " + number);
-         Cloud remoteCloud = Publish.getRemoteCloud(cloud);
+         Cloud remoteCloud = getRemoteCloud(cloud);
          remoteCloud.getNode(number).delete(true);
       }
       else {
@@ -38,7 +40,13 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
 
    }
 
-   @Override
+
+   public Cloud getRemoteCloud(Cloud cloud) {
+      Cloud remoteCloud = CloudManager.getCloud(cloud, "live.server");
+      return remoteCloud;
+   }
+
+
    public String getRequiredRankStr() {
       return ADMINISTRATOR;
    }

@@ -2,17 +2,26 @@ package com.finalist.cmsc.rssfeed;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.commons.util.XmlUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.util.SearchUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,11 +29,11 @@ import org.w3c.dom.Element;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.navigation.NavigationItemRenderer;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.*;
 
 public class RssFeedNavigationRenderer implements NavigationItemRenderer {
 
@@ -36,16 +45,14 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
     */
    private final static SimpleDateFormat formatRFC822Date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
-   public String getContentType() {
-        return "application/rss+xml";
-    }
-
 
    public void render(NavigationItem item, HttpServletRequest request, HttpServletResponse response,
            ServletConfig servletConfig) {
-
+       
       if (item instanceof RssFeed) {
          RssFeed rssFeed = (RssFeed) item;
+
+         response.setHeader("Content-Type", "application/rss+xml; charset=UTF-8");
 
          Document doc = XmlUtil.createDocument();
          Element rss = XmlUtil.createRoot(doc, "rss");
@@ -62,15 +69,13 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
          XmlUtil.createChildText(channel, "docs", "http://www.rssboard.org/rss-specification");
 
          List<String> contentTypesList = rssFeed.getContenttypes();
-         int contentChannelNumber = rssFeed.getContentChannel();
+         int contentChannelNumber = rssFeed.getContentChannel(); 
 
          int maxAgeInDays = rssFeed.getMax_age_in_days();
          
          boolean useLifecycle = true;
          int maxNumber = rssFeed.getMaximum();
-         if (maxNumber <= 0) {
-            maxNumber = -1;
-         }
+         if (maxNumber <= 0) maxNumber = -1;
 
          Date lastChange = null;
          boolean first = true;
@@ -93,7 +98,7 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
 
                String uniqueUrl = makeAbsolute(getContentUrl(resultNode), request);
                XmlUtil.createChildText(itemE, "link", uniqueUrl);
-
+               
                String description = null;
                if (resultNode.getNodeManager().hasField("intro")) {
                   description = resultNode.getStringValue("intro");
@@ -158,7 +163,7 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
        }
        else {
            String site = SiteManagement.getSite(rss);
-           return getServerDocRoot(request) + site;
+           return getServerDocRoot(request) + site; 
        }
    }
 

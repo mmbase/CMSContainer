@@ -11,7 +11,8 @@ package com.finalist.cmsc.services.contentrepository;
 
 import java.util.List;
 
-import com.finalist.cmsc.beans.NodetypeBean;
+import net.sf.mmapps.commons.beans.NodetypeBean;
+
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.services.ServiceManager;
@@ -34,11 +35,6 @@ public class ContentRepository {
    }
 
 
-   public static int countContentElements(String channel, List<String> contenttypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day, int maxDays) {
-      return cService.countContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumbers, year, month, day, maxDays);
-   }
    public static int countContentElements(String channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day) {
       return cService.countContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
@@ -79,10 +75,4 @@ public class ContentRepository {
       return cService.getContentElement(elementId);
    }
 
-   public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
-         int day , int maxDays) {
-      return cService.getContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumbers, year, month, day, maxDays);
-   }
 }
