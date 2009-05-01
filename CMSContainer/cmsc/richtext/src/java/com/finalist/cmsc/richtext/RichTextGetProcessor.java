@@ -9,12 +9,11 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.richtext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
@@ -31,7 +30,6 @@ import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 
@@ -358,7 +356,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                else {
                   Integer destination = copiedNodes.get(source);
                   if (destination  != null && destination > 0 && sourceNode.getCloud().hasNode(destination)) {
-                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager( RichText.INLINEREL_NM), destinationNode.getNumber(), destination);
+                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager(RichText.INLINEREL_NM), destinationNode.getNumber(), destination);
                      if(rel == null) {
                         rel = RelationUtil.createRelation(destinationNode, sourceNode.getCloud().getNode(destination), RichText.INLINEREL_NM);
                      }
@@ -418,11 +416,10 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                else {
                   Integer destination = copiedNodes.get(source);
                   if (destination  != null && destination > 0 && sourceNode.getCloud().hasNode(destination)) {
-                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager( RichText.IMAGEINLINEREL_NM), destinationNode.getNumber(), destination);
+                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager(RichText.IMAGEINLINEREL_NM), destinationNode.getNumber(), destination);
                      if(rel == null) {
                         rel = RelationUtil.createRelation(destinationNode, sourceNode.getCloud().getNode(destination), RichText.IMAGEINLINEREL_NM);
                      }
-                   
                      image.setAttribute(RichText.DESTINATION_ATTR, String.valueOf(destination));
                      image.setAttribute(RichText.RELATIONID_ATTR, String.valueOf(rel.getNumber()));
                   }

@@ -57,5 +57,5 @@ public interface NewsletterSubscriptionCAO {
 
    public int countSubscription(int id);
 
-   public void deleteSubscriptionsByAuthId(Long anthId); 
+   public void deleteSubscriptionsByAuthId(Long anthId);
 }

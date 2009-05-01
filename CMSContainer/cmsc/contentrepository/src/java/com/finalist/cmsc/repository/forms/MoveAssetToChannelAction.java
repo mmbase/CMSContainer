@@ -21,7 +21,6 @@ import org.apache.struts.util.MessageResources;
 import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.struts.MMBaseAction;
 
@@ -47,19 +46,11 @@ public class MoveAssetToChannelAction extends MMBaseAction {
       int channel = Integer.parseInt(request.getParameter(PARAMETER_CHANNEL));
       int newChannel = Integer.parseInt(request.getParameter(PARAMETER_NEW_CHANNEL));
 
-      String message = "";
+      String message = null;
       String[] numbers = objectNumber.split(",");
-      Node userNode = SecurityUtil.getUserNode(cloud);
-      String language = userNode.getStringValue("language");
-      Locale locale;
-      if(StringUtils.isEmpty(language)){
-         locale = request.getLocale();
-      }else{
-         locale = new Locale(language);
-      }
+      Locale locale = request.getLocale();
       MessageResources resources = getResources(request, "REPOSITORY");
-      int successCount=0;
-      int failureCount=0;
+      boolean isSuccess = true;
 
       Node channelNode = cloud.getNode(channel);
       Node newChannelNode = cloud.getNode(newChannel);
@@ -68,51 +59,40 @@ public class MoveAssetToChannelAction extends MMBaseAction {
          int number = Integer.parseInt(number2);
          Node elementNode = cloud.getNode(number);
 
-         RelationManager creationRelationManager = cloud.getRelationManager("creationrel");
-         NodeList newCreationList = creationRelationManager.getList("(snumber = " + newChannel + " and dnumber = " + number
-               + ") or (snumber = " + number + " and dnumber = " + newChannel + ")", null, null);
+      RelationManager creationRelationManager = cloud.getRelationManager("creationrel");
+      NodeList newCreationList = creationRelationManager.getList("(snumber = " + newChannel + " and dnumber = " + number
+            + ") or (snumber = " + number + " and dnumber = " + newChannel + ")", null, null);
 
 
-         // only if we are not already in the other channel
-         if (newCreationList.size() == 0) {
-   
-            RelationUtil.createRelation(channelNode, elementNode, "deletionrel");
-   
-            NodeList oldCreationList = creationRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
-                  + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
-            for (NodeIterator i = oldCreationList.nodeIterator(); i.hasNext();) {
-               i.nextNode().delete();
-               RelationUtil.createRelation(newChannelNode, elementNode, "creationrel");
-            }
-   
-            String remark = resources.getMessage(locale, "asset.movetochannel.workflow.message", elementNode
-                  .getStringValue("title"), channelNode.getStringValue("name"), newChannelNode.getStringValue("name"));
-            List<Node> nodes = new ArrayList<Node>();
-            nodes.add(elementNode);
-            Workflow.create(channelNode, remark, nodes);
-            Workflow.create(newChannelNode, remark, nodes);
-            successCount++;
+      // only if we are not already in the other channel
+      if (newCreationList.size() == 0) {
+
+         RelationUtil.createRelation(channelNode, elementNode, "deletionrel");
+
+         NodeList oldCreationList = creationRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
+               + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
+         for (NodeIterator i = oldCreationList.nodeIterator(); i.hasNext();) {
+            i.nextNode().delete();
+            RelationUtil.createRelation(newChannelNode, elementNode, "creationrel");
+         }
+
+         String remark = resources.getMessage(locale, "asset.movetochannel.workflow.message", elementNode
+               .getStringValue("title"), channelNode.getStringValue("name"), newChannelNode.getStringValue("name"));
+         List<Node> nodes = new ArrayList<Node>();
+         nodes.add(elementNode);
+         Workflow.create(channelNode, remark, nodes);
+         Workflow.create(newChannelNode, remark, nodes);
+            isSuccess = true;
          }
          else {
-            failureCount++;
+            isSuccess = false;
          }
       }
-      if(successCount>0) {
-         if(successCount==1){
-            message += resources.getMessage(locale, "asset.movetochannel.success", newChannelNode.getStringValue("name"));
-         }else{
-            message += resources.getMessage(locale, "asset.massmovetochannel.success", successCount, newChannelNode.getStringValue("name"));
-         }
+      if(isSuccess) {
+         message = resources.getMessage(locale, "asset.movetochannel.success", newChannelNode.getStringValue("name"));
       }
-      if(failureCount>0) {
-         if(successCount>0){
-            message += "\\n";
-         }
-         if(failureCount==1){
-            message += resources.getMessage(locale, "asset.movetochannel.failed", newChannelNode.getStringValue("name"));
-         }else{
-            message += resources.getMessage(locale, "asset.massmovetochannel.failed", failureCount, newChannelNode.getStringValue("name"));
-         }
+      else {
+         message = resources.getMessage(locale, "asset.movetochannel.failed", newChannelNode.getStringValue("name"));
       }
       String path = mapping.findForward(SUCCESS).getPath() + "?type=asset&" + PARAMETER_CHANNEL + "=" + channel;
 

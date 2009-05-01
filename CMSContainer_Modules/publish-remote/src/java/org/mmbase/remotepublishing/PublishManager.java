@@ -866,13 +866,14 @@ public final class PublishManager {
     *         or null if node was not imported
     */
    public static Node getSourceNode(Node localNode) {
-      CloudInfo localCloudInfo = CloudInfo.getDefaultCloudInfo();
+       CloudInfo localCloudInfo = CloudInfo.getDefaultCloudInfo();
       synchronized (publishLock) {
          Node adminNode = getPublishInfoNode(localCloudInfo, localNode.getNumber(), localCloudInfo);
 
          if (adminNode == null) {
             return null;
          }
+
          Cloud sourceCloud = CloudManager.getCloud(localNode.getCloud(), adminNode.getIntValue(SOURCE_CLOUD));
          Node sourceNode = null;
          try {

@@ -6,13 +6,13 @@
       document.forms['<portlet:namespace />form'].registrationpage.value = page;
       document.forms['<portlet:namespace />form'].registrationpagepathuri.value = path;
    }
-   function selectRedirectPage(page, path) {
-      document.forms['<portlet:namespace />form'].page.value = page;
-      document.forms['<portlet:namespace />form'].pagepath.value = path;
-   }
-   function erase(field) {
-      document.forms['<portlet:namespace />form'][field].value = '';
-   }
+function selectRedirectPage(page, path) {
+   document.forms['<portlet:namespace />form'].page.value = page;
+   document.forms['<portlet:namespace />form'].pagepath.value = path;
+}
+function erase(field) {
+   document.forms['<portlet:namespace />form'][field].value = '';
+}
 </script>
 	<form name="<portlet:namespace />form" method="post" target="_parent" action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
 		<table class="editcontent">

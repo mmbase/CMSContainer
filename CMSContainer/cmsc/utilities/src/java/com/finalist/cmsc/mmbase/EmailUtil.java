@@ -9,14 +9,12 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.mmbase;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.functions.Function;
 
-import com.finalist.cmsc.util.ServerUtil;
+import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 public class EmailUtil {
 
@@ -31,10 +29,6 @@ public class EmailUtil {
    public static void send(Cloud cloud, String name, String email, String nameFrom, String emailFrom, String subject,
          String body) {
 
-      if(!ServerUtil.isProduction()){
-         return ;
-      }
-
       if (cloud == null) {
          cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
       }
@@ -43,7 +37,7 @@ public class EmailUtil {
          emailFrom = PropertiesUtil.getProperty("mail.system.email");
          nameFrom = PropertiesUtil.getProperty("mail.system.name");
       }
-      
+
       if (StringUtils.isEmpty(emailFrom)){
          throw new IllegalStateException("The 'mail.system.email' setting is missing in the System properties.");
       }      

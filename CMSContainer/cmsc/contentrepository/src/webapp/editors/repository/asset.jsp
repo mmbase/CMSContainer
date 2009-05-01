@@ -106,6 +106,7 @@
 
             <mm:import externid="elements" from="request" required="true"/>
             <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+            <mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
             <c:set var="listSize" value="${elementCount}"/>
             <c:set var="offset" value="${param.offset}"/>
             <c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}&show=${show}"/>
@@ -139,9 +140,9 @@
                            <th><a href="javascript:sortBy('Asset', 'title','<mm:write referid="parentchannel" />')" class="headerlink">
                                  <fmt:message key="asset.titlecolumn"/></a></th>
                            <th><a href="javascript:sortBy('Asset', 'lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-                                 <fmt:message key="asset.lastmodifiercolumn"/></a> </th>
+                                 <fmt:message key="asset.authorcolumn"/></a> </th>
                            <th><a href="javascript:sortBy('Asset', 'lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-                                 <fmt:message key="asset.lastmodifieddatecolumn"/></a></th>
+                                 <fmt:message key="asset.lastmodifiedcolumn"/></a></th>
                            <th><a href="javascript:sortBy('Asset', 'number','<mm:write referid="parentchannel" />')" class="headerlink">
                                  <fmt:message key="asset.numbercolumn"/></a></th>
                            <th>&nbsp;</th>

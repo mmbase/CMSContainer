@@ -1250,15 +1250,15 @@ public final class RepositoryUtil {
       public static Node copyContentElements(Node sourceChannel, Node destChannel, List<Integer> channelList,Map<Integer, Integer> copiedNodes ,StringBuilder output) {
       if (!isParent(sourceChannel, destChannel)) {
          Object newChannelNumber = copiedNodes.get(sourceChannel.getNumber());
-         
          if( newChannelNumber != null) {
             Node newChannel = sourceChannel.getCloud().getNode((Integer)newChannelNumber);
-            cloneRelatedNodes(sourceChannel, newChannel,copiedNodes,output,channelList);
+                        cloneRelatedNodes(sourceChannel, newChannel,copiedNodes,output,channelList);
             NodeList children = getOrderedChildren(sourceChannel);
             for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
                Node childChannel = iter.next();
                copyContentElements(childChannel, newChannel,channelList,copiedNodes,output);
             }
+   
          }
       }
       return null;
@@ -1345,8 +1345,8 @@ public final class RepositoryUtil {
       return SecurityUtil.getRole(channel, rightsInherited, channelsWithRole);
    }
 
-   public static void setGroupRights(Cloud cloud, Node group, Map<Integer, UserRole> rights) {
-      SecurityUtil.setGroupRights(cloud, group, rights, TreeUtil.convertToList(treeManagers));
+   public static void setGroupRights(Cloud cloud, Node user, Map<Integer, UserRole> rights) {
+      SecurityUtil.setGroupRights(cloud, user, rights, TreeUtil.convertToList(treeManagers));
    }
 
    public static List<Node> getUsersWithRights(Node channel, Role requiredRole) {
@@ -1477,7 +1477,7 @@ public final class RepositoryUtil {
             continue; //Skip contentchannels and collection channels. 
          }
          if (! rel.isRelation()) {
-            output.append("skipped  " + rel + "; ");
+            output.append("skipped " + rel + "; ");
             continue; //Skip contentchannels and collection channels.  
          }
          RelationManager relManager = rel.getRelationManager();
@@ -1505,7 +1505,7 @@ public final class RepositoryUtil {
             continue; //Skip nodes not in the current channel tree. 
          }
          else 
-         {         
+         {
             //*** Start cloning the node from sourceChild -> destChild
             //If the related node should be cloned, dive into the node and deepcopy it
             Node sourceChild = rel.getDestination();
@@ -1542,9 +1542,8 @@ public final class RepositoryUtil {
                destRel.commit(); 
                output.append("[newRel:" + destNode.getNumber() + "," + relName + "];");
             }
-
-
             
+ 
             //Creation channels are skipped at copying relations, so do it by hand.
             if (hasCreationChannel(sourceChild,sourceNode) && isChannel(destNode)) {
                addCreationChannel(destChild, destNode);

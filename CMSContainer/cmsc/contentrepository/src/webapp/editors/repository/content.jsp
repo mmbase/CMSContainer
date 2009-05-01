@@ -85,6 +85,7 @@
 <div class="body">
 <mm:import externid="elements" from="request" required="true"/>
 <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+<mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
 
 <c:set var="listSize" value="${elementCount}"/>
 <c:set var="offset" value="${param.offset}"/>
@@ -118,9 +119,9 @@
         <th><a href="javascript:sortBy('Content','title','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.titlecolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifiercolumn"/></a></th>
+        <fmt:message key="content.authorcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifieddatecolumn"/></a></th>
+        <fmt:message key="content.lastmodifiedcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','number','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.numbercolumn"/></a></th>
         <th><fmt:message key="content.creationchannelcolumn"/></th>

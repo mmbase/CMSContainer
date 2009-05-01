@@ -22,14 +22,10 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mmbase.bridge.Cloud;
-
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 import com.finalist.cmsc.login.PasswordGenerator;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
@@ -40,6 +36,7 @@ import com.finalist.cmsc.services.community.person.RegisterStatus;
 import com.finalist.cmsc.services.community.security.Authentication;
 import com.finalist.cmsc.services.community.security.AuthenticationService;
 import com.finalist.cmsc.util.EmailSender;
+import org.mmbase.bridge.Cloud;
 
 /**
  * Login portlet
@@ -77,6 +74,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
          String send_password =  request.getParameter(SEND_PASSWORD);
          
          if (StringUtils.isEmpty(send_password)) {
+            
             if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
                Community.login(userName, password);
             } else {
