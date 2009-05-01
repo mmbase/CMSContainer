@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import com.finalist.cmsc.util.bundles.JstlUtil;
 
@@ -37,11 +37,11 @@ public class OptionTag extends SimpleTagSupport {
          ctx.getOut().print(" selected=\"selected\"");
       }
       ctx.getOut().print(">");
-      if (StringUtils.isNotEmpty(name)) {
+      if (!StringUtil.isEmpty(name)) {
          ctx.getOut().print(name);
       }
       else {
-         if (StringUtils.isNotEmpty(message)) {
+         if (!StringUtil.isEmpty(message)) {
             HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
             ctx.getOut().print(JstlUtil.getMessage(request, message));
          }

@@ -4,17 +4,17 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.security.Rank;
 import org.mmbase.storage.search.AggregatedField;
 
 import com.finalist.cmsc.mmbase.EmailUtil;
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.util.bundles.JstlUtil;
 
-public final class TasksUtil {
+public class TasksUtil {
 
    public static final String TASK = "task";
    public static final String TASKREL = "taskrel";
@@ -160,7 +160,7 @@ public final class TasksUtil {
 
          String language = userNode.getStringValue("language");
          Locale locale = new Locale(language);
-
+         
          String subject = JstlUtil.getMessage(RESOURCEBUNDLE_BASENAME, locale, "tasks.email.expire.subject");
          String emailMessage = JstlUtil.getMessage(RESOURCEBUNDLE_BASENAME, locale, "tasks.email.expire.message");
 
@@ -184,11 +184,6 @@ public final class TasksUtil {
 
    public static Node getAssignedUser(Node task) {
       return SearchUtil.findRelatedNode(task, SecurityUtil.USER, ASSIGNEDREL);
-   }
-
-
-   public static Node getCreator(Node task) {
-      return SearchUtil.findRelatedNode(task, SecurityUtil.USER, CREATORREL);
    }
 
 
@@ -217,27 +212,6 @@ public final class TasksUtil {
       NodeManager manager = contentNode.getCloud().getNodeManager(TASK);
       int count = contentNode.countRelatedNodes(manager, TASKREL, "source");
       return count > 0;
-   }
-
-   /**
-    * Task is deleteable if and only if it is in one of the situations below:
-    * 1)The task is created by the cloud user.
-    * 2)The task is assigned to the cloud user and has been finished.
-    * 3)The task is assigned to the cloud user and the cloud user has the rank 'siteadmin'.
-    * 
-    * @param task
-    * @param cloud
-    * @return
-    */
-   public static boolean isDeleteable(Node task, Cloud cloud) {
-      Node creator = getCreator(task);;
-      Node assignee = getAssignedUser(task);
-      Node user = SecurityUtil.getUserNode(cloud);
-      String status = task.getStringValue(STATUS);
-      if (user.equals(creator) || (user.equals(assignee) && (STATUS_DONE.equals(status) || cloud.getUser().getRank().compareTo(Rank.BASICUSER) > 0))) {
-         return true;
-      }
-      return false;
    }
 
 }

@@ -188,7 +188,7 @@ public class PortletTag extends SimpleTagSupport {
                   modeType = "view";
                   isVisible = true;
                }
-               portletInfo.addPortletMode(mode, modeURL.toString(control, Boolean.valueOf(request.isSecure())), mode
+               portletInfo.addPortletMode(mode, modeURL.toString(control, new Boolean(request.isSecure())), mode
                      .equals(currentMode), isVisible, modeType);
             }
          }
@@ -203,7 +203,7 @@ public class PortletTag extends SimpleTagSupport {
             WindowState currentState = control.getState(portletWindow);
 
             control.setState(portletWindow, state);
-            portletInfo.addPortletWindowState(state.toString().substring(0, 3), stateURL.toString(control, Boolean.valueOf(
+            portletInfo.addPortletWindowState(state.toString().substring(0, 3), stateURL.toString(control, new Boolean(
                   request.isSecure())), state.equals(currentState));
          }
       }

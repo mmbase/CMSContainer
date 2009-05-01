@@ -9,12 +9,12 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationIterator;
-import org.mmbase.bridge.RelationList;
+import java.io.Serializable;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
+
+import org.mmbase.bridge.*;
+
 import com.finalist.cmsc.beans.om.Layout;
 import com.finalist.cmsc.navigation.PagesUtil;
 
@@ -26,7 +26,7 @@ public class LayoutCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    @Override
-   protected Object loadEntry(Object key) throws Exception {
+   protected Serializable loadEntry(Serializable key) throws Exception {
       Node layoutNode = getNode(key);
       if (layoutNode == null || !PagesUtil.isLayout(layoutNode)) {
          return null;

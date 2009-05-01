@@ -1,10 +1,11 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- * 
+
+ This software is OSI Certified Open Source Software.
+ OSI Certified is a certification mark of the Open Source Initiative.
+
+ The license (Mozilla version 1.0) can be read at the MMBase site.
+ See http://www.MMBase.org/license
+
  */
 package com.finalist.cmsc.services.community.security;
 
@@ -102,17 +103,6 @@ public class AuthenticationHibernateService extends HibernateService implements 
       getSession().flush();
    }
 
-   // addAuthorityToUserByAuthenticationId is just makeup addAuthorityToUser fuction
-   @Transactional
-   public void addAuthorityToUserByAuthenticationId(String AuthenticationId, String authorityName) {
-      // Long Authenticationid=Long.getLong(AuthenticationId);
-      Long Authenticationid = Long.parseLong(AuthenticationId);
-      Authentication authentication = getAuthenticationById(Authenticationid);
-      Authority authority = authorityService.findAuthorityByName(authorityName);
-      authentication.addAuthority(authority);
-      getSession().flush();
-   }
-
    /** {@inheritDoc} */
    @Transactional
    public void removeAuthorityFromUser(String userId, String authorityName) {
@@ -135,15 +125,8 @@ public class AuthenticationHibernateService extends HibernateService implements 
       return authentication == null ? null : authentication.getId();
    }
 
-   @Transactional(readOnly = true)
    private Authentication findAuthenticationByUserId(String userId) {
       Criteria criteria = getSession().createCriteria(Authentication.class).add(Restrictions.eq("userId", userId));
-      return findAuthenticationByCriteria(criteria);
-   }
-
-   @Transactional(readOnly = true)
-   private Authentication findAuthenticationByEmail(String email) {
-      Criteria criteria = getSession().createCriteria(Authentication.class).add(Restrictions.eq("userId", email));
       return findAuthenticationByCriteria(criteria);
    }
 
@@ -163,22 +146,21 @@ public class AuthenticationHibernateService extends HibernateService implements 
 
    /** {@inheritDoc} */
    @Transactional(readOnly = true)
-   public List < Authentication > findAuthentications() {
+   public List<Authentication> findAuthentications() {
       Criteria criteria = getSession().createCriteria(Authentication.class);
       return findAuthenticationListByCriteria(criteria);
    }
 
    /** {@inheritDoc} */
    @Transactional(readOnly = true)
-   public List < Authentication > findAuthenticationsForAuthority(String name) {
-      Criteria criteria = getSession().createCriteria(Authentication.class).createCriteria("authorities").add(
-            Restrictions.eq("name", name));
+   public List<Authentication> findAuthenticationsForAuthority(String name) {
+      Criteria criteria = getSession().createCriteria(Authentication.class).createCriteria("authorities").add(Restrictions.eq("name", name));
       return findAuthenticationListByCriteria(criteria);
    }
 
    @SuppressWarnings("unchecked")
-   private List < Authentication > findAuthenticationListByCriteria(Criteria criteria) {
-      List < Authentication > result = new ArrayList < Authentication >();
+   private List<Authentication> findAuthenticationListByCriteria(Criteria criteria) {
+      List<Authentication> result = new ArrayList<Authentication>();
       List authenticationList = criteria.list();
       for (Iterator iter = authenticationList.iterator(); iter.hasNext();) {
          Authentication authentication = (Authentication) iter.next();
@@ -196,19 +178,5 @@ public class AuthenticationHibernateService extends HibernateService implements 
    @Transactional(readOnly = true)
    public Authentication getAuthenticationById(Long authenticationId) {
       return (Authentication) getSession().get(Authentication.class, authenticationId);
-   }
-
-   @Transactional
-   public Authentication createAuthentication(Authentication authentication) {
-      return createAuthentication(authentication.getUserId(), authentication.getPassword());
-   }
-
-   @Transactional
-   public void removeAuthenticationFromAuthority(String authId, String groupName) {
-      Long id = Long.decode(authId);
-      Authentication authentication = getAuthenticationById(id);
-      Authority authority = authorityService.findAuthorityByName(groupName);
-      authentication.removeAuthority(authority);
-      getSession().flush();
    }
 }

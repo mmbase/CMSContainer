@@ -14,7 +14,7 @@
 		<mm:listnodes type="editwizards">
 		   <mm:field name="nodepath" jspvar="nodepath" id="nodepath" vartype="String">
 			 <% 
-			  List<String> hiddenTypes = com.finalist.cmsc.repository.ContentElementUtil.getHiddenTypes();
+			  List<String> hiddenTypes = PropertiesUtil.getHiddenTypes();
 			  if (com.finalist.cmsc.repository.ContentElementUtil.isContentType(nodepath)&& !hiddenTypes.contains(nodepath)) { %>
 				<mm:param name="contenttype" value="${nodepath}"/>
 			  <% } %>
