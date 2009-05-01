@@ -11,7 +11,7 @@ package com.finalist.cmsc.recyclebin.forms;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,7 +28,7 @@ public class RestoreAction extends MMBaseFormlessAction {
 
       if (!RepositoryUtil.hasRecyclebinRights(cloud, "webmaster")) {
          return redirectLogin(request);
-      }       
+      }          
        
       String objectnumber = getParameter(request, "objectnumber");
       Node objectNode = cloud.getNode(objectnumber);
@@ -42,7 +42,7 @@ public class RestoreAction extends MMBaseFormlessAction {
          }
          else {
             String channelnumber = getParameter(request, "channelnumber");
-            if (StringUtils.isNotEmpty(channelnumber)) {
+            if (!StringUtil.isEmpty(channelnumber)) {
                Node channelNode = cloud.getNode(channelnumber);
                RepositoryUtil.addContentToChannel(objectNode, channelNode);
                Workflow.create(objectNode, null);
@@ -54,22 +54,6 @@ public class RestoreAction extends MMBaseFormlessAction {
             }
          }
       }
-      else {
-         String channelnumber = getParameter(request, "channelnumber");
-         if (StringUtils.isNotEmpty(channelnumber)) {
-            Node channelNode = cloud.getNode(channelnumber);
-            RepositoryUtil.addContentToChannel(objectNode, channelNode);
-            Workflow.create(objectNode, null);
-         }
-         else {
-            contentchannels = RepositoryUtil.getAllContentChannels(cloud);
-            addToRequest(request, "content", objectNode);
-            addToRequest(request, "contentchannels", contentchannels);
-            return mapping.findForward("restore");
-         }
-
-      }
-      addToRequest(request, "fresh", "true");
       return mapping.findForward(SUCCESS);
    }
 }

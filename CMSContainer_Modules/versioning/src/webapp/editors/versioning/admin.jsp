@@ -6,7 +6,7 @@
 <cmscedit:head title="versioning.admin.header" />
 <mm:cloud jspvar="cloud" loginpage="../login.jsp">
 
-	<mm:hasrank minvalue="siteadmin">
+	<mm:hasrank minvalue="administrator">
 
 		<c:if test="${param.action == 'deleteall'}">
 			<mm:listnodes type="archive">

@@ -2,8 +2,7 @@
   Editwizard cascading style sheet.
 */
 div.buttonscontent  {
-	text-align: right;
-	height:39px;
+        text-align: right;
 } 
 
 /* CMS Container style  */
@@ -38,7 +37,7 @@ div.tabs
 	clear: both;
 }
 
-/* active tab */
+/* actieve tab */
 div.tabs div.tab_active
 {
 	display: block;
@@ -103,8 +102,8 @@ div.tabs div.tab div.body
 div.tabs div.tab div.body a.valid
 {
 	padding-top: 14px;
-   color: #64676f;
-   font-size: 14px;
+	color: #a4a79f;
+	font-size: 13px;	
 	float: left;			
 }
 div.tabs div.tab div.body a.notvalid
@@ -424,21 +423,37 @@ table.itemcontent {
     
 }
 
-tr.item1
+tr.item1,
+tr.item5,
+tr.item9,
+tr.item13,
+tr.item17
 {
  background-color: #f5e9e6;
 }
-tr.item2
+tr.item2,
+tr.item6,
+tr.item10,
+tr.item14,
+tr.item18
 {
  background-color: #e0ffc1;
 }
 
-tr.item3
+tr.item3,
+tr.item7,
+tr.item11,
+tr.item15,
+tr.item19
 {
  background-color: #d7d7ff;
 }
 
-tr.item4
+tr.item4,
+tr.item8,
+tr.item12,
+tr.item16,
+tr.item20
 {
  background-color: #f1f1f1;
 }
@@ -461,7 +476,6 @@ td.itembutton {
     padding: 0px;
     vertical-align: top;
     text-align: left;
-    width: 57px;
 }
 span
 {
@@ -504,9 +518,7 @@ table a.button
 	color: #313728;
 	font-size: 11px;
 	font-weight: bold;
-	/* Conflicts in some IE versions, see CMSC-668 
 	background-image: url('../../../gfx/button_side_block.gif');
-	*/
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 15px;

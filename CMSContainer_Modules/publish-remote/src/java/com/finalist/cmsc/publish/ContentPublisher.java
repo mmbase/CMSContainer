@@ -17,7 +17,6 @@ import org.mmbase.remotepublishing.util.PublishUtil;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.workflow.Workflow;
 
 
@@ -54,7 +53,6 @@ public class ContentPublisher extends Publisher {
             for (Integer cloudNumber : clouds) {
                 for (Node pnode : nodes) {
                     PublishUtil.publishOrUpdateNode(cloud, pnode.getNumber(), cloudNumber, publishDate);
-                    Versioning.setPublishVersion(pnode);
                 }
             }
         }

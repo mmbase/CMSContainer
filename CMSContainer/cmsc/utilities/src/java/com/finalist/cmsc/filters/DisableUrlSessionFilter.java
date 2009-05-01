@@ -108,7 +108,7 @@ public class DisableUrlSessionFilter implements Filter {
     private void cleanSessions(HttpServletRequest httpRequest) {
         try {
             String userAgent = httpRequest.getHeader("User-Agent");
-            if (StringUtils.isNotBlank(userAgent) && userAgentPattern != null && userAgentPattern.matcher(userAgent).find()) {
+            if (userAgentPattern != null && userAgentPattern.matcher(userAgent).find()) {
                 HttpSession session = httpRequest.getSession(false);
                 if (session != null && session.isNew()) {
                     session.invalidate();
@@ -157,7 +157,7 @@ public class DisableUrlSessionFilter implements Filter {
         String searchEngines = "google.com|search.msn.com|yahoo.com|IlseBot|gigablast.com"
                 + "|Baiduspider|WebAlta|tineye.com|ICC-Crawler|Yeti|REAP-crawler|Snapbot";
         return searchEngines;
-   }
+    }
 
     private String getFeedReaders() {
         // feed readers

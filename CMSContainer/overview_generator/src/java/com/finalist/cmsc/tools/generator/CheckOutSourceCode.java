@@ -27,7 +27,7 @@ import com.ice.cvsc.CVSScramble;
 
 public class CheckOutSourceCode extends BatchOperation {
 
-    private static final Log log = LogFactory.getLog(CheckOutSourceCode.class.getName());
+    private static final Log log = LogFactory.getLog(CheckOutSourceCode.class);
 
     public void checkout() {
         List<VCSConfig> configs = getConfigs();
@@ -67,8 +67,7 @@ public class CheckOutSourceCode extends BatchOperation {
             manager.getUpdateClient().doCheckout(url, path, revision, revision,
                     true);
         } catch (SVNException e) {
-            log.warn("Check out from svn error");
-            System.out.println("-->timeout ,connect the server failure server = [" + vcsConfig.getUrl() + "] user= [" + vcsConfig.getUsername() + "] pwd=["+vcsConfig.getPassword()+"]");
+            log.equals("Check out from svn error");
         }
     }
 
@@ -84,11 +83,9 @@ public class CheckOutSourceCode extends BatchOperation {
         String userName = vcsConfig.getUsername();
         String passWord = vcsConfig.getPassword();
         String url = vcsConfig.getUrl();
-        String temp = url.substring(url.indexOf("@")+1);
-        String hostName = temp.substring(0, temp.indexOf(":"));
+        String hostName = url.substring(0, url.indexOf(":"));
         String module = vcsConfig.getModule();
-        String rootDirectory = temp.substring(temp.indexOf("/"));
-		
+        String rootDirectory = url.substring(url.indexOf(":") + 1, url.length());
         String localDirectory = CVSCUtilities.stripFinalSeparator(path.getPath());
 
         boolean isPServer = true;
@@ -125,7 +122,6 @@ public class CheckOutSourceCode extends BatchOperation {
         // Now establish information required by CVSProject
         project.setProjectDef(projectDef);
         project.setUserName(userName);
-
         project.setRepository(module);
         project.setRootDirectory(rootDirectory);
         project.setLocalRootDirectory(localDirectory);

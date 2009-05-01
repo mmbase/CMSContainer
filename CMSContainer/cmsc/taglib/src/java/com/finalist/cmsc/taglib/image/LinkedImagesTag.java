@@ -14,7 +14,7 @@ import java.util.Iterator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.jsp.taglib.NodeReferrerTag;
@@ -65,8 +65,6 @@ public class LinkedImagesTag extends NodeReferrerTag {
    /** Holds value of property max. */
    private Attribute max = Attribute.NULL;
 
-   /** Holds value of property template. */
-   private Attribute template = Attribute.NULL;
 
    public void setPosition(String position) throws JspTagException {
       this.position = getAttribute(position);
@@ -122,10 +120,6 @@ public class LinkedImagesTag extends NodeReferrerTag {
       this.popup = getAttribute(popup);
    }
 
-   public void setTemplate(String template) throws JspTagException {
-      this.template = getAttribute(template);
-   }
-
 
    /**
     * This tag returns links to content.
@@ -153,7 +147,7 @@ public class LinkedImagesTag extends NodeReferrerTag {
          NodeList list = imagerelManager.getList(query);
 
          String pos = position.getString(this);
-         if (StringUtils.isNotEmpty(pos)) {
+         if (!StringUtil.isEmpty(pos)) {
             // filter list on position
             // Other option to filter on position is to add a constraint to the
             // query
@@ -190,7 +184,6 @@ public class LinkedImagesTag extends NodeReferrerTag {
                String crop = imagerel.getStringValue("crop");
                String legendType = imagerel.getStringValue("legend");
                boolean popup = imagerel.getBooleanValue("popup");
-               String template = null;
 
                if (this.width != Attribute.NULL && this.height != Attribute.NULL) {
                   width = this.width.getInt(this, 0);
@@ -224,12 +217,8 @@ public class LinkedImagesTag extends NodeReferrerTag {
                // Issue NIJ-149: legendType was not set
                imgTag.setLegendtype(legendType);
 
-               if (this.template != Attribute.NULL) {
-                  template = this.template.getString(this);
-               }
-
                imgTag.setExternalAttributes(getOtherAttributes());
-               String templateStr = imgTag.getTemplate(image, template, width, height, crop);
+               String templateStr = imgTag.getTemplate(image, null, width, height, crop);
                Dimension dim = imgTag.getDimension(image, templateStr);
 
                Node cachedNode = imgTag.getServletNode(image, templateStr);

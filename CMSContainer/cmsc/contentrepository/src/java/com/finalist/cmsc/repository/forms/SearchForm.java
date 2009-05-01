@@ -20,7 +20,6 @@ public class SearchForm extends PagerForm {
    private String mode = "basic";
    private String search = "true";
    private String parentchannelpath = "";
-   private String index = "";
 
 
    public String getContenttypes() {
@@ -170,16 +169,6 @@ public class SearchForm extends PagerForm {
 
    public void setKeywords(String keywords) {
       this.keywords = keywords;
-   }
-
-
-   public void setIndex(String index) {
-      this.index = index;
-   }
-
-
-   public String getIndex() {
-      return index;
    }
 
 }

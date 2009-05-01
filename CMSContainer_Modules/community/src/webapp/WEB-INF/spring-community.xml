@@ -55,7 +55,7 @@
       p:sessionFactory-ref="sessionFactory"/>
 
   <!-- Instruct Spring to perform declarative transaction management automatically on annotated classes. -->
-  <tx:annotation-driven transaction-manager="transactionManager"/>
+  <tx:annotation-driven />
 
 
   <!-- Services -->
@@ -64,25 +64,6 @@
   <bean name="authorityService" class="com.finalist.cmsc.services.community.security.AuthorityHibernateService" />
   <bean name="preferenceService" class="com.finalist.cmsc.services.community.preferences.PreferenceHibernateService" />
   <bean name="personService" class="com.finalist.cmsc.services.community.person.PersonHibernateService" />
-
-   <!-- Actions -->
-   <bean name="/editors/community/PreferenceAction" class="com.finalist.cmsc.community.forms.PreferenceAction">
-      <property name="preferenceService" ref="preferenceService"/>
-   </bean>
-
-   <bean name="/editors/community/ReferenceImportExportAction"
-         class="com.finalist.cmsc.community.forms.ReferenceImportExportAction">
-      <property name="personService" ref="personService"/>
-   </bean>
-
-   <bean name="/editors/community/SearchConditionalUser"
-         class="com.finalist.cmsc.community.forms.SearchConditionalUserAction">
-      <property name="personService" ref="personService"/>
-      <property name="authenticationService" ref="authenticationService"/>
-      <property name="authorityService" ref="authorityService"/>
-   </bean>
-
-   <import resource="spring-security.xml"/>
-   <!-- Services Holder-->
-   <bean id="contextHolder" class="com.finalist.cmsc.services.community.ApplicationContextFactory"/>
+  
+  <import resource="spring-security.xml" />
 </beans>

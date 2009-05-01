@@ -15,7 +15,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import javax.portlet.*;
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.mmbase.bridge.*;
 
@@ -26,7 +28,11 @@ import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public class MailFriendPortlet extends ContentPortlet {
 
-   public void processView(ActionRequest request, ActionResponse response) throws PortletException {
+   protected static final String ACTION_PARAM = "action";
+   protected static final String CONTENTELEMENT = "contentelement";
+
+
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       String action = request.getParameter(ACTION_PARAM);
       Map<String, String> errorMessages = new Hashtable<String, String>();
       if (action == null) {
@@ -42,23 +48,23 @@ public class MailFriendPortlet extends ContentPortlet {
             String toemail = request.getParameter("toemail");
             String toname = request.getParameter("toname");
             String articleNumber = request.getParameter("articleNumber");
-            if (StringUtils.isBlank(articleNumber)) {
+            if (StringUtil.isEmptyOrWhitespace(articleNumber)) {
                errorMessages.put("article", "view.error.noarticle");
             }
             String emailRegex = PropertiesUtil.getProperty("email.regex");
-            if (StringUtils.isBlank(fromname)) {
+            if (StringUtil.isEmptyOrWhitespace(fromname)) {
                errorMessages.put("fromname", "view.fromname.empty");
             }
-            if (StringUtils.isBlank(fromemail)) {
+            if (StringUtil.isEmptyOrWhitespace(fromemail)) {
                errorMessages.put("fromemail", "view.fromemail.empty");
             }
             else if (!fromemail.matches(emailRegex)) {
                errorMessages.put("fromemail", "view.fromemail.invalid");
             }
-            if (StringUtils.isBlank(toname)) {
+            if (StringUtil.isEmptyOrWhitespace(toname)) {
                errorMessages.put("toname", "view.toname.empty");
             }
-            if (StringUtils.isBlank(toemail)) {
+            if (StringUtil.isEmptyOrWhitespace(toemail)) {
                errorMessages.put("toemail", "view.toemail.empty");
             }
             else if (!toemail.matches(emailRegex)) {
@@ -66,7 +72,8 @@ public class MailFriendPortlet extends ContentPortlet {
             }
 
             if (errorMessages.size() == 0) {
-               Cloud cloud = getCloudForAnonymousUpdate();
+               CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+               Cloud cloud = cloudProvider.getCloud();
                Node mailfriend = cloud.getNode(contentelement);
                boolean sent = sendEmail(cloud, toname, toemail, fromname, fromemail, mailfriend, request, articleNumber);
                if (!sent) {
@@ -142,17 +149,17 @@ public class MailFriendPortlet extends ContentPortlet {
             request.setAttribute("confirm", confirm);
          }
          if (portletSession.getAttribute("errormessages") != null) {
-            Map<String, String> errormessages = (Map<String, String>) portletSession.getAttribute("errormessages");
+            Hashtable errormessages = (Hashtable) portletSession.getAttribute("errormessages");
             portletSession.removeAttribute("errormessages");
             request.setAttribute("errormessages", errormessages);
          }
          if (portletSession.getAttribute("parameterMap") != null) {
-            Map<String, String> parameterMap = (Map<String, String>) portletSession.getAttribute("parameterMap");
+            Map parameterMap = (HashMap) portletSession.getAttribute("parameterMap");
             portletSession.removeAttribute("parameterMap");
-            Iterator<String> keyIterator = parameterMap.keySet().iterator();
+            Iterator keyIterator = parameterMap.keySet().iterator();
             while (keyIterator.hasNext()) {
-               String keyValue = keyIterator.next();
-               String entryValue = parameterMap.get(keyValue);
+               String keyValue = (String) keyIterator.next();
+               String entryValue = (String) parameterMap.get(keyValue);
                request.setAttribute(keyValue, entryValue);
             }
          }
@@ -173,7 +180,8 @@ public class MailFriendPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }

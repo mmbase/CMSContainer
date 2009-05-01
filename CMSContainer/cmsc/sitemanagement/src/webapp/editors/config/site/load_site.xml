@@ -18,7 +18,6 @@
 	<field name="source" />
 	<field name="language" />
 	<field name="rights" />
-    <field name="googleanalyticsid" />
 	
 	<relation destination="images" role="namedrel" />
 	<relation destination="layout" role="layoutrel" />
