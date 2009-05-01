@@ -11,18 +11,17 @@ package com.finalist.cmsc.repository;
 
 import java.util.*;
 
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.*;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.TypeUtil;
 import com.finalist.cmsc.security.SecurityUtil;
 
-public final class ContentElementUtil {
+public class ContentElementUtil {
 
    private static final String SOURCE = "SOURCE";
    private static final String DESTINATION = "DESTINATION";
@@ -45,7 +44,6 @@ public final class ContentElementUtil {
 
    public static final String OWNERREL = "ownerrel";
 
-   private static final String PROPERTY_HIDDEN_TYPES = "system.contenttypes.hide";
 
    private ContentElementUtil() {
       // utility
@@ -86,7 +84,7 @@ public final class ContentElementUtil {
 
    /**
     * Is element from one of the content types
-    *
+    * 
     * @param element
     *           node to check
     * @return is content type
@@ -101,7 +99,7 @@ public final class ContentElementUtil {
 
    /**
     * Is ModeManager of the content types
-    *
+    * 
     * @param nm
     *           NodeManager to check
     * @return is content type
@@ -112,9 +110,9 @@ public final class ContentElementUtil {
          return false;
       }
       try {
-         NodeManager nmTemp = nm.getParent();
-         while (!CONTENTELEMENT.equals(nmTemp.getName())) {
-            nmTemp = nmTemp.getParent();
+         nm = nm.getParent();
+         while (!CONTENTELEMENT.equals(nm.getName())) {
+            nm = nm.getParent();
          }
          return true;
       }
@@ -127,7 +125,7 @@ public final class ContentElementUtil {
 
    /**
     * Is type of content type
-    *
+    * 
     * @param type
     *           to check
     * @return is content type
@@ -140,7 +138,8 @@ public final class ContentElementUtil {
 
    public static void removeContentBlock(Node node) {
       List<Node> nodes = findContentBlockNodes(node);
-      for (Node removeNode : nodes) {
+      for (Iterator<Node> iter = nodes.iterator(); iter.hasNext();) {
+         Node removeNode = iter.next();
          removeNode.delete(true);
       }
    }
@@ -256,7 +255,7 @@ public final class ContentElementUtil {
 
    /**
     * Add owner
-    *
+    * 
     * @param content -
     *           content
     */
@@ -271,7 +270,7 @@ public final class ContentElementUtil {
 
    /**
     * Check if a contentnode has an owner
-    *
+    * 
     * @param content -
     *           Content Node
     * @return true if the node has a related workflowitem
@@ -284,7 +283,7 @@ public final class ContentElementUtil {
 
    /**
     * Get author of the content element
-    *
+    * 
     * @param content -
     *           Content Node
     * @return Author node
@@ -297,7 +296,7 @@ public final class ContentElementUtil {
 
    /**
     * Get owner of the content element
-    *
+    * 
     * @param content -
     *           Content Node
     * @return Owner node
@@ -362,7 +361,7 @@ public final class ContentElementUtil {
       int operator = (greater ? FieldCompareConstraint.GREATER_EQUAL : FieldCompareConstraint.LESS_EQUAL);
 
       Field expireField = contentManager.getField(EXPIREDATE_FIELD);
-      Object expireDateObj = (expireField.getType() == Field.TYPE_DATETIME) ? new Date(date) : Long.valueOf(date);
+      Object expireDateObj = (expireField.getType() == Field.TYPE_DATETIME) ? new Date(date) : new Long(date);
       Constraint expirydate = query.createConstraint(query.getStepField(expireField), operator, expireDateObj);
       return expirydate;
    }
@@ -372,20 +371,20 @@ public final class ContentElementUtil {
       int operator = (greater ? FieldCompareConstraint.GREATER_EQUAL : FieldCompareConstraint.LESS_EQUAL);
 
       Field publishField = contentManager.getField(PUBLISHDATE_FIELD);
-      Object publishDateObj = (publishField.getType() == Field.TYPE_DATETIME) ? new Date(date) : Long.valueOf(date);
+      Object publishDateObj = (publishField.getType() == Field.TYPE_DATETIME) ? new Date(date) : new Long(date);
       Constraint publishdate = query.createConstraint(query.getStepField(publishField), operator, publishDateObj);
       return publishdate;
    }
 
 
    public static void addArchiveConstraint(Node channel, NodeQuery query, Long date, String archive) {
-      if (StringUtils.isEmpty(archive) || "all".equalsIgnoreCase(archive)) {
+      if (StringUtil.isEmpty(archive) || "all".equalsIgnoreCase(archive)) {
          return;
       }
       NodeManager contentManager = channel.getCloud().getNodeManager(CONTENTELEMENT);
 
       Field archiveDateField = contentManager.getField(ARCHIVEDATE_FIELD);
-      Object archiveDateObj = (archiveDateField.getType() == Field.TYPE_DATETIME) ? new Date(date) : Long.valueOf(date);
+      Object archiveDateObj = (archiveDateField.getType() == Field.TYPE_DATETIME) ? new Date(date) : new Long(date);
 
       Constraint archivedate = null;
       if ("old".equalsIgnoreCase(archive)) {
@@ -401,16 +400,8 @@ public final class ContentElementUtil {
    }
 
 
-    /**
-     * judge if the content's archive date is in the archive time scope
-     * @param content the node to be match
-     * @param archive spcifiy how to calculate the archive time scrop.accept "all" "old" or other String as parameter,
-     * @return <li>true if archive is "all" or content is empty.
-     *         <li>true if archive is "old" and content's archive time is before current time
-     *         <li>true if archive is others and content's archive time is after or equels to current time
-     */
    public static boolean matchArchive(Node content, String archive) {
-      if (StringUtils.isEmpty(archive) || "all".equalsIgnoreCase(archive)) {
+      if (StringUtil.isEmpty(archive) || "all".equalsIgnoreCase(archive)) {
          return true;
       }
       // Precision of now is based on minutes.
@@ -426,25 +417,6 @@ public final class ContentElementUtil {
       else {
          return archiveDate.getTime() >= date;
       }
-   }
-
-   /**
-    * Helper method to get all hidden types
-    *
-    * @return List of hidden types
-    */
-   public static List<String> getHiddenTypes() {
-      String property = PropertiesUtil.getProperty(PROPERTY_HIDDEN_TYPES);
-      if (property == null) {
-         return new ArrayList<String>();
-      }
-
-      ArrayList<String> list = new ArrayList<String>();
-      String[] values = property.split(",");
-      for (String value : values) {
-         list.add(value);
-      }
-      return list;
    }
 
 }

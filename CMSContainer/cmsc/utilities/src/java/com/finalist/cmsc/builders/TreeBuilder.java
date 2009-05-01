@@ -2,7 +2,7 @@ package com.finalist.cmsc.builders;
 
 import java.util.LinkedHashMap;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.mmbase.bridge.Cloud;
@@ -23,7 +23,7 @@ public abstract class TreeBuilder extends MMObjectBuilder {
     private static final String TMP_OLDPATHNAME = "_oldpathname";
 
     /** Logger instance. */
-    private static final Logger log = Logging.getLoggerInstance(TreeBuilder.class.getName());
+    private static Logger log = Logging.getLoggerInstance(TreeBuilder.class.getName());
    
    @Override
    public boolean init() {
@@ -95,14 +95,14 @@ public abstract class TreeBuilder extends MMObjectBuilder {
 
     private void updateEmptyNameField(MMObjectNode objectNode) {
         String nameFieldname = getNameFieldname();
-        if (StringUtils.isEmpty(objectNode.getStringValue(nameFieldname))) {
+        if (StringUtil.isEmpty(objectNode.getStringValue(nameFieldname))) {
             String fragmentFieldname = getFragmentFieldnameForBuilder();
             String pathFragment = objectNode.getStringValue(fragmentFieldname);
             objectNode.setValue(nameFieldname, pathFragment);
         }
         else {
             String fragmentFieldname = getFragmentFieldnameForBuilder();
-            if (StringUtils.isEmpty(objectNode.getStringValue(fragmentFieldname))) {
+            if (StringUtil.isEmpty(objectNode.getStringValue(fragmentFieldname))) {
                 String name = objectNode.getStringValue(nameFieldname);
                 String pathFragment = TreeUtil.convertToFragment(name);
                 objectNode.setValue(fragmentFieldname, pathFragment);
@@ -156,14 +156,14 @@ public abstract class TreeBuilder extends MMObjectBuilder {
          if (TreeUtil.OLDPATH_FIELD.equals(field)) {
             String p = getPath(node);
             String oldpathname = node.getStringValue(TMP_OLDPATHNAME);
-            if(StringUtils.isNotEmpty(oldpathname)) {
+            if(!StringUtil.isEmpty(oldpathname)) {
                return p.substring(0, p.lastIndexOf('/')+1) + oldpathname.replace(' ', '_');
             }
             return p;
          }
          if (TreeUtil.LEVEL_FIELD.equals(field)) {
             int level = TreeUtil.getLevel(getPath(node));
-            return Integer.valueOf(level);
+            return new Integer(level);
          }
 
       }

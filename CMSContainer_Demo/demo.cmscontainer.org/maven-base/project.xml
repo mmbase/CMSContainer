@@ -50,7 +50,6 @@
 	<dependencies>
 
 <!-- Application dependencies -->	
-
       <dependency>
          <groupId>finalist</groupId>
          <artifactId>cmsc-portlets-teaser</artifactId>
@@ -68,7 +67,7 @@
          <artifactId>cmsc-portlets-dynamicforms</artifactId>
          <version>${cmscportlets.version}</version>
          <type>mmbase-module</type>
-      </dependency>
+      </dependency>   
       <dependency>
          <groupId>poi</groupId>
          <artifactId>poi</artifactId>
@@ -76,20 +75,14 @@
          <properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
-      </dependency>   
-      <dependency>
-         <groupId>finalist</groupId>
-         <artifactId>cmsc-portlets-jforum</artifactId>
-         <version>${cmscportlets.version}</version>
-         <type>mmbase-module</type>
-      </dependency>
+      </dependency>  
       <dependency>
          <groupId>finalist</groupId>
          <artifactId>cmsc-portlets-google</artifactId>
          <version>${cmscportlets.version}</version>
          <type>mmbase-module</type>
       </dependency>
-      <dependency>
+		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-modules-directreaction</artifactId>
 			<version>${cmscmodules.version}</version>
@@ -109,17 +102,16 @@
       </dependency>
       <dependency>
          <groupId>finalist</groupId>
-         <artifactId>cmsc-modules-subsite</artifactId>
+         <artifactId>cmsc-modules-glossary</artifactId>
          <version>${cmscmodules.version}</version>
          <type>mmbase-module</type>
-      </dependency> 
+      </dependency>
       <dependency>
          <groupId>finalist</groupId>
          <artifactId>cmsc-modules-staticdownload</artifactId>
          <version>${cmscmodules.version}</version>
          <type>mmbase-module</type>
       </dependency>
-
 
 <!-- CMS Container standard -->	
    		<dependency>
@@ -369,7 +361,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
+			<version>1.2.8</version>
 			<type>jar</type>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
@@ -415,22 +407,12 @@
 		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
-			<version>2.7.1</version>
+			<version>2.6.0</version>
 			<type>jar</type>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
 		</dependency>
-		<dependency>
-			<groupId>xalan</groupId>
-			<artifactId>serializer</artifactId>
-			<version>2.7.1</version>
-			<type>jar</type>
-			<properties>
-				<war.bundle>${war.bundle}</war.bundle>
-			</properties>
-		</dependency>
-
 
 <!-- Servlet/JSP -->	
 		<dependency>
@@ -479,7 +461,7 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.8.0</version>
+			<version>1.7.0</version>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
@@ -487,7 +469,7 @@
 		<dependency>
 			<groupId>commons-chain</groupId>
 			<artifactId>commons-chain</artifactId>
-			<version>1.2</version>
+			<version>1.1</version>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
@@ -503,7 +485,7 @@
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
+			<version>3.1</version>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
@@ -544,7 +526,7 @@
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
+			<version>1.0.4</version>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
@@ -583,24 +565,26 @@
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
 		</dependency>
-      <!-- XStream dependencies -->
-      <dependency>
-         <groupId>com.thoughtworks.xstream</groupId>
-         <artifactId>xstream</artifactId>
-         <version>1.2</version>
-         <type>jar</type>
-      </dependency>
-<!-- EHcache used for cmsc sitemanagement -->		
-      <dependency>
-         <groupId>net.sf.ehcache</groupId>
-         <artifactId>ehcache</artifactId>
-         <version>1.5.0</version>
-         <type>jar</type>
-         <properties>
-            <war.bundle>${war.bundle}</war.bundle>
-         </properties>
-      </dependency>
 
+<!-- EHcache used for cmsc sitemanagement -->		
+   		<dependency>
+			<groupId>ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>1.1</version>
+			<type>jar</type>
+			<properties>
+				<war.bundle>${war.bundle}</war.bundle>
+			</properties>
+		</dependency>
+   		<dependency>
+			<groupId>ehcache</groupId>
+			<artifactId>ehcache-constructs</artifactId>
+			<version>0.6</version>
+			<type>jar</type>
+			<properties>
+				<war.bundle>${war.bundle}</war.bundle>
+			</properties>
+		</dependency>
 
 <!-- Maven mmbase-modules plugin -->
 		<dependency>

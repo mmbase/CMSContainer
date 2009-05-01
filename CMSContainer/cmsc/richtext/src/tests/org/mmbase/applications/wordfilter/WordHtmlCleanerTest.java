@@ -106,9 +106,6 @@ public class WordHtmlCleanerTest extends TestCase {
     	}
     }
 
-	/**
-	 * See CMSC-931, youtube failed because <param> tags were mis-identified for <p> tags
-     */ 
     public void testYoutube() {
     	String code = "<object width=\"425\" height=\"355\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"355\"></embed></object>";
     	String expected = "<object height=\"355\" width=\"425\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\"/><param name=\"wmode\" value=\"transparent\"/><embed height=\"355\" src=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\" type=\"application/x-shockwave-flash\" width=\"425\" wmode=\"transparent\"/></object>";

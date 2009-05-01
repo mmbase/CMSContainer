@@ -11,8 +11,7 @@
    <script src="userlist.js" type="text/javascript"></script>
 </cmscedit:head>   
 <body>
-<mm:cloud loginpage="../login.jsp" rank="basic user" jspvar="cloud">
-<mm:hasrank minvalue="siteadmin">
+<mm:cloud loginpage="../login.jsp" rank="administrator" jspvar="cloud">
 <div style="float: left">
 <cmscedit:sideblock title="view.groups" titleClass="side_block_gray">
       <ul class="shortcuts">
@@ -119,7 +118,6 @@
    </pg:pager>
 </cmscedit:sideblock>
 </div>
-</mm:hasrank>
 </mm:cloud>
 </body>
 </html:html>

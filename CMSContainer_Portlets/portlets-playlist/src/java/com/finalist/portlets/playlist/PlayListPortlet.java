@@ -31,6 +31,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
@@ -81,7 +84,8 @@ public class PlayListPortlet extends ContentPortlet {
       String contentelement = preferences.getValue(CONTENTELEMENT, null);
       if (contentelement != null) {
          PortletSession portletSession = request.getPortletSession();
-         Cloud cloud = getCloudForAnonymousUpdate();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(contentelement);
 
          String selectedYear = (String) portletSession.getAttribute(PLAYLIST_YEAR);
@@ -156,7 +160,8 @@ public class PlayListPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }

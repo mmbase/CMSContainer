@@ -14,6 +14,7 @@ import java.util.*;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -22,7 +23,6 @@ import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.FieldValueConstraint;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.portlets.ContentChannelPortlet;
 import com.finalist.cmsc.repository.RepositoryUtil;
@@ -90,7 +90,7 @@ public class I18NChannelPortlet extends ContentChannelPortlet {
    }
 
 
-   protected Cloud getCloud() {
+   private Cloud getCloud() {
       Cloud cloud = cloudProvider.getAnonymousCloud();
       return cloud;
    }

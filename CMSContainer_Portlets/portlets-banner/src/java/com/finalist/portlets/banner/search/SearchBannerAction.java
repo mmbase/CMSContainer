@@ -1,28 +1,48 @@
 package com.finalist.portlets.banner.search;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.Query;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.storage.search.*;
+import org.mmbase.remotepublishing.CloudManager;
+import org.mmbase.storage.search.CompositeConstraint;
+import org.mmbase.storage.search.Constraint;
+import org.mmbase.storage.search.FieldValueBetweenConstraint;
+import org.mmbase.storage.search.FieldValueConstraint;
+import org.mmbase.storage.search.RelationStep;
+import org.mmbase.storage.search.Step;
+import org.mmbase.storage.search.StepField;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 /**
- *
- *
+ * 
+ * 
  */
 public class SearchBannerAction extends MMBaseAction {
 
@@ -42,11 +62,11 @@ public class SearchBannerAction extends MMBaseAction {
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cld) throws Exception {
 
-      List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+      List<Map> rows = new ArrayList<Map>();
 
       BannerForm bannerForm = (BannerForm) form;
       log.debug("Searching on remote cloud? " + bannerForm.isRemote());
-      Cloud cloud = getCloudForAnonymousUpdate(bannerForm.isRemote());
+      Cloud cloud = getCloud(bannerForm.isRemote());
 
       int count = 0;
       int offset = 0;
@@ -66,6 +86,7 @@ public class SearchBannerAction extends MMBaseAction {
          maxNumber = MAX_NUMBER_EXPORT;
       }
       int queryOffset = maxNumber * offset;
+      String direction = getParameterAsString(request, "direction", "up");
 
       String action = request.getParameter("action");
       String page = request.getParameter("pagepath");
@@ -80,7 +101,7 @@ public class SearchBannerAction extends MMBaseAction {
       count = Queries.count(query);
       rows = populateBannersAndPositions(nodes);
 
-      request.setAttribute("offset", Integer.valueOf(offset));
+      request.setAttribute("offset", new Integer(offset));
       request.setAttribute("rows", rows);
       request.setAttribute("resultCount", count);
       request.setAttribute("allPositions", bannerForm.getAllPositions());
@@ -98,14 +119,6 @@ public class SearchBannerAction extends MMBaseAction {
       return mapping.findForward(action);
    }
 
-   public Cloud getCloudForAnonymousUpdate(boolean isRemote) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      if (isRemote) {
-         return Publish.getRemoteCloud(cloud);
-      }
-      return cloud;
-   }
-
 
    @Override
    public String getRequiredRankStr() {
@@ -113,8 +126,8 @@ public class SearchBannerAction extends MMBaseAction {
    }
 
 
-   private List<Map<String, Object>> populateBannersAndPositions(NodeList nodes) {
-      List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+   private List<Map> populateBannersAndPositions(NodeList nodes) {
+      List<Map> rows = new ArrayList<Map>();
       for (NodeIterator iter = nodes.nodeIterator(); iter.hasNext();) {
 
          Node node = iter.nextNode();
@@ -161,6 +174,27 @@ public class SearchBannerAction extends MMBaseAction {
       NodeList attachments = query.getNodeManager().getList(query);
       return attachments != null && attachments.size() > 0;
    }
+
+
+   private Cloud getCloud(boolean isRemote) {
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
+      log.debug("Using remote cloud?: " + isRemote);
+      if (isRemote) {
+         return CloudManager.getCloud(cloud, "live.server");
+      }
+      return cloud;
+   }
+
+
+   private String getParameterAsString(HttpServletRequest request, String name, String defaultValue) {
+      String value = request.getParameter(name);
+      if (StringUtils.isBlank(value)) {
+         return defaultValue;
+      }
+      return value;
+   }
+
 
    private void addConstraint(Query query, NodeManager manager, Step step, String fieldName, String value) {
       if (StringUtils.isBlank(value)) {

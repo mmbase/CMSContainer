@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -39,7 +39,7 @@ public class DownloadSavedFormAction extends MMBaseAction {
       String nodeNumber = request.getParameter("nodenumber");
       String formTitle;
       // construct headers
-      if (StringUtils.isNotBlank(nodeNumber) && cloud.hasNode(nodeNumber)) {
+      if (!StringUtil.isEmptyOrWhitespace(nodeNumber) && cloud.hasNode(nodeNumber)) {
          Node responseForm = cloud.getNode(nodeNumber);
          formTitle = responseForm.getStringValue("title");
          NodeList savedFormNodeList = responseForm.getRelatedNodes("savedform");
@@ -98,10 +98,11 @@ public class DownloadSavedFormAction extends MMBaseAction {
                savedFormNodeList.size(), values);
          return null;
       }
-      
-      String message = getResources(request, "SAVEDFORM").getMessage(locale, "incorrect.nodenumber", nodeNumber);
-      request.setAttribute("error", message);
-      String returnurl = request.getParameter("returnurl");
-      return new ActionForward(returnurl);
+      else {
+         String message = getResources(request, "SAVEDFORM").getMessage(locale, "incorrect.nodenumber", nodeNumber);
+         request.setAttribute("error", message);
+         String returnurl = request.getParameter("returnurl");
+         return new ActionForward(returnurl);
+      }
    }
 }

@@ -5,6 +5,7 @@ import org.mmbase.bridge.Node;
 /**
  * @author Jeoffrey Bakker, Finalist IT Group
  */
+@SuppressWarnings("unused")
 public class DummyVersioningService extends VersioningService {
 
    @Override
@@ -22,10 +23,5 @@ public class DummyVersioningService extends VersioningService {
    @Override
    public void removeVersions(Node node) {
       // nothing
-   }
-   
-   @Override
-   public void setPublishVersion(Node node) {
-      
    }
 }

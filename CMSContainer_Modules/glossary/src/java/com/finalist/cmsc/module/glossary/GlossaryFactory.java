@@ -5,7 +5,6 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
-import org.mmbase.module.core.MMBase;
 
 import java.util.Iterator;
 
@@ -15,11 +14,8 @@ import java.util.Iterator;
 public class GlossaryFactory {
 
 
-   @SuppressWarnings("unchecked")
    public static Glossary getGlossary() {
       Glossary glossary = Glossary.instance();
-
-      MMBase.getMMBase().addNodeRelatedEventsListener("glossary", new GlossaryEventListener(glossary));
 
       if (glossary.getTerms().size() > 0)
          return glossary;
@@ -29,7 +25,7 @@ public class GlossaryFactory {
       NodeManager manager = cloud.getNodeManager("glossary");
       NodeList list = manager.createQuery().getList();
 
-      Iterator<Node> nodeListIterator = (Iterator<Node>)list.iterator();
+      Iterator<Node> nodeListIterator = list.iterator();
 
       while (nodeListIterator.hasNext()) {
          Node node = nodeListIterator.next();

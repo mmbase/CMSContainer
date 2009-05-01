@@ -11,21 +11,23 @@ package com.finalist.cmsc.navigation;
 
 import java.util.*;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.bridge.*;
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.mmbase.TreeUtil;
 import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.security.forms.RolesInfo;
-import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
-public final class NavigationUtil {
+public class NavigationUtil {
 
     public static final String NAVREL = "navrel";
     public static final String ALLOWREL = "allowrel";
@@ -46,14 +48,14 @@ public final class NavigationUtil {
     }
 
     /**
-     * This method is used on startup of MMBase to fill the information about treeManagers
+     * This method is used on startup of MMBase to fill the information about treeManagers 
      * and path fragment fields
      * This method is synchronized on the class (static method) to make sure only one managers is added
      * at the same time.
-     *
+     * 
      * @param manager name of nodemanager which is used in the tree
      * @param fragmentFieldname name of field which is used in the path of a tree item
-     * @param root This nodemanager maintains the nodes which are root tree items
+     * @param root This nodemanager maintains the nodes which are root tree items 
      */
     public static synchronized void registerTreeManager(String manager, String fragmentFieldname, boolean root) {
         if (root) {
@@ -70,7 +72,7 @@ public final class NavigationUtil {
     private NavigationUtil() {
         // utility
     }
-
+    
     public static RelationManager getRelationManager(Cloud cloud) {
         return TreeUtil.getRelationManager(cloud, PagesUtil.PAGE, NAVREL);
     }
@@ -212,7 +214,7 @@ public final class NavigationUtil {
      * @return node with page path
      */
     public static Node getPageFromPath(Cloud cloud, String path) {
-        if (StringUtils.isNotBlank(path)) {
+        if (!StringUtil.isEmptyOrWhitespace(path)) {
             int index = path.indexOf(TreeUtil.PATH_SEPARATOR);
             if (index == -1) {
                 Node site = SiteUtil.getSite(cloud, path);
@@ -231,7 +233,7 @@ public final class NavigationUtil {
     }
 
    public static Node getSiteFromPath(Cloud cloud, String path) {
-      if (StringUtils.isNotBlank(path)) {
+      if (!StringUtil.isEmptyOrWhitespace(path)) {
          int index = path.indexOf(TreeUtil.PATH_SEPARATOR);
          if (index == -1) {
             Node site = SiteUtil.getSite(cloud, path);
@@ -292,7 +294,7 @@ public final class NavigationUtil {
         return TreeUtil.getChild(parentChannel, fragment, treeManagers, NAVREL);
     }
 
-
+    
     public static void reorder(Node parent, String children) {
         RelationUtil.reorder(parent, children, NAVREL, PagesUtil.PAGE);
     }
@@ -317,16 +319,6 @@ public final class NavigationUtil {
         return children;
     }
 
-    /**
-     * Get sorted StrictPage child nodes
-     * 
-     * @param parentNode
-     *           - parent
-     * @return list of sorted children
-     */
-    public static NodeList getStrictPageOrderedChildren(Node parentNode) {
-       return SearchUtil.findRelatedOrderedNodeList(parentNode, "page", NAVREL, NAVREL + ".pos");
-    }
 
     public static NodeList getOrderedChildren(Node parentNode) {
         return SearchUtil.findRelatedOrderedNodeList(parentNode, null, NAVREL, NAVREL + ".pos");
@@ -338,17 +330,6 @@ public final class NavigationUtil {
 
     public static int getChildCount(Node parent) {
         return TreeUtil.getChildCount(parent, "object", NAVREL);
-    }
-
-    /**
-     * Get number of strict page children
-     * 
-     * @param parent
-     *           - parent
-     * @return number of children
-     */
-    public static int getStrictPageChildCount(Node parent) {
-       return TreeUtil.getChildCount(parent, "page", NAVREL);
     }
 
     public static void movePage(Node sourcePage, Node destPage) {
@@ -500,7 +481,7 @@ public final class NavigationUtil {
     /**
      * This is the method for a USER, the old ones want a GROUP...
      * (even although the are called getRoleForUser(..)
-     *
+     * 
      * @param page page to get role for
      * @param user user to get role for
      * @return User Role
@@ -515,7 +496,7 @@ public final class NavigationUtil {
         return SecurityUtil.getUsersWithRights(channel, requiredRole, TreeUtil.convertToList(treeManagers), NAVREL);
     }
 
-
+    
     /**
      * This method will calculate the url towards a certain navigation item
      * @param request
