@@ -1,8 +1,8 @@
 package com.finalist.cmsc.repository.xml;
 
 import java.io.StringWriter;
-import java.text.DateFormat;
 import java.util.*;
+import java.text.DateFormat;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -10,8 +10,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import net.sf.mmapps.commons.bridge.NodeFieldComparator;
+import net.sf.mmapps.commons.util.StringUtil;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
@@ -19,7 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.finalist.cmsc.mmbase.ResourcesUtil;
-import com.finalist.cmsc.mmbase.TypeUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.SecurityUtil;
@@ -29,7 +28,7 @@ import com.finalist.cmsc.security.SecurityUtil;
  */
 public class XMLController {
 
-   private static final Logger log = Logging.getLoggerInstance(XMLController.class.getName());
+   static Logger log = Logging.getLoggerInstance(XMLController.class.getName());
 
    public final static List<String> defaultDisallowedTypes = new ArrayList<String>();
    public final static List<String> defaultDisallowedRelationTypes = new ArrayList<String>();
@@ -77,11 +76,11 @@ public class XMLController {
 
 
    private List<String> setypList(List<String> allowedRelationTypes) {
-      if (allowedRelationTypes == null) {
-         return new ArrayList<String>();
+      if (allowedRelationTypes != null) {
+         return allowedRelationTypes;
       }
       else {
-         return allowedRelationTypes;
+         return new ArrayList<String>();
       }
    }
 
@@ -112,8 +111,8 @@ public class XMLController {
          return writeXml(document);
       }
       catch (Exception e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -125,8 +124,8 @@ public class XMLController {
          return writeXml(document);
       }
       catch (Exception e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -138,8 +137,8 @@ public class XMLController {
          return writeXml(document);
       }
       catch (Exception e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -159,21 +158,21 @@ public class XMLController {
          NodeIterator nli1 = nodes.nodeIterator();
          while (nli1.hasNext()) {
             Node relatedNode = nli1.nextNode();
-            nodesSeenButNotProcessed.add(Integer.valueOf(relatedNode.getNumber()));
+            nodesSeenButNotProcessed.add(new Integer(relatedNode.getNumber()));
          }
 
          NodeIterator nli = nodes.nodeIterator();
          while (nli.hasNext()) {
             Node n = nli.nextNode();
-            nodesSeenButNotProcessed.remove(Integer.valueOf(n.getNumber()));
+            nodesSeenButNotProcessed.remove(new Integer(n.getNumber()));
             toXmlNode(n, document, root, true, false, new HashMap<Integer, Node>(), nodesSeenButNotProcessed);
          }
 
          return writeXml(document);
       }
       catch (Exception e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -192,8 +191,8 @@ public class XMLController {
          return writeXml(document);
       }
       catch (Exception e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -214,23 +213,23 @@ public class XMLController {
 
 
    private Element toXmlNode(Node node, Document document, Element root, boolean addRelations,
-         boolean fieldsAsAttribute, Map<Integer, Node> processedNodes) {
+         boolean fieldsAsAttribute, HashMap<Integer, Node> processedNodes) {
       return toXmlNode(node, document, root, addRelations, fieldsAsAttribute, processedNodes, new ArrayList<Integer>());
    }
 
 
    private Element toXmlNode(Node node, Document document, Element root, boolean addRelations,
-         boolean fieldsAsAttribute, Map<Integer, Node> processedNodes, List<Integer> nodesSeenButNotProcessed) {
+         boolean fieldsAsAttribute, HashMap<Integer, Node> processedNodes, List<Integer> nodesSeenButNotProcessed) {
       NodeManager manager = node.getNodeManager();
       String managerName = manager.getName();
-      if (!TypeUtil.isSystemType(managerName)) {
+      if (isTypeAllowed(managerName)) {
          Element nodeElement = document.createElement(managerName);
          toXmlFields(node, document, nodeElement, fieldsAsAttribute);
          addExternalUrl(node, document, nodeElement, fieldsAsAttribute);
 
-         processedNodes.put(Integer.valueOf(node.getNumber()), node);
+         processedNodes.put(new Integer(node.getNumber()), node);
 
-         if (addRelations && !nodesSeenButNotProcessed.contains(Integer.valueOf(node.getNumber()))) {
+         if (addRelations && !nodesSeenButNotProcessed.contains(new Integer(node.getNumber()))) {
             RelationManagerList rml = manager.getAllowedRelations((NodeManager) null, null, "DESTINATION");
             RelationManagerIterator rmi = rml.relationManagerIterator();
             while (rmi.hasNext()) {
@@ -242,13 +241,13 @@ public class XMLController {
                }
             }
          }
-         processedNodes.remove(Integer.valueOf(node.getNumber()));
+         processedNodes.remove(new Integer(node.getNumber()));
 
-         if (root == null) {
-            document.appendChild(nodeElement);
+         if (root != null) {
+            root.appendChild(nodeElement);
          }
          else {
-            root.appendChild(nodeElement);
+            document.appendChild(nodeElement);
          }
          return nodeElement;
       }
@@ -318,7 +317,7 @@ public class XMLController {
             else {
                if ("page".equals(builderName) || "site".equals(builderName)) {
                   url = node.getStringValue("externalurl");
-                  if (StringUtils.isEmpty(url)) {
+                  if (StringUtil.isEmpty(url)) {
                      url = ResourcesUtil.getServletPathWithAssociation("content", "/content/*", node
                            .getStringValue("number"), node.getStringValue("title"));
                   }
@@ -326,7 +325,7 @@ public class XMLController {
             }
          }
       }
-      if (StringUtils.isNotEmpty(url)) {
+      if (!StringUtil.isEmpty(url)) {
          if (fieldsAsAttribute) {
             nodeElement.setAttribute("externalUrl", url);
          }
@@ -361,7 +360,7 @@ public class XMLController {
 
             Object value = null;
             if ("number".equals(fieldName)) {
-               value = Integer.valueOf(node.getNumber());
+               value = new Integer(node.getNumber());
                if (relationFields) {
                   fieldName = "relationnumber";
                }
@@ -374,10 +373,10 @@ public class XMLController {
             if (value != null) {
                if (Field.TYPE_BOOLEAN == type) {
                   if (value instanceof Boolean) {
-                     val = value.toString();
+                     val = "" + ((Boolean) value).booleanValue();
                   }
                   if (value instanceof Integer) {
-                     val = Boolean.toString( ((Integer) value) == 1 );
+                     val = "" + (((Integer) value).intValue() == 1);
                   }
                }
                else if (Field.TYPE_DATETIME == type) {
@@ -412,7 +411,7 @@ public class XMLController {
                   testManager = testManager.getParent();
                }
                catch (NotFoundException nfe) {
-                  break;
+                  testManager = null;
                }
             }
             return false;
@@ -431,7 +430,7 @@ public class XMLController {
                   testManager = testManager.getParent();
                }
                catch (NotFoundException nfe) {
-                  break;
+                  testManager = null;
                }
             }
             return true;
@@ -450,14 +449,14 @@ public class XMLController {
 
 
    public void toXmlRelations(Node node, Document document, Element nodeElement, RelationManager rm,
-         boolean addRelations, boolean fieldsAsAttribute, Map<Integer, Node> processedNodes) {
+         boolean addRelations, boolean fieldsAsAttribute, HashMap<Integer, Node> processedNodes) {
       toXmlRelations(node, document, nodeElement, rm, addRelations, fieldsAsAttribute, processedNodes,
             new ArrayList<Integer>());
    }
 
 
    public void toXmlRelations(Node node, Document document, Element nodeElement, RelationManager rm,
-         boolean addRelations, boolean fieldsAsAttribute, Map<Integer, Node> processedNodes,
+         boolean addRelations, boolean fieldsAsAttribute, HashMap<Integer, Node> processedNodes,
          List<Integer> nodesSeenButNotProcessed) {
       if (rm.hasField("pos")) {
          Comparator<Node> comparator = new NodeFieldComparator("pos");
@@ -473,7 +472,7 @@ public class XMLController {
 
    private void toXmlRelations(Node node, Document document, Element nodeElement, RelationManager rm,
          boolean addRelations, boolean fieldsAsAttribute, Comparator<Node> comparator,
-         Map<Integer, Node> processedNodes, List<Integer> parentNodesSeenButNotProcessed) {
+         HashMap<Integer, Node> processedNodes, List<Integer> parentNodesSeenButNotProcessed) {
       String relatedRole = rm.getForwardRole();
       NodeManager destination = rm.getDestinationManager();
       RelationList rl = node.getRelations(relatedRole, destination, "DESTINATION");
@@ -487,7 +486,7 @@ public class XMLController {
       while (rli1.hasNext()) {
          Relation relation = rli1.nextRelation();
          Node relatedNode = relation.getDestination();
-         nodesSeenButNotProcessed.add(Integer.valueOf(relatedNode.getNumber()));
+         nodesSeenButNotProcessed.add(new Integer(relatedNode.getNumber()));
       }
 
       RelationIterator rli = rl.relationIterator();
@@ -495,17 +494,18 @@ public class XMLController {
       while (rli.hasNext()) {
          Relation relation = rli.nextRelation();
          Node relatedNode = relation.getDestination();
-         if (processedNodes.containsKey(relatedNode.getNumber())) {
-            // Node already processed.. make sure we don't get circular references
-            skippedChildren++;
-            log.debug("Skipping child " + relatedNode + ", since it was already processed");
-         }
-         else {
-            nodesSeenButNotProcessed.remove(Integer.valueOf(relatedNode.getNumber()));
+         if (!processedNodes.containsKey(new Integer(relatedNode.getNumber()))) {
+            nodesSeenButNotProcessed.remove(new Integer(relatedNode.getNumber()));
             toXmlNode(relatedNode, document, nodeElement, addRelations, fieldsAsAttribute, processedNodes,
                   nodesSeenButNotProcessed);
             toXmlFields(relation, document, (Element) nodeElement.getLastChild(), true, true);
             ((Element) nodeElement.getLastChild()).setAttribute("relationname", relatedRole);
+         }
+         else {
+            // Node already processed.. make sure we don't get circular
+            // references
+            skippedChildren++;
+            log.debug("Skipping child " + relatedNode + ", since it was already processed");
          }
       }
       if (skippedChildren > 0) {
@@ -521,12 +521,12 @@ public class XMLController {
          return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
       }
       catch (ParserConfigurationException e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
       catch (FactoryConfigurationError e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
    }
 
@@ -541,20 +541,20 @@ public class XMLController {
          transformer.transform(new DOMSource(document), new StreamResult(output));
       }
       catch (TransformerConfigurationException e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
       catch (IllegalArgumentException e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
       catch (TransformerFactoryConfigurationError e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
       catch (TransformerException e) {
-         log.warn(Logging.stackTrace(e));
-         throw e;
+         e.printStackTrace();
+         throw new Exception(e);
       }
       return output.toString();
    }

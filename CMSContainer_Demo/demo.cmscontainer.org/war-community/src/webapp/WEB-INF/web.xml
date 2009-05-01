@@ -7,11 +7,17 @@
    <display-name>CMS Container implementation</display-name>
    <description>CMS Container implementation</description>
 
-<!--
+    <context-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:applicationContext.xml</param-value>
+   </context-param>
+
+   <listener>
+      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+   </listener>
    <listener>
        <listener-class>net.jforum.ForumSessionListener</listener-class>
    </listener>
--->
 	<!-- 
 		MMBase Taglib settings
 	-->
@@ -82,29 +88,6 @@
 		<param-value>false</param-value>
 	</context-param -->
 
-
-    <context-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/spring-*.xml</param-value>
-    </context-param>
-    
-    <listener>
-      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    
-    <filter>
-      <filter-name>SecurityFilterChainProxy</filter-name>
-      <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-      <init-param>
-        <param-name>targetClass</param-name>
-        <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
-      </init-param>
-    </filter>
-    <filter-mapping>
-      <filter-name>SecurityFilterChainProxy</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
-  
    <filter>
       <description>Filter catch all requests.</description>
       <display-name>DisableUrlSession Filter</display-name>
@@ -142,7 +125,13 @@
       </init-param>
    </filter>
 
-<!-- Clickstream 
+   <filter>
+      <filter-name>hibernateFilter</filter-name>
+      <filter-class>
+         org.springframework.orm.hibernate3.support.OpenSessionInViewFilter
+      </filter-class>
+   </filter>
+   	<!-- Clickstream -->
    <filter>
        <filter-name>clickstream-jforum</filter-name>
        <filter-class>net.jforum.util.legacy.clickstream.ClickstreamFilter</filter-class>
@@ -151,7 +140,12 @@
        <filter-name>clickstream-jforum</filter-name>
        <url-pattern>*.page</url-pattern>
    </filter-mapping>
--->
+  
+   <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+   </filter-mapping>
+
    
    <filter-mapping>
       <filter-name>DisableUrlSessionFilter</filter-name>
@@ -210,7 +204,7 @@
         <servlet-class>com.finalist.cmsc.services.search.RedirectServlet</servlet-class>
         <init-param>
 			<param-name>forwardRequest</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
         </init-param>
         <load-on-startup>4</load-on-startup>
     </servlet>
@@ -316,13 +310,33 @@
        <param-value>true</param-value>
      </init-param>
    </servlet> -->
-
+    <!-- JForum JahiaWebapps bridge-->
+    <servlet>
+        <servlet-name>jForumJahiaWebApp</servlet-name>
+        <servlet-class>org.jahia.jahiawebapps.jforum.JForumJahiaWebAppBridge</servlet-class>
+    </servlet>
+    <!-- AJAX -->
+    <servlet>
+        <servlet-name>dwr-invoker</servlet-name>
+        <servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+        <init-param>
+            <param-name>configJForum</param-name>
+            <param-value>WEB-INF/dwr-jforum.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
     <!-- Mapping -->
     <!--<servlet-mapping>
         <servlet-name>install</servlet-name>
         <url-pattern>/install/install.page</url-pattern>
     </servlet-mapping> -->
-
+    <servlet-mapping>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>jforum</servlet-name>
         <url-pattern>*.page</url-pattern>
@@ -431,18 +445,5 @@
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>
-	
-	<env-entry>
-		<description>MMbase CloudContext Security: allow all read operations on nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/readall</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
-	<env-entry>
-		<description>MMbase CloudContext Security: Disable checks on context of nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/disableContextChecks</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
 
 </web-app>

@@ -64,12 +64,9 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
 
     public String getIcon(Object node, UserRole role) {
         Node n = (Node) node;
-        return getIcon(n.getNodeManager().getName(), role);
+        return "type/" + n.getNodeManager().getName() + "_"+role.getRole().getName()+".png";
     }
 
-    public String getIcon(String name, UserRole role) {
-        return "type/" + name + "_"+role.getRole().getName()+".png";
-    }
     
     public String getOpenAction(Node parentNode, boolean secure) {
         String contextPath = request.getContextPath();
@@ -78,19 +75,14 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
     }
 
     public TreeOption createTreeOption(String icon, String message, String resourcebundle, String action) {
-        String label = getLabel(message, resourcebundle);
+        Locale locale = JstlUtil.getLocale(request);
+        String label = JstlUtil.getMessage(resourcebundle, locale, message);
         if (!action.startsWith("javascript:")) {
             action = getUrl(action);
         }
         return createOption(icon, label,  action, target);      
         
     }
-
-	public String getLabel(String message, String resourcebundle) {
-		Locale locale = JstlUtil.getLocale(request);
-        String label = JstlUtil.getMessage(resourcebundle, locale, message);
-		return label;
-	}
     
     public TreeOption createTreeOption(String icon, String message, String action) {
         String label = JstlUtil.getMessage(request, message);
@@ -107,7 +99,7 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
     
     public abstract TreeOption createOption(String icon, String label, String action, String target);
 
-    public abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
+    protected abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
 
     public boolean showChildren(Object node) {
        Node parentNode = (Node) node;

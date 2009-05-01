@@ -11,7 +11,7 @@ package com.finalist.cmsc.alias.forms;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -26,14 +26,12 @@ public class AliasCreate extends MMBaseFormlessAction {
 
       String parentpage = getParameter(request, "parentpage", true);
       String action = getParameter(request, "action");
-      boolean stacked=(request.getParameter("stacked") != null && request.getParameter("stacked").equals("true"));
 
-      if (StringUtils.isBlank(action)) {
+      if (StringUtil.isEmptyOrWhitespace(action)) {
          request.getSession().setAttribute("parentpage", parentpage);
 
-         
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?action=create"
-               + "&contenttype=pagealias" + "&returnurl=" + mapping.findForward("returnurl").getPath() + "?stacked="+stacked);
+               + "&contenttype=pagealias" + "&returnurl=" + mapping.findForward("returnurl").getPath());
          ret.setRedirect(true);
          return ret;
       }
@@ -43,13 +41,8 @@ public class AliasCreate extends MMBaseFormlessAction {
             NavigationUtil.appendChild(cloud, parentpage, ewnodelastedited);
 
             addToRequest(request, "showalias", ewnodelastedited);
-            addToRequest(request, "refreshChannels", "true");
-            if(!stacked) {
-	            return mapping.findForward(SUCCESS);
-            }
-            else {
-            	return new ActionForward(mapping.findForward("stacked").getPath()+"?parent="+parentpage);
-            }
+            ActionForward ret = mapping.findForward(SUCCESS);
+            return ret;
          }
          request.getSession().removeAttribute("parentpage");
          ActionForward ret = mapping.findForward(CANCEL);

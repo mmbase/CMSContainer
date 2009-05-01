@@ -9,11 +9,13 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
+import java.io.Serializable;
 import java.util.List;
+
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
 
 import org.mmbase.bridge.Node;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.View;
 import com.finalist.cmsc.navigation.PortletUtil;
 
@@ -25,7 +27,7 @@ public class ViewCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    @Override
-   protected Object loadEntry(Object key) throws Exception {
+   protected Serializable loadEntry(Serializable key) throws Exception {
       Node viewNode = getNode(key);
       if (viewNode == null || !PortletUtil.isView(viewNode)) {
          return null;

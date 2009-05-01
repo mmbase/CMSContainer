@@ -14,17 +14,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import net.sf.mmapps.commons.util.XmlUtil;
+
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.finalist.cmsc.util.XmlUtil;
-
 public class Generator {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(Generator.class.getName());
+   private static Logger log = Logging.getLoggerInstance(Generator.class.getName());
 
    private static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/googlesitemap/generator.properties";
 
@@ -56,7 +56,7 @@ public class Generator {
    }
 
 
-   public final void setDateFormat(String dateTimeFormat) {
+   public void setDateFormat(String dateTimeFormat) {
       if (dateTimeFormat == null) {
          dateTimeFormat = "yyyy-MM-dd";
       }
@@ -65,7 +65,7 @@ public class Generator {
    }
 
 
-   public final void setChangefreq(String changefreq) {
+   public void setChangefreq(String changefreq) {
       if (changefreq == null) {
          this.changefreq = "monthly";
       }
@@ -75,7 +75,7 @@ public class Generator {
    }
 
 
-   public String generate(SitemapModel model) {
+   public String generate(SitemapModel model) throws Exception {
       Document sitemap = XmlUtil.createDocument();
       Element urlsetNode = XmlUtil.createRoot(sitemap, "urlset", googleNamespace);
 

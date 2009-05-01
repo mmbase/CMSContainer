@@ -7,7 +7,6 @@ The license (Mozilla version 1.0) can be read at the MMBase site.
 See http://www.MMBase.org/license
 -->
 <project>
-    <!--extend>${basedir}/../maven-base/project.xml</extend-->
     <artifactId>cmsc-overview_generator</artifactId>
     <name>CMS Container overview generator</name>
     <currentVersion>0.1</currentVersion>
@@ -22,7 +21,7 @@ See http://www.MMBase.org/license
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
+            <version>1.1</version>
             <type>jar</type>
             <properties>
                 <jar.manifest.classpath>true</jar.manifest.classpath>
@@ -40,16 +39,7 @@ See http://www.MMBase.org/license
         <dependency>
             <groupId>jcvsii</groupId>
             <artifactId>jcvsii</artifactId>
-            <version>5.3.2</version>
-            <type>jar</type>
-            <properties>
-                <jar.manifest.classpath>true</jar.manifest.classpath>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>mindterm</groupId>
-            <artifactId>mindterm</artifactId>
-            <version>3.2</version>
+            <version>5.4.2</version>
             <type>jar</type>
             <properties>
                 <jar.manifest.classpath>true</jar.manifest.classpath>
@@ -58,7 +48,7 @@ See http://www.MMBase.org/license
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.15</version>
+            <version>1.2.11</version>
             <type>jar</type>
             <properties>
                 <jar.manifest.classpath>true</jar.manifest.classpath>
@@ -67,7 +57,7 @@ See http://www.MMBase.org/license
         <dependency>
             <groupId>svnkit</groupId>
             <artifactId>svnkit</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.4</version>
             <type>jar</type>
             <properties>
                 <jar.manifest.classpath>true</jar.manifest.classpath>

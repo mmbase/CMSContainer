@@ -95,8 +95,8 @@ public class Parameters extends NameValuePairs {
          }
       }
 
-      for (String string : deletables) {
-         super.removeEntry(string);
+      for (Iterator<String> iter = deletables.iterator(); iter.hasNext();) {
+         super.removeEntry(iter.next());
       }
    }
 }

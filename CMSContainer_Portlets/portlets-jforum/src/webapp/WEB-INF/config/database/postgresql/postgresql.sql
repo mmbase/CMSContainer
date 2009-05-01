@@ -2,7 +2,7 @@
 # UserModel
 # ##########
 UserModel.selectAllByLimit = SELECT user_email, user_id, user_posts, user_regdate, username, deleted, user_karma, user_from, user_website, user_viewemail \
-	FROM jforum_users ORDER BY user_id OFFSET ? LIMIT ?
+	FROM jforum_users ORDER BY user_id LIMIT ? OFFSET ?
 
 UserModel.lastGeneratedUserId = SELECT CURRVAL('jforum_users_seq')
 
@@ -17,8 +17,8 @@ UserModel.selectAllByGroup = SELECT user_email, u.user_id, user_posts, user_regd
 	FROM jforum_users u, jforum_user_groups ug \
 	WHERE u.user_id = ug.user_id \
 	AND ug.group_id = ? \
-	ORDER BY username \
-	OFFSET ? LIMIT ?
+	ORDER BY user_id \
+	LIMIT ? OFFSET ?
 
 # #############
 # PostModel
@@ -33,7 +33,7 @@ PostModel.selectAllByTopicByLimit = SELECT p.post_id, topic_id, forum_id, p.user
 	AND p.user_id = u.user_id \
 	AND p.need_moderate = 0 \
 	ORDER BY post_time ASC \
-	OFFSET ? LIMIT ?
+	LIMIT ? OFFSET ?
 
 PostModel.selectByUserByLimit = SELECT p.post_id, topic_id, forum_id, p.user_id, post_time, poster_ip, enable_bbcode, p.attach, \
 	enable_html, enable_smilies, enable_sig, post_edit_time, post_edit_count, status, pt.post_subject, pt.post_text, username, p.need_moderate \
@@ -42,9 +42,8 @@ PostModel.selectByUserByLimit = SELECT p.post_id, topic_id, forum_id, p.user_id,
 	AND p.user_id = u.user_id \
 	AND p.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND forum_id IN(:fids:) \
-	ORDER BY p.post_id DESC \
-	OFFSET ? LIMIT ?
+	ORDER BY post_time DESC \
+	LIMIT ? OFFSET ?
 
 # ##########
 # PollModel
@@ -59,28 +58,21 @@ ForumModel.lastGeneratedForumId = SELECT CURRVAL('jforum_forums_seq');
 # #############
 # TopicModel
 # #############
-TopicModel.selectAllByForumByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, (SELECT SUM(p.attach) \
-        FROM jforum_posts p \
-        WHERE p.topic_id = t.topic_id \
-        AND p.need_moderate = 0) AS attach \
+TopicModel.selectAllByForumByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
-	WHERE (t.forum_id = ? OR t.topic_moved_id = ?) \
+	WHERE t.forum_id = ? \
 	AND p.post_id = t.topic_last_post_id \
 	AND p.need_moderate = 0 \
 	ORDER BY t.topic_type DESC, t.topic_last_post_id DESC \
-	OFFSET ? LIMIT ?
+	LIMIT ? OFFSET ?
 
-TopicModel.selectByUserByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, (SELECT SUM(p.attach) \
-        FROM jforum_posts p \
-        WHERE p.topic_id = t.topic_id \
-        AND p.need_moderate = 0) AS attach \
+TopicModel.selectByUserByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
 	WHERE p.post_id = t.topic_last_post_id \
 	AND t.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND t.forum_id IN(:fids:) \
 	ORDER BY t.topic_last_post_id DESC \
-	OFFSET ? LIMIT ?
+	LIMIT ? OFFSET ?
 		
 TopicModel.lastGeneratedTopicId = SELECT CURRVAL('jforum_topics_seq')
 
@@ -88,6 +80,22 @@ TopicModel.lastGeneratedTopicId = SELECT CURRVAL('jforum_topics_seq')
 # PrivateMessagesModel
 # #####################
 PrivateMessagesModel.lastGeneratedPmId = SELECT CURRVAL('jforum_privmsgs_seq')
+
+# ############
+# SearchModel
+# ############
+SearchModel.cleanSearchResults = DELETE FROM jforum_search_results WHERE session_id = ? OR search_time < (NOW() - INTERVAL '1 HOUR')
+SearchModel.cleanSearchTopics = DELETE FROM jforum_search_topics WHERE session_id = ? OR search_time < (NOW() - INTERVAL '1 HOUR')
+
+SearchModel.insertTopicsIds = INSERT INTO jforum_search_results ( topic_id, session_id, search_time ) SELECT DISTINCT t.topic_id, ?::varchar, NOW() FROM jforum_topics t, jforum_posts p \
+	WHERE t.topic_id = p.topic_id \
+	AND p.post_id IN (:posts:)
+	
+SearchModel.getPostsToIndex = SELECT p.post_id, pt.post_text, pt.post_subject \
+	FROM jforum_posts p, jforum_posts_text pt \
+	WHERE p.post_id = pt.post_id \
+	AND p.post_id BETWEEN ? AND ? \
+	LIMIT ? OFFSET ?
 
 # #############
 # SmiliesModel
@@ -113,20 +121,3 @@ AttachmentModel.lastGeneratedAttachmentId = SELECT CURRVAL('jforum_attach_seq')
 # UserModel
 # ##########
 UserModel.login = SELECT user_id FROM jforum_users WHERE lower(username) = lower(?) AND user_password = ?
-
-# ###############
-# BanlistModel
-# ###############
-BanlistModel.lastGeneratedBanlistId = SELECT CURRVAL('jforum_banlist_seq')
-
-# ################
-# ModerationLog
-# ################
-ModerationLog.lastGeneratedModerationLogId = SELECT CURRVAL('jforum_moderation_log_seq')
-
-ModerationLog.selectAll = SELECT l.*, u.username, u2.username AS poster_username \
-	FROM jforum_moderation_log l \
-	LEFT JOIN jforum_users u2 ON u2.user_id = l.post_user_id \
-	LEFT JOIN jforum_users u ON l.user_id = u.user_id \
-	ORDER BY log_id DESC \
-	OFFSET ? LIMIT ?

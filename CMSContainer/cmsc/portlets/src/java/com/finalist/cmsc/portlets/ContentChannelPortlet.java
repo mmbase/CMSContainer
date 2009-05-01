@@ -14,15 +14,15 @@ import java.util.*;
 
 import javax.portlet.*;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.beans.om.ContentElement;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.services.contentrepository.ContentRepository;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * Portlet to edit content elements
@@ -50,7 +50,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    protected static final String DIRECTION = "direction";
    protected static final String ORDERBY = "orderby";
    protected static final String CONTENTCHANNEL = "contentchannel";
-   protected static final String MAX_DAYS = "maxDays";
 
    protected static final String VIEW_TYPE = "viewtype";
    protected static final String DISPLAY_TYPE = "displaytype";
@@ -80,7 +79,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       setPortletParameter(portletId, VIEW_TYPE, request.getParameter(VIEW_TYPE));
       setPortletNodeParameter(portletId, ARCHIVE_PAGE, request.getParameter(ARCHIVE_PAGE));
       setPortletParameter(portletId, START_INDEX, request.getParameter(START_INDEX));
-      setPortletParameter(portletId,MAX_DAYS,request.getParameter(MAX_DAYS));
    }
 
 
@@ -104,8 +102,8 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       PortletPreferences preferences = req.getPreferences();
 
       String channel = preferences.getValue(CONTENTCHANNEL, null);
-      if (StringUtils.isNotEmpty(channel)) {
-         addContentElements(req, channel);
+      if (!StringUtil.isEmpty(channel)) {
+         addContentElements(req);
          super.doView(req, res);
       }
    }
@@ -114,11 +112,11 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    @Override
    protected void doEdit(RenderRequest req, RenderResponse res) throws PortletException, IOException {
       String elementId = req.getParameter(ELEMENT_ID);
-      if (StringUtils.isEmpty(elementId)) {
+      if (StringUtil.isEmpty(elementId)) {
+         addContentElements(req);
          PortletPreferences preferences = req.getPreferences();
          String channel = preferences.getValue(CONTENTCHANNEL, null);
-         addContentElements(req, channel);
-         if (StringUtils.isNotEmpty(channel)) {
+         if (!StringUtil.isEmpty(channel)) {
             if (ContentRepository.mayEdit(channel)) {
                super.doEdit(req, res);
             }
@@ -133,16 +131,18 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    }
 
 
-   protected void addContentElements(RenderRequest req, String channel) {
+   protected void addContentElements(RenderRequest req) {
       String elementId = req.getParameter(ELEMENT_ID);
-      if (StringUtils.isEmpty(elementId)) {
+      if (StringUtil.isEmpty(elementId)) {
          PortletPreferences preferences = req.getPreferences();
          String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
          List<String> contenttypes = SiteManagement.getContentTypes(portletId);
 
+         String channel = preferences.getValue(CONTENTCHANNEL, null);
+
          int offset = 0;
          String currentOffset = req.getParameter(OFFSET);
-         if (StringUtils.isNotEmpty(currentOffset)) {
+         if (!StringUtil.isEmpty(currentOffset)) {
             offset = Integer.parseInt(currentOffset);
          }
          int startIndex = Integer.parseInt(preferences.getValue(START_INDEX, "1")) - 1;
@@ -151,14 +151,8 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          }
          setAttribute(req, "offset", offset);
 
-         String orderby = req.getParameter(ORDERBY);
-         if(orderby == null) {
-        	 orderby = preferences.getValue(ORDERBY, null);
-         }
-         String direction = req.getParameter(DIRECTION);
-         if(direction == null) {
-        	 direction = preferences.getValue(DIRECTION, null);
-         }
+         String orderby = preferences.getValue(ORDERBY, null);
+         String direction = preferences.getValue(DIRECTION, null);
          String useLifecycle = preferences.getValue(USE_LIFECYCLE, null);
 
          String archive = preferences.getValue(ARCHIVE, null);
@@ -188,18 +182,14 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
             useLifecycleBool = false;
          }
 
-         int maxDays = Integer.parseInt(preferences.getValue(MAX_DAYS, "0"));
-         if(maxDays < 0){
-            maxDays = 0;
-         }
          int totalItems = countContentElements(req, contenttypes, channel, offset, orderby, direction, archive,
-               elementsPerPage, year, month, day, useLifecycleBool, maxDays);
+               elementsPerPage, year, month, day, useLifecycleBool);
          if (startIndex > 0) {
             totalItems = totalItems - startIndex;
          }
 
          List<ContentElement> elements = getContentElements(req, contenttypes, channel, offset, orderby, direction,
-               archive, elementsPerPage, year, month, day, useLifecycleBool, maxDays);
+               archive, elementsPerPage, year, month, day, useLifecycleBool);
 
          setAttribute(req, ELEMENTS, elements);
          if (contenttypes != null && !contenttypes.isEmpty()) {
@@ -209,12 +199,12 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          setAttribute(req, ELEMENTS_PER_PAGE, elementsPerPage);
 
          String pagesIndex = preferences.getValue(PAGES_INDEX, null);
-         if (StringUtils.isEmpty(pagesIndex)) {
+         if (StringUtil.isEmpty(pagesIndex)) {
             setAttribute(req, PAGES_INDEX, "center");
          }
 
          String showPages = preferences.getValue(SHOW_PAGES, null);
-         if (StringUtils.isEmpty(showPages)) {
+         if (StringUtil.isEmpty(showPages)) {
             setAttribute(req, SHOW_PAGES, 10);
          }
 
@@ -225,11 +215,11 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          setAttribute(req, USE_PAGING, usePaging);
 
          String indexPosition = preferences.getValue(INDEX_POSITION, null);
-         if (StringUtils.isEmpty(indexPosition)) {
+         if (StringUtil.isEmpty(indexPosition)) {
             setAttribute(req, INDEX_POSITION, "bottom");
          }
          String viewType = preferences.getValue(VIEW_TYPE, null);
-         if (StringUtils.isEmpty(viewType)) {
+         if (StringUtil.isEmpty(viewType)) {
             setAttribute(req, DISPLAY_TYPE, "list");
          }
          else {
@@ -254,20 +244,22 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,
-         boolean useLifecycleBool, int maxDays) {
+         boolean useLifecycleBool) {
       int totalItems = ContentRepository.countContentElements(channel, contenttypes, orderby, direction,
-            useLifecycleBool, archive, offset, elementsPerPage, year, month, day, maxDays);
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day);
       return totalItems;
    }
-   
+
+
    protected List<ContentElement> getContentElements(RenderRequest req, List<String> contenttypes, String channel,
          int offset, String orderby, String direction, String archive, int elementsPerPage, int year, int month,
-         int day, boolean useLifecycleBool, int maxDays) {
+         int day, boolean useLifecycleBool) {
       List<ContentElement> elements = ContentRepository.getContentElements(channel, contenttypes, orderby, direction,
-            useLifecycleBool, archive, offset, elementsPerPage, year, month, day,maxDays);
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day);
       return elements;
    }
-   
+
+
    public int getOffset(int currentPage, int pageSize) {
       return ((currentPage - 1) * pageSize) + 1;
    }

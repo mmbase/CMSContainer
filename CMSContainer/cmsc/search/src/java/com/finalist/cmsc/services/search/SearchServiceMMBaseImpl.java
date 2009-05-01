@@ -26,7 +26,6 @@ import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class SearchServiceMMBaseImpl extends SearchService {
 
@@ -45,11 +44,10 @@ public class SearchServiceMMBaseImpl extends SearchService {
    protected static final String PAGE = "page";
    protected static final String WINDOW = "window";
 
-   protected static final int ANY_PAGE = -1;
+   private static final int ANY_PAGE = -1;
 
-   protected Map<String, Integer> priorities = new HashMap<String, Integer>();
-   protected boolean usePosition;
-   protected boolean preferContentChannels;
+   private Map<String, Integer> priorities = new HashMap<String, Integer>();
+   private boolean usePosition;
 
 
    @Override
@@ -76,11 +74,10 @@ public class SearchServiceMMBaseImpl extends SearchService {
       }
 
       usePosition = aProperties.getBoolean("filter.usePosition", false);
-      preferContentChannels = aProperties.getBoolean("filter.preferContentChannels", true);
    }
 
 
-   protected int getPriority(String name) {
+   private int getPriority(String name) {
       Integer prio = priorities.get(name);
       if (prio != null) {
          return prio;
@@ -98,15 +95,8 @@ public class SearchServiceMMBaseImpl extends SearchService {
    @Override
    public PageInfo findDetailPageForContent(Node content, String serverName) {
       List<Node> pages = findPagesForContent(content, null);
-      return determineDetailPage(content, serverName, pages);
-   }
-
-
-   protected PageInfo determineDetailPage(Node content, String serverName, List<Node> pages) {
       if (!pages.isEmpty()) {
-         if (content != null) {
-             filterPageQueryNodes(pages, content);
-         }
+         filterPageQueryNodes(pages, content);
          if (!pages.isEmpty()) {
             List<PageInfo> pageInfos = new ArrayList<PageInfo>();
             for (Node pageNode : pages) {
@@ -125,7 +115,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected void filterPageQueryNodes(List<Node> pages, Node content) {
+   private void filterPageQueryNodes(List<Node> pages, Node content) {
       for (Iterator<Node> iter = pages.iterator(); iter.hasNext();) {
          Node pageQueryNode = iter.next();
          boolean keep = evaluatePageQueryNode(pageQueryNode, content);
@@ -136,7 +126,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected boolean evaluatePageQueryNode(Node pageQueryNode, Node content) {
+   private boolean evaluatePageQueryNode(Node pageQueryNode, Node content) {
       Page page = (Page) SiteManagement.getNavigationItem(pageQueryNode.getIntValue(PagesUtil.PAGE + ".number"));
       String key = pageQueryNode.getStringValue(PortletUtil.NODEPARAMETER + "." + PortletUtil.KEY_FIELD);
       if (CONTENTCHANNEL.equals(key)) {
@@ -153,7 +143,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected boolean evaluateContentTypes(Integer portletId, Node content) {
+   private boolean evaluateContentTypes(Integer portletId, Node content) {
       List<String> nodeManagerNames = SiteManagement.getContentTypes(portletId.toString());
       if (!nodeManagerNames.isEmpty()) {
          for (String nmName : nodeManagerNames) {
@@ -167,13 +157,13 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected boolean evaluateArchive(Portlet portlet, Node content) {
+   private boolean evaluateArchive(Portlet portlet, Node content) {
       String archive = portlet.getParameterValue(ARCHIVE);
       return ContentElementUtil.matchArchive(content, archive);
    }
 
 
-   protected boolean evalutateContentchannelPosition(Portlet portlet, Node content) {
+   private boolean evalutateContentchannelPosition(Portlet portlet, Node content) {
       if (usePosition) {
          String startIndex = portlet.getParameterValue(START_INDEX);
          String maxElements = portlet.getParameterValue(MAX_ELEMENTS);
@@ -181,9 +171,6 @@ public class SearchServiceMMBaseImpl extends SearchService {
          int end = maxElements == null || maxElements.length() == 0 ? -1 : Integer.valueOf(maxElements);
 
          if (start > 0 || end > 0) {
-            if (start <= 0) {
-               start = 1;
-            }
             List<String> contenttypes = SiteManagement.getContentTypes(String.valueOf(portlet.getId()));
 
             String contentchannel = portlet.getParameterValue(CONTENTCHANNEL);
@@ -202,7 +189,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
             Node channel = cloud.getNode(contentchannel);
 
             NodeList l = RepositoryUtil.getLinkedElements(channel, contenttypes, orderby, direction, useLifecycleBool,
-                  archive, start - 1, end, -1, -1, -1);
+                  archive, start, end, -1, -1, -1);
             for (Iterator<Node> iterator = l.iterator(); iterator.hasNext();) {
                Node node = iterator.next();
                if (node.getNumber() == content.getNumber()) {
@@ -242,14 +229,24 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected List<PageInfo> findAllDetailPages(Node content) {
+   private List<PageInfo> findAllDetailPages(Node content) {
       return findAllDetailPages(content, ANY_PAGE);
    }
 
 
-   protected List<PageInfo> findAllDetailPages(Node content, int pageId) {
-       List<Node> pages = findPagesForContent(content, null, pageId, preferContentChannels);
-      return convertToPageInfos(pages);
+   private List<PageInfo> findAllDetailPages(Node content, int pageId) {
+      NodeList pages = findPagesForContent(content, null, pageId);
+
+      List<PageInfo> infos = new ArrayList<PageInfo>();
+      for (Iterator<Node> iter = pages.iterator(); iter.hasNext();) {
+         Node pageNode = iter.next();
+         PageInfo pageInfo = getPageInfo(pageNode, true);
+         if (pageInfo != null && !infos.contains(pageInfo)) {
+            infos.add(pageInfo);
+         }
+      }
+
+      return infos;
    }
 
 
@@ -261,26 +258,21 @@ public class SearchServiceMMBaseImpl extends SearchService {
 
    @Override
    public List<PageInfo> findPagesForContentElement(Node content, Node channel) {
-      List<Node> pages = findPagesForContent(content, channel);
-      return convertToPageInfos(pages);
+      NodeList pages = findPagesForContent(content, channel);
+
+      List<PageInfo> infos = new ArrayList<PageInfo>();
+      for (Iterator<Node> iter = pages.iterator(); iter.hasNext();) {
+         Node pageNode = iter.next();
+         PageInfo pageInfo = getPageInfo(pageNode, false);
+         if (pageInfo != null) {
+            infos.add(pageInfo);
+         }
+      }
+      return infos;
    }
 
 
-   protected List<PageInfo> convertToPageInfos(List<Node> pages) {
-       List<PageInfo> infos = new ArrayList<PageInfo>();
-       for (Node pageNode : pages) {
-          PageInfo pageInfo = getPageInfo(pageNode, true);
-          if (pageInfo != null && !infos.contains(pageInfo)) {
-             infos.add(pageInfo);
-          }
-       }
-       // put the best page as first
-       Collections.sort(infos, new PageInfoComparator());
-       return infos;
-    }
-
-
-   protected PageInfo getPageInfo(Node pageQueryNode, boolean clicktopage) {
+   private PageInfo getPageInfo(Node pageQueryNode, boolean clicktopage) {
       NavigationItem item = SiteManagement.getNavigationItem(pageQueryNode.getIntValue(PagesUtil.PAGE + ".number"));
       if (item != null && Page.class.isInstance(item)) {
          Page page = Page.class.cast(item);
@@ -298,7 +290,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
                if (portlet != null) {
                   String pageNumber = portlet.getParameterValue(PAGE);
                   if (pageNumber != null) {
-                      NavigationItem clickItem = SiteManagement.getNavigationItem(Integer.valueOf(pageNumber));
+                      NavigationItem clickItem = SiteManagement.getNavigationItem(Integer.valueOf(pageNumber)); 
                       if (clickItem != null && Page.class.isInstance(clickItem)) {
                           page = Page.class.cast(clickItem);
                           portletWindowName = portlet.getParameterValue(WINDOW);
@@ -311,12 +303,6 @@ public class SearchServiceMMBaseImpl extends SearchService {
          Integer portletId = page.getPortlet(portletWindowName);
          if (portletId == -1) {
             return null;
-         }
-         else {
-             Portlet portlet = SiteManagement.getPortlet(portletId);
-             if (!isDetailPortlet(portlet)) {
-                 return null;
-             }
          }
 
          String host = null;
@@ -340,34 +326,20 @@ public class SearchServiceMMBaseImpl extends SearchService {
 
    @Override
    public boolean hasContentPages(Node content) {
-      NodeList pages = findPagesForContent(content, null, preferContentChannels);
+      NodeList pages = findPagesForContent(content, null);
       return (pages != null && pages.size() > 0);
    }
 
-   protected NodeList findPagesForContent(Node content, Node channel) {
-      return findPagesForContent(content, channel, preferContentChannels);
-   }
-   
-   protected NodeList findPagesForContent(Node content, Node channel, boolean preferContentChannels) {
-      return findPagesForContent(content, channel, ANY_PAGE, preferContentChannels);
+
+   private NodeList findPagesForContent(Node content, Node channel) {
+      return findPagesForContent(content, channel, ANY_PAGE);
    }
 
 
-   protected NodeList findPagesForContent(Node content, Node channel, int pageid, boolean preferContentChannels) {
-      Cloud cloud;
-      if (content != null) {
-          cloud = content.getCloud();
-      }
-      else {
-          if (channel != null) {
-              cloud = channel.getCloud();
-          }
-          else {
-              throw new IllegalArgumentException("content and channel are null");
-          }
-      }
-
+   private NodeList findPagesForContent(Node content, Node channel, int pageid) {
       NodeList channels;
+      Cloud cloud = content.getCloud();
+
       if (channel != null) {
          channels = cloud.createNodeList();
          channels.add(channel);
@@ -375,64 +347,40 @@ public class SearchServiceMMBaseImpl extends SearchService {
       else {
          channels = RepositoryUtil.getContentChannelsForContent(content);
       }
-      NodeList pages = null;
-      if (preferContentChannels) {
+
+      if (content != null) {
+         channels.add(content);
+      }
+
+      Query query = createPagesForContentQuery(cloud, channels, pageid);
+
+      NodeList pages = cloud.getList(query);
+      if (pages.isEmpty()) {
          if (content != null) {
-            channels.add(content);
+            channels.remove(content);
          }
-   
-         Query query = createPagesForContentQuery(cloud, channels, pageid);
-   
-         pages = cloud.getList(query);
-         if (pages.isEmpty()) {
-            if (content != null) {
-               channels.remove(content);
+         NodeList collectionchannels = cloud.createNodeList();
+         for (Iterator<Node> iter = channels.iterator(); iter.hasNext();) {
+            Node contentchannel = iter.next();
+            NodeList cc = RepositoryUtil.getCollectionChannels(contentchannel);
+            if (!cc.isEmpty()) {
+               collectionchannels.addAll(cc);
             }
-            NodeList collectionchannels = getCollectionsForChannels(cloud, channels);
-            if (!collectionchannels.isEmpty()) {
-               Query collectionquery = createPagesForContentQuery(cloud, collectionchannels, pageid);
-               pages = cloud.getList(collectionquery);
-            }
+         }
+         if (!collectionchannels.isEmpty()) {
+            Query collectionquery = createPagesForContentQuery(cloud, collectionchannels, pageid);
+            pages = cloud.getList(collectionquery);
          }
       }
-      else {
-         NodeList collectionchannels = getCollectionsForChannels(cloud, channels);
-         channels.addAll(collectionchannels);
-         
-         if (content != null) {
-            channels.add(content);
-         }
-   
-         Query query = createPagesForContentQuery(cloud, channels, pageid);
-         pages = cloud.getList(query);
+      if (content != null) {
+         filterPageQueryNodes(pages, content);
       }
-      if (pages != null) {
-         
-         if (content != null) {
-            filterPageQueryNodes(pages, content);
-         }
-         return pages;
-      }
-      else {
-         return cloud.createNodeList();
-      }
+
+      return pages;
    }
 
 
-   private NodeList getCollectionsForChannels(Cloud cloud, NodeList channels) {
-      NodeList collectionchannels = cloud.createNodeList();
-      for (Iterator<Node> iter = channels.iterator(); iter.hasNext();) {
-         Node contentchannel = iter.next();
-         NodeList cc = RepositoryUtil.getCollectionChannels(contentchannel);
-         if (!cc.isEmpty()) {
-            collectionchannels.addAll(cc);
-         }
-      }
-      return collectionchannels;
-   }
-
-
-   protected Query createPagesForContentQuery(Cloud cloud, NodeList channels, int pageid) {
+   private Query createPagesForContentQuery(Cloud cloud, NodeList channels, int pageid) {
       NodeManager parameterManager = cloud.getNodeManager(PortletUtil.NODEPARAMETER);
       NodeManager portletManager = cloud.getNodeManager(PortletUtil.PORTLET);
       NodeManager pageManager = cloud.getNodeManager(PagesUtil.PAGE);
@@ -469,50 +417,48 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected Set<Node> findContentElementsForPage(Node page, boolean detailOnly) {
+   private Set<Node> findContentElementsForPage(Node page, boolean detailOnly) {
       Set<Node> result = new HashSet<Node>();
       if (page != null) {
          Cloud cloud = page.getCloud();
 
-         NavigationItem item = SiteManagement.getNavigationItem(page.getNumber());
+         NavigationItem item = SiteManagement.getNavigationItem(page.getNumber()); 
          if (item == null || !Page.class.isInstance(item)) {
              return result;
          }
-
+         
          Page pageObject = Page.class.cast(item);
          Collection<Integer> portlets = pageObject.getPortlets();
          for (Integer portletId : portlets) {
             Portlet portlet = SiteManagement.getPortlet(portletId);
 
-            if (portlet != null) {
-                if (detailOnly && !isDetailPortlet(portlet)) {
-                   continue;
-                }
+            if (detailOnly && !isDetailPortlet(portlet)) {
+               continue;
+            }
 
-                List<Object> parameters = portlet.getPortletparameters();
-                for (Object param : parameters) {
-                   if (param instanceof NodeParameter) {
-                      String value = ((NodeParameter) param).getValueAsString();
-                      if (value != null) {
-                         Node found = cloud.getNode(value);
-                         if (RepositoryUtil.isChannel(found)) {
-                            NodeList elements = RepositoryUtil.getLinkedElements(found);
-                            for (Iterator<Node> iterator = elements.iterator(); iterator.hasNext();) {
-                               Node contentElement = iterator.next();
-                               if (evaluateArchive(portlet, contentElement)) {
-                                  result.add(contentElement);
-                               }
-                            }
-                         }
-                         else {
-                            if (ContentElementUtil.isContentElement(found)) {
-                               if (evaluateArchive(portlet, found)) {
-                                  result.add(found);
-                               }
-                            }
-                         }
-                      }
-                   }
+            List<Object> parameters = portlet.getPortletparameters();
+            for (Object param : parameters) {
+               if (param instanceof NodeParameter) {
+                  String value = ((NodeParameter) param).getValueAsString();
+                  if (value != null) {
+                     Node found = cloud.getNode(value);
+                     if (RepositoryUtil.isContentChannel(found)) {
+                        NodeList elements = RepositoryUtil.getLinkedElements(found);
+                        for (Iterator<Node> iterator = elements.iterator(); iterator.hasNext();) {
+                           Node contentElement = iterator.next();
+                           if (evaluateArchive(portlet, contentElement)) {
+                              result.add(contentElement);
+                           }
+                        }
+                     }
+                     else {
+                        if (ContentElementUtil.isContentElement(found)) {
+                           if (evaluateArchive(portlet, found)) {
+                              result.add(found);
+                           }
+                        }
+                     }
+                  }
                }
             }
          }
@@ -522,30 +468,13 @@ public class SearchServiceMMBaseImpl extends SearchService {
    }
 
 
-   protected boolean isDetailPortlet(Portlet portlet) {
-      if (portlet == null) {
-         return false;
-      }
+   private boolean isDetailPortlet(Portlet portlet) {
       String contentchannel = portlet.getParameterValue(CONTENTCHANNEL);
       if (contentchannel != null) {
          String pageNumber = portlet.getParameterValue(PAGE);
          if (pageNumber != null) {
             return false;
          }
-         else {
-             return isDetailView(portlet);
-         }
-      }
-      else {
-         return isDetailView(portlet);
-      }
-   }
-
-   protected boolean isDetailView(Portlet portlet) {
-      int viewNumber = portlet.getView();
-      if (viewNumber > 0) {
-         View view = SiteManagement.getView(viewNumber);
-         return view.isDetailsupport();
       }
       return true;
    }
@@ -576,7 +505,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
 
 
    @Override
-   public PageInfo getPortletInformation(int pageId, String elementNumber) {
+   public String getPortletWindow(int pageId, String elementNumber) {
       Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase");
       Node content = cloud.getNode(elementNumber);
       if (ContentElementUtil.isContentElement(content)) {
@@ -589,7 +518,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
             Collections.sort(infos, new PageInfoComparator());
             for (PageInfo pageInfo : infos) {
                if (pageId == pageInfo.getPageNumber()) {
-                  return pageInfo;
+                  return pageInfo.getWindowName();
                }
             }
          }

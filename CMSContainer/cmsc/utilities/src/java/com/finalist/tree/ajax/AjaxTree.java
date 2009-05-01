@@ -9,10 +9,10 @@
  */
 package com.finalist.tree.ajax;
 
-import com.finalist.cmsc.util.XmlUtil;
 import com.finalist.tree.Tree;
 import com.finalist.tree.TreeInfo;
 import com.finalist.tree.TreeModel;
+import net.sf.mmapps.commons.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -76,32 +76,24 @@ public class AjaxTree extends Tree {
 	         XmlUtil.createAttribute(element, "loaded", true);
 	      }
 	      else {
-	         if (getCellRenderer().showChildren(node)) {
-    	         if (showChildren(node)) {
-    	            XmlUtil.createAttribute(element, "loaded", true);
-    	            XmlUtil.createAttribute(element, "open", true);
-    
-    	            int count = getModel().getChildCount(node);
-    	            if (count > 0) {
-    	               for (int i = 0; i < count; i++) {
-    	                  Object child = getModel().getChild(node, i);
-    	                  Element item = XmlUtil.createChild(element, "item");
-    	                  renderNode(child, item);
-    	               }
-    	            }
-    	         }
-    	         else {
-    	            XmlUtil.createAttribute(element, "loaded", false);
-    	            XmlUtil.createAttribute(element, "open", false);
-    	         }
+	         if (showChildren(node) && getCellRenderer().showChildren(node)) {
+	            XmlUtil.createAttribute(element, "loaded", true);
+	            XmlUtil.createAttribute(element, "open", true);
+
+	            int count = getModel().getChildCount(node);
+	            if (count > 0) {
+	               for (int i = 0; i < count; i++) {
+	                  Object child = getModel().getChild(node, i);
+	                  Element item = XmlUtil.createChild(element, "item");
+	                  renderNode(child, item);
+	               }
+	            }
 	         }
 	         else {
-                 XmlUtil.createAttribute(element, "loaded", true);
+	            XmlUtil.createAttribute(element, "loaded", false);
+	            XmlUtil.createAttribute(element, "open", false);
 	         }
 	      }
-      }
-      else {
-    	  element.getParentNode().removeChild(element);
       }
    }
 

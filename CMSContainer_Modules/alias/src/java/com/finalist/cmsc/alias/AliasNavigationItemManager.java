@@ -1,9 +1,7 @@
 package com.finalist.cmsc.alias;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
@@ -12,116 +10,68 @@ import com.finalist.cmsc.alias.beans.om.Alias;
 import com.finalist.cmsc.alias.publish.AliasPublisher;
 import com.finalist.cmsc.alias.tree.AliasTreeItemRenderer;
 import com.finalist.cmsc.alias.util.AliasUtil;
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.navigation.*;
 
 public class AliasNavigationItemManager implements NavigationItemManager {
 
-   private static final Logger log = Logging.getLoggerInstance(AliasNavigationItemManager.class);
+    private static Logger log = Logging.getLoggerInstance(AliasNavigationItemManager.class.getName());
+	
+	private NavigationItemRenderer renderer = new AliasNavigationRenderer();
+	private NavigationTreeItemRenderer treeRenderer = new AliasTreeItemRenderer();
 
-   private NavigationItemRenderer renderer = new AliasNavigationRenderer();
+	public NavigationItemRenderer getRenderer() {
+		return renderer;
+	}
 
-   private NavigationTreeItemRenderer treeRenderer = new AliasTreeItemRenderer();
+	public String getTreeManager() {
+		return AliasUtil.ALIAS;
+	}
 
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getRenderer()
-    */
-   public NavigationItemRenderer getRenderer() {
-      return renderer;
-   }
+    public boolean isRoot() {
+        return false;
+    }
 
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getTreeManager()
-    */
-   public String getTreeManager() {
-      return AliasUtil.ALIAS;
-   }
+	public NavigationItem loadNavigationItem(Integer key, Node node) {
+        if (node == null || !AliasUtil.isAliasType(node)) {
+            log.debug("Alias not found: " + key);
+            return null;
+        }
 
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getRelatedTypes()
-    */
-   public List<String> getRelatedTypes() {
-      List<String> relatedTypes = new ArrayList<String>();
-      relatedTypes.add(ResourcesUtil.URLS);
-      return relatedTypes;
-   }
+        Alias alias = MMBaseNodeMapper.copyNode(node, Alias.class);
+        NodeList relatedPages = node.getRelatedNodes("page", "related", "destination");
+        if(relatedPages.size() > 0) {
+            Node page = relatedPages.getNode(0);
+            alias.setPage(page.getNumber());
+        }
 
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#isRoot()
-    */
-   public boolean isRoot() {
-      return false;
-   }
+        NodeList relatedUrls = node.getRelatedNodes("urls", "related", "destination");
+        if(relatedUrls.size() > 0) {
+            Node url = relatedUrls.getNode(0);
+            alias.setUrl(url.getStringValue("url"));
+        }
+        
+        return alias;
+	}
 
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#loadNavigationItem(org.mmbase.bridge.Node)
-    */
-   public NavigationItem loadNavigationItem(Node node) {
-      if (!AliasUtil.isAliasType(node)) {
-         log.debug("Node is not an Alias: " + node.getNumber());
-         return null;
-      }
+	public Object getPublisher(Cloud cloud, String type) {
+		if(type.equals(getTreeManager())) {
+			return new AliasPublisher(cloud);
+		}
+		else {
+			return null;
+		}
+	}
 
-      Alias alias = MMBaseNodeMapper.copyNode(node, Alias.class);
+    public NavigationTreeItemRenderer getTreeRenderer() {
+        return treeRenderer;
+    }
 
-      Node page = AliasUtil.getPage(node);
-      if (page != null) {
-         alias.setPage(page.getNumber());
-      }
-      else {
-         String externalUrl = AliasUtil.getUrlStr(node);
-         if (StringUtils.isNotEmpty(externalUrl)) {
-            alias.setUrl(externalUrl);
-         }
-      }
+    public Class<? extends NavigationItem> getItemClass() {
+        return Alias.class;
+    }
 
-      return alias;
-   }
-
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getPublisher(org.mmbase.bridge.Cloud,
-    *      java.lang.String)
-    */
-   public Object getPublisher(Cloud cloud, String type) {
-      if (type.equals(getTreeManager())) {
-         return new AliasPublisher(cloud);
-      }
-      else {
-         return null;
-      }
-   }
-
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getTreeRenderer()
-    */
-   public NavigationTreeItemRenderer getTreeRenderer() {
-      return treeRenderer;
-   }
-
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#getItemClass()
-    */
-   public Class<? extends NavigationItem> getItemClass() {
-      return Alias.class;
-   }
-
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#deleteNode(org.mmbase.bridge.Node)
-    */
    public void deleteNode(Node pageNode) {
-      pageNode.delete(true); // Also delete related items
-   }
-
-   /**
-    * @see com.finalist.cmsc.navigation.NavigationItemManager#findItemForRelatedNode(org.mmbase.bridge.Node)
-    */
-   public Node findItemForRelatedNode(Node node) {
-      NodeList aliases = node.getRelatedNodes(AliasUtil.ALIAS, "related", "source");
-      if (!aliases.isEmpty()) {
-         return aliases.getNode(0);
-      }
-      return null;
+      pageNode.delete(true);	//Also delete related items
    }
 }

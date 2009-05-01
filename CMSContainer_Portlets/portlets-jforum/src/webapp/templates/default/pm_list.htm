@@ -1,23 +1,28 @@
 <#include "header.htm"/>
 <table cellspacing="0" cellpadding="10" width="100%" align="center" border="0">
-	<tbody>
+	<tdiv>
 		<tr>
 			<td class="bodyline">
-				<script type="text/javascript">
-				function select_switch(status) 
+				<script>
+				<!--
+				//
+				// Should really check the browser to stop this whining ...
+				//
+				function select_switch(status)
 				{
 					for (i = 0; i < document.privmsg_list.length; i++) {
 						document.privmsg_list.elements[i].checked = status;
 					}
 				}
+				-->
 				</script>
 
 				<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
-					<tbody>
+					<tdiv>
 						<tr>
 							<td valign="top" align="center" width="100%">
 								<table cellspacing="2" cellpadding="2" border="0">
-									<tbody>
+									<tdiv>
 										<tr valign="middle">
 											<td>
 												<#if !inbox?default(false)>
@@ -56,18 +61,18 @@
 												</#if>
 											</td>
 										</tr>
-									</tbody>
+									</tdiv>
 								</table>
 							</td>
 						</tr>
-					</tbody>
+					</tdiv>
 				</table>
 				<br clear="all" />
 				<form action="${JForumContext.encodeURL("/jforum")}" method="post" name="privmsg_list" id="privmsg_list">
 				<input type="hidden" name="module" value="${moduleName}" />
 				<input type="hidden" name="action" value="delete" />
 					<table cellspacing="2" cellpadding="2" width="100%" align="center" border="0">
-						<tbody>
+						<tdiv>
 							<tr>
 								<td valign="middle" align="left">
 									<a href="${JForumContext.encodeURL("/pm/send")}" class="icon_new_topic"><img src="${contextPath}/images/transp.gif" alt="New Topic" /></a>
@@ -78,10 +83,10 @@
 									 </span>
 								</td>
 							</tr>
-						</tbody>
+						</tdiv>
 					</table>
 					<table class="forumline" cellspacing="1" cellpadding="3" width="100%" border="0">
-						<tbody>
+						<tdiv>
 							<tr>
 								<th class="thcornerl" nowrap="nowrap" width="5%" height="25">
 									&nbsp;&nbsp;
@@ -112,7 +117,7 @@
 										<img src="${contextPath}/templates/${templateName}/images/folder.gif" alt="Folder" />
 									</#if>
 								</td>
-								<td class="row1" valign="middle" width="55%"><span class="topictitle">&nbsp;<a class="topictitle" href="${JForumContext.encodeURL("/pm/read/${pm.id}")}">${pm.post.subject?html}</a></span></td>
+								<td class="row1" valign="middle" width="55%"><span class="topictitle">&nbsp;<a class="topictitle" href="${JForumContext.encodeURL("/pm/read/${pm.id}")}">${pm.post.subject}</a></span></td>
 								<td class="row1" valign="middle" align="center" width="20%">
 									<#if inbox?default(false)>
 									<span class="name">&nbsp;<a class="name" href="${JForumContext.encodeURL("/user/profile/${pm.fromUser.id}")}">${pm.fromUser.username}</a></span>
@@ -131,17 +136,17 @@
 									&nbsp; <input class="liteoption" type="submit" value="${I18n.getMessage("PrivateMessage.deleteAll")}" name="deleteall" />
 									-->
 								</td></tr>
-						</tbody>
+						</tdiv>
 					</table>
 					<table cellspacing="2" cellpadding="2" width="100%" align="center" border="0">
-						<tbody>
+						<tdiv>
 							<tr>
 								<td valign="middle" align="left">
 									<a href="${JForumContext.encodeURL("/pm/send")}" class="icon_new_topic nav"><img src="${contextPath}/images/transp.gif" alt="" /></a>
 								</td>
 								<td valign="middle" align="left" width="100%"><span class="nav"></span></td>
 								<td valign="top" nowrap="nowrap" align="right">
-									<b><span class="gensmall"><a class="gensmall" href="javascript:select_switch(true);">${I18n.getMessage("PrivateMessage.checkAll")}</a> :: 
+									<b><span class="gensmall"><a class="gensmall" href="javascript:select_switch(true);">${I18n.getMessage("PrivateMessage.checkAll")}</a> ::
 									<a class="gensmall" href="javascript:select_switch(false);">${I18n.getMessage("PrivateMessage.uncheckAll")}</a></span></b>
 									<br />
 									<span class="nav">
@@ -149,12 +154,12 @@
 									</span>
 								</td>
 							</tr>
-						</tbody>
+						</tdiv>
 					</table>
 				</form>
 				<div align="center"></div>
 			</td>
 		</tr>
-	</tbody>
+	</tdiv>
 </table>
 <#include "bottom.htm"/>

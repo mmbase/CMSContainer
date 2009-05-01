@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 <!--
 var quick = false;
 
@@ -36,17 +36,17 @@ function activateAdvancedQuery()
 			<form action="${JForumContext.encodeURL("/jforum")}" method="post" name="searchByMonthForm" id="post">
 			<input type="hidden" name="action" value="searchByMonth" />
 			<input type="hidden" name="module" value="karma" />
-			<table class="forumline" width="100%" align="center">				
+			<table class="forumline" width="100%" align="center">
 				<tr>
 					<th class="thtop" align="left">
 						<b>${I18n.getMessage("Karma.advancedQuery")}</b>
 					</th>
 				</tr>
-				
+
 				<tr>
 					<td><span class="gen"><b>${I18n.getMessage("Karma.queryByMonth")}:</b></span></td>
 				</tr>
-				
+
 				<tr>
 					<td>
 						<span class="gen">
@@ -86,19 +86,19 @@ function activateAdvancedQuery()
 					<td align="center" >
 						<input type="submit" value="${I18n.getMessage("PostForm.submit")}" class="mainoption" />
 					</td>
-				</tr>		
+				</tr>
 			</table>
 			</form>
 
 				<form action="${JForumContext.encodeURL("/jforum")}" method="post" name="searchByPeriodForm" id="post2">
 				<input type="hidden" name="action" value="searchByPeriod" />
 				<input type="hidden" name="module" value="karma" />
-			<table class="forumline" width="100%" align="center">				
+			<table class="forumline" width="100%" align="center">
 
 				<tr>
 					<td align="center"class="row2" height="1"><img src="${contextPath}/templates/${templateName}/images/spacer.gif" alt="" width="1" height="1" /></td>
 				</tr>
-				
+
 				<tr>
 					<td><span class="gen"><b>${I18n.getMessage("Karma.queryByPeriod")}:</b></span></td>
 				</tr>

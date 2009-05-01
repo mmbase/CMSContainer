@@ -17,15 +17,11 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.apache.commons.lang.StringEscapeUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 public class SelectTag extends SimpleTagSupport {
 
    public String var;
-   
-   public String onchange;
 
    public String selected;
 
@@ -36,9 +32,6 @@ public class SelectTag extends SimpleTagSupport {
       this.var = var;
    }
 
-   public void setOnchange(String onchange) {
-      this.onchange = onchange;
-   }
 
    @Override
    public void doTag() throws JspException, IOException {
@@ -47,16 +40,10 @@ public class SelectTag extends SimpleTagSupport {
 
       selected = (String) request.getAttribute(var);
 
-      if (StringUtils.isEmpty(selected)) {
+      if (StringUtil.isEmpty(selected)) {
          selected = defaultValue;
       }
-      
-      String myOnChange = "";
-      if (StringUtils.isNotEmpty(onchange)){
-         myOnChange = " " + "onchange=\"" + StringEscapeUtils.escapeXml(onchange) + "\"";  
-      } 
-      
-      ctx.getOut().print("<select name=\"" + StringEscapeUtils.escapeXml(var) + "\"" + myOnChange + ">");
+      ctx.getOut().print("<select name=\"" + var + "\">");
       JspFragment frag = getJspBody();
       if (frag != null) {
          frag.invoke(null);

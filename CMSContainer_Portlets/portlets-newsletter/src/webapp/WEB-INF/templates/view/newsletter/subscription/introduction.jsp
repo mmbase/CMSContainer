@@ -1,21 +1,13 @@
-<%@include file="/WEB-INF/templates/portletglobals.jsp" %>
+<form method="POST" name="<portlet:namespace />form_subscribe" action="<cmsc:renderURL><cmsc:param name="action" value="subscribe"/></cmsc:renderURL>" target="_self">
+<input type="hidden" name="template" value="newsletter/subscription/subscribe.jsp">
 
-<div class="newsletter_introduction">
-   <h3><fmt:message key="subscription.introduction.title"/></h3>
-  
-   <p><fmt:message key="subscription.introduction.info"/></p>
-   
-   <c:choose>
-      <c:when test="${isUserLogin}">
-         <form method="post" name="<portlet:namespace />form_subscribe" action="<cmsc:renderURL/>">
-            <input name="action" type="hidden" value="subscribe"/>
-            <p><fmt:message key="subscription.subscribe.info"/></p>
-            <input type="submit" value="<fmt:message key="subscription.introduction.buttontext" />" >
-         </form>
-      </c:when>
-      <c:otherwise>
-         <p><fmt:message key="subscription.login.info"/></p>
-      </c:otherwise>
-   </c:choose>
-
+<div class="heading">
+	<h3><fmt:message key="subscription.introduction.title" /></h3>
 </div>
+<div class="content">
+	<p><fmt:message key="subscription.introduction.info" />
+</div>
+<br>
+<a href="javascript:document.forms['<portlet:namespace />form_subscribe'].submit()" class="button"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit.png'/>" alt=""/> <fmt:message key="subscription.introduction.buttontext" /></a>
+
+</form>	

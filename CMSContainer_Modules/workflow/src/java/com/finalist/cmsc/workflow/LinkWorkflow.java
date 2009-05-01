@@ -9,26 +9,25 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.workflow;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import net.sf.mmapps.commons.bridge.RelationUtil;
 
 import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.security.Role;
-import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.services.workflow.WorkflowException;
+import com.finalist.cmsc.services.workflow.Workflow;
 
 public class LinkWorkflow extends RepositoryWorkflow {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(LinkWorkflow.class.getName());
+   private static Logger log = Logging.getLoggerInstance(LinkWorkflow.class.getName());
 
    public static final String TYPE_LINK = "link";
 
@@ -42,7 +41,7 @@ public class LinkWorkflow extends RepositoryWorkflow {
    public Node createFor(Node channel, String remark) {
       Node wfItem = getWorkflowNode(channel, TYPE_LINK);
       if (wfItem == null) {
-         wfItem = createFor(TYPE_LINK, remark, Workflow.STATUS_FINISHED, null);
+         wfItem = createFor(TYPE_LINK, remark, Workflow.STATUS_FINISHED);
       }
 
       if (channel != null) {
@@ -58,7 +57,7 @@ public class LinkWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
+   @SuppressWarnings("unused")
    public void finishWriting(Node content, String remark) {
       throw new UnsupportedOperationException("Linked workflows are always finished after linking");
    }
@@ -68,7 +67,6 @@ public class LinkWorkflow extends RepositoryWorkflow {
     * Status change to 'APPROVED'. The workflow appears on all chiefeditor
     * workflow screens
     */
-   @Override
    public void accept(Node node, String remark) {
       Node wfItem;
       Node channel;
@@ -91,7 +89,6 @@ public class LinkWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public void reject(Node node, String remark) {
       Node wfItem;
       if (RepositoryUtil.isContentChannel(node)) {
@@ -105,20 +102,18 @@ public class LinkWorkflow extends RepositoryWorkflow {
             wfItem = node;
          }
       }
-      changeWorkflowFailPublished(wfItem, STATUS_FINISHED, remark);
+      changeWorkflow(wfItem, STATUS_FINISHED, remark);
    }
 
 
    /**
     * Put content elements in publishqueue
     */
-   @Override
    public void publish(Node node) throws WorkflowException {
       publish(node, null);
    }
 
 
-   @Override
    public void publish(Node node, List<Integer> publishNumbers) throws WorkflowException {
       Node channel;
       if (RepositoryUtil.isContentChannel(node)) {
@@ -131,11 +126,10 @@ public class LinkWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    protected void publishInternal(Node wf, Node node) {
       NodeList nodes = getAllWorkflowNodes(wf);
       if (nodes.size() == 1) {
-         if (nodes.getNode(0).getNumber() == node.getNumber()) {
+         if (nodes.getNode(0).getNumber() != node.getNumber()) {
             Publish.publish(node);
          }
       }
@@ -151,7 +145,6 @@ public class LinkWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public void complete(Node contentNode) {
       complete(contentNode, TYPE_LINK);
    }
@@ -187,11 +180,6 @@ public class LinkWorkflow extends RepositoryWorkflow {
          channel = getLinkChannel(node);
       }
       return RepositoryUtil.getRole(node.getCloud(), channel, false);
-   }
-
-   @Override
-   public void addUserToWorkflow(Node node) {
-      addUserToWorkflow(node, TYPE_LINK);
    }
 
 }

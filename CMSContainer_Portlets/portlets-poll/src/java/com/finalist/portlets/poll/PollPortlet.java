@@ -13,18 +13,22 @@ import java.io.IOException;
 
 import javax.portlet.*;
 
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.mmbase.bridge.*;
+import org.mmbase.remotepublishing.PublishManager;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public class PollPortlet extends ContentPortlet {
 
-   @Override
-   public void processView(ActionRequest request, ActionResponse response) throws PortletException {
+   protected static final String ACTION_PARAM = "action";
+   protected static final String CONTENTELEMENT = "contentelement";
+
+
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       String action = request.getParameter(ACTION_PARAM);
       if (action == null) {
          response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
@@ -34,7 +38,8 @@ public class PollPortlet extends ContentPortlet {
          String contentelement = preferences.getValue(CONTENTELEMENT, null);
 
          if (contentelement != null) {
-            Cloud cloud = getCloudForAnonymousUpdate();
+            CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+            Cloud cloud = cloudProvider.getCloud();
 
             String pollChoiceNumber = request.getParameter("pollChoiceNumber");
             if (pollChoiceNumber != null) {
@@ -43,7 +48,7 @@ public class PollPortlet extends ContentPortlet {
                message.setIntValue("counter", counter);
                message.commit();
                if (ServerUtil.isLive()) {
-                  Node messageStaging = Publish.getRemoteNode(message);
+                  Node messageStaging = PublishManager.getSourceNode(message);
                   messageStaging.setIntValue("counter", counter);
                   messageStaging.commit();
                }
@@ -61,7 +66,6 @@ public class PollPortlet extends ContentPortlet {
    }
 
 
-   @Override
    public void processEdit(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       super.processEdit(request, response);
 
@@ -71,7 +75,8 @@ public class PollPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }

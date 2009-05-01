@@ -9,23 +9,24 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.subsite.tree;
 
+import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.navigation.NavigationRenderer;
 import com.finalist.cmsc.navigation.NavigationTreeItemRenderer;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.subsite.util.SubSiteUtil;
 import com.finalist.tree.TreeElement;
 import com.finalist.tree.TreeModel;
-import com.finalist.util.module.ModuleUtil;
 
 
 public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
 
     private static final String RESOURCEBUNDLE = "cmsc-modules-subsite";
-    protected static final String FEATURE_WORKFLOW = "workflowitem";
 
     public TreeElement getTreeElement(NavigationRenderer renderer, Node parentNode, TreeModel model) {
          Node parentParentNode = NavigationUtil.getParent(parentNode);
@@ -33,6 +34,7 @@ public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
          
          String name = parentNode.getStringValue(PagesUtil.TITLE_FIELD);
          String fragment = parentNode.getStringValue( NavigationUtil.getFragmentFieldname(parentNode) );
+         System.out.println("Name = " + name + ", fragment = " + fragment);
 
          String id = String.valueOf(parentNode.getNumber());
          TreeElement element = renderer.createElement(parentNode, role, name, fragment, false);
@@ -61,6 +63,8 @@ public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
             element.addOption(renderer.createTreeOption("subsite_new.png", "site.personal.new.page",
             		RESOURCEBUNDLE, "../subsite/PersonalPageCreate.do?parentpage=" + id));
             element.addOption(renderer.createTreeOption("personalpage_go.png", "site.personal.showpages",
+                  RESOURCEBUNDLE, "../subsite/module-subsite.jsp?subsite=" + id));
+            element.addOption(renderer.createTreeOption("personalpage_go.png", "site.personal.showpages",
                   RESOURCEBUNDLE, "../subsite/SubSiteAction.do?subsite=" + id));
          }
          
@@ -72,13 +76,6 @@ public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
              */
           }
 
-         if (SecurityUtil.isWebmaster(role) && ModuleUtil.checkFeature(FEATURE_WORKFLOW)) {
-             element.addOption(renderer.createTreeOption("publish.png", "site.page.publish",
-                   "../workflow/publish.jsp?number=" + id));
-             element.addOption(renderer.createTreeOption("masspublish.png", "site.page.masspublish",
-                   "../workflow/masspublish.jsp?number=" + id));
-          }
-         
          element.addOption(renderer.createTreeOption("rights.png", "site.page.rights",
                  "../usermanagement/pagerights.jsp?number=" + id));
          
@@ -92,7 +89,7 @@ public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
    }
    
 	public boolean showChildren(Node parentNode) {
-		return false; //Do not show PersonalPages
+		return true;//Do not show PersonalPages
 	}
 
 }

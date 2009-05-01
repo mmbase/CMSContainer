@@ -1,6 +1,10 @@
 package com.finalist.cmsc.util.bundles;
 
-import java.util.*;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Locale;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * The class for representing an inherited PropertyResourceBundle. This class
@@ -15,21 +19,21 @@ import java.util.*;
  * permitted.
  * <p>
  * <strong>Example:</strong><br>
- *
+ * 
  * <pre>
  *  # Relationships file for the resources.ProductNames bundle.
  * # resources/ProductNames.relationships
- *
+ * 
  * resources.CompanyStandards
  * resources.Products
  * </pre>
- *
+ * 
  * <p>
  * In the above example, if a key is searched for that does not exist in the
  * backed PropertyResourceBundle, then the resources.CompanyStandards bundle is
  * checked first. If it is not found there, the resources.Products bundle is
  * checked next.
- *
+ * 
  * @see java.util.PropertyResourceBundle
  * @author Eric Olson <eolson@imation.com>
  * @version 1.
@@ -41,7 +45,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
     * InheritedPropertyResourceBundles. These parent bundles will be checked if
     * any key cannot be found in this bundle.
     */
-   private List<InheritedPropertyResourceBundle> relationships = null;
+   private Vector<InheritedPropertyResourceBundle> relationships = null;
 
    /**
     * The java.util.ResourceBundle that backs this instance. This bundle will
@@ -71,7 +75,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
     * Creates a new InheritedPropertyResourceBundle. This constructor should
     * only be called by a resource bundle manager so that duplicate versions are
     * not created.
-    *
+    * 
     * @param baseName
     *           the base name of the resource bundle.
     * @param locale
@@ -82,7 +86,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
     *           relationships files.
     */
    protected InheritedPropertyResourceBundle(String baseName, Locale locale, ClassLoader loader) {
-      super();
+
       // cache all creation information.
       this.baseName = baseName;
       this.locale = locale;
@@ -108,15 +112,15 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
 
    /**
     * Initializes the parent relationships from the relationships file.
-    *
+    * 
     * @see RelationshipLoader
     */
-   protected final void initRelationships() {
+   protected void initRelationships() {
 
       // create a RelationshipLoader with the appropriate context.
       RelationshipLoader rl = new RelationshipLoader(baseName, locale, loader);
 
-      relationships = new ArrayList<InheritedPropertyResourceBundle>();
+      relationships = new Vector<InheritedPropertyResourceBundle>();
 
       // add the parent relationships to this instance.
       rl.createRelations(this);
@@ -129,7 +133,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
     */
    @Override
    public Enumeration<String> getKeys() {
-      List<String> temp = new ArrayList<String>();
+      Vector<String> temp = new Vector<String>();
 
       // get all keys for the backed PropertyResourceBundle
       for (Enumeration<String> e = instance.getKeys(); e.hasMoreElements();) {
@@ -148,14 +152,14 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
                String k = g.nextElement();
 
                // only add the key if it does not already exist.
-               if (!temp.contains(k)) {
+               if (!temp.contains(k))
                   temp.add(k);
-               }
             }
          }
       }
 
-      return Collections.enumeration(temp);
+      return temp.elements();
+
    }
 
 
@@ -163,7 +167,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
     * Gets an object from this resource bundle. If the resource is not found in
     * the backing PropertyResourceBundle, then parent bundles are searched, in
     * order, for the resource.
-    *
+    * 
     * @param key
     *           the key of the desired resource.
     * @return the resource corresponding to the key, or null if the resource
@@ -182,15 +186,17 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
          // of this inherited bundle.
       }
 
-      if (retVal == null && relationships != null) {
+      if (retVal == null) {
          // resource not found in PropertyResourceBundle, check all parents.
-         for (Object element : relationships) {
+         if (relationships != null) {
+            for (Object element : relationships) {
 
-            // attempt to get the resource from the current parent bundle.
-            retVal = ((InheritedPropertyResourceBundle) element).handleGetObject(key);
+               // attempt to get the resource from the current parent bundle.
+               retVal = ((InheritedPropertyResourceBundle) element).handleGetObject(key);
 
-            if (retVal != null) {
-               return retVal;
+               if (retVal != null)
+                  return retVal;
+
             }
          }
       }
@@ -201,7 +207,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
 
    /**
     * Adds the InheritedPropertyResourceBundle at the end of the parent list.
-    *
+    * 
     * @param r
     *           the resource bundle which will be added to the end of the parent
     *           list.
@@ -215,7 +221,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
    /**
     * Adds the InheritedPropertyResourceBundle at the given location. All
     * subsequent parents will be pushed down one space.
-    *
+    * 
     * @param r
     *           the resource bundle which will be added.
     * @param l
@@ -230,7 +236,7 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
 
    /**
     * Removes the resource bundle from the parent list.
-    *
+    * 
     * @param r
     *           resource bundle to remove
     */
@@ -241,13 +247,12 @@ public class InheritedPropertyResourceBundle extends ResourceBundle {
 
    /**
     * Gets the parent bundles associated with this instance.
-    *
+    * 
     * @return an Enumeration of the parent resource bundles.
     */
    public Enumeration<InheritedPropertyResourceBundle> getRelationships() {
-      if (relationships == null) {
-         return Collections.enumeration(new ArrayList<InheritedPropertyResourceBundle>());
-      }
-      return Collections.enumeration(relationships);
+      if (relationships == null)
+         return (new Vector<InheritedPropertyResourceBundle>().elements());
+      return relationships.elements();
    }
 }

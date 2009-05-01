@@ -1,9 +1,10 @@
+<#include "../header.htm"/>
 <#setting number_format = "#"/>
 
-<style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css?${startupTime} );</style>
+<style type="text/css">@import url( ${contextPath}/templates/${templateName}/admin/style.css );</style>
 <table class="forumline" cellspacing="1" cellpadding="3" width="100%" border="0">
 	<tr>
-		<th class="thhead" valign="middle" colspan="7" height="25">${I18n.getMessage("Cache.postsInfo")}</th>
+		<th class="thhead" valign="center" colspan="7" height="25">${I18n.getMessage("Cache.postsInfo")}</th>
 	</tr>
 
 	<tr>
@@ -18,11 +19,12 @@
 
 	<#list topics as t>
 		<tr>
-			<td class="row2"><a class="gen" href="${contextPath}/posts/list/${t.get("id")}${extension}" target="_new">${t.get("title")}</a></td>
+			<td class="row2"><a class="gen" href='${JForumContext.encodeURL("/posts/list/${t.get("id")}")}' target="_new">${t.get("title")}</a></td>
 			<td class="row2"><span class="gen">${repository.size(t.get("id"))}</span></td>
 			<td class="row2">
-				<a class="gen" href="${contextPath}/jforum${extension}?module=adminCache&action=postsClear&topic_id=${t.get("id")}">${I18n.getMessage("Cache.clear")}</a>
+				<a class="gen" href='${JForumContext.encodeURL("/jforum${extension}?module=adminCache&action=postsClear&topic_id=${t.get("id")}")}'>${I18n.getMessage("Cache.clear")}</a>
 			</td>
 		</tr>
 	</#list>
 </table>
+<#include "../bottom.htm"/>

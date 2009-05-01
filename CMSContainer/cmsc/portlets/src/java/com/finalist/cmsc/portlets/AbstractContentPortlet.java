@@ -16,197 +16,183 @@ import java.util.*;
 
 import javax.portlet.*;
 
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.commons.bridge.CloudUtil;
-import net.sf.mmapps.modules.cloudprovider.CloudProvider;
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portalImpl.headerresource.MetaHeaderResource;
-import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.services.contentrepository.ContentRepository;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
+import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
 import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.versioning.VersioningException;
 import com.finalist.cmsc.services.workflow.Workflow;
-import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
+import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public abstract class AbstractContentPortlet extends CmscPortlet {
 
    protected static final String CONTENTELEMENT = "contentelement";
-
    protected static final String USE_LIFECYCLE = "useLifecycle";
 
    protected static final String ACTION_PARAM = "action";
-
    protected static final String CONTENT_PARAM = "content_";
 
    protected static final String ELEMENT_ID = "elementId";
-
    protected static final String VIEW = "view";
 
    protected static final String WINDOW = "window";
-
    protected static final String PAGE = "page";
 
    /** name of the map on the request that contains error messages */
    protected static final String ERROR_MESSSAGES = "errormessages";
-
    /**
-    * name of the map on the request that contains the original values of the form
+    * name of the map on the request that contains the original values of the
+    * form
     */
    protected static final String ORIGINAL_VALUES = "originalValues";
-
    /** name of the parameter that defines the mode the view is displayed in */
    protected static final String MODE = "mode";
 
-   private final DateFormat metaDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+   private DateFormat metaDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
     *      javax.portlet.ActionResponse)
     */
    @Override
-   public void processEditDefaults(ActionRequest request, ActionResponse response)
-         throws PortletException, IOException {
+   public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       String action = request.getParameter(ACTION_PARAM);
       if (action == null) {
          response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
       }
-      else
-         if (action.equals("edit")) {
-            PortletPreferences preferences = request.getPreferences();
-            String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
-            if (portletId != null) {
-               // get the values submitted with the form
-               setPortletView(portletId, request.getParameter(VIEW));
-               setPortletNodeParameter(portletId, PAGE, request.getParameter(PAGE));
-               setPortletParameter(portletId, WINDOW, request.getParameter(WINDOW));
-            }
-            else {
-               getLogger().error("No portletId");
-            }
+      else if (action.equals("edit")) {
+         PortletPreferences preferences = request.getPreferences();
+         String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
+         if (portletId != null) {
+            // get the values submitted with the form
+            saveParameters(request, portletId);
+
+            setPortletView(portletId, request.getParameter(VIEW));
+
+            setPortletNodeParameter(portletId, PAGE, request.getParameter(PAGE));
+            setPortletParameter(portletId, WINDOW, request.getParameter(WINDOW));
          }
          else {
-            getLogger().error("Unknown action: '" + action + "'");
+            getLogger().error("No portletId");
          }
-      super.processEditDefaults(request, response);
+         // switch to View mode
+         response.setPortletMode(PortletMode.VIEW);
+      }
+      else {
+         getLogger().error("Unknown action: '" + action + "'");
+      }
    }
 
+
+   @SuppressWarnings("unused")
+   protected void saveParameters(ActionRequest request, String portletId) {
+      // convenience method
+   }
+
+
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#processEdit(javax.portlet.ActionRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEdit(javax.portlet.ActionRequest,
     *      javax.portlet.ActionResponse)
     */
    @Override
-   public void processEdit(ActionRequest request, ActionResponse response) throws PortletException,
-         IOException {
+   public void processEdit(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       getLogger().debug("===>ContentChannelPortlet.EDIT mode");
       String action = request.getParameter(ACTION_PARAM);
       if (action == null) {
          response.setPortletMode(PortletMode.EDIT);
       }
-      else
-         if (action.equals("edit")) {
-            PortletPreferences preferences = request.getPreferences();
-            String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
+      else if (action.equals("edit")) {
+         PortletPreferences preferences = request.getPreferences();
+         String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
 
-            if (portletId != null) {
-               // get the values submitted with the form
-               Enumeration<String> parameterNames = request.getParameterNames();
+         if (portletId != null) {
+            // get the values submitted with the form
+            Enumeration<String> parameterNames = request.getParameterNames();
 
-               // currently supperting one Node
-               Map<String, Node> nodesMap = new HashMap<String, Node>();
-               while (parameterNames.hasMoreElements()) {
-                  // the parameterformat is "content_NUMBER_FIELD"
-                  // for example "content_123_title"
-                  String name = parameterNames.nextElement();
-                  int index = name.indexOf("_");
-                  int secondIndex = -1;
-                  if (index > 0) {
-                     secondIndex = name.indexOf("_", index + 1);
-                  }
-                  if (name.startsWith(CONTENT_PARAM) && secondIndex > 0) {
-                     String number = name.substring(index + 1, secondIndex);
-                     String field = name.substring(secondIndex + 1);
-                     String value = request.getParameter(name);
-                     if (StringUtils.isNotEmpty(number)) {
-                        if (!nodesMap.containsKey(number)) {
-                           Cloud cloud = getCloud();
-                           Node node = cloud.getNode(number);
-                           node.setValue(field, value);
-                           nodesMap.put(number, node);
-                        }
-                        else {
-                           Node node = nodesMap.get(number);
-                           node.setValue(field, value);
-                           nodesMap.put(number, node);
-                        }
-                     }
-                  }
+            // currently supperting one Node
+            Map<String, Node> nodesMap = new HashMap<String, Node>();
+            while (parameterNames.hasMoreElements()) {
+               // the parameterformat is "content_NUMBER_FIELD"
+               // for example "content_123_title"
+               String name = parameterNames.nextElement();
+               int index = name.indexOf("_");
+               int secondIndex = -1;
+               if (index > 0) {
+                  secondIndex = name.indexOf("_", index + 1);
                }
-               if (nodesMap.size() > 0) {
-                  for (Node node : nodesMap.values()) {
-                     getLogger().debug("==> updating node: " + node.getNumber());
-                     if (ContentElementUtil.isContentElement(node)) {
-                        try {
-                           Versioning.addVersion(node);
-                        }
-                        catch (VersioningException e) {
-                           getLogger().error(
-                                 "Problem while adding version for node : " + node.getNumber(), e);
-                        }
-                     }
-                     node.commit();
-                     if (!Workflow.hasWorkflow(node)) {
-                        Workflow.create(node, "");
+               if (name.startsWith(CONTENT_PARAM) && secondIndex > 0) {
+                  String number = name.substring(index + 1, secondIndex);
+                  String field = name.substring(secondIndex + 1);
+                  String value = request.getParameter(name);
+                  if (!StringUtil.isEmpty(number)) {
+                     if (!nodesMap.containsKey(number)) {
+                        Cloud cloud = CloudUtil.getCloudFromThread();
+                        Node node = cloud.getNode(number);
+                        node.setValue(field, value);
+                        nodesMap.put(number, node);
                      }
                      else {
-                        Workflow.addUserToWorkflow(node);
+                        Node node = nodesMap.get(number);
+                        node.setValue(field, value);
+                        nodesMap.put(number, node);
                      }
                   }
                }
-               setEditResponse(request, response, nodesMap);
             }
-            else {
-               getLogger().error("No portletId");
+            if (nodesMap.size() > 0) {
+               for (Node node : nodesMap.values()) {
+                  getLogger().debug("==> updating node: " + node.getNumber());
+                  if (ContentElementUtil.isContentElement(node)) {
+                     try {
+                        Versioning.addVersion(node);
+                     }
+                     catch (VersioningException e) {
+                        getLogger().error("Problem while adding version for node : " + node.getNumber(), e);
+                     }
+                  }
+                  node.commit();
+                  if (!Workflow.hasWorkflow(node)) {
+                     Workflow.create(node, "");
+                  }
+               }
             }
-            // switch to View mode
-            response.setPortletMode(PortletMode.VIEW);
+            setEditResponse(request, response, nodesMap);
          }
          else {
-            getLogger().error("Unknown action: '" + action + "'");
+            getLogger().error("No portletId");
          }
+         // switch to View mode
+         response.setPortletMode(PortletMode.VIEW);
+      }
+      else {
+         getLogger().error("Unknown action: '" + action + "'");
+      }
    }
 
-   protected Cloud getCloud() {
-      Cloud cloud = CloudUtil.getCloudFromThread();
-      return cloud;
-   }
 
-   protected Cloud getCloudForAnonymousUpdate() {
-      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
-      Cloud cloud = cloudProvider.getCloud();
-      return cloud;
-   }
-
-   protected void setEditResponse(ActionRequest request, ActionResponse response,
-         Map<String, Node> nodesMap) throws PortletModeException {
+   @SuppressWarnings("unused")
+   protected void setEditResponse(ActionRequest request, ActionResponse response, Map<String, Node> nodesMap)
+         throws PortletModeException {
       response.setPortletMode(PortletMode.VIEW);
    }
 
+
    @Override
-   protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException,
-         PortletException {
+   protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException, PortletException {
       addViewInfo(req);
 
       PortletPreferences preferences = req.getPreferences();
       String pageid = preferences.getValue(PAGE, null);
-      if (StringUtils.isNotEmpty(pageid)) {
+      if (!StringUtil.isEmpty(pageid)) {
 
          String pagepath = SiteManagement.getPath(Integer.valueOf(pageid), true);
 
@@ -222,8 +208,8 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
       super.doEditDefaults(req, res);
    }
 
-   protected void doEdit(RenderRequest req, RenderResponse res, String elementId)
-         throws IOException, PortletException {
+
+   protected void doEdit(RenderRequest req, RenderResponse res, String elementId) throws IOException, PortletException {
       if (ContentRepository.mayEdit(elementId)) {
          super.doEdit(req, res);
       }
@@ -233,21 +219,26 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
       }
    }
 
+
    protected void setMetaData(RenderRequest req, String elementId) {
       try {
          ContentElement element = ContentRepository.getContentElement(elementId);
-         if (element != null) { //When element not found, skip it.
-            PortletFragment portletFragment = getPortletFragment(req);
-            portletFragment.addHeaderResource(new MetaHeaderResource(true, "title", element.getTitle()));
-            portletFragment.addHeaderResource(new MetaHeaderResource(true, "subject", element.getKeywords()));
-            portletFragment.addHeaderResource(new MetaHeaderResource(true, "date", formatDate(element.getCreationdate())));
-            portletFragment.addHeaderResource(new MetaHeaderResource(true, "identifier", elementId));
-            portletFragment.addHeaderResource(new MetaHeaderResource(true, "coverage",
-                  formatDate(element.getPublishdate()) + " - " + formatDate(element.getExpirydate())));
-         }
+
+         PortletFragment portletFragment = getPortletFragment(req);
+         portletFragment.addHeaderResource(new MetaHeaderResource(true, "title", element.getTitle()));
+         portletFragment.addHeaderResource(new MetaHeaderResource(true, "subject", element.getKeywords()));
+         portletFragment.addHeaderResource(new MetaHeaderResource(true, "date", formatDate(element.getCreationdate())));
+         portletFragment.addHeaderResource(new MetaHeaderResource(true, "identifier", elementId));
+         portletFragment.addHeaderResource(new MetaHeaderResource(true, "coverage",
+               formatDate(element.getPublishdate()) + " - " + formatDate(element.getExpirydate())));
       }
       catch (RuntimeException re) {
-         getLogger().error(re);
+         if (re.getMessage().startsWith("Node not found")) {
+            getLogger().debug("Node not found", re);
+         }
+         else {
+            getLogger().error(re);
+         }
       }
    }
 
@@ -261,19 +252,20 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
       }
    }
 
+
    @Override
-   public void processView(ActionRequest request, ActionResponse response) throws PortletException,
-         IOException {
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       /*
-       * Freek: I moved all the reaction stuff to the tags in the reaciton module. (see there) I am
-       * not entirely sure if the line below is still required... but think so.
+       * Freek: I moved all the reaction stuff to the tags in the reaciton
+       * module. (see there) I am not entirely sure if the line below is still
+       * required... but think so.
        */
       response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
    }
 
+
    @Override
-   protected void doView(RenderRequest req, RenderResponse res) throws PortletException,
-         IOException {
+   protected void doView(RenderRequest req, RenderResponse res) throws PortletException, IOException {
       PortletSession session = req.getPortletSession();
       Object errormessages = session.getAttribute(ERROR_MESSSAGES);
       if (errormessages != null) {

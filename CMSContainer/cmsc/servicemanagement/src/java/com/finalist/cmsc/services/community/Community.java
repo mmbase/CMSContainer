@@ -3,7 +3,11 @@ package com.finalist.cmsc.services.community;
 import java.util.List;
 import java.util.Map;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
 import com.finalist.cmsc.services.ServiceManager;
+import com.finalist.cmsc.services.community.CommunityService;
 
 /**
  * Community, this is a CMSc service class.
@@ -11,87 +15,38 @@ import com.finalist.cmsc.services.ServiceManager;
  * by the "CommunityServiceMysqlImpl".
  * In this class comes the request from a portlet or module and will be
  * redirected to the "CommunityServiceMysqlImpl".
- *
+ * 
  * @author menno menninga
  */
 public class Community {
+   private final static CommunityService cService = (CommunityService) ServiceManager
+         .getService(CommunityService.class);
 
-	private final static CommunityService communityService =
-	   (CommunityService) ServiceManager.getService(CommunityService.class);
 
-   public static void login(String userName, String password) {
-      communityService.login(userName, password);
+   public static boolean loginUser(ActionRequest request, ActionResponse response) {
+      return cService.loginUser(request, response);
    }
 
-   public static void logout() {
-      communityService.logout();
-   }
 
-   public static boolean isAuthenticated() {
-      return communityService.isAuthenticated();
+   public static boolean logoutUser(/** HttpServletRequest HttpRequest, * */
+   ActionRequest request, ActionResponse response) {
+      return cService.logoutUser(/** HttpRequest, * */
+      request, response);
    }
-
-   public static String getAuthenticatedUser() {
-      return communityService.getAuthenticatedUser();
+   
+   public Map<String, Map<String,List<String>>> getPreferences(String module, String userId, String key, String value){
+      return cService.getPreferences(module, userId, key, value);
    }
-
-   public static List<String> getAuthorities() {
-      return communityService.getAuthorities();
+   
+   public void createPreference(String module, String userId, String key, List<String> values){
+      cService.createPreference(module, userId, key, values);
    }
-
-   public static boolean hasAuthority(String authority) {
-      return communityService.hasAuthority(authority);
+   
+   public void removePreferences(String module, String userId, String key){
+      cService.removePreferences(module, userId, key);
    }
-
-   public static List<String> getPreferenceValues(String module, String userId, String key) {
-      return communityService.getPreferenceValues(module, userId, key);
+   
+   public Map<String, Map<String, String>> getUserProperty(String userName){
+      return cService.getUserProperty(userName);
    }
-
-   public static Map<String, Map<String,List<String>>> getPreferences(String module, String userId, String key, String value){
-      return communityService.getPreferences(module, userId, key, value);
-   }
-
-   public static void createPreference(String module, String userId, String key, List<String> values){
-      communityService.createPreference(module, userId, key, values);
-   }
-
-   public static void removePreferences(String module, String userId, String key){
-      communityService.removePreferences(module, userId, key);
-   }
-
-   public static Map<String, Map<String, String>> getUserProperty(String userName){
-      return communityService.getUserProperty(userName);
-   }
-
-   /**
-    * DO NOT USE THIS METHOD. Really, <strong>DO NOT USE THIS METHOD</strong>.
-    * <br />
-    * <br />
-    * The passwords should normally be stored in an encrypted form which makes
-    * this method useless. For 4en5mei.nl the passwords are stored in plain text
-    * and we moved this method here instead of creating a dependency hell on the
-    * login-portlet. This is so we can remove this functionality easily and
-    * trade it for a way to <em>reset</em> a password rather than email the
-    * account data.
-    *
-    * @param username
-    *           The username to search for a password.
-    * @param senderName
-    *           Name used as email sender
-    * @param senderEmail
-    *           Email used as email sender
-    * @param emailSubject
-    *           The email subject
-    * @param emailBody
-    *           The email body
-    * @return <code>true</code> if a password was succesfully send to the
-    *         user, <code>false</code> otherwise.
-    *
-    * @deprecated Don't use this method, this functionality should be
-    *             implemented somewhere else.
-    */
-   public static boolean sendPassword(String username, String senderName, String senderEmail, String emailSubject, String emailBody) {
-      return communityService.sendPassword(username, senderName, senderEmail, emailSubject, emailBody);
-   }
-
 }

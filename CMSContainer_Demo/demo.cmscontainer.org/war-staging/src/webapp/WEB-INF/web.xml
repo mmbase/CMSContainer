@@ -169,10 +169,6 @@
         <display-name>Redirect</display-name>
         <servlet-name>CmscRedirectServlet</servlet-name>
         <servlet-class>com.finalist.cmsc.services.search.RedirectServlet</servlet-class>
-        <init-param>
-			<param-name>forwardRequest</param-name>
-			<param-value>true</param-value>
-        </init-param>
         <load-on-startup>4</load-on-startup>
     </servlet>
     
@@ -319,9 +315,7 @@
 	</mime-mapping>
 
 	<welcome-file-list>
-    	<welcome-file>index.jspx</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
-    	<welcome-file>default.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
@@ -368,19 +362,6 @@
 	<env-entry>
 		<description></description>
 		<env-entry-name>cmsc/richtext/resolveIds</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
-
-	<env-entry>
-		<description>MMbase CloudContext Security: allow all read operations on nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/readall</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
-	<env-entry>
-		<description>MMbase CloudContext Security: Disable checks on context of nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/disableContextChecks</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
 		<env-entry-value>true</env-entry-value>
 	</env-entry>

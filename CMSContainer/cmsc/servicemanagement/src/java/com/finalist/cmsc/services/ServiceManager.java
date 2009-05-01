@@ -267,7 +267,9 @@ public class ServiceManager {
       }
 
       // post init all services
-      for (Service service : cServicesList) {
+      for (Iterator<Service> iterator = cServicesList.iterator(); iterator.hasNext();) {
+         Service service = iterator.next();
+
          try {
             service.postInit(aConfig);
          }
@@ -305,7 +307,9 @@ public class ServiceManager {
 
       // destroy the services in reverse order
 
-      for (Service service : cServicesList) {
+      for (Iterator<Service> iterator = cServicesList.iterator(); iterator.hasNext();) {
+         Service service = iterator.next();
+
          try {
             service.destroy(aConfig);
          }

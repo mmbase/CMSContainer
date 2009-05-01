@@ -108,7 +108,7 @@
         </attribute>
     </tag>
     <tag>
-        <description>Lists the available child pages</description>
+        <description>Lists the available pages</description>
         <name>list-pages</name>
         <tag-class>com.finalist.cmsc.taglib.ListPagesTag</tag-class>
         <body-content>scriptless</body-content>
@@ -228,7 +228,7 @@
             <rtexprvalue>false</rtexprvalue>
         </attribute>
         <attribute>
-            <description>The method of inherit images from parent page, options: "override" (to override the parent options), "directly" (to merge all the parent images) and "false" (for no inheritance, default)</description>
+            <description>The method of inherit images from parent page</description>
             <name>inherit</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
@@ -739,12 +739,6 @@
         <attribute>
             <description>Default value when selected is not set.</description>
             <name>default</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>OnChange HTML option.</description>
-            <name>onchange</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1366,16 +1360,10 @@
     <!-- Security Tags -->
     <!-- ################ -->
     <tag>
-        <description>Container for protected content. Will process the body only if someone is authenticated.</description>
+        <description>Container for protected content</description>
         <name>protected</name>
         <tag-class>com.finalist.cmsc.taglib.security.ProtectedTag</tag-class>
         <body-content>scriptless</body-content>
-        <attribute>
-            <description>If true, the body is processed only when nobody is logged in, thus inversing the working of this tag. Defaults to false.</description>
-            <name>inverse</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
     </tag>
     <tag>
         <description>
@@ -1512,58 +1500,13 @@
         </attribute>
     </tag>
     <tag>
-        <description>Tag to generate Google Analytics code. 
-        Meant to put in the body of a page, please note that if you want to use events, 
-        there has to be a normal tag first. 
-        Search order of the google analytics account used:
-		 * 1) The "account"-parameter passed to the tag (only when available, live and production)
-		 * 2) The "googleAnalytics/account" setting in the context XML (only when available, this is the prefered manner)
-		 * 3) The "googleanalytics.account" system property, from the system properties (only when available, live and production)
-        </description>
+        <description>Tag to generate google analytics .</description>
         <name>google-analytics</name>
         <tag-class>com.finalist.cmsc.taglib.stats.GoogleAnalyticsTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <description>The google account name.</description>
             <name>account</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>The type, one of the following: 
-            	"basic" (default: initialize google analytics and count the page), 
-            	"event" (event code: the category and action are now required, first needs a basic)</description>
-            <name>type</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>The category used by the "event" type, then required, otherwise ignored.</description>
-            <name>category</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>The action used by the "event" type, then required when no nodenumber, otherwise ignored.</description>
-            <name>action</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>Will build a nice action used by the "event" type, then required when no action, otherwise ignored.</description>
-            <name>nodeNumber</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>The label used by the "event" type, optional.</description>
-            <name>label</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>The value used by the "event" type, "label" is required when using this parameter.</description>
-            <name>value</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1633,7 +1576,6 @@
         <path>/META-INF/tags/attachment.tag</path>
     </tag-file>
     <tag-file>
-        <description>Generates page header information of all the RSS feeds on the current page level.</description>
         <name>feeds</name>
         <path>/META-INF/tags/feeds.tag</path>
     </tag-file>

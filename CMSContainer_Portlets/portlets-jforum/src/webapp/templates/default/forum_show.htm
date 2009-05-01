@@ -1,16 +1,11 @@
-<#include "header.htm"/>
-
+fo<#include "header.htm"/>
 <#import "../macros/pagination.ftl" as pagination>
 <#import "../macros/presentation.ftl" as presentation/>
 
-<script type="text/javascript" src="${contextPath}/templates/${templateName}/js/pagination.js?${startupTime}"></script>
-
-<#if logged>
-	<script type="text/javascript" src="${contextPath}/templates/${templateName}/js/watch.js?${startupTime}"></script>
-</#if>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="${JForumContext.encodeURL("/rss/forumTopics/${forum.id}")}" />
 
 <#if moderator>
-	<script type="text/JavaScript" src="${JForumContext.encodeURL("/js/list/moderation")}"></script>
+	<script  src="${JForumContext.encodeURL("/js/list/moderation")}"></script>
 </#if>
 
 <table cellspacing="0" cellpadding="10" width="100%" align="center" border="0">
@@ -19,19 +14,33 @@
 			<table cellspacing="2" cellpadding="2" width="100%" align="center">
 				<tr>
 					<td valign="bottom" align="left" colspan="2">
-						<a class="maintitle" href="${JForumContext.encodeURL("/forums/list")}">${I18n.getMessage("ForumListing.forumIndex")}</a> &raquo;
 						<a class="maintitle" href="${JForumContext.encodeURL("/forums/show/${forum.id}")}">${forum.name?html}</a>
-
 						<#if rssEnabled>
 							<a href="${JForumContext.encodeURL("/rss/forumTopics/${forum.id}")}"><img src="${contextPath}/templates/${templateName}/images/xml_button.gif" border="0" alt="[XML]" /></a>
 							<br />
 						</#if>
 					</td>
 
-					<td valign="middle"  nowrap="nowrap" align="right" class="gensmall">
-						<#if logged>
-							<a href="${JForumContext.encodeURL("/forums/readAll/${forum.id}")}">${I18n.getMessage("ForumIndex.setAllTopicsAsRead")}</a>
-						</#if>
+					<td valign="middle"  nowrap="nowrap" align="right"><#assign paginationData><@pagination.doPagination action, forum.id/></#assign>${paginationData}</td>
+				</tr>
+
+				<tr>
+					<#if !readonly && !replyOnly>
+						<td valign="middle" align="left" width="50">
+							<a href="${JForumContext.encodeURL("/jforum${extension}?module=posts&amp;action=insert&amp;forum_id=${forum.id}", "")}" rel="nofollow" class="icon_new_topic"><img src="${contextPath}/images/transp.gif" alt="" /></a>
+						</td>
+					<#else>
+						<#assign colspan = "2"/>
+					</#if>
+
+					<td class="nav" valign="middle" align="left" width="100%" colspan="${colspan?default("")}">
+						<span class="nav"><a class="nav" href="${JForumContext.encodeURL("/forums/list")}">${I18n.getMessage("ForumListing.forumIndex")}</a> -&gt; <a class="nav" href="${JForumContext.encodeURL("/forums/show/${forum.id}")}">${forum.name?html}</a></span>
+                                        </td>
+
+					<td class="nav" valign="bottom" nowrap="nowrap" align="right">
+		  				<span class="gensmall">
+						&nbsp;
+						<a href="${JForumContext.encodeURL("/forums/readAll/${forum.id}")}">${I18n.getMessage("ForumIndex.setAllTopicsAsRead")}</a>
 
 						<#if moderator>
 							<br />
@@ -44,44 +53,21 @@
 									<#assign link = JForumContext.encodeURL("/forums/show/" + forum.id)/>
 								</#if>
 								<a href="${link}">${I18n.getMessage("Moderation.CloseModeration")}</a>
-							<#else>
-								<a href="${contextPath}/forums/moderation/<#if (start > 0)>${start}/</#if>${forum.id}${extension}">${I18n.getMessage("Moderation.OpenModeration")}</a>
+                                                        <#else>
+                                                          <#if (start > 0)>
+								<a href='${JForumContext.encodeURL("/forums/moderation/${start}/${forum.id}")}'>${I18n.getMessage("Moderation.OpenModeration")}</a>
+                                                          <#else>
+								<a href='${JForumContext.encodeURL("/forums/moderation/${forum.id}")}'>${I18n.getMessage("Moderation.OpenModeration")}</a>
+                                                          </#if>
 							</#if>
 						</#if>
-					</td>
-				</tr>
-			</table>
-
-			<table cellspacing="2" cellpadding="2" width="100%" align="center">
-				<tr>
-					<#if !readonly && !replyOnly>
-						<td valign="middle" align="left" width="50">
-							<a href="${JForumContext.encodeURL("/jforum${extension}?module=posts&amp;action=insert&amp;forum_id=${forum.id}", "")}" rel="nofollow" class="icon_new_topic"><img src="${contextPath}/images/transp.gif" alt="" /></a>
-						</td>
-					</#if>
-
-					<form accept-charset="${encoding}" action="${JForumContext.encodeURL("/jforum")}" method="get" id="formSearch" name="formSearch">
-					<input type="hidden" name="module" value="search"/>
-					<input type="hidden" name="action" value="search"/>
-					<input type="hidden" name="forum" value="${forum.id}">
-					<input type="hidden" name="match_type" value="all">
-
-					<td class="nav" valign="middle" align="left" colspan="${colspan?default("")}">
-						<input type="text" onblur="if (this.value == '') this.value = '${I18n.getMessage("ForumIndex.searchThisForum")}...';" onclick="if (this.value == '${I18n.getMessage("ForumIndex.searchThisForum")}...') this.value = '';" value="${I18n.getMessage("ForumIndex.searchThisForum")}..." size="20" name="search_keywords" class="inputSearchForum"/>
-						<input type="submit" value="${I18n.getMessage("ForumBase.search")}" class="liteoption">
-					</td>
-
-					</form>
-
-					<td class="nav" nowrap="nowrap" align="right">
-		  				<#assign paginationData><@pagination.doPagination action, forum.id/></#assign>
-						${paginationData}
+						</span>
 					</td>
 				</tr>
 			</table>
 
 			<#if (canApproveMessages && topicsToApprove.size() > 0)>
-				<script type="text/javascript">
+				<script>
 				<!--
 				function viewPending(id)
 				{
@@ -94,6 +80,7 @@
 				<form action="${JForumContext.encodeURL("/jforum")}" method="post" accept-charset="${encoding}">
 				<input type="hidden" name="action" value="approveMessages" />
 				<input type="hidden" name="module" value="${moduleName}" />
+				<input type="hidden" name="securityHash" value="${securityHash}" />
 				<input type="hidden" name="forum_id" value="${forum.id}" />
 
 				<table width="70%"class="forumline" align="center" cellspacing="1" cellpadding="4">
@@ -111,9 +98,9 @@
 						<tr class="${rowColor}">
 							<td width="90%">
 								<#if (topic.topicReplies > 0)>
-									<a href="${JForumContext.encodeURL("/posts/list/${topic.topicId}")}" class="gen">${topic.topicTitle?html}</a>
+									<a href="${JForumContext.encodeURL("/posts/list/${topic.topicId}")}" class="gen">${topic.topicTitle}</a>
 								<#else>
-									<span class="gen">${topic.topicTitle?html}</span>
+									<span class="gen">${topic.topicTitle}</span>
 								</#if>
 							</td>
 							<td align="center"><span class="gen"><a href="javascript:viewPending(${topic.topicId});"><b>${I18n.getMessage("Moderation.Admin.view")}</b></a></span></td>
@@ -126,15 +113,15 @@
 									<#list topic.posts as post>
 										<#assign post = postFormatter.preparePostForDisplay(post)/>
 
-										<tr><td><span class="gensmall"><b>${I18n.getMessage("PostShow.author")}</b>: <a href="${JForumContext.encodeURL("/user/profile/${post.userId}")}">${post.postUsername}</a></span></td></tr>
+										<tr><td><span class="gensmall"><b>${I18n.getMessage("PostShow.author")}</b>: ${post.postUsername}</span></td></tr>
 										<tr><td><span class="gensmall">${post.text}</span></td></tr>
 
 										<tr>
 											<td colspan="2" align="right">
 												<span class="gensmall">
-													<input type="radio" id="status_approve_${post.id}" name="status_${post.id}" value="aprove" /><label for="status_approve_${post.id}">${I18n.getMessage("Moderation.Admin.aprove")}</label>&nbsp;
-													<input type="radio" id="status_defer_${post.id}" name="status_${post.id}" value="defer" checked="checked" /><label for="status_defer_${post.id}">${I18n.getMessage("Moderation.Admin.defer")}</label>&nbsp;
-													<input type="radio" id="status_deny_${post.id}" name="status_${post.id}" value="reject" /><label for="status_deny_${post.id}">${I18n.getMessage("Moderation.Admin.reject")}</label>&nbsp;
+													<input type="radio" id="status_approve" name="status_${post.id}" value="aprove" /><label for="status_approve">${I18n.getMessage("Moderation.Admin.aprove")}</label>&nbsp;
+													<input type="radio" id="status_defer" name="status_${post.id}" value="defer" checked="checked" /><label for="status_defer">${I18n.getMessage("Moderation.Admin.defer")}</label>&nbsp;
+													<input type="radio" id="status_deny" name="status_${post.id}" value="reject" /><label for="status_deny">${I18n.getMessage("Moderation.Admin.reject")}</label>&nbsp;
 													<input type="hidden" name="post_id" value="${post.id}" />
 												</span>
 											</td>
@@ -160,13 +147,12 @@
 			</#if>
 
 			<#if moderator>
-				<form action="${JForumContext.encodeURL("/jforum")}" method="post" name="formModeration" id="formModeration" accept-charset="${encoding}">
+				<form action='${JForumContext.encodeURL("/jforum")}' method="post" name="form1" id="form1" accept-charset="${encoding}">
 				<input type="hidden" name="action" value="doModeration" />
 				<input type="hidden" name="module" value="moderation" />
-				<input type="hidden" name="returnUrl" value="${JForumContext.encodeURL("/${moduleName}/${action}/${start}/${forum.id}")}" />
+				<input type="hidden" name="securityHash" value="${securityHash}" />
+				<input type="hidden" name="returnUrl" value="${contextPath}/${moduleName}/${action}/${start}/${forum.id}${extension}" />
 				<input type="hidden" name="forum_id" value="${forum.id}" />
-				<input type="hidden" name="log_type" value="0"/>
-				<input type="hidden" name="log_description">
 			</#if>
 
 			<table class="forumline" cellspacing="1" cellpadding="4" width="100%" border="0">
@@ -203,12 +189,7 @@
 							<span class="topictitle">
 							<a href="${JForumContext.encodeURL("/posts/list/${topic.id}")}">
 							<#if topic.vote>${I18n.getMessage("ForumListing.pollLabel")}</#if>
-							<#if (topic.title?length == 0)>
-								No Subject
-							<#else>
-								${topic.title?html}
-							</#if>
-							</a>
+							<#if (topic.title?length == 0)>No Subject<#else>${topic.title?html}</#if></a>
 							</span>
 
 							<#if topic.paginate>
@@ -240,26 +221,19 @@
 						</td>
 
 						<#if moderator && openModeration?default(false)>
-							<td ${class2} valign="middle" align="center">
-								<input type="checkbox" <#if topic.movedId != 0 && topic.forumId != forum.id>disabled="disabled"</#if> name="topic_id" value="${topic.id}" onclick="changeTrClass(this, ${topic_index});"/>
-							</td>
+							<td ${class2} valign="middle"  align="center"><input type="checkbox" name="topic_id" value="${topic.id}" onclick="changeTrClass(this, ${topic_index});"/></td>
 						</#if>
 					</tr>
 				</#list>
 				<!-- END OF TOPICS LISTING -->
-				
-				<tr align="center">
+
+				<tr>
 					<td class="catbottom" valign="middle"  align="right" colspan="<#if moderator && openModeration?default(false)>7<#else>6</#if>" height="28">
-						<table cellspacing="0" cellpadding="0" border="0">
-							<tr>
-								<td align="center"><span class="gensmall">&nbsp;<@presentation.moderationButtons/></span></td>
-							</tr>
-						</table>
+						&nbsp;<@presentation.moderationButtons/>
 					</td>
 				</tr>
 			</table>
-			
-			<#if moderator></form></#if>	
+				<#if moderator></form></#if>
 
 			<table cellspacing="2" cellpadding="2" width="100%" align="center" border="0">
 				<tr>
@@ -271,12 +245,12 @@
 						<#assign colspan = "2"/>
 					</#if>
 
-					<td valign="middle"  align="left" colspan="${colspan?default("0")}">
+					<td valign="middle"  align="left" width="100%" colspan="${colspan?default("0")}">
 						<span class="nav">
-						<a class="nav" href="${JForumContext.encodeURL("/forums/list")}">${I18n.getMessage("ForumListing.forumIndex")}</a> &raquo;  <a class="nav" href="${JForumContext.encodeURL("/forums/show/${forum.id}")}">${forum.name?html}</a></span>
+						<a class="nav" href="${JForumContext.encodeURL("/forums/list")}">${I18n.getMessage("ForumListing.forumIndex")}</a> -&gt;  <a class="nav" href="${JForumContext.encodeURL("/forums/show/${forum.id}")}">${forum.name?html}</a></span>
 					</td>
 
-					<td nowrap="nowrap" align="right" class="nav">${paginationData}</td>
+					<td valign="middle"  nowrap="nowrap" align="right">${paginationData}</td>
 				</tr>
 
 				<tr>
@@ -286,16 +260,19 @@
 
 			<table cellspacing="0" cellpadding="5" width="100%" border="0">
 				<tr>
-					<td align="left" class="gensmall">
+					<td align="left">
 						<#if logged>
-							<#if !watching>
-								<#assign watchMessage = I18n.getMessage("ForumShow.watch")/>
-								<a href="#watch" onClick="watchForum('${JForumContext.encodeURL("/forums/watchForum/${forum.id}")}', '${I18n.getMessage("ForumShow.confirmWatch")}');">
-							<#else>
+							<span class="gensmall">
+							<#assign watch = "watchForum"/>
+							<#assign watchMessage = I18n.getMessage("ForumShow.watch")/>
+							<#if watching>
+								<#assign watch = "unwatchForum"/>
 								<#assign watchMessage = I18n.getMessage("ForumShow.unwatch")/>
-								<a href="${JForumContext.encodeURL("/forums/unwatchForum/${forum.id}")}">
 							</#if>
-							<img src="${contextPath}/templates/${templateName}/images/watch.gif" align="middle" alt="Watch" />&nbsp;${watchMessage}</a>
+
+							<a href="${JForumContext.encodeURL("/forums/${watch}/${forum.id}")}"><img src="${contextPath}/templates/${templateName}/images/watch.gif" align="middle" alt="Watch" /></a>
+							<a href="${JForumContext.encodeURL("/forums/${watch}/${forum.id}")}">${watchMessage}</a>
+							</span>
 						</#if>
 					</td>
 					<td align="right"><@presentation.forumsComboTable/></td>
@@ -305,18 +282,47 @@
 			<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
 				<tr>
 					<td valign="top" align="left">
-						<#include "folder_descriptions.htm"/>
-					</td>
+						<table cellspacing="3" cellpadding="0" border="0">
+							<tr>
+								<td align="left" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_new.gif" alt="[New Folder]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.newMessages")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder.gif" alt="[Folder]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.noNewMessages")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_announce.gif" alt="[Announce Folder]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.announce")}</td>
+							</tr>
 
-					<#assign moderators = forum.getModeratorList()/>
-					<#if (moderators.size() > 0)>
-						<td align="right" class="gensmall">
-							${I18n.getMessage("ForumIndex.forumAdmins")}:
-							<b><#list moderators as m>
-							<a href="${JForumContext.encodeURL("/user/listGroup/${m.id}")}">${m.name?html}</a>
-							</#list></b>
-						</td>
-					</#if>
+							<tr>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_new_hot.gif" alt="[New Hot]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.newMessagesHot")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_hot.gif" alt="[Hot]"/></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.noNewMessagesHot")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_sticky.gif" alt="[Sticky]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.sticky")}</td>
+							</tr>
+
+							<tr>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_lock_new.gif" alt="[Lock New]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.newMessagesBlocked")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td align="center" width="20"><img src="${contextPath}/templates/${templateName}/images/folder_lock.gif" alt="[Lock]" /></td>
+								<td class="gensmall">${I18n.getMessage("ForumIndex.noNewMessagesBlocked")}</td>
+								<td>&nbsp;&nbsp;</td>
+								<td colspan="2"></td>
+							</tr>
+						</table>
+					</td>
+					<td align="right" class="gensmall">
+						${I18n.getMessage("ForumIndex.forumAdmins")}:
+						<#assign moderators = forum.getModeratorList()/>
+						<b><#list moderators as m>
+						<a href="${JForumContext.encodeURL("/user/listGroup/${m.id}")}">${m.name?html}</a>
+						</#list></b>
+					</td>
 				</tr>
 			</table>
 		</td>

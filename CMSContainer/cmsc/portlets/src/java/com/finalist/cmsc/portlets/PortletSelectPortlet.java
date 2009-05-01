@@ -32,7 +32,7 @@ public class PortletSelectPortlet extends CmscPortlet {
 
 
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
     *      javax.portlet.ActionResponse)
     */
    @Override
@@ -74,7 +74,7 @@ public class PortletSelectPortlet extends CmscPortlet {
 
 
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#doEditDefaults(javax.portlet.RenderRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#doEditDefaults(javax.portlet.RenderRequest,
     *      javax.portlet.RenderResponse)
     */
    @Override
@@ -83,7 +83,9 @@ public class PortletSelectPortlet extends CmscPortlet {
       String layoutId = (String) req.getAttribute(PortalConstants.CMSC_OM_PORTLET_LAYOUTID);
 
       List<PortletDefinition> portlets = SiteManagement.getSingletonPortlets(pageId, layoutId);
+      ;
       List<PortletDefinition> portletdefinitions = SiteManagement.getPortletDefintions(pageId, layoutId);
+      ;
 
       Map<PortletDefinition, List<View>> defViews = new HashMap<PortletDefinition, List<View>>();
       for (PortletDefinition definition : portletdefinitions) {

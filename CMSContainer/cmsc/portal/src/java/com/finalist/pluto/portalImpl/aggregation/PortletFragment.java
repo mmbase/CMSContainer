@@ -18,27 +18,25 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.HttpUtil;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pluto.PortletContainerException;
 import org.apache.pluto.om.ControllerObjectAccess;
 import org.apache.pluto.om.entity.PortletEntity;
-import org.apache.pluto.om.portlet.PortletApplicationDefinition;
 import org.apache.pluto.om.portlet.PortletDefinition;
 import org.apache.pluto.om.servlet.ServletDefinition;
 import org.apache.pluto.om.servlet.ServletDefinitionCtrl;
 import org.apache.pluto.om.window.*;
 
 import com.finalist.cmsc.beans.om.*;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portalImpl.headerresource.HeaderResource;
-import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.*;
 import com.finalist.pluto.portalImpl.om.common.impl.PreferenceSetImpl;
 import com.finalist.pluto.portalImpl.om.entity.impl.PortletEntityImpl;
-import com.finalist.pluto.portalImpl.om.servlet.impl.WebApplicationDefinitionImpl;
 import com.finalist.pluto.portalImpl.om.window.impl.PortletWindowImpl;
 import com.finalist.pluto.portalImpl.servlet.ServletObjectAccess;
 import com.finalist.pluto.portalImpl.servlet.ServletResponseImpl;
@@ -52,108 +50,70 @@ import com.finalist.pluto.portalImpl.servlet.ServletResponseImpl;
  * PortletFragmentFooter.jsp. These pages define the header and footer of the
  * portlet.
  * </p>
- *
+ * 
  * @author Wouter Heijke
  */
 public class PortletFragment extends AbstractFragment {
 
-   private static final Log log = LogFactory.getLog(PortletFragment.class);
+   private static Log log = LogFactory.getLog(PortletFragment.class);
 
    public static final String PORTLET_ERROR_MSG = "Error occurred in portlet!";
 
    private com.finalist.cmsc.beans.om.Portlet portlet;
    private PortletWindow portletWindow;
    private StringWriter storedWriter;
-   private int expirationCache = -1;
 
-   private List<HeaderResource> headerResources;
+   private ArrayList<HeaderResource> headerResources;
 
 
    public PortletFragment(ServletConfig config, Fragment parent, String layoutId,
          com.finalist.cmsc.beans.om.Portlet portlet, com.finalist.cmsc.beans.om.PortletDefinition definition, View view)
          throws Exception {
       super(layoutId, config, parent);
-
-      if (portlet == null) {
-         throw new IllegalArgumentException("Portlet is null for layoutid " + layoutId);
-      }
-      if (definition == null) {
-         throw new IllegalArgumentException("Portlet is null for layoutid " + layoutId);
-      }
-
       this.portlet = portlet;
 
       PortletEntityImpl portletEntity = new PortletEntityImpl();
       portletEntity.setId(getId());
       portletEntity.setDefinitionId(definition.getDefinition());
-      PortletDefinition portletDefinition = portletEntity.getPortletDefinition();
-      if (portletDefinition == null) {
-         throw new IllegalArgumentException("Missing definition " + definition.getDefinition() + " in portlet.xml");
-      }
-      
+
       // for now set CMSC portlet params in the preferences of the portlet
       // entiy
-      log.debug("Create - portlet: " + portlet.getId());
+      if (portlet != null) {
+         log.debug("Create - portlet: " + portlet.getId());
 
-      PreferenceSetImpl ps = (PreferenceSetImpl) portletEntity.getPreferenceSet();
-      setDefaultPreferences(ps);
+         PreferenceSetImpl ps = (PreferenceSetImpl) portletEntity.getPreferenceSet();
+         setDefaultPreferences(ps);
 
-      List<Object> p = portlet.getPortletparameters();
-      if (!p.isEmpty()) {
-         Iterator<Object> pparams = p.iterator();
-         while (pparams.hasNext()) {
-            Object objectParam = pparams.next();
-            if (objectParam instanceof PortletParameter) {
-               PortletParameter param = (PortletParameter) objectParam;
-               String key = param.getKey();
-               List<String> values = param.getValues();
-               if (values != null) {
-                  log.debug("key: " + key + " value: " + values);
-                  ps.add(key, values);
+         List<Object> p = portlet.getPortletparameters();
+         if (p.size() > 0) {
+            Iterator<Object> pparams = p.iterator();
+            while (pparams.hasNext()) {
+               Object objectParam = pparams.next();
+               if (objectParam instanceof PortletParameter) {
+                  PortletParameter param = (PortletParameter) objectParam;
+                  String key = param.getKey();
+                  List<String> values = param.getValues();
+                  if (values != null) {
+                     log.debug("key: " + key + " value: " + values);
+                     ps.add(key, values);
+                  }
+               }
+               if (objectParam instanceof NodeParameter) {
+                  NodeParameter param = (NodeParameter) objectParam;
+                  String key = param.getKey();
+                  List<String> values = param.getValues();
+                  if (values != null) {
+                     log.debug("key: " + key + " value: " + values);
+                     ps.add(key, values);
+                  }
                }
             }
-            if (objectParam instanceof NodeParameter) {
-               NodeParameter param = (NodeParameter) objectParam;
-               String key = param.getKey();
-               List<String> values = param.getValues();
-               if (values != null) {
-                  log.debug("key: " + key + " value: " + values);
-                  ps.add(key, values);
-               }
-            }
-         }
-      }
-
-      // also add the view
-      if (view != null) {
-         ps.add(PortalConstants.CMSC_OM_VIEW_ID, view.getId());
-         ps.add(PortalConstants.CMSC_PORTLET_VIEW_TEMPLATE, view.getResource());
-      }
-      
-      String expiractionFromDefinition = portletDefinition.getExpirationCache();
-      /* Portlet spec 1.0 PLT.18.1 Expiration Cache
-       * For a portlet that has not defined expiration cache in the deployment descriptor,
-       * if the expiration cache property is set it must be ignored by the portlet-container.
-       *
-       * Here we are doing something similar for the expiration settings or our Definitions, views and Portlets
-       * which are configured through the database
-       */
-      if (StringUtils.isNotBlank(expiractionFromDefinition)) {
-         try {
-            expirationCache = Integer.valueOf(expiractionFromDefinition);
-         }
-         catch(NumberFormatException nfe) {
-            log.error("Cache expiration in xml is not a number for " + portletDefinition.getName());
          }
 
-         if (definition.getExpirationcache() > -1) {
-            expirationCache = definition.getExpirationcache();
-         }
-         if (view != null && view.getExpirationcache() > -1) {
-            expirationCache = Math.min(expirationCache, view.getExpirationcache());
-         }
-         if (portlet.getExpirationcache() > -1) {
-            expirationCache = portlet.getExpirationcache();
+         // also add the view
+         if (view != null) {
+            ps.add(PortalConstants.CMSC_OM_VIEW_ID, view.getId());
+            ps.add(PortalConstants.CMSC_PORTLET_VIEW_TEMPLATE, view.getResource());
          }
       }
 
@@ -164,7 +124,7 @@ public class PortletFragment extends AbstractFragment {
    }
 
 
-   protected final void setDefaultPreferences(PreferenceSetImpl ps) {
+   protected void setDefaultPreferences(PreferenceSetImpl ps) {
       ps.add(PortalConstants.CMSC_OM_PORTLET_ID, String.valueOf(portlet.getId()));
       ps.add(PortalConstants.CMSC_OM_PORTLET_DEFINITIONID, String.valueOf(portlet.getDefinition()));
    }
@@ -180,13 +140,10 @@ public class PortletFragment extends AbstractFragment {
       }
       catch (PortletException e) {
          log.fatal("process portlet raised an exception", e);
-         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
       }
       catch (PortletContainerException e) {
          log.fatal("portlet container raised an exception", e);
-         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
       }
-      cleanRequest(request);
    }
 
 
@@ -204,19 +161,8 @@ public class PortletFragment extends AbstractFragment {
       // okay
       String errorMsg = null;
       try {
-          log.debug("|| portletLoad:'" + portletWindow.getId() + "'");
-
+         log.debug("|| portletLoad:'" + portletWindow.getId() + "'");
          PortletContainerFactory.getPortletContainer().portletLoad(portletWindow, wrappedRequest, response);
-
-         PortletDefinition def = portletWindow.getPortletEntity().getPortletDefinition();
-         if (def == null) {
-            throw new PortletException("PortletDefinition not found for window " + portletWindow.getId());
-         }
-
-         // store the context path in the webapp.
-         PortletApplicationDefinition app = def.getPortletApplicationDefinition();
-         WebApplicationDefinitionImpl wa = (WebApplicationDefinitionImpl) app.getWebApplicationDefinition();
-         wa.setContextRoot(request.getContextPath());
       }
       catch (PortletContainerException e) {
          log.error("PortletContainerException-Error in Portlet", e);
@@ -258,6 +204,7 @@ public class PortletFragment extends AbstractFragment {
       ServletDefinition servletDefinition = getServletDefinition();
 
       if (servletDefinition != null && !servletDefinition.isUnavailable()) {
+         request.setAttribute(PortalConstants.FRAGMENT, this);
          PrintWriter writer2 = new PrintWriter(storedWriter);
 
          // create a wrapped response which the Portlet will be rendered to
@@ -289,23 +236,17 @@ public class PortletFragment extends AbstractFragment {
             writer2.println(getErrorMsg(e));
          }
 
+         request.removeAttribute(PortalConstants.FRAGMENT);
       }
       else {
          log.error("Error no servletDefinition!!!");
       }
-      cleanRequest(request);
       log.debug("PortletFragment service exits");
    }
 
 
    private void setupRequest(HttpServletRequest request) {
       request.setAttribute(PortalConstants.CMSC_OM_PORTLET_LAYOUTID, getKey());
-      request.setAttribute(PortalConstants.FRAGMENT, this);
-   }
-
-   private void cleanRequest(HttpServletRequest request) {
-       request.removeAttribute(PortalConstants.FRAGMENT);
-       request.removeAttribute(PortalConstants.CMSC_OM_PORTLET_LAYOUTID);
    }
 
 
@@ -338,7 +279,7 @@ public class PortletFragment extends AbstractFragment {
          // output the header JSP page
 
          // request.setAttribute("portletInfo", portletInfo);
-         RequestDispatcher rd = getMainRequestDispatcher(portletHeaderJsp, response.getContentType());
+         RequestDispatcher rd = getMainRequestDispatcher(portletHeaderJsp);
          rd.include(request, response);
          try {
             // output the Portlet
@@ -354,7 +295,7 @@ public class PortletFragment extends AbstractFragment {
          finally {
             // output the footer JSP page
             String portletFooterJsp = getServletContextParameterValue("portlet.footer.jsp", "PortletFragmentFooter.jsp");
-            RequestDispatcher rdFooter = getMainRequestDispatcher(portletFooterJsp, response.getContentType());
+            RequestDispatcher rdFooter = getMainRequestDispatcher(portletFooterJsp);
             rdFooter.include(request, response);
 
             request.removeAttribute(PortalConstants.FRAGMENT);
@@ -371,10 +312,6 @@ public class PortletFragment extends AbstractFragment {
       finally {
          storedWriter = null;
       }
-   }
-
-   public PortletMode getPortletMode(PortalEnvironment env, PortletWindow portletWindow) {
-       return env.getPortalControlParameter().getMode(portletWindow);
    }
 
 
@@ -398,7 +335,7 @@ public class PortletFragment extends AbstractFragment {
    }
 
 
-   public final String getKey() {
+   public String getKey() {
       return getId(); // "_" + layoutId;
    }
 
@@ -413,12 +350,6 @@ public class PortletFragment extends AbstractFragment {
          headerResources = new ArrayList<HeaderResource>();
       }
       headerResources.add(resource);
-   }
-
-
-
-   public int getExpirationCache() {
-      return expirationCache;
    }
 
 }

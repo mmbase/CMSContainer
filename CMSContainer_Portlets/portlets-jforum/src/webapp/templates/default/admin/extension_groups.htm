@@ -1,14 +1,16 @@
+<#include "../header.htm"/>
 <#setting number_format = "#"/>
-<style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css?${startupTime} );</style>
+<STYLE type=text/css>@import url( ${contextPath}/templates/${templateName}/admin/style.css );</STYLE>
 
 <table width="100%" align="center" cellpadding="4" cellspacing="1" border="0" class="forumline">
 	<tr>
 		<td class="cathead" colspan="8" align="center" height="28"><span class="cattitle">${I18n.getMessage("AdminAttachments.addNew")}</span></td>
 	</tr>
-	
-	<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
+
+	<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
 	<input type="hidden" name="action" value="extensionGroupsSave" />
 	<input type="hidden" name="module" value="${moduleName}" />
+	<input type="hidden" name="securityHash" value="${securityHash}" />
 
 	<tr>
 		<th class="thleft">&nbsp;${I18n.getMessage("AdminAttachments.extensionGroup")}&nbsp;</th>
@@ -52,9 +54,10 @@
 	</tr>
 
 	<#if (groups.size() > 0)>
-		<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
+		<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
 		<input type="hidden" name="action" value="extensionGroupsUpdate" />
 		<input type="hidden" name="module" value="${moduleName}" />
+		<input type="hidden" name="securityHash" value="${securityHash}" />
 		<input type="hidden" name="total_records" value="${groups.size()}"/>
 
 		<tr>
@@ -97,3 +100,5 @@
 		</form>
 	</#if>
 </table>
+<#include "../bottom.htm"/>
+

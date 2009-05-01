@@ -5,34 +5,48 @@ var maxAttachments = ${maxAttachments?default(0)};
 var counter = 0;
 
 <#if attachmentsEnabled>
-	var template = "<div id='attach_#counter#'><table width='100%' class='gensmall'><tr><td>${I18n.getMessage("Attachments.filename")}</td>";
+	var template = "<table width='100%'><tr><td><span class='gen'><b>${I18n.getMessage("Attachments.filename")}</b></span></td>";
 	template += "<td><input type='file' size='50' name='file_#counter#'></td></tr>";
-	template += "<tr><td>${I18n.getMessage("Attachments.description")}</td>";
-	template += "<td><input type='text' name='comment_#counter#' size='50'>";
-	template += "&nbsp;&nbsp;<a href='javascript:removeAttach(#counter#)' class='gensmall'>[${I18n.getMessage("Attachments.remove")}]</a></td></tr>";
-	template += "</table><div style='border-top: 1px dashed #000;'>&nbsp;</div></div>";
+	template += "<tr><td><span class='gen'><b>${I18n.getMessage("Attachments.description")}</b></span></td>";
+	template += "<td><textarea rows='4' cols='40' name='comment_#counter#'></textarea>";
+	template += "&nbsp;&nbsp;<a href='javascript:removeAttach(#counter#)' class='gensmall'>${I18n.getMessage("Attachments.remove")}</a></td></tr>";
+	template += "<tr><td colspan='2' width='100%' class='row3'></td></tr></table>";
+
+	function openAttachmentPanel() 
+	{
+		if (total == 0 && !ignoreStart) {
+			addAttachmentFields();
+		}
+
+		document.getElementById("tdAttachPanel").style.display = panelOpen ? 'none' : '';
+		panelOpen = !panelOpen;
+	}
 
 	function addAttachmentFields()
 	{
 		if (counter < maxAttachments) {
 			var s = template.replace(/#counter#/g, total);
-			$("#attachmentFields").append(s);
-			$("#total_files").val(++total);
+			s += "<div id='attach_#counter#'></div>";
+			s = s.replace(/#counter#/, total + 1);
+
+			
+			document.getElementById("attach_" + total).innerHTML = s;
+			document.getElementById("total_files").value = ++total;
 
 			counter++;
-
-			defineAttachmentButtonStatus();
+			setAddAttachButtonStatus();
 		}
 	}
 
 	function removeAttach(index)
 	{
-		$("#attach_" + index).empty();
-		counter--;
-		defineAttachmentButtonStatus();
+		document.getElementById("attach_" + index).innerHTML = "<div id='attach_" + total + "'></div>";
+		//Avoid HTML Validation error by not using the minusminus shortcut
+		counter = counter-1;
+		setAddAttachButtonStatus();
 	}
 
-	function defineAttachmentButtonStatus()
+	function setAddAttachButtonStatus()
 	{
 		var disabled = !(counter < maxAttachments);
 		document.post.add_attach.disabled = disabled;
@@ -41,10 +55,10 @@ var counter = 0;
 </#if>
 
 <#if attachments?exists>
-	var templateEdit = "<table width='100%'><tr><td class='row2 gen'>${I18n.getMessage("Attachments.filename")}</td>";
-	templateEdit += "<td class='row2 gen'>#name#</td></tr>";
-	templateEdit += "<tr><td class='row2 gen'>${I18n.getMessage("Attachments.description")}</td>";
-	templateEdit += "<td class='row2' valign='middle'><input type='text' size='50' name='edit_comment_#id#' value='#value#'>";
+	var templateEdit = "<table width='100%'><tr><td class='row2'><span class='gen'><b>${I18n.getMessage("Attachments.filename")}</b></span></td>";
+	templateEdit += "<td class='row2'><span class='gen'>#name#</td></tr>";
+	templateEdit += "<tr><td class='row2'><span class='gen'><b>${I18n.getMessage("Attachments.description")}</b></span></td>";
+	templateEdit += "<td class='row2'><textarea rows='4' cols='40' name='edit_comment_#id#'>#value#</textarea>";
 	templateEdit += "&nbsp;&nbsp;<span class='gensmall'><input type='checkbox' onclick='configureAttachDeletion(#id#, this);'>${I18n.getMessage("Attachments.remove")}</span></td></tr>";
 	templateEdit += "<tr><td colspan='2' width='100%' class='row3'></td></tr></table>";
 	
@@ -60,9 +74,9 @@ var counter = 0;
 
 			data.push(attach_${a.id});
 		</#list>
-		
+
 		counter = data.length;
-		<#if attachmentsEnabled>defineAttachmentButtonStatus();</#if>
+		<#if attachmentsEnabled>setAddAttachButtonStatus();</#if>
 		
 		for (var i = 0; i < data.length; i++) {
 			var a = data[i];

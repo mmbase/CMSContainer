@@ -9,28 +9,18 @@
 	<field name="lastmodifier" />
 	<field name="use_expirydate" />
 	<field name="urlfragment" />
-	<field name="from_mail" />
-	<field name="from_name" />
-	<field name="replyto_mail" />
-	<field name="replyto_name" />
-   <field name="paused" />
-	<field name="pausedstartdate" />
-   <field name="pausedstopdate" />
+	<field name="inmenu" />
+	<field name="secure" />
 	<field name="title" />
 	<field name="subject" />
 	<field name="description" />
 	<field name="externalurl"/>
-	<field name="schedule" />
-   <field name="bounce_checking"/>
-   <field name="max_bounces"/>
-   <field name="server"/>
-   <field name="user_name"/>
-   <field name="password"/>
-   <relation destination="term" role="posrel" />
+	<field name="publishinterval" />
+
 	<relation destination="images" role="namedrel" />
 	<relation destination="layout" role="allowrel" />
 	<relation destination="layout" role="layoutrel" />
 	<relation destination="page" role="navrel" />
 	<relation destination="portlet" role="portletrel" />
-   <relation destination="stylesheet" role="stylerel" />
+	<relation destination="newslettertheme" role="newslettertheme" />
 </action>

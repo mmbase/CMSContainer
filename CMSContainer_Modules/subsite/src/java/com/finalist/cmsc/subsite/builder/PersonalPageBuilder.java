@@ -6,7 +6,7 @@ import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.subsite.PersonalPageNavigationItemManager;
 
 /**
- * @author Jacobjob
+ * @author Freek Punt
  */
 public class PersonalPageBuilder extends NavigationBuilder {
     
