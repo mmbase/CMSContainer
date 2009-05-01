@@ -1,5 +1,4 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp"%>
-<cmsc:location var="cur" sitevar="site" />
 <div class="kolombestel">
 <mm:cloud method="asis">
 	<mm:import externid="elementId" required="true" from="request" />	
@@ -28,28 +27,10 @@
 				</c:set>		
 			</mm:node>		
 		
-			<p><fmt:message key="view.titleinfo"/></p>
-
-			<table cellpadding="0" cellspacing="0" border="0" class="nopad">
-			    <tr>
-					<td></td>
-					<td>
-						<label class="upcase"><fmt:message key="view.link"/></label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="url"><fmt:message key="view.url"/></label>
-					</td>
-					<td>
-						<c:set var="articleUrlPath" value="http://${site.urlfragment}/content/${articleIdValue}" />
-						<input type="text" name="articleUrlPath" value="${articleUrlPath}" maxlength="255" readonly="readonly"/>
-						<div></div>
-					</td>
-				</tr>
-			</table>
-			
-			<p><fmt:message key="view.info"/></p>
+			<mm:node number="${elementId}" notfound="skip">			   
+				<mm:field name="intro">
+				<mm:isnotempty><p class="body"><mm:write escape="none"/></p></mm:isnotempty></mm:field>	
+			</mm:node>				
 			
 			<c:if test="${!empty errormessages['sendemail']}">
 				<font size="1" color="red"><fmt:message key="${errormessages['sendemail']}" /></font>
@@ -62,15 +43,9 @@
 			<form name="<portlet:namespace />form" method="post"
 			action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>" >	
 				<input type="hidden" name="articleNumber" value="${articleIdValue}"/>
-				<input type="hidden" name="articleUrlPath" value="${articleUrlPath}"/>
 			    <mm:node number="${elementId}" notfound="skip">	
 			    <table cellpadding="0" cellspacing="0" border="0">
-					<tr>
-						<td></td>
-						<td>
-							<label class="upcase"><fmt:message key="view.addressee"/></label>
-						</td>
-					</tr>
+			    <tr><td colspan="2">&nbsp;</td></tr>
 					<tr>
 						<td>
 							<label for="toname"><fmt:message key="view.toname"/></label>  		    
@@ -100,12 +75,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td>
-							<label class="upcase"><fmt:message key="view.sender"/></label>
-						</td>
-					</tr>
-					<tr>
 						<td>
 							<label for="fromname"><fmt:message key="view.fromname"/></label>  		    
 						</td>	
@@ -131,14 +100,6 @@
 									<br/><fmt:message key="${errormessages['fromemail']}" />
 								</font> 
 							</c:if>								 
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="message"><fmt:message key="view.message"/></label>  		    
-						</td>	
-						<td>							 
-							<textarea name="message" rows="3" cols="20">${message}</textarea>		 	 
 						</td>
 					</tr>						
 					<tr>

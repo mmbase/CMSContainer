@@ -20,8 +20,8 @@ import org.apache.commons.logging.LogFactory;
 import org.mmbase.servlet.BridgeServlet;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
 public class LanguageRedirectServlet extends BridgeServlet {
@@ -36,7 +36,7 @@ public class LanguageRedirectServlet extends BridgeServlet {
    @Override
    protected Map getAssociations() {
       Map a = super.getAssociations();
-      a.put("language", Integer.valueOf(50));
+      a.put("language", new Integer(50));
       return a;
    }
 
@@ -74,21 +74,12 @@ public class LanguageRedirectServlet extends BridgeServlet {
          response.sendError(HttpServletResponse.SC_NOT_FOUND);
       }
       String redirect = getRedirectUrl(request, pagePath);
-      if (redirect == null) {
-         response.sendError(HttpServletResponse.SC_NOT_FOUND, "pagePath: " + pagePath);
-      }
-      else {
-         response.sendRedirect(redirect);
-      }
+      response.sendRedirect(redirect);
    }
 
 
    private String getRedirectUrl(HttpServletRequest request, String path) {
       NavigationItem item = SiteManagement.getNavigationItemFromPath(path);
-      if (item == null) {
-         return null;
-      }
-      
       String link = SiteManagement.getPath(item, !ServerUtil.useServerName());
 
       String host = null;

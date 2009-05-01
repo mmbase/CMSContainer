@@ -1,31 +1,34 @@
 package com.finalist.emailalert;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionForm;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.HttpUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ConfirmAction extends Action {
 
    private static final Logger log = Logging.getLoggerInstance(ConfirmAction.class.getName());
 
 
-   @Override
    public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
          HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
 
       String emailAddress = httpServletRequest.getParameter("s");
       String returnUrl = null;
-      Cloud cloud = getCloudForAnonymousUpdate(false);
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
       if (emailAddress != null) {
          Node subscriberNode = null;
          try {
@@ -52,13 +55,6 @@ public class ConfirmAction extends Action {
       return null;
    }
 
-   public Cloud getCloudForAnonymousUpdate(boolean isRemote) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      if (isRemote) {
-         return Publish.getRemoteCloud(cloud);
-      }
-      return cloud;
-   }
 
    private String getConfirmationLink(Cloud cloud) {
       String link = null;

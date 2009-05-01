@@ -59,7 +59,7 @@ public class RepositoryInfo implements TreeInfo {
       }
 
       if (openChannels.contains(number)) {
-         openChannels.remove(Integer.valueOf(number));
+         openChannels.remove(new Integer(number));
       }
    }
 

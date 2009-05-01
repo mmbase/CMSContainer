@@ -34,7 +34,6 @@ public class PortletURLProviderImpl implements PortletURLProvider {
 
    protected String windowid;
    protected String page;
-   protected String host;
 
    private DynamicInformationProviderImpl provider;
 
@@ -102,7 +101,7 @@ public class PortletURLProviderImpl implements PortletURLProvider {
    public String toString() {
       PortalURL url = null;
       if (page != null) {
-         url = new PortalURL(host, provider.request, page);
+         url = new PortalURL(provider.request, page);
       }
       else {
          url = PortalEnvironment.getPortalEnvironment(provider.request).getRequestedPortalURL();
@@ -164,7 +163,7 @@ public class PortletURLProviderImpl implements PortletURLProvider {
          }
       }
 
-      return url.toString(controlURL, Boolean.valueOf(secure));
+      return url.toString(controlURL, new Boolean(secure));
    }
 
 
@@ -175,10 +174,6 @@ public class PortletURLProviderImpl implements PortletURLProvider {
 
    public void setWindowid(String windowid) {
       this.windowid = windowid;
-   }
-   
-   public void setHost(String host) {
-      this.host = host;
    }
 
 }

@@ -9,14 +9,14 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.navigation;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.security.Role;
 import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
-public final class SiteUtil {
+public class SiteUtil {
 
    private static final String STAGING_FRAGMENT = "stagingfragment";
    private static final String LIVE_FRAGMENT = "urlfragment";
@@ -37,7 +37,7 @@ public final class SiteUtil {
 
    public static boolean isSite(Node node) {
       if (node == null) {
-         throw new IllegalArgumentException("node can not be null");
+         throw new NullPointerException("node can not be null");
       }
       return SITE.equals(node.getNodeManager().getName());
    }
@@ -55,7 +55,8 @@ public final class SiteUtil {
 
    public static NodeList getSites(Cloud cloud) {
       NodeManager sitesManager = cloud.getNodeManager(SITE);
-      return sitesManager.getList(sitesManager.createQuery());
+      NodeList sites = sitesManager.getList(sitesManager.createQuery());
+      return sites;
    }
 
 
@@ -67,11 +68,11 @@ public final class SiteUtil {
    public static Node createSite(Cloud cloud, String name, String pathname, String description, Node layout) {
       Node site = cloud.getNodeManager(SITE).createNode();
       site.setStringValue(TITLE_FIELD, name);
-      if (StringUtils.isNotEmpty(pathname)) {
+      if (!StringUtil.isEmpty(pathname)) {
          site.setStringValue(STAGING_FRAGMENT, pathname);
          site.setStringValue(LIVE_FRAGMENT, pathname);
       }
-      if (StringUtils.isNotEmpty(description)) {
+      if (!StringUtil.isEmpty(description)) {
          site.setStringValue(DESCRIPTION_FIELD, description);
       }
       site.commit();

@@ -1,7 +1,7 @@
 package com.finalist.cmsc.taglib;
 
 import net.sf.mmapps.commons.bridge.NodeFieldComparator;
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.jsp.taglib.NodeReferrerTag;
@@ -43,15 +43,15 @@ public class LinkedContentTag extends NodeReferrerTag {
    /**
     * Formatter used for layout of list. This attribute is not required. If it
     * is not supplied, the default is used which is
-    * com.finalist.cmsc.taglib.LinkedContentTag$DefaultFormatter.
+    * net.sf.mmapps.commons.basicmodel.taglib.LinkedContentTag$DefaultFormatter.
     */
    private Attribute formatter = Attribute.NULL;
 
 
    private String getFormatter() throws JspTagException {
       String result = formatter.getString(this);
-      if (StringUtils.isEmpty(result)) {
-         result = DefaultFormatter.class.getName();
+      if (StringUtil.isEmpty(result)) {
+         result = "net.sf.mmapps.commons.basicmodel.taglib.LinkedContentTag$DefaultFormatter";
       }
       return result;
    }
@@ -76,11 +76,11 @@ public class LinkedContentTag extends NodeReferrerTag {
          // get the related nodes
          NodeList nodes = contentNode.getRelatedNodes(mgrRelatedNodesStr, roleStr, "destination");
 
-         if (StringUtils.isNotEmpty(sortStr)) {
+         if (!StringUtil.isEmpty(sortStr)) {
             Collections.sort(nodes, new NodeFieldComparator(sortStr));
          }
          else {
-            if (StringUtils.isNotEmpty(roleStr)) {
+            if (!StringUtil.isEmpty(roleStr)) {
                RelationManager relationManager = contentNode.getCloud().getRelationManager(roleStr);
                if (relationManager != null && relationManager.hasField("pos")) {
                   Collections.sort(nodes, new NodeFieldComparator("pos"));
@@ -191,14 +191,14 @@ public class LinkedContentTag extends NodeReferrerTag {
        */
       String write(NodeList list, String title) throws JspException;
    }
-  
+
    /**
     * Implementation of the <code>Formatter</code> interface.
     */
    public static class DefaultFormatter implements Formatter {
 
       /**
-       * @see com.finalist.cmsc.taglib.LinkedContentTag.Formatter#write(org.mmbase.bridge.NodeList,
+       * @see net.sf.mmapps.commons.basicmodel.taglib.LinkedContentTag.Formatter#write(org.mmbase.bridge.NodeList,
        *      java.lang.String)
        */
       public String write(NodeList list, String title) throws JspException {

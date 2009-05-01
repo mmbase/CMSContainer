@@ -11,26 +11,24 @@ package com.finalist.cmsc.navigation;
 
 import java.util.*;
 
-import net.sf.mmapps.commons.bridge.CloneUtil;
-import net.sf.mmapps.commons.bridge.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.*;
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.mmbase.TreeUtil;
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
+import com.finalist.cmsc.services.publish.Publish;
 
-public final class PagesUtil {
+public class PagesUtil {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(PagesUtil.class.getName());
+   private static Logger log = Logging.getLoggerInstance(PagesUtil.class.getName());
 
    private static final String SOURCE = "source";
    private static final String DESTINATION = "DESTINATION";
@@ -66,10 +64,6 @@ public final class PagesUtil {
    public static final String POS_FIELD = "pos";
 
 
-   private PagesUtil() {
-      // utility
-   }
-
    public static NodeManager getNodeManager(Cloud cloud) {
       return TreeUtil.getNodeManager(cloud, PAGE);
    }
@@ -96,7 +90,7 @@ public final class PagesUtil {
 
    /**
     * Is element of page type
-    *
+    * 
     * @param node
     *           node to check
     * @return is page
@@ -109,7 +103,7 @@ public final class PagesUtil {
 
    /**
     * Is ModeManager of the type page
-    *
+    * 
     * @param nm
     *           NodeManager to check
     * @return is page
@@ -176,10 +170,10 @@ public final class PagesUtil {
         String description, Node layout, String managerName) {
       Node page = TreeUtil.getNodeManager(cloud, managerName).createNode();
       page.setStringValue(TITLE_FIELD, name);
-      if (StringUtils.isNotEmpty(pathname)) {
+      if (!StringUtil.isEmpty(pathname)) {
          page.setStringValue(FRAGMENT_FIELD, pathname);
       }
-      if (StringUtils.isNotEmpty(description)) {
+      if (!StringUtil.isEmpty(description)) {
          page.setStringValue(DESCRIPTION_FIELD, description);
       }
       page.commit();
@@ -188,6 +182,7 @@ public final class PagesUtil {
       linkPortlets(page, layout);
       return page;
    }
+
 
    public static void addLayout(Node page, Node layoutNode) {
       if (layoutNode == null) {
@@ -220,7 +215,7 @@ public final class PagesUtil {
 
    /**
     * Use this method to remove a page.
-    *
+    * 
     * @param page
     */
    public static void deletePage(Node page) {
@@ -259,8 +254,6 @@ public final class PagesUtil {
 
    public static Node copyPageRelations(Node sourcePage, Node newPage) {
       CloneUtil.cloneRelations(sourcePage, newPage, LAYOUTREL, LAYOUT);
-      CloneUtil.cloneRelations(sourcePage, newPage, STYLEREL, STYLESHEET);
-      CloneUtil.cloneRelations(sourcePage, newPage, NAMEDREL, IMAGES);
       PortletUtil.copyPortlets(sourcePage, newPage);
 
       Node popupinfo = getPopupinfo(sourcePage);
@@ -346,10 +339,10 @@ public final class PagesUtil {
         for(RelationIterator iter = relations.relationIterator(); iter.hasNext();) {
             Relation relation = iter.nextRelation();
             String name = relation.getStringValue(NAME_FIELD);
-
+             
             // this is a bit of a hack, but saves on the loading of the actual node
             int image = relation.getIntValue("dnumber");
-
+             
             List<Integer> images = pageImages.get(name);
             if (images == null) {
                 images = new ArrayList<Integer>();
@@ -365,7 +358,7 @@ public final class PagesUtil {
         Collections.sort(namedrels, new NodeFieldComparator(NAME_FIELD));
         return namedrels;
     }
-
+    
    public static Node copyPopupinfo(Node popupinfo) {
       return CloneUtil.cloneNode(popupinfo);
    }
@@ -417,7 +410,7 @@ public final class PagesUtil {
                      PortletUtil.addPortlet(newPage, portlet, name);
                   }
                   else {
-                     throw new IllegalArgumentException("Single portletdefinition does not have a portlet instance");
+                     throw new NullPointerException("Single portletdefinition does not have a portlet instance");
                   }
                }
             }
@@ -506,7 +499,7 @@ public final class PagesUtil {
       int operator = (greater ? FieldCompareConstraint.GREATER_EQUAL : FieldCompareConstraint.LESS_EQUAL);
 
       Field expireField = pageManager.getField(EXPIREDATE_FIELD);
-      Object expireDateObj = (expireField.getType() == Field.TYPE_DATETIME) ? new Date(date) : Long.valueOf(date);
+      Object expireDateObj = (expireField.getType() == Field.TYPE_DATETIME) ? new Date(date) : new Long(date);
       Constraint expirydate = query.createConstraint(query.getStepField(expireField), operator, expireDateObj);
       return expirydate;
    }
@@ -516,7 +509,7 @@ public final class PagesUtil {
       int operator = (greater ? FieldCompareConstraint.GREATER_EQUAL : FieldCompareConstraint.LESS_EQUAL);
 
       Field publishField = pageManager.getField(PUBLISHDATE_FIELD);
-      Object publishDateObj = (publishField.getType() == Field.TYPE_DATETIME) ? new Date(date) : Long.valueOf(date);
+      Object publishDateObj = (publishField.getType() == Field.TYPE_DATETIME) ? new Date(date) : new Long(date);
       Constraint publishdate = query.createConstraint(query.getStepField(publishField), operator, publishDateObj);
       return publishdate;
    }
