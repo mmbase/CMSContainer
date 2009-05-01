@@ -25,64 +25,56 @@ import org.apache.pluto.om.window.PortletWindowListCtrl;
 
 public class PortletWindowListImpl implements PortletWindowList, PortletWindowListCtrl {
 
-   HashMap<String, PortletWindow> windows;
+	HashMap windows;
 
+	public PortletWindowListImpl() {
+		windows = new HashMap();
+	}
 
-   public PortletWindowListImpl() {
-      windows = new HashMap<String, PortletWindow>();
-   }
+	// PortletWindowList implementation.
 
+	/**
+	 * Returns the elements of this set
+	 * 
+	 * @return An iterator containg all elements
+	 */
+	public Iterator iterator() {
 
-   // PortletWindowList implementation.
+		return windows.values().iterator();
+	}
 
-   /**
-    * Returns the elements of this set
-    * 
-    * @return An iterator containg all elements
-    */
-   public Iterator<PortletWindow> iterator() {
+	/**
+	 * Returns the portlet window object of the given id
+	 * 
+	 * @param id the window id.
+	 * @return the portlet window object or null if the list does not contain a
+	 *         portlet window with the given id
+	 */
+	public PortletWindow get(ObjectID id) {
+		return (PortletWindow) windows.get(id.toString());
+	}
 
-      return windows.values().iterator();
-   }
+	// PortletWindowListCtrl implementation.
 
+	/**
+	 * Add a portlet window to the list
+	 * 
+	 * @param window the porlet window to add
+	 */
+	public void add(PortletWindow window) {
+		if (window != null) {
+			windows.put(window.getId().toString(), window);
+		}
+	}
 
-   /**
-    * Returns the portlet window object of the given id
-    * 
-    * @param id
-    *           the window id.
-    * @return the portlet window object or null if the list does not contain a
-    *         portlet window with the given id
-    */
-   public PortletWindow get(ObjectID id) {
-      return windows.get(id.toString());
-   }
-
-
-   // PortletWindowListCtrl implementation.
-
-   /**
-    * Add a portlet window to the list
-    * 
-    * @param window
-    *           the porlet window to add
-    */
-   public void add(PortletWindow window) {
-      if (window != null) {
-         windows.put(window.getId().toString(), window);
-      }
-   }
-
-
-   /**
-    * Remove the portlet window with the given Id from the list
-    * 
-    * @param id
-    *           the Id of the portlet window which should be removed
-    */
-   public void remove(ObjectID id) {
-      if (id != null) {
-         windows.remove(id.toString());
-      }
-   }
+	/**
+	 * Remove the portlet window with the given Id from the list
+	 * 
+	 * @param id the Id of the portlet window which should be removed
+	 */
+	public void remove(ObjectID id) {
+		if (id != null) {
+			windows.remove(id.toString());
+		}
+	}
 }

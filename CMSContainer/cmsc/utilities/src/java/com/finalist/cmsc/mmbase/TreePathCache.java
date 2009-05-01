@@ -9,15 +9,19 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.mmbase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 
-public final class TreePathCache {
+public class TreePathCache {
 
     private static Map<String,BidiMap> treeCaches = new HashMap<String,BidiMap>();
-
+    
     private TreePathCache() {
         //utility
     }
@@ -30,8 +34,8 @@ public final class TreePathCache {
         return getPathStringFromCache(getCache(nodeManagerName), number);
     }
 
-    public static Integer getTreeItemFromCache(String nodeManagerName, String path) {
-        return getTreeItemFromCache(getCache(nodeManagerName), path);
+    public static Integer getChannelFromCache(String nodeManagerName, String path) {
+        return getChannelFromCache(getCache(nodeManagerName), path);
     }
 
     public static void removeFromCache(String nodeManagerName, int node) {
@@ -44,10 +48,8 @@ public final class TreePathCache {
     public static void updateCache(String nodeManagerName, int node, String name) {
         updateCache(getCache(nodeManagerName), node, name);
     }
-    public static void moveCache(String nodeManagerName, int node, String newPath) {
-        replaceCache(getCache(nodeManagerName), node, newPath);
-    }
-
+    
+    
     private static BidiMap getCache(String nodeManagerName) {
         synchronized (treeCaches) {
             if (treeCaches.containsKey(nodeManagerName)) {
@@ -60,11 +62,11 @@ public final class TreePathCache {
             }
         }
     }
-
-
-    private static String getPathStringFromCache(BidiMap treeCache, int node) {
-       synchronized(treeCache) {
-          TreePathCacheKey key = (TreePathCacheKey) treeCache.getKey(Integer.valueOf(node));
+    
+   
+    private static String getPathStringFromCache(BidiMap channelCache, int node) {
+       synchronized(channelCache) {
+          TreePathCacheKey key = (TreePathCacheKey) channelCache.getKey(new Integer(node));
           if (key != null) {
              return key.getPath();
           }
@@ -72,37 +74,39 @@ public final class TreePathCache {
        }
     }
 
-    private static Integer getTreeItemFromCache(BidiMap treeCache, String path) {
-       synchronized(treeCache) {
-          return (Integer) treeCache.get(new TreePathCacheKey(path));
+    private static Integer getChannelFromCache(BidiMap channelCache, String path) {
+       synchronized(channelCache) {
+          return (Integer) channelCache.get(new TreePathCacheKey(path));
        }
     }
 
-    private static void addToCache(BidiMap treeCache, String path, int node) {
-       synchronized(treeCache) {
-          treeCache.put(new TreePathCacheKey(path), Integer.valueOf(node));
+    private static void addToCache(BidiMap channelCache, String path, int node) {
+       synchronized(channelCache) {
+          channelCache.put(new TreePathCacheKey(path), new Integer(node));
        }
     }
 
-    private static void removeFromCache(BidiMap treeCache, int node) {
-       synchronized(treeCache) {
-          treeCache.removeValue(Integer.valueOf(node));
+    private static void removeFromCache(BidiMap channelCache, int node) {
+       synchronized(channelCache) {
+          channelCache.removeValue(new Integer(node));
        }
     }
 
-    private static void clearCache(BidiMap treeCache) {
-       synchronized(treeCache) {
-          treeCache.clear();
+    private static void clearCache(BidiMap channelCache) {
+       synchronized(channelCache) {
+          channelCache.clear();
        }
     }
 
-    private static void updateCache(BidiMap treeCache, int node, String name) {
-       synchronized(treeCache) {
-          Integer nodeNumber = Integer.valueOf(node);
-          if (treeCache.containsValue(nodeNumber)) {
-             TreePathCacheKey cKey = (TreePathCacheKey) treeCache.getKey(nodeNumber);
+    private static void updateCache(BidiMap channelCache, int node, String name) {
+       synchronized(channelCache) {
+          Integer nodeNumber = new Integer(node);
+          if (channelCache.containsValue(nodeNumber)) {
+             TreePathCacheKey cKey = (TreePathCacheKey) channelCache.removeValue(nodeNumber);
              String path = cKey.getPath();
+             List<TreePathCacheKey> entriesToChange = new ArrayList<TreePathCacheKey>();
              String newPath = "";
+             
              int index = path.lastIndexOf(TreeUtil.PATH_SEPARATOR);
              if (index > -1) {
                 newPath = path.substring(0, index)  + TreeUtil.PATH_SEPARATOR + name;
@@ -111,35 +115,25 @@ public final class TreePathCache {
                 // root node changed
                 newPath = name;
              }
-             replaceCache(treeCache, nodeNumber, newPath);
+             channelCache.put(new TreePathCacheKey(newPath), nodeNumber);
+             
+             Iterator iter = channelCache.keySet().iterator();
+             while (iter.hasNext()) {
+                TreePathCacheKey key = (TreePathCacheKey) iter.next();
+                if (key.getPath().startsWith(path+'/')) {
+                   entriesToChange.add(key);
+                }
+             }
+             
+             Iterator entriesIter = entriesToChange.iterator();
+             while (entriesIter.hasNext()) {
+                TreePathCacheKey key = (TreePathCacheKey) entriesIter.next();
+                Integer tempNode = (Integer) channelCache.remove(key);
+                String newKey = key.getPath().replaceFirst(path+'/', newPath+'/');
+                channelCache.put(new TreePathCacheKey(newKey), tempNode);
+             }
           }
        }
     }
-
-    private static void replaceCache(BidiMap treeCache, Integer nodeNumber, String newPath) {
-        synchronized (treeCache) {
-            TreePathCacheKey cKey = (TreePathCacheKey) treeCache.removeValue(nodeNumber);;
-            treeCache.put(new TreePathCacheKey(newPath), nodeNumber);
-
-            String path = cKey.getPath();
-            List<TreePathCacheKey> entriesToChange = new ArrayList<TreePathCacheKey>();
-
-            Iterator<TreePathCacheKey> iter = treeCache.keySet().iterator();
-            while (iter.hasNext()) {
-                TreePathCacheKey key = iter.next();
-                if (key.getPath().startsWith(path + '/')) {
-                    entriesToChange.add(key);
-                }
-            }
-
-            Iterator<TreePathCacheKey> entriesIter = entriesToChange.iterator();
-            while (entriesIter.hasNext()) {
-                TreePathCacheKey key = entriesIter.next();
-                Integer tempNode = (Integer) treeCache.remove(key);
-                String newKey = key.getPath().replaceFirst(path + '/', newPath + '/');
-                treeCache.put(new TreePathCacheKey(newKey), tempNode);
-            }
-        }
-    }
-
+    
 }

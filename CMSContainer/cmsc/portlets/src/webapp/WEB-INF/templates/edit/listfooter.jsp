@@ -1,6 +1,5 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 </div>
-<c:if test="${empty orderby}">
 <script type="text/javascript">
 function <portlet:namespace />reorder() {
 	var sortOptions = {
@@ -9,7 +8,7 @@ function <portlet:namespace />reorder() {
 		onUpdate : function() { 
 			var ajaxOptions = {
 				onComplete : function(request) { new Effect.Highlight('<portlet:namespace />list',{}); },
-				parameters : 'action=reorderpartial&parent=${contentchannel}&offset=${offset}&direction=${direction}&'
+				parameters : 'action=reorderpartial&parent=${contentchannel}&offset=${offset}&'
 							 + Sortable.serialize('<portlet:namespace />list', {name: 'ids'} ),
 				evalScripts : true,
 				asynchronous : true
@@ -22,4 +21,3 @@ function <portlet:namespace />reorder() {
 }
 <portlet:namespace />reorder();
 </script>
-</c:if>

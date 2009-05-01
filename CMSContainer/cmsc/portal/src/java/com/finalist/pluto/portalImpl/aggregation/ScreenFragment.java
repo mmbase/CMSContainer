@@ -3,174 +3,103 @@ package com.finalist.pluto.portalImpl.aggregation;
 import java.io.IOException;
 import java.util.*;
 
-import javax.servlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.finalist.cmsc.beans.om.Layout;
-import com.finalist.cmsc.beans.om.Page;
+import com.finalist.cmsc.beans.om.*;
 import com.finalist.cmsc.portalImpl.PortalConstants;
-import com.finalist.cmsc.services.security.LoginSession;
-import com.finalist.cmsc.services.sitemanagement.SiteManagement;
+import com.finalist.cmsc.portalImpl.services.sitemanagement.SiteModelManager;
+import com.finalist.pluto.portalImpl.core.PortalURL;
 
 /**
  * @author Wouter Heijke
+ * @version $Revision: 1.1 $
  */
-public class ScreenFragment extends AbstractFragment {
-   private static Log log = LogFactory.getLog(ScreenFragment.class);
+public class ScreenFragment extends AbstractFragmentContainer{
+	private static Log log = LogFactory.getLog(ScreenFragment.class);
+    
+	private Page page;
+    private Layout layout;
 
-   private List<PortletFragment> children = new ArrayList<PortletFragment>();
-
-   private Page page;
-   private Layout layout;
-
-
-   public ScreenFragment(ServletConfig config, Page page, Layout layout) throws Exception {
-      super(null, config, null);
-      this.page = page;
-      this.layout = layout;
-      log.debug("Create - page: " + page.getId() + " layout: " + page.getLayout());
-   }
-
-
-   public void processAction(HttpServletRequest request, HttpServletResponse response, String actionFragment)
-         throws IOException {
-      PortletFragment pf = getFragment(actionFragment);
-      setupRequest(request);
-      pf.processAction(request, response);
-      cleanRequest(request);
-   }
-
-
-   public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      setupRequest(request);
-
-      int expirationCache = -1;
-
-      Iterator<PortletFragment> portlets = this.getChildFragments().iterator();
-      while (portlets.hasNext()) {
-          PortletFragment portlet = portlets.next();
-         // let the Portlet do it's thing
-         portlet.service(request, response);
-
-         int portletExpiration = portlet.getExpirationCache();
-         if (portletExpiration > -1) {
-            if (expirationCache == -1) {
-               expirationCache = portletExpiration;
+	public ScreenFragment(ServletConfig config, Page page, SiteModelManager siteModelManager) throws Exception {
+		super(null, config, null);
+		this.page = page;
+        layout = siteModelManager.getLayout(page.getLayout());
+        
+        log.debug("Create - page: " + page.getId() + " layout: " + page.getLayout());
+        
+        // place portletfragments and emptyfragments in the screenfragment
+        
+        Set<String> names = layout.getNames();
+        for (Iterator iter = names.iterator(); iter.hasNext();) {
+            String layoutId = (String) iter.next();
+            Integer portletId = page.getPortlet(layoutId);
+            Portlet portlet = siteModelManager.getPortlet(portletId);
+            if (portlet != null) {
+                PortletFragment pf = new PortletFragment(config, this, layoutId, portlet, siteModelManager);
+                this.addChild(pf);
+            } else {
+                createDefaultPortlet(layoutId, config, siteModelManager);
             }
-            else {
-               expirationCache = Math.min(expirationCache, portletExpiration);
+        }
+	}
+    
+    private void createDefaultPortlet(String layoutId, ServletConfig config, SiteModelManager siteModelManager) {
+        try {
+            Portlet empty = siteModelManager.getPortlet(-1);
+            page.addPortlet(layoutId, -1);
+            EmptyFragment ef = new EmptyFragment(config, this, layoutId, empty, siteModelManager);
+            addChild(ef);
+        } catch (Exception e) {
+            log.error("cannot create default portlet");
+            if (log.isDebugEnabled()) {
+                log.debug(e);
             }
-         }
-      }
-
-      LoginSession ls = SiteManagement.getLoginSession(request);
-      if (!ls.isAuthenticated()) {
-         if (expirationCache > -1) {
-            response.setHeader("Cache-Control", "maxage=" + expirationCache);
-            if (expirationCache > 30) {
-               /*
-               If a response includes both an Expires header and a max-age
-               directive, the max-age directive overrides the Expires header, even
-               if the Expires header is more restrictive.  This rule allows an
-               origin server to provide, for a given response, a longer expiration
-               time to an HTTP/1.1 (or later) cache than to an HTTP/1.0 cache.  This
-               might be useful if certain HTTP/1.0 caches improperly calculate ages
-               or expiration times, perhaps due to desynchronized clocks.
-               */
-               long now = System.currentTimeMillis();
-               response.setDateHeader("Date", now);
-               long expires = now + (expirationCache * 1000); // seconds to milliseconds
-               response.setDateHeader("Expires", expires);
-            }
-         }
-      }
-
-      if (page != null) {
-         if (layout != null) {
-             log.debug("using layout:'" + layout.getResource() + "' for page:'" + page.getTitle() + "'");
-
-             request.setAttribute(PortalConstants.FRAGMENT, this);
-
-             FragmentResouceRender render = FragmentResouceRenderFactory.getRender(layout.getResource());
-
-             if (null != render) {
-                 render.render(layout.getResource(), request, response);
-             } else {
-                 RequestDispatcher rd = getMainRequestDispatcher(layout.getResource(), response.getContentType());
-                 rd.include(request, response);
-             }
-             request.removeAttribute(PortalConstants.FRAGMENT);
-         } else {
-            log.error("No layout for Screen");
-         }
-      }
-      else {
-         log.error("No page for ScreenFragment");
-      }
-
-      cleanRequest(request);
-   }
-
-
-   public void setupRequest(HttpServletRequest request) {
-      request.setAttribute(PortalConstants.CMSC_OM_PAGE_ID, String.valueOf(getPage().getId()));
-   }
-
-   private void cleanRequest(HttpServletRequest request) {
-       request.removeAttribute(PortalConstants.CMSC_OM_PAGE_ID);
-   }
-
-
-   public Page getPage() {
-      return page;
-   }
-
-
-   public Layout getLayout() {
-      return layout;
-   }
-
-
-   public String getKey() {
-      return this.getId();
-   }
-
-
-   public Collection<PortletFragment> getChildFragments() {
-      return children;
-   }
-
-
-   public void addChild(PortletFragment child) {
-      children.add(child);
-   }
-
-
-   public PortletFragment getFragment(String id) {
-      PortletFragment fragment = null;
-      Iterator<PortletFragment> iterator = this.getChildFragments().iterator();
-      while (iterator.hasNext()) {
-         PortletFragment tmp = iterator.next();
-         if (tmp != null) {
-            if (tmp.getKey().equalsIgnoreCase(id)) {
-               fragment = tmp;
-               break;
-            }
-         }
-      }
-      log.debug("getFragment: '" + id + "':'" + fragment + "'");
-      return fragment;
-   }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Screen[page:%s(%s) layout:%s(%s)]",
-                page.getTitle(), page.getId(), layout.getNames(), layout.getId()
-        );
+        }
     }
+
+
+	public void createURL(PortalURL url) {
+		// do nothing
+		// we assume that the given url points already to the base portal
+		// servlet
+	}
+
+	public boolean isPartOfURL(PortalURL url) {
+		return true;
+	}
+
+	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute(PortalConstants.FRAGMENT, this);
+		if (page != null) {
+			if (layout != null) {
+				log.debug("using layout:'" + layout.getResource() + "' for page:'" + page.getTitle() + "'");
+				RequestDispatcher rd = getMainRequestDispatcher(layout.getResource());
+				rd.include(request, response);
+			} else {
+				log.error("No layout for Screen");
+			}
+		} else {
+			log.error("No page for ScreenFragment");
+		}
+	}
+
+	public Page getPage() {
+		return page;
+	}
+    
+    public Layout getLayout() {
+        return layout;
+    }
+
+	public String getKey() {
+		return this.getId();
+	}
+
 }

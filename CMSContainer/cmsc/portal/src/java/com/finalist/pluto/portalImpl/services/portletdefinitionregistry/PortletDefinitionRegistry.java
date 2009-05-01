@@ -23,7 +23,7 @@ import org.apache.pluto.om.common.ObjectID;
 import org.apache.pluto.om.portlet.PortletApplicationDefinitionList;
 import org.apache.pluto.om.portlet.PortletDefinition;
 
-import com.finalist.cmsc.services.ServiceManager;
+import com.finalist.pluto.portalImpl.services.ServiceManager;
 
 /**
  * This class is a static accessor for a <code>PortletRegistryService</code>
@@ -31,30 +31,31 @@ import com.finalist.cmsc.services.ServiceManager;
  */
 public class PortletDefinitionRegistry {
 
-   // removed final modifier for hot deploy
-   private static PortletDefinitionRegistryService cService = (PortletDefinitionRegistryService) ServiceManager
-         .getService(PortletDefinitionRegistryService.class);
+	// removed final modifier for hot deploy
+	private static PortletDefinitionRegistryService cService = (PortletDefinitionRegistryService) ServiceManager
+			.getService(PortletDefinitionRegistryService.class);
 
+	/**
+	 * Returns a set containg all portlet application definitions
+	 * 
+	 * @return the portlet application definition set
+	 */
+	public static PortletApplicationDefinitionList getPortletApplicationDefinitionList() {
+		return cService.getPortletApplicationDefinitionList();
+	}
 
-   /**
-    * Returns a set containg all portlet application definitions
-    * 
-    * @return the portlet application definition set
-    */
-   public static PortletApplicationDefinitionList getPortletApplicationDefinitionList() {
-      return cService.getPortletApplicationDefinitionList();
-   }
+	/**
+	 * Returns the portlet definition to the given object id
+	 * 
+	 * @return the portlet definition
+	 */
+	public static PortletDefinition getPortletDefinition(ObjectID id) {
+		return cService.getPortletDefinition(id);
+	}
 
-
-   /**
-    * Returns the portlet definition to the given object id
-    * 
-    * @param id
-    *           ObjectID of the portlet definition
-    * @return the portlet definition
-    */
-   public static PortletDefinition getPortletDefinition(ObjectID id) {
-      return cService.getPortletDefinition(id);
-   }
-
+	// method added for hot deploy
+	public static void setPortletDefinitionRegistryService() {
+		PortletDefinitionRegistryService cService = (PortletDefinitionRegistryService) ServiceManager
+				.getService(PortletDefinitionRegistryService.class);
+	}
 }

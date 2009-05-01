@@ -6,88 +6,58 @@ OSI Certified is a certification mark of the Open Source Initiative.
 The license (Mozilla version 1.0) can be read at the MMBase site.
 See http://www.MMBase.org/license
 
- */
+*/
 package com.finalist.cmsc.beans.om;
 
 import java.util.*;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
+
 
 /**
  * @author Wouter Heijke
  */
 @SuppressWarnings("serial")
-public class View extends NodeBean implements Comparable<View> {
+public class View extends NodeBean implements Comparable {
 
-   private String title;
-   private String description;
-   private String resource;
-   private boolean detailsupport = true; // when field is not present or virtual then this is the default value
-   private int expirationcache = -1; // when field is not present or virtual then this is the default value
-   private List<String> contenttypes = new ArrayList<String>();
+	private String title;
+    private String description;
+	private String resource;
+    private List<String> contenttypes = new ArrayList<String>();
 
-
-   public String getTitle() {
-      return title;
-   }
-
-
-   public void setTitle(String title) {
-      this.title = title;
-   }
-
-
-   public String getDescription() {
-      return description;
-   }
-
-
-   public void setDescription(String description) {
-      this.description = description;
-   }
-
-
-   public String getResource() {
-      return resource;
-   }
-
-
-   public void setResource(String resource) {
-      this.resource = resource;
-   }
-
-
-   public List<String> getContenttypes() {
-      return Collections.unmodifiableList(contenttypes);
-   }
-
-
-   public void addContenttype(String contenttypes) {
-      this.contenttypes.add(contenttypes);
-   }
-
-
-   public int compareTo(View o) {
-      return title.compareTo(o.title);
-   }
-
-    public boolean isDetailsupport() {
-        return detailsupport;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDetailsupport(boolean detailsupport) {
-        this.detailsupport = detailsupport;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+   
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public String getResource() {
+		return resource;
+	}
 
-   public int getExpirationcache() {
-      return expirationcache;
-   }
+	public void setResource(String resource) {
+		this.resource = resource;
+	}
 
+    public List<String> getContenttypes() {
+        return Collections.unmodifiableList(contenttypes);
+    }
+    
+    public void addContenttype(String contenttypes) {
+        this.contenttypes.add(contenttypes);
+    }
 
-
-   public void setExpirationcache(int expirationcache) {
-      this.expirationcache = expirationcache;
-   }
+    public int compareTo(Object o) {
+        return title.compareTo(((View) o).title);
+    }
 }

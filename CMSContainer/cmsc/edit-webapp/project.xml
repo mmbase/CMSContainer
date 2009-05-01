@@ -2,25 +2,13 @@
 <project>
     <extend>${basedir}/../../maven-base/project.xml</extend>
     <artifactId>cmsc-edit-webapp</artifactId>
-    <name>CMS Container edit-webapp</name>
-    <shortDescription>CMS Container edit-webapp</shortDescription>
+    <name>CMS container edit-webapp</name>
+    <shortDescription>CMS container edit-webapp</shortDescription>
     
   <dependencies>
    		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-contentrepository</artifactId>
-			<version>${cmsc.version}</version>
-			<type>jar</type>
-		</dependency>
-   		<dependency>
-			<groupId>finalist</groupId>
-			<artifactId>cmsc-security</artifactId>
-			<version>${cmsc.version}</version>
-			<type>jar</type>
-		</dependency>
-   		<dependency>
-			<groupId>finalist</groupId>
-			<artifactId>cmsc-servicemanagement</artifactId>
 			<version>${cmsc.version}</version>
 			<type>jar</type>
 		</dependency>

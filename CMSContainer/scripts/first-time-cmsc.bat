@@ -1,1 +1,1 @@
-build build cmsc ..\..\CMSContainer_Modules ..\..\CMSContainer_Portlets ..\..\CMSContainer_Demo\demo.cmscontainer.org && build deploy-tomcat ..\..\CMSContainer_Demo\demo.cmscontainer.org
+build build cmsc tools cmscImpl && build deploy-tomcat cmscImpl

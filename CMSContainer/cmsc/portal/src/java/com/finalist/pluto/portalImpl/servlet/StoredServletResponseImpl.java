@@ -22,79 +22,38 @@ package com.finalist.pluto.portalImpl.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.pluto.util.PrintWriterServletOutputStream;
-
 public class StoredServletResponseImpl extends ServletResponseImpl {
+	private PrintWriter writer;
 
-   private boolean usingWriter;
-   private boolean usingStream;
+	public StoredServletResponseImpl(HttpServletResponse response, PrintWriter _writer) {
+		super(response);
+		writer = _writer;
+	}
 
-   private ServletOutputStream wrappedStream;
-   private PrintWriter writer;
+	public void setResponse(HttpServletResponse response) {
+		super.setResponse(response);
+	}
 
+	/*
+	 * public ServletOutputStream getOutputStream() throws IOException { return
+	 * response.getOutputStream(); }
+	 */
+	public PrintWriter getWriter() throws IOException {
+		return writer;
+	}
 
-   public StoredServletResponseImpl(HttpServletResponse response, PrintWriter _writer) {
-      super(response);
-      writer = _writer;
-   }
-
-
-   public void setResponse(HttpServletResponse response) {
-      super.setResponse(response);
-   }
-
-
-   public ServletOutputStream getOutputStream() throws IllegalStateException, IOException {
-      if (usingWriter) {
-         throw new IllegalStateException("getOutputStream can't be used after getWriter was invoked");
-      }
-
-      if (wrappedStream == null) {
-         wrappedStream = new PrintWriterServletOutputStream(writer, getResponse().getCharacterEncoding());
-      }
-
-      usingStream = true;
-
-      return wrappedStream;
-   }
-
-
-   public PrintWriter getWriter() throws IOException {
-      if (usingStream) {
-         throw new IllegalStateException("getWriter can't be used after getOutputStream was invoked");
-      }
-
-      usingWriter = true;
-
-      return writer;
-   }
-
-
-   public void setBufferSize(int size) {
-      // ignore
-   }
-
-
-   public int getBufferSize() {
-      return 0;
-   }
-
-
-   public void flushBuffer() throws IOException {
-      writer.flush();
-   }
-
-
-   public boolean isCommitted() {
-      return false;
-   }
-
-
-   public void reset() {
-      // ignore right now
-   }
-
+	/*
+	 * public void setBufferSize(int size) { response.setBufferSize(size); }
+	 * public int getBufferSize() { return response.getBufferSize(); }
+	 */
+	public void flushBuffer() throws IOException {
+		writer.flush();
+	}
+	/*
+	 * public boolean isCommitted() { return response.isCommitted(); } public
+	 * void reset() { response.reset(); } public void resetBuffer() {
+	 * response.resetBuffer(); }
+	 */
 }

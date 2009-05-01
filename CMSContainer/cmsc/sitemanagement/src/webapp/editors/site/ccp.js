@@ -3,15 +3,13 @@ var NAVIGATION = "CMSC-NAVIGATION";
   function cut(number) {
     writeCookie(NAVIGATION, 'action', 'move');
     writeCookie(NAVIGATION, 'sourceChannel', number);
-	var cut = "cut("+ "'" + number + "'" +")"
-    return cut;
+    return false;
   }
 
   function copy(number) {
     writeCookie(NAVIGATION, 'action', 'copy');
     writeCookie(NAVIGATION, 'sourceChannel', number);
-	var copy = "copy("+ "'" + number + "'" +")"
-    return copy;
+    return false;
   }
 
   function paste(number) {
@@ -24,6 +22,5 @@ var NAVIGATION = "CMSC-NAVIGATION";
       document.forms['NavigationPasteForm'].destPasteChannel.value = number;
       document.forms['NavigationPasteForm'].submit();
     }
-	var paste = "paste("+ "'" + number + "'" +")"
-    return paste;
+    return false;
   }

@@ -21,44 +21,40 @@
 package com.jsptags.navigation.pager;
 
 import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
 
 public abstract class SkipTagSupport extends PageTagSupport {
 
-   private boolean ifnull = false;
+	private boolean ifnull = false;
 
+	public final void setIfnull(boolean b) {
+		ifnull = b;
+	}
 
-   public final void setIfnull(boolean b) {
-      ifnull = b;
-   }
+	public final boolean getIfnull() {
+		return ifnull;
+	}
 
+	protected abstract boolean skip();
 
-   public final boolean getIfnull() {
-      return ifnull;
-   }
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
+		if (!skip()) {
 
-   protected abstract boolean skip();
+			if (!ifnull)
+				return SKIP_BODY;
 
+			removeAttributes();
+		}
 
-   public int doStartTag() throws JspException {
-      super.doStartTag();
+		return EVAL_BODY_INCLUDE;
+	}
 
-      if (!skip()) {
-
-         if (!ifnull)
-            return SKIP_BODY;
-
-         removeAttributes();
-      }
-
-      return EVAL_BODY_INCLUDE;
-   }
-
-
-   public void release() {
-      ifnull = false;
-      super.release();
-   }
+	public void release() {
+		ifnull = false;
+		super.release();
+	}
 }
 
 /* vim:set ts=4 sw=4: */

@@ -4,19 +4,15 @@
 
    Author: Nico Klasens
    Created: 25-07-2003
-   Version: $Revision: 1.4 $
+   Version: $Revision: 1.1 $
 -->
-<xsl:stylesheet
-  version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:node="org.mmbase.bridge.util.xml.NodeFunction"
-  extension-element-prefixes="node">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
    <!-- Import original stylesheet -->
    <xsl:import href="ew:xsl/searchlist.xsl"/>
 
   <xsl:template name="colorstyle">
-    <link rel="stylesheet" type="text/css" href="{$ew_context}{$templatedir}style/color/searchlist.css" />
+    <link rel="stylesheet" type="text/css" href="{$ew_context}/{$templatedir}style/color/searchlist.css" />
   </xsl:template>
 
 </xsl:stylesheet>

@@ -15,9 +15,9 @@
 </mm:notpresent>
 
 <mm:present referid="number">
-	<frameset rows="25,*" framespacing="0" border="0">
+	<frameset rows="40,*">
 		<frame name="select" src="select.jsp?number=<mm:write referid="number"/>"  frameborder="0"/>
-		<frame name="xml"  frameborder="0" src="../../empty.html"/>
+		<frame name="xml"  frameborder="0" />
 	</frameset>
 </mm:present>
 

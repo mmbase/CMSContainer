@@ -6,13 +6,13 @@
 <html:html xhtml="true">
 	<head>
 		<title><fmt:message key="newtypes.title" /></title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
 	</head>
 	<body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 
   <form action="WizardInitAction.do" method="post">
 	 <input type="hidden" name="action" value="create" />
-	 <input type="hidden" name="creation" value="${creation}" />
      <c:if test="${not empty param.sessionkey}">
 		<input type="hidden" name="sessionkey" value="${param.sessionkey}" />
      </c:if>

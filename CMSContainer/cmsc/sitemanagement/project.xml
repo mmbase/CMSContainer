@@ -9,15 +9,9 @@ See http://www.MMBase.org/license
 <project>
     <extend>${basedir}/../../maven-base/project.xml</extend>
     <artifactId>cmsc-sitemanagement</artifactId>
-    <name>CMS Container sitemanagement</name>
-    <shortDescription>CMS Container sitemanagement</shortDescription>
+    <name>CMS container sitemanagement</name>
+    <shortDescription>CMS container sitemanagement</shortDescription>
 	<dependencies>
-   		<dependency>
-			<groupId>finalist</groupId>
-			<artifactId>cmsc-servicemanagement</artifactId>
-			<version>${cmsc.version}</version>
-			<type>jar</type>
-		</dependency>
    		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-security</artifactId>
@@ -30,12 +24,7 @@ See http://www.MMBase.org/license
 			<version>${cmsc.version}</version>
 			<type>jar</type>
 		</dependency>
-   		<dependency>
-			<groupId>finalist</groupId>
-			<artifactId>cmsc-contentrepository</artifactId>
-			<version>${cmsc.version}</version>
-			<type>jar</type>
-		</dependency>
+
    		<dependency>
 			<groupId>mmbase</groupId>
 			<artifactId>mmbase</artifactId>

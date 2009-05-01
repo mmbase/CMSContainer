@@ -17,54 +17,51 @@ import org.apache.pluto.util.StringUtils;
 
 import com.finalist.pluto.portalImpl.om.common.Support;
 
+/**
+ * @author Wouter Heijke
+ * @version $Revision: 1.1 $
+ */
 public class DisplayNameImpl implements DisplayName, Serializable, Support {
 
-   private String displayName;
+	private String displayName;
 
-   private Locale locale;
+	private Locale locale;
 
+	public String getDisplayName() {
+		return displayName;
+	}
 
-   public String getDisplayName() {
-      return displayName;
-   }
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 
+	public Locale getLocale() {
+		return locale;
+	}
 
-   public void setDisplayName(String displayName) {
-      this.displayName = displayName;
-   }
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
+    public String toString() {
+        return toString(0);
+    }
 
-   public Locale getLocale() {
-      return locale;
-   }
+    public String toString(int indent) {
+        StringBuffer buffer = new StringBuffer(50);
+        StringUtils.newLine(buffer, indent);
+        buffer.append(getClass().toString());
+        buffer.append(": displayName='");
+        buffer.append(displayName);
+        buffer.append("', locale='");
+        buffer.append(locale);
+        buffer.append("'");
+        return buffer.toString();
+    }
 
-
-   public void setLocale(Locale locale) {
-      this.locale = locale;
-   }
-
-
-   public String toString() {
-      return toString(0);
-   }
-
-
-   public String toString(int indent) {
-      StringBuffer buffer = new StringBuffer(50);
-      StringUtils.newLine(buffer, indent);
-      buffer.append(getClass().toString());
-      buffer.append(": displayName='");
-      buffer.append(displayName);
-      buffer.append("', locale='");
-      buffer.append(locale);
-      buffer.append("'");
-      return buffer.toString();
-   }
-
-
-   public void postLoad(Object parameter) throws Exception {
-      if (locale == null) {
-         locale = Locale.ENGLISH;
-      }
-   }
+    public void postLoad(Object parameter) throws Exception {
+        if (locale == null) {
+            locale = Locale.ENGLISH;
+        }
+    }
 }

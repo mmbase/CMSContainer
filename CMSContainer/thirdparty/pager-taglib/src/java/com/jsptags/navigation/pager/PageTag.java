@@ -21,16 +21,17 @@
 package com.jsptags.navigation.pager;
 
 import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
 
 public final class PageTag extends PageTagSupport {
 
-   public int doStartTag() throws JspException {
-      super.doStartTag();
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
-      setOffsetAttributes(pagerTag.getOffset());
+		setOffsetAttributes(pagerTag.getOffset());
 
-      return EVAL_BODY_INCLUDE;
-   }
+		return EVAL_BODY_INCLUDE;
+	}
 }
 
 /* vim:set ts=4 sw=4: */

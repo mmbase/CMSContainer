@@ -9,40 +9,24 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.repository;
 
-import java.util.LinkedHashMap;
+import com.finalist.cmsc.builders.ChannelBuilder;
 
-import com.finalist.cmsc.builders.TreeBuilder;
+public class ContentChannelBuilder extends ChannelBuilder {
 
-public class ContentChannelBuilder extends TreeBuilder {
-
-    @Override
     protected String getNameFieldname() {
         return RepositoryUtil.TITLE_FIELD;
     }
+    
+    protected String[] getFragmentFieldname() {
+        return new String[] { RepositoryUtil.FRAGMENT_FIELD };
+    }
 
-    @Override
     protected String getRelationName() {
         return RepositoryUtil.CHILDREL;
     }
 
-    @Override
-    protected LinkedHashMap<String,String> getPathManagers() {
-        return RepositoryUtil.getTreeManagers();
-    }
-
-    @Override
-    protected String getFragmentField() {
-        return RepositoryUtil.FRAGMENT_FIELD;
-    }
-
-    @Override
-    protected boolean isRoot() {
-        return RepositoryUtil.CONTENTCHANNEL.equals(getTableName());
-    }
-
-    @Override
-    protected void registerTreeManager() {
-        RepositoryUtil.registerTreeManager(getTableName(), getFragmentField(), isRoot());
+    protected String[] getPathManagers() {
+        return new String[] { RepositoryUtil.CONTENTCHANNEL };
     }
 
 }

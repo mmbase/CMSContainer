@@ -21,8 +21,8 @@ package com.finalist.pluto.portalImpl.services.config;
 
 import java.util.Iterator;
 
-import com.finalist.cmsc.services.Parameters;
-import com.finalist.cmsc.services.Service;
+import com.finalist.pluto.portalImpl.services.Service;
+import com.finalist.pluto.portalImpl.util.Parameters;
 
 /**
  * * The <CODE>ConfigService</CODE> holds the basic portal * configuration. * *
@@ -32,57 +32,48 @@ import com.finalist.cmsc.services.Service;
 
 public abstract class ConfigService extends Service {
 
-   /**
-    * * Returns the configuration parameters managed by this service. * *
-    * 
-    * @return the configuration parameters
-    */
+	/**
+	 * * Returns the configuration parameters managed by this service. * *
+	 * 
+	 * @return the configuration parameters
+	 */
 
-   public abstract Parameters getParameters();
+	public abstract Parameters getParameters();
 
+	public String getString(String name) {
+		return getParameters().getString(name);
+	}
 
-   public String getString(String name) {
-      return getParameters().getString(name);
-   }
+	public String getString(String name, String defaultValue) {
+		return getParameters().getString(name, defaultValue);
+	}
 
+	public Integer getInteger(String name) {
+		return getParameters().getInteger(name);
+	}
 
-   public String getString(String name, String defaultValue) {
-      return getParameters().getString(name, defaultValue);
-   }
+	public Integer getInteger(String name, Integer defaultValue) {
+		return getParameters().getInteger(name, defaultValue);
+	}
 
+	public int getInteger(String name, int defaultValue) {
+		return getParameters().getInteger(name, defaultValue);
+	}
 
-   public Integer getInteger(String name) {
-      return getParameters().getInteger(name);
-   }
+	public Boolean getBoolean(String name) {
+		return getParameters().getBoolean(name);
+	}
 
+	public Boolean getBoolean(String name, Boolean defaultValue) {
+		return getParameters().getBoolean(name, defaultValue);
+	}
 
-   public Integer getInteger(String name, Integer defaultValue) {
-      return getParameters().getInteger(name, defaultValue);
-   }
+	public boolean getBoolean(String name, boolean defaultValue) {
+		return getParameters().getBoolean(name, defaultValue);
+	}
 
-
-   public int getInteger(String name, int defaultValue) {
-      return getParameters().getInteger(name, defaultValue);
-   }
-
-
-   public Boolean getBoolean(String name) {
-      return getParameters().getBoolean(name);
-   }
-
-
-   public Boolean getBoolean(String name, Boolean defaultValue) {
-      return getParameters().getBoolean(name, defaultValue);
-   }
-
-
-   public boolean getBoolean(String name, boolean defaultValue) {
-      return getParameters().getBoolean(name, defaultValue);
-   }
-
-
-   public Iterator keys() {
-      return getParameters().keys();
-   }
+	public Iterator keys() {
+		return getParameters().keys();
+	}
 
 }

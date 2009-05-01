@@ -31,8 +31,8 @@ MyHTMLArea_I18N = {
 		"Search for an attachment" : "Zoek naar een bijlage",
 		"Url" : "Url",
 		"Search for an url" : "Zoek naar een Url",
-		"Element" : "Contenttype",
-		"Search for an element" : "Zoek naar een ander contenttype",
+		"Element" : "Element",
+		"Search for an element" : "Zoek naar een element",
 
 		"Insert Inline Image" : "Afbeelding invoegen/aanpassen",
 		"Image URL:" : "Afbeeelding:",

@@ -15,8 +15,8 @@
  */
 package com.finalist.pluto.portalImpl.services.config;
 
-import com.finalist.cmsc.services.Parameters;
-import com.finalist.cmsc.services.ServiceManager;
+import com.finalist.pluto.portalImpl.services.ServiceManager;
+import com.finalist.pluto.portalImpl.util.Parameters;
 
 /**
  * * The static accessor for the {@link ConfigService}. * *
@@ -26,20 +26,19 @@ import com.finalist.cmsc.services.ServiceManager;
 
 public class Config {
 
-   /**
-    * *
-    * 
-    * @see ConfigService#getParameters
-    */
+	/**
+	 * *
+	 * 
+	 * @see ConfigService#getParameters
+	 */
 
-   public static Parameters getParameters() {
-      return (cService.getParameters());
-   }
+	public static Parameters getParameters() {
+		return (cService.getParameters());
+	}
 
+	public static ConfigService getService() {
+		return cService;
+	}
 
-   public static ConfigService getService() {
-      return cService;
-   }
-
-   private final static ConfigService cService = (ConfigService) ServiceManager.getService(ConfigService.class);
+	private final static ConfigService cService = (ConfigService) ServiceManager.getService(ConfigService.class);
 }

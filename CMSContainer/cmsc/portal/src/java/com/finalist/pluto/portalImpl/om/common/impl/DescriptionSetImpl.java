@@ -20,35 +20,37 @@ import org.apache.pluto.util.StringUtils;
 import com.finalist.pluto.portalImpl.om.common.AbstractSupportSet;
 import com.finalist.pluto.portalImpl.om.common.Support;
 
+/**
+ * @author Wouter Heijke
+ * @version $Revision: 1.1 $
+ */
 public class DescriptionSetImpl extends AbstractSupportSet implements DescriptionSet, Serializable, Support {
 
-   // DescriptionSet implemenation.
-   public Description get(Locale locale) {
-      Iterator iterator = this.iterator();
-      while (iterator.hasNext()) {
-         Description desc = (Description) iterator.next();
-         if (desc.getLocale().equals(locale)) {
-            return desc;
-         }
-      }
-      return null;
-   }
+	// DescriptionSet implemenation.
+	public Description get(Locale locale) {
+		Iterator iterator = this.iterator();
+		while (iterator.hasNext()) {
+			Description desc = (Description) iterator.next();
+			if (desc.getLocale().equals(locale)) {
+				return desc;
+			}
+		}
+		return null;
+	}
+    
+    public String toString() {
+        return toString(0);
+    }
 
-
-   public String toString() {
-      return toString(0);
-   }
-
-
-   public String toString(int indent) {
-      StringBuffer buffer = new StringBuffer(50);
-      StringUtils.newLine(buffer, indent);
-      buffer.append(getClass().toString());
-      buffer.append(": ");
-      Iterator iterator = this.iterator();
-      while (iterator.hasNext()) {
-         buffer.append(((DescriptionImpl) iterator.next()).toString(indent + 2));
-      }
-      return buffer.toString();
-   }
+    public String toString(int indent) {
+        StringBuffer buffer = new StringBuffer(50);
+        StringUtils.newLine(buffer, indent);
+        buffer.append(getClass().toString());
+        buffer.append(": ");
+        Iterator iterator = this.iterator();
+        while (iterator.hasNext()) {
+            buffer.append(((DescriptionImpl) iterator.next()).toString(indent + 2));
+        }
+        return buffer.toString();
+    }
 }

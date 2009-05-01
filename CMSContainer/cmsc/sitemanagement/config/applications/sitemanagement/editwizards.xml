@@ -7,7 +7,6 @@
 		<wizard>config/layout/layout</wizard>
 		<nodepath>layout</nodepath>
 		<fields>title</fields>
-		<orderby>title</orderby>
 	</node>
 
 	<node number="32002" owner="admin">
@@ -63,8 +62,7 @@
 		<description>Stylesheet</description>
 		<wizard>config/stylesheet/stylesheet</wizard>
 		<nodepath>stylesheet</nodepath>
-		<fields>title,resource</fields>
-		<orderby>title</orderby>
+		<fields>title</fields>
 	</node>
 
 	<node number="32009" owner="admin">
@@ -73,24 +71,5 @@
 		<wizard>config/view/view</wizard>
 		<nodepath>view</nodepath>
 		<fields>title</fields>
-		<orderby>title</orderby>
-	</node>
- 	<node number="32010" owner="admin">
-		<name>Singleportletdefinition</name>
-		<description>Singleportletdefinition</description>
-		<wizard>config/singleportletdefinition/singleportletdefinition</wizard>
-		<nodepath>portletdefinition</nodepath>
-		<fields>title</fields>
-		<orderby>title</orderby>
-       <constraints>type='single'</constraints>
-	</node>
- 	<node number="32011" owner="admin">
-		<name>Multiportletdefinition</name>
-		<description>Multiportletdefinition</description>
-		<wizard>config/multiportletdefinition/multiportletdefinition</wizard>
-		<nodepath>portletdefinition</nodepath>
-		<fields>title</fields>
-		<orderby>title</orderby>
-       <constraints>type='multiple'</constraints>
 	</node>
 </editwizards>

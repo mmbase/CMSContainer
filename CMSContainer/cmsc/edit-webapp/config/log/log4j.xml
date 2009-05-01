@@ -2,8 +2,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd"
    [
     <!ENTITY mmlevel  "org.mmbase.util.logging.log4j.Log4jLevel" >
-    <!ENTITY logdir   "${catalina.home}/logs" >
-    <!ENTITY logprefix  "cmsc" >
+    <!ENTITY logdir   "../logs" >
 ]>
 <log4j:configuration 
   debug="false" 
@@ -11,21 +10,17 @@
   >
 
 	<appender name="logfile" class="org.apache.log4j.DailyRollingFileAppender" >
-	    <param name="File"   value="&logdir;/&logprefix;.log" />
+	    <param name="File"   value="&logdir;/cmsc.log" />
  	    <param name="DatePattern" value="'.'yyyy-MM-dd" />
 	    <param name="Append" value="true" />
 	    <layout class="org.apache.log4j.PatternLayout">
 	    <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %c{3} %M.%L %x - %m%n" />
  		<!-- <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p - %m%n" /> -->
 	    </layout>
-        <filter class="com.finalist.cmsc.logging.ExceptionStringMatchFilter"> 
-            <param name="StringToMatch" value="ClientAbortException" /> 
-            <param name="AcceptOnMatch" value="false" /> 
-        </filter> 
 	</appender>
 
 	<appender name="sqllogfile" class="org.apache.log4j.DailyRollingFileAppender" >
-	    <param name="File"   value="&logdir;/&logprefix;-sql.log" />
+	    <param name="File"   value="&logdir;/cmsc-sql.log" />
  	    <param name="DatePattern" value="'.'yyyy-MM-dd" />
 	    <param name="Append" value="true" />
 	    <layout class="org.apache.log4j.PatternLayout">
@@ -80,11 +75,6 @@
 
   <logger name="org.mmbase.PAGE.LOGTAG" additivity="false">
     <level class="&mmlevel;" value="info" />
-    <appender-ref ref="logfile" />
-  </logger>
-
-  <logger name="org.mmbase.module.tools.ApplicationInstaller" additivity="false">
-    <level class="&mmlevel;" value="warn" />
     <appender-ref ref="logfile" />
   </logger>
 

@@ -6,431 +6,207 @@ OSI Certified is a certification mark of the Open Source Initiative.
 The license (Mozilla version 1.0) can be read at the MMBase site.
 See http://www.MMBase.org/license
 
- */
+*/
 package com.finalist.cmsc.richtext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
+import net.sf.mmapps.commons.util.XmlUtil;
+
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationList;
-import org.mmbase.datatypes.processors.ParameterizedProcessorFactory;
 import org.mmbase.datatypes.processors.Processor;
-import org.mmbase.security.Rank;
-import org.mmbase.util.functions.Parameter;
-import org.mmbase.util.functions.Parameters;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 import org.w3c.dom.NodeList;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 
+
 @SuppressWarnings("serial")
-public class RichTextGetProcessor implements ParameterizedProcessorFactory {
+public class RichTextGetProcessor implements Processor {
 
-   /** MMbase logging system */
-   static final Logger log = Logging.getLoggerInstance(RichTextGetProcessor.class.getName());
-   protected static final Parameter[] PARAMS = new Parameter[] { new Parameter("dynamicDescriptions", String.class,
-         "false") };
-
-
-   public Parameters createParameters() {
-      return new Parameters(PARAMS);
-   }
-
-
-   public Processor createProcessor(Parameters parameters) {
-      final boolean dynamicDescriptions = Boolean.parseBoolean(parameters.get("dynamicDescriptions").toString());
-      return new Processor() {
-         public Object process(Node node, Field field, Object value) {
-            String out = "";
-            String in = (String) value;
-            if (StringUtils.isNotEmpty(in) && RichText.hasRichtextItems(in)) {
-               try {
-                  Document doc = RichText.getRichTextDocument(in);
-                  if (doc == null) {
-                     out = in;
-                  }
-                  else {
-                     resolve(node, doc, dynamicDescriptions);
-                     out = RichText.getRichTextString(doc);
-                  }
+    /** MMbase logging system */
+    private static Logger log = Logging.getLoggerInstance(RichTextGetProcessor.class.getName());
+    
+    public Object process(Node node, Field field, Object value) {
+       String out = "";
+       String in = (String) value;
+       if (in.indexOf("<"+RichText.LINK_TAGNAME) > -1 || in.indexOf("<"+RichText.IMG_TAGNAME) > -1) {
+           try {
+               // to string and strip root node, doctype and xmldeclaration
+               if (in == null) {
+                   in = "";
                }
-               catch (Exception e) {
-                  log.error("resolve failed " + node.getNumber() + " " + field.getName(), e);
-                  throw new IllegalStateException(e);
-               }
-            }
-            else {
-               out = in;
-            }
-            return out;
-         }
-      };
-   }
+                String txt = RichText.RICHTEXT_ROOT_OPEN + in 
+                //WordHtmlCleaner.cleanHtml(in).trim()
+                + RichText.RICHTEXT_ROOT_CLOSE;
+                log.debug("Na wordcleaner voor resolving afbeeldingen\n" + txt);
+    
+               txt = XmlUtil.escapeXMLEntities(txt);
+               Document doc = XmlUtil.toDocument(txt, false);
+               resolve(node, doc);
+               out = XmlUtil.serializeDocument(doc);
+               out = XmlUtil.unescapeXMLEntities(out);
+    
+               out = out.replaceAll("<.?richtext.?>", "");
+               out = out.replaceAll("<.?richtext.?>", "");
+           } catch (Exception e) {
+               log.error("resolve failed " +node.getNumber() + " " + field.getName(), e);
+               throw new RuntimeException(e);
+           }
+       }
+       else {
+          out = in;
+       }
+       return out;
+    }
+    
+    /**
+     * Transform given richtext field data links to frontend links using given
+     * navigation bean.
+     * 
+     * @param node MMbase node
+     * @param doc richtext field data
+     * @return transformed field data DOM object
+     */
+    public Document resolve(Node node, Document doc) {
+        Cloud cloud = node.getCloud();
+        
+        Map<String,String> inlineLinks = new HashMap<String,String>();
+        RelationList links = node.getRelations(RichText.INLINEREL_NM);
+        for (Iterator iter = links.iterator(); iter.hasNext();) {
+            Relation inlineRel = (Relation) iter.next();
+            inlineLinks.put(inlineRel.getStringValue(RichText.REFERID_FIELD), inlineRel.getStringValue("dnumber"));
+        }
+        
+        // transform links
+        NodeList linklist = doc.getElementsByTagName(RichText.LINK_TAGNAME);
+        if (linklist.getLength() > 0) {
+            resolveLinks(cloud, doc, linklist, inlineLinks);
+        }
 
+        Map<String,Relation> inlineImages = new HashMap<String,Relation>();
+        RelationList images = node.getRelations(RichText.IMAGEINLINEREL_NM, "images");
+        for (Iterator iter = images.iterator(); iter.hasNext();) {
+            Relation inlineRel = (Relation) iter.next();
+            inlineImages.put(inlineRel.getStringValue(RichText.REFERID_FIELD), inlineRel);
+        }
 
-   /**
-    * Transform given richtext field data links to frontend links using given
-    * navigation bean.
-    *
-    * @param node
-    *           MMbase node
-    * @param doc
-    *           richtext field data
-    * @param dynamicDescriptions
-    *           dynamic Descriptions
-    * @return transformed field data DOM object
-    */
-   public Document resolve(Node node, Document doc, boolean dynamicDescriptions) {
-      Cloud cloud = node.getCloud();
+        // transform all images
+        NodeList imglist = doc.getElementsByTagName(RichText.IMG_TAGNAME);
+        log.debug("" + imglist.getLength() + " images found in richtext.");
+        if (imglist.getLength() > 0) {
+            resolveImages(cloud, doc, imglist, inlineImages);
+        }
 
-      Map<String, String> inlineLinks = new HashMap<String, String>();
-      RelationList links = node.getRelations(RichText.INLINEREL_NM, null, "DESTINATION");
-      for (Iterator<Relation> iter = links.iterator(); iter.hasNext();) {
-         Relation inlineRel = iter.next();
-         inlineLinks.put(inlineRel.getStringValue(RichText.REFERID_FIELD), inlineRel.getStringValue("dnumber"));
-      }
+        return doc;
+    }
 
-      // transform links
-      NodeList linklist = doc.getElementsByTagName(RichText.LINK_TAGNAME);
-      if (linklist.getLength() > 0) {
-         resolveLinks(cloud, linklist, inlineLinks, dynamicDescriptions);
-      }
+    /**
+     * Find image tags in the text and replace them with marked up blocks
+     * including the corrected image tag.
+     */
+    private void resolveImages(Cloud cloud, Document doc, NodeList nl, Map<String, Relation> inlineImages) {
+       for (int j = nl.getLength() - 1; j >= 0; --j) {
+          Element image = (Element) nl.item(j);
 
-      Map<String, Relation> inlineImages = new HashMap<String, Relation>();
-      RelationList images = node
-            .getRelations(RichText.IMAGEINLINEREL_NM, cloud.getNodeManager("images"), "DESTINATION");
-      for (Iterator<Relation> iter = images.iterator(); iter.hasNext();) {
-         Relation inlineRel = iter.next();
-         inlineImages.put(inlineRel.getStringValue(RichText.REFERID_FIELD), inlineRel);
-      }
+          if (image.hasAttribute(RichText.DESCRIPTION_ATTR)
+                && !(image.hasAttribute(RichText.TITLE_ATTR) && image.hasAttribute(RichText.ALT_ATTR))) {
+             String desc = image.getAttribute(RichText.DESCRIPTION_ATTR);
+             image.removeAttribute(RichText.DESCRIPTION_ATTR);
+             image.setAttribute(RichText.TITLE_ATTR, desc);
+             image.setAttribute(RichText.ALT_ATTR, desc);
+          }
 
-      // transform all images
-      NodeList imglist = doc.getElementsByTagName(RichText.IMG_TAGNAME);
-      log.debug("" + imglist.getLength() + " images found in richtext.");
-      if (imglist.getLength() > 0) {
-         resolveImages(cloud, imglist, inlineImages, dynamicDescriptions);
-      }
+          if (image.hasAttribute(RichText.RELATIONID_ATTR)) {
+             String imgidrel = image.getAttribute(RichText.RELATIONID_ATTR);
+             log.debug("Creating image by relation " + imgidrel);
 
-      return doc;
-   }
+             if (!inlineImages.containsKey(imgidrel)) {
+                log.error("Relation "
+                            + imgidrel
+                            + " for inline image not found. Ignoring this image!!! It will NOT be displayed.");
+                continue;
+             }
+             Relation inlineRel = inlineImages.get(String.valueOf(imgidrel));
+             String imageId = inlineRel.getStringValue("dnumber");
 
+             Node imageNode = cloud.getNode(imageId);
 
-   /**
-    * Find image tags in the text and replace them with marked up blocks
-    * including the corrected image tag.
-    */
-   private void resolveImages(Cloud cloud, NodeList nl, Map<String, Relation> inlineImages, boolean dynamicDescriptions) {
-      for (int j = nl.getLength() - 1; j >= 0; --j) {
-         Element image = (Element) nl.item(j);
+             int height = inlineRel.getIntValue("height");
+             int width = inlineRel.getIntValue("width");
+            
+             imageNode = ResourcesUtil.getImageNode(imageNode, height, width);
+             String servletPath = ResourcesUtil.getServletPath(imageNode, imageNode.getStringValue("number"));
 
-         if (image.hasAttribute(RichText.DESCRIPTION_ATTR)
-               && !(image.hasAttribute(RichText.TITLE_ATTR) && image.hasAttribute(RichText.ALT_ATTR))) {
-            String desc = image.getAttribute(RichText.DESCRIPTION_ATTR);
-            image.removeAttribute(RichText.DESCRIPTION_ATTR);
-            image.setAttribute(RichText.TITLE_ATTR, desc);
-            image.setAttribute(RichText.ALT_ATTR, desc);
-         }
+             image.setAttribute(RichText.SRC_ATTR, servletPath);
+             if (width > 0) {
+                image.setAttribute(RichText.WIDTH_ATTR, String.valueOf(width));
+             }
+             if (height > 0) {
+                image.setAttribute(RichText.HEIGHT_ATTR, String.valueOf(height));
+             }
+          } else {
+             log.debug("ImageTag does not contain relationId attribute. Skipping this image.");
+          }
+       }
+    }
 
-         if (image.hasAttribute(RichText.RELATIONID_ATTR)) {
-            String imgidrel = image.getAttribute(RichText.RELATIONID_ATTR);
-            log.debug("Creating image by relation " + imgidrel);
+    /**
+     * Find a tags in the text and replace them with valid links
+     */
+    private void resolveLinks(Cloud cloud, Document doc, NodeList nl, Map<String, String> inlineLinks) {
+       for (int j = nl.getLength() - 1; 0 <= j; --j) {
+          Element aElement = (Element) nl.item(j);
 
-            if (!inlineImages.containsKey(imgidrel)) {
-               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
-                  org.w3c.dom.Node parentNode = image.getParentNode();
-                  parentNode.removeChild(image);
-               }
-               continue;
-            }
-            Relation inlineRel = inlineImages.get(String.valueOf(imgidrel));
-            String imageId = inlineRel.getStringValue("dnumber");
+          if (aElement.hasAttribute(RichText.RELATIONID_ATTR)) {
+             log.debug("Creating link to attachment/article by inlinerel");
+             String idrel = aElement.getAttribute(RichText.RELATIONID_ATTR);
 
-            Node imageNode = cloud.getNode(imageId);
-            if (dynamicDescriptions) {
-               String description = imageNode.getStringValue("description");
-               if (StringUtils.isBlank(description)) {
-                  description = imageNode.getStringValue(RichText.TITLE_ATTR);
-               }
-               image.setAttribute(RichText.ALT_ATTR, description);
-               image.setAttribute(RichText.TITLE_ATTR, description);
-            }
-            int height = inlineRel.getIntValue("height");
-            int width = inlineRel.getIntValue("width");
+             if (!inlineLinks.containsKey(String.valueOf(idrel))) {
+                log.error("Relation "
+                            + idrel
+                            + " for inline link not found. Ignoring this link!!! It will NOT be displayed.");
+                continue;
+             }
+             String aElementId = inlineLinks.get(String.valueOf(idrel));
+             
+             Node destinationNode = cloud.getNode(aElementId);
 
-            Node scaledImageNode = ResourcesUtil.getImageNode(imageNode, height, width);
-            String servletPath = ResourcesUtil
-                  .getServletPath(scaledImageNode, scaledImageNode.getStringValue("number"));
+             String name = null;
+             String url = null;
+             String builderName = destinationNode.getNodeManager().getName();
+             if ("attachments".equals(builderName)) {
+                 name = destinationNode.getStringValue(RichText.TITLE_ATTR);
+                 url = ResourcesUtil.getServletPath(destinationNode, destinationNode.getStringValue("number"));
+             } else {
+                 if ("urls".equals(builderName)) {
+                     name = destinationNode.getStringValue("name");
+                     url = destinationNode.getStringValue("url");
+                 }
+                 else {
+                     name = destinationNode.getStringValue(RichText.TITLE_ATTR);
+                     url = getContentUrl(destinationNode);
+                 }
+             }
+             
+             if (aElement.hasAttribute(RichText.HREF_ATTR)) {
+                 aElement.removeAttribute(RichText.HREF_ATTR);
+             }
+             aElement.setAttribute(RichText.HREF_ATTR,url);
+             
+             if (!aElement.hasAttribute(RichText.TITLE_ATTR)) {
+                 aElement.setAttribute(RichText.TITLE_ATTR, name);
+             }
+          }
+       }
+    }
 
-            image.setAttribute(RichText.SRC_ATTR, servletPath);
-            if (width > 0) {
-               image.setAttribute(RichText.WIDTH_ATTR, String.valueOf(width));
-            }
-            if (height > 0) {
-               image.setAttribute(RichText.HEIGHT_ATTR, String.valueOf(height));
-            }
-
-            if (image.hasAttribute("align")) {
-               String align = image.getAttribute("align");
-               if (image.hasAttribute("class")) {
-                  String oldClass = image.getAttribute("class");
-                  String classStr = oldClass + " inline-" + align;
-                  image.removeAttribute("class");
-                  image.setAttribute("class", classStr);
-               }
-               else {
-                  String classStr = "inline-" + align;
-                  image.setAttribute("class", classStr);
-               }
-            }
-
-            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
-               image.removeAttribute(RichText.RELATIONID_ATTR);
-               if (image.hasAttribute(RichText.DESTINATION_ATTR)) {
-                  image.removeAttribute(RichText.DESTINATION_ATTR);
-               }
-            }
-
-         }
-         else {
-            log.debug("ImageTag does not contain relationId attribute. Skipping this image.");
-         }
-      }
-   }
-
-
-   /**
-    * Find a tags in the text and replace them with valid links
-    */
-   private void resolveLinks(Cloud cloud, NodeList nl, Map<String, String> inlineLinks, boolean dynamicDescriptions) {
-      for (int j = nl.getLength() - 1; 0 <= j; --j) {
-         Element aElement = (Element) nl.item(j);
-
-         if (aElement.hasAttribute(RichText.RELATIONID_ATTR)) {
-            log.debug("Creating link to node by inlinerel");
-            String idrel = aElement.getAttribute(RichText.RELATIONID_ATTR);
-
-            if (!inlineLinks.containsKey(String.valueOf(idrel))) {
-               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
-                  org.w3c.dom.Node parentNode = aElement.getParentNode();
-                  org.w3c.dom.Node nextSibling = aElement.getNextSibling();
-                  while (nextSibling != null && nextSibling.getNodeType() == org.w3c.dom.Node.ATTRIBUTE_NODE) {
-                     nextSibling = nextSibling.getNextSibling();
-                  }
-
-                  parentNode.removeChild(aElement);
-                  org.w3c.dom.NodeList children = aElement.getChildNodes();
-                  for (int i = 0; i < children.getLength(); i++) {
-                     org.w3c.dom.Node child = children.item(i);
-                     if (child.getNodeType() != org.w3c.dom.Node.ATTRIBUTE_NODE) {
-                        parentNode.insertBefore(child, nextSibling);
-                     }
-                  }
-               }
-               continue;
-            }
-            String aElementId = inlineLinks.get(String.valueOf(idrel));
-
-            Node destinationNode = cloud.getNode(aElementId);
-
-            String name = null;
-            String url = null;
-            String builderName = destinationNode.getNodeManager().getName();
-            if ("attachments".equals(builderName)) {
-               name = destinationNode.getStringValue(RichText.DESCRIPTION_ATTR);
-               if (StringUtils.isBlank(name)) {
-                  name = destinationNode.getStringValue(RichText.TITLE_FIELD);
-               }
-               url = ResourcesUtil.getServletPath(destinationNode, destinationNode.getStringValue("number"));
-            }
-            else {
-               if ("urls".equals(builderName)) {
-                  name = destinationNode.getStringValue(RichText.TITLE_FIELD);
-                  url = destinationNode.getStringValue("url");
-                  url = url.replaceAll("&(?!amp;)", "&amp;");
-               }
-               else {
-                  if (destinationNode.getNodeManager().hasField(RichText.TITLE_FIELD)) {
-                     name = destinationNode.getStringValue(RichText.TITLE_FIELD);
-                  }
-                  else {
-                     if (destinationNode.getNodeManager().hasField("name")) {
-                        name = destinationNode.getStringValue("name");
-                     }
-                  }
-                  url = getContentUrl(destinationNode);
-               }
-            }
-
-            if (aElement.hasAttribute(RichText.HREF_ATTR)) {
-               aElement.removeAttribute(RichText.HREF_ATTR);
-            }
-            aElement.setAttribute(RichText.HREF_ATTR, url);
-
-            if (StringUtils.isBlank(name)) {
-               name = url;
-            }
-            if (!aElement.hasAttribute(RichText.TITLE_ATTR) || dynamicDescriptions) {
-               aElement.setAttribute(RichText.TITLE_ATTR, name);
-            }
-
-            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
-               aElement.removeAttribute(RichText.RELATIONID_ATTR);
-               if (aElement.hasAttribute(RichText.DESTINATION_ATTR)) {
-                  aElement.removeAttribute(RichText.DESTINATION_ATTR);
-               }
-            }
-         }
-      }
-   }
-
-
-   private String getContentUrl(Node node) {
-      String title = null;
-
-      //Check for the existence of title field of the node
-      if (node.getNodeManager().hasField(RichText.TITLE_FIELD)) {
-         title = node.getStringValue(RichText.TITLE_FIELD);
-      }
-
-      String id = node.getStringValue("number");
-      return ResourcesUtil.getServletPathWithAssociation("content", "/content/*", id, title);
-   }
-
-   public void resolve(Node sourceNode,Node destinationNode,Document doc,Map<Integer, Integer> copiedNodes) {
-      resolveLinks(doc,sourceNode,destinationNode,copiedNodes);
-      resolveImages(doc,sourceNode,destinationNode,copiedNodes);
-   }
-   /**
-    *    To resolve the links in Richtext fields
-    * @param doc
-    * @param sourceNode
-    * @param copiedNodes
-    * @param channels
-    */
-   public static void resolveLinks(Document doc, Node sourceNode,Node destinationNode,Map<Integer, Integer> copiedNodes) {
-      if (doc == null) {
-         return;
-      }
-      // collect <A> tags
-      org.w3c.dom.NodeList nl = doc.getElementsByTagName("a");
-      List<org.w3c.dom.Node> links = new ArrayList<org.w3c.dom.Node>();
-      
-      int len = nl.getLength();
-      for(int i = 0 ; i < len ; i++) {
-         links.add(nl.item(i));
-      }
-      for (int i = 0; i < len; i++) {
-         Element link = (Element) links.get(i);
-         if (link.hasAttribute(RichText.DESTINATION_ATTR)
-               && "undefined".equalsIgnoreCase(link.getAttribute(RichText.DESTINATION_ATTR))) {
-            link.removeAttribute(RichText.DESTINATION_ATTR);
-         }
-         if (link.hasAttribute(RichText.RELATIONID_ATTR)
-               && "undefined".equalsIgnoreCase(link.getAttribute(RichText.RELATIONID_ATTR))) {
-            link.removeAttribute(RichText.RELATIONID_ATTR);
-         }
-         // handle relations to other objects
-         if (link.hasAttribute(RichText.DESTINATION_ATTR) && link.hasAttribute(RichText.RELATIONID_ATTR)) {
-            // get id of the link
-            //String id = link.getAttribute("relationID");
-            int source = Integer.parseInt(link.getAttribute(RichText.DESTINATION_ATTR));
-            org.w3c.dom.Node parentNode = link.getParentNode();
-            if (source > 0) {
-               Node node = sourceNode.getCloud().getNode(source);
-               Object number = copiedNodes.get(node.getNumber());
-               if (number == null) {
-                  Element newNode = doc.createElement("span");
-                  newNode.appendChild(link.getFirstChild());
-                  parentNode.replaceChild(newNode,link);
-               }
-               else {
-                  Integer destination = copiedNodes.get(source);
-                  if (destination  != null && destination > 0 && sourceNode.getCloud().hasNode(destination)) {
-                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager( RichText.INLINEREL_NM), destinationNode.getNumber(), destination);
-                     if(rel == null) {
-                        rel = RelationUtil.createRelation(destinationNode, sourceNode.getCloud().getNode(destination), RichText.INLINEREL_NM);
-                     }
-                     link.setAttribute(RichText.DESTINATION_ATTR, String.valueOf(destination));
-                     link.setAttribute(RichText.RELATIONID_ATTR, String.valueOf(rel.getNumber()));
-                  }
-               }
-            }
-         }
-      }
-   }
-
-
-   /**
-    *   To resolve the images used in the richtext fileds
-    * @param doc
-    * @param sourceNode
-    * @param copiedNodes
-    * @param channels
-    */
-   public static  void resolveImages(Document doc,Node sourceNode,Node destinationNode,Map<Integer, Integer> copiedNodes) {
-      if (doc == null) {
-         return;
-      }
-      org.w3c.dom.NodeList nl = doc.getElementsByTagName("img");
-      log.debug("number of images: " + nl.getLength());
-      List<org.w3c.dom.Node> links = new ArrayList<org.w3c.dom.Node>();
-      int len = nl.getLength();
-      for(int i = 0 ; i < len ; i++) {
-         links.add(nl.item(i));
-      }
-      for (int i = 0; i < len; i++) {
-         Element image = (Element) links.get(i);
-
-         if (image.hasAttribute(RichText.DESTINATION_ATTR)
-               && "undefined".equalsIgnoreCase(image.getAttribute(RichText.DESTINATION_ATTR))) {
-            image.removeAttribute(RichText.DESTINATION_ATTR);
-         }
-         if (image.hasAttribute(RichText.RELATIONID_ATTR)
-               && "undefined".equalsIgnoreCase(image.getAttribute(RichText.RELATIONID_ATTR))) {
-            image.removeAttribute(RichText.RELATIONID_ATTR);
-         }
-
-         if (image.hasAttribute(RichText.DESTINATION_ATTR) && image.hasAttribute(RichText.RELATIONID_ATTR)) {
-            // get id of the image
-            int source = Integer.parseInt(image.getAttribute(RichText.DESTINATION_ATTR));
-           
-            org.w3c.dom.Node parentNode = image.getParentNode();
-           // parentNode.removeChild(image);
-           // MMObjectNode imagerel = getImageInlineRel(id);
-            if (source > 0 ) {
-               Node node = sourceNode.getCloud().getNode(source);
-               Object number = copiedNodes.get(node.getNumber());
-               if (number == null) {
-                  parentNode.removeChild(image);
-               }
-               else {
-                  Integer destination = copiedNodes.get(source);
-                  if (destination  != null && destination > 0 && sourceNode.getCloud().hasNode(destination)) {
-                     Relation rel = RelationUtil.getRelation(sourceNode.getCloud().getNodeManager( RichText.IMAGEINLINEREL_NM), destinationNode.getNumber(), destination);
-                     if(rel == null) {
-                        rel = RelationUtil.createRelation(destinationNode, sourceNode.getCloud().getNode(destination), RichText.IMAGEINLINEREL_NM);
-                     }
-                   
-                     image.setAttribute(RichText.DESTINATION_ATTR, String.valueOf(destination));
-                     image.setAttribute(RichText.RELATIONID_ATTR, String.valueOf(rel.getNumber()));
-                  }
-               }
-            }
-         }
-
-      }
-   }
+    private String getContentUrl(Node node) {
+        String servletpath = ResourcesUtil.getServletPathWithAssociation("content", "/content/*");
+        return servletpath + "/" + node.getStringValue("number") + "/" + node.getStringValue("title");
+    }
 
 }

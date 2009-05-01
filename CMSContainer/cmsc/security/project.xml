@@ -9,8 +9,8 @@ See http://www.MMBase.org/license
 <project>
     <extend>${basedir}/../../maven-base/project.xml</extend>
     <artifactId>cmsc-security</artifactId>
-    <name>CMS Container security</name>
-    <shortDescription>CMS Container security</shortDescription>
+    <name>CMS container security</name>
+    <shortDescription>CMS container security</shortDescription>
 	<dependencies>
    		<dependency>
 			<groupId>finalist</groupId>
@@ -31,12 +31,7 @@ See http://www.MMBase.org/license
 			<version>${mmbase.version}</version>
 			<type>jar</type>
 		</dependency>
-      <dependency>
-          <groupId>org.samba.jcifs</groupId>
-          <artifactId>jcifs</artifactId>
-          <version>1.2.9</version>
-          <type>jar</type>
-      </dependency>      
+
 	</dependencies>
 </project>
 

@@ -21,192 +21,189 @@
 package com.jsptags.navigation.pager;
 
 import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
 import com.jsptags.navigation.pager.parser.*;
 
 public abstract class PageTagSupport extends PagerTagSupport {
 
-   private String export = null;
+	private String export = null;
 
-   private PageTagExport pageTagExport = null;
-   private Object oldPageUrl = null;
-   private Object oldPageNumber = null;
-   private Object oldFirstItem = null;
-   private Object oldLastItem = null;
-
-
-   public final void setExport(String value) throws JspException {
-      if (export != value) {
-         try {
-            pageTagExport = TagExportParser.parsePageTagExport(value);
-         }
-         catch (ParseException ex) {
-            throw new JspTagException(ex.getMessage());
-         }
-      }
-      export = value;
-   }
+	private PageTagExport pageTagExport = null;
+	private Object oldPageUrl = null;
+	private Object oldPageNumber = null;
+	private Object oldFirstItem = null;
+	private Object oldLastItem = null;
 
 
-   public final String getExport() {
-      return export;
-   }
+	public final void setExport(String value) throws JspException {
+		if (export != value) {
+			try {
+				pageTagExport = TagExportParser.parsePageTagExport(value);
+			} catch (ParseException ex) {
+				throw new JspTagException(ex.getMessage());
+			}
+		}
+		export = value;
+	}
+
+	public final String getExport() {
+		return export;
+	}
 
 
-   protected final void setPageAttributes(int page) {
-      if (pageTagExport == null) {
-         pageContext.setAttribute(PageTagExport.PAGE_URL, pagerTag.getPageUrl(page));
-         pageContext.setAttribute(PageTagExport.PAGE_NUMBER, pagerTag.getPageNumber(page));
-      }
-      else {
-         String name;
+	protected final void setPageAttributes(int page) {
+		if (pageTagExport == null) {
+			pageContext.setAttribute(PageTagExport.PAGE_URL,
+				pagerTag.getPageUrl(page));
+			pageContext.setAttribute(PageTagExport.PAGE_NUMBER,
+				pagerTag.getPageNumber(page));
+		} else {
+			String name; 
 
-         if ((name = pageTagExport.getPageUrl()) != null)
-            pageContext.setAttribute(name, pagerTag.getPageUrl(page));
+			if ((name = pageTagExport.getPageUrl()) != null)
+				pageContext.setAttribute(name, pagerTag.getPageUrl(page));
 
-         if ((name = pageTagExport.getPageNumber()) != null)
-            pageContext.setAttribute(name, pagerTag.getPageNumber(page));
+			if ((name = pageTagExport.getPageNumber()) != null)
+				pageContext.setAttribute(name, pagerTag.getPageNumber(page));
 
-         int maxPageItems = pagerTag.getMaxPageItems();
+			int maxPageItems = pagerTag.getMaxPageItems();
 
-         if ((name = pageTagExport.getFirstItem()) != null) {
-            int firstItem = (page * maxPageItems) + 1;
-            pageContext.setAttribute(name, new Integer(firstItem));
-         }
+			if ((name = pageTagExport.getFirstItem()) != null) {
+				int firstItem = (page * maxPageItems) + 1;
+				pageContext.setAttribute(name, new Integer(firstItem));
+			}
 
-         if ((name = pageTagExport.getLastItem()) != null) {
-            int lastItem = Math.min((page + 1) * maxPageItems, pagerTag.getItemCount());
-            pageContext.setAttribute(name, new Integer(lastItem));
-         }
-      }
-   }
+			if ((name = pageTagExport.getLastItem()) != null) {
+				int lastItem = Math.min((page + 1) * maxPageItems,
+									pagerTag.getItemCount());
+				pageContext.setAttribute(name, new Integer(lastItem));
+			}
+		}
+	}
 
+	protected final void setOffsetAttributes(int offset) {
+		if (pageTagExport == null) {
+			pageContext.setAttribute(PageTagExport.PAGE_URL,
+				pagerTag.getOffsetUrl(offset));
+			pageContext.setAttribute(PageTagExport.PAGE_NUMBER,
+				pagerTag.getOffsetPageNumber(offset));
+		} else {
+			String name; 
 
-   protected final void setOffsetAttributes(int offset) {
-      if (pageTagExport == null) {
-         pageContext.setAttribute(PageTagExport.PAGE_URL, pagerTag.getOffsetUrl(offset));
-         pageContext.setAttribute(PageTagExport.PAGE_NUMBER, pagerTag.getOffsetPageNumber(offset));
-      }
-      else {
-         String name;
+			if ((name = pageTagExport.getPageUrl()) != null)
+				pageContext.setAttribute(name, pagerTag.getOffsetUrl(offset));
 
-         if ((name = pageTagExport.getPageUrl()) != null)
-            pageContext.setAttribute(name, pagerTag.getOffsetUrl(offset));
+			if ((name = pageTagExport.getPageNumber()) != null)
+				pageContext.setAttribute(name,
+					pagerTag.getOffsetPageNumber(offset));
 
-         if ((name = pageTagExport.getPageNumber()) != null)
-            pageContext.setAttribute(name, pagerTag.getOffsetPageNumber(offset));
+			int maxPageItems = pagerTag.getMaxPageItems();
 
-         int maxPageItems = pagerTag.getMaxPageItems();
+			if ((name = pageTagExport.getFirstItem()) != null) {
+				int firstItem = offset + 1;
+				pageContext.setAttribute(name, new Integer(firstItem));
+			}
 
-         if ((name = pageTagExport.getFirstItem()) != null) {
-            int firstItem = offset + 1;
-            pageContext.setAttribute(name, new Integer(firstItem));
-         }
-
-         if ((name = pageTagExport.getLastItem()) != null) {
-            int lastItem = Math.min(offset + maxPageItems, pagerTag.getItemCount());
-            pageContext.setAttribute(name, new Integer(lastItem));
-         }
-      }
-   }
-
-
-   protected final void removeAttributes() {
-      if (pageTagExport == null) {
-         pageContext.removeAttribute(PageTagExport.PAGE_URL);
-         pageContext.removeAttribute(PageTagExport.PAGE_NUMBER);
-      }
-      else {
-         String name;
-
-         if ((name = pageTagExport.getPageUrl()) != null)
-            pageContext.removeAttribute(name);
-
-         if ((name = pageTagExport.getPageNumber()) != null)
-            pageContext.removeAttribute(name);
-
-         if ((name = pageTagExport.getFirstItem()) != null)
-            pageContext.removeAttribute(name);
-
-         if ((name = pageTagExport.getLastItem()) != null)
-            pageContext.removeAttribute(name);
-      }
-   }
+			if ((name = pageTagExport.getLastItem()) != null) {
+				int lastItem = Math.min(offset + maxPageItems,
+									pagerTag.getItemCount());
+				pageContext.setAttribute(name, new Integer(lastItem));
+			}
+		}
+	}
 
 
-   public int doStartTag() throws JspException {
-      super.doStartTag();
+	protected final void removeAttributes() {
+		if (pageTagExport == null) {
+			pageContext.removeAttribute(PageTagExport.PAGE_URL);
+			pageContext.removeAttribute(PageTagExport.PAGE_NUMBER);
+		} else {
+			String name; 
 
-      if (pageTagExport == null) {
-         oldPageUrl = pageContext.getAttribute(PageTagExport.PAGE_URL);
-         oldPageNumber = pageContext.getAttribute(PageTagExport.PAGE_NUMBER);
-      }
-      else {
-         String name;
+			if ((name = pageTagExport.getPageUrl()) != null)
+				pageContext.removeAttribute(name);
 
-         if ((name = pageTagExport.getPageUrl()) != null)
-            oldPageUrl = pageContext.getAttribute(name);
+			if ((name = pageTagExport.getPageNumber()) != null)
+				pageContext.removeAttribute(name);
 
-         if ((name = pageTagExport.getPageNumber()) != null)
-            oldPageNumber = pageContext.getAttribute(name);
+			if ((name = pageTagExport.getFirstItem()) != null)
+				pageContext.removeAttribute(name);
 
-         if ((name = pageTagExport.getFirstItem()) != null)
-            oldFirstItem = pageContext.getAttribute(name);
+			if ((name = pageTagExport.getLastItem()) != null)
+				pageContext.removeAttribute(name);
+		}
+	}
 
-         if ((name = pageTagExport.getLastItem()) != null)
-            oldLastItem = pageContext.getAttribute(name);
-      }
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
-      return EVAL_BODY_INCLUDE;
-   }
+		if (pageTagExport == null) {
+			oldPageUrl = pageContext.getAttribute(PageTagExport.PAGE_URL);
+			oldPageNumber = pageContext.getAttribute(PageTagExport.PAGE_NUMBER);
+		} else {
+			String name; 
 
+			if ((name = pageTagExport.getPageUrl()) != null)
+				oldPageUrl = pageContext.getAttribute(name);
 
-   public int doEndTag() throws JspException {
+			if ((name = pageTagExport.getPageNumber()) != null)
+				oldPageNumber = pageContext.getAttribute(name);
 
-      if (pageTagExport == null) {
-         restoreAttribute(PageTagExport.PAGE_URL, oldPageUrl);
-         restoreAttribute(PageTagExport.PAGE_NUMBER, oldPageNumber);
-         oldPageUrl = null;
-         oldPageNumber = null;
-      }
-      else {
-         String name;
+			if ((name = pageTagExport.getFirstItem()) != null)
+				oldFirstItem = pageContext.getAttribute(name);
 
-         if ((name = pageTagExport.getPageUrl()) != null) {
-            restoreAttribute(name, oldPageUrl);
-            oldPageUrl = null;
-         }
+			if ((name = pageTagExport.getLastItem()) != null)
+				oldLastItem = pageContext.getAttribute(name);
+		}
 
-         if ((name = pageTagExport.getPageNumber()) != null) {
-            restoreAttribute(name, oldPageNumber);
-            oldPageNumber = null;
-         }
+		return EVAL_BODY_INCLUDE;
+	}
 
-         if ((name = pageTagExport.getFirstItem()) != null) {
-            restoreAttribute(name, oldFirstItem);
-            oldFirstItem = null;
-         }
+	public int doEndTag() throws JspException {
 
-         if ((name = pageTagExport.getLastItem()) != null) {
-            restoreAttribute(name, oldLastItem);
-            oldLastItem = null;
-         }
-      }
+		if (pageTagExport == null) {
+			restoreAttribute(PageTagExport.PAGE_URL, oldPageUrl);
+			restoreAttribute(PageTagExport.PAGE_NUMBER, oldPageNumber);
+			oldPageUrl = null;
+			oldPageNumber = null;
+		} else {
+			String name;
 
-      super.doEndTag();
+			if ((name = pageTagExport.getPageUrl()) != null) {
+				restoreAttribute(name, oldPageUrl);
+				oldPageUrl = null;
+			}
 
-      return EVAL_PAGE;
-   }
+			if ((name = pageTagExport.getPageNumber()) != null) {
+				restoreAttribute(name, oldPageNumber);
+				oldPageNumber = null;
+			}
 
+			if ((name = pageTagExport.getFirstItem()) != null) {
+				restoreAttribute(name, oldFirstItem);
+				oldFirstItem = null;
+			}
 
-   public void release() {
-      export = null;
-      pageTagExport = null;
-      oldPageUrl = null;
-      oldPageNumber = null;
-      oldFirstItem = null;
-      oldLastItem = null;
-      super.release();
-   }
+			if ((name = pageTagExport.getLastItem()) != null) {
+				restoreAttribute(name, oldLastItem);
+				oldLastItem = null;
+			}
+		}
+
+		super.doEndTag();
+
+		return EVAL_PAGE;
+	}
+
+	public void release() {
+		export = null;
+		pageTagExport = null;
+		oldPageUrl = null;
+		oldPageNumber = null;
+		oldFirstItem = null;
+		oldLastItem = null;
+		super.release();
+	}
 }
 
 /* vim:set ts=4 sw=4: */

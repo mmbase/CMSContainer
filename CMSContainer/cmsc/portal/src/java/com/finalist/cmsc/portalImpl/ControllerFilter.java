@@ -12,27 +12,23 @@ package com.finalist.cmsc.portalImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.finalist.cmsc.filters.FriendlyUrlFilter;
-
+import net.sf.mmapps.commons.web.FriendlyUrlFilter;
 
 /**
  * The controller filter filters out all navigation requests and dispatches them
  * through to the portal servlet.
- *
+ * 
  * @author R.W. van 't Veer
  * @author Wouter Heijke
  */
 public class ControllerFilter extends FriendlyUrlFilter {
 
-   @Override
-   protected String getServlet() {
-      return PortalConstants.CMSC_PORTAL_SERVLET;
-   }
+    protected String getServlet() {
+        return PortalConstants.CMSC_PORTAL_SERVLET;
+    }
 
-
-   @Override
-   protected boolean isFriendlyUrl(HttpServletRequest req, HttpServletResponse resp) {
-      return PortalServlet.isNavigation(req, resp);
-   }
+    protected boolean isFriendlyUrl(HttpServletRequest req, HttpServletResponse resp) {
+        return PortalServlet.isNavigation(ctx, req, resp);
+    }
 
 }

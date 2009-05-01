@@ -1,18 +1,13 @@
 package com.finalist.cmsc.navigation;
 
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.mmbase.bridge.Node;
 
+import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
-import com.finalist.cmsc.util.bundles.JstlUtil;
-import com.finalist.tree.TreeCellRenderer;
-import com.finalist.tree.TreeElement;
-import com.finalist.tree.TreeModel;
-import com.finalist.tree.TreeOption;
+import com.finalist.cmsc.struts.JstlUtil;
+import com.finalist.tree.*;
 
 /**
  * Renderer of the Site management tree.
@@ -21,20 +16,16 @@ import com.finalist.tree.TreeOption;
  */
 public abstract class NavigationRenderer implements TreeCellRenderer {
 
-    protected static final String FEATURE_WORKFLOW = "workflowitem";
-	
-	private String target = null;
+    private String target = null;
     private HttpServletRequest request;
-    private HttpServletResponse response;
 
-    public NavigationRenderer(HttpServletRequest request, HttpServletResponse response, String target) {
+    public NavigationRenderer(HttpServletRequest request, String target) {
         this.request = request;
-        this.response = response;
         this.target = target;
     }
 
     /**
-     * Render a node of a tree.
+     * Render een node van de tree.
      * 
      * @see com.finalist.tree.TreeCellRenderer#getElement(TreeModel, Object, String)
      */
@@ -44,78 +35,81 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
             id = String.valueOf(parentNode.getNumber());
         }
         
-        NavigationItemManager manager = NavigationManager.getNavigationManager(parentNode);
-    	if(manager != null) {
-    		TreeElement treeElement = manager.getTreeRenderer().getTreeElement(this, parentNode, model);
-			return treeElement;
-    	}
-        return null;
-    }
+        UserRole role = NavigationUtil.getRoleForUser(parentNode.getCloud(), parentNode, false);
 
-    public void addParentOptions(TreeElement treeElement, String id) {
-        for (NavigationItemManager managerOption : NavigationManager.getNavigationManagers()) {
-        	managerOption.getTreeRenderer().addParentOption(this, treeElement, id);
-        }
-    }
-
-    private String getUrl(String url) {
-        return response.encodeURL(url);
-    }
-
-    public String getIcon(Object node, UserRole role) {
-        Node n = (Node) node;
-        return getIcon(n.getNodeManager().getName(), role);
-    }
-
-    public String getIcon(String name, UserRole role) {
-        return "type/" + name + "_"+role.getRole().getName()+".png";
-    }
-    
-    public String getOpenAction(Node parentNode, boolean secure) {
-        String contextPath = request.getContextPath();
-        String action = String.format("/editors/site/NavigatorPanel.do?nodeId=%s",parentNode.getNumber());
-        return contextPath+action;
-    }
-
-    public TreeOption createTreeOption(String icon, String message, String resourcebundle, String action) {
-        String label = getLabel(message, resourcebundle);
-        if (!action.startsWith("javascript:")) {
-            action = getUrl(action);
-        }
-        return createOption(icon, label,  action, target);      
+        boolean isPage = PagesUtil.isPage(parentNode);
         
-    }
+        String titleFieldName = isPage ? PagesUtil.TITLE_FIELD : SiteUtil.TITLE_FIELD;
+        String name = parentNode.getStringValue(titleFieldName);
+        
+        String fragment = parentNode.getStringValue( NavigationUtil.getFragmentFieldname(parentNode) );
+        
+        String action = "../../" + NavigationUtil.getPathToRootString(parentNode, !ServerUtil.useServerName());
 
-	public String getLabel(String message, String resourcebundle) {
-		Locale locale = JstlUtil.getLocale(request);
-        String label = JstlUtil.getMessage(resourcebundle, locale, message);
-		return label;
-	}
-    
-    public TreeOption createTreeOption(String icon, String message, String action) {
-        String label = JstlUtil.getMessage(request, message);
-        if (!action.startsWith("javascript:")) {
-            action = getUrl(action);
+        TreeElement element = createElement(getIcon(node), id, name, fragment, action, target);
+        
+        if (role != null && SecurityUtil.isWriter(role)) {
+            if (isPage) {
+                if (SecurityUtil.isEditor(role)) {
+                    String labelPageEdit = JstlUtil.getMessage(request, "site.page.edit");
+                    element.addOption(createOption("existing.gif", labelPageEdit,
+                        "PageEdit.do?number=" + parentNode.getNumber(), target));
+
+                    if ((model.getChildCount(parentNode) == 0)) {
+                        String labelPageRemove = JstlUtil.getMessage(request, "site.page.remove");
+                        element.addOption(createOption("remove.gif", labelPageRemove,
+                                "PageDelete.do?number=" + parentNode.getNumber(), target));
+                    }
+                }
+            }
+            else {
+                if (SecurityUtil.isChiefEditor(role)) {
+                    String labelSiteEdit = JstlUtil.getMessage(request, "site.site.edit");
+                    element.addOption(createOption("existing.gif", labelSiteEdit,
+                        "SiteEdit.do?number=" + parentNode.getNumber(), target));
+
+                    if ((model.getChildCount(parentNode) == 0)) {
+                        String labelSiteRemove = JstlUtil.getMessage(request, "site.site.remove");
+                        element.addOption(createOption("remove.gif", labelSiteRemove,
+                                "SiteDelete.do?number=" + parentNode.getNumber(), target));
+                    }
+                }
+            }
+            if (SecurityUtil.isEditor(role)) {
+                String labelPageNew = JstlUtil.getMessage(request, "site.page.new");
+                element.addOption(createOption("new_page.gif", labelPageNew,
+                                "PageCreate.do?parentpage=" + parentNode.getNumber(), target));
+                if (NavigationUtil.getChildCount(parentNode) >= 2) {
+                    String labelPageReorder = JstlUtil.getMessage(request, "site.page.reorder");
+                    element.addOption(createOption("reorder.gif", labelPageReorder, "reorder.jsp?parent="
+                            + parentNode.getNumber(), target));
+                }
+                
+                if (SecurityUtil.isChiefEditor(role)) {
+                    if (isPage) {
+                        String labelPageCut = JstlUtil.getMessage(request, "site.page.cut");
+                        element.addOption(createOption("cut.gif", labelPageCut, "javascript:cut('"
+                                + parentNode.getNumber() + "');", null));
+                        String labelPageCopy = JstlUtil.getMessage(request, "site.page.copy");
+                        element.addOption(createOption("copy.gif", labelPageCopy, "javascript:copy('"
+                                + parentNode.getNumber() + "');", null));
+                    }
+                    String labelPagePaste = JstlUtil.getMessage(request, "site.page.paste");
+                    element.addOption(createOption("paste.gif", labelPagePaste, "javascript:paste('"
+                            + parentNode.getNumber() + "');", null));
+                }
+            }
         }
-        return createOption(icon, label,  action, target);    	
+        return element;
     }
 
-    public TreeElement createElement(Node parentNode, UserRole role, String name, String fragment, boolean secure) {
-        String id = String.valueOf(parentNode.getNumber());
-        return createElement(getIcon(parentNode, role), id, name, fragment, getOpenAction(parentNode, secure), target);
+    public String getIcon(Object node) {
+        Node n = (Node) node;
+        return "type/" + n.getNodeManager().getName() + ".gif";
     }
+
+    protected abstract TreeOption createOption(String icon, String label, String action, String target);
+
+    protected abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
     
-    public abstract TreeOption createOption(String icon, String label, String action, String target);
-
-    public abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
-
-    public boolean showChildren(Object node) {
-       Node parentNode = (Node) node;
-       NavigationItemManager manager = NavigationManager.getNavigationManager(parentNode);
-
-       if(manager != null) {
-          return manager.getTreeRenderer().showChildren(parentNode);
-       }
-       return false;
-    }
 }

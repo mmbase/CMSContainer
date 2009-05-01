@@ -23,7 +23,7 @@ import org.apache.pluto.om.common.ObjectID;
 import org.apache.pluto.om.portlet.PortletApplicationDefinitionList;
 import org.apache.pluto.om.portlet.PortletDefinition;
 
-import com.finalist.cmsc.services.Service;
+import com.finalist.pluto.portalImpl.services.Service;
 
 /**
  * <P>
@@ -46,20 +46,17 @@ import com.finalist.cmsc.services.Service;
  */
 public abstract class PortletDefinitionRegistryService extends Service {
 
-   /**
-    * Returns a set containg all portlet application definitions
-    * 
-    * @return the portlet application definition set
-    */
-   abstract public PortletApplicationDefinitionList getPortletApplicationDefinitionList();
+	/**
+	 * Returns a set containg all portlet application definitions
+	 * 
+	 * @return the portlet application definition set
+	 */
+	abstract public PortletApplicationDefinitionList getPortletApplicationDefinitionList();
 
-
-   /**
-    * Returns the portlet definition to the given object id
-    * 
-    * @param id
-    *           ObjectID of the portlet definition
-    * @return the portlet definition
-    */
-   abstract public PortletDefinition getPortletDefinition(ObjectID id);
+	/**
+	 * Returns the portlet definition to the given object id
+	 * 
+	 * @return the portlet definition
+	 */
+	abstract public PortletDefinition getPortletDefinition(ObjectID id);
 }

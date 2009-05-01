@@ -20,8 +20,8 @@ import javax.servlet.ServletConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.finalist.cmsc.services.Parameters;
-import com.finalist.cmsc.services.Properties;
+import com.finalist.pluto.portalImpl.util.Parameters;
+import com.finalist.pluto.portalImpl.util.Properties;
 
 /**
  * * The implementation of the {@link ConfigService}. * *
@@ -30,31 +30,28 @@ import com.finalist.cmsc.services.Properties;
  * its own configuration file.
  */
 public class ConfigServiceImpl extends ConfigService {
-   private static Log log = LogFactory.getLog(ConfigServiceImpl.class);
+	private static Log log = LogFactory.getLog(ConfigServiceImpl.class);
+	
+	private Parameters iParameters;
+	
+	public void init(ServletConfig aConfig, Properties aProperties) throws Exception {
+		log.debug("init ConfigServiceImpl");
 
-   private Parameters iParameters;
+		iParameters = new Parameters(aConfig);
 
+        Parameters contextParams = new Parameters(aConfig.getServletContext());
 
-   public void init(ServletConfig aConfig, Properties aProperties) throws Exception {
-      log.debug("init ConfigServiceImpl");
+		contextParams.setParent(aProperties);
 
-      iParameters = new Parameters(aConfig);
+		iParameters.setParent(contextParams);
+	}
 
-      Parameters contextParams = new Parameters(aConfig.getServletContext());
+	public void destroy() {
+		iParameters = null;
+	}
 
-      contextParams.setParent(aProperties);
-
-      iParameters.setParent(contextParams);
-   }
-
-
-   public void destroy() {
-      iParameters = null;
-   }
-
-
-   public Parameters getParameters() {
-      return (iParameters);
-   }
+	public Parameters getParameters() {
+		return (iParameters);
+	}
 
 }

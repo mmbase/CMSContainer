@@ -21,14 +21,15 @@
 package com.jsptags.navigation.pager;
 
 import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
 
 public final class ItemTag extends PagerTagSupport {
 
-   public int doStartTag() throws JspException {
-      super.doStartTag();
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
-      return (pagerTag.nextItem() ? EVAL_BODY_INCLUDE : SKIP_BODY);
-   }
+		return (pagerTag.nextItem() ? EVAL_BODY_INCLUDE : SKIP_BODY);
+	}
 }
 
 /* vim:set ts=4 sw=4: */

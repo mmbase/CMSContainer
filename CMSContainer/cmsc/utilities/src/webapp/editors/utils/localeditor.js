@@ -1,24 +1,4 @@
 var InPlaceEditor = {}
-var xinha_config;
-var xinha_plugins;
-
-var inplaceeditor_xinha_init;
-
-inplaceeditor_xinha_init = inplaceeditor_xinha_init ? inplaceeditor_xinha_init : function() {
-  xinha_plugins = [
-   'CharacterMap',
-   'ContextMenu',
-//   'ListType',
-//   'FullScreen',
-//   'SpellChecker',
-//   'Stylist',
-//   'SuperClean',
-   'TableOperations'
-  ];
-  // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-  if(!HTMLArea.loadPlugins(xinha_plugins, inplaceeditor_xinha_init)) return;
-  xinha_config = createDefaultConfig();
-}
 
 InPlaceEditor.Local = Class.create();
 InPlaceEditor.Local.defaultHighlightColor = "#FFFF99";
@@ -27,10 +7,8 @@ InPlaceEditor.Local.prototype = {
     this.element = $(element);
 
     this.options = Object.extend({
-      cancelButton: true,
-      cancelText: "Cancel",
-      saveButton: true,
-      saveButtonText: "Opslaan",
+      cancelLink: true,
+      cancelText: "cancel",
       clickToEditText: "Click to edit",
       rows: 1,
       minHeight: 100,
@@ -64,10 +42,6 @@ InPlaceEditor.Local.prototype = {
     if (this.options.externalControl) {
       this.options.externalControl = $(this.options.externalControl);
     }
-
-    if (this.options.htmlarea) {
-      inplaceeditor_xinha_init();
-    }
     
     this.originalBackground = Element.getStyle(this.element, 'background-color');
     if (!this.originalBackground) {
@@ -90,15 +64,12 @@ InPlaceEditor.Local.prototype = {
     
     this._checkEmpty();
   },
-
-  _checkEmpty: function(){
-    if( this.element.innerHTML.length == 0 ){
-      this.element.appendChild(
-        Builder.node('span', {className: this.options.emptyClassName}, this.options.emptyText)
-      );
-    }
-  },
-  
+    _checkEmpty: function(){
+        if( this.element.innerHTML.length == 0 ){
+            this.element.appendChild(
+                Builder.node('span',{className:this.options.emptyClassName},this.options.emptyText));
+        }
+    },
   enterEditMode: function(evt) {
     this.elementWidth = this.element.offsetWidth;
     this.elementHeight = this.element.offsetHeight;
@@ -128,22 +99,15 @@ InPlaceEditor.Local.prototype = {
     if (this.options.textarea) {
       var br = document.createElement("br");
       this.form.appendChild(br);
-    }    
-
-    if (this.options.saveButton) {
-      saveButton = document.createElement("input");
-      saveButton.type = "submit";
-      saveButton.className = 'portal_button';
-      saveButton.value = this.options.saveButtonText;
-      this.form.appendChild(saveButton);
     }
-    if (this.options.cancelButton) {
-      cancelButton = document.createElement("input");
-      cancelButton.type = "submit";
-      cancelButton.onclick = this.onclickCancel.bind(this);
-      cancelButton.className = 'portal_button';
-      cancelButton.value = this.options.cancelText;
-      this.form.appendChild(cancelButton);
+
+    if (this.options.cancelLink) {
+      cancelLink = document.createElement("a");
+      cancelLink.href = "#";
+      cancelLink.appendChild(document.createTextNode(this.options.cancelText));
+      cancelLink.onclick = this.onclickCancel.bind(this);
+      cancelLink.className = 'editor_cancel';      
+      this.form.appendChild(cancelLink);
     }
   },
   hasHTMLLineBreaks: function(string) {
@@ -175,37 +139,33 @@ InPlaceEditor.Local.prototype = {
       textArea.obj = this;
       textArea.name = "value";
       if (this.options.htmlarea) {
-        textArea.value = text;
+	      textArea.value = text;
       } else {
-        textArea.value = this.convertHTMLLineBreaks(text);
-    }
+	      textArea.value = this.convertHTMLLineBreaks(text);
+	  }
       textArea.rows = this.options.rows;
       textArea.cols = this.options.cols || 40;
       textArea.className = 'editor_field';      
       this.editField = textArea;
     }
 
-  this.editField.name = this.element.id;
+	this.editField.name = this.element.id;
 
     this.form.appendChild(this.editField);
     
     if (this.options.htmlarea) {
-        setTimeout(function() { obj.createInplaceHTMLArea(); }, 50);
+      var editor = new HTMLArea(this.editField);
+      customize(editor, _editor_url);
+      editor.config.width = this.elementWidth;
+      editor.config.height = this.options.minHeight > this.elementHeight ? this.options.minHeight: this.elementHeight;
+      editor.config.sizeIncludesToolbar = false;
+      editor.generate();
+      
+      this.editor = editor;
     }
   },
-  createInplaceHTMLArea: function() {
-        var editor = new HTMLArea(this.editField, HTMLArea.cloneObject(xinha_config));
-        xinha_editors = HTMLArea.makeEditors(editor, xinha_config);
-        editor.registerPlugins(xinha_plugins);
-        editor.config.width = this.elementWidth;
-        editor.config.height = this.options.minHeight > this.elementHeight ? this.options.minHeight: this.elementHeight;
-        editor.config.sizeIncludesBars = false;
-        editor.generate();
-      
-       this.editor = editor;
-  },
   getText: function() {
-    this.element.select('.' + this.options.emptyClassName).each(function(child){
+    document.getElementsByClassName(this.options.emptyClassName,this.element).each(function(child){
         this.element.removeChild(child);
     }.bind(this));
     return this.element.innerHTML;
@@ -217,7 +177,7 @@ InPlaceEditor.Local.prototype = {
   onSubmit: function() {
     if (HTMLArea.checkSupportedBrowser() && this.editor) {
       updateValue(this.editor);
-    }
+	}
     return true;
   },
   removeForm: function() {

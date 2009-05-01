@@ -26,39 +26,36 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.pluto.services.ContainerService;
 
 public class PortletContainerEnvironment implements org.apache.pluto.services.PortletContainerEnvironment {
-   private static Log log = LogFactory.getLog(PortletContainerEnvironment.class);
+	private static Log log = LogFactory.getLog(PortletContainerEnvironment.class);
+	
+	private HashMap services = new HashMap();
 
-   private HashMap<Class, ContainerService> services = new HashMap<Class, ContainerService>();
+	public PortletContainerEnvironment() {
+	}
 
+	// org.apache.pluto.services.PortletContainerEnvironment implementation.
 
-   public PortletContainerEnvironment() {
-   }
+	public ContainerService getContainerService(Class service) {
+		return (ContainerService) services.get(service);
+	}
 
+	// additional methods.
 
-   // org.apache.pluto.services.PortletContainerEnvironment implementation.
-
-   public ContainerService getContainerService(Class service) {
-      return services.get(service);
-   }
-
-
-   // additional methods.
-
-   public void addContainerService(ContainerService service) {
-      Class serviceClass = service.getClass();
-      log.debug("class='" + serviceClass.getName() + "'");
-      while (serviceClass != null) {
-         Class[] interfaces = serviceClass.getInterfaces();
-         for (Class element : interfaces) {
-            Class[] interfaces2 = element.getInterfaces();
-            for (Class element2 : interfaces2) {
-               if (element2.equals(ContainerService.class)) {
-                  services.put(element, service);
-               }
-            }
-         }
-         serviceClass = serviceClass.getSuperclass();
-      }
-   }
+	public void addContainerService(ContainerService service) {
+		Class serviceClass = service.getClass();
+		log.debug("class='"+serviceClass.getName()+"'");
+		while (serviceClass != null) {
+			Class[] interfaces = serviceClass.getInterfaces();
+			for (int i = 0; i < interfaces.length; i++) {
+				Class[] interfaces2 = interfaces[i].getInterfaces();
+				for (int ii = 0; ii < interfaces2.length; ii++) {
+					if (interfaces2[ii].equals(ContainerService.class)) {
+						services.put(interfaces[i], service);
+					}
+				}
+			}
+			serviceClass = serviceClass.getSuperclass();
+		}
+	}
 
 }

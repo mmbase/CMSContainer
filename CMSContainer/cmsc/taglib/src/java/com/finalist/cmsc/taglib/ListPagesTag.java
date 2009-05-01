@@ -9,18 +9,29 @@
  */
 package com.finalist.cmsc.taglib;
 
-import com.finalist.cmsc.beans.om.NavigationItem;
+import java.util.List;
+
 import com.finalist.cmsc.beans.om.Page;
+import com.finalist.cmsc.beans.om.Site;
+import com.finalist.cmsc.portalImpl.services.sitemanagement.SiteManagement;
 
 /**
  * List the available Pages
  * 
  * @author Wouter Heijke
  */
-public class ListPagesTag extends ListNavigationItemsTag {
+public class ListPagesTag extends AbstractListTag {
 
-    @Override
-    protected Class<? extends NavigationItem> getChildNavigationClass() {
-        return Page.class;
-    }
+	protected List getList() {
+		if (origin != null) {
+			if (origin instanceof Site) {
+				return SiteManagement.getPages((Site)origin);
+	        } else if (origin instanceof Page) {
+				return SiteManagement.getPages((Page)origin);
+	        }
+		} else {
+			return SiteManagement.getSites();
+		}
+		return null;
+	}
 }

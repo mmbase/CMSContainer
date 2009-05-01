@@ -1,22 +1,22 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp"%>
 <c:if test="${viewtype eq 'list'}">
-	<cmsc:renderURL var="renderUrl" />
+	<portlet:renderURL var="renderUrl" />
 	<a href="${renderUrl}"><fmt:message key="view.back" /></a>
 </c:if>
 
 <mm:cloud>
 <form name="contentportlet" id="contentportlet" method="post"
-	action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
+	action="<portlet:actionURL><portlet:param name="action" value="edit"/></portlet:actionURL>">
 	<mm:import externid="elementId" required="true" />
 	<mm:node number="${elementId}" notfound="skip">
 
 		<h1 id="content_${elementId}_title"><mm:field name="title" /></h1>
 		<h2 id="content_${elementId}_subtitle"><mm:field name="subtitle" /></h2>
-		<p class="intro" id="content_${elementId}_intro"><mm:field name="intro" escape="none" /></p>
+		<p class="intro" id="content_${elementId}_intro"><mm:field name="intro" /></p>
 
 		<cmsc-bm:linkedimages position="top-left" style="float: left;" />
 		<cmsc-bm:linkedimages position="top-right" style="float: right;" />
-		<div id="content_${elementId}_body"><mm:field name="body" escape="none" /></div>
+		<div id="content_${elementId}_body"><mm:field name="body" /></div>
 		<cmsc-bm:linkedimages position="bottom-left" style="float: left;" />
 		<cmsc-bm:linkedimages position="bottom-right" style="float: right;" />
 

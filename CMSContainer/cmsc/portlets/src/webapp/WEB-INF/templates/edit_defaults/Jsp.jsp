@@ -1,19 +1,15 @@
-<%@include file="/WEB-INF/templates/portletglobals.jsp"%>
-<%@include file="/WEB-INF/templates/edit_defaults/sections/globals.jsp"%>
+<%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 
-<div class="portlet-config-canvas">
-	<form method="POST" name="<portlet:namespace />form" action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>" target="_parent">
-		<table class="editcontent">
-		
-			<%-- Portletdefinition display --%>
-			<c:import url="sections/definitiondisplay.jsp" />
-			
-			<%-- View selector --%>
-			<c:import url="sections/viewselector.jsp" />
-			
-			<%-- Save button --%>
-			<c:import url="sections/savebutton.jsp" />
-			
-		</table>
-	</form>
+<div>
+<h3><fmt:message key="edit_defaults.title" /></h3>
+
+<form method="POST" action="<portlet:actionURL><portlet:param name="action" value="edit"/></portlet:actionURL>">
+<fmt:message key="edit_defaults.view" />: 
+<cmsc:select var="view">
+	<c:forEach var="v" items="${views}">
+		<cmsc:option value="${v.id}" name="${v.title}" />
+	</c:forEach>
+</cmsc:select><br />
+
+<input type="submit" value="<fmt:message key="edit_defaults.save" />" /></form>
 </div>

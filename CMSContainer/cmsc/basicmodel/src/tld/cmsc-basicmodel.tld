@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
-
-	<description>Taglib to support the Finalist CMS Container basic model</description>
-	<display-name>CMS Container basic model tags</display-name>
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
 	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
 	<short-name>cmsc-basicmodel</short-name>
-	<uri>http://finalist.com/cmsc-basicmodel</uri>
+	<uri>http://finalist.com/csmc-basicmodel</uri>
+	<display-name>CMS Container basic model tags</display-name>
+	<description>Taglib to support the Finalist CMS Container basic model</description>
+
 	<tag>
 		<name>image</name>
-		<tag-class>com.finalist.cmsc.taglib.image.ImageTag</tag-class>
+		<tag-class>com.finalist.cmsc.basicmodel.taglib.ImageTag</tag-class>
 		<tei-class>org.mmbase.bridge.jsp.taglib.StringWriterTEI</tei-class>
-		<body-content>scriptless</body-content>
 		<attribute>
 			<name>popup</name>
 			<required>false</required>
@@ -116,15 +116,19 @@
 	</tag>
 
 	<tag>
-		<description>This tag creates a list of related images with an imagerel relation.</description>
 		<name>linkedimages</name>
-		<tag-class>com.finalist.cmsc.taglib.image.LinkedImagesTag</tag-class>
+		<tag-class>com.finalist.cmsc.basicmodel.taglib.LinkedImagesTag</tag-class>
 		<body-content>empty</body-content>
+		<description>
+			<![CDATA[This tag creates a list of related images with an imagerel relation.]]>
+		</description>
 		<attribute>
-			<description>Images have to match this position in the imagerel</description>
 			<name>position</name>
-			<required>false</required>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>
+				<![CDATA[Images have to match this position in the imagerel]]>
+			</description>
 		</attribute>
 		<attribute>
 			<name>styleClass</name>
@@ -156,149 +160,54 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-		<attribute>
-			<name>width</name>
-         <description>
-            The preferred width of linked images (in pixels). This attribute is ignored when a custom template is provided.
-         </description>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>	
-		<attribute>
-			<name>height</name>
-         <description>
-            The preferred height of linked images (in pixels). This attribute is ignored when a custom template is provided.
-         </description>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>	
-		<attribute>
-			<name>popup</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>max</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-      <attribute>
-         <name>template</name>
-         <description>
-            A template String representing the way linked images should be treated by the underlying converter application (e.g. ImageMagick).
-         </description>
-         <required>false</required>
-         <rtexprvalue>true</rtexprvalue>
-      </attribute>
 	</tag>
+
 	<tag>
-		<description>This tag creates a list of related content elements.</description>
 		<name>linkedcontent</name>
-		<tag-class>com.finalist.cmsc.taglib.LinkedContentTag</tag-class>
+		<tag-class>com.finalist.cmsc.basicmodel.taglib.LinkedContentTag</tag-class>
 		<body-content>empty</body-content>
+		<description>
+			<![CDATA[This tag creates a list of related content elements.]]>
+		</description>
 		<attribute>
-			<description>A specific formatter implementation</description>
 			<name>formatter</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>
+				<![CDATA[A specific formatter implementation]]>
+			</description>
 		</attribute>
 		<attribute>
-			<description>The name of the nodemanager of the related nodes that should be retrieved</description>
 			<name>manager</name>
 			<required>true</required>
 			<rtexprvalue>false</rtexprvalue>
+			<description>
+				<![CDATA[The name of the nodemanager of the related nodes that should be retrieved]]>
+			</description>
 		</attribute>
 		<attribute>
-			<description>The title of the link list.</description>
 			<name>title</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>
+				<![CDATA[The title of the link list.]]>
+			</description>
 		</attribute>
 		<attribute>
-			<description>The role of the relation.</description>
 			<name>role</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>
+				<![CDATA[The role of the relation.]]>
+			</description>
 		</attribute>
 		<attribute>
-			<description>The name of a node field to sort on.</description>
 			<name>sort</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>	
-	<!-- ################ -->
-	<!-- FontImage Tag -->	
-	<!-- ################ -->	
-	<tag>
-		<description>Tag that puts text into an image according to the given parameters.</description>
-		<name>fontimage</name>
-		<tag-class>com.finalist.cmsc.taglib.image.FontImageTag</tag-class>
-		<tei-class>org.mmbase.bridge.jsp.taglib.StringWriterTEI</tei-class>
-		<body-content>scriptless</body-content>	
-		<attribute>
-			<description>The width of the image.</description>
-			<name>width</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>	
-		<attribute>
-			<description>The height of the image.</description>
-			<name>height</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-	
-	<tag>
-		<description>The text subtags for the tag above.</description>
-		<name>imagetext</name>
-		<tag-class>com.finalist.cmsc.taglib.image.ImageTextTag</tag-class>
-		<body-content>empty</body-content>	
-		<attribute>
-			<description>The font that is parsed in the image.</description>
-			<name>font</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The pointsize of the font.</description>
-			<name>pointSize</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The color of the text that is in the image.</description>
-			<name>color</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<description>
-				The effect to use. This can be any supported mmbase convert command (e.g. for imagemagick: "stroke(black)" )
-				Or custom commands specially for this tag (only one supported at the moment: "outline(white)").
+				<![CDATA[The name of a node field to sort on.]]>
 			</description>
-			<name>effect</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The text that is in the image.</description>
-			<name>text</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The x position of the start of the text in the image.</description>
-			<name>x</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The y position of the start of the text in the image.</description>
-			<name>y</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 </taglib>

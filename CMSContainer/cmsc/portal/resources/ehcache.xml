@@ -96,7 +96,7 @@
         />
 
     <cache name="com.finalist.cmsc.beans.om.Portlet"
-        maxElementsInMemory="3000"
+        maxElementsInMemory="100"
         eternal="true"
         overflowToDisk="false"
         diskPersistent="false"
@@ -123,10 +123,11 @@
         diskPersistent="false"
         />
 
-    <cache name="com.finalist.cmsc.beans.om.NavigationItem"
+    <cache name="com.finalist.cmsc.beans.om.Page"
         maxElementsInMemory="1000"
         eternal="true"
         overflowToDisk="false"
         diskPersistent="false"
         />
+
 </ehcache>

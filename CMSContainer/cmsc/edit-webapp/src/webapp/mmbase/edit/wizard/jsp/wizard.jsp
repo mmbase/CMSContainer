@@ -9,6 +9,7 @@
      * wizard.jsp
      *
      * @since    MMBase-1.6
+     * @version  $Id: wizard.jsp,v 1.2 2006-06-21 13:59:01 nico Exp $
      * @author   Kars Veling
      * @author   Michiel Meeuwissen
      * @author   Pierre van Rooden
@@ -108,8 +109,6 @@ if (wizardConfig == null) {
     }
 }
 
-com.finalist.cmsc.editwizard.WizardController wizardController = new com.finalist.cmsc.editwizard.WizardWorkflowController();
-
 if (wizardConfig.wiz.startWizard()) {
     log.debug("Starting a wizard " );
     WizardCommand cmd=wizardConfig.wiz.getStartWizardCommand();
@@ -130,25 +129,23 @@ if (wizardConfig.wiz.startWizard()) {
                                  "&popupid=" + popupId);
     log.debug("Redirecting to " + redirectTo);
     response.sendRedirect(redirectTo);
-} else {
+} else if (wizardConfig.wiz.mayBeClosed()) {
+    log.trace("Closing this wizard");
 	//	This is executed when a wizard will be closed. 
 	//	It adds the number of the object to the session and deals with workflow commands.
-	wizardController.closeWizard(request, ewconfig, wizardConfig, cloud);
+	com.finalist.cmsc.editwizard.WizardController.closeWizard(request, ewconfig, wizardConfig, cloud);
     
-    if (wizardConfig.wiz.mayBeClosed()) {
-	    log.trace("Closing this wizard");
-	    response.sendRedirect(response.encodeRedirectURL("wizard.jsp?sessionkey=" + ewconfig.sessionKey +
-	                                             "&proceed=true" +
-	                                             "&remove=true" +
-	                                             "&popupid=" + popupId ));
-	} else {
-	    log.trace("Send html back");
-		// This is executed when a wizard is opened. 
-		java.util.Map stylesheetParams = 
-		    wizardController.openWizard(request, ewconfig, wizardConfig, cloud);
-		wizardConfig.wiz.writeHtmlForm(out, wizardConfig.wizard, stylesheetParams);
-	
-	    //wizardConfig.wiz.writeHtmlForm(out, wizardConfig.wizard);
-	}
+    response.sendRedirect(response.encodeRedirectURL("wizard.jsp?sessionkey=" + ewconfig.sessionKey +
+                                             "&proceed=true" +
+                                             "&remove=true" +
+                                             "&popupid=" + popupId ));
+} else {
+    log.trace("Send html back");
+	// This is executed when a wizard is opened. 
+	java.util.Map stylesheetParams = 
+	    com.finalist.cmsc.editwizard.WizardController.openWizard(request, ewconfig, wizardConfig, cloud);
+	wizardConfig.wiz.writeHtmlForm(out, wizardConfig.wizard, stylesheetParams);
+
+    //wizardConfig.wiz.writeHtmlForm(out, wizardConfig.wizard);
 }
 %></mm:log></mm:cloud></mm:content>

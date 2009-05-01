@@ -1,6 +1,6 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 <div id="<portlet:namespace />list">
-<cmsc:renderURL var="renderUrl"/>
+<portlet:renderURL var="renderUrl"/>
 
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 
@@ -13,9 +13,7 @@
 	<c:if test="${empty types}">
 		<mm:listnodes type="editwizards">
 		   <mm:field name="nodepath" jspvar="nodepath" id="nodepath" vartype="String">
-			 <% 
-			  List<String> hiddenTypes = com.finalist.cmsc.repository.ContentElementUtil.getHiddenTypes();
-			  if (com.finalist.cmsc.repository.ContentElementUtil.isContentType(nodepath)&& !hiddenTypes.contains(nodepath)) { %>
+			  <% if (com.finalist.cmsc.repository.ContentElementUtil.isContentType(nodepath)) { %>
 				<mm:param name="contenttype" value="${nodepath}"/>
 			  <% } %>
 		   </mm:field>
@@ -26,8 +24,8 @@
    <mm:param name="action" value="create" />
    <mm:param name="creation" value="${contentchannel}" />
 </mm:url>
-<a href="<mm:write referid="newurl"/>" onclick="openPopupWindow('cmsc_element_edit', '750', '550')"
-   class="portal_button" target="cmsc_element_edit" style="float: left;">
-	<cmsc:editorMessage key="edit.new" />
+<a href="<mm:write referid="newurl"/>" target="cmsc_element_edit" 
+   onclick="openPopupWindow('cmsc_element_edit', '750', '750')">
+	New
 </a>
 </mm:cloud>

@@ -9,16 +9,8 @@
       <description xml:lang="en">
       	Html field with inline links to other objects
       </description>
-      <setprocessor type="string">
-        <class name="com.finalist.cmsc.richtext.RichTextSetProcessor">
-          <param name="replaceHeaders">false</param>
-          <param name="replaceParagraphs">true</param>
-        </class>
-      </setprocessor>
       <getprocessor type="string">
-        <class name="com.finalist.cmsc.richtext.RichTextGetProcessor" >
-           <param name="dynamicDescriptions">false</param>
-        </class>
+        <class name="com.finalist.cmsc.richtext.RichTextGetProcessor" />
       </getprocessor>
     </specialization>
   </datatype>
