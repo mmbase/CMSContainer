@@ -20,18 +20,12 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mmbase.bridge.Cloud;
 
 import com.finalist.cmsc.login.PasswordGenerator;
-import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.community.Community;
 import com.finalist.cmsc.services.community.person.Person;
@@ -62,7 +56,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
    
    protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException,
    PortletException {
-      super.DEFAULT_EMAIL_CONFIRM_TEMPLATE = EMAIL_TEMPLATE_DIR;
+      super.DEFAULT_EMAIL_CONFIRM_TEMPLATE_DIR = EMAIL_TEMPLATE_DIR;
       super.doEditDefaults(req, res);
    }
    
@@ -77,6 +71,8 @@ public class LoginPortlet extends AbstractLoginPortlet {
          String send_password =  request.getParameter(SEND_PASSWORD);
          
          if (StringUtils.isEmpty(send_password)) {
+            request.getPortletSession().setAttribute("username", userName, PortletSession.APPLICATION_SCOPE);
+            
             if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
                Community.login(userName, password);
             } else {
@@ -90,27 +86,21 @@ public class LoginPortlet extends AbstractLoginPortlet {
             }
             
             if (Community.isAuthenticated()) {
-               request.getPortletSession().setAttribute("username", userName, PortletSession.APPLICATION_SCOPE);
-               String pageid = preferences.getValue(PAGE, null);
-               if (StringUtils.isNotEmpty(pageid)) {
-                  Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-                  String redirectUrl = NavigationUtil.getNavigationItemUrl((HttpServletRequest)request, (HttpServletResponse)response, cloud.getNode(Integer.valueOf(pageid)));
-                  response.sendRedirect(redirectUrl);
-               }
                log.info(String.format("Login successful for user %s", userName));
             } else {
                
                PersonService personHibernateService = (PersonService) ApplicationContextFactory.getBean("personService");
                Person person = personHibernateService.getPersonByUserId(userName);
                
-               if (person != null && RegisterStatus.UNCONFIRMED.getName().equalsIgnoreCase(person.getActive())) {
-                  response.setRenderParameter(ERRORMESSAGE, "view.account.unconfirmed");
-               }
-               else if (person != null && RegisterStatus.BLOCKED.getName().equalsIgnoreCase(person.getActive())) {
-                  response.setRenderParameter(ERRORMESSAGE, "view.account.blocked");
-               } else {
+               if (person == null) {
                   log.info(String.format("Login failed for user %s", userName));
                   response.setRenderParameter(ERRORMESSAGE, "login.failed");
+               }
+               else if (RegisterStatus.UNCONFIRMED.getName().equalsIgnoreCase(person.getActive())) {
+                  response.setRenderParameter(ERRORMESSAGE, "view.account.unconfirmed");
+               }
+               else if (RegisterStatus.BLOCKED.getName().equalsIgnoreCase(person.getActive())) {
+                  response.setRenderParameter(ERRORMESSAGE, "view.account.blocked");
                }
             }
          }
@@ -185,11 +175,6 @@ public class LoginPortlet extends AbstractLoginPortlet {
       String template;
       String error = request.getParameter(ERRORMESSAGE);
       String send_password = request.getParameter(SEND_PASSWORD);
-      PortletPreferences preferences = request.getPreferences();
-      String registrationpagepath = preferences.getValue(REGISTRATIONPAGEPATH, null);
-      if(StringUtils.isNotEmpty(registrationpagepath)){
-         request.setAttribute(REGISTRATIONPAGEPATH, registrationpagepath);
-      }
       if (StringUtils.isNotBlank(error)) {
          request.setAttribute(ERRORMESSAGE, error);
       }
@@ -207,7 +192,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
    
    protected String getEmailBody(String emailText,ActionRequest request,
          Authentication authentication, Person person) {
-      super.DEFAULT_EMAIL_CONFIRM_TEMPLATE = EMAIL_TEMPLATE_DIR;
+      super.DEFAULT_EMAIL_CONFIRM_TEMPLATE_DIR = EMAIL_TEMPLATE_DIR;
       return String.format(emailText == null?getConfirmationTemplate():emailText, authentication
             .getUserId(), authentication.getPassword(), person.getFirstName(),
             person.getInfix(), person.getLastName());

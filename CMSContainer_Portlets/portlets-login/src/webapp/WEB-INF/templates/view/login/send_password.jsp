@@ -11,7 +11,7 @@
 <c:if test="${!empty sendMessage && sendMessage ne 'send'}">
   <tr class="inputrow">
      <td><fmt:message key="${sendMessage}" /></td>
-     <td>
+     <td id="Submit">
         <a href="<cmsc:renderURL page="${page}"/>"/><fmt:message key="view.send_password.back"/></a>
      </td>
   </tr>
@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td id="Submit">
       <input type="submit" value="<fmt:message key="view.send_password.submit" />" />
     </td>
   </tr>

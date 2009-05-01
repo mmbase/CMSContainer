@@ -1,4 +1,5 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp"%>
+
 <h2><fmt:message key="register.title" /></h2>
 
 <form name="<portlet:namespace />form" 
@@ -12,7 +13,7 @@
       <table class="formcontent">     
          <tr>
             <td class="fieldname"><fmt:message key="register.email" /></td>
-            <td><input type="text" name="email" size='30' value="${email}" /><font color="red">*</font></td>
+            <td><input type="text" name="email" size='30' /><font color="red">*</font></td>
          </tr>
          <c:if test="${!empty errormessages['email']}">
          <tr>
@@ -21,7 +22,7 @@
          </c:if>
          <tr>
             <td class="fieldname"><fmt:message key="register.firstName" /></td>
-            <td><input type="text" name="firstName" size="30" value="${firstName}" /><font color="red">*</font></td>
+            <td><input type="text" name="firstName" size="30" /><font color="red">*</font></td>
          </tr>
          <c:if test="${!empty errormessages['firstname']}">
          <tr>
@@ -30,11 +31,11 @@
          </c:if> 
          <tr>
             <td class="fieldname"><fmt:message key="register.infix" /></td>
-            <td><input type="text" name="infix" size="15" value="${infix}" /></td>
+            <td><input type="text" name="infix" size="15" /></td>
          </tr>         
          <tr>
             <td class="fieldname"><fmt:message key="register.lastname" /></td>
-            <td><input type="text" name="lastName" size='30' value="${lastName}" /><font color="red">*</font></td>
+            <td><input type="text" name="lastName" size='30' /><font color="red">*</font></td>
          </tr>
          <c:if test="${!empty errormessages['lastname']}">
          <tr>
@@ -56,18 +57,13 @@
          </c:if>
          <c:if test="${useterms eq 'yes'}">
             <tr>
-               <td><a href="<cmsc:link dest='${termsPage}'/>"><fmt:message key="register.terms.title"/></a></td>
+               <td><a href="<cmsc:link dest='${page}'/>"><fmt:message key="register.terms.title"/></a></td>
                <td><input type="checkbox" name="agreedToTerms"/><fmt:message key="register.terms.agree" /></td>
             </tr>
-            <c:if test="${!empty errormessages['agreedToTerms']}">
-               <tr>
-                  <td colspan="2"><fmt:message key="${errormessages['agreedToTerms']}" /></td>
-               </tr>
-            </c:if>
          </c:if>
          <tr>
           <td></td>
-          <td><input type="submit" value="<fmt:message key="register.submit" />" /></td>
+          <td id="Submit"><input type="submit" value="<fmt:message key="register.submit" />" /></td>
           </tr>
         </table>
    </div>
