@@ -1,6 +1,6 @@
 function verifyModerationCheckedTopics()
 {
-	var f = document.formModeration.topic_id;
+	var f = document.form1.topic_id;
 	
 	if (f.length == undefined)	 {
 		if (f.checked) {
@@ -20,41 +20,11 @@ function verifyModerationCheckedTopics()
 
 function validateModerationDelete()
 {
-	var status = verifyModerationCheckedTopics()
-		&& confirm("${I18n.getMessage("Moderation.ConfirmDelete")}")
-		&& askModerationReason();
-
-	if (status) {
-		document.formModeration.log_type.value = "1";
+	if (verifyModerationCheckedTopics() && confirm("${I18n.getMessage("Moderation.ConfirmDelete")}")) {
+		return true;
 	}
-
-	return status;
-}
-
-function lockUnlock() 
-{
-	var status = verifyModerationCheckedTopics() && askModerationReason();
 	
-	if (status) {
-		document.formModeration.log_type.value = "3";
-	}
-
-	return status;
-}
-
-function askModerationReason() 
-{
-	var message = prompt("${I18n.getMessage("ModerationLog.changeReason")}");
-
-	if (message == null || message == "") {
-		alert("${I18n.getMessage("ModerationLog.reasonIsEmpty")}");
-		return false;
-	}
-	else {
-		document.formModeration.log_description.value = message;
-	}
-
-	return true;
+	return false;
 }
 
 var oldClasses = {}

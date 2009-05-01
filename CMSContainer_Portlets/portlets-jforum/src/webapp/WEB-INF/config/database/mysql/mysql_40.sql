@@ -1,4 +1,4 @@
-# @version: $Id: mysql_40.sql,v 1.3 2008-07-03 12:02:59 kevinshen Exp $
+# @version: $Id: mysql_40.sql,v 1.1 2008-01-17 07:48:24 mguo Exp $
 # ################
 # PermissionControl
 # ################

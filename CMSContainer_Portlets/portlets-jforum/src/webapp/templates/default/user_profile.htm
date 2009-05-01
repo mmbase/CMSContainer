@@ -1,7 +1,8 @@
 <#include "header.htm"/>
 
-<script type="text/javascript">
+<script>
 <!--
+
 <#include "js/utils.js"/>
 
 -->
@@ -27,18 +28,16 @@
 		<td class="row1" valign="top" align="center" height="6">
 			<#if (u.avatar?exists && u.avatar?length > 0)>
 				<#if u.isExternalAvatar() || u.avatar.startsWith("http://")>
-					<#if avatarAllowExternalUrl>
-						<img src="${u.avatar}" border="0">
-					</#if>
+					<img src="${u.avatar}" border="0">
 				<#else>
 					<img src="${contextPath}/images/avatar/${u.avatar}" border="0" /><br />
 				</#if>
 			</#if>
 			<span class="postdetails">
-				${I18n.getMessage("PostShow.ranking")}: ${rank.getRankTitle(u.rankId, u.totalPosts)}
-			
+				${I18n.getMessage("PostShow.ranking")}: ${rank.getRankTitle(u.totalPosts)}
+
 				<#if karmaEnabled>
-					<br />${I18n.getMessage("Karma.karma")}: <script type="text/javascript">writeStars(${u.karma.karmaPoints}, ${u.id});</script>
+					<br/>${I18n.getMessage("Karma.karma")}: <script>writeStars(${u.karma.karmaPoints}, ${u.id});</script>
 				</#if>
 			</span>
 		</td>
@@ -49,12 +48,12 @@
 					<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.registrationDate")}:&nbsp;</span></td>
 					<td width="100%"><b><span class="gen">${u.registrationDate}</span></b></td>
 				</tr>
-				
+
 				<tr>
 					<td valign="top" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.totalMessages")}:&nbsp;</span></td>
 					<td valign="top">
-						<#if (nposts > 0)>
-							<b><a class="gen" href="${JForumContext.encodeURL("/posts/listByUser/${u.id}")}">[${nposts}] ${I18n.getMessage("PostShow.userPosts")} ${u.username?html}</a> </b>
+						<#if (u.totalPosts > 0)>
+							<b><a class="gen" href="${JForumContext.encodeURL("/posts/listByUser/${u.id}")}">[${u.totalPosts}] ${I18n.getMessage("PostShow.userPosts")} ${u.username?html}</a> </b>
 						<#else>
 							<span class="gen">${I18n.getMessage("PostShow.noUserCreatedPosts")}</span>
 						</#if>
@@ -70,34 +69,34 @@
 						</#if>
 						</td>
 				</tr>
-				<#if (u.from?exists && u.from?length > 0)>
+				<#if (u.location?exists && u.location?length > 0)>
 				<tr>
 					<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.from")}:&nbsp;</span></td>
-					<td><b><span class="gen">${u.from}</span></b></td>
+					<td><b><span class="gen">${u.location}</span></b></td>
 				</tr>
 				</#if>
-            
+
 				<#if (u.webSite?exists && u.webSite?length > 0)>
 				<tr>
 					<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.webSite")}:&nbsp;</span></td>
 					<td><span class="gen"><b><a href="${u.webSite}" target="_new">${u.webSite}</a></b></span></td>
 				</tr>
 				</#if>
-            
+
 				<#if (u.occupation?exists && u.occupation?length > 0)>
 				<tr>
 					<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.occupation")}:&nbsp;</span></td>
 					<td><b><span class="gen">${u.occupation}</span></b></td>
 				</tr>
 				</#if>
-            
+
 				<#if (u.interests?exists && u.interests?length > 0)>
 				<tr>
 					<td valign="top" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.interests")}:</span></td>
 					<td><b><span class="gen">${u.interests}</span></b></td>
 				</tr>
 				</#if>
-            
+
 				<#if (u.biography?exists && u.biography?length > 0)>
 				<tr>
 					<td valign="top" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("UserProfile.biography")}:</span></td>
@@ -120,11 +119,11 @@
 			</table>
 		</td>
 	</tr>
-    
+
 	<tr>
 		<td class="catleft" align="center" height="28"><b><span class="gen">${I18n.getMessage("UserProfile.contact")} ${u.username}</span></b></td>
 	</tr>
-    
+
 	<tr>
 		<td class="row1" valign="top">
 			<table cellspacing="1" cellpadding="3" width="100%" border="0">
@@ -150,14 +149,14 @@
 				</td>
 			</tr>
 			</#if>
-            
+
 			<#if (u.msnm?exists && u.msnm?length > 0)>
 			<tr>
 				<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("User.msn")}:</span></td>
 				<td class="row1" valign="middle"><span class="gen">${u.msnm}</span></td>
 			</tr>
 			</#if>
-            
+
 			<#if (u.yim?exists && u.yim?length > 0)>
 			<tr>
 				<td valign="middle" nowrap="nowrap" align="right"><span class="gen">${I18n.getMessage("User.yahoo")}:</span></td>

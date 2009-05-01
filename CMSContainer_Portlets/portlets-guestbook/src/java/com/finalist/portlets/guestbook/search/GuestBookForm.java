@@ -1,6 +1,6 @@
 package com.finalist.portlets.guestbook.search;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
@@ -35,7 +35,7 @@ public class GuestBookForm extends SearchForm {
       }
 
       // set default order field
-      if (StringUtils.isEmpty(getOrder())) {
+      if (StringUtil.isEmpty(getOrder())) {
          setOrder("title");
       }
 

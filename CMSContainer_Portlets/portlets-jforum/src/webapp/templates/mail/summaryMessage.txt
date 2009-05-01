@@ -3,7 +3,7 @@ Hi, this is Forum Summary of the week.
 <#list posts as post>
 
 Subject: ${post.subject}
-Link: ${url}posts/list/${post.topicId}${extension}
+Link: ${url}posts/list/${post.topicId}.page
 Poster: ${post.postUsername}
 Text:
 ${post.text}

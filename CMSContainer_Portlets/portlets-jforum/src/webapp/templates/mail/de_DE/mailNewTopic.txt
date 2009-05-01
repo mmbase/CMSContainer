@@ -1,8 +1,3 @@
-<#assign hasMessageContents = message?exists/>
-<#if hasMessageContents>
-	<#assign hasMessageContents = user?exists && user.notifyText()/>
-</#if>
-<#if !hasMessageContents>
 Hallo, 
 
 Sie haben diese E-Mail erhalten weil ein neues Thema in unserem Forum eröffnet würde.
@@ -11,7 +6,3 @@ Der Titel des Themas lautet "${topic.title}" und sie können folgenden Link benut
 ${path}
 
 Falls Sie keine weiteren Benachrichtungen für dieses Forum erhalten wollen, klicken Sie folgenden Link: ${unwatch}
-
-<#else>
-<#include "mailNewReplyWithContents.txt"/>
-</#if>

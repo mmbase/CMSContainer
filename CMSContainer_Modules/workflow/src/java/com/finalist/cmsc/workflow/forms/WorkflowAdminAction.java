@@ -116,17 +116,17 @@ public class WorkflowAdminAction extends MMBaseFormlessAction {
 
 
       public Date getStartTime() {
-         return (Date) startTime.clone();
+         return startTime;
       }
 
 
       public void setStartTime(Date startTime) {
-         this.startTime = (Date) startTime.clone();
+         this.startTime = startTime;
       }
 
 
       public Date getEstimatedTime() {
-         return (Date) estimatedTime.clone();
+         return estimatedTime;
       }
 
 

@@ -6,7 +6,7 @@
 <head>
   <title><fmt:message key="download.title" /></title>
   <link href="../../css/main.css" type="text/css" rel="stylesheet" />
-  <script type="text/javascript">
+  <script>
   		function openError(staticDownload) {
   			openWindow("error", staticDownload);
   		}
@@ -33,7 +33,7 @@
     </div>
 
 <mm:cloud jspvar="cloud" loginpage="../../login.jsp">
-	<mm:hasrank minvalue="siteadmin">
+	<mm:hasrank minvalue="administrator">
 
 		<div class="editor">
 	      <div class="ruler_green"><div><fmt:message key="download.ruler.new" /></div></div>
@@ -75,7 +75,7 @@
 						<mm:field name="completed" jspvar="completed" write="false" vartype="Long"/>
 						<c:set var="running" value="${empty completed}"/>
 						<c:if test="${running}">
-							<script type="text/javascript">
+							<script>
 								setTimeout("document.location.href = 'download.jsp'",5000);
 							</script>
 							<c:set var="completed"><%=System.currentTimeMillis()/1000%></c:set>

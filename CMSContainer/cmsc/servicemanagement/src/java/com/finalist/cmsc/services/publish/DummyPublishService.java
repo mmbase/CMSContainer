@@ -9,8 +9,10 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.publish;
 
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
 
+@SuppressWarnings("unused")
 public class DummyPublishService extends PublishService {
 
    @Override
@@ -21,7 +23,7 @@ public class DummyPublishService extends PublishService {
 
    @Override
    public boolean isPublished(Node node) {
-      return true;
+      return false;
    }
 
 
@@ -60,20 +62,14 @@ public class DummyPublishService extends PublishService {
        return null;
    }
 
-   @Override
-   public String getRemoteContentUrl(Node node) {
-      return null;
-   }
-
-   @Override
-   public String getRemoteUrl(String appPath) {
-      return null;
-   }
-
-
-   @Override
-   public Cloud getRemoteCloud(Cloud cloud) {
-      return null;
-   }
+    @Override
+    public String getRemoteContentUrl(Node node) {
+        return null;
+    }
+    
+    @Override
+    public String getRemoteUrl(String appPath) {
+        return null;
+    }
 
 }

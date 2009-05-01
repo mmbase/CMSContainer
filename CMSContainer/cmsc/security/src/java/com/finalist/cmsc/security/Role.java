@@ -12,9 +12,9 @@ package com.finalist.cmsc.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
-public final class Role {
+public class Role {
 
    public static final Role NONE = new Role(0, "none"); // DENY all rights
    public static final Role WRITER = new Role(1, "writer");
@@ -53,12 +53,10 @@ public final class Role {
 
    @Override
    public boolean equals(Object other) {
-      if (other == null) {
+      if (other == null)
          return false;
-      }
-      if (other == this) {
+      if (other == this)
          return true;
-      }
       if (other instanceof Role) {
          return this.id == ((Role) other).id;
       }
@@ -84,7 +82,7 @@ public final class Role {
 
 
    public static Role getRole(String name) {
-      if (StringUtils.isEmpty(name)) {
+      if (StringUtil.isEmpty(name)) {
          throw new IllegalArgumentException("Role with empty name does not exist");
       }
       for (int i = 0; i < roles.size(); i++) {

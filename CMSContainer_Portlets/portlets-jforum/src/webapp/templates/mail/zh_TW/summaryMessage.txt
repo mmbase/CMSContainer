@@ -1,11 +1,11 @@
-ï»¿æ‚¨å¥½, é€™æ˜¯æœ¬é€±çš„è¨è«–å€æ‘˜è¦.
+±z¦n, ³o¬O¥»¶gªº½×¾ÂºK­n.
 
 <#list posts as post>
 
-ä¸»é¡Œ: ${post.subject}
-ç¶²å€: ${url}posts/list/${post.topicId}${extension}
-ç™¼è¡¨äºº: ${post.postUsername}
-å…§å®¹:
+¥DÃD: ${post.subject}
+ºô§}: ${url}posts/list/${post.topicId}.page
+µoªí¤H: ${post.postUsername}
+¤º®e:
 ${post.text}
 -------------
 

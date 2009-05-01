@@ -9,17 +9,11 @@
  */
 package com.finalist.cmsc.workflow.forms;
 
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.workflow.ContentWorkflow;
-import com.finalist.cmsc.workflow.WorkflowManager;
+import com.finalist.cmsc.workflow.*;
 
 public class ContentWorkflowAction extends WorkflowAction {
 
@@ -64,11 +58,6 @@ public class ContentWorkflowAction extends WorkflowAction {
          addOrderBy(manager, wfQuery, WorkflowManager.LASTMODIFIEDDATE_FIELD, aord);
       }
       return wfQuery;
-   }
-
-
-   @Override
-   protected void addAllcontentListToRequest(HttpServletRequest request, Cloud cloud,String orderby, String status, String laststatus) {
    }
 
 }

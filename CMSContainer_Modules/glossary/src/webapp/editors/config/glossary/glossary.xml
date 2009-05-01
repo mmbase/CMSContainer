@@ -9,6 +9,7 @@
    <action include="config/glossary/delete_glossary.xml"/>
    <action include="config/glossary/load_glossary.xml"/>
 
+
    <steps>
       <step form-schema="edit_glossary"/>
    </steps>

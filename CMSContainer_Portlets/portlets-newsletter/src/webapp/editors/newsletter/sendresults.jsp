@@ -15,31 +15,9 @@
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <body>
 <cmscedit:sideblock title="sendsuccess.title" titleClass="side_block_green">
-   <c:if test="${not empty isPaused}">
-      <p> <fmt:message key="newsletter.ispaused" />
-	   </p>
-   </c:if>
-   <c:if test="${empty isPaused}">
-      <c:if test="${not empty isSingle}">
-	      <p>
-		      <fmt:message key="sendsuccess.subtitle" >
-            <fmt:param><c:out value="${sendSuccess+sendFail}"/></fmt:param>
-            </fmt:message>
-	      </p>
-      </c:if>
-      <c:if test="${empty isSingle}">
-         <c:choose>
-            <c:when test="${not empty isPublish}">
-               <p> <fmt:message key="sendsuccess.publish.subtitle" />
-	            </p>
-            </c:when>
-            <c:otherwise>
-               <p> <fmt:message key="sendsuccess.test.subtitle" />
-	            </p>
-            </c:otherwise>
-         </c:choose>
-      </c:if>
-   </c:if>
+	<p>
+		<fmt:message key="sendsuccess.subtitle" />
+	</p>
 </cmscedit:sideblock>
 </body>
 </mm:cloud>
