@@ -25,21 +25,30 @@ import org.mmbase.security.Rank;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.Role;
+import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.versioning.VersioningException;
+import com.finalist.cmsc.services.workflow.Workflow;
 
 /**
  * @author Nico Klasens This class contains code which extends wizard.jsp
  */
 public class WizardController {
-   
+
+   private static final String DESTINATION = "destination";
+
+   private static final String OWNERREL = "ownerrel";
+
+   private static final String USER = "user";
+
    /**
     * MMbase logging system
     */
@@ -114,8 +123,7 @@ public class WizardController {
 
             if (PagesUtil.isPageType(node)) {
                creationNode = node;
-               Node repositoryRootNode = RepositoryUtil.getRootNode(node.getCloud());
-               session.setAttribute(SESSION_CREATION, "" + repositoryRootNode.getNumber());
+               session.setAttribute(SESSION_CREATION, "" + creationNode.getNumber());
             }
             if (ContentElementUtil.isContentType(elementtype) || AssetElementUtil.isAssetType(elementtype)) {
                if (RepositoryUtil.hasCreationChannel(node)) {
@@ -261,21 +269,19 @@ public class WizardController {
                      if(ContentElementUtil.getAuthor(node) == null){
                         node.commit();
                      }
-                     /*
-                     NodeManager ownerManager = cloud.getNodeManager(USER);
-                     int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
-                     if (owners < 1) {  
-                       RelationUtil.createRelation(node, SecurityUtil.getUserNode(cloud), OWNERREL);
-                     }
+                   //  NodeManager ownerManager = cloud.getNodeManager(USER);
+                    // int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
+                    // if (owners < 1) {  
+                   //    RelationUtil.createRelation(node, SecurityUtil.getUserNode(cloud), OWNERREL);
+                    // }
                      
-                     if (!Workflow.hasWorkflow(node)) { 
-                        Workflow.create(node, ""); 
-                     } 
-                     else
-                     { 
-                        Workflow.addUserToWorkflow(node);
-                     }
-                     */
+//                     if (!Workflow.hasWorkflow(node)) { 
+//                        Workflow.create(node, ""); 
+//                     } 
+//                     else
+//                     { 
+//                        Workflow.addUserToWorkflow(node);
+//                     }
                      //add version for asset element
                      try {
                         Versioning.addVersion(node);

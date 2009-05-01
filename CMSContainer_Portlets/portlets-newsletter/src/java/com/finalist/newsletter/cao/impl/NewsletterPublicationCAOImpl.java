@@ -1,20 +1,19 @@
 package com.finalist.newsletter.cao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import com.finalist.cmsc.beans.MMBaseNodeMapper;
+import com.finalist.cmsc.navigation.NavigationUtil;
+import com.finalist.cmsc.paging.PagingStatusHolder;
+import com.finalist.cmsc.paging.PagingUtils;
+import com.finalist.newsletter.cao.NewsletterPublicationCAO;
+import com.finalist.newsletter.domain.Newsletter;
+import com.finalist.newsletter.domain.Publication;
+import com.finalist.newsletter.domain.Term;
+import com.finalist.newsletter.util.NewsletterPublicationUtil;
+import com.finalist.newsletter.util.POConvertUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
@@ -22,14 +21,7 @@ import org.mmbase.storage.search.Step;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
-import com.finalist.cmsc.navigation.NavigationUtil;
-import com.finalist.cmsc.paging.PagingStatusHolder;
-import com.finalist.cmsc.paging.PagingUtils;
-import com.finalist.newsletter.cao.NewsletterPublicationCAO;
-import com.finalist.newsletter.domain.Publication;
-import com.finalist.newsletter.domain.Term;
-import com.finalist.newsletter.util.NewsletterPublicationUtil;
+import java.util.*;
 
 public class NewsletterPublicationCAOImpl implements NewsletterPublicationCAO {
 
@@ -50,8 +42,8 @@ public class NewsletterPublicationCAOImpl implements NewsletterPublicationCAO {
       query.setNodeStep(theStep);
 
       Field field = pubManager.getField("status");
-      Constraint statusConstraint = SearchUtil.createEqualConstraint(query, field, Publication.STATUS.READY.toString());
-      SearchUtil.addConstraint(query, statusConstraint);
+      Constraint titleConstraint = SearchUtil.createEqualConstraint(query, field, Publication.STATUS.READY.toString());
+      SearchUtil.addConstraint(query, titleConstraint);
 
       List<Node> pubNodes = query.getList();
 
@@ -70,6 +62,22 @@ public class NewsletterPublicationCAOImpl implements NewsletterPublicationCAO {
    }
 
    public Publication getPublication(int number) {
+      Node newsletterPublicationNode = cloud.getNode(number);
+
+      List<Node> relatedNewsletters = newsletterPublicationNode.getRelatedNodes("newsletter");
+      log.debug("Get " + relatedNewsletters.size() + " related newsletter");
+
+      Publication pub = new Publication();
+      pub.setId(newsletterPublicationNode.getNumber());
+      pub.setStatus(Publication.STATUS.valueOf(newsletterPublicationNode.getStringValue("status")));
+      pub.setUrl(getPublicationURL(number));
+      Newsletter newsletter = new Newsletter();
+
+      Node node = relatedNewsletters.get(0);
+      new POConvertUtils<Newsletter>().convert(newsletter, node);
+      newsletter.setReplyAddress(node.getStringValue("replyto_mail"));
+      pub.setNewsletter(newsletter);
+
       return NewsletterPublicationUtil.getPublication(cloud,number);
    }
 

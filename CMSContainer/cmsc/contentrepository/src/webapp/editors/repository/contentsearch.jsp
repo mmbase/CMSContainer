@@ -365,8 +365,8 @@
                   <th><a href="javascript:orderBy('otype')" class="headerlink" ><fmt:message key="locate.typecolumn" /></a></th>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
                   <th><fmt:message key="locate.creationchannelcolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifier')" class="headerlink" ><fmt:message key="locate.lastmodifiercolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifieddatecolumn" /></th>
+                  <th><a href="javascript:orderBy('creator')" class="headerlink" ><fmt:message key="locate.authorcolumn" /></th>
+                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifiedcolumn" /></th>
                   <th><a href="javascript:orderBy('number')" class="headerlink" ><fmt:message key="locate.numbercolumn" /></th>
                   <th></th>
                </tr>
@@ -375,7 +375,7 @@
       </mm:first>
 
 
-      <mm:field name="number" id="number">
+      <mm:field name="${contenttypes}.number" id="number">
          <mm:node number="${number}">
 
             <mm:relatednodes role="creationrel" type="contentchannel">
@@ -398,6 +398,7 @@
             </mm:relatednodes>
 
 
+
             <tr <mm:even inverse="true">class="swap"</mm:even>>
                <td style="white-space: nowrap;">
                <cmsc:rights nodeNumber="${creationRelNumber}" var="rights"/>
@@ -405,7 +406,10 @@
                    <input type="checkbox" value="<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
                </mm:compare>
                <mm:compare referid="action" value="link" inverse="true">
-                  <c:if test="${(rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster') && fn:length(results) >1}">
+                  <c:if test="${creationRelNumber == trashnumber && rights == 'webmaster' && fn:length(results) >1}">
+                      <input type="checkbox" value="permanentDelete:<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
+                  </c:if>
+                  <c:if test="${creationRelNumber != trashnumber && (rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster') && fn:length(results) >1}">
                     <input type="checkbox" value="moveToRecyclebin:<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
                   </c:if>
                </mm:compare>    
@@ -461,7 +465,12 @@
                              </c:if>
                      </cmsc:hasfeature>
                   </mm:compare>
-            <c:if test="${rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster'}">
+            <c:if test="${creationRelNumber == trashnumber && rights == 'webmaster'}">
+               <a href="javascript:deleteContent('<mm:field name='number'/>','<fmt:message key="recyclebin.removeconfirm"/>')">
+                  <img src="../gfx/icons/delete.png" title="<fmt:message key="searchform.icon.delete.recyclebin" />" alt="<fmt:message key="searchform.icon.delete.recyclebin" />"/>
+               </a>
+            </c:if>
+            <c:if test="${creationRelNumber != trashnumber && (rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster')}">
                <a href="javascript:deleteContent('<mm:field name='number'/>')"><img src="../gfx/icons/delete.png" title="<fmt:message key="searchform.icon.delete.channel" />" alt="<fmt:message key="searchform.icon.delete.channel" />"/></a>
             </c:if>
 
@@ -510,6 +519,7 @@
                   </td>
                 </c:if>
             </tr>
+
          </mm:node>
       </mm:field>
 

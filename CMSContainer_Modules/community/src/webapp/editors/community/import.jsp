@@ -1,7 +1,8 @@
 <%@include file="globals.jsp"
-%><%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"
-%><fmt:setBundle basename="cmsc-community" scope="request" /><mm:content type="text/html" encoding="UTF-8" expires="0"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<cmscedit:head title="community.data.title"/>
+%><%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"%>
+<fmt:setBundle basename="cmsc-community" scope="request" />
+<mm:content type="text/html" encoding="UTF-8" expires="0">
+<cmscedit:head title="ewsletter.subscription.manage.newsletteroverview"/>
 <script language="javascript">
 function checkid(chk){
  var i=0;
@@ -64,7 +65,7 @@ function getOs()
 
 <div class="editor">
 	<div class="body">
-   <div style="color:red;"></div>
+   <div style="color:red;"><c:if test="${not empty requestScope.warning}">Please check the input data.</c:if></div>
 		<html:form action="/editors/community/ReferenceImportExportAction"
 			enctype="multipart/form-data">
 			<tr>
@@ -93,11 +94,15 @@ function getOs()
          <input type="hidden" name="groupId" value="${groupId}"/>
 			<input type="button" value="Import" id="bn" onclick="checkid(level);" />
 		</html:form>
-      <c:if test="${not empty invalidMessage}">
-         <div style="margin:4px;color:red;">
-            <fmt:message key="${invalidMessage}"/>
-         </div>
-      </c:if>
+		<div style="margin:4px;color:red;">
+			<html:messages id="file" message="false">
+				<bean:write name="file" />
+				<br>
+			</html:messages>
+		</div>
+		
+	</div>
+
 </div>
 </div>
 </mm:content>

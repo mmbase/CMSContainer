@@ -415,22 +415,12 @@
 		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
-			<version>2.7.1</version>
+			<version>2.6.0</version>
 			<type>jar</type>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
 			</properties>
 		</dependency>
-		<dependency>
-			<groupId>xalan</groupId>
-			<artifactId>serializer</artifactId>
-			<version>2.7.1</version>
-			<type>jar</type>
-			<properties>
-				<war.bundle>${war.bundle}</war.bundle>
-			</properties>
-		</dependency>
-
 
 <!-- Servlet/JSP -->	
 		<dependency>
@@ -591,16 +581,24 @@
          <type>jar</type>
       </dependency>
 <!-- EHcache used for cmsc sitemanagement -->		
-      <dependency>
-         <groupId>net.sf.ehcache</groupId>
-         <artifactId>ehcache</artifactId>
-         <version>1.5.0</version>
-         <type>jar</type>
-         <properties>
-            <war.bundle>${war.bundle}</war.bundle>
-         </properties>
-      </dependency>
-
+   		<dependency>
+			<groupId>ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>1.1</version>
+			<type>jar</type>
+			<properties>
+				<war.bundle>${war.bundle}</war.bundle>
+			</properties>
+		</dependency>
+   		<dependency>
+			<groupId>ehcache</groupId>
+			<artifactId>ehcache-constructs</artifactId>
+			<version>0.6</version>
+			<type>jar</type>
+			<properties>
+				<war.bundle>${war.bundle}</war.bundle>
+			</properties>
+		</dependency>
 
 <!-- Maven mmbase-modules plugin -->
 		<dependency>

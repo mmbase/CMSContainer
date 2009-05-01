@@ -1,9 +1,10 @@
 <%@include file="globals.jsp" 
 %><%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" 
-%><%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg" 
-%><fmt:setBundle basename="cmsc-community" scope="request" /><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%><%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg" %>
+<fmt:setBundle basename="cmsc-community" scope="request" />
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
    <title>
@@ -32,16 +33,19 @@
 <div class="side_block_green">
    <div class="header">
       <div class="title">
-         <fmt:message key="datafile.import.success.title"/>
+         <fmt:message key="community.datafile.import.success"/>
       </div>
+
       <div class="header_end"></div>
    </div>
    <div class="body">
       <p>
-      <fmt:message key="datafile.import.success">
-         <fmt:param>${confirm_userNum}</fmt:param>
-      </fmt:message>
+         ${confirm_userNum} users are added or overwritten successfully.
       </p>
+      <p>
+         <fmt:message key="community.datafile.import.success"/>
+      </p>
+
    </div>
    <div class="side_block_end"></div>
 </div>

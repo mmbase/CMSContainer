@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -40,9 +43,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jahia.portlet.fileupload.PortletRequestContext;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portlets.CmscPortlet;
-import com.finalist.cmsc.util.ServerUtil;
 
 import freemarker.template.SimpleHash;
 
@@ -137,7 +138,7 @@ public class JForumPortletBridge extends CmscPortlet {
       boolean isFileUpload = isMultipartContent(request);
       if (isFileUpload) {
          postBody = handleMultipartRequest(request, response);
-      } else { 
+      } else {
          logger.debug("It's no a file Upload.");
       }
 
@@ -165,25 +166,12 @@ public class JForumPortletBridge extends CmscPortlet {
 
       try {
          // default values for reuqest wrapper
-         String defaultRequestUri = "";
+         String defaultRequestUri;
          String defaultModule;
          String defaultAction;
          // Manage auto login portal user
          PortalAutoConnectUserManager userProcesseur = new PortalAutoConnectUserManager(request, response);
-
-         if(ServerUtil.isLive()) {
-            String stagingPath = PropertiesUtil.getProperty("system.stagingpath");
-            if(StringUtils.isEmpty(stagingPath)) {
-               logger.info("Properity system.stagingpath is null");
-            }
-            stagingPath = checkSlash(stagingPath);
-            defaultRequestUri = stagingPath+"forums/list.page";
-         }
-         else {
-            String contextPath = request.getContextPath();
-            contextPath = checkSlash(contextPath);
-            defaultRequestUri += contextPath+"forums/list.page";
-         }
+         defaultRequestUri = "forums/list.page";
          defaultModule = "forums";
          defaultAction = "list";
          if (isAlreadyInstalled()) {
@@ -242,14 +230,6 @@ public class JForumPortletBridge extends CmscPortlet {
       }
       logger.debug("End render method");
 
-   }
-
-
-   private String checkSlash(String path) {
-      if (!path.endsWith("/")) {
-         path += "/";
-      }
-      return path;
    }
 
    private void updateRemoteUser(RenderRequest request) {
@@ -498,7 +478,7 @@ public class JForumPortletBridge extends CmscPortlet {
          String language = "en_US";
          String charset = (String) request.getPortletSession().getAttribute("javax.servlet.jsp.jstl.fmt.request.charset");
 
-         if (locale != null && !locale.getLanguage().equals("en") && StringUtils.isEmpty(locale.getCountry())) {
+         if (!locale.getLanguage().equals("en") && StringUtils.isEmpty(locale.getCountry())) {
             locale = Locale.getDefault();
             language = locale.getLanguage() + "_" + locale.getCountry();
          }
@@ -555,7 +535,7 @@ public class JForumPortletBridge extends CmscPortlet {
       reqW.setAttribute("admin_pass1", StringUtils.isEmpty(SystemGlobals.getValue("admin.password")) ? "admin2k" : SystemGlobals.getValue("admin.password"));
       reqW.setAttribute("db_connection_type", "ds");
       reqW.setAttribute("site_link", "");
-      reqW.setAttribute("dbdatasource", StringUtils.isEmpty(SystemGlobals.getValue("database.datasource.name")) ? "java:comp/env/jdbc/jforum" : SystemGlobals.getValue("database.datasource.name"));
+      reqW.setAttribute("dbdatasource", StringUtils.isEmpty(SystemGlobals.getValue("database.dbdatasource")) ? "java:comp/env/jdbc/jforum" : SystemGlobals.getValue("database.dbdatasource"));
       try {
          net.jforum.context.RequestContext requestContext = new WebRequestContext(reqW);
          ResponseContext responseContext = new WebResponseContext(respW);

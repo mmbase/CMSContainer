@@ -106,6 +106,7 @@
 
             <mm:import externid="elements" from="request" required="true"/>
             <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+            <mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
             <c:set var="listSize" value="${elementCount}"/>
             <c:set var="offset" value="${param.offset}"/>
             <c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}&show=${show}"/>
@@ -122,8 +123,7 @@
                   <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
                   <% if (role != null && SecurityUtil.isWriter(role)) { %>
                      <c:if test="${fn:length(elements) >1}">
-                        <input type="button" class="button" value="<fmt:message key="asset.delete.massdelete" />"
-                              onclick="massDelete('<fmt:message key="asset.delete.massdeleteconfirm" />', 'assetForm')"/>
+                        <input type="submit" class="button" value="<fmt:message key="asset.delete.massdelete" />"/>
                         <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
                               onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                      </c:if>
@@ -138,10 +138,10 @@
                                  <fmt:message key="asset.typecolumn"/></a></th>
                            <th><a href="javascript:sortBy('Asset', 'title','<mm:write referid="parentchannel" />')" class="headerlink">
                                  <fmt:message key="asset.titlecolumn"/></a></th>
-                           <th><a href="javascript:sortBy('Asset', 'lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-                                 <fmt:message key="asset.lastmodifiercolumn"/></a> </th>
+                           <th><a href="javascript:sortBy('Asset', 'creator','<mm:write referid="parentchannel" />')" class="headerlink">
+                                 <fmt:message key="asset.authorcolumn"/></a> </th>
                            <th><a href="javascript:sortBy('Asset', 'lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-                                 <fmt:message key="asset.lastmodifieddatecolumn"/></a></th>
+                                 <fmt:message key="asset.lastmodifiedcolumn"/></a></th>
                            <th><a href="javascript:sortBy('Asset', 'number','<mm:write referid="parentchannel" />')" class="headerlink">
                                  <fmt:message key="asset.numbercolumn"/></a></th>
                            <th>&nbsp;</th>

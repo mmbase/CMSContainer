@@ -36,13 +36,13 @@
          unknown="false" validate="false">
          <forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false" />
          <forward name="returnurl" path="/editors/repository/ChannelCreate.do" redirect="false" />
-         <forward name="success" path="/editors/repository/Content.do" redirect="false" />
+         <forward name="success" path="/editors/repository/refreshchannels.jsp" redirect="false" />
       </action>
       <action path="/editors/repository/ChannelEdit" type="com.finalist.cmsc.repository.forms.ChannelEdit"
          unknown="false" validate="false">
          <forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false" />
          <forward name="returnurl" path="/editors/repository/ChannelEdit.do" redirect="false" />
-         <forward name="success" path="/editors/repository/Content.do" redirect="false" />
+         <forward name="success" path="/editors/repository/refreshchannels.jsp" redirect="false" />
       </action>
       <action path="/editors/repository/ChannelDelete" type="com.finalist.cmsc.repository.forms.ChannelDelete"
          unknown="false" validate="false">
@@ -281,13 +281,6 @@
          <forward name="searchoptions" path="/editors/repository/assetsearch.jsp" redirect="false" />
          <forward name="dosearch" path="/editors/repository/AssetSearchAction.do" redirect="false" />
          <forward name="insertAsset" path="/editors/resources/attachmentsearch.jsp" redirect="false" />
-      </action>
-
-      <!-- ==== Typedef ==== -->
-      <action path="/editors/contenttype/ContentTypeAction"
-              type="com.finalist.cmsc.contenttype.forms.ContentTypeAction" scope="session"
-              unknown="false" validate="false">
-          <forward name="success" path="/editors/typedef/typelist.jsp" redirect="false"/>
       </action>
    </action-mappings>
 

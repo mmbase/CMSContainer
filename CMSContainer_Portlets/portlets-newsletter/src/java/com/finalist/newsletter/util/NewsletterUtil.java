@@ -38,6 +38,7 @@ import com.finalist.newsletter.domain.Schedule;
 import com.finalist.newsletter.domain.Term;
 import com.finalist.newsletter.domain.StatisticResult.HANDLE;
 import com.finalist.newsletter.services.impl.StatisticServiceImpl;
+import com.finalist.portlets.newsletter.NewsletterContentPortlet;
 
 public abstract class NewsletterUtil {
    
@@ -478,16 +479,15 @@ public abstract class NewsletterUtil {
          for (Node portlet : relatedportlets) {
             List<Node> portletdefNodes = portlet.getRelatedNodes(PORTLETDEFINITION);
             String portletDefinition = portletdefNodes.get(0).getStringValue("definition");
-//            if (portletDefinition.equals(NewsletterContentPortlet.DEFINITION)) {
-//               RelationList relations = portlet.getRelations(PORTLETREL, publicationNode.getNodeManager());
-//               String name = relations.getRelation(0).getStringValue("name");
-//               url += "/_rp_".concat(name).concat("_").concat(NewsletterContentPortlet.NEWSLETTER_TERMS_PARAM).concat("/1_").concat(termIds);
-//           }
+            if (portletDefinition.equals(NewsletterContentPortlet.DEFINITION)) {
+               RelationList relations = portlet.getRelations(PORTLETREL, publicationNode.getNodeManager());
+               String name = relations.getRelation(0).getStringValue("name");
+               url += "/_rp_".concat(name).concat("_").concat(NewsletterContentPortlet.NEWSLETTER_TERMS_PARAM).concat("/1_").concat(termIds);
+            }
          }
       }
       return url;
    }
-
 
 
    public static String getServerURL() {

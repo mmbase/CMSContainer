@@ -3,7 +3,12 @@ package com.finalist.cmsc.community.forms;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.supercsv.cellprocessor.ConvertNullTo;
@@ -49,14 +56,14 @@ public class ReferenceImportExportAction extends DispatchAction {
          null };
 
    public ActionForward listGroups(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-         HttpServletResponse response) {
+         HttpServletResponse response) throws IOException {
       List<Authority> groups = personService.getAllAuthorities();
       request.setAttribute("groups", groups);
       return mapping.findForward("show");
    }
 
    public ActionForward showImportPage(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-         HttpServletResponse response) {
+         HttpServletResponse response) throws IOException {
       String groupId = request.getParameter("imGroupId");
       request.setAttribute("groupId", groupId);
       return mapping.findForward("failed");
@@ -179,30 +186,28 @@ public class ReferenceImportExportAction extends DispatchAction {
       ReferenceImportUploadForm myForm = (ReferenceImportUploadForm) form;
       FormFile myFile = myForm.getFile();
       byte[] fileData = myFile.getFileData();
-    //  String contentType = myFile.getContentType();
-      String fileName = myFile.getFileName();
-      boolean isXML = "xml".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));
-      boolean isCSV = "csv".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));
+      String contentType = myFile.getContentType();
+      boolean isXML = "text/xml".equals(contentType);
+      boolean isCSV = "text/csv".equals(contentType);
       String level = myForm.getLevel();
+      ActionMessages messages = new ActionMessages();
       if (!isXML && !isCSV) {
-//         messages.add("invalidMessage", new ActionMessage("datafile.unsupport"));
-//         saveMessages(request, messages);
+         messages.add("file", new ActionMessage("datafile.unsupport"));
+         saveMessages(request, messages);
          request.setAttribute("warning", 1);
-         request.setAttribute("invalidMessage", "datafile.unsupport");
          return mapping.findForward("failed");
       }
 
       if (isXML) {
          try {
-            int size = importFromFile(fileData, level,groupId);
+            int size = importFromFile(fileData, level);
             request.setAttribute("confirm_userNum", size);
          } catch (Exception e) {
             log.error(e);
-//            messages.add("invalidMessage", new ActionMessage("datafile.invalid"));
-//            saveMessages(request, messages);
+            messages.add("file", new ActionMessage("datafile.invalid"));
+            saveMessages(request, messages);
             request.setAttribute("warning", 1);
             request.setAttribute("groupId", groupId);
-            request.setAttribute("invalidMessage", "datafile.invalid");
             return mapping.findForward("failed");
          }
       } else if (isCSV) {
@@ -216,14 +221,6 @@ public class ReferenceImportExportAction extends DispatchAction {
                header = inFile.getCSVHeader(true);
             }
             Map<String, PersonExportImportVO> personVOMap = fillPersonVO(groupId, inFile, header);
-            if(personVOMap == null) {
-//               messages.add("invalidMessage", new ActionMessage("datafile.invalid.data"));
-//               saveMessages(request, messages);
-               request.setAttribute("warning", 1);
-               request.setAttribute("groupId", groupId);
-               request.setAttribute("invalidMessage", "datafile.invalid.data");
-               return mapping.findForward("failed");
-            }
             if ("clean".equals(level)) {
                batchCleanRecord();
             }
@@ -234,11 +231,10 @@ public class ReferenceImportExportAction extends DispatchAction {
             request.setAttribute("confirm_userNum", personVOMap.size());
          } catch (Exception e) {
             log.error(e);
-//            messages.add("invalidMessage", new ActionMessage("datafile.invalid"));
-//            saveMessages(request, messages);
+            messages.add("file", new ActionMessage("datafile.invalid"));
+            saveMessages(request, messages);
             request.setAttribute("warning", 1);
             request.setAttribute("groupId", groupId);
-            request.setAttribute("invalidMessage", "datafile.invalid");
             return mapping.findForward("failed");
          } finally {
             inFile.close();
@@ -252,9 +248,6 @@ public class ReferenceImportExportAction extends DispatchAction {
       CommunityExportForCsvVO communityVO;
       Map<String, PersonExportImportVO> personVOMap = new HashMap<String, PersonExportImportVO>();
       while ((communityVO = inFile.read(CommunityExportForCsvVO.class, header, userProcessors)) != null) {
-         if(StringUtils.isEmpty(communityVO.getAuthenticationUserId()) || StringUtils.isEmpty(communityVO.getAuthenticationPassword()) || StringUtils.isEmpty(communityVO.getEmail())) {
-            return null;
-         }
          PersonExportImportVO personExImVO = new PersonExportImportVO();
          Authentication auth = new Authentication();
          List<Preference> preferences = new ArrayList<Preference>();
@@ -274,7 +267,7 @@ public class ReferenceImportExportAction extends DispatchAction {
             personExImVO.setInfix(communityVO.getInfix());
             personExImVO.setEmail(communityVO.getEmail());
             personExImVO.setRegisterDate(new Date(System.currentTimeMillis()));
-            if (StringUtils.isNotBlank(communityVO.getActive())) {
+            if (null != communityVO.getActive()) {
                personExImVO.setActive(communityVO.getActive());
             } else {
                personExImVO.setActive("active");
@@ -302,7 +295,7 @@ public class ReferenceImportExportAction extends DispatchAction {
       return pre;
    }
 
-   private int importFromFile(byte[] fileData, String level,String groupId) throws Exception {
+   private int importFromFile(byte[] fileData, String level) throws Exception {
       String xml = new String(fileData);
       CommunityExport communityExport;
       communityExport = (CommunityExport) getXStream().fromXML(xml);
@@ -312,17 +305,9 @@ public class ReferenceImportExportAction extends DispatchAction {
       }
       for (PersonExportImportVO importPerson : xpersons) {
          Authentication authentication = importPerson.getAuthentication();
-         if (null == authentication || StringUtils.isBlank(authentication.getUserId())
-               || StringUtils.isBlank(authentication.getPassword())) {
+         if (null == authentication || StringUtils.isWhitespace(authentication.getUserId())
+               || StringUtils.isWhitespace(authentication.getPassword())) {
             continue;
-         }
-         authentication.setAuthorities(new HashSet());
-         importPerson.setRegisterDate(new Date(System.currentTimeMillis()));
-         if (StringUtils.isBlank(importPerson.getActive())) {
-            importPerson.setActive("active");
-         }
-         if (null != groupId && groupId != "0" && groupId != "") {
-            importPerson.setAuthorityId(new Long(groupId));
          }
          personService.addRelationRecord(level, importPerson);
       }
@@ -354,5 +339,4 @@ public class ReferenceImportExportAction extends DispatchAction {
    public static Log getLog() {
       return log;
    }
-
 }

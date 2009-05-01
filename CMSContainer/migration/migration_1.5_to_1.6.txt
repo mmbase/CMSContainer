@@ -102,16 +102,6 @@ Exceptions/errors/other problems and what to do:
 *
 *
 
-Name: Add a sendtime column in <prefix>_newsletterpublication table
-Goal: Used to save/get sendtime,CMSC-1348
-Type: sql-script
---- Start script ---
-ALTER TABLE mm_newsletterpublication ADD sendtime datetime;
-ALTER TABLE live_newsletterpublication ADD sendtime datetime;
---- End script ---
-*
-*
-*
 
 Name: The <cmsc:renderURL> uses stricter page parameter input, for resolving of page location
 Goal: better JSP code
@@ -210,17 +200,6 @@ Type: add dependency to maven-base/project.xml
               <war.bundle>${war.bundle}</war.bundle>
             </properties>
           </dependency>
---- End script ---
-*
-*
-*
-
-Name: Add google analytics id
-Goal: Have a google analytics id per site
-ype:  sql-script
---- Start script ---
-ALTER TABLE mm_site ADD COLUMN googleanalyticsid VARCHAR(40) NULL;
-ALTER TABLE live_site ADD COLUMN googleanalyticsid VARCHAR(40) NULL;
 --- End script ---
 *
 *

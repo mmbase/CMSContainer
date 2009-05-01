@@ -49,7 +49,6 @@ public class InsertAssetSearchAction extends PagerAction {
    public static final String OBJECTID = "objectid";
    public static final String PARENTCHANNEL = "parentchannel";
    public static final String ASSETTYPES = "assettypes";
-   private static final String SESSION_CREATION = "creation";
 
    public static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
 
@@ -267,7 +266,7 @@ public class InsertAssetSearchAction extends PagerAction {
       if (StringUtils.isNotEmpty(insertAsset)) {
          request.setAttribute("insertAsset", insertAsset);
       }
-      String parentchannel = (String) request.getSession().getAttribute(SESSION_CREATION);
+      String parentchannel = (String) request.getSession().getAttribute("creation");
       if (StringUtils.isNotEmpty(parentchannel)) {
          request.setAttribute("parentchannel", parentchannel);
       }

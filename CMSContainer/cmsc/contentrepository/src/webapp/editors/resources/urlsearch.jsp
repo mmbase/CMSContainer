@@ -7,12 +7,6 @@
 <cmscedit:head title="urls.title">
 <script src="../repository/search.js" type="text/javascript"></script>
 <script type="text/javascript">
-  function showIcons(id){
-    document.getElementById('thumbnail-icons-'+id).style.visibility = 'visible';
-  }
-  function hideIcons(id){
-    document.getElementById('thumbnail-icons-'+id).style.visibility = 'hidden';
-  }
    function setShowMode() {
 	   var showMode = document.getElementsByTagName("option");
 	   var assetShow;
@@ -105,10 +99,10 @@
          </c:when>
          <c:otherwise>
             <mm:import id="formAction">/editors/repository/HighFrequencyAsset</mm:import>
-            <c:if test="${param.channelid eq 'all' || param.channelid eq 'siteassets'}">
+            <c:if test="${param.channelid eq 'all'}">
                 <mm:import id="channelMsg"><fmt:message key="urls.channel.title"><fmt:param>ALL CHANNELS</fmt:param></fmt:message></mm:import>
             </c:if>
-            <c:if test="${param.channelid ne 'all' && param.channelid ne 'siteassets'}">
+            <c:if test="${param.channelid ne 'all'}">
                <mm:node number="${channelid}">
                   <mm:field name="path" id="path" write="false" />
                   <mm:import id="channelMsg">
@@ -168,16 +162,12 @@
                      <c:if test="${ empty strict}">
                        <mm:import id="url">javascript:selectElement('<mm:field name="number" />', '<mm:field name="title" escape="js-single-quotes"/>','<mm:field name="url" />');</mm:import>
                      </c:if>
-                     <div class="grid" href="<mm:write referid="url"/>" onMouseOut="javascript:hideIcons(<mm:field name='number'/>)" onMouseOver="showIcons(<mm:field name='number'/>)">
-                        <div id="thumbnail-icons-<mm:field name='number'/>" class="thumbnail-icons">
-                            <a href="javascript:showInfo(<mm:field name="number" />)">
-                              <img src="../gfx/icons/info.png" alt="<fmt:message key="urlsearch.icon.info" />" title="<fmt:message key="urlsearch.icon.info" />"/></a>
-                        </div>
-                        <div class="thumbnail" onclick="initParentHref(this.parentNode)">
+                     <div class="grid" href="<mm:write referid="url"/>" onclick="initParentHref(this)" title="double click to show the info">
+                        <div class="thumbnail" ondblclick="showInfo('<mm:field name="number"/>')">
                            <c:set var="thumbnail_alt"><mm:field name="url" /></c:set>
                            <img src="../gfx/url.gif" title="${thumbnail_alt}" alt="${thumbnail_alt}" width="120" height="100"/>
                         </div>
-                        <div class="assetInfo" onclick="initParentHref(this.parentNode)">
+                        <div class="assetInfo">
                               <mm:field name="title" jspvar="title" write="false"/>
                               ${fn:substring(title, 0, 40)}<c:if test="${fn:length(title) > 40}">...</c:if>
                               <br/>

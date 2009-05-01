@@ -12,14 +12,12 @@ import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeManager;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 public class UrlCreateAction extends MMBaseAction {
 
    private static final String ALL = "all";
-   private static final String SITEASSETS = "siteassets";
-   private static final String SESSION_CREATION = "creation";
+   private static final String CREATION = "creation";
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -34,10 +32,8 @@ public class UrlCreateAction extends MMBaseAction {
       int nodeId = 0;
       
 
-      if (parentchannel.equalsIgnoreCase(SITEASSETS)) {
-         parentchannel = RepositoryUtil.getRoot(cloud);
-      } else if (parentchannel.equalsIgnoreCase(ALL) || StringUtils.isEmpty(parentchannel)) {
-         parentchannel = (String) request.getSession().getAttribute(SESSION_CREATION);
+      if (parentchannel.equalsIgnoreCase(ALL) || StringUtils.isEmpty(parentchannel)) {
+         parentchannel = (String) request.getSession().getAttribute(CREATION);
       }
 
       NodeManager manager = cloud.getNodeManager("urls");

@@ -16,14 +16,14 @@
          <prompt xml:lang="nl">URL</prompt>
          <prompt xml:lang="zh">URL</prompt>
       </field>
-      <field dtrequired="false" ftype="data" name="description" rows="3">
+      <field dtrequired="false" ftype="text" name="description" rows="3">
          <prompt xml:lang="en">Description</prompt>
          <prompt xml:lang="nl">Omschrijving</prompt>
          <prompt xml:lang="zh">描述</prompt>
       </field>
    </item>
 
-	<command name="siteassetsselector" nodepath="urls" age="-1" fields="title,url,description">
+	<command name="assetsselector" nodepath="urls" age="-1" fields="title,url,description">
       <prompt xml:lang="en">Search URL</prompt>
       <prompt xml:lang="nl">Zoek URL</prompt>
       <prompt xml:lang="zh">查找URL</prompt>
@@ -53,7 +53,7 @@
       </search-filter>
    </command>
    
-   <command name="startwizard" inline="true" wizardname="config/urls/urls" objectnumber="new">
+   <command name="insert" objectnumber="new">
       <prompt xml:lang="en">New</prompt>
       <prompt xml:lang="nl">Nieuw</prompt>
       <prompt xml:lang="zh">新建</prompt>

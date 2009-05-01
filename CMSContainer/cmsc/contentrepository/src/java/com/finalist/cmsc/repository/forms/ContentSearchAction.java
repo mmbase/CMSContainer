@@ -1,9 +1,6 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,32 +9,18 @@ import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.FieldList;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
-import org.mmbase.storage.search.FieldCompareConstraint;
-import org.mmbase.storage.search.FieldValueConstraint;
-import org.mmbase.storage.search.SortOrder;
 import org.mmbase.storage.search.Step;
-import org.mmbase.storage.search.StepField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
-import com.finalist.cmsc.repository.NodeGUITypeComparator;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.resources.forms.QueryStringComposer;
 import com.finalist.cmsc.services.publish.Publish;
@@ -74,7 +57,7 @@ public class ContentSearchAction extends PagerAction {
 
       String deleteContentRequest = request.getParameter("deleteContentRequest");
       String index = searchForm.getIndex();
-      if (StringUtils.isEmpty(index)) {
+      if(StringUtils.isEmpty(index)){
          index = "no";
       }
       request.setAttribute("index", index);
@@ -121,22 +104,18 @@ public class ContentSearchAction extends PagerAction {
       queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
       // First add the proper step to the query.
-      NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
-      Step channelStep = query.addStep(channelNodeManager);
-      Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
+      Step theStep = null;
       if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
-         query.addNode(channelStep, cloud.getNode(searchForm.getParentchannel()));
-         query.setNodeStep(contentStep);
+         Step step = query.addStep(cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL));
+         query.addNode(step, cloud.getNode(searchForm.getParentchannel()));
+         theStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
+         query.setNodeStep(theStep);
          queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
       } else {
-         // CMSC-1260 Content search also finds elements in Recycle bin
-         Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
-         StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
-         SearchUtil.addConstraint(query, channelConstraint);
-         query.setNodeStep(contentStep);
+         theStep = query.addStep(nodeManager);
+         query.setNodeStep(theStep);
       }
+
       // Order the result by:
       String order = searchForm.getOrder();
 
@@ -152,10 +131,7 @@ public class ContentSearchAction extends PagerAction {
       if (StringUtils.isNotEmpty(order)) {
          queryStringComposer.addParameter(ORDER, searchForm.getOrder());
          queryStringComposer.addParameter(DIRECTION, "" + searchForm.getDirection());
-         // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-         if (!"otype".equals(order)) {
-            query.addSortOrder(query.getStepField(nodeManager.getField(order)), searchForm.getDirection());
-         }
+         query.addSortOrder(query.getStepField(nodeManager.getField(order)), searchForm.getDirection());
       }
 
       query.setDistinct(true);
@@ -186,17 +162,9 @@ public class ContentSearchAction extends PagerAction {
             String paramName = nodeManager.getName() + "." + field.getName();
             String paramValue = request.getParameter(paramName);
             if (StringUtils.isNotEmpty(paramValue)) {
-               //CMSC-1116 advanced search for dynamic form save answer gives 500 error
-               //The following if to deal with INTEGER field
-               if(field.getType() == Field.TYPE_INTEGER){
-                  FieldValueConstraint fvc = SearchUtil.createEqualConstraint(query, nodeManager, field.getName(), Integer.parseInt(paramValue));
-                  SearchUtil.addConstraint(query, fvc);
-               }
-               else{
-                  SearchUtil.addLikeConstraint(query, field, paramValue.trim());
-                  queryStringComposer.addParameter(paramName, paramValue);
-               }
+               SearchUtil.addLikeConstraint(query, field, paramValue.trim());
             }
+            queryStringComposer.addParameter(paramName, paramValue);
          }
       }
 
@@ -249,40 +217,21 @@ public class ContentSearchAction extends PagerAction {
       // Set the maximum result size.
       String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
       if (resultsPerPage == null || !resultsPerPage.matches("\\d+")) {
-         resultsPerPage = "25";
-      }
-      // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-      if (StringUtils.isEmpty(order) || !"otype".equals(order)) {
+         query.setMaxNumber(25);
+      } else {
          query.setMaxNumber(Integer.parseInt(resultsPerPage));
       }
 
       // Set the offset (used for paging).
-      String offset = "0";
       if (searchForm.getOffset() != null && searchForm.getOffset().matches("\\d+")) {
-         offset = searchForm.getOffset();
-         // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-         if (StringUtils.isEmpty(order) || !"otype".equals(order)) {
-            query.setOffset(query.getMaxNumber() * Integer.parseInt(offset));
-         }
+         query.setOffset(query.getMaxNumber() * Integer.parseInt(searchForm.getOffset()));
          queryStringComposer.addParameter(OFFSET, searchForm.getOffset());
       }
 
       log.debug("QUERY: " + query);
 
       int resultCount = Queries.count(query);
-      NodeList results = query.getNodeManager().getList(query);
-      // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-      if (StringUtils.isNotEmpty(order) && "otype".equals(order)) {
-         boolean reverse = false;
-         if (searchForm.getDirection() == SortOrder.ORDER_DESCENDING) {
-            reverse = true;
-         }
-         Collections.sort(results, new NodeGUITypeComparator(cloud.getLocale(), reverse));
-         int fromIndex = (Integer.parseInt(resultsPerPage)) * Integer.parseInt(offset);
-         int toIndex = resultCount < (fromIndex + Integer.parseInt(resultsPerPage)) ? resultCount
-               : (fromIndex + Integer.parseInt(resultsPerPage));
-         results = results.subNodeList(fromIndex, toIndex);
-      }
+      NodeList results = cloud.getList(query);
 
       // Set everything on the request.
       searchForm.setResultCount(resultCount);

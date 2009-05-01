@@ -108,11 +108,6 @@ public abstract class Publisher {
                return iter.next();
            }
        }
-       else {
-          if (PublishManager.isImported(node)) {
-             return PublishManager.getSourceNodeNumber(node);
-          }
-       }
        return -1;
     }
 

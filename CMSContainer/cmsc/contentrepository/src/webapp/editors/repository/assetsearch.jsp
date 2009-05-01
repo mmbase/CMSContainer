@@ -363,8 +363,8 @@
                   <th><a href="javascript:orderBy('otype')" class="headerlink" ><fmt:message key="locate.typecolumn" /></a></th>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
                   <th><fmt:message key="locate.creationchannelcolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifier')" class="headerlink" ><fmt:message key="locate.lastmodifiercolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifieddatecolumn" /></th>
+                  <th><a href="javascript:orderBy('creator')" class="headerlink" ><fmt:message key="locate.authorcolumn" /></th>
+                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifiedcolumn" /></th>
                   <th><a href="javascript:orderBy('number')" class="headerlink" ><fmt:message key="locate.numbercolumn" /></th>
                </tr>
             </thead>
@@ -372,7 +372,7 @@
             <tbody class="hover">
       </mm:first>
 
-   <mm:field name="number" id="number" write="false">
+   <mm:field name="${assettypes}.number" id="number" write="false">
       <mm:node number="${number}">
          <mm:relatednodes role="creationrel" type="contentchannel">
             <c:set var="creationRelNumber"><mm:field name="number" id="creationnumber"/></c:set>
@@ -393,7 +393,10 @@
          </mm:relatednodes>
          <tr <mm:even inverse="true">class="swap"</mm:even>>
             <td style="white-space: nowrap;">
-                  <c:if test="${(rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster') && fn:length(results) >1}">
+                  <c:if test="${creationRelNumber == trashnumber && rights == 'webmaster' && fn:length(results) >1}">
+                      <input type="checkbox" value="permanentDelete:<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
+                  </c:if>
+                  <c:if test="${creationRelNumber != trashnumber && (rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster') && fn:length(results) >1}">
                     <input type="checkbox" value="moveToRecyclebin:<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
                   </c:if>
                <%@ include file="searchIconsBar.jspf" %>
@@ -418,7 +421,7 @@
                      ${channelName}
                   </mm:compare>
             </td>
-            <td style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="lastmodifier" /></td>
+            <td style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="creator" /></td>
             <td style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="lastmodifieddate"><cmsc:dateformat displaytime="true" /></mm:field></td>
             <td  style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="number"/></td>
             <c:if test="${hasWorkflow}">
@@ -464,7 +467,7 @@
          <%@include file="searchpages.jsp" %>
       </mm:first>
 
-   <mm:field name="number" id="number" write="false">
+   <mm:field name="${assettypes}.number" id="number" write="false">
       <mm:node number="${number}">
 
          <mm:relatednodes role="creationrel" type="contentchannel">
@@ -472,6 +475,7 @@
             <mm:field name="number" jspvar="channelNumber" write="false"/>
             <cmsc:rights nodeNumber="${channelNumber}" var="rights"/>
          </mm:relatednodes>
+
          <div class="thumbnail_show" onMouseOut="javascript:hideEditItems(<mm:field name='number'/>)" onMouseOver="showEditItems(<mm:field name='number'/>)">
             <div class="thumbnail_operation">
                <div class="asset-info" id="asset-info-<mm:field name='number'/>" style="display: none; position: relative; border: 1px solid #eaedff" >

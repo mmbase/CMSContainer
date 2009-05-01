@@ -26,11 +26,11 @@
    <field name="server"/>
    <field name="user_name"/>
    <field name="password"/>
+   <relation destination="attachments" role="posrel" />
    <relation destination="term" role="posrel" />
 	<relation destination="images" role="namedrel" />
 	<relation destination="layout" role="allowrel" />
 	<relation destination="layout" role="layoutrel" />
 	<relation destination="page" role="navrel" />
 	<relation destination="portlet" role="portletrel" />
-   <relation destination="stylesheet" role="stylerel" />
 </action>
