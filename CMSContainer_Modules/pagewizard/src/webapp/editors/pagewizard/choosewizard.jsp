@@ -2,13 +2,15 @@
 <%@include file="globals.jsp"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
-<cmscedit:head title="pagewizard.title">
+<head>
+	<title><fmt:message key="pagewizard.title" /></title>
+	<link href="../css/main.css" type="text/css" rel="stylesheet" />
 	<script>
 	function select(wizard) {
 		document.location.href="ChooseWizardAction.do?parentPage=${parentPage}&wizard="+wizard;
 	}
 	</script>
-</cmscedit:head>
+</head>
 <body>
     <div class="tabs">
         <div class="tab_active">

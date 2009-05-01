@@ -1,17 +1,24 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
-%><%@include file="globals.jsp"
-%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=UTF-8"%>
+<%@include file="globals.jsp" %>
 <mm:import from="request" externid="referrer">.</mm:import>
 <mm:import externid="reason">please</mm:import>
-
+<mm:content type="text/html" encoding="UTF-8" expires="0">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="login.title">
+<head>
+   <title><fmt:message key="login.title" /></title>
+   <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/editors/css/main.css'/>" />
+   <link rel="icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
+   <link rel="shortcut icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
    <style type="text/css">
       body {
-         margin: 100px auto 0 auto;
+         behavior: url(./css/hover.htc);
+         margin: 100px;
          text-align: center;
-         width: 285px;
+      }
+      div.side_block, div.side_block table {
+         position: relative;
+         margin: 0px auto;
       }
    </style>
 <script type="text/javascript">
@@ -28,7 +35,8 @@ function setFocusOnFirstInput() {
     }
 }
 </script>
-</cmscedit:head>
+   
+</head>	
 <body onload="setFocusOnFirstInput()">
    <script type="text/javascript">
    <!--
@@ -36,8 +44,11 @@ function setFocusOnFirstInput() {
    top.location.href=location.href
    // -->
    </script>
-
-	<cmscedit:sideblock title="login.title">
+   <div class="side_block">
+      <div class="header">
+         <div class="title"><fmt:message key="login.title" /></div>
+         <div class="header_end"></div>
+      </div>
       &nbsp;
 <!-- restricted url: <mm:write referid="referrer" />  -->
       <form method="post" action="<mm:url page='/editors/' />" target="_top">
@@ -67,7 +78,8 @@ function setFocusOnFirstInput() {
             </mm:write>
          </table>
       </form>
-	</cmscedit:sideblock>
+      <div class="side_block_end"></div>
+   </div>
 </body>
 </html:html>
 </mm:content>

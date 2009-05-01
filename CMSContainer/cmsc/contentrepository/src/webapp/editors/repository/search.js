@@ -5,7 +5,6 @@
 
  function orderBy(orderColumn) {
     var oldOrderColumn = document.forms[0].order.value;
-    
     if (oldOrderColumn == orderColumn) {
        // order column is not changed so change direction
        var oldDirection = document.forms[0].direction.value;
@@ -20,18 +19,15 @@
        document.forms[0].order.value = orderColumn;
        document.forms[0].direction.value = '1';
     }
-    
     document.forms[0].submit();
  }
 
  function selectContenttype(initUrl) {
     // parentchannel is only there when linking is active...
-    if(document.forms[0].parentchannel){
-        try {
-            document.forms[0].parentchannel.value='';
-        } catch (e) {
-            ;
-        }
+    try {
+       document.forms[0].parentchannel.value='';
+    } catch (e) {
+       ;
     }
     // This doesn't work in IE...
     // document.forms[0].action=initUrl;
@@ -62,17 +58,3 @@ function selectElement(element, title, url, width, height, description) {
    window.top.opener.selectElement(element, title, url, width, height, description);
    window.top.close();
 }
-
-function selectAssettype(initUrl) {
-    // parentchannel is only there when linking is active...
-    if(document.forms[0].parentchannel){
-        try {
-            document.forms[0].parentchannel.value='';
-        } catch (e) {
-            ;
-        }
-    }
-    // This doesn't work in IE...
-    // document.forms[0].action=initUrl;
-    document.forms[0].submit();
- }

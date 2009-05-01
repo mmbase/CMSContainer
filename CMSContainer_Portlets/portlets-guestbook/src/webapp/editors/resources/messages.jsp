@@ -1,16 +1,18 @@
 <%@page language="java" contentType="text/html;charset=utf-8"%>
 <%@include file="guestbookglobals.jsp"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
-<mm:import externid="rows" jspvar="nodeList" vartype="List" />
-<mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
-<mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html:html xhtml="true">
-   	<cmscedit:head title="customer.title">
-	    <script src="../repository/search.js" type="text/javascript"></script>
-	    <script src="../repository/content.js" type="text/javascript"></script>
-   	</cmscedit:head>
-<body>
+    <mm:import externid="rows" jspvar="nodeList" vartype="List" />
+    <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
+    <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html:html xhtml="true">
+    <head>
+    <head>
+    <%@include file="includes/head_guestbook.jsp"%>
+    </head>
+    </head>
+    <body>
+
     <mm:import externid="action">search</mm:import>
     <%-- either: search of select --%>
 
@@ -38,7 +40,7 @@
                                 <a href="<mm:url page="DeleteGuestMessageAction.do" >
                                             <mm:param name="objectnumber">${row.number}</mm:param>
                                             <mm:param name="isRemote">${param.remote eq 'on'}</mm:param>
-                                            <mm:param name="returnurl" value='<%="/editors/resources/SearchGuestBookAction.do" + request.getAttribute("geturl")%>' />
+                                            <mm:param name="returnurl" value="<%="/editors/resources/SearchGuestBookAction.do" + request.getAttribute("geturl")%>" />
                                          </mm:url>">
                                 <img src="../gfx/icons/delete.png" title="<fmt:message key="reactionsearch.icon.delete" />"/></a>
                         </td>
@@ -56,6 +58,6 @@
     </c:if> <c:if test="${not empty rows}">
         <%@include file="includes/searchpages.jsp"%>
     </c:if></div>
-</body>
-</html:html>
+    </body>
+    </html:html>
 </mm:content>
