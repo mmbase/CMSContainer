@@ -9,24 +9,23 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeIterator;
-import org.mmbase.bridge.NodeList;
+import java.io.Serializable;
+
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
+
+import org.mmbase.bridge.*;
 import org.mmbase.core.event.NodeEvent;
 import org.mmbase.core.event.RelationEvent;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
-import com.finalist.cmsc.beans.om.NodeParameter;
-import com.finalist.cmsc.beans.om.Portlet;
-import com.finalist.cmsc.beans.om.PortletParameter;
+import com.finalist.cmsc.beans.om.*;
 import com.finalist.cmsc.navigation.PortletUtil;
 
 public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(PortletCacheEntryFactory.class.getName());
+   private static Logger log = Logging.getLoggerInstance(PortletCacheEntryFactory.class.getName());
 
 
    public PortletCacheEntryFactory() {
@@ -37,7 +36,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    @Override
-   protected Object loadEntry(Object key) {
+   protected Serializable loadEntry(Serializable key) throws Exception {
       return loadPortlet((Integer) key);
    }
 
@@ -132,7 +131,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
    protected Integer getKey(NodeEvent event) {
       int nodeNumber = event.getNodeNumber();
       if (isNodeEvent(event, PortletUtil.PORTLET)) {
-         return Integer.valueOf(nodeNumber);
+         return new Integer(nodeNumber);
       }
       if (isNodeEvent(event, PortletUtil.PORTLETPARAMETER) || isNodeEvent(event, PortletUtil.NODEPARAMETER)) {
 
@@ -141,7 +140,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
             if (parameter != null) {
                Node portlet = PortletUtil.getPortletForParameter(parameter);
                if (portlet != null) {
-                  return Integer.valueOf(portlet.getNumber());
+                  return new Integer(portlet.getNumber());
                }
             }
          }
@@ -154,7 +153,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
    protected Integer getKey(RelationEvent event) {
       int nodeNumber = event.getRelationSourceNumber();
       if (isRelationEvent(event, PortletUtil.PORTLET)) {
-         return Integer.valueOf(nodeNumber);
+         return new Integer(nodeNumber);
       }
       if (isRelationEvent(event, PortletUtil.PORTLETPARAMETER) || isRelationEvent(event, PortletUtil.NODEPARAMETER)) {
 
@@ -162,7 +161,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
          if (parameter != null) {
             Node portlet = PortletUtil.getPortletForParameter(parameter);
             if (portlet != null) {
-               return Integer.valueOf(portlet.getNumber());
+               return new Integer(portlet.getNumber());
             }
          }
       }

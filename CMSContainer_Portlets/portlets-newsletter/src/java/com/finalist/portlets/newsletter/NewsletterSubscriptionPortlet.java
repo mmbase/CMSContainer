@@ -1,38 +1,32 @@
 package com.finalist.portlets.newsletter;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
+import javax.portlet.WindowState;
 
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portlets.JspPortlet;
-import com.finalist.cmsc.services.community.ApplicationContextFactory;
-import com.finalist.newsletter.domain.Subscription;
-import com.finalist.newsletter.domain.Subscription.STATUS;
-import com.finalist.newsletter.services.CommunityModuleAdapter;
-import com.finalist.newsletter.services.NewsletterSubscriptionServices;
+import com.finalist.newsletter.generator.NewsletterGeneratorFactory;
+import com.finalist.newsletter.util.NewsletterSubscriptionUtil;
+import com.finalist.newsletter.util.NewsletterUtil;
 
 public class NewsletterSubscriptionPortlet extends JspPortlet {
-   
-   protected  static final String NEWSLETTER_SUBSCRIPTION_INTRODUCTION_JSP = "/newsletter/subscription/introduction.jsp";
-   protected  static final String NEWSLETTER_SUBSCRIPTION_SUBSCRIBE_JSP = "/newsletter/subscription/subscribe.jsp";
-   private  static final String SUBSCRIPTION_LIST = "subscriptionList";
-   private static final String IS_USER_LOGIN = "isUserLogin";
-   private static final String VIEW = "view";
-   private static final String SUBSCRIPTIONS = "subscriptions";
-   private static Logger log = Logging.getLoggerInstance(NewsletterSubscriptionPortlet.class.getName());
+
+   private static final String HAS_SUBSCRIPTIONS = "hassubscriptions";
+   private static final String NEWSLETTERSUBSCRIPTIONS = "newslettersubscriptions";
+   private static final String ACTION_SUBSCRIBE = "subscribe";
+   private static final String ACTION_CHANGE = "change";
+   private static final String ACTION_TERMINATE = "terminate";
+
    private static final String ALLOWED_NEWSLETTERS = "allowednewsletters";
 
    @Override
@@ -42,27 +36,73 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
       if (newsletters != null) {
          request.setAttribute(ALLOWED_NEWSLETTERS, newsletters);
       }
-
       super.doEditDefaults(request, response);
    }
 
    @Override
    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+      PortletSession session = request.getPortletSession(true);
       PortletPreferences preferences = request.getPreferences();
-      NewsletterSubscriptionServices services = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
-      int userId = CommunityModuleAdapter.getCurrentUserId();
-      String[] newsletters = preferences.getValues(ALLOWED_NEWSLETTERS, null);
 
-      if (!CommunityModuleAdapter.isUserLogin()) {
-         request.setAttribute(IS_USER_LOGIN, CommunityModuleAdapter.isUserLogin());
-         doInclude(VIEW, NEWSLETTER_SUBSCRIPTION_INTRODUCTION_JSP, request, response);
-         return;
+      String action = request.getParameter("action");
+
+      if (isLoggedIn(session) == true) {
+         String userName = getUserName(session);
+
+         List<String> availableMimeTypes = NewsletterGeneratorFactory.getMimeTypes();
+         request.setAttribute(NewsletterGeneratorFactory.AVAILABLE_MIMETYPES, availableMimeTypes);
+         List<String> availableStatusOptions = NewsletterSubscriptionUtil.getStatusOptions();
+         request.setAttribute(NewsletterSubscriptionUtil.STATUS_OPTIONS, availableStatusOptions);
+
+         List<Integer> subscribedThemes = NewsletterSubscriptionUtil.getUserSubscribedThemes(userName);
+         List<Integer> subscribedNewsletters = NewsletterSubscriptionUtil.getUserSubscribedNewsletters(userName);
+
+         if (subscribedNewsletters != null && subscribedNewsletters.size() > 0) {
+            request.setAttribute(NEWSLETTERSUBSCRIPTIONS, subscribedNewsletters);
+         }
+
+         if (subscribedThemes != null && subscribedThemes.size() > 0) {
+            request.setAttribute(NewsletterSubscriptionUtil.NEWSLETTER_THEME, subscribedThemes);
+         }
+
+         if ((subscribedThemes != null && subscribedThemes.size() > 0) || (subscribedNewsletters != null && subscribedNewsletters.size() > 0)) {
+            request.setAttribute(HAS_SUBSCRIPTIONS, true);
+            String status = NewsletterSubscriptionUtil.getSubscriptionStatus(userName);
+            request.setAttribute(NewsletterSubscriptionUtil.SUBSCRIPTION_STATUS_KEY, status);
+            String preferredMimeType = NewsletterSubscriptionUtil.getPreferredMimeType(userName);
+            request.setAttribute(NewsletterSubscriptionUtil.PREFERRED_MIMETYPE, preferredMimeType);
+         }
+
+         if (action != null) {
+            String template = "" + request.getParameter("template");
+            doInclude("view", template, request, response);
+         } else {
+            String template = preferences.getValue(PortalConstants.CMSC_PORTLET_VIEW_TEMPLATE, null);
+            doInclude("view", template, request, response);
+         }
+      } else {
+
       }
-   
-      List<Subscription> subscriptionList = services.getSubscriptionList(newsletters, userId);
-      request.setAttribute(SUBSCRIPTION_LIST, subscriptionList);
-      doInclude(VIEW, NEWSLETTER_SUBSCRIPTION_SUBSCRIBE_JSP, request, response);
+   }
 
+   private String getUserName(PortletSession session) {
+      return ((String) session.getAttribute("userName", PortletSession.APPLICATION_SCOPE));
+
+   }
+
+   private boolean isLoggedIn(PortletSession session) {
+      String userName = getUserName(session);
+      if (userName != null && userName.length() > 0) {
+         return (true);
+      }
+      return (false);
+   }
+
+   private void processChangeSubscription(ActionRequest request, ActionResponse response) {
+      PortletSession session = request.getPortletSession();
+      String userName = getUserName(session);
+      NewsletterSubscriptionUtil.unsubscribeFromAllNewsletters(userName);
+      processNewSubscription(request, response);
    }
 
    @Override
@@ -76,45 +116,73 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
       super.processEditDefaults(request, response);
    }
 
+   private void processNewSubscription(ActionRequest request, ActionResponse response) {
+      PortletSession session = request.getPortletSession();
+      String userName = getUserName(session);
+      List<Integer> subscribeToThemes = new ArrayList<Integer>();
+      List<Integer> subscribeToNewsletters = new ArrayList<Integer>();
+
+      String[] newsletters = request.getParameterValues(NEWSLETTERSUBSCRIPTIONS);
+      if (newsletters != null) {
+         List<Integer> newsletterList = new ArrayList<Integer>();
+         for (int n = 0; n < newsletters.length; n++) {
+            newsletterList.add(Integer.parseInt(newsletters[n]));
+         }
+         subscribeToNewsletters.addAll(newsletterList);
+      }
+
+      String[] themes = request.getParameterValues(NewsletterSubscriptionUtil.NEWSLETTER_THEME);
+      if (themes != null) {
+         for (int i = 0; i < themes.length; i++) {
+            String theme = themes[i];
+            int themeNumber = Integer.parseInt(theme);
+            subscribeToThemes.add(themeNumber);
+            int newsletterNumber = NewsletterUtil.findNewsletterForTheme(themeNumber);
+            if (newsletterNumber > 0) {
+
+               int defaultTheme = NewsletterUtil.getDefaultTheme(newsletterNumber);
+               if (!subscribeToThemes.contains(defaultTheme)) {
+                  subscribeToThemes.add(defaultTheme);
+               }
+               if (!subscribeToNewsletters.contains(newsletterNumber)) {
+                  subscribeToNewsletters.add(newsletterNumber);
+               }
+            }
+         }
+      }
+
+      NewsletterSubscriptionUtil.subscribeToNewsletters(userName, subscribeToNewsletters);
+      NewsletterSubscriptionUtil.subscribeToThemes(userName, subscribeToThemes);
+      String preferredMimeType = request.getParameter(NewsletterSubscriptionUtil.PREFERRED_MIMETYPE);
+      NewsletterSubscriptionUtil.setPreferredMimeType(userName, preferredMimeType);
+      String status = request.getParameter(NewsletterSubscriptionUtil.SUBSCRIPTION_STATUS_KEY);
+      NewsletterSubscriptionUtil.setSubscriptionStatus(userName, status);
+   }
+
+   private void processTermination(ActionRequest request, ActionResponse response) {
+      PortletSession session = request.getPortletSession();
+      String userName = getUserName(session);
+      String confirmation = request.getParameter("confirm_unsubscribe");
+      if (confirmation != null) {
+         NewsletterSubscriptionUtil.terminateUserSubscription(userName);
+      }
+   }
 
    @Override
    public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
-      PortletPreferences preferences = request.getPreferences();
-      String[] allNewsletters = preferences.getValues(ALLOWED_NEWSLETTERS, null);
-      String[] newsletters = request.getParameterValues(SUBSCRIPTIONS);
-      NewsletterSubscriptionServices services = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
-      int subscriberId = CommunityModuleAdapter.getCurrentUserId();
-      List<Subscription> allSubscribtions = services.getSubscriptions(allNewsletters, subscriberId);
-      
-      if(newsletters == null) {
-         for (Subscription subscription : allSubscribtions) {
-            services.terminateUserSubscription(Integer.toString(subscription.getId()));
-         }
-      }
-      else {
-         if(allSubscribtions.size() == 0) {
-            for (String newsletterId : newsletters) {
-               services.addNewRecord(subscriberId, Integer.valueOf(newsletterId));
-            }
-         }
-         else {
-            List<String> newsletterList = Arrays.asList(newsletters);
-            List<Integer> subscribtions = new ArrayList<Integer>();
-            for(Subscription subscription : allSubscribtions) {
-               if (newsletterList.contains(String.valueOf(subscription.getNewsletter().getId()))) {
-                  if(!STATUS.ACTIVE.equals(subscription.getStatus())){
-                     services.resume(Integer.toString(subscription.getId()));
-                  }
-               }
-               else {
-                  services.terminateUserSubscription(Integer.toString(subscription.getId()));
-               }
-               subscribtions.add(subscription.getNewsletter().getId());
-            }
-            for (String newsletterId : newsletters) {
-               if( !subscribtions.contains(Integer.valueOf(newsletterId))) {
-                  services.addNewRecord(subscriberId, Integer.valueOf(newsletterId));
-               }
+      PortletSession session = request.getPortletSession();
+
+      String action = request.getParameter("action");
+
+      if (isLoggedIn(session) == true) {
+         if (action != null) {
+            response.setWindowState(WindowState.MAXIMIZED);
+            if (action.equals(ACTION_SUBSCRIBE)) {
+               processNewSubscription(request, response);
+            } else if (action.equals(ACTION_CHANGE)) {
+               processChangeSubscription(request, response);
+            } else if (action.equals(ACTION_TERMINATE)) {
+               processTermination(request, response);
             }
          }
       }

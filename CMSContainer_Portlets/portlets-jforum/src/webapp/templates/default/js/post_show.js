@@ -1,8 +1,3 @@
-function sendEmail(s1, s2)
-{
-	document.location = 'mailto:' + showEmail(s1, s2);
-}
-
 function handleBbCode(evt)
 {
 	var e = evt || window.event;
@@ -45,22 +40,4 @@ function enterText(field)
 function leaveText()
 {
 	document.onkeydown = null;
-}
-
-function selectCode(a)
-{
-	var e = a.parentNode.parentNode.getElementsByTagName('code')[0];
-
-	if (document.selection) {
-		var r = document.body.createTextRange();
-		r.moveToElementText(e);
-		r.select();
-	}
-	else {
-		var s = window.getSelection();
-		var r = document.createRange();
-		r.setStartBefore(e);
-		r.setEndAfter(e);
-		s.addRange(r);
-	}
 }

@@ -10,7 +10,8 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.services.publish;
 
 import org.mmbase.bridge.*;
-import org.mmbase.remotepublishing.*;
+import org.mmbase.remotepublishing.PublishListener;
+import org.mmbase.remotepublishing.PublishManager;
 import org.mmbase.remotepublishing.builders.PublishingQueueBuilder;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
@@ -68,22 +69,14 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
    public boolean isPublishable(Node node) {
       Cloud cloud = node.getCloud();
       return !TypeUtil.isSystemType(node.getNodeManager().getName())
-            && (getAssetPublisher(cloud).isPublishable(node) || getContentPublisher(cloud).isPublishable(node) || getPagePublisher(cloud).isPublishable(node) || getChannelPublisher(
+            && (getContentPublisher(cloud).isPublishable(node) || getPagePublisher(cloud).isPublishable(node) || getChannelPublisher(
                   cloud).isPublishable(node));
    }
 
 
    private Publisher getPublisher(Node node) {
-      Publisher publisher = getAssetPublisher(node.getCloud());
+      Publisher publisher = getContentPublisher(node.getCloud());
       if (publisher.isPublishable(node)) {
-         return publisher;
-      }
-      publisher = getContentPublisher(node.getCloud());
-      if (publisher.isPublishable(node)) {
-         return publisher;
-      }
-      publisher = getOptionalPublisher(node.getCloud(), node.getNodeManager().getName());
-      if (publisher != null && publisher.isPublishable(node)) {
          return publisher;
       }
       publisher = getPagePublisher(node.getCloud());
@@ -92,6 +85,10 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
       }
       publisher = getChannelPublisher(node.getCloud());
       if (publisher.isPublishable(node)) {
+         return publisher;
+      }
+      publisher = getOptionalPublisher(node.getCloud(), node.getNodeManager().getName());
+      if (publisher != null && publisher.isPublishable(node)) {
          return publisher;
       }
       publisher = getNodePublisher(node.getCloud());
@@ -110,10 +107,6 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
       return new NodePublisher(cloud);
    }
 
-   private Publisher getAssetPublisher(Cloud cloud) {
-      return new AssetPublisher(cloud);
-   }
-   
    private Publisher getContentPublisher(Cloud cloud) {
       return new ContentPublisher(cloud);
    }
@@ -176,10 +169,5 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
    public String getRemoteUrl(String appPath) {
         String livePath = PropertiesUtil.getProperty(SYSTEM_LIVEPATH);
         return livePath + appPath;
-   }
-
-   @Override
-   public Cloud getRemoteCloud(Cloud cloud) {
-      return CloudManager.getCloudByAlias(cloud, "cloud.remote");
-   }
+    }
 }

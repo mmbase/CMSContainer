@@ -2,20 +2,12 @@
 <#setting number_format = "#"/>
 <#if edit>
 </#if>
-<!DOCTYPE html 
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-<title>Bookmarks - <#if edit>${I18n.getMessage("Update")}<#else>${I18n.getMessage("Insert")}</#if></title>
-<meta http-equiv="Content-Type" content="text/html; charset=${encoding}" />
-<meta name="description" content="${metaDescription}" />
-<meta name="keywords" content="${metaKeywords}, jforum, jforum java, java jforum, java forum, forum, rafael steil, bulletin board, java bb, javabb" />
+<#include "header.htm"/>
+<div>
 <style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css );</style>
-</head>
 
-<body>
-<form action="${contextPath}/jforum${extension}" method="post" name="search" id="search" accept-charset="${encoding}">
+<div>
+<form action='${JForumContext.encodeURL("/jforum")}' method="post" name="search" id="search" accept-charset="${encoding}">
 <input type="hidden" name="action" value="<#if edit>updateSave<#else>insertSave</#if>" />
 <input type="hidden" name="module" value="${moduleName}" />
 <input type="hidden" name="relation_id" value="${relationId}" />
@@ -68,5 +60,6 @@
 </table>
 
 </form>
-</body>
-</html>
+</div>
+</div>
+<#include "bottom.htm"/>

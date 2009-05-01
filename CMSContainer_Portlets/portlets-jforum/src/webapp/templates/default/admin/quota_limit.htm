@@ -1,13 +1,14 @@
+<#include "../header.htm"/>
 <#setting number_format = "#"/>
 <#import "macros/group_macros.ftl" as lib>
-<style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css?${startupTime} );</style>
+<STYLE type=text/css>@import url( ${contextPath}/templates/${templateName}/admin/style.css );</STYLE>
 
-
+<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
+<input type="hidden" name="action" value="quotaLimitSave" />
+<input type="hidden" name="module" value="${moduleName}" />
+<input type="hidden" name="securityHash" value="${securityHash}" />
 
 <table width="99%" align="center" cellpadding="4" cellspacing="1" border="0" class="forumline">
-	<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
-	<input type="hidden" name="action" value="quotaLimitSave" />
-	<input type="hidden" name="module" value="${moduleName}" />
 	<tr>
 	  <th class="thead" colspan="5" align="center" height="28">${I18n.getMessage("AdminAttachments.quotaTitle")}</th>
 	</tr>
@@ -21,7 +22,7 @@
 	<tr>
 		<td class="row1" align="center" valign="middle"><input type="text" size="20" maxlength="25" name="quota_description" value=""/></td>
 		<td class="row2" align="center" valign="middle" colspan="2">
-			<input type="text" size="8" maxlength="15" name="max_filesize"/> 
+			<input type="text" size="8" maxlength="15" name="max_filesize"/>
 			<select name="type">
 				<option value="1">KB</option>
 				<option value="2" selected>MB</option>
@@ -32,13 +33,14 @@
 	<tr align="right">
 	  <td class="catbottom" colspan="5" height="29">  <input type="submit" name="submit" class="liteoption" value="${I18n.getMessage("submit")}" /></td>
 	</tr>
-	</form>
+</form>
 
 	<!-- List existing entries -->
 	<#if (quotas.size() > 0)>
-	<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
+	<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
 	<input type="hidden" name="action" value="quotaLimitUpdate" />
 	<input type="hidden" name="module" value="${moduleName}" />
+	<input type="hidden" name="securityHash" value="${securityHash}" />
 	<input type="hidden" name="total_records" value="${quotas.size()}"/>
 		<tr>
 			<th class="thcornerl">${I18n.getMessage("AdminAttachments.quotaDescription")}</th>
@@ -64,7 +66,7 @@
 				</td>
 
 				<td class="row2" align="center" valign="middle">
-					<input type="text" size="8" maxlength="15" name="max_filesize_${count}" value="${q.size}"/> 
+					<input type="text" size="8" maxlength="15" name="max_filesize_${count}" value="${q.size}"/>
 					<select name="type_${count}">
 						<option value="1" <#if q.type == 1>selected</#if>>KB</option>
 						<option value="2" <#if q.type == 2>selected</#if>>MB</option>
@@ -79,9 +81,9 @@
 		  <td class="catbottom" colspan="5" height="29"> <input type="submit" name="submit" class="liteoption" value="${I18n.getMessage("submit")}" /></td>
 		</tr>
 	</#if>
-    </form>
 </table>
-<br />
+</form>
+<br/>
 
 <#macro quotaCombo n quotaId>
 	<select name="limit_${n}"/>
@@ -92,9 +94,10 @@
 	</select>
 </#macro>
 
-<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
+<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
 <input type="hidden" name="action" value="quotaGroupsSave" />
 <input type="hidden" name="module" value="${moduleName}" />
+<input type="hidden" name="securityHash" value="${securityHash}" />
 <input type="hidden" name="total_groups" value="${groups.size()}">
 <table width="60%" align="center" cellpadding="4" cellspacing="1" border="0" class="forumline">
 	<tr>
@@ -129,3 +132,5 @@
 	</tr>
 </table>
 </form>
+<#include "../bottom.htm"/>
+

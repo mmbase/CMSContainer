@@ -43,10 +43,8 @@ public class PasteAction extends TreePasteAction {
    @Override
    protected void move(Node sourcePage, Node destPage) {
       NavigationUtil.movePage(sourcePage, destPage);
-      if (Workflow.isWorkflowType(sourcePage.getNodeManager().getName())) {       
-	      if (!Workflow.hasWorkflow(sourcePage)) {
-    	     Workflow.create(sourcePage, null);
-      	 }
+      if (!Workflow.hasWorkflow(sourcePage)) {
+         Workflow.create(sourcePage, null);
       }
       SecurityUtil.clearUserRoles(sourcePage.getCloud());
    }

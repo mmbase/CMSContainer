@@ -116,11 +116,11 @@ public class Search {
    }
 
 
-   public static PageInfo getPortletInformation(int pageId, String elementNumber) {
+   public static String getPortletWindow(int pageId, String elementNumber) {
       if (cService == null) {
          log.info("SearchService not started");
          return null;
       }
-      return cService.getPortletInformation(pageId, elementNumber);
+      return cService.getPortletWindow(pageId, elementNumber);
    }
 }

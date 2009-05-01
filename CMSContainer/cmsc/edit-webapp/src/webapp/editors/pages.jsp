@@ -1,14 +1,15 @@
-<%@ page import="org.apache.commons.lang.RandomStringUtils" 
-%><%@ page import="com.finalist.cmsc.paging.PagingUtils" 
-%><%@ page import="com.finalist.cmsc.mmbase.PropertiesUtil"
-%><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" 
-%><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" 
-%><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" %>
-<c:set var="resultsPerPage">
-   <%=PropertiesUtil.getProperty("repository.search.results.per.page")%>
-</c:set>
+<%@ page import="org.apache.commons.lang.RandomStringUtils" %>
+<%@ page import="com.finalist.cmsc.paging.PagingUtils" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" %>
+
+
+<!--todo : get default page size from system properties.-->
+
 <c:set var="currentPage" value="${empty param.offset ? 1 : param.offset +1 }"/>
 <c:set var="pagessize" value="${ cmsc:ceil(listSize/resultsPerPage)}"/>
+
 
 <fmt:bundle basename="cmsc">
 <fmt:message key="pages.message" var="error"/>
@@ -53,8 +54,11 @@
          <td style="text-align:right;width:50%;">
             <fmt:message key="searchpages.page"/>:
             <c:if test="${currentPage > 1}">
-               <a href="<%=PagingUtils.previousPage(pageContext)%>" class="page_list_navtrue">&lt;&lt;<fmt:message key="pages.previous"/></a>
+               <a href="<%=PagingUtils.previousPage(pageContext)%>" class="page_list_navtrue">
+                  &lt;&lt;<fmt:message key="pages.previous"/>
+               </a>
             </c:if>
+
 
             <c:choose>
                <c:when test="${pagessize>0&&pagessize<14}">
@@ -88,7 +92,7 @@
                </c:when>
 
                <c:otherwise>
-                  The page you requested does not exist. ${pagessize}
+                  The page you requested does not exist.  ${pagessize}
                </c:otherwise>
 
             </c:choose>
@@ -97,7 +101,9 @@
                <%=RandomStringUtils.randomAlphabetic(5)%>
             </c:set>
             <c:if test="${currentPage < pagessize}">
-               <a href="<%=PagingUtils.nextPage(pageContext)%>" class="page_list_navtrue"><fmt:message key="pages.next"/>&gt;&gt;</a>
+               <a href="<%=PagingUtils.nextPage(pageContext)%>" class="page_list_navtrue">
+                  <fmt:message key="pages.next"/>&gt;&gt;
+               </a>
             </c:if>
             <c:if test="${pagessize>13}">
                <input type="text" name="targetpage" id="${targetfield}" size="4"

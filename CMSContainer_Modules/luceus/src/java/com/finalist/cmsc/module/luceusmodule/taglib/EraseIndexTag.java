@@ -9,16 +9,25 @@
  */
 package com.finalist.cmsc.module.luceusmodule.taglib;
 
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Erase all Luceus content from this repository
  * 
  * @author Wouter Heijke
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.2 $
  */
 public class EraseIndexTag extends LuceusmoduleTag {
+   private static Log log = LogFactory.getLog(EraseIndexTag.class);
+
 
    @Override
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       if (isRunning()) {
          getModule().startEraseIndex();
       }

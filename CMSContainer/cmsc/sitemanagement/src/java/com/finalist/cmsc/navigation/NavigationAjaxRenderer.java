@@ -35,7 +35,7 @@ public class NavigationAjaxRenderer extends NavigationRenderer implements AjaxTr
 
 
    @Override
-   public TreeElement createElement(String icon, String id, String name, String fragment, String action,
+   protected TreeElement createElement(String icon, String id, String name, String fragment, String action,
          String target) {
       return new AjaxTreeElement(icon, id, name, fragment, action, target);
    }

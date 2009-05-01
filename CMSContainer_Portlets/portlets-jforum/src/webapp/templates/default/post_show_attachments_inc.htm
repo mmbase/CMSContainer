@@ -1,10 +1,8 @@
 <#list attachments as a>
-	<#assign hasThumb = a.hasThumb()/>
-
-	<table width="70%" border="<#if !hasThumb || thumbShowBox>1<#else>0</#if>" cellpadding="2" cellspacing="0" class="attachtable" align="center">
-		<#if hasThumb>
+	<table width="70%" border="<#if thumbShowBox>1<#else>0</#if>" cellpadding="2" cellspacing="0" class="attachtable" align="center">
+		<#if a.hasThumb()>
 			<tr>
-				<td width="100%" colspan="3" align="center" class="attachrow">
+				<td width="100%" colspan="3" align="center" colspan="2">
 					<#if !thumbShowBox>
 						<a href="${JForumContext.encodeURL("/posts/downloadAttach/${a.id}")}">
 					</#if>
@@ -14,21 +12,16 @@
 			</tr>
 		</#if>
 
-		<#if !hasThumb || thumbShowBox>
-			<tr>
-				<td width="15%" class="attachrow"><span class="genmed">&nbsp;${I18n.getMessage("Attachments.filename")}</span></td>
-				<td width="75%" class="attachrow"><span class="genmed">${a.info.realFilename}</span></td>
-				
-				<td rowspan="4" align="center">
-					<img src="${contextPath}/templates/${templateName}/images/icon_disk.gif" alt="[Disk]" />
-					<a href="${JForumContext.encodeURL("/posts/downloadAttach/${a.id}")}" class="gensmall"><b>${I18n.getMessage("Attachments.download")}</b></a>
-				</td>
-			</tr>
-
-			<tr>
+		<#if thumbShowBox>
+		<tr>
 				<td width="15%" class="attachrow"><span class="genmed">&nbsp;${I18n.getMessage("Attachments.description")}</span></td>
-				<td width="75%" class="attachrow"><span class="genmed">${a.info.comment?default(I18n.getMessage("Attachments.noDescription"))?html}</span></td>
-				
+				<td width="75%" class="attachrow"><span class="genmed">${a.info.comment?default(I18n.getMessage("Attachments.noDescription"))}</span></td>
+				<td rowspan="3" align="center">
+					<img src="${contextPath}/templates/${templateName}/images/icon_disk.gif" alt="[Disk]" />
+					<!--<a href="${JForumContext.encodeURL("/posts/downloadAttach/${a.id}")}" class="gensmall"><b>${I18n.getMessage("Attachments.download")}</b></a>-->
+                    <!-- ADDED by JAHIA: do not encode downloading url -->
+                    <a href="${contextPath}/posts/downloadAttach/${a.id}.page" class="gensmall"><b>${I18n.getMessage("Attachments.download")}</b></a>
+                </td>
 			</tr>	
 
 			<tr>
@@ -50,5 +43,5 @@
 			</tr>
 		</#if>
 	</table>
-	<br />
+	<br/>
 </#list>

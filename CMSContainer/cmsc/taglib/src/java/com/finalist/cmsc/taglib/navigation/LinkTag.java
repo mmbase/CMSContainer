@@ -21,11 +21,10 @@ import javax.servlet.jsp.tagext.JspFragment;
 import org.apache.commons.lang.StringUtils;
 
 import com.finalist.cmsc.beans.om.*;
-import com.finalist.cmsc.services.search.PageInfo;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.search.Search;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.taglib.CmscTag;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
 /**
@@ -61,53 +60,14 @@ public class LinkTag extends CmscTag {
       HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
 
       if (page == null) {
-         if (StringUtils.isNotBlank(urlfragment)) {
-            // Computing the window for a given urlfragment can be expensive and will always yield
-            // the same result. Therefore the computed pageId is cached in the page context.
-            String key = "linktag_urlfragment_" + urlfragment;
-            Integer pageId = (Integer) ctx.getAttribute(key);
-            if (pageId == null) {
-               String path = getPath();
-               page = getPageWithUrlFragement(path, urlfragment);
-
-               pageId = page != null ? page.getId() : -1;
-               ctx.setAttribute(key, pageId);
-            }
-            else if (pageId == -1) {
-               page = null;
-            }
-            else {
-               page = SiteManagement.getNavigationItem(pageId);
-            }
+         if (!StringUtils.isBlank(urlfragment)) {
+            String path = getPath();
+            page = getPageWithUrlFragement(path, urlfragment);
          }
          else {
-            if (StringUtils.isNotBlank(portletdefinition)) {
-               // Computing the window and page for a given portletdefinition can be expensive and
-               // will always yield the same result. Therefore the computed values are cached in the
-               // page context.
-               String key = "linktag_portlet_" + portletdefinition;
-               String value = (String) ctx.getAttribute(key);
-               if (value == null) {
-                  // No value in the page context, so we have to compute it now
-                  String path = getPath();
-                  setPageAndWindowBasedOnPortletDefinition(path, portletdefinition);
-
-                  value = page != null ? page.getId() + "_" + window : "";
-                  ctx.setAttribute(key, value); // Cache the result in the page context
-               }
-               else if ("".equals(value.trim())) {
-                  // An empty String indicates a value is computed, but no page and window was found  
-                  page = null;
-                  window = null;
-               }
-               else {
-                  // Otherwise the value has format 'pageId_window'
-                  int splitAt = value.indexOf("_");
-                  int pageId = Integer.valueOf(value.substring(0, splitAt));
-
-                  page = SiteManagement.getNavigationItem(pageId);
-                  window = value.substring(splitAt + 1);
-               }
+            if (!StringUtils.isBlank(portletdefinition)) {
+               String path = getPath();
+               setPageAndWindowBasedOnPortletDefinition(path, portletdefinition);
             }
          }
       }
@@ -123,7 +83,7 @@ public class LinkTag extends CmscTag {
          if (page instanceof Page) {
              externalurl = ((Page) page).getExternalurl();
          }
-         if (StringUtils.isNotBlank(externalurl)) {
+         if (!StringUtils.isBlank(externalurl)) {
             if (externalurl.indexOf("://") > -1) {
                newlink = externalurl;
             }
@@ -280,21 +240,14 @@ public class LinkTag extends CmscTag {
     private void addPortletParametersToUrl(PortalURL u) {
         if (element != null) {
             int pageId = page.getId();
-            PageInfo pageInfo = Search.getPortletInformation(pageId, element);
-            if (pageInfo != null) {
-               window = pageInfo.getWindowName(); 
-               u.setRenderParameter(window, "elementId", new String[] { element });
-               for (Map.Entry<String, String> urlParam : pageInfo.getUrlParameters().entrySet()) {
-                   u.setRenderParameter(pageInfo.getWindowName(), urlParam.getKey(), new String[] { urlParam.getValue() } );
-               }
+            if (window == null) {
+               window = Search.getPortletWindow(pageId, element);
             }
-            else {
-               if (window != null) {
-                   u.setRenderParameter(window, "elementId", new String[] { element });
-               }
+            if (window != null) {
+               u.setRenderParameter(window, "elementId", new String[] { element });
             }
          }
-
+       
          if (window != null) {
             for (Map.Entry<String, Object> paramEntry : params.entrySet()) {
                u.setRenderParameter(window, paramEntry.getKey(), new String[] { paramEntry.getValue().toString() });

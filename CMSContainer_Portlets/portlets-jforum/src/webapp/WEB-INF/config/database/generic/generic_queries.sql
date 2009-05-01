@@ -25,11 +25,10 @@ CategoryModel.getMaxOrder = SELECT MAX(display_order) FROM jforum_categories
 # RankingModel
 # #############
 RankingModel.selectById = SELECT * FROM jforum_ranks WHERE rank_id = ?
-RankingModel.selectSpecials = SELECT * FROM jforum_ranks WHERE rank_special = 1
 RankingModel.selectAll = SELECT * FROM jforum_ranks ORDER BY rank_min
 RankingModel.delete = DELETE FROM jforum_ranks WHERE rank_id = ?
 RankingModel.update = UPDATE jforum_ranks SET rank_title = ?, rank_image = ?, rank_special = ?, rank_min = ? WHERE rank_id = ?
-RankingModel.addNew = INSERT INTO jforum_ranks ( rank_title, rank_min, rank_special) VALUES ( ?, ?, ? )
+RankingModel.addNew = INSERT INTO jforum_ranks ( rank_title, rank_min ) VALUES ( ?, ? )
 
 # #############
 # ConfigModel
@@ -44,8 +43,6 @@ ConfigModel.update = UPDATE jforum_config SET config_value = ? WHERE config_name
 # ##########
 # UserModel
 # ##########
-UserModel.pendingActivations = SELECT user_id, username, user_regdate FROM jforum_users WHERE user_actkey IS NOT NULL ORDER BY user_id
-
 UserModel.selectById = SELECT COUNT(pm.privmsgs_to_userid) AS private_messages, u.* \
 	FROM jforum_users u \
 	LEFT JOIN jforum_privmsgs pm ON pm.privmsgs_type = 1 AND pm.privmsgs_to_userid = u.user_id \
@@ -56,7 +53,7 @@ UserModel.selectAll = SELECT user_email, user_id, user_posts, user_regdate, user
 	user_website, user_viewemail FROM jforum_users ORDER BY user_id
 
 UserModel.selectAllByLimit = SELECT user_email, user_id, user_posts, user_regdate, username, deleted, user_karma, user_from, user_website, user_viewemail \
-	FROM jforum_users ORDER BY username LIMIT ?, ?
+	FROM jforum_users ORDER BY user_id LIMIT ?, ?
 
 UserModel.selectAllByGroup = SELECT user_email, u.user_id, user_posts, user_regdate, username, deleted, user_karma, user_from, \
 	user_website, user_viewemail \
@@ -65,8 +62,6 @@ UserModel.selectAllByGroup = SELECT user_email, u.user_id, user_posts, user_regd
 	AND ug.group_id = ? \
 	ORDER BY user_id LIMIT ?, ?
 
-UserModel.saveUserAuthHash = UPDATE jforum_users SET user_authhash = ? WHERE user_id = ?
-UserModel.getUserAuthHash = SELECT user_authhash FROM jforum_users WHERE user_id = ?
 UserModel.totalUsersByGroup = SELECT COUNT(1) FROM jforum_user_groups WHERE group_id = ?
 UserModel.deletedStatus = UPDATE jforum_users SET deleted = ? WHERE user_id = ?
 UserModel.isDeleted = SELECT deleted FROM jforum_users WHERE user_id = ?
@@ -74,10 +69,9 @@ UserModel.incrementPosts = UPDATE jforum_users SET user_posts = user_posts + 1 W
 UserModel.decrementPosts = UPDATE jforum_users SET user_posts = user_posts - 1 WHERE user_id = ?
 UserModel.rankingId = UPDATE jforum_users SET rank_id = ? WHERE user_id = ?
 UserModel.activeStatus = UPDATE jforum_users SET user_active = ? WHERE user_id = ?
-UserModel.addNew = INSERT INTO jforum_users (username, user_password, user_email, user_regdate, user_actkey, rank_id) VALUES (?, ?, ?, ?, ?, 0)
+UserModel.addNew = INSERT INTO jforum_users (username, user_password, user_email, user_regdate, user_actkey) VALUES (?, ?, ?, ?, ?)
 UserModel.findByName = SELECT user_id, username, user_email, deleted FROM jforum_users WHERE UPPER(username) LIKE UPPER(?)
-UserModel.findByEmail = SELECT * FROM jforum_users WHERE LOWER(user_email) = LOWER(?)
-UserModel.selectByName = SELECT * FROM jforum_users WHERE LOWER(username) = LOWER(?)
+UserModel.selectByName = SELECT * FROM jforum_users WHERE username = ?
 UserModel.addNewWithId = INSERT INTO jforum_users (username, user_password, user_email, user_regdate, user_actkey, user_id) VALUES (?, ?, ?, ?, ?, ?)
 
 UserModel.update = UPDATE jforum_users SET user_aim = ?, \
@@ -106,11 +100,7 @@ UserModel.update = UPDATE jforum_users SET user_aim = ?, \
 	username = ?, \
 	user_lang = ?, \
 	user_notify_pm = ?, \
-	user_biography = ?, \
-	user_lastvisit = ?, \
-	user_notify_always = ?, \
-	user_notify_text = ?, \
-	rank_id = ? \
+	user_biography = ? \
 	WHERE user_id = ?
 	
 UserModel.lastUserRegistered = SELECT user_id, username FROM jforum_users ORDER BY user_regdate DESC LIMIT 1
@@ -123,10 +113,9 @@ UserModel.removeFromGroup = DELETE FROM jforum_user_groups WHERE user_id = ? AND
 
 UserModel.selectGroups = SELECT ug.group_id, g.group_name FROM jforum_user_groups ug, jforum_groups g \
 	WHERE ug.group_id = g.group_id \
-	AND ug.user_id = ? \
-	ORDER BY g.group_id
+	AND ug.user_id = ?
 
-UserModel.saveNewPassword = UPDATE jforum_users SET user_password = ?, security_hash = null WHERE user_email = ?
+UserModel.saveNewPassword = UPDATE jforum_users SET user_password = ? WHERE user_email = ?
 UserModel.validateLostPasswordHash = SELECT COUNT(1) AS valid FROM jforum_users WHERE security_hash = ? AND user_email = ?
 UserModel.writeLostPasswordHash = UPDATE jforum_users SET security_hash = ? WHERE user_email = ?
 UserModel.getUsernameByEmail = SELECT username FROM jforum_users WHERE user_email = ?
@@ -138,32 +127,9 @@ UserModel.getUsername = SELECT username FROM jforum_users WHERE user_id = ?
 # #############
 # PostModel
 # #############
-PostModel.selectLatestByForumForRSS = SELECT p.topic_id, p.topic_id, p.post_id, p.forum_id, pt.post_subject AS subject, pt.post_text, p.post_time, p.user_id, u.username \
-	FROM jforum_topics t, jforum_posts p, jforum_posts_text pt, jforum_users u \
-	WHERE p.post_id = t.topic_first_post_id \
-	AND p.topic_id = t.topic_id \
-	AND p.user_id = u.user_id \
-	AND p.post_id = pt.post_id \
-	AND p.need_moderate = 0 \
-	AND t.forum_id = ? \
-	ORDER BY t.topic_id DESC \
-	LIMIT ?
-	
-PostModel.selectHotForRSS = SELECT t.topic_id, t.topic_title AS subject, p.post_id, t.forum_id, pt.post_text, p.post_time, p.user_id, u.username \
-	FROM jforum_topics t, jforum_posts p, jforum_posts_text pt, jforum_users u \
-	WHERE p.post_id = t.topic_first_post_id \
-	AND p.topic_id = t.topic_id \
-	AND p.user_id = u.user_id \
-	AND p.post_id = pt.post_id \
-	AND p.need_moderate = 0  \
-	ORDER BY topic_first_post_id DESC \
-	LIMIT ?
-
 PostModel.countPreviousPosts = SELECT COUNT(p2.post_id) AS prev_posts \
 	FROM jforum_posts p, jforum_posts p2 \
-	WHERE p.post_id = ? \
-	AND p2.topic_id = p.topic_id \
-	AND p2.post_id <= ?
+	WHERE p.post_id = ? AND p2.topic_id = p.topic_id AND p2.post_id <= ?
 
 PostModel.selectById = SELECT p.post_id, topic_id, forum_id, p.user_id, post_time, poster_ip, enable_bbcode, enable_html, \
 	enable_smilies, enable_sig, post_edit_time, post_edit_count, status, pt.post_subject, pt.post_text, username, p.attach, p.need_moderate \
@@ -174,8 +140,9 @@ PostModel.selectById = SELECT p.post_id, topic_id, forum_id, p.user_id, post_tim
 
 PostModel.deletePost = DELETE FROM jforum_posts WHERE post_id = ?
 PostModel.deletePostText = DELETE FROM jforum_posts_text WHERE post_id = ?
+PostModel.deleteWordMatch = DELETE FROM jforum_search_wordmatch WHERE post_id = ?
 
-PostModel.updatePost = UPDATE jforum_posts SET topic_id = ?, forum_id = ?, enable_bbcode = ?, enable_html = ?, enable_smilies = ?, enable_sig = ?, post_edit_time = ?, post_edit_count = ?, poster_ip = ? WHERE post_id = ?
+PostModel.updatePost = UPDATE jforum_posts SET topic_id = ?, forum_id = ?, enable_bbcode = ?, enable_html = ?, enable_smilies = ?, enable_sig = ?, post_edit_time = ?, post_edit_count = post_edit_count + 1, poster_ip = ? WHERE post_id = ?
 PostModel.updatePostText = UPDATE jforum_posts_text SET post_text = ?, post_subject = ? WHERE post_id = ?
 
 PostModel.addNewPost = INSERT INTO jforum_posts (topic_id, forum_id, user_id, post_time, poster_ip, enable_bbcode, enable_html, enable_smilies, enable_sig, post_edit_time, need_moderate) \
@@ -199,11 +166,8 @@ PostModel.selectByUserByLimit = SELECT p.post_id, topic_id, forum_id, p.user_id,
 	AND p.user_id = u.user_id \
 	AND p.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND forum_id IN(:fids:) \
-	ORDER BY p.post_id DESC \
+	ORDER BY post_time DESC \
 	LIMIT ?, ?
-
-PostModel.countUserPosts = SELECT COUNT(1) AS total FROM jforum_posts where user_id = ? AND forum_id IN (:fids:) AND need_moderate = 0
 	
 PostModel.setForumByTopic = UPDATE jforum_posts SET forum_id = ? WHERE topic_id = ?
 PostModel.deleteByTopic = SELECT post_id, user_id FROM jforum_posts WHERE topic_id = ?
@@ -247,7 +211,7 @@ ForumModel.selectAllForPermissions = SELECT forum_id, forum_name FROM jforum_for
 
 ForumModel.statsFirstPostTime = SELECT MIN(post_time) FROM jforum_posts WHERE post_time > 0
 ForumModel.statsFirstRegisteredUserTime = SELECT MIN(user_regdate) FROM jforum_users WHERE user_regdate > 0
-ForumModel.discoverForumId = SELECT forum_id FROM jforum_mail_integration WHERE forum_email = ?
+
 ForumModel.countForumPosts = SELECT COUNT(1) FROM jforum_posts WHERE forum_id = ?
 ForumModel.setModerated = UPDATE jforum_forums SET moderated = ? WHERE categories_id = ?
 ForumModel.delete = DELETE FROM jforum_forums WHERE forum_id = ?
@@ -268,23 +232,24 @@ ForumModel.lastPostInfo = SELECT post_time, p.topic_id, t.topic_replies, post_id
 	AND f.forum_last_post_id = t.topic_last_post_id \
 	AND t.topic_last_post_id = p.post_id \
 	AND p.forum_id = ? \
-	AND p.user_id = u.user_id \
-    AND p.need_moderate = 0
+	AND p.user_id = u.user_id
 
 ForumModel.getModeratorList = SELECT g.group_id AS id, g.group_name AS name \
-	FROM jforum_groups g, jforum_roles r, jforum_role_values rv, jforum_roles r2 \
-	WHERE g.group_id = r.group_id \
-	AND r.role_id = rv.role_id \
-	AND r.name = 'perm_moderation_forums' \
-	AND rv.role_value = ? \
-	AND r2.name = 'perm_moderation' \
-	AND r2.group_id = g.group_id 		
+		FROM jforum_groups g, jforum_roles r, jforum_role_values rv, jforum_roles r2 \
+		WHERE g.group_id = r.group_id \
+		AND r.role_id = rv.role_id \
+		AND r.name = 'perm_moderation_forums' \
+		AND rv.role_value = ? \
+		AND rv.role_type = 1 \
+		AND r2.name = 'perm_moderation' \
+		AND r2.role_type = 1 \
+		AND r2.group_id = g.group_id 		
 
-ForumModel.totalMessages = SELECT COUNT(1) as total_messages FROM jforum_posts WHERE need_moderate = 0
+ForumModel.totalMessages = SELECT COUNT(1) as total_messages FROM jforum_posts
 ForumModel.getMaxPostId = SELECT MAX(post_id) AS post_id FROM jforum_posts WHERE forum_id = ?
-ForumModel.moveTopics = UPDATE jforum_topics SET forum_id = ?, topic_moved_id = ? WHERE topic_id = ?
+ForumModel.moveTopics = UPDATE jforum_topics SET forum_id = ? WHERE topic_id = ?
 ForumModel.checkUnreadTopics = SELECT MAX(post_time), topic_id FROM jforum_posts WHERE forum_id = ? AND post_time > ? GROUP BY topic_id
-ForumModel.latestTopicIdForfix = SELECT MAX(topic_id) AS topic_id FROM jforum_posts WHERE forum_id = ? AND need_moderate = 0
+ForumModel.latestTopicIdForfix = SELECT MAX(topic_id) AS topic_id FROM jforum_posts WHERE forum_id = ?
 ForumModel.fixLatestPostData = UPDATE jforum_topics SET topic_last_post_id = ? WHERE topic_id = ?
 ForumModel.fixForumLatestPostData = UPDATE jforum_forums SET forum_last_post_id = ? WHERE forum_id = ?
 
@@ -293,36 +258,34 @@ ForumModel.getUnreadForums = SELECT t.forum_id, t.topic_id, p.post_time \
 	WHERE p.post_id = t.topic_last_post_id \
 	AND p.post_time > ?
 
-ForumModel.subscribeUser = INSERT INTO jforum_forums_watch(forum_id, user_id) VALUES (?, ?)
+ForumModel.subscribeUser = INSERT INTO jforum_forums_watch(forum_id, user_id, is_read) VALUES (?, ?, 1)
 ForumModel.isUserSubscribed = SELECT user_id FROM jforum_forums_watch WHERE forum_id = ? AND user_id = ?
 ForumModel.removeSubscription = DELETE FROM jforum_forums_watch WHERE forum_id = ? AND user_id = ?
 ForumModel.removeSubscriptionByForum = DELETE FROM jforum_forums_watch WHERE forum_id = ?
 
-ForumModel.notifyUsers = SELECT u.user_id, u.username, u.user_lang, u.user_email, \
-	u.user_notify_always, u.user_notify_text \
+ForumModel.notifyUsers = SELECT u.user_id AS user_id, u.username AS username, \
+	u.user_lang AS user_lang, u.user_email AS user_email \
 	FROM jforum_forums_watch fw, jforum_users u \
 	WHERE fw.user_id = u.user_id \
 	AND fw.forum_id = ? \
+	AND fw.is_read = 1 \
 	AND u.user_id NOT IN ( ?, ? )
-	AND u.user_notify_always IN (0, 1)
 
 # #############
 # TopicModel
 # #############
-TopicModel.findTopicsByDateRange = SELECT DISTINCT topic_id FROM jforum_posts WHERE post_time >= ? AND post_time <= ?
-
-TopicModel.selectById = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
+TopicModel.selectById = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
 	WHERE t.topic_id = ? \
 	AND p.post_id = t.topic_last_post_id
 	
 TopicModel.selectRaw = SELECT topic_id, forum_id, topic_title, user_id, topic_views, topic_replies, topic_status, topic_vote_id, topic_type, \
-	topic_first_post_id, topic_last_post_id, moderated, topic_time, topic_moved_id \
+	topic_first_post_id, topic_last_post_id, moderated, topic_time \
 	FROM jforum_topics WHERE topic_id = ?
 
-TopicModel.selectAllByForumByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
+TopicModel.selectAllByForumByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
-	WHERE (t.forum_id = ? OR t.topic_moved_id = ?) \
+	WHERE t.forum_id = ? \
 	AND p.post_id = t.topic_last_post_id \
 	AND p.need_moderate = 0 \
 	ORDER BY t.topic_type DESC, t.topic_last_post_id DESC \
@@ -335,7 +298,8 @@ TopicModel.topicPosters = SELECT user_id, username, user_karma, user_avatar, use
 
 TopicModel.distinctPosters = SELECT DISTINCT user_id FROM jforum_posts WHERE topic_id = ?
 
-TopicModel.selectTopicTitlesByIds = SELECT topic_id, topic_title FROM jforum_topics WHERE topic_id IN (:ids:)
+TopicModel.selectTopicTitlesByIds SELECT topic_id, topic_title FROM jforum_topics WHERE topic_id IN (:ids:)
+TopicModel.selectLastN = SELECT topic_title, topic_time, topic_id, topic_type FROM jforum_topics ORDER BY topic_time DESC LIMIT ?
 TopicModel.setModerationStatus = UPDATE jforum_topics SET moderated = ? WHERE forum_id = ?
 TopicModel.setModerationStatusByTopic = UPDATE jforum_topics SET moderated = ? WHERE topic_id = ?
 TopicModel.deleteByForum = SELECT topic_id FROM jforum_topics where forum_id = ?
@@ -362,49 +326,35 @@ TopicModel.removeSubscription = DELETE FROM jforum_topics_watch WHERE topic_id =
 TopicModel.removeSubscriptionByTopic = DELETE FROM jforum_topics_watch WHERE topic_id = ?
 TopicModel.updateReadStatus = UPDATE jforum_topics_watch SET is_read = ? WHERE topic_id = ? AND user_id = ?
 
-TopicModel.notifyUsers = SELECT u.user_id, u.username, u.user_lang, u.user_email, u.user_notify_text \
+TopicModel.notifyUsers = SELECT u.user_id AS user_id, u.username AS username, \
+	u.user_lang AS user_lang, u.user_email AS user_email \
 	FROM jforum_topics_watch tw, jforum_users u \
 	WHERE tw.user_id = u.user_id \
 	AND tw.topic_id = ? \
-	AND (tw.is_read = 1 OR u.user_notify_always = 1) \
+	AND tw.is_read = 1 \
 	AND u.user_id NOT IN ( ?, ? )
 	
 TopicModel.markAllAsUnread = UPDATE jforum_topics_watch SET is_read = '0' WHERE topic_id = ? AND user_id NOT IN (?, ?)
 TopicModel.lockUnlock = UPDATE jforum_topics SET topic_status = ? WHERE topic_id = ?
 
-TopicModel.selectRecentTopicsByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
+TopicModel.selectRecentTopicsByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
 	WHERE p.post_id = t.topic_last_post_id \
 	AND p.need_moderate = 0 \
 	ORDER BY topic_last_post_id DESC \
 	LIMIT ?
-	
-TopicModel.selectForNewMessages = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
-	FROM jforum_topics t, jforum_posts p \
-	WHERE t.topic_id IN (:topicIds:) \
-	AND p.need_moderate = 0 \
-	AND p.post_id = t.topic_last_post_id \
-	ORDER BY topic_last_post_id DESC
 
-TopicModel.selectHottestTopicsByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
-    FROM jforum_topics t, jforum_posts p \
-    WHERE p.post_id = t.topic_last_post_id \
-    AND p.need_moderate = 0 \
-    ORDER BY topic_views DESC \
-    LIMIT ?
-    
 TopicModel.getUserInformation = SELECT user_id, username FROM jforum_users WHERE user_id IN (#ID#)
 
-TopicModel.selectByUserByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach \
+TopicModel.selectByUserByLimit = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
 	FROM jforum_topics t, jforum_posts p \
 	WHERE p.post_id = t.topic_last_post_id \
 	AND t.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND t.forum_id IN(:fids:) \
 	ORDER BY t.topic_last_post_id DESC \
 	LIMIT ?, ?
 
-TopicModel.countUserTopics = SELECT COUNT(1) AS total FROM jforum_topics t, jforum_posts p WHERE t.user_id = ? AND t.forum_id IN (:fids:) AND p.post_id = t.topic_first_post_id AND p.need_moderate = 0
+TopicModel.countUserTopics = SELECT COUNT(*) AS total FROM jforum_topics where user_id = ?
 	
 TopicModel.getFirstLastPostId = SELECT MIN(post_id) AS first_post_id, MAX(post_id) AS last_post_id FROM jforum_posts WHERE topic_id = ?
 TopicModel.fixFirstLastPostId = UPDATE jforum_topics SET topic_first_post_id = ?, topic_last_post_id = ? WHERE topic_id = ?
@@ -413,21 +363,56 @@ TopicModel.totalTopics = SELECT COUNT(1) FROM jforum_topics
 # ############
 # SearchModel
 # ############
-SearchModel.getFirstPostId = SELECT MIN(post_id) FROM jforum_posts
-SearchModel.firstPostIdByDate = SELECT post_id FROM jforum_posts WHERE post_time > ? LIMIT 1
-SearchModel.lastPostIdByDate = SELECT post_id FROM jforum_posts WHERE post_time < ? ORDER BY post_id DESC LIMIT 1
+SearchModel.searchBase = SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach \
+	FROM jforum_search_topics t, jforum_posts p :table_category: \
+	WHERE p.post_id = t.topic_last_post_id \
+	AND t.session_id = ? \
+	:criterias: \
+	ORDER BY :orderByField: :orderBy:
+	
+SearchModel.insertWords = INSERT INTO jforum_search_words (word, word_hash) VALUES (?, ?)
+SearchModel.selectExistingWords = SELECT word_id, word FROM jforum_search_words WHERE word IN (#IN#)
+SearchModel.selectAllExistingWords = SELECT word_id, word FROM jforum_search_words
 
-SearchModel.getPostsToIndexForLucene = SELECT p.post_id, p.forum_id, p.enable_bbcode, p.enable_smilies, '' AS topic_title, p.topic_id, p.user_id, p.post_time, pt.post_text, pt.post_subject \
+SearchModel.searchByWord = SELECT post_id FROM jforum_search_wordmatch wm, jforum_search_words w \
+	WHERE wm.word_id = w.word_id \
+	AND w.word = ?
+	
+SearchModel.searchByLikeWord = SELECT post_id FROM jforum_search_wordmatch wm, jforum_search_words w \
+	WHERE wm.word_id = w.word_id \
+	AND w.word LIKE ?
+	
+SearchModel.insertTopicsIds = INSERT INTO jforum_search_results ( topic_id, session_id, search_time ) SELECT DISTINCT t.topic_id, ?, NOW() FROM jforum_topics t, jforum_posts p \
+	WHERE t.topic_id = p.topic_id \
+	AND p.post_id IN (:posts:)
+	
+SearchModel.selectTopicData = INSERT INTO jforum_search_topics (topic_id, forum_id, topic_title, user_id, topic_time, \
+	topic_views, topic_status, topic_replies, topic_vote_id, topic_type, topic_first_post_id, topic_last_post_id, moderated, session_id, search_time) \
+	SELECT t.topic_id, t.forum_id, t.topic_title, t.user_id, t.topic_time, \
+	t.topic_views, t.topic_status, t.topic_replies, t.topic_vote_id, t.topic_type, t.topic_first_post_id, t.topic_last_post_id, t.moderated, ?, NOW() \
+	FROM jforum_topics t, jforum_search_results s \
+	WHERE t.topic_id = s.topic_id \
+	AND s.session_id = ?
+	
+SearchModel.cleanSearchResults = DELETE FROM jforum_search_results WHERE session_id = ? OR search_time < DATE_SUB(NOW(), INTERVAL 1 HOUR)
+SearchModel.cleanSearchTopics = DELETE FROM jforum_search_topics WHERE session_id = ? OR search_time < DATE_SUB(NOW(), INTERVAL 1 HOUR)
+	
+SearchModel.searchByTime = INSERT INTO jforum_search_results (topic_id, session_id, search_time) SELECT DISTINCT t.topic_id, ?, NOW() FROM jforum_topics t, jforum_posts p \
+	WHERE t.topic_id = p.topic_id \
+	AND p.post_time > ?
+
+SearchModel.associateWordToPost = INSERT INTO jforum_search_wordmatch (post_id, word_id, title_match) \
+	SELECT #ID#, word_id, 0 FROM jforum_search_words WHERE word IN (#IN#)
+
+SearchModel.maxPostIdUntilNow = SELECT MAX(post_id) FROM jforum_posts WHERE post_time < ?
+SearchModel.lastIndexedPostId = SELECT MAX(post_id) FROM jforum_search_wordmatch
+SearchModel.howManyToIndex = SELECT COUNT(1) FROM jforum_posts WHERE post_time < ? AND post_id > ?
+
+SearchModel.getPostsToIndex = SELECT p.post_id, pt.post_text, pt.post_subject \
 	FROM jforum_posts p, jforum_posts_text pt \
 	WHERE p.post_id = pt.post_id \
-	AND p.post_id >= ? AND p.post_id < ?
-
-SearchModel.getPostsDataForLucene = SELECT p.post_id, p.forum_id, p.topic_id, p.user_id, u.username, p.enable_bbcode, p.enable_smilies, p.post_time, pt.post_subject, pt.post_text, t.topic_title \
-	FROM jforum_posts p, jforum_posts_text pt, jforum_users u, jforum_topics t \
-	WHERE p.post_id IN (:posts:) \
-	AND p.post_id = pt.post_id  \
-	AND p.topic_id = t.topic_id \
-	AND p.user_id = u.user_Id
+	AND p.post_id BETWEEN ? AND ? \
+	LIMIT ?, ?
 
 # ##########
 # TreeGroup
@@ -438,25 +423,18 @@ TreeGroup.selectGroup = SELECT group_id, group_name FROM jforum_groups WHERE par
 # PermissionControl
 # ################
 PermissionControl.deleteAllRoleValues = DELETE FROM jforum_role_values WHERE role_id IN (SELECT role_id FROM jforum_roles WHERE group_id = ?)
+
 PermissionControl.deleteAllGroupRoles = DELETE FROM jforum_roles WHERE group_id = ?
-PermissionControl.addGroupRole = INSERT INTO jforum_roles (group_id, name) VALUES (?, ?)
-PermissionControl.addRoleValues = INSERT INTO jforum_role_values (role_id, role_value) VALUES (?, ?)
+PermissionControl.deleteGroupRole = DELETE FROM jforum_roles WHERE group_id = ? AND name = ?
+PermissionControl.addGroupRole = INSERT INTO jforum_roles ( group_id, name, role_type ) VALUES (?, ?, ?)
+PermissionControl.addRoleValues = INSERT INTO jforum_role_values (role_id, role_value, role_type ) VALUES (?, ?, ?)
 PermissionControl.getRoleIdByName = SELECT role_id FROM jforum_roles WHERE name = ? AND group_id = ?
 
-PermissionControl.selectForumRoles = SELECT DISTINCT r.role_id FROM jforum_roles r, jforum_role_values rv \
-	WHERE r.role_id = rv.role_id \
-	AND r.name in ('perm_forum', 'perm_anonymous_post', 'perm_reply_only', 'perm_read_only_forums', 'perm_reply_without_moderation', 'perm_html_disabled', 'perm_attachments_enabled', 'perm_moderation_forums') \
-	AND rv.role_value = ?
-
-PermissionControl.deleteRoleValues = DELETE FROM jforum_role_values WHERE role_value = ? AND role_id IN (#IDS#) 
-
-PermissionControl.loadGroupRoles = SELECT r.name, '0' AS role_value FROM jforum_roles r WHERE r.group_id IN (#IN#) \
-	UNION \
-	SELECT r.name, rv.role_value \
-	FROM jforum_roles r, jforum_role_values rv \
-	WHERE r.role_id = rv.role_id  \
-	AND r.group_id IN (#IN#) \
-	ORDER BY name
+PermissionControl.loadGroupRoles = SELECT r.role_id, r.name, rv.role_value, rv.role_type AS rv_type, r.role_type \
+	FROM jforum_roles r \
+	LEFT JOIN jforum_role_values rv ON rv.role_id = r.role_id \
+	WHERE r.group_id = ? \
+	ORDER BY r.role_id
 
 # #############
 # TopicListing
@@ -482,13 +460,12 @@ PrivateMessageModel.add = INSERT INTO jforum_privmsgs ( privmsgs_type, privmsgs_
 	
 PrivateMessagesModel.addText = INSERT INTO jforum_privmsgs_text ( privmsgs_id, privmsgs_text ) VALUES (?, ?)
 	
-PrivateMessagesModel.isDeleteAllowed = SELECT 1 FROM jforum_privmsgs WHERE privmsgs_id = ? \
+PrivateMessageModel.delete = DELETE FROM jforum_privmsgs WHERE privmsgs_id = ? \
 	AND ( \
 	    (privmsgs_from_userid = ? AND privmsgs_type = 2) \
 	    OR (privmsgs_to_userid = ? AND privmsgs_type IN(0, 1, 5)) \
 	)
-
-PrivateMessageModel.delete = DELETE FROM jforum_privmsgs WHERE privmsgs_id = ?	
+	
 PrivateMessagesModel.deleteText = DELETE FROM jforum_privmsgs_text WHERE privmsgs_id = ?
 
 PrivateMessageModel.baseListing = SELECT pm.privmsgs_type, pm.privmsgs_id, pm.privmsgs_date, pm.privmsgs_subject, u.user_id, u.username \
@@ -647,7 +624,7 @@ AttachmentModel.updateAttachment = UPDATE jforum_attach_desc SET description = ?
 AttachmentModel.removeAttachment = DELETE FROM jforum_attach WHERE attach_id = ?
 AttachmentModel.removeAttachmentInfo = DELETE FROM jforum_attach_desc WHERE attach_id = ?
 AttachmentModel.countPostAttachments = SELECT COUNT(1) FROM jforum_attach WHERE post_id = ?
-AttachmentModel.deleteGroupQuota = DELETE FROM jforum_attach_quota
+AttachmentModel.deleteGroupQuota = DELETE FROM jforum_attach_quota;
 AttachmentModel.setGroupQuota = INSERT INTO jforum_attach_quota (group_id, quota_limit_id) VALUES (?, ?)
 AttachmentModel.selectGroupsQuotaLimits = SELECT group_id, quota_limit_id FROM jforum_attach_quota
 
@@ -725,36 +702,3 @@ SummaryDAO.selectPosts = SELECT p.post_id, p.topic_id, p.forum_id, p.user_id, po
 	AND status = 1 \
 	AND t.topic_time BETWEEN ? AND ? \
 	ORDER BY post_time DESC 
-###################
-# MailIntegration
-###################
-MailIntegration.findAll = SELECT * FROM jforum_mail_integration
-MailIntegration.find = SELECT * FROM jforum_mail_integration WHERE forum_id = ?
-MailIntegration.delete = DELETE FROM jforum_mail_integration WHERE forum_id = ?
-MailIntegration.add = INSERT INTO jforum_mail_integration (forum_id, forum_email, pop_host, pop_username, pop_password, pop_port, pop_ssl) VALUES (?, ?, ?, ?, ?, ?, ?)
-MailIntegration.update = UPDATE jforum_mail_integration SET forum_id = ?, forum_email = ?, pop_host = ?, pop_username = ?, pop_password = ?, pop_port = ?, pop_ssl = ? WHERE forum_id = ?
-
-############
-# ApiModel
-############
-ApiModel.isValid = SELECT 1 FROM jforum_api WHERE api_key = ?
-
-# ###############
-# BanlistModel
-# ###############
-BanlistModel.delete = DELETE FROM jforum_banlist WHERE banlist_id = ?
-BanlistModel.insert = INSERT INTO jforum_banlist (user_id, banlist_ip, banlist_email) VALUES (?, ?, ?)
-BanlistModel.selectAll = SELECT * FROM jforum_banlist ORDER BY banlist_id
-
-
-# ################
-# ModerationLog
-# ################
-ModerationLog.addNew = INSERT INTO jforum_moderation_log (user_id, log_description, log_original_message, log_date, log_type, post_id, topic_id, post_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-ModerationLog.totalRecords = SELECT COUNT(log_id) FROM jforum_moderation_log
-
-ModerationLog.selectAll = SELECT l.*, u.username, u2.username AS poster_username FROM jforum_moderation_log l \
-	LEFT JOIN jforum_users u2 ON u2.user_id = l.post_user_id \
-	LEFT JOIN jforum_users u ON l.user_id = u.user_id \
-	ORDER BY log_id DESC \
-	LIMIT ?, ?

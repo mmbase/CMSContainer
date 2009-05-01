@@ -9,9 +9,12 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
+import java.io.Serializable;
+
+import net.sf.mmapps.commons.beans.MMBaseNodeMapper;
+
 import org.mmbase.bridge.Node;
 
-import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.Stylesheet;
 import com.finalist.cmsc.navigation.PagesUtil;
 
@@ -23,7 +26,7 @@ public class StyleSheetCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    @Override
-   protected Object loadEntry(Object key) throws Exception {
+   protected Serializable loadEntry(Serializable key) throws Exception {
       Node stylesheetNode = getNode(key);
       if (stylesheetNode == null || !PagesUtil.isStylesheet(stylesheetNode)) {
          return null;

@@ -11,7 +11,7 @@ package com.finalist.cmsc.repository.forms;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -27,7 +27,7 @@ public class ChannelEdit extends MMBaseFormlessAction {
 
       String action = getParameter(request, "action");
 
-      if (StringUtils.isBlank(action)) {
+      if (StringUtil.isEmptyOrWhitespace(action)) {
          String objectnumber = getParameter(request, "number", true);
 
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?objectnumber="
@@ -37,8 +37,7 @@ public class ChannelEdit extends MMBaseFormlessAction {
       }
       else {
          SecurityUtil.clearUserRoles(cloud);
-         String ewnodelastedited = getParameter(request, "ewnodelastedited");
-         ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath()+"?parentchannel="+ewnodelastedited+"&direction=down&refreshchannel=true");
+         ActionForward ret = mapping.findForward(SUCCESS);
          return ret;
       }
    }

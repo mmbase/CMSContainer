@@ -1,47 +1,67 @@
-<%@include file="globals.jsp"
-%><%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
-%><mm:content type="text/html" encoding="UTF-8" expires="0">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-   <cmscedit:head title="ewsletter.subscription.manage.newsletteroverview">
-   </cmscedit:head>
-   <body>
-      <edit:ui-tabs>
-         <edit:ui-tab key="newsletteroverview.title" active="true">
-            #
-         </edit:ui-tab>
-      </edit:ui-tabs>
+<%@include file="globals.jsp" %>
 
-      <div class="editor">
-         <div class="body">
-            <form method="post" name="form" action="SubscriptionManagement.do">
-               <input type="hidden" name="action" value="listSubscriptionByPerson"/>
-               <input type="hidden" name="subsriberId" value="${requestScope.subsriberId}"/>
-               <table border="0">
-                  <tr>
-                     <td style="width: 110px"><fmt:message key="newspubform.title"/></td>
-                     <td><input type="text" name="title" value="${param.title}" style="width: 150px"/></td>
-                  </tr>
-                  <tr>
-                     <td></td>
-                     <td><input type="submit" name="submitButton" onclick="document.forms['form'].submit()" value="<fmt:message key='newsletter.subscriber.search'/>"/></td>
-                  </tr>
-               </table>
-            </form>
-         </div>
-         <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
-         <div class="body">
-            <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/SubscriptionManagement.do">
-               <edit:ui-tcolumn titlekey="newsletteroverview.newsletter" sort="title" width="15%">
-                  ${result.title}
-               </edit:ui-tcolumn>
-               <edit:ui-tcolumn titlekey="subscriptionoverview.status" width="85%">
-                  ${result.status}
-               </edit:ui-tcolumn>
-            </edit:ui-table>
-         </div>
-      </div>
-   </body>
-</html>
-</mm:content>
+<cmscedit:head title="reactions.title">
+	<fmt:message key="subscriptiondetail.title" />
+</cmscedit:head>
+
+<br><br>
+
+<jsp:useBean id="subscriptionDetailBean" scope="request" class="com.finalist.newsletter.module.bean.SubscriptionDetailBean" />
+<c:set var="userName" value="${subscriptionDetailBean.userName}" />
+
+<mm:cloud>
+<table width="50%">
+	<tr>
+		<th align="left"><fmt:message key="subscriptiondetail.username" /></tk>
+		<td><jsp:getProperty name="subscriptionDetailBean" property="userName" /></td>
+	</tr>
+	<tr>
+		<th align="left"><fmt:message key="subscriptiondetail.emailaddress" /></tk>
+		<td><jsp:getProperty name="subscriptionDetailBean" property="emailAddress" /></td>
+	</tr>
+	<tr>
+		<th align="left"><fmt:message key="subscriptiondetail.status" /></tk>
+		<td>
+			<cmsc:select var="mimetype">
+				<c:forEach var="m" items="${bean.availableMimeTypes}">
+					<cmsc:option name="${m}" value="${m}" />
+				</c:forEach>
+			</cmsc:select>
+		</td>
+	</tr>
+	<tr>
+		<th align="left"><fmt:message key="subscriptiondetail.mimetype" /></tk>
+		<td>
+			<cmsc:select var="status">
+				<c:forEach var="s" items="${bean.availableStatusOptions}">
+					<cmsc:option name="${s}" value="${s}" />
+				</c:forEach>
+			</cmsc:select>
+		</td>
+
+	</tr>
+</table>
+<br><br>
+<table width="75%">
+	<mm:listnodes type="newsletter">
+	<mm:field name="number" jspvar="newsletternumber" write="false" />
+		<tr>
+			<td width="10px"><cmsc:checkbox var="newslettersubscriptions" value="${newsletternumber}" />
+			<td colspan="2"><mm:field name="title" write="true" />	</td>
+		</tr>		
+		<mm:relatednodes type="newslettertheme" role="newslettertheme">
+		<mm:field name="number" jspvar="themenumber" write="false" />
+		<tr><td>&nbsp;</td>
+			<td width="10px"><cmsc:checkbox var="themesubscriptions" value="${themenumber}" />
+			<td><mm:field name="title" write="true" />	</td>
+		</tr>
+		</mm:relatednodes>
+	</mm:listnodes>
+</table>
+</mm:cloud>
+
+<br /><a href="SubscriptionAction.do?action=update&username=${userName}"><fmt:message key="subscriptiondetail.link.update" /></a>
+<br /><a href="SubscriptionAction.do?action=pause&username=${userName}"><fmt:message key="subscriptiondetail.link.pause" /></a>
+<br /><a href="SubscriptionAction.do?action=resume&username=${userName}"><fmt:message key="subscriptiondetail.link.resume" /></a>
+<br /><a href="SubscriptionAction.do?action=unsubscribe&username=${userName}"><fmt:message key="subscriptiondetail.link.unsubscribe" /></a>
+<br /><a href="SubscriptionAction.do?action=terminate&username=${userName}"><fmt:message key="subscriptiondetail.link.terminate" /></a>
