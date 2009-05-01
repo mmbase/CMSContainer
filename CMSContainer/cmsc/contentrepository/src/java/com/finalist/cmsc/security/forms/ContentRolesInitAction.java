@@ -10,8 +10,7 @@ import com.finalist.cmsc.repository.RepositoryUtil;
  */
 public class ContentRolesInitAction extends RolesInitAction {
 
-   @Override
-   protected RolesInfo getRolesInfo(Cloud cloud, Node group) {
-      return RepositoryUtil.getRolesInfo(cloud, group);
-   }
+    protected RolesInfo getRolesInfo(Cloud cloud, Node group) {
+        return RepositoryUtil.getRolesInfo(cloud, group);
+    }
 }

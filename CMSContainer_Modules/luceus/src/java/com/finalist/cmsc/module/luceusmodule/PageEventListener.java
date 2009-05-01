@@ -28,55 +28,52 @@ import com.finalist.cmsc.navigation.PortletUtil;
  */
 public class PageEventListener implements NodeEventListener, RelationEventListener {
 
-   protected final static String TYPE_PAGE = "page";
+	protected final static String TYPE_PAGE = "page";
 
-   protected final static String TYPE_PORTLET = "portlet";
+	protected final static String TYPE_PORTLET = "portlet";
 
-   private LuceusModule module;
+	private LuceusModule module;
 
-   private static final Logger log = Logging.getLoggerInstance(PageEventListener.class.getName());
+	private static Logger log = Logging.getLoggerInstance(PageEventListener.class.getName());
 
+	public PageEventListener(LuceusModule module) {
+		this.module = module;
+		MMBase.getMMBase().addNodeRelatedEventsListener(TYPE_PAGE, this);
+		log.info("registered listener for: " + TYPE_PAGE);
+	}
 
-   public PageEventListener(LuceusModule module) {
-      this.module = module;
-      MMBase.getMMBase().addNodeRelatedEventsListener(TYPE_PAGE, this);
-      log.info("registered listener for: " + TYPE_PAGE);
-   }
+	public void notify(NodeEvent event) {
+		log.debug("PageEventListener NodeEvent: " + event.getNodeNumber());
+		switch (event.getType()) {
+		case Event.TYPE_CHANGE:
+		case Event.TYPE_NEW:
+			module.updatePageIndex(event.getNodeNumber());
+			break;
+		case Event.TYPE_DELETE:
+			module.deletePageIndex(event.getNodeNumber());
+			break;
+		}
+	}
 
+	public void notify(RelationEvent event) {
+		String sourceType = event.getRelationSourceType();
+		String destinationType = event.getRelationDestinationType();
 
-   public void notify(NodeEvent event) {
-      log.debug("PageEventListener NodeEvent: " + event.getNodeNumber());
-      switch (event.getType()) {
-         case Event.TYPE_CHANGE:
-         case Event.TYPE_NEW:
-            module.updatePageIndex(event.getNodeNumber());
-            break;
-         case Event.TYPE_DELETE:
-            module.deletePageIndex(event.getNodeNumber());
-            break;
-      }
-   }
+		log.debug("PageEventListener RelationEvent source: " + event.getRelationSourceNumber() + " (" + sourceType + ") to "
+				+ event.getRelationDestinationNumber() + " (" + destinationType + ")");
 
+		// update a page with a changed relation to a portlet
+		if (PagesUtil.isPageType(sourceType) && PortletUtil.isPortletType(destinationType)) {
+			switch (event.getType()) {
+			case Event.TYPE_DELETE:
+			case Event.TYPE_NEW:
+			case Event.TYPE_CHANGE:
+				int page = event.getRelationSourceNumber();
+				module.updatePageIndex(page);
+				break;
+			}
+		}
 
-   public void notify(RelationEvent event) {
-      String sourceType = event.getRelationSourceType();
-      String destinationType = event.getRelationDestinationType();
-
-      log.debug("PageEventListener RelationEvent source: " + event.getRelationSourceNumber() + " (" + sourceType
-            + ") to " + event.getRelationDestinationNumber() + " (" + destinationType + ")");
-
-      // update a page with a changed relation to a portlet
-      if (PagesUtil.isPageType(sourceType) && PortletUtil.isPortletType(destinationType)) {
-         switch (event.getType()) {
-            case Event.TYPE_DELETE:
-            case Event.TYPE_NEW:
-            case Event.TYPE_CHANGE:
-               int page = event.getRelationSourceNumber();
-               module.updatePageIndex(page);
-               break;
-         }
-      }
-
-   }
+	}
 
 }

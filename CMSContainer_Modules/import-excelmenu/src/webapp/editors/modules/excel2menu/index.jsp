@@ -4,7 +4,7 @@
 <html>
 <head>
   <title>Excel2menu</title>
-  <script type="text/javascript">
+  <script language="javascript">
     function upload() {
         var f=document.forms[0];
         f.submit();
@@ -24,8 +24,7 @@
 </head>
     <body>
        <h2>Excel2menu</h2>
-<mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="basic user">
-<mm:hasrank minvalue="siteadmin">
+<mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">
 <mm:log jspvar="log">
 
 <div id="form">
@@ -55,7 +54,6 @@ Created
 
 </mm:log>
 </mm:cloud>
-</mm:hasrank>
       Done!
    </body>
 </html>

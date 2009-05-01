@@ -26,94 +26,88 @@ import com.finalist.pluto.container.factory.PortletFactory;
  * @author Wouter Heijke
  */
 public class DirectPortletInvoker implements PortletInvoker {
-   private static Log log = LogFactory.getLog(DirectPortletInvoker.class);
+	private static Log log = LogFactory.getLog(DirectPortletInvoker.class);
+	
+	/** servlet configuration */
+	private final ServletConfig servletConfig;
 
-   /** servlet configuration */
-   private final ServletConfig servletConfig;
+	/** The portlet definition */
+	private final PortletDefinition portletDefinition;
 
-   /** The portlet definition */
-   private final PortletDefinition portletDefinition;
+	/** The portlet */
+	private Portlet portlet;
 
-   /** The portlet */
-   private Portlet portlet;
+	private final ServletContext servletContext;
+	
+	private final PortletFactory portletFactory;
 
-   private final ServletContext servletContext;
+	public DirectPortletInvoker(PortletDefinition portletDefinition, ServletConfig servletConfig, PortletFactory portletFactory) {
+		this.portletDefinition = portletDefinition;
+		this.servletConfig = servletConfig;
+		this.portletFactory = portletFactory;
+		this.servletContext = servletConfig.getServletContext();
+	}
 
-   private final PortletFactory portletFactory;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.pluto.invoker.PortletInvoker#action(javax.portlet.ActionRequest,
+	 *      javax.portlet.ActionResponse)
+	 */
+	public void action(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+		portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
 
+		if (portlet == null) {
+			throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
+		}
+		portlet.processAction(request, response);
+	}
 
-   public DirectPortletInvoker(PortletDefinition portletDefinition, ServletConfig servletConfig,
-         PortletFactory portletFactory) {
-      this.portletDefinition = portletDefinition;
-      this.servletConfig = servletConfig;
-      this.portletFactory = portletFactory;
-      this.servletContext = servletConfig.getServletContext();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.pluto.invoker.PortletInvoker#render(javax.portlet.RenderRequest,
+	 *      javax.portlet.RenderResponse)
+	 */
+	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
 
+		if (portlet == null) {
+			throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
+		}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.invoker.PortletInvoker#action(javax.portlet.ActionRequest,
-    *      javax.portlet.ActionResponse)
-    */
-   public void action(ActionRequest request, ActionResponse response) throws PortletException, IOException {
-      portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
+		try {
+			request.setAttribute(org.apache.pluto.Constants.METHOD_ID, org.apache.pluto.Constants.METHOD_RENDER);
+			request.setAttribute(org.apache.pluto.Constants.PORTLET_REQUEST, request);
+			request.setAttribute(org.apache.pluto.Constants.PORTLET_RESPONSE, response);
+			portlet.render(request, response);
+		} finally {
+			request.removeAttribute(org.apache.pluto.Constants.METHOD_ID);
+			request.removeAttribute(org.apache.pluto.Constants.PORTLET_REQUEST);
+			request.removeAttribute(org.apache.pluto.Constants.PORTLET_RESPONSE);
+		}
+	}
 
-      if (portlet == null) {
-         throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
-      }
-      portlet.processAction(request, response);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.pluto.invoker.PortletInvoker#load(javax.portlet.PortletRequest,
+	 *      javax.portlet.RenderResponse)
+	 */
+	public void load(PortletRequest request, RenderResponse response) throws PortletException {
+		PortletContext portletContext = null;
+		PortletConfig portletConfig = null;
 
+		portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.invoker.PortletInvoker#render(javax.portlet.RenderRequest,
-    *      javax.portlet.RenderResponse)
-    */
-   public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-      portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
+		if (portlet == null) {
+			throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
+		}
+		portletContext = PortletObjectAccess.getPortletContext(servletContext, portletDefinition
+				.getPortletApplicationDefinition());
+		portletConfig = PortletObjectAccess.getPortletConfig(servletConfig, portletContext, portletDefinition);
 
-      if (portlet == null) {
-         throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
-      }
-
-      try {
-         request.setAttribute(org.apache.pluto.Constants.METHOD_ID, org.apache.pluto.Constants.METHOD_RENDER);
-         request.setAttribute(org.apache.pluto.Constants.PORTLET_REQUEST, request);
-         request.setAttribute(org.apache.pluto.Constants.PORTLET_RESPONSE, response);
-         portlet.render(request, response);
-      }
-      finally {
-         request.removeAttribute(org.apache.pluto.Constants.METHOD_ID);
-         request.removeAttribute(org.apache.pluto.Constants.PORTLET_REQUEST);
-         request.removeAttribute(org.apache.pluto.Constants.PORTLET_RESPONSE);
-      }
-   }
-
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.invoker.PortletInvoker#load(javax.portlet.PortletRequest,
-    *      javax.portlet.RenderResponse)
-    */
-   public void load(PortletRequest request, RenderResponse response) throws PortletException {
-      PortletContext portletContext = null;
-      PortletConfig portletConfig = null;
-
-      portlet = portletFactory.getPortletInstance(servletContext, portletDefinition);
-
-      if (portlet == null) {
-         throw new PortletException("Unable to instantiate portlet from class " + portletDefinition.getClassName());
-      }
-      portletContext = PortletObjectAccess.getPortletContext(servletContext, portletDefinition
-            .getPortletApplicationDefinition());
-      portletConfig = PortletObjectAccess.getPortletConfig(servletConfig, portletContext, portletDefinition);
-
-      portlet.init(portletConfig);
-   }
+		portlet.init(portletConfig);
+	}
 
 }

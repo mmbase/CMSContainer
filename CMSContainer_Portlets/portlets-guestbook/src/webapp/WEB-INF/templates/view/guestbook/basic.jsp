@@ -70,7 +70,9 @@
 			<c:set var="totalElements">
 				<mm:size id="totalitems"/>
 			</c:set>
-			<cmsc:pager maxPageItems="${elementsPerPage}" 
+			<cmsc:renderURL var="renderUrl" />
+			<pg:pager url="${renderUrl}" 
+					maxPageItems="${elementsPerPage}" 
 					items="${totalElements}"
 					index="center" maxIndexPages="${10}"
 					export="offset,currentPage=pageNumber">
@@ -85,7 +87,7 @@
 					<br />
 				</mm:relatednodes>
 				<%@include file="pagerindex.jsp" %>
-			</cmsc:pager>
+			</pg:pager>
 		</mm:relatednodescontainer>
 	</mm:node>
 </mm:cloud>

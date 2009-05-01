@@ -1,11 +1,15 @@
 <%@page language="java" contentType="text/html;charset=utf-8"%>
 <%@include file="globals.jsp" %>
+
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="egemmail.title">
-  <script src="../repository/search.js" type="text/javascript"></script>
-</cmscedit:head>  
+<head>
+  <title><fmt:message key="egemmail.title" /></title>
+  <link href="../css/main.css" type="text/css" rel="stylesheet" />
+  <script src="../repository/search.js"type="text/javascript" ></script>
+</head>
+
 <body onload="refreshChannels()">
     <div class="tabs">
         <div class="tab_active">

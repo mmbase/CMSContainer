@@ -36,7 +36,7 @@
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
 
 	<mm:haspage page="/editors/admin/">
-		<mm:hasrank minvalue="siteadmin">
+		<mm:hasrank minvalue="administrator">
 		
 	   <cmsc:list-pages var="sites"/>
 	   <c:forEach var="site" items="${sites}">
@@ -75,10 +75,7 @@
 				   		</td>
 				   		<td>
 				   			<mm:import jspvar="id" vartype="Integer">${channel.id}</mm:import>
-				   			<%
-				   				try { out.print(com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())); }
-			   					catch (Exception e) { out.print("<b>?? (Warning: language independent name not unique?)</b>"); }
-				   			%>
+			   				<%=com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())%>
 			   			</td>
 			   		</tr>
 						
@@ -94,10 +91,7 @@
 					   		</td>
 					   		<td>
 					   			<mm:import jspvar="id" vartype="Integer">${subchannel.id}</mm:import>
-				   				<%
-				   					try { out.print(com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())); }
-			   						catch (Exception e) { out.print("<b>?? (Warning: language independent name not unique?)</b>"); }
-				   				%>
+				   				<%=com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())%>
 				   			</td>
 				   		</tr>
 							
