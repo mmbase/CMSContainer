@@ -7,6 +7,8 @@
   <shortDescription>Remember users and roles.</shortDescription>
   <description>Remember users and roles.</description>
   
+  <currentVersion>1.4.5-20080331</currentVersion>
+  
   <dependencies>
   
 <!-- Hibernate dependencies -->
@@ -65,6 +67,33 @@
       </properties>
     </dependency>
     <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>3.3.1.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.3.0.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>3.0.0.GA</version>
+      <type>jar</type>
+      <properties>
+        <war.bundle>${war.bundle}</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>jta</artifactId>
       <version>1.0.1B</version>
@@ -74,24 +103,6 @@
       </properties>
     </dependency>
 
-	<dependency>
-      <groupId>supercsv</groupId>
-      <artifactId>SuperCSV</artifactId>
-      <version>1.52</version>
-      <type>jar</type>
-      <properties>
-        <war.bundle>${war.bundle}</war.bundle>
-      </properties>
-    </dependency>
-		<dependency>
-      <groupId>spiffyframework</groupId>
-      <artifactId>spiffy-with_source-all</artifactId>
-      <version>0.05</version>
-      <type>jar</type>
-      <properties>
-        <war.bundle>${war.bundle}</war.bundle>
-      </properties>
-    </dependency>
 <!-- Spring dependencies -->
     <dependency>
       <groupId>springframework</groupId>
@@ -131,22 +142,6 @@
         <war.bundle>${war.bundle}</war.bundle>
       </properties>
     </dependency>
-     <dependency>
-        <groupId>finalist</groupId>
-        <artifactId>cmsc-edit-webapp</artifactId>
-        <version>${cmsc.version}</version>
-        <type>jar</type>
-        <properties>
-           <war.bundle>${war.bundle}</war.bundle>
-        </properties>
-     </dependency>
-     <!-- XStream dependencies -->
-      <dependency>
-         <groupId>com.thoughtworks.xstream</groupId>
-         <artifactId>xstream</artifactId>
-         <version>1.2</version>
-         <type>jar</type>
-      </dependency>
   </dependencies>
 </project>
 

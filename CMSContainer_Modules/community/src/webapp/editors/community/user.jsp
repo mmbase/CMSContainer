@@ -4,13 +4,13 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="view.title"/>
+<cmscedit:head title="view.title">
+</cmscedit:head>
 <body style="overflow: auto">
 <cmscedit:contentblock title="view.title" titleClass="content_block_pink">
-<mm:cloud loginpage="../login.jsp" rank="basic user">
-<mm:hasrank minvalue="siteadmin">
+<mm:cloud loginpage="../login.jsp" rank='administrator'>
 	<mm:cloudinfo type="user" id="cloudusername" write="false" />
-   <html:form action="/editors/community/userAddAction?group=${groupName},${option}">
+   <html:form action="/editors/community/userAddAction">
 		<div id="user">
 		<table class="formcontent">
      
@@ -76,7 +76,6 @@
 			<html:cancel style="width:90"><fmt:message key="view.cancel"/></html:cancel>
 		</div>
 	</html:form>
-</mm:hasrank>
 </mm:cloud>
 </cmscedit:contentblock>	
 </body>
