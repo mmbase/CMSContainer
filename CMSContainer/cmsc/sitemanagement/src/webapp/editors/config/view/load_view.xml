@@ -4,7 +4,5 @@
 	<field name="title" />
 	<field name="description" />
 	<field name="resource" />
-	<field name="detailsupport" />
-	<field name="expirationcache" />
 	<relation destination="typedef" role="allowrel" />
 </action>

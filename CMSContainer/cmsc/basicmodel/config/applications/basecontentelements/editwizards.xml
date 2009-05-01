@@ -25,6 +25,14 @@
 		<fields>title</fields>
 	</node>
 
+	<node number="33004" owner="admin">
+		<name>Mailform</name>
+		<description>Mailform </description>
+		<wizard>config/mailform/mailform</wizard>
+		<nodepath>mailform</nodepath>
+		<fields>title</fields>
+	</node>
+
 	<node number="33006" owner="admin">
 		<name>Faqcategory</name>
 		<description>Faqcategory </description>
@@ -59,13 +67,5 @@
 		<fields>name, url</fields>
 		<search>yes</search>
 	</node>
-
-   <node number="33010" owner="admin">
-      <name>HTML Fragment</name>
-      <description>HTML Fragment</description>
-      <wizard>config/html/html</wizard>
-      <nodepath>html</nodepath>
-      <fields>code</fields>
-   </node>
 
 </editwizards>

@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <head>
@@ -14,9 +13,9 @@ function i18n(str) {
   return (HTMLArea._lc(str, 'cmscrichtext'));
 }
 
-var IMAGE_WIDTH_LEFT = 160;
-var IMAGE_WIDTH_RIGHT = 160;
-var IMAGE_WIDTH_FULL = 450;
+var IMAGE_WIDTH_LEFT = 176;
+var IMAGE_WIDTH_RIGHT = 176;
+var IMAGE_WIDTH_FULL = 353;
 
 function Init() {
   __dlg_translate('cmscrichtext');
@@ -33,19 +32,11 @@ function Init() {
       document.getElementById("f_width").value = param["f_width"];
       document.getElementById("f_height").value = param["f_height"];
       document.getElementById("f_destination").value = param["f_destination"];
-      //Store the original sizes of image for aspect ratio 
-      saveOriginalSizes();          
   }
   if (document.getElementById("f_width").value == "") {
-     document.getElementById("f_align").value = "left";
+  	document.getElementById("f_align").value = "left";
+  	document.getElementById("f_width").value = IMAGE_WIDTH_LEFT;
   }
-  if (document.getElementById("f_url").value == "") {
-      document.getElementById("f_width").disabled = true;
-      document.getElementById("f_height").disabled = true;
-      document.getElementById("f_border").disabled = true;
-      document.getElementById("f_align").disabled = true;
-  }
-  
   
   document.getElementById("f_url").focus();
 }
@@ -81,7 +72,7 @@ function onCancel() {
 }
 
 function onSelect() {
-  openPopupWindow('../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=images','filterwindow2',750,600);
+  openPopupWindow('../../../../../editors/resources/ImageInitAction.do?action=select','filterwindow2',750,550);
   return false;
 };
 
@@ -90,11 +81,6 @@ function selectElement(element_id, title, url, width, height, description) {
 
    if (url != undefined && url.length != 0 ) {
       document.getElementById("f_url").value = url;
-      document.getElementById("f_width").disabled = false;
-      document.getElementById("f_height").disabled = false;
-      document.getElementById("f_border").disabled = false;
-      document.getElementById("f_align").disabled = false;
-      ratio = "";
    }
    if (document.getElementById("f_alt").value == undefined 
          || document.getElementById("f_alt").value.length == 0 ) {
@@ -102,38 +88,27 @@ function selectElement(element_id, title, url, width, height, description) {
    }
   var imagePosition = document.getElementById("f_align").value
   if ("left" == imagePosition) {
-      if (width && height) {
-         if (width > IMAGE_WIDTH_LEFT) {
-            height = Math.round((IMAGE_WIDTH_LEFT / width) * height);
-            width = IMAGE_WIDTH_LEFT;
-         }  
-         document.getElementById("f_width").value = width;
-         document.getElementById("f_height").value = height;
-      }
-   }
-   if ("right" == imagePosition) {
-      if (width && height) {
-         if (width > IMAGE_WIDTH_RIGHT) {
-            height = Math.round((IMAGE_WIDTH_RIGHT / width) * height);
-            width = IMAGE_WIDTH_RIGHT;
-         }
-         document.getElementById("f_width").value = IMAGE_WIDTH_RIGHT;
-         document.getElementById("f_height").value = width;
-       }
-   }
-   if ("" == imagePosition) {
-      if (width && height) {
-         if (width > IMAGE_WIDTH_FULL) {
-            height = Math.round((IMAGE_WIDTH_FULL / width) * height);
-            width = IMAGE_WIDTH_FULL;
-         }
-         document.getElementById("f_width").value = width;
-         document.getElementById("f_height").value = height;
-      }
-   }
-   
-  //Store the original sizes of image for aspect ratio 
-  saveOriginalSizes();
+    if (width && height) {
+      height = (IMAGE_WIDTH_LEFT / width) * height;
+      document.getElementById("f_width").value = IMAGE_WIDTH_LEFT;
+      document.getElementById("f_height").value = height;
+    }
+  }
+  if ("right" == imagePosition) {
+    if (width && height) {
+      height = (IMAGE_WIDTH_RIGHT / width) * height;
+      document.getElementById("f_width").value = IMAGE_WIDTH_RIGHT;
+      document.getElementById("f_height").value = height;
+    }
+  }
+  if ("" == imagePosition) {
+    if (width && height) {
+      height = (IMAGE_WIDTH_FULL / width) * height;
+      document.getElementById("f_width").value = IMAGE_WIDTH_FULL;
+      document.getElementById("f_height").value = height;
+    }
+  }
+
 }
 
 function onSelectPosition() {
@@ -193,106 +168,94 @@ function openPopupWindow(url, windowName, width, height) {
       obj.opener = this;
    }
 
-    return true;
+ 	return true;
 }
 
-</script>
-
-
-
-<script type="text/javascript">
-   var width_orig = 1;
-   var height_orig = 1;
-
-   function saveOriginalSizes() {
-      width_orig = document.getElementById("f_width").value;
-      height_orig = document.getElementById("f_height").value;
-}
- 
- function calculateWidth() {
-   if ( document.getElementById("f_lock_ratio").checked ) {
-         var height = document.getElementById("f_height").value;
-         if (!isNaN(height) && height > 0) {
-             document.getElementById("f_width").value = Math.round ((width_orig / height_orig) * height);
-         } 
-   }
- }
- 
- function calculateHeight() {
-   if ( document.getElementById("f_lock_ratio").checked ) {
-         var width = document.getElementById("f_width").value;
-         if (!isNaN(width) && width > 0) {
-        	   document.getElementById("f_height").value = Math.round ((height_orig / width_orig) * width);
-   }
- }
-   }
 </script>
 
 </head>
 
 <body  class="dialog" onload="Init()">
-   <div class="title">Insert Image</div>
-      <form name="inlineImageForm" action="" method="get">
-            <input type="hidden" name="destination" id="f_destination" />
-         <table border="0" width="100%" style="padding: 0px; margin: 0px">
-              <tbody>
-                 <tr>
-                   <td style="width: 7em; text-align: right">Image URL:</td>
-                   <td>
-                        <input type="text" name="url" id="f_url" style="width:75%" readonly  />
-                        <button name="select" onclick="return onSelect();" title="Search for an image">Search</button>
-                   </td>
-                 </tr>
-                 <tr>
-                   <td style="width: 7em; text-align: right">Alternate text:</td>
-                   <td><input type="text" name="alt" id="f_alt" style="width:100%" title="For browsers that don't support images" /></td>
-                 </tr>
-              </tbody>
-         </table>
+<div class="title">Insert Image</div>
 
-         <p />
+<form name="inlineImageForm" action="" method="get">
+      <input type="hidden" name="destination" id="f_destination" />
 
-         <fieldset style="float: left; margin-left: 5px;">
-            <legend>Layout</legend>
-            <div class="space"></div>
-            
-            <div class="fl">Alignment:</div>
-               <select size="1" name="align" id="f_align" title="Positioning of this image" onchange="onSelectPosition()">
-                  <option value="">Not set</option>
-                  <option value="left">Left</option>
-                  <option value="right">Right</option>  
-                  <option value="texttop">Text top</option>
-                  <option value="absmiddle">Abs middle</option>
-                  <option value="baseline">Baseline</option>
-                  <option value="absbottom">Abs bottom</option>
-                  <option value="bottom">Bottom</option>
-                  <option value="middle">Middle</option>
-                  <option value="top">Top</option>
-            </select>
-            <p />
-            <div class="fl">Border thickness:</div>
-            <input type="text" name="border" id="f_border" size="5" title="Leave empty for no border" />
-            <div class="space"></div>
-         </fieldset>
+<table border="0" width="100%" style="padding: 0px; margin: 0px">
+  <tbody>
+  <tr>
+    <td style="width: 7em; text-align: right">Image URL:</td>
+    <td>
+      <input type="text" name="url" id="f_url" style="width:75%" readonly  />
+      <button name="select" onclick="return onSelect();"
+      title="Search for an image">Search</button>
+    </td>
+  </tr>
+  <tr>
+    <td style="width: 7em; text-align: right">Alternate text:</td>
+    <td><input type="text" name="alt" id="f_alt" style="width:100%"
+      title="For browsers that don't support images" /></td>
+  </tr>
+  </tbody>
+</table>
 
-         <fieldset style="float:right; margin-right: 5px;">
-            <legend>Size</legend>
-            <div class="fr">Width:</div>
-            <input type="text" name="width" id="f_width" size="5" title="Width" onblur="calculateHeight();" />
-            <p />
-            <div class="fr">Height:</div>
-            <input type="text" name="height" id="f_height" size="5" title="Height" onblur="calculateWidth();" />
-            <p />
-            <div class="fr">Lock ratio:</div>
-            <input type="checkbox" name="lock_ratio" id="f_lock_ratio" title="Lock aspect ratio" checked="checked" />
-            <div class="space"></div>
-            </fieldset>
-            <div class="space"></div>
-            <div style="margin-top: 85px; text-align: right;">
-            <hr />
-            <button type="button" name="ok" onclick="return onOK();">OK</button>
-            <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-         </div>
-      </form>
-   </body>
+<p />
+
+<fieldset style="float: left; margin-left: 5px;">
+<legend>Layout</legend>
+
+<div class="space"></div>
+
+<div class="fl">Alignment:</div>
+<select size="1" name="align" id="f_align"
+    title="Positioning of this image"
+    onchange="onSelectPosition()">
+  <option value=""                             >Not set</option>
+  <option value="left"                         >Left</option>
+  <option value="right"                        >Right</option>
+  <option value="texttop"                      >Texttop</option>
+  <option value="absmiddle"                    >Absmiddle</option>
+  <option value="baseline" selected="1"        >Baseline</option>
+  <option value="absbottom"                    >Absbottom</option>
+  <option value="bottom"                       >Bottom</option>
+  <option value="middle"                       >Middle</option>
+  <option value="top"                          >Top</option>
+</select>
+
+<p />
+
+<div class="fl">Border thickness:</div>
+<input type="text" name="border" id="f_border" size="5"
+title="Leave empty for no border" />
+
+<div class="space"></div>
+
+</fieldset>
+
+<fieldset style="float:right; margin-right: 5px;">
+<legend>Size</legend>
+
+<div class="fr">Width:</div>
+<input type="text" name="width" id="f_width" size="5"
+title="Width" />
+
+<p />
+
+<div class="fr">Height:</div>
+<input type="text" name="height" id="f_height" size="5"
+title="Height" />
+
+<div class="space"></div>
+
+</fieldset>
+
+<div style="margin-top: 85px; text-align: right;">
+<hr />
+<button type="button" name="ok" onclick="return onOK();">OK</button>
+<button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
+</div>
+
+</form>
+
+</body>
 </html>

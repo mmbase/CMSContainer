@@ -22,7 +22,7 @@
 				<td>
 					<logic:equal name="GroupForm" property="id" value="-1">
 						<html:text property="name" size='15' maxlength='15' />
-						<span class="notvalid"><html:errors bundle="SECURITY" property="groupname" /></span>
+						<span class="notvalid"><html:errors bundle="SECURITY" property="name" /></span>
 					</logic:equal> 
 					<logic:notEqual name="GroupForm" property="id" value="-1">
 						<bean:write name="GroupForm" property="name" />
@@ -60,8 +60,8 @@
 
 		<br />
 		<div style="padding: 5px;">
+			<html:cancel style="width:90"><fmt:message key="group.cancel"/></html:cancel>
 			<html:submit style="width:90"><fmt:message key="group.submit"/></html:submit>
-         <html:cancel style="width:90"><fmt:message key="group.cancel"/></html:cancel>
 		</div>
 	</html:form>
 	</cmscedit:contentblock>	

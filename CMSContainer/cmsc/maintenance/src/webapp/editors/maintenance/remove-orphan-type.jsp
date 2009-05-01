@@ -28,15 +28,12 @@
 </form>
 
 <mm:present referid="nodetype">
-	nodetype:	<mm:write referid="nodetype" /><br />
+	nodetype:	<mm:write referid="nodetype" jspvar="nodetype"/><br />
 	
 	<mm:import externid="action"/>
 	<mm:present referid="action">
-		<mm:write referid="action" jspvar="action" vartype="String">
-		<mm:write referid="nodetype" jspvar="nodetype" vartype="String">
+		<mm:write referid="action" jspvar="action"/>
 		<%= new SqlExecutor().execute(new OrphanNodes(nodetype, action)) %>
-		</mm:write>
-		</mm:write>
 	</mm:present>
 </mm:present>
 

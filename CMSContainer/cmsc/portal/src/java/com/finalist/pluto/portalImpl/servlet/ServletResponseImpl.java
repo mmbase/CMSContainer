@@ -23,21 +23,19 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ServletResponseImpl extends javax.servlet.http.HttpServletResponseWrapper {
 
-   public ServletResponseImpl(HttpServletResponse response) {
-      super(response);
-   }
+	public ServletResponseImpl(HttpServletResponse response) {
+		super(response);
+	}
 
+	public java.lang.String getContentType() {
+		String contentType = "text/html"; // default...
+		return contentType;
+	}
 
-   public java.lang.String getContentType() {
-      String contentType = "text/html"; // default...
-      return contentType;
-   }
+	public void setResponse(HttpServletResponse response) {
+		super.setResponse(response);
+	}
 
-
-   public void setResponse(HttpServletResponse response) {
-      super.setResponse(response);
-   }
-
-   // HttpServletResponseWrapper overlay
+	// HttpServletResponseWrapper overlay
 
 }

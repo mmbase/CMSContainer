@@ -36,7 +36,7 @@
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
 
 	<mm:haspage page="/editors/admin/">
-		<mm:hasrank minvalue="siteadmin">
+		<mm:hasrank minvalue="administrator">
 		
 	   <cmsc:list-pages var="sites"/>
 	   <c:forEach var="site" items="${sites}">
@@ -48,7 +48,7 @@
 	   		
 	   		<cmsc:list-pages var="topchannels" origin="${site}" mode="all"/>
    			<c:set var="swap" value="true"/>
-			   <c:forEach var="topchannel" items="${topchannels}" varStatus="topstatus" >
+			   <c:forEach var="topchannel" items="${topchannels}" varStatus="topstatus" end="5">
 		   		<tr <c:if test="${swap}">class="swap"</c:if>>
 		   			<c:set var="swap" value="${!swap}"/>
 			   		<td>* ${topchannel.title}</td>
@@ -64,7 +64,7 @@
 		   		</tr>
 					
 				   <cmsc:list-pages var="channels" origin="${topchannel}" mode="all"/>
-					<c:forEach var="channel" items="${channels}" varStatus="status" >
+					<c:forEach var="channel" items="${channels}" varStatus="status" end="7">
 			   		<tr <c:if test="${swap}">class="swap"</c:if>>
 			   			<c:set var="swap" value="${!swap}"/>
 			   			<td>&nbsp;&nbsp;- ${channel.title}</td>
@@ -75,15 +75,12 @@
 				   		</td>
 				   		<td>
 				   			<mm:import jspvar="id" vartype="Integer">${channel.id}</mm:import>
-				   			<%
-				   				try { out.print(com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())); }
-			   					catch (Exception e) { out.print("<b>?? (Warning: language independent name not unique?)</b>"); }
-				   			%>
+			   				<%=com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())%>
 			   			</td>
 			   		</tr>
 						
 		   			<cmsc:list-pages var="subchannels" origin="${channel}" mode="all"/>
-						<c:forEach var="subchannel" items="${subchannels}" varStatus="substatus" >
+						<c:forEach var="subchannel" items="${subchannels}" varStatus="substatus" end="7">
 				   		<tr <c:if test="${swap}">class="swap"</c:if>>
 				   			<c:set var="swap" value="${!swap}"/>
 								<td>&nbsp;&nbsp;&nbsp;&nbsp;* ${subchannel.title}</td>
@@ -94,10 +91,7 @@
 					   		</td>
 					   		<td>
 					   			<mm:import jspvar="id" vartype="Integer">${subchannel.id}</mm:import>
-				   				<%
-				   					try { out.print(com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())); }
-			   						catch (Exception e) { out.print("<b>?? (Warning: language independent name not unique?)</b>"); }
-				   				%>
+				   				<%=com.finalist.cmsc.languageredirect.LanguageRedirectUtil.translate("en", id.intValue())%>
 				   			</td>
 				   		</tr>
 							

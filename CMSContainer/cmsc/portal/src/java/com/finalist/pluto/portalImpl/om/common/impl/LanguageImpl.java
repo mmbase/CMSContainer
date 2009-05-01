@@ -17,221 +17,197 @@ import org.apache.pluto.util.StringUtils;
 
 public class LanguageImpl implements Language, java.io.Serializable {
 
-   // ResourceBundle creation part
+    // ResourceBundle creation part
 
-   private static final long serialVersionUID = 9023275378993097543L;
+    private static final long serialVersionUID = 9023275378993097543L;
 
-   private static class DefaultsResourceBundle extends ListResourceBundle {
+    private static class DefaultsResourceBundle extends ListResourceBundle {
 
-      private Object[][] resources;
+        private Object[][] resources;
 
+        public DefaultsResourceBundle(String defaultTitle, String defaultShortTitle,
+                String defaultKeyWords) {
+            resources = new Object[][] { { "javax.portlet.title", defaultTitle },
+                    { "javax.portlet.short-title", defaultShortTitle },
+                    { "javax.portlet.keywords", defaultKeyWords } };
+        }
 
-      public DefaultsResourceBundle(String defaultTitle, String defaultShortTitle, String defaultKeyWords) {
-         resources = new Object[][] { { "javax.portlet.title", defaultTitle },
-               { "javax.portlet.short-title", defaultShortTitle }, { "javax.portlet.keywords", defaultKeyWords } };
-      }
+        protected Object[][] getContents() {
+            return resources;
+        }
+    }
 
+    private static class ResourceBundleImpl extends ResourceBundle {
 
-      protected Object[][] getContents() {
-         return resources;
-      }
-   }
+        private HashMap<String, Object> data;
 
-   private static class ResourceBundleImpl extends ResourceBundle {
+        public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle defaults) {
+            data = new HashMap<String, Object>();
 
-      private HashMap<String, Object> data;
+            importData(defaults);
+            importData(bundle);
+        }
 
-
-      public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle defaults) {
-         data = new HashMap<String, Object>();
-
-         importData(defaults);
-         importData(bundle);
-      }
-
-
-      private void importData(ResourceBundle bundle) {
-         if (bundle != null) {
-            for (Enumeration<String> enumerator = bundle.getKeys(); enumerator.hasMoreElements();) {
-               String key = enumerator.nextElement();
-               Object value = bundle.getObject(key);
-               data.put(key, value);
+        private void importData(ResourceBundle bundle) {
+            if (bundle != null) {
+                for (Enumeration<String> enumerator = bundle.getKeys(); enumerator.hasMoreElements();) {
+                    String key = enumerator.nextElement();
+                    Object value = bundle.getObject(key);
+                    data.put(key, value);
+                }
             }
-         }
-      }
+        }
 
+        protected Object handleGetObject(String key) {
+            return data.get(key);
+        }
 
-      protected Object handleGetObject(String key) {
-         return data.get(key);
-      }
+        public Enumeration<String> getKeys() {
+            return new Enumerator(data.keySet());
+        }
+    }
 
+    private Locale locale;
 
-      public Enumeration<String> getKeys() {
-         return new Enumerator(data.keySet());
-      }
-   }
+    private String title;
 
-   private Locale locale;
+    private String shortTitle;
 
-   private String title;
+    private ResourceBundle bundle;
 
-   private String shortTitle;
+    private Collection<String> keywords;
 
-   private ResourceBundle bundle;
+	public LanguageImpl() {
+		this(Locale.ENGLISH, null, "", "", "");
+	}
 
-   private Collection<String> keywords;
+    public LanguageImpl(Locale locale, ResourceBundle bundle, String defaultTitle,
+            String defaultShortTitle, String defaultKeyWords) {
+        this.bundle = new ResourceBundleImpl(bundle, new DefaultsResourceBundle(defaultTitle,
+                defaultShortTitle, defaultKeyWords));
 
+        this.locale = locale;
+        title = this.bundle.getString("javax.portlet.title");
+        shortTitle = this.bundle.getString("javax.portlet.short-title");
+        keywords = toList(this.bundle.getString("javax.portlet.keywords"));
+    }
 
-   public LanguageImpl() {
-      this(Locale.ENGLISH, null, "", "", "");
-   }
+    // Language implementation.
 
+    public Locale getLocale() {
+        return locale;
+    }
 
-   public LanguageImpl(Locale locale, ResourceBundle bundle, String defaultTitle, String defaultShortTitle,
-         String defaultKeyWords) {
-      this.bundle = new ResourceBundleImpl(bundle, new DefaultsResourceBundle(defaultTitle, defaultShortTitle,
-            defaultKeyWords));
+    public String getTitle() {
+        return title;
+    }
 
-      this.locale = locale;
-      title = this.bundle.getString("javax.portlet.title");
-      shortTitle = this.bundle.getString("javax.portlet.short-title");
-      keywords = toList(this.bundle.getString("javax.portlet.keywords"));
-   }
+    public String getShortTitle() {
+        return shortTitle;
+    }
 
+    public Iterator<String> getKeywords() {
+        return keywords.iterator();
+    }
 
-   // Language implementation.
+    public ResourceBundle getResourceBundle() {
+        return bundle;
+    }
 
-   public Locale getLocale() {
-      return locale;
-   }
+    // internal methods.
+    private List<String> toList(String value) {
+        List<String> keywords = new ArrayList<String>();
 
+        for (StringTokenizer st = new StringTokenizer(value, ","); st.hasMoreTokens();) {
+            keywords.add(st.nextToken().trim());
+        }
 
-   public String getTitle() {
-      return title;
-   }
+        return keywords;
+    }
 
+    public String toString() {
+        return toString(0);
+    }
 
-   public String getShortTitle() {
-      return shortTitle;
-   }
+    public String toString(final int indent) {
+        StringBuffer buffer = new StringBuffer(50);
+        StringUtils.newLine(buffer, indent);
+        buffer.append(getClass().toString());
+        buffer.append(":");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("{");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("locale='");
+        buffer.append(locale);
+        buffer.append("'");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("title='");
+        buffer.append(title);
+        buffer.append("'");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("shortTitle='");
+        buffer.append(shortTitle);
+        buffer.append("'");
+        Iterator<String> iterator = keywords.iterator();
+        if (iterator.hasNext()) {
+            StringUtils.newLine(buffer, indent);
+            buffer.append("Keywords:");
+        }
+        while (iterator.hasNext()) {
+            buffer.append(iterator.next());
+            buffer.append(',');
+        }
+        StringUtils.newLine(buffer, indent);
+        buffer.append("}");
+        return buffer.toString();
+    }
 
+    // additional methods.
 
-   public Iterator<String> getKeywords() {
-      return keywords.iterator();
-   }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object) used for element equality according collection
+     *      implementations
+     */
+    public boolean equals(Object o) {
+        return o == null ? false : ((LanguageImpl) o).getLocale().equals(this.locale);
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return locale.hashCode();
+    }
 
-   public ResourceBundle getResourceBundle() {
-      return bundle;
-   }
+    public void setKeywords(Collection<String> keywords) {
+        this.keywords.clear();
+        this.keywords.addAll(keywords);
+    }
 
+    public void setKeywords(String keywordStr) {
+        if (keywords == null) {
+            keywords = new ArrayList<String>();
+        }
+        StringTokenizer tok = new StringTokenizer(keywordStr, ",");
+        while (tok.hasMoreTokens()) {
+            keywords.add(tok.nextToken());
+        }
+    }
+    
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
-   // internal methods.
-   private List<String> toList(String value) {
-      List<String> keywords = new ArrayList<String>();
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
+    }
 
-      for (StringTokenizer st = new StringTokenizer(value, ","); st.hasMoreTokens();) {
-         keywords.add(st.nextToken().trim());
-      }
-
-      return keywords;
-   }
-
-
-   public String toString() {
-      return toString(0);
-   }
-
-
-   public String toString(final int indent) {
-      StringBuffer buffer = new StringBuffer(50);
-      StringUtils.newLine(buffer, indent);
-      buffer.append(getClass().toString());
-      buffer.append(":");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("{");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("locale='");
-      buffer.append(locale);
-      buffer.append("'");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("title='");
-      buffer.append(title);
-      buffer.append("'");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("shortTitle='");
-      buffer.append(shortTitle);
-      buffer.append("'");
-      Iterator<String> iterator = keywords.iterator();
-      if (iterator.hasNext()) {
-         StringUtils.newLine(buffer, indent);
-         buffer.append("Keywords:");
-      }
-      while (iterator.hasNext()) {
-         buffer.append(iterator.next());
-         buffer.append(',');
-      }
-      StringUtils.newLine(buffer, indent);
-      buffer.append("}");
-      return buffer.toString();
-   }
-
-
-   // additional methods.
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see java.lang.Object#equals(java.lang.Object) used for element equality
-    *      according collection implementations
-    */
-   public boolean equals(Object o) {
-      if (o == null) return false;
-      if (o instanceof LanguageImpl) {
-         return ((LanguageImpl) o).getLocale().equals(this.locale);
-      } else return false;
-   }
-
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see java.lang.Object#hashCode()
-    */
-   public int hashCode() {
-      return locale.hashCode();
-   }
-
-
-   public void setKeywords(Collection<String> keywords) {
-      this.keywords.clear();
-      this.keywords.addAll(keywords);
-   }
-
-
-   public void setKeywords(String keywordStr) {
-      if (keywords == null) {
-         keywords = new ArrayList<String>();
-      }
-      StringTokenizer tok = new StringTokenizer(keywordStr, ",");
-      while (tok.hasMoreTokens()) {
-         keywords.add(tok.nextToken());
-      }
-   }
-
-
-   public void setLocale(Locale locale) {
-      this.locale = locale;
-   }
-
-
-   public void setShortTitle(String shortTitle) {
-      this.shortTitle = shortTitle;
-   }
-
-
-   public void setTitle(String title) {
-      this.title = title;
-   }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 }
