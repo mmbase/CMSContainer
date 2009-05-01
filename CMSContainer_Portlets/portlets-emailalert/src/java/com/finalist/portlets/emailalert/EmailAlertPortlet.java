@@ -3,23 +3,29 @@ package com.finalist.portlets.emailalert;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
-
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.CompositeConstraint;
 import org.mmbase.storage.search.Constraint;
 
-import com.finalist.cmsc.mmbase.*;
+import com.finalist.cmsc.mmbase.EmailUtil;
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
-import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public class EmailAlertPortlet extends ContentPortlet {
 
+   protected static final String ACTION_PARAM = "action";
+   protected static final String CONTENTELEMENT = "contentelement";
    private static final String SUBSCRIBEREL = "subscriberel";
    private static final String SUBSCRIBER = "subscriber";
    private static final String ERRORMESSAGES = "errormessages";
@@ -29,8 +35,7 @@ public class EmailAlertPortlet extends ContentPortlet {
    private static final String VALID = "valid";
 
 
-   @Override
-   public void processView(ActionRequest request, ActionResponse response) throws PortletException {
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       String action = request.getParameter(ACTION_PARAM);
       Map<String, String> errorMessages = new Hashtable<String, String>();
       if (action == null) {
@@ -44,17 +49,18 @@ public class EmailAlertPortlet extends ContentPortlet {
             String emailAddress = request.getParameter(EMAILADDRESS);
             String subscribePage = request.getParameter(SUBSCRIBEPAGE);
             String emailRegex = PropertiesUtil.getProperty("email.regex");
-            if (StringUtils.isBlank(emailAddress)) {
+            if (StringUtil.isEmptyOrWhitespace(emailAddress)) {
                errorMessages.put(EMAILADDRESS, "view.emailaddress.empty");
             }
             else if (!emailAddress.matches(emailRegex)) {
                errorMessages.put(EMAILADDRESS, "view.emailaddress.invalid");
             }
-            if (StringUtils.isBlank(subscribePage)) {
+            if (StringUtil.isEmptyOrWhitespace(subscribePage)) {
                errorMessages.put(SUBSCRIBEPAGE, "view.error.nopage");
             }
             if (errorMessages.size() == 0) {
-               Cloud cloud = getCloudForAnonymousUpdate();
+               CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+               Cloud cloud = cloudProvider.getCloud();
                Node emailAlert = cloud.getNode(contentElement);
                // check if the emailaddress already exists, otherwise create it
                Node subscriberNode = SearchUtil.findNode(cloud, SUBSCRIBER, EMAILADDRESS, emailAddress);
@@ -142,7 +148,7 @@ public class EmailAlertPortlet extends ContentPortlet {
             request.setAttribute(CONFIRM, confirm);
          }
          if (portletSession.getAttribute(ERRORMESSAGES) != null) {
-             Map<String, String> errormessages = (Map<String, String>) portletSession.getAttribute(ERRORMESSAGES);
+            Hashtable errormessages = (Hashtable) portletSession.getAttribute(ERRORMESSAGES);
             portletSession.removeAttribute(ERRORMESSAGES);
             request.setAttribute(ERRORMESSAGES, errormessages);
          }
@@ -162,7 +168,6 @@ public class EmailAlertPortlet extends ContentPortlet {
    }
 
 
-   @Override
    public void processEdit(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       super.processEdit(request, response);
 
@@ -172,7 +177,8 @@ public class EmailAlertPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }

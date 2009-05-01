@@ -4,5 +4,13 @@
     <artifactId>cmsc-portlets-poll</artifactId>
     <name>Poll portlet</name>
     <shortDescription>Poll portlet</shortDescription>
+	<dependencies>
+		<dependency>
+            <groupId>mmapps</groupId>
+            <artifactId>remotepublishing</artifactId>
+            <version>1.0.14</version>
+            <type>jar</type>
+        </dependency>
+	</dependencies>
 </project>
 

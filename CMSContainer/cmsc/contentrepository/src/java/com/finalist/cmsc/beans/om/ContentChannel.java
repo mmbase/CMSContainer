@@ -1,6 +1,6 @@
 package com.finalist.cmsc.beans.om;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 /**
  * @author Wouter Heijke

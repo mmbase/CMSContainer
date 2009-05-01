@@ -34,7 +34,7 @@ public class PageEventListener implements NodeEventListener, RelationEventListen
 
    private LuceusModule module;
 
-   private static final Logger log = Logging.getLoggerInstance(PageEventListener.class.getName());
+   private static Logger log = Logging.getLoggerInstance(PageEventListener.class.getName());
 
 
    public PageEventListener(LuceusModule module) {

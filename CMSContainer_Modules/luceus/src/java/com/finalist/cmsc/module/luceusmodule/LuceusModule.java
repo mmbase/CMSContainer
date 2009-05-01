@@ -25,7 +25,6 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.NotFoundException;
 import org.mmbase.bridge.util.HugeNodeListIterator;
 import org.mmbase.module.Module;
 
@@ -70,8 +69,6 @@ public class LuceusModule extends Module {
    private List<String> excludeTypes = new ArrayList<String>();
 
    private CustomContentHandler customContentHandler;
-   
-   private CustomObjectHandler customObjectHandler;
 
    private Set<String> secondaryCache = Collections.synchronizedSet(new HashSet<String>());
 
@@ -211,7 +208,7 @@ public class LuceusModule extends Module {
          }
       }
 
-      // read customContentHandlerClass and create instance
+      // read customhandlerclass and create instance
       String customContentHandlerClassname = getInitParameter("custom-content-handler-classname");
       if (customContentHandlerClassname != null) {
          try {
@@ -222,17 +219,6 @@ public class LuceusModule extends Module {
          }
       }
 
-      // read customObjectHandlerClass and create instance
-      String customObjectHandlerClassname = getInitParameter("custom-object-handler-classname");
-      if (customObjectHandlerClassname != null) {
-         try {
-            customObjectHandler = (CustomObjectHandler) Class.forName(customObjectHandlerClassname).newInstance();
-         }
-         catch (Exception e) {
-            log.warn("Unable to create CustomObjectHandler! (" + e.getMessage() + ")");
-         }
-      }      
-      
       in = new LinkedBlockingQueue<QueuedUpdate>(updateQueueSize);
 
       if (doListeners) {
@@ -243,9 +229,6 @@ public class LuceusModule extends Module {
          if (customContentHandler != null) {
             customContentHandler.registerListeners(this);
          }
-         if (customObjectHandler != null) {
-             customObjectHandler.registerListeners(this);
-          }
       }
 
       ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(execs);
@@ -293,7 +276,7 @@ public class LuceusModule extends Module {
    public void eraseIndex() {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_ERASE_INDEX));
    }
-   
+
 
    public void deleteChannelContentIndex(int channel, int contentelement) {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_DELETE_CHANNELCONTENT_INDEX, channel, contentelement));
@@ -314,23 +297,17 @@ public class LuceusModule extends Module {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_DELETE_PAGE_INDEX, nodeNumber));
    }
 
-   public void deleteCustomObjectIndex(int nodeNumber) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_DELETE_CUSTOMOBJECT_INDEX, nodeNumber));
-    }
-   
 
    // aka fullindex
    public void createContentIndex(Node node) {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_CREATE_CONTENT_INDEX, node.getNumber()));
    }
 
-   public void createCustomObjectIndex(Node node) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_CREATE_CUSTOMOBJECT_INDEX, node.getNumber()));
-    }
-   
+
    public void updateContentIndex(Node node) {
       updateContentIndex(node.getNumber());
    }
+
 
    public void updateContentIndex(int nodeNumber) {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_CONTENT_INDEX, nodeNumber));
@@ -351,13 +328,6 @@ public class LuceusModule extends Module {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_SECONDARYCONTENT_INDEX, nodeNumber));
    }
 
-   public void updateCustomObjectIndex(Node node) {
-       updateCustomObjectIndex(node.getNumber());
-    }   
-   
-   public void updateCustomObjectIndex(int nodeNumber) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_CUSTOMOBJECT_INDEX, nodeNumber));
-   }
 
    public Cloud getAnonymousCloud() {
       return CloudProviderFactory.getCloudProvider().getAnonymousCloud();
@@ -371,12 +341,10 @@ public class LuceusModule extends Module {
    private class FullIndexTimerTask extends TimerTask {
 
       private boolean erase = false;
-      
-      private String nodemanager = null;
 
-      public FullIndexTimerTask(boolean erase, String nodemanager) {
+
+      public FullIndexTimerTask(boolean erase) {
          this.erase = erase;
-         this.nodemanager = nodemanager;
       }
 
 
@@ -384,25 +352,12 @@ public class LuceusModule extends Module {
          log.info("===>fullIndex starting<==");
          Cloud cloud = getAnonymousCloud();
 
-         NodeManager nm = cloud.getNodeManager(ContentElementUtil.CONTENTELEMENT);
-         
-         //Optionally use a specific Nodemanager to (re)index
-         if (nodemanager != null) {
-            log.info("===>only doing a fullIndex on nodemanager " + nodemanager + "<==");
-            try {
-               nm = cloud.getNodeManager(nodemanager);
-            } catch (NotFoundException e) {
-               log.error("===>Help, nodemanager '" + nodemanager + "' could not be found!<===");
-               log.info("===>fullIndex aborted<==");
-               return;
-            }
-         }
-         
          if (erase) {
             log.info("===>erasing index<==");
             eraseIndex();
          }
-         
+
+         NodeManager nm = cloud.getNodeManager(ContentElementUtil.CONTENTELEMENT);
          NodeQuery q = nm.createQuery();
 
          // use this iterator because we can have many data to process
@@ -416,10 +371,6 @@ public class LuceusModule extends Module {
                updateContentIndex(currentNode);
             }
          }
-         
-         //if (customObjectHandler != null) {
-         //    customObjectHandler.fullIndex(erase);
-         //}
 
          log.info("===>fullIndex done<==");
       }
@@ -434,8 +385,8 @@ public class LuceusModule extends Module {
    }
 
 
-   public void startFullIndex(boolean erase, String nodemanager) {
-      Thread runOnce = new Thread(new FullIndexTimerTask(erase, nodemanager));
+   public void startFullIndex(boolean erase) {
+      Thread runOnce = new Thread(new FullIndexTimerTask(erase));
       runOnce.setDaemon(true);
       runOnce.start();
    }
@@ -487,10 +438,7 @@ public class LuceusModule extends Module {
       return customContentHandler;
    }
 
-   public CustomObjectHandler getCustomObjectHandler() {
-       return customObjectHandler;
-    }
-   
+
    public boolean hasProcessedSecondary(String scId) {
       return secondaryCache.contains(scId);
    }

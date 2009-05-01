@@ -2,8 +2,7 @@
   Editwizard cascading style sheet.
 */
 div.buttonscontent  {
-	text-align: right;
-	height:39px;
+        text-align: right;
 } 
 
 /* CMS Container style  */
@@ -38,7 +37,7 @@ div.tabs
 	clear: both;
 }
 
-/* active tab */
+/* actieve tab */
 div.tabs div.tab_active
 {
 	display: block;
@@ -103,8 +102,8 @@ div.tabs div.tab div.body
 div.tabs div.tab div.body a.valid
 {
 	padding-top: 14px;
-   color: #64676f;
-   font-size: 14px;
+	color: #a4a79f;
+	font-size: 13px;	
 	float: left;			
 }
 div.tabs div.tab div.body a.notvalid
@@ -275,7 +274,11 @@ div.page_buttons div.button:hover div.button_body a.bottombutton-disabled
 	display: block;
 }
 
-div.ruler1
+div.ruler1,
+div.ruler5,
+div.ruler9,
+div.ruler13,
+div.ruler17
 {
 	background-color: #ffffff;	
 	height: 18px;	
@@ -288,7 +291,11 @@ div.ruler1
 	width: 100%;			
 }
 
-div.ruler1 div
+div.ruler1 div,
+div.ruler5 div,
+div.ruler9 div,
+div.ruler13 div,
+div.ruler17 div
 {		
 	display: inline;
 	margin-left: 40px;
@@ -306,7 +313,11 @@ div.ruler1 div
 	background-repeat: no-repeat;	
 }
 
-div.ruler2
+div.ruler2,
+div.ruler6,
+div.ruler10,
+div.ruler14,
+div.ruler18
 {
 	background-color: #ffffff;	
 
@@ -320,7 +331,11 @@ div.ruler2
 	width: 100%;			
 }
 
-div.ruler2 div
+div.ruler2 div,
+div.ruler6 div,
+div.ruler10 div,
+div.ruler14 div,
+div.ruler18 div
 {
 	display: inline;
 	margin-left: 40px;
@@ -338,7 +353,11 @@ div.ruler2 div
 	background-repeat: no-repeat;	
 }
 
-div.ruler3
+div.ruler3,
+div.ruler7,
+div.ruler11,
+div.ruler15,
+div.ruler19
 {
 	background-color: #ffffff;	
 
@@ -352,7 +371,11 @@ div.ruler3
 	width: 100%;
 }
 
-div.ruler3 div
+div.ruler3 div,
+div.ruler7 div,
+div.ruler11 div,
+div.ruler15 div,
+div.ruler19 div
 {
 	display: inline;
 	margin-left: 40px;
@@ -370,7 +393,11 @@ div.ruler3 div
 	background-repeat: no-repeat;
 }
 
-div.ruler4
+div.ruler4,
+div.ruler8,
+div.ruler12,
+div.ruler16,
+div.ruler20
 {
 	background-color: #ffffff;	
 
@@ -384,7 +411,11 @@ div.ruler4
 	width: 100%;
 }
 
-div.ruler4 div
+div.ruler4 div,
+div.ruler8 div,
+div.ruler12 div,
+div.ruler16 div,
+div.ruler20 div
 {
 	display: inline;
 	margin-left: 40px;
@@ -424,21 +455,37 @@ table.itemcontent {
     
 }
 
-tr.item1
+tr.item1,
+tr.item5,
+tr.item9,
+tr.item13,
+tr.item17
 {
  background-color: #f5e9e6;
 }
-tr.item2
+tr.item2,
+tr.item6,
+tr.item10,
+tr.item14,
+tr.item18
 {
  background-color: #e0ffc1;
 }
 
-tr.item3
+tr.item3,
+tr.item7,
+tr.item11,
+tr.item15,
+tr.item19
 {
  background-color: #d7d7ff;
 }
 
-tr.item4
+tr.item4,
+tr.item8,
+tr.item12,
+tr.item16,
+tr.item20
 {
  background-color: #f1f1f1;
 }
@@ -461,7 +508,6 @@ td.itembutton {
     padding: 0px;
     vertical-align: top;
     text-align: left;
-    width: 57px;
 }
 span
 {
@@ -504,9 +550,7 @@ table a.button
 	color: #313728;
 	font-size: 11px;
 	font-weight: bold;
-	/* Conflicts in some IE versions, see CMSC-668 
 	background-image: url('../../../gfx/button_side_block.gif');
-	*/
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 15px;

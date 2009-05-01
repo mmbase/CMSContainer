@@ -13,12 +13,6 @@
 							<mm:haspage page="/editors/modules/customermenu.jsp">
 								<jsp:include page="/editors/modules/customermenu.jsp"/>
 							</mm:haspage>
-
-							<mm:haspage page="/editors/resources/banners_and_positions.jsp">
-								<li class="banners"> <a href="<mm:url page="/editors/resources/banners_and_positions.jsp"/>" target="rightpane">
-									<fmt:message key="modules.banners" />
-									</a> </li>
-							</mm:haspage>
 							<mm:haspage page="/editors/messageoftheday">
 								<li class="messageoftheday">
 									<c:url var="messageofthedayUrl" value="/editors/messageoftheday/index.jsp"/>
@@ -36,28 +30,15 @@
 									<fmt:message key="modules.versioning" />
 									</a> </li>
 							</mm:haspage>
-                     <mm:haspage page="/editors/newsletter">
-                        <li class="newsletter">
-                           <c:url var="newsletterUrl" value="/editors/newsletter/SubscriptionManagement.do"/>
-                           <a href="${newsletterUrl}" target="rightpane"><fmt:message key="modules.newsletter"/></a>
-                        </li>
-                     </mm:haspage>
+							<mm:haspage page="/editors/newsletter/module/report_overview.jsp">
+								<li class="newsletter"><a href="<mm:url page="../newsletter/module/ReportOverview.do" />" target="rightpane">
+									<fmt:message key="modules.newsletter" />
+									</a> </li>
+							</mm:haspage>
                      <mm:haspage page="/editors/community">
                         <li class="users">
-                          <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
-                           <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
-                        </li>
-                     </mm:haspage>
-                     <mm:haspage page="/editors/community">
-                        <li class="users">
-                           <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
-                           <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
-                        </li>
-                     </mm:haspage>
-                     <mm:haspage page="/editors/community/preferencesearch.jsp">
-                        <li class="community">
-                           <c:url var="communityUrl" value="/editors/community/PreferenceAction.do?method=list&reload=true"/>
-                           <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.reference" /></a>
+                           <c:url var="communityUrl" value="/editors/community/index.jsp"/>
+                           <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community" /></a>
                         </li>
                      </mm:haspage>
                      <mm:haspage page="/editors/subsite/module-subsite.jsp">
@@ -65,21 +46,7 @@
                            <fmt:message key="modules.subsite" />
                            </a> </li>
                      </mm:haspage>
-                     <mm:haspage page="/editors/modules/glossary">
-                        <li class="glossary">
-                           <a href="<mm:url page="/editors/WizardListAction.do?nodetype=glossary"/>" target="rightpane">
-                              <fmt:message key="modules.glossary" />
-                           </a>
-                        </li>
-                     </mm:haspage>
-                     <mm:haspage page="/editors/modules/tagcloud">
-                        <li style="background-image: url('../gfx/icons/tagcloud.png');">
-                           <a href="<mm:url page="/editors/modules/tagcloud/list.jsp?orderby=count&direction=down"/>" target="rightpane">
-                              <fmt:message key="modules.tagcloud" />
-                           </a>
-                        </li>
-                     </mm:haspage>                     
-                     <mm:haspage page="/editors/egemmail">
+							<mm:haspage page="/editors/egemmail">
 								<li class="egem"> <a href="../egemmail/EgemSearchInitAction.do" target="rightpane">
 									<fmt:message key="modules.egemmail.export" />
 									</a> </li>

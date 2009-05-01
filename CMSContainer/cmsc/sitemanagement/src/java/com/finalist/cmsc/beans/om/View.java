@@ -11,7 +11,7 @@ package com.finalist.cmsc.beans.om;
 
 import java.util.*;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 /**
  * @author Wouter Heijke
@@ -23,7 +23,6 @@ public class View extends NodeBean implements Comparable<View> {
    private String description;
    private String resource;
    private boolean detailsupport = true; // when field is not present or virtual then this is the default value
-   private int expirationcache = -1; // when field is not present or virtual then this is the default value
    private List<String> contenttypes = new ArrayList<String>();
 
 
@@ -74,20 +73,8 @@ public class View extends NodeBean implements Comparable<View> {
     public boolean isDetailsupport() {
         return detailsupport;
     }
-
+    
     public void setDetailsupport(boolean detailsupport) {
         this.detailsupport = detailsupport;
     }
-
-
-
-   public int getExpirationcache() {
-      return expirationcache;
-   }
-
-
-
-   public void setExpirationcache(int expirationcache) {
-      this.expirationcache = expirationcache;
-   }
 }

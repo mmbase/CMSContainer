@@ -27,9 +27,9 @@ import org.mmbase.security.Rank;
 import org.mmbase.security.UserContext;
 
 import com.finalist.cmsc.beans.om.*;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.security.LoginSession;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * MMBase specific PortalLayoutService implementation, in this case MMBase
@@ -110,7 +110,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    private boolean isValidNavigation(NavigationItem item) {
        if (item.isUse_expirydate()) {
            Date now = new Date();
-           return now.after(item.getPublishdate()) && now.before(item.getExpiredate());
+           return now.after(item.getPublishdate()) && now.before(item.getExpirydate());
        }
        return true;
    }
@@ -184,8 +184,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
          // loop through pages
          // if override only take the sheets of the last page
          for (int count = pagesToRoot.size()-1; count >= 0; count--) {
-            Page page = pagesToRoot.get(count);
-            stylesheets = getStylesheetForPage(page);
+            getStylesheetForPage(pagesToRoot, count, stylesheets);
 
             if (!stylesheets.isEmpty()) {
                return stylesheets;
@@ -193,41 +192,29 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
          }
       }
       else {
-         stylesheets = getStylesheetForPage(pagesToRoot.get(0));
-
          // loop through pages
-			for (int count = 1; count < pagesToRoot.size(); count++) {
-			   Page page = pagesToRoot.get(count);
-			   List<Stylesheet> pageSheets = getStylesheetForPage(page);
-			   if (!pageSheets.isEmpty()) {
-			      removeOverwriteableStylesheets(stylesheets);
-			      stylesheets.addAll(pageSheets);
-			   }
-			}
-		}
+         for (int count = 0; count < pagesToRoot.size(); count++) {
+            getStylesheetForPage(pagesToRoot, count, stylesheets);
+         }
+         
+      }
      
       return stylesheets;
    }
 
-	private void removeOverwriteableStylesheets(List<Stylesheet> stylesheets) {
-      for (Iterator<Stylesheet> iterator = stylesheets.iterator(); iterator.hasNext();) {
-         Stylesheet stylesheet = iterator.next();
-         if (stylesheet.isOverwriteable()) {
-            iterator.remove();
-         }
-      }
-   }
 
-   private List<Stylesheet> getStylesheetForPage(Page page) {
-	   List<Stylesheet> stylesheets = new ArrayList<Stylesheet>();
+   protected void getStylesheetForPage(List<Page> pagesToRoot, int count,
+         List<Stylesheet> stylesheets) {
+      Page page = pagesToRoot.get(count);
+
       List<Integer> stylesheetNumbers = page.getStylesheet();
       for (int j = 0; j < stylesheetNumbers.size(); j++) {
          Integer stylesheetNumber = stylesheetNumbers.get(j);
          Stylesheet stylesheet = siteModelManager.getStylesheet(stylesheetNumber.intValue());
          stylesheets.add(stylesheet);
       }
-      return stylesheets;
    }
+
 
    @Override
    public NavigationItem getNavigationItemFromPath(String path) {
@@ -253,7 +240,8 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    public <E extends NavigationItem> List<E> getListFromPath(String path, Class<E> clazz) {
       List<E> itemsForPath = siteModelManager.getItemsForPath(path, clazz);
       if (ServerUtil.isStaging()) {
-          for (E child : itemsForPath) {
+          for (Iterator<E> iterator = itemsForPath.iterator(); iterator.hasNext();) {
+             E child = iterator.next();
              if (!showNavigation(child)) {
                 itemsForPath.clear();
                 break;

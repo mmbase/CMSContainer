@@ -219,7 +219,9 @@ public abstract class NameValuePairs {
 
       Entry result = null;
 
-      for (Entry entry : iEntries) {
+      for (Iterator<Entry> iter = iEntries.iterator(); iter.hasNext();) {
+         Entry entry = iter.next();
+
          if (entry.iName.equals(aName)) {
             result = entry;
             break;
