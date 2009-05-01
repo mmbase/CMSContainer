@@ -228,7 +228,6 @@ public class NewsletterCronJob extends AbstractCronJob {
 
    @Override
    public void init() {
-      log.info("Start Newsletter CronJob");
       NewsletterService newsletterService = (NewsletterService) ApplicationContextFactory.getBean("newsletterServices");
       BounceChecker checker = new BounceChecker(newsletterService);
       if (!checker.isRunning() && (ServerUtil.isStaging() || ServerUtil.isSingle())) {
@@ -238,7 +237,6 @@ public class NewsletterCronJob extends AbstractCronJob {
 
    @Override
    public void run() {
-      log.info("Running Newsletter CronJob for newsletter 1" );
       if(ServerUtil.isSingle() || ServerUtil.isStaging()) {
          List<Node> newslettersToPublish = getNewslettersToPublish();
          for (int newsletterIterator = 0; newsletterIterator < newslettersToPublish.size(); newsletterIterator++) {
