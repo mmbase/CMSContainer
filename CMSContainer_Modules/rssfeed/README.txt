@@ -6,7 +6,4 @@ CONFIGURATION:
 \
 
 TODO:
-* ??? merge into core ???
-* use the CMSC channel selector in stead of the edit wizard one
-* ??? email automatic ???
-
+\

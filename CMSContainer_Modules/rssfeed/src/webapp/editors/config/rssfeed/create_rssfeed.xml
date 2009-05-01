@@ -4,5 +4,6 @@
    <object type="rssfeed">
 	   <field name="maximum">100</field>
 	   <field name="max_age_in_days">30</field>
+	   <field name="language">nl</field>
    </object>
 </action>
