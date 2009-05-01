@@ -11,8 +11,7 @@
    <script src="userlist.js" type="text/javascript"></script>
 </cmscedit:head>   
 <body>
-<mm:cloud loginpage="../login.jsp" rank="basic user" jspvar="cloud">
-<mm:hasrank minvalue="siteadmin">
+<mm:cloud loginpage="../login.jsp" rank="administrator" jspvar="cloud">
 <div style="float: left">
 <cmscedit:sideblock title="view.groups" titleClass="side_block_gray">
       <ul class="shortcuts">
@@ -87,9 +86,9 @@
          <c:forEach var="auth" items="${userList}">
             <pg:item>
             <tr>
-               <td style="padding-right: 10px"><a href="userAddInitAction.do?authid=${auth.id}">${auth.userId}</a></td>
+               <td style="padding-right: 10px"><a href="userAddInitAction.do?userid=${auth.userId}">${auth.userId}</a></td>
                <td>
-                  <a href="deleteUserAction.do?authid=${auth.id}">
+                  <a href="deleteUserAction.do?userid=${auth.userId}">
                      <img src="../gfx/icons/delete.png" border='0' title="<fmt:message key="view.removeuser" />"
                         onclick="return confirm('<fmt:message key="view.removeuserquestion" />')" />
                   </a>
@@ -119,7 +118,6 @@
    </pg:pager>
 </cmscedit:sideblock>
 </div>
-</mm:hasrank>
 </mm:cloud>
 </body>
 </html:html>

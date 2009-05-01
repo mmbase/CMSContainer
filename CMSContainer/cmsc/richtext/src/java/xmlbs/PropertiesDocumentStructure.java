@@ -95,8 +95,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
       // collect tag names
       {
          Set<Object> keys = prop.keySet();
-         for (Object object : keys) {
-            String key = (String) object;
+         for (Iterator<Object> iter = keys.iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
             if (!key.startsWith("_")) {
                tagNames.add(key);
             }
@@ -105,7 +105,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
 
       // create "master" map by resolving all includes
       Map<String, List<String>> master = new HashMap<String, List<String>>();
-      for (String key : tagNames) {
+      for (Iterator<String> it = tagNames.iterator(); it.hasNext();) {
+         String key = it.next();
          master.put(key, include(prop, key));
       }
 
@@ -124,7 +125,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
       }
 
       // create hierarchy map from master
-      for (String key : tagNames) {
+      for (Iterator<String> it = tagNames.iterator(); it.hasNext();) {
+         String key = it.next();
          List<String> l = new ArrayList<String>(master.get(key));
          // remove attribute info
          for (Iterator<String> it0 = l.iterator(); it0.hasNext();) {
@@ -137,11 +139,13 @@ public class PropertiesDocumentStructure implements DocumentStructure {
       }
 
       // create attribute map from master
-      for (String key : tagNames) {
+      for (Iterator<String> it = tagNames.iterator(); it.hasNext();) {
+         String key = it.next();
          List<String> in = new ArrayList<String>(master.get(key));
          List<String> l = new ArrayList<String>();
          // copy attribute only info to list
-         for (String key0 : in) {
+         for (Iterator<String> it0 = in.iterator(); it0.hasNext();) {
+            String key0 = it0.next();
             if (key0.startsWith("$")) {
                l.add(key0.substring(1));
             }
@@ -209,7 +213,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
       }
 
       String in = name.toLowerCase();
-      for (String n : tagNames) {
+      for (Iterator<String> it = tagNames.iterator(); it.hasNext();) {
+         String n = it.next();
          if (n.toLowerCase().equals(in)) {
             return n;
          }
@@ -238,7 +243,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
 
       // find a lower case match
       String in = name.toLowerCase();
-      for (String n : entityNames) {
+      for (Iterator<String> it = entityNames.iterator(); it.hasNext();) {
+         String n = it.next();
          if (n.toLowerCase().equals(in)) {
             return n;
          }
@@ -267,7 +273,8 @@ public class PropertiesDocumentStructure implements DocumentStructure {
          return attr;
       }
       String in = attr.toLowerCase();
-      for (String n : names) {
+      for (Iterator<String> it = names.iterator(); it.hasNext();) {
+         String n = it.next();
          if (n.toLowerCase().equals(in)) {
             return n;
          }

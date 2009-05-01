@@ -11,6 +11,10 @@ package com.finalist.cmsc.services.sitemanagement;
 
 import java.util.*;
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
+import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.core.event.*;
 import org.mmbase.module.core.MMBase;
@@ -23,26 +27,23 @@ import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.services.sitemanagement.tree.PageTree;
 import com.finalist.cmsc.services.sitemanagement.tree.PageTreeNode;
 
-public final class SiteCache implements RelationEventListener, NodeEventListener {
+public class SiteCache implements RelationEventListener, NodeEventListener {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(SiteCache.class);
+   private static Logger log = Logging.getLoggerInstance(SiteCache.class.getName());
 
-   private final SiteCacheLoader loader;
+   private CloudProvider cloudProvider;
    private Map<String, PageTree> trees = new HashMap<String, PageTree>();
 
-   public SiteCache() {
-      this(new SiteCacheLoader());
-   }
 
-   public SiteCache(SiteCacheLoader loader) {
-      this.loader = loader;
+   public SiteCache() {
+      this.cloudProvider = CloudProviderFactory.getCloudProvider();
       doSetupCache();
       registerListeners();
    }
 
    public void registerListeners() {
-       List<NavigationItemManager> navigationManagers = loader.getNavigationManagers();
+       List<NavigationItemManager> navigationManagers = NavigationManager.getNavigationManagers();
        for (NavigationItemManager nim : navigationManagers) {
            if (!nim.isRoot()) {
                String nodeType = nim.getTreeManager();
@@ -52,8 +53,20 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
    }
 
    public void doSetupCache() {
-       Map<String, PageTree> newtrees = loader.loadPageTreeMap();
+       Cloud cloud = getCloud();
+       SiteCacheLoader loader = new SiteCacheLoader();
+       Map<String, PageTree> newtrees = loader.loadPageTreeMap(cloud);
        trees = newtrees;
+   }
+
+
+   protected Cloud getAdminCloud() {
+      return cloudProvider.getAdminCloud();
+   }
+
+
+   protected Cloud getCloud() {
+      return cloudProvider.getAnonymousCloud();
    }
 
    public void createTree(int siteId, String sitefragment) {
@@ -213,7 +226,7 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
                }
                int sourceNumber = event.getRelationSourceNumber();
                int destinationNumber = event.getRelationDestinationNumber();
-               Node sourceNode = loader.getCloud().getNode(sourceNumber);
+               Node sourceNode = getCloud().getNode(sourceNumber);
                String path = sourceNode.getStringValue(TreeUtil.PATH_FIELD);
 
                List<String> names = PageTree.getPathElements(path);
@@ -232,20 +245,12 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
                int childIndex = (Integer) event.getNodeEvent().getNewValue(TreeUtil.RELATION_POS_FIELD);
                if (destTreeNode == null) {
                   // create new PageYreeNode
-                  Node destNode = loader.getCloud().getNode(destinationNumber);
-
-                  if (NavigationUtil.getChildCount(destNode) == 0) {
-                     String path = destNode.getStringValue(TreeUtil.PATH_FIELD);
-                     List<String> names = PageTree.getPathElements(path);
-                     PageTree tree = getTree(names.get(0));
-                     if (tree != null) {
-                        tree.insert(path, destinationNumber, childIndex);
-                     }
-                  }
-                  else {
-                     // this is NOT a new navigation item. SiteCache is invalid.
-                     // fastest way to recover (minimal number of queries) is a reset of the cache.
-                     doSetupCache();
+                  Node destNode = getCloud().getNode(destinationNumber);
+                  String path = destNode.getStringValue(TreeUtil.PATH_FIELD);
+                  List<String> names = PageTree.getPathElements(path);
+                  PageTree tree = getTree(names.get(0));
+                  if (tree != null) {
+                     tree.insert(path, destinationNumber, childIndex);
                   }
                }
                else {
@@ -273,14 +278,15 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
 
 
    private boolean isChangeTreeEvent(RelationEvent event) {
-      int relationNumber = loader.getNavrelRelationNumber();
-      if (event.getRole() == relationNumber) {
+      int relationNumber = MMBase.getMMBase().getRelDef().getNumberByName(NavigationUtil.NAVREL);
+      if (event.getRole() == relationNumber) { 
           boolean sourceIsTreeType = NavigationManager.getNavigationManager(event.getRelationSourceType()) != null;
           boolean destinationIsTreeType = NavigationManager.getNavigationManager(event.getRelationDestinationType()) != null;
           return sourceIsTreeType && destinationIsTreeType;
       }
       return false;
    }
+
 
    public void notify(NodeEvent event) {
       Integer key = event.getNodeNumber();
@@ -293,21 +299,13 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
               if (event.getChangedFields().contains(fragmentField)) {
                   String newFragment = (String) event.getNewValue(fragmentField);
                   if (navigationManager.isRoot()) {
-
-                     //Search for keys to change
-                     ArrayList<PageTree> addList = new ArrayList<PageTree>();
-                     for (PageTree tree : trees.values()) {
+                      for (PageTree tree : trees.values()) {
                           if (tree.containsPageTreeNode(key)) {
-                             addList.add(tree);
-                        }
-                     }
-
-                     //Now change the 'trees' Map (otherwise the Map gets corrupted)
-                     for (PageTree tree : addList) {
-                        trees.remove(tree.getRoot().getPathStr().toLowerCase());
-                        trees.put(newFragment.toLowerCase(), tree);
-                        tree.replace(key, newFragment);
-                     }
+                              trees.remove(tree.getRoot().getPathStr().toLowerCase());
+                              trees.put(newFragment.toLowerCase(), tree);
+                              tree.replace(key, newFragment);
+                          }
+                      }   
                   }
                   else {
                       for (PageTree tree : trees.values()) {

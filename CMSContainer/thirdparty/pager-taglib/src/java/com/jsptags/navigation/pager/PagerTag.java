@@ -167,7 +167,7 @@ public class PagerTag extends TagSupport {
 
 
    public final void setExport(String value) throws JspException {
-      if (!export.equals(value)) {
+      if (export != value) {
          try {
             pagerTagExport = TagExportParser.parsePagerTagExport(value);
          }
@@ -288,14 +288,14 @@ public class PagerTag extends TagSupport {
 
 
    final Integer getOffsetPageNumber(int pageOffset) {
-      return Integer.valueOf(1 + pageNumber(pageOffset));
+      return new Integer(1 + pageNumber(pageOffset));
    }
 
 
    final Integer getPageNumber(int i) {
       if (i == pageNumber)
          return pageNumberInteger;
-      return Integer.valueOf(1 + i);
+      return new Integer(1 + i);
    }
 
 
@@ -390,7 +390,7 @@ public class PagerTag extends TagSupport {
       }
 
       pageNumber = pageNumber(offset);
-      pageNumberInteger = Integer.valueOf(1 + pageNumber);
+      pageNumberInteger = new Integer(1 + pageNumber);
 
       if (REQUEST.equals(scope)) {
          ServletRequest request = pageContext.getRequest();

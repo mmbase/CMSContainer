@@ -9,7 +9,9 @@
  */
 package org.mmbase.applications.wordfilter;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,13 +24,13 @@ import xmlbs.PropertiesDocumentStructure;
 /**
  * This util class removes ugly html code from a string Ugly html code could be
  * a result of copy&paste from ms word to the mmbase editwizards wysiwyg input
- *
+ * 
  * @author Nico Klasens (Finalist IT Group)
  */
-public final class WordHtmlCleaner {
+public class WordHtmlCleaner {
 
    /** MMBase logging system */
-   private static final Logger log = Logging.getLoggerInstance(WordHtmlCleaner.class.getName());
+   private static Logger log = Logging.getLoggerInstance(WordHtmlCleaner.class.getName());
 
    /**
     * xmlbs stuff Document structure configurable using a property file. A
@@ -47,7 +49,7 @@ public final class WordHtmlCleaner {
          String propertiesResource = "WordHtmlCleaner.properties";
          InputStream resourceAsStream = WordHtmlCleaner.class.getResourceAsStream(propertiesResource);
          if (resourceAsStream == null) {
-            throw new IllegalStateException("resource " + propertiesResource + " is not found");
+            throw new RuntimeException("resource " + propertiesResource + " is not found");
          }
          prop.load(resourceAsStream);
          xmlbsDTD = new xmlbs.PropertiesDocumentStructure(prop);
@@ -58,9 +60,6 @@ public final class WordHtmlCleaner {
       }
    }
 
-   private WordHtmlCleaner() {
-      // utility
-   }
 
    public static String cleanXML(String textStr) {
       String xmlVersion = "";
@@ -98,28 +97,13 @@ public final class WordHtmlCleaner {
 
    /**
     * Cleans html code
-    *
-    * @param textStr
-    *           ugly html code
-    * @param replaceHeaders
-    * @return clean html code
-    */
-   public static String cleanHtml(String textStr, boolean replaceHeaders) {
-      /* replaceParagraphs - is set to true, to keep old functionality working */
-      boolean replaceParagraphs = true;
-      return cleanHtml(textStr, replaceHeaders, replaceParagraphs);
-   }
-   
-   /**
-    * Cleans html code
     * 
     * @param textStr
     *           ugly html code
-    * @param replaceHeaders 
-    * @param replaceParagraphs 
+ * @param replaceHeaders 
     * @return clean html code
     */
-   public static String cleanHtml(String textStr, boolean replaceHeaders, boolean replaceParagraphs) {
+   public static String cleanHtml(String textStr, boolean replaceHeaders) {
       log.debug("old value : " + textStr);
       if (textStr != null) {
          try {
@@ -130,13 +114,9 @@ public final class WordHtmlCleaner {
             xmlStr = fixBadLists(xmlStr);
             xmlStr = fixNiceLists(xmlStr);
             xmlStr = removeHtmlIfComments(xmlStr);
-            xmlStr = removeComments(xmlStr);
             xmlStr = fixBR(xmlStr);
             xmlStr = removeEmptyFonts(xmlStr);
-            
-            if (replaceParagraphs) {
-               xmlStr = replaceParagraph(xmlStr);
-            }
+            xmlStr = replaceParagraph(xmlStr);
             if (replaceHeaders) {
                 xmlStr = replaceHeaders(xmlStr);
             }
@@ -205,19 +185,10 @@ public final class WordHtmlCleaner {
       return text;
    }
 
-   /**
-    * CMSC-1337: Remove inline style from e.g. Word
-    */
-   private static String removeComments(String text) {
-      Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(text);
-      text = matcher.replaceAll("");
-      return text;
-   }
 
    /**
     * remove xml namespace declarations
-    *
+    * 
     * @param text
     *           xml string
     * @return xml string with namespace removed
@@ -231,23 +202,21 @@ public final class WordHtmlCleaner {
    }
 
 
-   /**
-    *  Replace <p> tags with <rr /> tags. This removes issues with <p> tags in <p> tags
-    *  1 We do not know if these fields are used in a template with surrounding <p> tags
-    *  2 HTML-editors do not enforce <p> tags around the contents. To make everything
-    *  look the same and xhtml just replace them.
-    *  3 Nested <p> tags have issues in several browsers.
-    */
    private static String replaceParagraph(String text) {
-       // see CMSC-421 when you are going to change this code
-
       // remove <p></p> (empty paragraphs)
-      text = text.replaceAll("<[pP]{1}>\\s*</[pP]{1}>", "");
+      // CMSC-421: FP: Commented this out, because this is eating whitespace!
+      // text =
+      // text.replaceAll("<\\s{0,1}[pP]{1}\\s{0,1}></\\s{0,1}[pP]{1}\\s{0,1}>",
+      // "");
 
-      // remove all remaining <p> start tags
-      text = text.replaceAll("<\\s*[pP]{1}(\\s{1}.*?)?>", "");
-      // replace all remaining </p> closing tags with a <br><br>
-      text = text.replaceAll("<\\s*/[pP]{1}(\\s{1}.*?)?>", "<br/><br/>");
+      // remove all remaining <p>
+      text = text.replaceAll("<\\s*[pP]{1}\\s*.*?>", "");
+
+      // replace all remaining </p> with a <br><br>
+      // CMSC-421: FP: Changed this to two newlines, because it was eating
+      // whitespace
+      text = text.replaceAll("<\\s*/[pP]{1}\\s*.*?>", "<br/><br/>");
+
       // remove all <br> at the end
       text = text.replaceAll("(<\\s*[bB][rR]\\s*/?>|\\s|&nbsp;)+\\z", "");
       return text;
@@ -258,7 +227,7 @@ public final class WordHtmlCleaner {
       // remove the starting header tags ( <h1> till <h7>)
       text = text.replaceAll("<\\s*[hH]{1}[1-7]{1}\\s*.*?>", "<strong>");
       // replace all remaining ending header tags ( </h1> till </h7>)
-      text = text.replaceAll("<\\s*/[hH]{1}[1-7]{1}\\s*.*?>", "</strong><br />");
+      text = text.replaceAll("<\\s*/[hH]{1}[1-7]{1}\\s*.*?>", "</strong>>");
       // remove all <br> at the end
       text = text.replaceAll("(<\\s*[bB][rR]\\s*/?>|\\s|&nbsp;)+\\z", "");
       return text;
@@ -267,7 +236,7 @@ public final class WordHtmlCleaner {
 
    /**
     * Fixes the anchors tags for Wordpad: <U><FONT color=#0000ff> ... </U></FONT>
-    *
+    * 
     * @param xmlStr
     *           xml string
     * @return xml string with fixed anchors
@@ -303,7 +272,7 @@ public final class WordHtmlCleaner {
     * tabs before and behind the dots of the lists.
     */
    private static String fixBadLists(String text) {
-      text = text.replaceAll("[งท]", ""); //UTF-8: &#192;
+      text = text.replaceAll("[งท]", "");
 
       int pos = -1;
       while ((pos = text.indexOf("<!--[if !supportLists", pos + 1)) != -1) {
@@ -374,7 +343,7 @@ public final class WordHtmlCleaner {
 
    /**
     * Fixes the anchors tags puts the href in the body if the
-    *
+    * 
     * @param xmlStr
     *           xml string
     * @return xml string with fixed anchors
@@ -385,7 +354,7 @@ public final class WordHtmlCleaner {
       int end = 0;
       while ((begin = nextResult(xmlStr, "<a ", end)) > -1) {
          xml += xmlStr.substring(end, begin);
-         int endBegin = xmlStr.indexOf('>', begin);
+         int endBegin = xmlStr.indexOf(">", begin);
          end = nextResult(xmlStr, "</a>", begin);
          if (end > -1 && "".equals(stripHtmlFromBody(xmlStr.substring(endBegin + 1, end)))) {
             String atag = xmlStr.substring(begin, endBegin + 1);
@@ -421,7 +390,7 @@ public final class WordHtmlCleaner {
       while ((begin = nextResult(xmlStr, "<a ", end)) > -1) {
          xml += xmlStr.substring(end, begin);
 
-         int gt = xmlStr.indexOf('>', begin);
+         int gt = xmlStr.indexOf(">", begin);
          int closinggt = xmlStr.indexOf("/>", begin);
          boolean emptyTag = closinggt != -1 && gt >= closinggt + 1;
          if (emptyTag) {

@@ -1,11 +1,12 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- * 
- */
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
+*/
 package com.finalist.cmsc.services.community.security;
 
 import java.util.List;
@@ -15,129 +16,121 @@ import java.util.List;
  */
 public interface AuthenticationService {
 
-   /**
-    * Create an authentication
-    * 
-    * @param userId
-    * @param password
-    */
-   Authentication createAuthentication(String userId, String password);
+    /**
+     * Create an authentication
+     *
+     * @param userId
+     * @param password
+     */
+    Authentication createAuthentication(String userId, String password);
 
-   /**
-    * Update the login information for the authentication (typically called by the user)
-    * 
-    * @param userId
-    * @param oldPassword
-    * @param newPassword
-    */
-   void updateAuthentication(String userId, String oldPassword, String newPassword);
+    /**
+     * Update the login information for the authentication (typically called by the user)
+     *
+     * @param userId
+     * @param oldPassword
+     * @param newPassword
+     */
+    void updateAuthentication(String userId, String oldPassword, String newPassword);
 
-   /**
-    * Set the login information for an authentication (typically called by an admin user)
-    * 
-    * @param userId
-    * @param newPassword
-    */
-   void updateAuthenticationPassword(String userId, String newPassword);
+    /**
+     * Set the login information for an authentication (typically called by an admin user)
+     *
+     * @param userId
+     * @param newPassword
+     */
+    void updateAuthenticationPassword(String userId, String newPassword);
 
-   /**
-    * Delete an authentication entry TODO if a authentication is deleted, what should happen with the user's content (in
-    * other systems)?
-    * 
-    * @param id
-    */
-   void deleteAuthentication(Long id);
 
-   /**
-    * Check if the given authentication exists
-    * 
-    * @param userId
-    * @return boolean returns true if a user exists, otherwise returns false
-    */
-   boolean authenticationExists(String userId);
+    /**
+     * Delete an authentication entry
+     * TODO if a authentication is deleted, what should happen with the user's content (in other systems)?
+     *
+     * @param userId
+     */
+    void deleteAuthentication(String userId);
 
-   /**
-    * Enable or disable a authentication
-    * 
-    * @param userId
-    * @param enabled
-    */
-   void setAuthenticationEnabled(String userId, boolean enabled);
+    /**
+     * Check if the given authentication exists
+     *
+     * @param userId
+     * @return boolean returns true if a user exists, otherwise it returns false
+     */
+    boolean authenticationExists(String userId);
 
-   /**
-    * Is an authentication enabled or disabled?
-    * 
-    * @param userId
-    * @return boolean returns true if a user is enabled, otherwise returns false
-    */
-   boolean isAuthenticationEnabled(String userId);
+    /**
+     * Enable or disable a authentication
+     *
+     * @param userId
+     * @param enabled
+     */
+    void setAuthenticationEnabled(String userId, boolean enabled);
 
-   /**
-    * Carry out an authentication attempt
-    * 
-    * @param userId
-    * @param password
-    */
-   boolean authenticate(String userId, String password);
+    /**
+     * Is an authentication enabled or disabled?
+     *
+     * @param userId
+     * @return boolean returns true if a user is enabled, otherwise it returns false
+     */
+    boolean isAuthenticationEnabled(String userId);
 
-   /**
-    * Adds an authority to a user
-    * 
-    * @param userId
-    * @param authority
-    */
-   void addAuthorityToUser(String userId, String authority);
+    /**
+     * Carry out an authentication attempt
+     *
+     * @param userId
+     * @param password
+     */
+    boolean authenticate(String userId, String password);
 
-   /**
-    * Removes an authority from a user
-    * 
-    * @param userId
-    * @param authority
-    */
-   void removeAuthorityFromUser(String userId, String authority);
+    /**
+     * Adds an authority to a user
+     *
+     * @param userId
+     * @param authority
+     */
+    void addAuthorityToUser(String userId, String authority);
 
-   /**
-    * Finds an authentication object for this userId
-    * 
-    * @param userId
-    * @return authentication
-    */
-   Authentication findAuthentication(String userId);
+    /**
+     * Removes an authority from a user
+     *
+     * @param userId
+     * @param authority
+     */
+    void removeAuthorityFromUser(String userId, String authority);
 
-   /**
-    * Finds all authentications
-    * 
-    * @param authority
-    * @return list authentications
-    */
-   List < Authentication > findAuthenticationsForAuthority(String name);
+    /**
+     * Finds an authentication object for this userId
+     * 
+     * @param userId
+     * @return authentication
+     */
+    Authentication findAuthentication(String userId);
+    
+    /**
+     * Finds all authentications
+     * 
+     * @param authority
+     * @return list authentications
+     */
+    List<Authentication> findAuthenticationsForAuthority(String name);
 
-   /**
-    * Finds all authentications
-    * 
-    * @return list authentications
-    */
-   List < Authentication > findAuthentications();
+    /**
+     * Finds all authentications
+     * @return list authentications
+     */
+    List<Authentication> findAuthentications();
+    
+    /**
+     * Finds an authentication id for this userId
+     * @param userId
+     * @return authenticationId
+     */ 
+	Long getAuthenticationIdForUserId(String userId);
 
-   /**
-    * Finds an authentication id for this userId
-    * 
-    * @param userId
-    * @return authenticationId
-    */
-   Long getAuthenticationIdForUserId(String userId);
-
-   /**
-    * Find authentication information by Id for a user
-    * 
-    * @param authenticationId
-    * @return Authentication
-    */
+	/**
+	 * Find authentication information by Id for a user
+	 * @param authenticationId
+	 * @return Authentication
+	 */
    Authentication getAuthenticationById(Long authenticationId);
-
-   public Authentication createAuthentication(Authentication authentication);
-
-   public void removeAuthenticationFromAuthority(String authId, String groupName);
-
-   public void addAuthorityToUserByAuthenticationId(String authId, String groupName);
 }

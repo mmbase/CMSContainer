@@ -52,7 +52,7 @@ public class PagerTag extends com.jsptags.navigation.pager.PagerTag {
          String[] values = pageContext.getRequest().getParameterValues(name);
 
          if (values != null) {
-            for (String value2 : values) {
+            for (int i = 0, l = values.length; i < l; i++) {
                renderUrl.setParameter(name, value);
             }
          }

@@ -2,7 +2,7 @@
 <!DOCTYPE application PUBLIC "-//MMBase/DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="rssfeed" maintainer="finalist.com" version="1" auto-deploy="true">
    <requirements>
-      <requires name="contentrepository" maintainer="finalist.com" version="3" type="application"/>
+      <requires name="contentrepository" maintainer="finalist.com" version="2" type="application"/>
       <requires name="sitemanagement" maintainer="finalist.com" version="1" type="application"/>
    </requirements>
 
@@ -18,7 +18,6 @@
       <relation from="page" to="rssfeed" type="navrel" />
       <relation from="rssfeed" to="contentchannel" type="related" />
       <relation from="rssfeed" to="typedef" type="allowrel" />
-      <relation from="mmbasegroups" to="rssfeed" type="rolerel" />
    </allowedrelationlist>
 
    <datasourcelist>

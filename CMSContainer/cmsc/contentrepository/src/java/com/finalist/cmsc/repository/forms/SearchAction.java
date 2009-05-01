@@ -1,21 +1,23 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.commons.util.KeywordUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.storage.search.Constraint;
-import org.mmbase.storage.search.Step;
+import org.mmbase.storage.search.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -23,17 +25,18 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.resources.forms.QueryStringComposer;
+import com.finalist.cmsc.struts.PagerAction;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
-import com.finalist.cmsc.struts.PagerAction;
-import com.finalist.cmsc.util.KeywordUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class SearchAction extends PagerAction {
 
     public static final String GETURL = "geturl";
 
     public static final String PERSONAL = "personal";
-    public static final String MODE = "mode";
     public static final String AUTHOR = "author";
     public static final String OBJECTID = "objectid";
     public static final String PARENTCHANNEL = "parentchannel";
@@ -44,7 +47,7 @@ public class SearchAction extends PagerAction {
     /**
      * MMbase logging system
      */
-    private static final Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
+    private static Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
 
 
     @Override
@@ -58,13 +61,8 @@ public class SearchAction extends PagerAction {
         String deleteContentRequest = request.getParameter("deleteContentRequest");
 
         if (StringUtils.isNotEmpty(deleteContentRequest)) {
-           if(deleteContentRequest.startsWith("massDelete:")) {
-              massDeleteContent(deleteContentRequest.substring(11));
-           }
-           else {
             deleteContent(deleteContentRequest);
-           }
-
+            
             // add a flag to let search result page refresh the channels frame,
             // so that the number of item in recyclebin can update
             request.setAttribute("refreshChannels", "refreshChannels");
@@ -74,7 +72,7 @@ public class SearchAction extends PagerAction {
         List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
         List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-        List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+        List<String> hiddenTypes = PropertiesUtil.getHiddenTypes();
         for (NodeManager manager : types) {
             String name = manager.getName();
             if (!hiddenTypes.contains(name)) {
@@ -91,9 +89,6 @@ public class SearchAction extends PagerAction {
 
         NodeManager nodeManager = cloud.getNodeManager(searchForm.getContenttypes());
         QueryStringComposer queryStringComposer = new QueryStringComposer();
-        if(StringUtils.isNotEmpty(request.getParameter(MODE))) {
-        	queryStringComposer.addParameter(MODE, request.getParameter(MODE));
-        }
         NodeQuery query = cloud.createNodeQuery();
 
         // First we add the contenttype parameter
@@ -101,7 +96,7 @@ public class SearchAction extends PagerAction {
 
         // First add the proper step to the query.
         Step theStep = null;
-        if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
+        if (!StringUtil.isEmpty(searchForm.getParentchannel())) {
             Step step = query.addStep(cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL));
             query.addNode(step, cloud.getNode(searchForm.getParentchannel()));
             theStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
@@ -117,7 +112,7 @@ public class SearchAction extends PagerAction {
         String order = searchForm.getOrder();
 
         // set default order field
-        if (StringUtils.isEmpty(order)) {
+        if (StringUtil.isEmpty(order)) {
             if (nodeManager.hasField("title")) {
                 order = "title";
             }
@@ -125,7 +120,7 @@ public class SearchAction extends PagerAction {
                 order = "name";
             }
         }
-        if (StringUtils.isNotEmpty(order)) {
+        if (StringUtil.isEmpty(order)) {
             queryStringComposer.addParameter(ORDER, searchForm.getOrder());
             queryStringComposer.addParameter(DIRECTION, "" + searchForm.getDirection());
             query.addSortOrder(query.getStepField(nodeManager.getField(order)), searchForm.getDirection());
@@ -158,24 +153,24 @@ public class SearchAction extends PagerAction {
                 Field field = fieldIterator.nextField();
                 String paramName = nodeManager.getName() + "." + field.getName();
                 String paramValue = request.getParameter(paramName);
-                if (StringUtils.isNotEmpty(paramValue)) {
-                    SearchUtil.addLikeConstraint(query, field, paramValue.trim());
+                if (!StringUtil.isEmpty(paramValue)) {
+                    SearchUtil.addLikeConstraint(query, field, paramValue);
                 }
                 queryStringComposer.addParameter(paramName, paramValue);
             }
         }
 
         // Add the title constraint:
-        if (StringUtils.isNotEmpty(searchForm.getTitle())) {
+        if (!StringUtil.isEmpty(searchForm.getTitle())) {
 
-            queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle().trim());
+            queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle());
             Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
-            Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle().trim());
+            Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
             SearchUtil.addConstraint(query, titleConstraint);
         }
 
         // And some keyword searching
-        if (StringUtils.isNotEmpty(searchForm.getKeywords())) {
+        if (!StringUtil.isEmpty(searchForm.getKeywords())) {
             queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords());
             Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
             List<String> keywords = KeywordUtil.getKeywords(searchForm.getKeywords());
@@ -186,26 +181,25 @@ public class SearchAction extends PagerAction {
         }
 
         // Set the objectid constraint
-        if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
-        	String stringObjectId = searchForm.getObjectid().trim();
+        if (!StringUtil.isEmpty(searchForm.getObjectid())) {
             Integer objectId = null;
-            if (stringObjectId.matches("^\\d+$")) {
-                objectId = Integer.valueOf(stringObjectId);
+            if (searchForm.getObjectid().matches("^\\d+$")) {
+                objectId = new Integer(searchForm.getObjectid());
             }
             else {
-                if (cloud.hasNode(stringObjectId)) {
-                    objectId = Integer.valueOf(cloud.getNode(stringObjectId).getNumber());
+                if (cloud.hasNode(searchForm.getObjectid())) {
+                    objectId = new Integer(cloud.getNode(searchForm.getObjectid()).getNumber());
                 }
                 else {
-                    objectId = Integer.valueOf(-1);
+                    objectId = new Integer(-1);
                 }
             }
             SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.NUMBER_FIELD, objectId);
-            queryStringComposer.addParameter(OBJECTID, stringObjectId);
+            queryStringComposer.addParameter(OBJECTID, searchForm.getObjectid());
         }
 
         // Add the user personal:
-        if (StringUtils.isNotEmpty(searchForm.getPersonal())) {
+        if (!StringUtil.isEmpty(searchForm.getPersonal())) {
 
             String useraccount = cloud.getUser().getIdentifier();
             if (ContentElementUtil.LASTMODIFIER_FIELD.equals(searchForm.getPersonal())) {
@@ -218,7 +212,7 @@ public class SearchAction extends PagerAction {
         }
 
         // Add the user
-        if (StringUtils.isNotEmpty(searchForm.getUseraccount())) {
+        if (!StringUtil.isEmpty(searchForm.getUseraccount())) {
             String useraccount = searchForm.getUseraccount();
             SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIER_FIELD, useraccount);
         }
@@ -243,21 +237,12 @@ public class SearchAction extends PagerAction {
         int resultCount = Queries.count(query);
         NodeList results = cloud.getList(query);
 
-        // Set everything on the request.
+        // Set everyting on the request.
         searchForm.setResultCount(resultCount);
         searchForm.setResults(results);
         request.setAttribute(GETURL, queryStringComposer.getQueryString());
 
         return super.execute(mapping, form, request, response, cloud);
-    }
-
-    private void massDeleteContent(String deleteContent) {
-       if(StringUtils.isNotBlank(deleteContent)){
-          String[] deleteContents = deleteContent.split(",");
-          for(String content : deleteContents) {
-             deleteContent(content);
-          }
-       }
     }
 
     private void deleteContent(String deleteContentRequest) {
@@ -299,8 +284,8 @@ public class SearchAction extends PagerAction {
 
         // unpublish and remove from workflow
         Publish.remove(objectNode);
-        Workflow.remove(objectNode);
         Publish.unpublish(objectNode);
+        Workflow.remove(objectNode);
     }
 
 }

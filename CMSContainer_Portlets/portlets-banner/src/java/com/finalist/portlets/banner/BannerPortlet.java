@@ -18,8 +18,12 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -71,12 +75,13 @@ public class BannerPortlet extends ContentChannelPortlet {
    }
 
    protected void handleBannerCounters(RenderRequest request) {
-      // remove all banners from the content elements that have reached max clicks (
+      // remove all banners from the content elemens that have reached max clicks (
       String screenId = (String) request.getAttribute(PortalConstants.CMSC_OM_PAGE_ID);
       String page = SiteManagement.getPath(Integer.valueOf(screenId), true);
       String position = (String) request.getAttribute(PortalConstants.CMSC_OM_PORTLET_LAYOUTID);
 
-      Cloud cloud = getCloudForAnonymousUpdate();
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
       // get the node list from the request
       List<ContentElement> elements = (List<ContentElement>) request.getAttribute(ELEMENTS);
       if (elements != null) {
@@ -93,6 +98,9 @@ public class BannerPortlet extends ContentChannelPortlet {
                               && (counter.getIntValue("clicks") >= banner.getIntValue("maxclicks"))) {
                          log.debug("Maximum number of clicks reached for banner: " + banner.getNumber() + ", skipping it");
                          iter.remove();
+                      } else {
+                         counter.setDateValue("enddate", now);
+                         counter.commit();
                       }
                    } else {
                       counter = createBannerCounter(cloud, banner, page, position);
@@ -110,14 +118,17 @@ public class BannerPortlet extends ContentChannelPortlet {
 
    @Override
    public void processView(ActionRequest request, ActionResponse response) {
-      String position = (String) request.getAttribute(PortalConstants.CMSC_OM_PORTLET_LAYOUTID);
+      PortletPreferences preferences = request.getPreferences();
+
+      String position = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_LAYOUTID, null);
       String screenId = (String) request.getAttribute(PortalConstants.CMSC_OM_PAGE_ID);
       String page = SiteManagement.getPath(Integer.valueOf(screenId), true);
 
-      Cloud cloud = getCloudForAnonymousUpdate();
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
 
       String bannerId = request.getParameter("elementId");
-      if (StringUtils.isNotBlank(bannerId)) {
+      if (!StringUtils.isBlank(bannerId)) {
          try {
             Node banner = cloud.getNode(bannerId);
             Node counter = findCounterNode(banner, page, position);
@@ -126,15 +137,12 @@ public class BannerPortlet extends ContentChannelPortlet {
                getLogger().debug("Could not find counter for banner: " + bannerId + ", created a new one");
             }
             int clicks = counter.getIntValue("clicks") + 1;
-            Date now = new Date();
             counter.setIntValue("clicks", clicks);
-            counter.setDateValue("enddate", now);
-
             counter.commit();
             getLogger().debug("Clicks updated to: " + clicks + " for banner: " + bannerId);
 
             String redirectUrl = request.getParameter(PARAM_REDIRECT);
-            if (StringUtils.isNotBlank(redirectUrl)) {
+            if (!StringUtils.isBlank(redirectUrl)) {
                getLogger().debug("Redirecting request for banner: " + bannerId + " to: " + redirectUrl);
                if (redirectUrl.indexOf("?") > -1) {
                   redirectUrl += "&";
