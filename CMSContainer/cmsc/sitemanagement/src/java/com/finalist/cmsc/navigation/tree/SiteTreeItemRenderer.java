@@ -35,7 +35,7 @@ public class SiteTreeItemRenderer implements NavigationTreeItemRenderer {
 
        if (SecurityUtil.isEditor(role)) {
 
-          if (SecurityUtil.isWebmaster(role)) {
+          if (SecurityUtil.isChiefEditor(role)) {
              element.addOption(renderer.createTreeOption("edit_defaults.png", 
                          "site.site.edit", "SiteEdit.do?number=" + id));
           }

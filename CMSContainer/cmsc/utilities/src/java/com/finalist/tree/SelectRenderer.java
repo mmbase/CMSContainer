@@ -13,7 +13,7 @@ import java.text.MessageFormat;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.Node;
 
@@ -53,7 +53,7 @@ public abstract class SelectRenderer implements TreeCellRenderer {
          link = getUrl(link);
       }
       element.setLink(link);
-      if (StringUtils.isNotEmpty(target)) {
+      if (!StringUtil.isEmpty(target)) {
          element.setTarget(target);
       }
       return element;

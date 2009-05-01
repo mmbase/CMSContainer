@@ -3,7 +3,6 @@
 <wizard-schema id="stylesheet">
 	<title xml:lang="nl">Stylesheets</title>
 	<title xml:lang="en">Style Sheets</title>
-	<title xml:lang="zh">样式表</title>
 
    <action include="config/stylesheet/create_stylesheet.xml"/>
    <action include="config/stylesheet/delete_stylesheet.xml"/>
@@ -12,7 +11,6 @@
    <lists>
       <optionlist include="config/option_lists/all_optionlists.xml"/>
       <optionlist include="config/option_lists/media.xml"/>
-	  <optionlist include="config/option_lists/boolean.xml"/>
    </lists>
 
    <steps>

@@ -39,36 +39,6 @@ function move(direction, objectNumber, channel) {
     document.location = url;
 }
 
-
-   
-function sortBy(action, orderColumn, channel) {
-    var offset = document.forms['initForm'].offset.value;
-    var oldOrderColumn = document.forms['initForm'].order.value;
-    
-    if (oldOrderColumn == orderColumn) {
-       // order column is not changed so change direction
-       var oldDirection = document.forms['initForm'].direction.value;
-       
-       if (oldDirection == 'down') {
-          document.forms['initForm'].direction.value = 'up';
-       }
-       else {
-          document.forms['initForm'].direction.value = 'down';
-       }
-    }
-    else {
-       document.forms['initForm'].order.value = orderColumn;
-       document.forms['initForm'].direction.value = 'down';
-    }
-    newDirection=document.forms['initForm'].direction.value;
-    type=document.forms['initForm'].order.value;
-    var url = action + '.do?' + 'type=' + action.toLowerCase() + '&orderby='+type+'&parentchannel=' + channel+'&direction='+newDirection+'&offset='+offset;
-    
-    document.location = url;
-    
- }   
-
-
 var moveContentNumber;
 var moveParentChannel;
 function moveContent(objectNumber, parentChannel) {
@@ -78,10 +48,7 @@ function moveContent(objectNumber, parentChannel) {
 }
 
 function selectChannel(channel, path) {
-    var newDirection=document.forms[0].direction.value;
-    var type=document.forms[0].order.value;
-    var offset = document.forms[0].offset.value;
-    document.location = "../Content.do?action=moveContentToChannel&parentchannel=" + moveParentChannel + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+    document.location = "../MoveContentToChannel.do?parentchannel=" + moveParentChannel + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber;
 }
 
 function refreshChannels() {
@@ -94,60 +61,13 @@ function refreshChannels() {
 function deleteContent(objectnumber, confirmmessage) {
     if (confirmmessage) {
         if (confirm(confirmmessage)) {
-           if(objectnumber == 'massdelete'){
-                 var checkboxs = document.getElementsByTagName("input");
-                 var objectnumbers = '';
-                 for(i = 0; i < checkboxs.length; i++) {
-                    if(checkboxs[i].type == 'checkbox' && checkboxs[i].name.indexOf('chk_') == 0 && checkboxs[i].checked) {
-                       objectnumbers += checkboxs[i].value+",";
-                    }
-                 }
-                 if(objectnumbers == ''){
-                    return ;
-                 }
-                 objectnumbers = objectnumbers.substr(0,objectnumbers.length - 1);
-                 document.forms[0].deleteContentRequest.value = "massDelete:"+objectnumbers;
-                 document.forms[0].submit();
-           }
-           else {
-              document.forms[0].deleteContentRequest.value = "permanentDelete:" + objectnumber;
-              document.forms[0].submit();
-           }
+            document.forms[0].deleteContentRequest.value = "permanentDelete:" + objectnumber;
+            document.forms[0].submit();
         }
     }
     else {
         document.forms[0].deleteContentRequest.value = "moveToRecyclebin:" + objectnumber;
         document.forms[0].submit();
     }
-}
 
-function selectAll(value, formName, elementPrefix) {
-   var elements = document.forms[formName].elements;
-   for (var i = 0; i < elements.length; i++) {
-      if (elements[i].name.indexOf(elementPrefix) == 0) {
-          elements[i].checked = value;
-      }
-   }
-}
-
-function massMove( parentChannel,url) {
-   var checkboxs = document.getElementsByTagName("input");
-   var objectnumbers = '';
-   for(i = 0; i < checkboxs.length; i++) {
-      if(checkboxs[i].type == 'checkbox' && checkboxs[i].name.indexOf('chk_') == 0 && checkboxs[i].checked) {
-         objectnumbers += checkboxs[i].value+",";
-      }
-   }
-   if(objectnumbers == ''){
-      return ;
-   }
-    moveContentNumber = objectnumbers.substr(0,objectnumbers.length - 1);
-    moveParentChannel = parentChannel;
-    openPopupWindow('selectchannel', 340, 400,url);
-}
-
-function massDelete(confirmmessage, formname) {
-   if(confirm(confirmmessage)){
-      document.forms[formname].submit();
-   }
 }

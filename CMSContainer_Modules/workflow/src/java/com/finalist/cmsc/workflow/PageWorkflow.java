@@ -12,6 +12,8 @@ package com.finalist.cmsc.workflow;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.RelationStep;
@@ -19,10 +21,8 @@ import org.mmbase.storage.search.Step;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.navigation.*;
-import com.finalist.cmsc.security.Role;
-import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.services.workflow.WorkflowException;
@@ -30,7 +30,7 @@ import com.finalist.cmsc.services.workflow.WorkflowException;
 public class PageWorkflow extends WorkflowManager {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(PageWorkflow.class.getName());
+   private static Logger log = Logging.getLoggerInstance(PageWorkflow.class.getName());
 
    public static final String TYPE_PAGE = "page";
 
@@ -49,14 +49,13 @@ public class PageWorkflow extends WorkflowManager {
    }
 
 
-   @Override
    public Node createFor(Node page, String remark) {
       synchronized (page) {
          if (hasWorkflow(page)) {
             return (Node) getWorkflows(page).get(0);
          }
          else {
-            Node wfItem = createFor(TYPE_PAGE, remark, null);
+            Node wfItem = createFor(TYPE_PAGE, remark);
             RelationUtil.createRelation(wfItem, page, WORKFLOWREL);
             log.debug("Workflow " + wfItem.getNumber() + " created for page " + page.getNumber());
             return wfItem;
@@ -137,7 +136,6 @@ public class PageWorkflow extends WorkflowManager {
    }
 
 
-   @Override
    public void complete(Node contentNode) {
       complete(contentNode, TYPE_PAGE);
    }
@@ -167,6 +165,7 @@ public class PageWorkflow extends WorkflowManager {
       return hasWorkflow(node, TYPE_PAGE);
    }
 
+
    @Override
    protected Node getWorkflowNode(Node node) {
       return getWorkflowNode(node, TYPE_PAGE);
@@ -177,7 +176,8 @@ public class PageWorkflow extends WorkflowManager {
    protected void checkNode(Node node, List<Node> errors, List<Integer> publishNumbers) {
       List<Node> path = NavigationUtil.getPathToRoot(node);
       path.remove(path.size() - 1);
-      for (Node pathElement : path) {
+      for (Iterator<Node> iter = path.iterator(); iter.hasNext();) {
+         Node pathElement = iter.next();
          if (!Publish.isPublished(pathElement)
                && (publishNumbers == null || !publishNumbers.contains(pathElement.getNumber()))) {
             errors.add(pathElement);
@@ -227,12 +227,5 @@ public class PageWorkflow extends WorkflowManager {
       }
       return NavigationUtil.getRole(node.getCloud(), page, false);
    }
-
-
-   @Override
-   public void addUserToWorkflow(Node node) {
-      addUserToWorkflow(node, TYPE_PAGE);
-   }
-
 
 }

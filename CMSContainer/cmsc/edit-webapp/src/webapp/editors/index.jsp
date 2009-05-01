@@ -7,20 +7,20 @@
    <mm:cloudinfo type="user" id="username" write="false"/>
    <mm:listnodes type="user" constraints="username='${username}'">
       <mm:field name="language" id="language" write="false"/>
+      
       <c:if test="${empty language}">
-         <c:set var='language' value='<%=request.getHeader ( "Accept-Language" )%>'/>
+         <c:set var="language" value="<%=request.getHeader ( "Accept-Language" )%>"/>
          <c:if test="${fn:length(language) > 2}">
             <c:set var="language" value="${fn:substring(language,0,2)}"/>
          </c:if>
          <mm:setfield name="language">${language}</mm:setfield>
       </c:if>
-      
    </mm:listnodes>
 
-   
+   <fmt:setLocale value="${language}" scope="session"/>
+   <fmt:setBundle basename="cmsc" scope="request" /> <%-- Reload the resource bundle again for JSTL --%>
    <mm:write referid="language" jspvar="lang" vartype="String">
-      <%request.getSession().setAttribute("org.apache.struts.action.LOCALE", new Locale(lang));%>
-     
+      <% request.getSession().setAttribute("org.apache.struts.action.LOCALE", new Locale(lang));%>
    </mm:write>
 </mm:cloud>
 
@@ -29,8 +29,6 @@
  This code sets the locale for all editors --%>
 <mm:locale language="${language}">
    <mm:cloud loginpage="login.jsp" rank="basic user">
-   <fmt:setLocale value="${language}" scope="session"/> 
-   <fmt:bundle basename="cmsc">
       <html:html xhtml="true">
          <head><title><fmt:message key="editors.title" /></title>
             <link rel="icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
@@ -41,13 +39,12 @@
             <mm:param name="bottomurl"><mm:write referid="bottomurl"/></mm:param>
          </mm:url>
          <mm:url page="${bottomurl}" id="bottompane" write="false"/>
-         <frameset rows="75,*,30" framespacing="0" border="0">
+         <frameset rows="75,*,46" framespacing="0" border="0">
             <frame src="<mm:url referid="toppane"/>" name="toppane" frameborder="0" scrolling="no" noresize="noresize" style="border: 0px" />
             <frame src="<mm:url referid="bottompane"/>" name="bottompane" frameborder="0" scrolling="auto" onload="initMenu();"/>
             <frame src="footer.jsp" name="footerpane" frameborder="0" scrolling="no"/>
          </frameset>
       </html:html>
-    </fmt:bundle>
    </mm:cloud>
 </mm:locale>
 

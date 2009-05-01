@@ -6,22 +6,26 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.*;
+import net.sf.mmapps.commons.util.StringUtil;
+
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 /**
  * Create a link to a Editwizard
- *
+ * 
  * @author Nico Klasens
  * @author Wouter Heijke
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.2 $
  */
-public final class WizardMaker {
-   private static final Logger log = Logging.getLoggerInstance(WizardMaker.class.getName());
+public class WizardMaker {
+   private static Logger log = Logging.getLoggerInstance(WizardMaker.class.getName());
 
-   private static final String DEFAULT_SESSION_KEY = "editwizard";
+   private static String DEFAULT_SESSION_KEY = "editwizard";
 
    private Cloud cloud;
 
@@ -78,20 +82,22 @@ public final class WizardMaker {
 
       HttpSession session = request.getSession();
 
-      if (StringUtils.isNotEmpty(this.returnUrl)) {
+      if (!StringUtil.isEmpty(this.returnUrl)) {
          session.setAttribute("returnurl", this.returnUrl);
       }
 
-      if (StringUtils.isNotEmpty(this.popup)) {
+      if (!StringUtil.isEmpty(this.popup)) {
          session.setAttribute("popup", this.popup);
       }
 
-      if (StringUtils.isNotEmpty(this.creation)) {
+      if (!StringUtil.isEmpty(this.creation)) {
          session.setAttribute("creation", this.creation);
       }
 
-      if (contentType != null && contentTypes == null) {
-         contentTypes = new String[] { contentType };
+      if (contentType != null) {
+         if (contentTypes == null) {
+            contentTypes = new String[] { contentType };
+         }
       }
 
       if (contentTypes == null || contentTypes.length == 0) {
@@ -100,7 +106,7 @@ public final class WizardMaker {
             contentType = node.getNodeManager().getName();
          }
          else {
-            throw new IllegalStateException("No criteria available to find a wizard."
+            throw new RuntimeException("No criteria available to find a wizard."
                   + " Provide a contenttype or objectnumber");
          }
       }
@@ -118,12 +124,12 @@ public final class WizardMaker {
 
       session.setAttribute("contenttype", contentType);
 
-      if (StringUtils.isEmpty(wizardConfigName)) {
+      if (StringUtil.isEmpty(wizardConfigName)) {
          NodeList list = null;
          NodeManager manager = cloud.getNodeManager("editwizards");
          list = manager.getList("nodepath = '" + contentType + "'", null, null);
          if (list.isEmpty()) {
-            throw new IllegalStateException("Unable to find a wizard for contenttype " + contentType + " or objectnumber "
+            throw new RuntimeException("Unable to find a wizard for contenttype " + contentType + " or objectnumber "
                   + objectNumber);
          }
 

@@ -9,30 +9,25 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.struts;
 
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.TreeUtil;
-import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.tree.TreeInfo;
 import com.finalist.tree.ajax.AjaxTree;
 
 public abstract class TreeAction extends MMBaseAction {
-
-   /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(TreeAction.class);
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -41,7 +36,7 @@ public abstract class TreeAction extends MMBaseAction {
       TreeInfo info = getTreeInfo(cloud);
 
       String action = request.getParameter("action");
-      if (StringUtils.isNotEmpty(action)) {
+      if (!StringUtil.isEmpty(action)) {
          response.setContentType("text/xml");
          if ("expand".equals(action)) {
             String persistentid = request.getParameter("persistentid");
@@ -72,49 +67,37 @@ public abstract class TreeAction extends MMBaseAction {
 
             PrintWriter out = HttpUtil.getWriterForXml(response);
             out.write("<options>");
-            for (String element : children) {
+            for (Iterator<String> iter = children.iterator(); iter.hasNext();) {
+               String element = iter.next();
                out.write("<option>" + element + "</option>");
             }
             out.write("</options>");
          }
          return null;
       }
-
-      String channel = getChannelId(request, cloud);
-      if (StringUtils.isNotEmpty(channel) && !"notfound".equals(channel) 
-            && cloud.hasNode(channel)) {
-
-         Node channelNode = cloud.getNode(channel);
-         List<Node> openChannels = getOpenChannels(channelNode);
-         if (openChannels != null) {
-            for (Node node : openChannels) {
-               info.expand(node.getNumber());
-            }
-            addToRequest(request, "channel", channelNode);
-         }
-      }
       else {
-         Node rootNode = getRootNode(cloud);
-         if (rootNode != null) {
-            addToRequest(request, "channel", rootNode);
+         String channel = getChannelId(request, cloud);
+         if (!StringUtil.isEmpty(channel) && !"notfound".equals(channel)) {
+            Node channelNode = cloud.getNode(channel);
+            List<Node> openChannels = getOpenChannels(channelNode);
+            if (openChannels != null) {
+               for (Iterator<Node> iter = openChannels.iterator(); iter.hasNext();) {
+                  Node node = iter.next();
+                  info.expand(node.getNumber());
+               }
+               addToRequest(request, "channel", channelNode);
+            }
          }
-      }
+         else {
+            Node rootNode = getRootNode(cloud);
+            if (rootNode != null) {
+               addToRequest(request, "channel", rootNode);
+            }
+         }
 
-      ActionForward ret = mapping.findForward(SUCCESS);
-      return ret;
-   }
-
-   @Override
-   protected ActionForward redirectLogin(HttpServletRequest req, HttpServletResponse resp) {
-      try {
-         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-      
-         return null;
-      } catch (IOException e) {
-         log.error("Failed to handle redirecting to the login page", e);
+         ActionForward ret = mapping.findForward(SUCCESS);
+         return ret;
       }
-      
-      return super.redirectLogin(req, resp);
    }
 
 

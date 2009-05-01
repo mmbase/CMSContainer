@@ -1,28 +1,42 @@
 package com.finalist.portlets.guestbook.search;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.mmbase.remotepublishing.CloudManager;
+import org.mmbase.storage.search.CompositeConstraint;
+import org.mmbase.storage.search.Constraint;
+import org.mmbase.storage.search.FieldValueConstraint;
+import org.mmbase.storage.search.SortOrder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.util.Queries;
-import org.mmbase.storage.search.*;
-
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.resources.forms.QueryStringComposer;
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 /**
- *
- *
+ * 
+ * 
  */
 public class SearchGuestBookAction extends MMBaseAction {
 
@@ -41,10 +55,10 @@ public class SearchGuestBookAction extends MMBaseAction {
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cld) throws Exception {
 
-      List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+      List<Map> rows = new ArrayList<Map>();
       QueryStringComposer queryStringComposer = new QueryStringComposer();
       GuestBookForm guestBookForm = (GuestBookForm) form;
-      Cloud cloud = getCloudForAnonymousUpdate(guestBookForm.isRemote());
+      Cloud cloud = getCloud(guestBookForm.isRemote());
       int count = 0;
       int offset = 0;
       if (guestBookForm.getOffset() != null && guestBookForm.getOffset().matches("\\d+")) {
@@ -80,7 +94,7 @@ public class SearchGuestBookAction extends MMBaseAction {
       }
       queryStringComposer.addParameter("offset", String.valueOf(offset));
 
-      request.setAttribute("offset", Integer.valueOf(offset));
+      request.setAttribute("offset", new Integer(offset));
       request.setAttribute("rows", rows);
       request.setAttribute("resultCount", count);
       request.setAttribute("geturl", queryStringComposer.getQueryString());
@@ -88,13 +102,6 @@ public class SearchGuestBookAction extends MMBaseAction {
       return mapping.findForward(action);
    }
 
-   public Cloud getCloudForAnonymousUpdate(boolean isRemote) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      if (isRemote) {
-         return Publish.getRemoteCloud(cloud);
-      }
-      return cloud;
-   }
 
    @Override
    public String getRequiredRankStr() {
@@ -102,8 +109,8 @@ public class SearchGuestBookAction extends MMBaseAction {
    }
 
 
-   private List<Map<String, Object>> populateMessageRows(NodeList nodes) {
-      List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+   private List<Map> populateMessageRows(NodeList nodes) {
+      List<Map> rows = new ArrayList<Map>();
       for (NodeIterator iter = nodes.nodeIterator(); iter.hasNext();) {
          Node node = iter.nextNode();
          Map<String, Object> columns = new HashMap<String, Object>();
@@ -122,16 +129,16 @@ public class SearchGuestBookAction extends MMBaseAction {
          String email, String title, String body) {
       NodeManager manager = cloud.getNodeManager("guestmessage");
       NodeQuery query = manager.createQuery();
-      if (StringUtils.isNotBlank(name)) {
+      if (!StringUtils.isBlank(name)) {
          addConstraint(query, manager, "name", name);
       }
-      if (StringUtils.isNotBlank(email)) {
+      if (!StringUtils.isBlank(email)) {
          addConstraint(query, manager, "email", email);
       }
-      if (StringUtils.isNotBlank(title)) {
+      if (!StringUtils.isBlank(title)) {
          addConstraint(query, manager, "title", title);
       }
-      if (StringUtils.isNotBlank(body)) {
+      if (!StringUtils.isBlank(body)) {
          addConstraint(query, manager, "body", body);
       }
       query.addSortOrder(query.getStepField(manager.getField("creationdate")), SortOrder.ORDER_DESCENDING);
@@ -139,6 +146,17 @@ public class SearchGuestBookAction extends MMBaseAction {
       query.setMaxNumber(maxNumber);
       log.debug("query: " + query.toSql());
       return query;
+   }
+
+
+   private Cloud getCloud(boolean isRemote) {
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
+      log.debug("Using remote cloud?: " + isRemote);
+      if (isRemote) {
+         return CloudManager.getCloud(cloud, "live.server");
+      }
+      return cloud;
    }
 
 
