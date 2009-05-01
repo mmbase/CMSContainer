@@ -20,7 +20,7 @@
 		<option value="page">Page</option>
 		<option value="content">Content</option>
 		<option value="contentchannel">ContentChannel</option>
-		<option value="secondary">Secondary</option>
+		<option value="secondary">Seconday</option>
 	</select>
 	<input type="submit" value="index"/>
 </form>

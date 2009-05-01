@@ -28,10 +28,6 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
 
    private static Log log = LogFactory.getLog(PageNavigationRenderer.class);
 
-   public String getContentType() {
-       return "text/html";
-   }
-   
    public void render(NavigationItem item, HttpServletRequest request, HttpServletResponse response,
          ServletConfig sc) throws IOException {
       if (item instanceof Page) {
@@ -50,24 +46,15 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
              if (screen == null) {
                  screen = getScreen((Page) item, sc);
              }
-             if (screen != null) {
-                screen.processAction(request, response, id);
-             }
-             else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-             }
+             
+             screen.processAction(request, response, id);
              return; // we issued an redirect, so return directly
           }
           else {
              // portlet render phase
              try {
                  ScreenFragment screen = getScreen((Page) item, sc);
-                 if (screen != null) {
-                    screen.service(request, response);
-                 }
-                 else {
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                 }
+                 screen.service(request, response);
              }
              catch (ServletException e) {
                 throw new RenderException("ServletException while rendering", e);

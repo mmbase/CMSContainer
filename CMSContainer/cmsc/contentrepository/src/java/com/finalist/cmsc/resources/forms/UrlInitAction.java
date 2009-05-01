@@ -1,6 +1,6 @@
 package com.finalist.cmsc.resources.forms;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -16,8 +16,8 @@ public class UrlInitAction extends SearchInitAction {
          HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
       UrlForm searchForm = (UrlForm) actionForm;
 
-      if (StringUtils.isEmpty(searchForm.getOrder())) {
-         searchForm.setOrder("title");
+      if (StringUtil.isEmpty(searchForm.getOrder())) {
+         searchForm.setOrder("name");
       }
       return super.execute(actionMapping, actionForm, httpServletRequest, httpServletResponse);
    }

@@ -2,7 +2,7 @@ package com.finalist.cmsc.beans.om;
 
 import java.util.Date;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 @SuppressWarnings("serial")
 public class NavigationItem extends NodeBean implements Comparable<NavigationItem> {

@@ -21,11 +21,11 @@ import javax.servlet.jsp.tagext.JspFragment;
 import org.apache.commons.lang.StringUtils;
 
 import com.finalist.cmsc.beans.om.*;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.search.PageInfo;
 import com.finalist.cmsc.services.search.Search;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.taglib.CmscTag;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
 /**
@@ -61,7 +61,7 @@ public class LinkTag extends CmscTag {
       HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
 
       if (page == null) {
-         if (StringUtils.isNotBlank(urlfragment)) {
+         if (!StringUtils.isBlank(urlfragment)) {
             // Computing the window for a given urlfragment can be expensive and will always yield
             // the same result. Therefore the computed pageId is cached in the page context.
             String key = "linktag_urlfragment_" + urlfragment;
@@ -81,7 +81,7 @@ public class LinkTag extends CmscTag {
             }
          }
          else {
-            if (StringUtils.isNotBlank(portletdefinition)) {
+            if (!StringUtils.isBlank(portletdefinition)) {
                // Computing the window and page for a given portletdefinition can be expensive and
                // will always yield the same result. Therefore the computed values are cached in the
                // page context.
@@ -123,7 +123,7 @@ public class LinkTag extends CmscTag {
          if (page instanceof Page) {
              externalurl = ((Page) page).getExternalurl();
          }
-         if (StringUtils.isNotBlank(externalurl)) {
+         if (!StringUtils.isBlank(externalurl)) {
             if (externalurl.indexOf("://") > -1) {
                newlink = externalurl;
             }

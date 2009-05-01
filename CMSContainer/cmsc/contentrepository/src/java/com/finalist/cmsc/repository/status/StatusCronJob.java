@@ -5,9 +5,15 @@ import java.util.Date;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.mmbase.applications.crontab.AbstractCronJob;
+import org.mmbase.applications.crontab.CronEntry;
 import org.mmbase.applications.crontab.CronJob;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.cache.CachePolicy;
 import org.mmbase.module.core.MMBase;
@@ -19,9 +25,8 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
-public class StatusCronJob extends AbstractCronJob implements CronJob {
+public class StatusCronJob implements CronJob {
 
    private static final String STATUS_EXPIRED = "expired";
 
@@ -55,30 +60,23 @@ public class StatusCronJob extends AbstractCronJob implements CronJob {
 
    private long maximumEndDate;
 
-   private static final Logger log = Logging.getLoggerInstance(StatusCronJob.class.getName());
+   private static Logger log = Logging.getLoggerInstance(StatusCronJob.class.getName());
 
 
-   @Override
-   public void init() {
+   public void init(CronEntry cronEntry) {
       Calendar calendar = Calendar.getInstance();
       calendar.set(9999, 11, 31, 12, 59, 59);
       maximumEndDate = calendar.getTimeInMillis();
    }
 
 
-   @Override
    public void stop() {
       // nothing
    }
 
 
-   @Override
    public void run() {
 
-      if (ServerUtil.isReadonly()) {
-         return;
-      }
-      
       long startTime = System.currentTimeMillis();
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeManager nodeManager = cloud.getNodeManager(TYPE_CONTENTELEMENT);
@@ -153,14 +151,14 @@ public class StatusCronJob extends AbstractCronJob implements CronJob {
                MMObjectNode objectNode = MMBase.getMMBase().getBuilder("contentelement").getNode(node.getNumber());
 
                objectNode.setValue(FIELD_STATUS, newStatus);
-               checkDates(objectNode);
+               cleckDates(objectNode);
                objectNode.commit();
 
                log.debug("Altered MMObjectNode " + objectNode.getNumber());
                resultOk++;
             }
-            else if (node != null) {
-                  log.debug("Node " + node.getNumber() + " is not a contentelement!");
+            else {
+               log.debug("Node " + node.getNumber() + " is not a contentelement!");
             }
          }
          catch (Exception e) {
@@ -171,7 +169,7 @@ public class StatusCronJob extends AbstractCronJob implements CronJob {
    }
 
 
-   private void checkDates(MMObjectNode objectNode) {
+   private void cleckDates(MMObjectNode objectNode) {
       Date publishDate = objectNode.getDateValue(FIELD_PUBLISHDATE);
       Date archiveDate = objectNode.getDateValue(FIELD_ARCHIVEDATE);
       Date expireDate = objectNode.getDateValue(FIELD_EXPIREDATE);

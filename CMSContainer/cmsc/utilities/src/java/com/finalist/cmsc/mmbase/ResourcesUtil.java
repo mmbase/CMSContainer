@@ -9,9 +9,11 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.mmbase;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.Node;
 import org.mmbase.module.builders.Images;
@@ -56,7 +58,7 @@ public class ResourcesUtil {
 
 
    public static Node getImageNode(Node node, String template) {
-      if (StringUtils.isEmpty(template)) {
+      if (StringUtil.isEmpty(template)) {
          return node;
       }
       else {
@@ -92,7 +94,7 @@ public class ResourcesUtil {
          servletpath += "/";
       }
       String url = servletpath + id;
-      if (StringUtils.isNotEmpty(title)) {
+      if (!StringUtil.isEmpty(title)) {
          url += "/" + TreeUtil.convertToFragment(title);
          // Apache webserver fails to pass the request to tomcat when / or \ is
          // in the url (escaped or not)
