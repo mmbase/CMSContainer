@@ -12,7 +12,8 @@ package com.finalist.cmsc.taglib.navigation;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 
-import com.finalist.cmsc.beans.om.*;
+import com.finalist.cmsc.beans.om.Page;
+import com.finalist.cmsc.beans.om.Site;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.taglib.CmscTag;
 
@@ -26,70 +27,63 @@ import com.finalist.cmsc.taglib.CmscTag;
  */
 public class LocationTag extends CmscTag {
 
-   /**
-    * JSP variable name.
-    */
-   private String var;
+	/**
+	 * JSP variable name.
+	 */
+	private String var;
 
-   /**
-    * JSP variable name.
-    */
-   private String sitevar;
-
+	/**
+	 * JSP variable name.
+	 */
+	private String sitevar;
+   
    /**
     * JSP variable path.
     */
    private String path;
 
+	/**
+	 * Find and put location in variable.
+	 */
+	@Override
+    public void doTag() {
+		PageContext ctx = (PageContext) getJspContext();
+		HttpServletRequest req = (HttpServletRequest) ctx.getRequest();
 
-   /**
-    * Find and put location in variable.
-    */
-   @Override
-   public void doTag() {
-      PageContext ctx = (PageContext) getJspContext();
-      HttpServletRequest req = (HttpServletRequest) ctx.getRequest();
-
-      if (path == null) {
+      if(path == null) {
          path = getPath();
       }
-      NavigationItem result = SiteManagement.getNavigationItemFromPath(path);
+      Page result = SiteManagement.getPageFromPath(path);
 
-      // handle result
-      if (result == null) {
-         req.removeAttribute(var);
-      }
-      else {
-         req.setAttribute(var, result);
-      }
+		// handle result
+		if (result == null) {
+			req.removeAttribute(var);
+		} else {
+			req.setAttribute(var, result);
+		}
 
-      if (sitevar != null) {
-         Site site = SiteManagement.getSiteFromPath(path);
-         if (site == null) {
-            req.removeAttribute(sitevar);
-         }
-         else {
-            req.setAttribute(sitevar, site);
-         }
-      }
-   }
+		if (sitevar != null) {
+			Site site = SiteManagement.getSiteFromPath(path);
+			if (site == null) {
+				req.removeAttribute(sitevar);
+			} else {
+				req.setAttribute(sitevar, site);
+			}
+		}
+	}
 
+	/**
+	 * Set the JSP variable name the URL choose be passed on to.
+	 * 
+	 * @param var the JSP variable name
+	 */
+	public void setVar(String var) {
+		this.var = var;
+	}
 
-   /**
-    * Set the JSP variable name the URL choose be passed on to.
-    * 
-    * @param var
-    *           the JSP variable name
-    */
-   public void setVar(String var) {
-      this.var = var;
-   }
-
-
-   public void setSitevar(String sitevar) {
-      this.sitevar = sitevar;
-   }
-
+	public void setSitevar(String sitevar) {
+		this.sitevar = sitevar;
+	}
 
    public void setPath(String path) {
       this.path = path;
