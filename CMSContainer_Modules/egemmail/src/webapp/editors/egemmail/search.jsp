@@ -1,6 +1,6 @@
-<%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp" 
-%><mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=utf-8"%>
+<%@include file="globals.jsp" %>
+<mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="egemmail.title">
@@ -8,25 +8,22 @@
   <script type="text/javascript">  
     function doForward(to) {
       var elem = document.getElementById("exportForm");
-      if (elem != null) {
+      if(elem != null) {
         elem.forward.value = to;
         elem.submit();
-        return false;
       }
-      return true;
     }
     
     function doChangePage(newPage) {
       var elem = document.getElementById('exportForm');
-      if (elem != null) {
+      if(elem != null) {
         elem.page.value = newPage;
-        return doForward('search');
+        doForward('search');
       }
-      return false;
     }
   </script>
 </cmscedit:head>
-<body>
+<body onload="refreshChannels()">
     <div class="tabs">
         <div class="tab_active">
             <div class="body">
@@ -39,46 +36,26 @@
 <mm:cloud>
 	<div class="editor">
 		<div class="body">
-            <html:form action="/editors/egemmail/EgemSearchAction">            
-               
+            <html:form action="/editors/egemmail/EgemSearchAction">
+                <label><fmt:message key="egemmail.field.title" />:</label>
+				<html:text property="title"/><br/>
+				<label><fmt:message key="egemmail.field.keywords" />:</label>
+				<html:text property="keywords"/><br/>
+				<label><fmt:message key="egemmail.field.author" />:</label>
+ 				<html:select property="author">
+					<html:option value=""><fmt:message key="egemmail.all_users" /></html:option>
+ 					<mm:listnodes type="user" orderby="username">
+						<c:set var="username"><mm:field name="username"/></c:set>
+						<c:if test="${username != 'anonymous'}">
+                     <mm:field name="username" id="useraccount" write="false"/>
+                     <html:option value="${useraccount}"> <mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /> </html:option>
+	 					</c:if>
+					</mm:listnodes>
+				</html:select><br/>
 				<html:checkbox property="limitToLastWeek"><fmt:message key="egemmail.field.lastWeek" /></html:checkbox><br/>
 				<html:checkbox property="selectResults"><fmt:message key="egemmail.field.selectResults" /></html:checkbox><br/>
 				<br/>
-                <table border="0">
-   <tr>
-      <td style="width: 105px"><fmt:message key="egemmail.field.title" />:</td>
-      <td><html:text style="width: 200px" property="title"/></td>
-   </tr>
-   <tr>
-      <td style="width: 105px"><fmt:message key="egemmail.field.keywords" />:</td>
-      <td><html:text style="width: 200px" property="keywords"/></td>
-   </tr>
-   <tr>
-      <td style="width: 105px"><fmt:message key="egemmail.field.author" />:</td>
-      <td>
-     <html:select property="author">
-					<html:option value=""><fmt:message key="egemmail.all_users" /></html:option> 
-                    
-                    <mm:listnodes type="user" orderby="username">
-						<c:set var="username"><mm:field name="username"/></c:set>
-					 <c:if test="${username != 'anonymous'}">
-                     <mm:field name="username" id="userFullname" write="false"/>
-                     <html:option value="${userFullname}"> 
-                     <mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /> 
-                     </html:option>
-	 					</c:if>
-					</mm:listnodes>					
-	</html:select>
-        </td>
-   </tr>   
-   <tr>
-      <td></td>
-      <td><html:submit><fmt:message key="egemmail.button.search" /></html:submit></td>
-   </tr>
-</table>
-               
-
-
+				<html:submit><fmt:message key="egemmail.button.search" /></html:submit>
 			</html:form>
 
             <mm:present referid="results">
@@ -145,7 +122,7 @@
 				            </tfoot>
 				        </table>
                         <egem:paging offset="${offset}" resultsPerPage="${resultsPerPage}" totalNumberOfResults="${totalNumberOfResults}" />				        
-				        <html:submit onclick="return doForward('export');"><fmt:message key="egemmail.button.export" /></html:submit>
+				        <html:submit onclick="doForward('export');"><fmt:message key="egemmail.button.export" /></html:submit>
 				     </mm:last>
 				 </mm:list>
             </html:form>

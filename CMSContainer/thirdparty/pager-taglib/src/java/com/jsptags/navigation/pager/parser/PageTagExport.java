@@ -22,51 +22,46 @@ package com.jsptags.navigation.pager.parser;
 
 public final class PageTagExport {
 
-   public static final String PAGE_URL = "pageUrl", PAGE_NUMBER = "pageNumber", FIRST_ITEM = "firstItem",
-         LAST_ITEM = "lastItem";
+    public static final String
+	PAGE_URL    = "pageUrl",
+	PAGE_NUMBER = "pageNumber",
+	FIRST_ITEM  = "firstItem",
+	LAST_ITEM   = "lastItem";
 
-   private String pageUrl = null;
-   private String pageNumber = null;
-   private String firstItem = null;
-   private String lastItem = null;
+    private String pageUrl = null;
+    private String pageNumber = null;
+    private String firstItem = null;
+    private String lastItem = null;
 
+    final void setPageUrl(String id) {
+	pageUrl = id;
+    }
 
-   final void setPageUrl(String id) {
-      pageUrl = id;
-   }
+    final void setPageNumber(String id) {
+	pageNumber = id;
+    }
 
+    final void setFirstItem(String id) {
+	firstItem = id;
+    }
 
-   final void setPageNumber(String id) {
-      pageNumber = id;
-   }
+    final void setLastItem(String id) {
+	lastItem = id;
+    }
 
+    public final String getPageUrl() {
+	return pageUrl;
+    }
 
-   final void setFirstItem(String id) {
-      firstItem = id;
-   }
+    public final String getPageNumber() {
+	return pageNumber;
+    }
 
+    public final String getFirstItem() {
+	return firstItem;
+    }
 
-   final void setLastItem(String id) {
-      lastItem = id;
-   }
-
-
-   public final String getPageUrl() {
-      return pageUrl;
-   }
-
-
-   public final String getPageNumber() {
-      return pageNumber;
-   }
-
-
-   public final String getFirstItem() {
-      return firstItem;
-   }
-
-
-   public final String getLastItem() {
-      return lastItem;
-   }
+    public final String getLastItem() {
+	return lastItem;
+    }
 }

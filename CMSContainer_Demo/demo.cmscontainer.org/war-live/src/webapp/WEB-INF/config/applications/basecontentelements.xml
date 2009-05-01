@@ -3,7 +3,7 @@
 <application name="basecontentelements" maintainer="finalist.com" version="1" auto-deploy="true">
    <requirements>
       <requires name="cmscrichtext" maintainer="finalist.com" version="1" type="application"/>
-      <requires name="contentrepository" maintainer="finalist.com" version="3" type="application" />
+      <requires name="contentrepository" maintainer="finalist.com" version="2" type="application" />
       <requires name="sitemanagement" maintainer="finalist.com" version="1" type="application"/>
    </requirements>
    <neededbuilderlist>
@@ -33,7 +33,7 @@
       <!--<datasource builder="images" path="basecontentelements/images.xml"/>-->
       <!--<datasource builder="attachments" path="basecontentelements/attachments.xml"/>-->
       <!--<datasource builder="urls" path="basecontentelements/urls.xml"/>-->
-      
+
       <!--<datasource builder="view" path="basecontentelements/view.xml"/>-->
    </datasourcelist>
 

@@ -25,121 +25,110 @@ import com.finalist.pluto.portalImpl.om.common.impl.SecurityRoleSetImpl;
 import com.finalist.pluto.portalImpl.util.ObjectID;
 
 public class WebApplicationDefinitionImpl implements WebApplicationDefinition, java.io.Serializable, Support {
-   private static Log log = LogFactory.getLog(WebApplicationDefinitionImpl.class);
+	private static Log log = LogFactory.getLog(WebApplicationDefinitionImpl.class);
 
-   private ObjectID objectId = null;
+	private ObjectID objectId = null;
 
-   private SecurityRoleSet securityRoles = new SecurityRoleSetImpl();
+	private SecurityRoleSet securityRoles = new SecurityRoleSetImpl();
 
-   private DescriptionSet descriptions = new DescriptionSetImpl();
+	private DescriptionSet descriptions = new DescriptionSetImpl();
 
-   private DisplayNameSet displayNames = new DisplayNameSetImpl();
+	private DisplayNameSet displayNames = new DisplayNameSetImpl();
 
-   private ServletDefinitionList servlets = new ServletDefinitionListImpl();
+	private ServletDefinitionList servlets = new ServletDefinitionListImpl();
 
-   private ParameterSet initParams = new ParameterSetImpl();
+	private ParameterSet initParams = new ParameterSetImpl();
 
-   private String contextPath; // Config.getParameters().getString("webapp.contextname");
+	private String contextPath; // Config.getParameters().getString("webapp.contextname");
 
+	public ObjectID getId() {
+		log.debug("???  getId()");
+		if (objectId == null) {
+			objectId = ObjectID.createFromString("CMSC-WEBAPP");
+		}
+		return objectId;
+	}
 
-   public ObjectID getId() {
-      log.debug("???  getId()");
-      if (objectId == null) {
-         objectId = ObjectID.createFromString("CMSC-WEBAPP");
-      }
-      return objectId;
-   }
+	public DisplayName getDisplayName(Locale locale) {
+		return displayNames.get(locale);
+	}
 
+	public Description getDescription(Locale locale) {
+		return descriptions.get(locale);
+	}
 
-   public DisplayName getDisplayName(Locale locale) {
-      return displayNames.get(locale);
-   }
+	public ParameterSet getInitParameterSet() {
+		return initParams;
+	}
 
+	public ServletDefinitionList getServletDefinitionList() {
+		return servlets;
+	}
 
-   public Description getDescription(Locale locale) {
-      return descriptions.get(locale);
-   }
+	public ServletContext getServletContext(ServletContext servletContext) {
+		return servletContext.getContext(contextPath);
+	}
 
+	public String getContextRoot() {
+		return contextPath;
+	}
 
-   public ParameterSet getInitParameterSet() {
-      return initParams;
-   }
+	public void setContextRoot(String contextPath) {
+		this.contextPath = contextPath;
+	}
 
+	public SecurityRoleSet getSecurityRoles() {
+		return securityRoles;
+	}
+    
+    public void postLoad(Object parameter) throws Exception {
+        Vector structure = (Vector) parameter;
+        PortletApplicationDefinition portletApplication = (PortletApplicationDefinition) structure
+                .get(0);
 
-   public ServletDefinitionList getServletDefinitionList() {
-      return servlets;
-   }
+        ((Support) portletApplication).postLoad(this);
 
+        ((Support) servlets).postLoad(this);
 
-   public ServletContext getServletContext(ServletContext servletContext) {
-      return servletContext.getContext(contextPath);
-   }
+        ((Support) descriptions).postLoad(parameter);
+        ((Support) displayNames).postLoad(parameter);
+    }
+    
+    public String toString() {
+        return toString(0);
+    }
 
+    public String toString(int indent) {
+        StringBuffer buffer = new StringBuffer(50);
+        StringUtils.newLine(buffer, indent);
+        buffer.append(getClass().toString());
+        buffer.append(":");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("{");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("id='");
+        buffer.append(objectId);
+        buffer.append("'");
 
-   public String getContextRoot() {
-      return contextPath;
-   }
+        StringUtils.newLine(buffer, indent);
+        buffer.append(((DisplayNameSetImpl) displayNames).toString(indent));
 
+        StringUtils.newLine(buffer, indent);
+        buffer.append(((DescriptionSetImpl) descriptions).toString(indent));
 
-   public void setContextRoot(String contextPath) {
-      this.contextPath = contextPath;
-   }
+        StringUtils.newLine(buffer, indent);
+        buffer.append(((ParameterSetImpl) initParams).toString(indent));
 
+        StringUtils.newLine(buffer, indent);
+        buffer.append(((ServletDefinitionListImpl) servlets).toString(indent));
 
-   public SecurityRoleSet getSecurityRoles() {
-      return securityRoles;
-   }
-
-
-   public void postLoad(Object parameter) throws Exception {
-      Vector structure = (Vector) parameter;
-      PortletApplicationDefinition portletApplication = (PortletApplicationDefinition) structure.get(0);
-
-      ((Support) portletApplication).postLoad(this);
-
-      ((Support) servlets).postLoad(this);
-
-      ((Support) descriptions).postLoad(parameter);
-      ((Support) displayNames).postLoad(parameter);
-   }
-
-
-   public String toString() {
-      return toString(0);
-   }
-
-
-   public String toString(int indent) {
-      StringBuffer buffer = new StringBuffer(50);
-      StringUtils.newLine(buffer, indent);
-      buffer.append(getClass().toString());
-      buffer.append(":");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("{");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("id='");
-      buffer.append(objectId);
-      buffer.append("'");
-
-      StringUtils.newLine(buffer, indent);
-      buffer.append(((DisplayNameSetImpl) displayNames).toString(indent));
-
-      StringUtils.newLine(buffer, indent);
-      buffer.append(((DescriptionSetImpl) descriptions).toString(indent));
-
-      StringUtils.newLine(buffer, indent);
-      buffer.append(((ParameterSetImpl) initParams).toString(indent));
-
-      StringUtils.newLine(buffer, indent);
-      buffer.append(((ServletDefinitionListImpl) servlets).toString(indent));
-
-      StringUtils.newLine(buffer, indent);
-      buffer.append("contextPath='");
-      buffer.append(contextPath);
-      buffer.append("'");
-      StringUtils.newLine(buffer, indent);
-      buffer.append("}");
-      return buffer.toString();
-   }
+        StringUtils.newLine(buffer, indent);
+        buffer.append("contextPath='");
+        buffer.append(contextPath);
+        buffer.append("'");
+        StringUtils.newLine(buffer, indent);
+        buffer.append("}");
+        return buffer.toString();
+    }
 
 }

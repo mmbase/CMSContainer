@@ -65,7 +65,6 @@
 
 	<Environment name="mmbase/mmbaseroot/datasource-context" value="java:comp/env" type="java.lang.String" />
 	<Environment name="mmbase/mmbaseroot/datasource" value="jdbc/cmsc" type="java.lang.String" />
-	<Environment name="mmbase/mmbaseroot/database" value="mysql-cmsc" type="java.lang.String" />
 <!--	<Environment name="mmbase/mmbaseroot/basename" value="mm" type="java.lang.String" />-->
 
 	<Environment name="mmbase/imaging/ImageConvertClass"
@@ -88,7 +87,5 @@
 	<Environment name="server/useServerName" value="false" type="java.lang.String" />
 	<!--  Contains value 'true' or 'false' to indicate whether or not this is the production system -->
 	<Environment name="server/production" value="false" type="java.lang.String" />	
-	<!--  Contains value 'true' or 'false' to indicate whether or not the application is in readonly mode -->
-	<Environment name="server/readonly" value="false" type="java.lang.String" />	
 
 </Context>
