@@ -19,7 +19,8 @@
 		<c:set var="pagerIndex" value="/WEB-INF/templates/pagerindex.jsp" />
 	</c:if>
 
-	<cmsc:pager maxPageItems="${elementsPerPage}" items="${totalElements}" 
+	<cmsc:renderURL var="renderUrl" />
+	<pg:pager url="${renderUrl}" maxPageItems="${elementsPerPage}" items="${totalElements}" 
 			index="${pagesIndex}" maxIndexPages="${showPages}" isOffset="true"
 			export="offset,currentPage=pageNumber">
 	<c:if test="${usePaging}">
@@ -43,9 +44,6 @@
    <c:if test="${not empty listHeader}">
 	    <c:import url="${listHeader}"/>
 	</c:if>
-   <c:if test="${empty elements && not empty newsletterNoContent}">
-       <c:import url="${newsletterNoContent}"/>
-   </c:if>
 	<c:forEach var="elem" items="${elements}" varStatus="listStatus">
 	<pg:item>
 	   	<c:set var="elementIndex" value="${listStatus.index}" scope="request"/>
@@ -87,5 +85,5 @@
 		<c:remove var="startPage" scope="request"/>  
 		<c:remove var="endPage" scope="request"/>
 	</c:if>
-	</cmsc:pager>
+	</pg:pager>
 </c:if>

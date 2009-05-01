@@ -1,5 +1,4 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
-%><%@include file="globals.jsp" %>
+<%@include file="globals.jsp" %>
 <html>
 <cmscedit:head title="Footer" titleMode="plain">
 <script type="text/javascript">
@@ -40,6 +39,7 @@ function heartbeat() {
 </cmscedit:head>
 <body onLoad="javascript:heartbeat();">
    <div id="footer">
+      <br />
       <fmt:message key="createdby" />
       <div style="float:right">&nbsp;</div>      
       <br/>

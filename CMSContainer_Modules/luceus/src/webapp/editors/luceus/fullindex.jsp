@@ -4,6 +4,7 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
+<head>
 <cmscedit:head title="fullindex.title" />
 <body>
 <cmscedit:sideblock title="fullindex.title">
@@ -20,7 +21,7 @@
 		</form>
 	</c:when>
 	<c:otherwise>
-		<p><fmt:message key="fullindex.busy" /></p>
+		<h2><fmt:message key="fullindex.busy" /></h2>
 		<luceusmodule:fullindex erase="${param.doerase}" />
 	</c:otherwise>
 </c:choose>

@@ -18,7 +18,7 @@ import org.mmbase.bridge.util.SearchUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import java.util.Locale;
 
@@ -28,13 +28,12 @@ import java.util.Locale;
 public class ShowVersionsAction extends MMBaseAction {
 
    @Override
-   public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request,
-         HttpServletResponse response, Cloud cloud) throws Exception {
+   public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response, Cloud cloud) throws Exception {
 
       Locale locale = request.getLocale();
 
       String nodeNumber = request.getParameter("nodenumber");
-      if (StringUtils.isNotBlank(nodeNumber) && cloud.hasNode(nodeNumber)) {
+      if (!StringUtil.isEmptyOrWhitespace(nodeNumber) && cloud.hasNode(nodeNumber)) {
 
          Node node = cloud.getNode(nodeNumber);
          int number = node.getNumber();
@@ -45,6 +44,7 @@ public class ShowVersionsAction extends MMBaseAction {
          NodeList archiveNodeList = manager.getList(query);
          request.setAttribute("archiveNodesSize", archiveNodeList.size());
          request.setAttribute("archiveNodes", archiveNodeList);
+
 
          UserRole role = RepositoryUtil.getRole(cloud, RepositoryUtil.getCreationChannel(node), false);
          request.setAttribute("isAllowed", SecurityUtil.isWriter(role));
