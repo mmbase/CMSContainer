@@ -10,20 +10,37 @@ See http://www.MMBase.org/license
 package com.finalist.portlets.ecard;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
-import javax.portlet.*;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.*;
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeManager;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.mmbase.*;
+import com.finalist.cmsc.mmbase.EmailUtil;
+import com.finalist.cmsc.mmbase.PropertiesUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portlets.ContentChannelPortlet;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
 public class EcardPortlet extends ContentChannelPortlet {
@@ -51,8 +68,7 @@ public class EcardPortlet extends ContentChannelPortlet {
    protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
 
-   @Override
-   public void processView(ActionRequest request, ActionResponse response) {
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       Map<String, String> errorMessages = new HashMap<String, String>();
       Map<String, String> parameterMap = new HashMap<String, String>();
       // elementId represents the image number
@@ -71,29 +87,29 @@ public class EcardPortlet extends ContentChannelPortlet {
       String textBody = request.getParameter(TEXT_BODY);
       parameterMap.put(TEXT_BODY, textBody);
 
-      if (StringUtils.isBlank(elementId) || StringUtils.isBlank(galleryId)) {
+      if (StringUtil.isEmptyOrWhitespace(elementId) || StringUtil.isEmptyOrWhitespace(galleryId)) {
          errorMessages.put("noimage", "view.ecard.noimage");
          getLogger().error("image or galery not available");
       }
-      if (StringUtils.isBlank(fromEmail)) {
+      if (StringUtil.isEmptyOrWhitespace(fromEmail)) {
          errorMessages.put(FROM_EMAIL, "view.ecard.fromEmail.empty");
       }
       else if (!fromEmail.matches(getEmailRegex())) {
          errorMessages.put(FROM_EMAIL, VIEW_ECARD_INVALID);
       }
-      if (StringUtils.isBlank(toEmail)) {
+      if (StringUtil.isEmptyOrWhitespace(toEmail)) {
          errorMessages.put(TO_EMAIL, "view.ecard.toEmail.empty");
       }
       else if (!toEmail.matches(getEmailRegex())) {
          errorMessages.put(TO_EMAIL, VIEW_ECARD_INVALID);
       }
-      if (StringUtils.isBlank(fromName)) {
+      if (StringUtil.isEmptyOrWhitespace(fromName)) {
          errorMessages.put(FROM_NAME, "view.ecard.fromName.empty");
       }
-      if (StringUtils.isBlank(toName)) {
+      if (StringUtil.isEmptyOrWhitespace(toName)) {
          errorMessages.put(TO_NAME, "view.ecard.toName.empty");
       }
-      if (StringUtils.isBlank(textBody)) {
+      if (StringUtil.isEmptyOrWhitespace(textBody)) {
          errorMessages.put(TEXT_BODY, "view.ecard.textBody.empty");
       }
       else if (textBody.length() > TEXTAREA_MAXLENGTH) {
@@ -101,7 +117,8 @@ public class EcardPortlet extends ContentChannelPortlet {
       }
 
       if (errorMessages.size() == 0) {
-         Cloud cloud = getCloudForAnonymousUpdate();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
 
          NodeManager ecardManager = cloud.getNodeManager("ecard");
          Node ecard = ecardManager.createNode();
@@ -156,7 +173,7 @@ public class EcardPortlet extends ContentChannelPortlet {
       String senderName = preferences.getValue(SENDER_NAME, null);
       String subject = preferences.getValue(EMAIL_SUBJECT, null);
       String bodyBefore = preferences.getValue(EMAIL_BODY_BEFORE, null);
-      if (StringUtils.isNotBlank(bodyBefore)) {
+      if (!StringUtil.isEmptyOrWhitespace(bodyBefore)) {
          bodyBefore = bodyBefore.replace("#TO#", toName);
          bodyBefore = bodyBefore.replace("#FROM#", fromName);
       }
@@ -164,7 +181,7 @@ public class EcardPortlet extends ContentChannelPortlet {
 
       if (senderEmail != null && subject != null) {
          StringBuffer body = new StringBuffer();
-         if (StringUtils.isNotBlank(bodyBefore)) {
+         if (!StringUtil.isEmptyOrWhitespace(bodyBefore)) {
             body.append(bodyBefore);
             body.append("\n");
          }
@@ -172,7 +189,7 @@ public class EcardPortlet extends ContentChannelPortlet {
          body.append(url);
          body.append("\n");
          body.append("\n");
-         if (StringUtils.isNotBlank(bodyAfter)) {
+         if (!StringUtil.isEmptyOrWhitespace(bodyAfter)) {
             body.append(bodyAfter);
          }
          EmailUtil.send(cloud, toName, toEmail, senderName, senderEmail, subject, body.toString());
@@ -243,7 +260,6 @@ public class EcardPortlet extends ContentChannelPortlet {
    }
 
 
-   @Override
    public void processEdit(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       super.processEdit(request, response);
 
@@ -253,7 +269,8 @@ public class EcardPortlet extends ContentChannelPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }
@@ -262,7 +279,7 @@ public class EcardPortlet extends ContentChannelPortlet {
 
    private String getEmailRegex() {
       String emailRegex = PropertiesUtil.getProperty("email.regex");
-      if (StringUtils.isNotBlank(emailRegex)) {
+      if (!StringUtil.isEmptyOrWhitespace(emailRegex)) {
          return emailRegex;
       }
       else {

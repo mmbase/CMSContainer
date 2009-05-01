@@ -26,7 +26,6 @@ import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class SearchServiceMMBaseImpl extends SearchService {
 
@@ -181,9 +180,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
          int end = maxElements == null || maxElements.length() == 0 ? -1 : Integer.valueOf(maxElements);
 
          if (start > 0 || end > 0) {
-            if (start <= 0) {
-               start = 1;
-            }
+            if (start <= 0) start = 1;
             List<String> contenttypes = SiteManagement.getContentTypes(String.valueOf(portlet.getId()));
 
             String contentchannel = portlet.getParameterValue(CONTENTCHANNEL);
@@ -298,7 +295,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
                if (portlet != null) {
                   String pageNumber = portlet.getParameterValue(PAGE);
                   if (pageNumber != null) {
-                      NavigationItem clickItem = SiteManagement.getNavigationItem(Integer.valueOf(pageNumber));
+                      NavigationItem clickItem = SiteManagement.getNavigationItem(Integer.valueOf(pageNumber)); 
                       if (clickItem != null && Page.class.isInstance(clickItem)) {
                           page = Page.class.cast(clickItem);
                           portletWindowName = portlet.getParameterValue(WINDOW);
@@ -474,11 +471,11 @@ public class SearchServiceMMBaseImpl extends SearchService {
       if (page != null) {
          Cloud cloud = page.getCloud();
 
-         NavigationItem item = SiteManagement.getNavigationItem(page.getNumber());
+         NavigationItem item = SiteManagement.getNavigationItem(page.getNumber()); 
          if (item == null || !Page.class.isInstance(item)) {
              return result;
          }
-
+         
          Page pageObject = Page.class.cast(item);
          Collection<Integer> portlets = pageObject.getPortlets();
          for (Integer portletId : portlets) {
@@ -488,7 +485,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
                 if (detailOnly && !isDetailPortlet(portlet)) {
                    continue;
                 }
-
+    
                 List<Object> parameters = portlet.getPortletparameters();
                 for (Object param : parameters) {
                    if (param instanceof NodeParameter) {
@@ -533,19 +530,12 @@ public class SearchServiceMMBaseImpl extends SearchService {
             return false;
          }
          else {
-             return isDetailView(portlet);
+             int viewNumber = portlet.getView();
+             if (viewNumber > 0) {
+                 View view = SiteManagement.getView(viewNumber);
+                 return view.isDetailsupport();
+             }
          }
-      }
-      else {
-         return isDetailView(portlet);
-      }
-   }
-
-   protected boolean isDetailView(Portlet portlet) {
-      int viewNumber = portlet.getView();
-      if (viewNumber > 0) {
-         View view = SiteManagement.getView(viewNumber);
-         return view.isDetailsupport();
       }
       return true;
    }

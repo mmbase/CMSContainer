@@ -122,7 +122,7 @@ public class LanguageSetImpl extends AbstractSupportSet implements LanguageSet, 
       if (title == null) {
          title = "";
       }
-      add(createLanguage(getDefaultLocale(), null));
+      boolean added = add(createLanguage(getDefaultLocale(), null));
    }
 
 

@@ -164,7 +164,7 @@ public class PortletURLProviderImpl implements PortletURLProvider {
          }
       }
 
-      return url.toString(controlURL, Boolean.valueOf(secure));
+      return url.toString(controlURL, new Boolean(secure));
    }
 
 
@@ -176,7 +176,7 @@ public class PortletURLProviderImpl implements PortletURLProvider {
    public void setWindowid(String windowid) {
       this.windowid = windowid;
    }
-   
+
    public void setHost(String host) {
       this.host = host;
    }

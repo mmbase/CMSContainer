@@ -21,8 +21,11 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mmbase.bridge.Cloud;
@@ -33,12 +36,15 @@ import org.mmbase.bridge.Relation;
 import com.finalist.captcha.CaptchaServiceSingleton;
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
+import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 import com.octo.captcha.service.CaptchaServiceException;
 
 public class GuestBookPortlet extends ContentPortlet {
     
     private static final Log log = LogFactory.getLog(GuestBookPortlet.class);
 
+    protected static final String ACTION_PARAM = "action";
+    protected static final String CONTENTELEMENT = "contentelement";
     private static final String TITLE_FIELD = "title";
     private static final String NAME_FIELD = "name";
     private static final String EMAIL_FIELD = "email";
@@ -48,7 +54,7 @@ public class GuestBookPortlet extends ContentPortlet {
 
     /** name of the parameter that defines the mode the view is displayed in */
 
-    public void processView(ActionRequest request, ActionResponse response) {
+    public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
         String action = request.getParameter(ACTION_PARAM);
         
         log.debug("Action: " + action);
@@ -108,22 +114,22 @@ public class GuestBookPortlet extends ContentPortlet {
                 request.getPortletSession().setAttribute(ELEMENT_ID, contentelement);
             }
             else {
-                Cloud cloud = getCloudForAnonymousUpdate();
+                CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+                Cloud cloud = cloudProvider.getCloud();
                 Node element = cloud.getNode(contentelement);
 
                 NodeManager messageMgr = cloud.getNodeManager("guestmessage");
                 Node message = messageMgr.createNode();
                 message.setStringValue(TITLE_FIELD, request.getParameter(TITLE_FIELD));
                 message.setStringValue(NAME_FIELD, request.getParameter(NAME_FIELD));
-                if (StringUtils.isNotEmpty(request.getParameter(EMAIL_FIELD))) {
+                if (!StringUtil.isEmpty(request.getParameter(EMAIL_FIELD))) {
                     message.setStringValue(EMAIL_FIELD, request.getParameter(EMAIL_FIELD));
                 }
                 String body = request.getParameter(BODY_FIELD);
                 if (body.length() > MAX_BODY_LENGTH) {
                     body = body.substring(0, MAX_BODY_LENGTH);
                 }
-                message.setStringValue(BODY_FIELD, body);
-                
+                message.setStringValue(BODY_FIELD, request.getParameter(BODY_FIELD));
                 log.debug("saving new guestmessage: " + message);
                 message.commit();
 
@@ -146,7 +152,8 @@ public class GuestBookPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
             String deleteNumber = request.getParameter("deleteNumber");
-            Cloud cloud = getCloud();
+            CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+            Cloud cloud = cloudProvider.getCloud();
             Node element = cloud.getNode(deleteNumber);
             element.delete(true);
         }

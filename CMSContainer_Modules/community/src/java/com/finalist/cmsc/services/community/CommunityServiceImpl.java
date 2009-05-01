@@ -1,10 +1,11 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- * 
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
  */
 package com.finalist.cmsc.services.community;
 
@@ -40,7 +41,7 @@ import com.finalist.cmsc.util.NameUtil;
 
 /**
  * CommunityServiceImpl, a CMSc service class.
- * 
+ *
  * @author Remco Bos
  */
 public class CommunityServiceImpl extends CommunityService {
@@ -90,13 +91,13 @@ public class CommunityServiceImpl extends CommunityService {
    }
 
    @Override
-   public List < String > getAuthorities() {
-      List < String > authorities = new ArrayList < String >();
+   public List<String> getAuthorities() {
+      List<String> authorities = new ArrayList<String>();
       User principal = getPrincipal();
       if (principal != null) {
          GrantedAuthority[] grantedAuthorities = principal.getAuthorities();
-         for (GrantedAuthority grantedAuthoritie : grantedAuthorities) {
-            authorities.add(grantedAuthoritie.getAuthority());
+         for (int i = 0; i < grantedAuthorities.length; i++) {
+            authorities.add(grantedAuthorities[i].getAuthority());
          }
       }
       return authorities;
@@ -107,8 +108,8 @@ public class CommunityServiceImpl extends CommunityService {
       User principal = getPrincipal();
       if (principal != null) {
          GrantedAuthority[] grantedAuthorities = principal.getAuthorities();
-         for (GrantedAuthority grantedAuthoritie : grantedAuthorities) {
-            if (grantedAuthoritie.getAuthority().equals(authority)) {
+         for (int i = 0; i < grantedAuthorities.length; i++) {
+            if (grantedAuthorities[i].getAuthority().equals(authority)) {
                return true;
             }
          }
@@ -122,16 +123,16 @@ public class CommunityServiceImpl extends CommunityService {
       return authentication != null ? (User) authentication.getPrincipal() : null;
    }
 
-   public Map < Long , Map < String , String > > getPreferencesByModule(String module) {
+   public Map<Long, Map<String, String>> getPreferencesByModule(String module) {
       return preferenceService.getPreferencesByModule(module);
    }
 
-   public Map < String , Map < String , String > > getPreferencesByUserId(String userId) {
+   public Map<String, Map<String, String>> getPreferencesByUserId(String userId) {
       return preferenceService.getPreferencesByUserId(userId);
    }
 
    @Override
-   public List < String > getPreferenceValues(String module, String userId, String key) {
+   public List<String> getPreferenceValues(String module, String userId, String key) {
       return preferenceService.getPreferenceValues(module, userId, key);
    }
 
@@ -150,7 +151,7 @@ public class CommunityServiceImpl extends CommunityService {
     * @deprecated please try to use another service
     */
    @Override
-   public void createPreference(String module, String userId, String key, List < String > values) {
+   public void createPreference(String module, String userId, String key, List<String> values) {
       for (String value : values) {
          preferenceService.createPreference(module, userId, key, value);
       }
@@ -160,8 +161,7 @@ public class CommunityServiceImpl extends CommunityService {
     * @deprecated please try to use another service
     */
    @Override
-   public Map < String , Map < String , List < String > > > getPreferences(String module, String userId, String key,
-         String value) {
+   public Map<String, Map<String, List<String>>> getPreferences(String module, String userId, String key, String value) {
       return null;
    }
 
@@ -169,7 +169,7 @@ public class CommunityServiceImpl extends CommunityService {
     * @deprecated please try to use another service
     */
    @Override
-   public Map < String , Map < String , String > > getUserProperty(String userId) {
+   public Map<String, Map<String, String>> getUserProperty(String userId) {
       // return preferenceService.getPreferencesByUserId(userId);
       return null;
    }
@@ -195,7 +195,7 @@ public class CommunityServiceImpl extends CommunityService {
       Person example = new Person();
       example.setEmail(email);
       // Retrieve a list of persons that match this example
-      List < Person > persons = personService.getPersons(example);
+      List<Person> persons = personService.getPersons(example);
 
       for (Person person : persons) {
          Authentication authentication = authenticationService.getAuthenticationById(person.getAuthenticationId());
@@ -226,7 +226,7 @@ public class CommunityServiceImpl extends CommunityService {
     */
    @Override
    public void removePreferences(String module, String userId, String key) {
-      List < String > valueList = preferenceService.getPreferenceValues(module, userId, key);
+      List<String> valueList = preferenceService.getPreferenceValues(module, userId, key);
       for (String value : valueList) {
          preferenceService.deletePreference(module, userId, key, value);
       }

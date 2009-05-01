@@ -10,18 +10,18 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.mmbase;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.EncodingUtil;
+import net.sf.mmapps.commons.util.StringUtil;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
+import org.apache.commons.lang.RandomStringUtils;
 
-import com.finalist.cmsc.util.EncodingUtil;
 
-
-public final class TreeUtil {
+public class TreeUtil {
 
 
    private static final String DESTINATION = "DESTINATION";
@@ -139,7 +139,8 @@ public final class TreeUtil {
 
       // check that the source item is not a parent of the destination item
       List<Node> pathNodes = getPathToRoot(destItem, treeManagers, relationName);
-      for (Node item : pathNodes) {
+      for (Iterator<Node> iter = pathNodes.iterator(); iter.hasNext();) {
+         Node item = iter.next();
          if (item.getNumber() == sourceItem.getNumber()) {
             isParent = true;
          }
@@ -236,7 +237,7 @@ public final class TreeUtil {
       String pathStr = TreePathCache.getPathStringFromCache(getRootManager(treeManagers), node.getNumber());
       if (pathStr == null) {
          pathStr = getPathToRootStringWithoutCache(node, treeManagers, relationName);
-         if (StringUtils.isNotEmpty(pathStr)) {
+         if (!StringUtil.isEmpty(pathStr)) {
             TreePathCache.addToCache(getRootManager(treeManagers), pathStr, node.getNumber());
          }
       }
@@ -473,7 +474,7 @@ public final class TreeUtil {
    }
 
    public static NodeList getChildren(Node parentNode, String relationName) {
-      return parentNode.getRelatedNodes("object", relationName, DESTINATION);
+      return parentNode.getRelatedNodes(parentNode.getNodeManager().getName(), relationName, DESTINATION);
    }
 
    public static NodeList getChildren(Node parentNode, String nodeManager, String relationName) {
@@ -481,7 +482,7 @@ public final class TreeUtil {
    }
 
    public static int getLevel(String path) {
-      if (StringUtils.isEmpty(path.trim())) {
+      if (StringUtil.isEmpty(path.trim())) {
          return 0;
       }
       String[] fragements = path.split(PATH_SEPARATOR);

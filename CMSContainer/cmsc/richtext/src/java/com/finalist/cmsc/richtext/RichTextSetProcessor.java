@@ -22,11 +22,11 @@ import org.mmbase.util.logging.Logging;
 public class RichTextSetProcessor implements ParameterizedProcessorFactory {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(RichTextSetProcessor.class.getName());
+   private static Logger log = Logging.getLoggerInstance(RichTextSetProcessor.class.getName());
 
    protected static final Parameter[] PARAMS = new Parameter[] { 
-           new Parameter("replaceHeaders", String.class,"false"), 
-           new Parameter("replaceParagraphs", String.class,"true")
+      new Parameter("replaceHeaders", String.class,"false"), 
+      new Parameter("replaceParagraphs", String.class,"true")
    };
 
    public Parameters createParameters() {

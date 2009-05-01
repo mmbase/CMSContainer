@@ -1,11 +1,15 @@
 package com.finalist.cmsc.struts;
 
-import javax.servlet.http.HttpServletRequest;
+import net.sf.mmapps.commons.util.StringUtil;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeList;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Nico Klasens
@@ -22,7 +26,7 @@ public class WizardListAction extends MMBaseFormlessAction {
       String wizardname = request.getParameter("wizardname");
 
       if (nodetype == null && wizardname == null) {
-         throw new IllegalArgumentException(" Provide a nodetype or wizardname requestparameter");
+         throw new RuntimeException(" Provide a nodetype or wizardname requestparameter");
       }
       String sessionkey = request.getParameter("sessionkey");
       if (sessionkey == null || sessionkey.length() == 0) {
@@ -43,7 +47,7 @@ public class WizardListAction extends MMBaseFormlessAction {
 
       }
       if (list == null || list.isEmpty()) {
-         throw new IllegalArgumentException("Unable to find a wizard for nodetype " + nodetype + " or wizardname " + wizardname);
+         throw new RuntimeException("Unable to find a wizard for nodetype " + nodetype + " or wizardname " + wizardname);
       }
       Node wizard = list.getNode(0);
 
@@ -92,10 +96,10 @@ public class WizardListAction extends MMBaseFormlessAction {
 
 
    private void addParameter(StringBuffer forward, String value, String paramname, String defaultvalue) {
-      if (StringUtils.isBlank(value)) {
+      if (StringUtil.isEmptyOrWhitespace(value)) {
          value = defaultvalue;
       }
-      if (StringUtils.isNotBlank(value)) {
+      if (!StringUtil.isEmptyOrWhitespace(value)) {
          forward.append("&").append(paramname).append("=").append(value);
       }
    }

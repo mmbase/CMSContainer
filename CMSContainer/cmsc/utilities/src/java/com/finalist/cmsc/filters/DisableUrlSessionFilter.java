@@ -157,7 +157,7 @@ public class DisableUrlSessionFilter implements Filter {
         String searchEngines = "google.com|search.msn.com|yahoo.com|IlseBot|gigablast.com"
                 + "|Baiduspider|WebAlta|tineye.com|ICC-Crawler|Yeti|REAP-crawler|Snapbot";
         return searchEngines;
-   }
+    }
 
     private String getFeedReaders() {
         // feed readers
