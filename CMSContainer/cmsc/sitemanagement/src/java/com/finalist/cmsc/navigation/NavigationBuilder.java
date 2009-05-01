@@ -9,26 +9,24 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.navigation;
 
-import java.util.LinkedHashMap;
+import com.finalist.cmsc.builders.ChannelBuilder;
 
-import com.finalist.cmsc.builders.TreeBuilder;
+public class NavigationBuilder extends ChannelBuilder {
 
-public abstract class NavigationBuilder extends TreeBuilder {
+    protected String getNameFieldname() {
+        return PagesUtil.TITLE_FIELD;
+    }
 
-    @Override
+    protected String[] getFragmentFieldname() {
+        return NavigationUtil.fragmentFieldnames;
+    }
+    
     protected String getRelationName() {
         return NavigationUtil.NAVREL;
     }
 
-    @Override
-    protected LinkedHashMap<String,String> getPathManagers() {
-        return NavigationUtil.getTreeManagers();
-    }
-    
-    @Override
-    protected void registerTreeManager() {
-        String builderName = getTableName();
-        NavigationUtil.registerTreeManager(builderName, getFragmentField(), isRoot());
+    protected String[] getPathManagers() {
+        return NavigationUtil.treeManagers;
     }
 
 }

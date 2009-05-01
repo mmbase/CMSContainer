@@ -21,36 +21,31 @@ import org.apache.pluto.om.common.SecurityRole;
 
 public class SecurityRoleImpl implements SecurityRole, Serializable {
 
-   private String description;
+	private String description;
 
-   private String roleName;
+	private String roleName;
 
+	public SecurityRoleImpl() {
+	}
 
-   public SecurityRoleImpl() {
-   }
+	// SecurityRole implementation.
 
+	public String getDescription() {
+		return description;
+	}
 
-   // SecurityRole implementation.
+	public String getRoleName() {
+		return roleName;
+	}
 
-   public String getDescription() {
-      return description;
-   }
+	// additional methods.
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-   public String getRoleName() {
-      return roleName;
-   }
-
-
-   // additional methods.
-
-   public void setDescription(String description) {
-      this.description = description;
-   }
-
-
-   public void setRoleName(String roleName) {
-      this.roleName = roleName;
-   }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
 }

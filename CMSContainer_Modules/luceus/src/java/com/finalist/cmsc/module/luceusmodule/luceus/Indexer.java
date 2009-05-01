@@ -27,33 +27,30 @@ import com.luceus.server.util.MBeanHelper;
  */
 public class Indexer {
 
-   private static Log log = LogFactory.getLog(Indexer.class);
+	private static Log log = LogFactory.getLog(Indexer.class);
 
-   private LuceusIndexServiceMBean indexer;
+	private LuceusIndexServiceMBean indexer;
 
-   private String name;
+	private String name;
 
+	public Indexer(String name, String url) throws IOException, MalformedObjectNameException, NullPointerException {
 
-   public Indexer(String name, String url) throws IOException, MalformedObjectNameException, NullPointerException {
+		this.name = name;
 
-      this.name = name;
+		if (url != null) {
+			log.info("LuceusModule uses remote Luceus Indexer");
+		} else {
+			log.info("LuceusModule uses local Luceus Indexer");
+		}
 
-      if (url != null) {
-         log.info("LuceusModule uses remote Luceus Indexer");
-      }
-      else {
-         log.info("LuceusModule uses local Luceus Indexer");
-      }
+		indexer = MBeanHelper.getIndexer(url);
+	}
 
-      indexer = MBeanHelper.getIndexer(url);
-   }
-
-
-   public void write(Envelope doc) {
-      if (doc != null) {
-         doc.setRepository(name);
-         indexer.enqueue(doc);
-      }
-   }
+	public void write(Envelope doc) {
+		if (doc != null) {
+			doc.setRepository(name);
+			indexer.enqueue(doc);
+		}
+	}
 
 }

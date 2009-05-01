@@ -1,3 +1,2 @@
-<%@include file="../globals.jsp" 
-%><%@taglib tagdir="/WEB-INF/tags/" prefix="egem"
-%><fmt:setBundle basename="cmsc-egemmail" scope="request" />
+<%@include file="../../globals.jsp" %>
+<fmt:setBundle basename="cmsc-egemmail" scope="request" />
