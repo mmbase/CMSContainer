@@ -11,22 +11,21 @@ package com.finalist.cmsc.services.sitemanagement;
 
 import java.io.Serializable;
 
-import net.sf.ehcache.Element;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
-import net.sf.mmapps.modules.cloudprovider.CloudProvider;
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.mmbase.bridge.*;
 import org.mmbase.core.event.*;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
+import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
 public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, NodeEventListener, RelationEventListener {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(MMBaseCacheEntryFactory.class.getName());
+   private static Logger log = Logging.getLoggerInstance(MMBaseCacheEntryFactory.class.getName());
 
    private CloudProvider cloudProvider;
    private SelfPopulatingCache cache;
@@ -41,20 +40,20 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
    }
 
 
-   protected abstract Object loadEntry(Object key) throws Exception;
+   protected abstract Serializable loadEntry(Serializable key) throws Exception;
 
 
-   protected final void registerListener(String nodeType) {
+   protected void registerListener(String nodeType) {
       MMBase.getMMBase().addNodeRelatedEventsListener(nodeType, this);
    }
 
 
-   public Object createEntry(Object key) throws Exception {
+   public Serializable createEntry(Serializable key) throws Exception {
       return loadEntry(key);
    }
 
 
-   protected Node getNode(Object key) {
+   protected Node getNode(Serializable key) {
       if (key == null) {
          return null;
       }
@@ -75,12 +74,14 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
 
 
    protected Cloud getAdminCloud() {
-      return cloudProvider.getAdminCloud();
+      Cloud cloud = cloudProvider.getAdminCloud();
+      return cloud;
    }
 
 
    protected Cloud getCloud() {
-      return cloudProvider.getAnonymousCloud();
+      Cloud cloud = cloudProvider.getAnonymousCloud();
+      return cloud;
    }
 
 
@@ -93,14 +94,14 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
     * Refreshes a single entry in a SelfPopulatingCache. The old entry is
     * discarded and then requested, causing it to be populated. Note: Used by
     * tests only, do not use in production.
-    *
+    * 
     * @param key
     *           cache key entry to refresh
     */
    public void refreshEntry(final Serializable key) {
       try {
          if (cache.getKeys().contains(key)) {
-            cache.put(new Element(key, null));
+            cache.put(key, null);
             cache.get(key);
          }
       }
@@ -112,7 +113,7 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
 
    public void deleteEntry(final Serializable key) {
       try {
-         cache.put(new Element(key, null));
+         cache.put(key, null);
       }
       catch (Exception e) {
          log.debug("Failed to delete " + key + ":" + e.getMessage(), e);
@@ -169,12 +170,12 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
 
 
    protected Integer getKey(NodeEvent event) {
-      return Integer.valueOf(event.getNodeNumber());
+      return new Integer(event.getNodeNumber());
    }
 
 
    protected Integer getKey(RelationEvent event) {
-      return Integer.valueOf(event.getRelationSourceNumber());
+      return new Integer(event.getRelationSourceNumber());
    }
 
 

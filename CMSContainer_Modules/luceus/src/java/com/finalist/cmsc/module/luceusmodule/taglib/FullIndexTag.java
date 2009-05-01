@@ -9,7 +9,12 @@
  */
 package com.finalist.cmsc.module.luceusmodule.taglib;
 
-import org.apache.commons.lang.StringUtils;
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Perform a Luceus FullIndex
@@ -17,36 +22,24 @@ import org.apache.commons.lang.StringUtils;
  * @author Wouter Heijke
  */
 public class FullIndexTag extends LuceusmoduleTag {
+   private static Log log = LogFactory.getLog(FullIndexTag.class);
 
    /**
     * Erase index first, so do a clean-fullindex.
     */
    public boolean erase = false;
-   
-   /**
-    * Optionally give a nodemanager to specifically index the given type
-    */
-   private String nodemanager = null;
 
 
    @Override
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       if (isRunning()) {
-         if (erase && StringUtils.isNotBlank(nodemanager)) {
-            throw new IllegalArgumentException("A *clean* FullIndex can not be executed together with a specific nodemanager type! Please remove either one of the two.");
-         }
-         getModule().startFullIndex(erase, nodemanager);
+         getModule().startFullIndex(erase);
       }
    }
 
 
    public void setErase(boolean erase) {
       this.erase = erase;
-   }
-
-
-   public void setNodemanager(String nodemanager) {
-      this.nodemanager = nodemanager;
    }
 
 }

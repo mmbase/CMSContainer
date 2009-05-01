@@ -1,20 +1,32 @@
 package com.finalist.cmsc.egemmail.forms;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import net.sf.mmapps.commons.util.KeywordUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.SearchQuery;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
-import com.finalist.cmsc.util.KeywordUtil;
 
 public class EgemSearchAction extends MMBaseAction {
 
@@ -31,16 +43,16 @@ public class EgemSearchAction extends MMBaseAction {
       NodeManager nodeManager = cloud.getNodeManager(ContentElementUtil.CONTENTELEMENT);
       NodeQuery query = nodeManager.createQuery();
 
-      if (StringUtils.isNotEmpty(form.getTitle())) {
+      if (!StringUtil.isEmpty(form.getTitle())) {
          Field field = nodeManager.getField("title");
          SearchUtil.addLikeConstraint(query, field, form.getTitle());
       }
 
-      if (StringUtils.isNotEmpty(form.getAuthor())) {
+      if (!StringUtil.isEmpty(form.getAuthor())) {
          SearchUtil.addEqualConstraint(query, nodeManager, "lastmodifier", form.getAuthor());
       }
 
-      if (StringUtils.isNotEmpty(form.getKeywords())) {
+      if (!StringUtil.isEmpty(form.getKeywords())) {
          List<String> keywords = KeywordUtil.getKeywords(form.getKeywords());
          Field field = nodeManager.getField("keywords");
          for (String string : keywords) {
@@ -64,7 +76,7 @@ public class EgemSearchAction extends MMBaseAction {
          removeUnpublished(cloud, results);
       }
 
-      int offset = StringUtils.isBlank(form.getPage()) ? 0 : Integer.parseInt(form.getPage());
+      int offset = StringUtil.isEmptyOrWhitespace(form.getPage()) ? 0 : Integer.parseInt(form.getPage());
       int resultsPerPage = 50;
       int numberOfResults = results.size();
 
@@ -94,7 +106,6 @@ public class EgemSearchAction extends MMBaseAction {
     *      javax.servlet.http.HttpServletRequest,
     *      javax.servlet.http.HttpServletResponse, org.mmbase.bridge.Cloud)
     */
-   @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
 
@@ -122,7 +133,7 @@ public class EgemSearchAction extends MMBaseAction {
       HashSet<Integer> remoteNumbers = new HashSet<Integer>();
       for (NodeIterator ni = remoteNodes.nodeIterator(); ni.hasNext();) {
          Node next = ni.nextNode();
-         remoteNumbers.add(Integer.valueOf(next.getStringValue("sourcenumber")));
+         remoteNumbers.add(new Integer(next.getStringValue("sourcenumber")));
       }
 
       int found = 0;

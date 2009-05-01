@@ -12,6 +12,7 @@ package com.finalist.cmsc.module.luceusmodule.taglib;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
@@ -29,7 +30,7 @@ public class RepositoryNameTag extends LuceusmoduleTag {
 
 
    @Override
-   public void doTag() throws IOException {
+   public void doTag() throws JspException, IOException {
       PageContext ctx = (PageContext) getJspContext();
       HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
 
