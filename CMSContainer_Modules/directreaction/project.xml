@@ -4,5 +4,19 @@
     <artifactId>cmsc-modules-directreaction</artifactId>
     <name>Direct reaction</name>
     <shortDescription>Provides direct reaction functionality</shortDescription>
+    <dependencies>
+        <dependency>
+            <groupId>mmapps</groupId>
+            <artifactId>remotepublishing</artifactId>
+            <version>1.0.13</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>finalist</groupId>
+            <artifactId>cmsc-modules-publish-remote</artifactId>
+            <version>${cmsc.version}</version>
+            <type>mmbase-module</type>
+        </dependency>
+    </dependencies>
 </project>
 

@@ -3,7 +3,6 @@
 <action type="load">
 	<field name="title" />
 	<field name="description" />
-	<field name="expirationcache" />
 	<relation destination="nodeparameter" role="parameterrel" />
 	<relation destination="portletdefinition" role="definitionrel" />
 	<relation destination="portletparameter" role="parameterrel" />

@@ -10,14 +10,9 @@ function editRemark(id, oldRemark) {
    }
 }
 
-function selectTab(val, workflowNodetype, orderby, laststatus) {
+function selectTab(val, orderby) {
    document.forms[0].orderby.value = orderby;
-   document.forms[0].workflowNodetype.value = workflowNodetype;
    document.forms[0].status.value = val;
-   if(laststatus==null ||laststatus=="")
-		document.forms[0].laststatus.vlaue="true";
-   else
-   		document.forms[0].laststatus.value=laststatus;
    document.forms[0].submit();
 }
 
