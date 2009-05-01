@@ -50,6 +50,7 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
              if (screen == null) {
                  screen = getScreen((Page) item, sc);
              }
+             
              if (screen != null) {
                 screen.processAction(request, response, id);
              }

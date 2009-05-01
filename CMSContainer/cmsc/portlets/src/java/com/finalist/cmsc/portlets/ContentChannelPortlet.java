@@ -251,7 +251,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       }
    }
 
-
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,
          boolean useLifecycleBool, int maxDays) {

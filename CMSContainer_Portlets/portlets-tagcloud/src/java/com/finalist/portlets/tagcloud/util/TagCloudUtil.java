@@ -31,40 +31,37 @@ public class TagCloudUtil {
 
 	public static final String ORDERBY_NAME = "name";
 
-	private static final String SQL_STAGING_SELECT_TAGS = "SELECT tag.number,tag.name,tag.description,tag.number FROM mm_tag tag WHERE tag.name is not null ";
-	private static final String SQL_LIVE_SELECT_TAGS = "SELECT tag.number,tag.name,tag.description,tag.number FROM live_tag tag WHERE tag.name is not null ";
+	private static final String SQL_STAGING_SELECT_TAGS = "SELECT tag.number,tag.name,tag.description,tag.number FROM mm_tag tag";
+	private static final String SQL_LIVE_SELECT_TAGS = "SELECT tag.number,tag.name,tag.description,tag.number FROM live_tag tag";
 /*
 
  */
-	private static final String SQL_STAGING_SELECT_TAGS_COUNT = "  SELECT tag.number,tag.name,tag.description,COUNT(insrel.number) AS cnt " 
+	private static final String SQL_STAGING_SELECT_TAGS_COUNT = "  SELECT tag.number,COUNT(insrel.number) AS cnt " 
 		+ "FROM mm_tag tag,mm_insrel insrel "
-		+ "WHERE (tag.number=insrel.dnumber) AND tag.name is not null "
-		+ "GROUP BY tag.number "
-		+ "ORDER BY cnt DESC";
-
-	private static final String SQL_LIVE_SELECT_TAGS_COUNT = "  SELECT tag.number,tag.name,tag.description,COUNT(insrel.number) AS cnt " 
-		+ "FROM live_tag tag,live_insrel insrel "
-		+ "WHERE (tag.number=insrel.dnumber) AND tag.name is not null "
-		+ "GROUP BY tag.number "
-		+ "ORDER BY cnt DESC";
+		+ "WHERE (tag.number=insrel.dnumber) "
+		+ "GROUP BY tag.number";
+	private static final String SQL_LIVE_SELECT_TAGS_COUNT = "SELECT tag.number,COUNT(contentelement.number) AS cnt "
+		+ "FROM live_tag tag,live_insrel insrel,live_contentelement contentelement "
+		+ "WHERE (tag.number=insrel.dnumber AND contentelement.number=insrel.snumber) "
+		+ "GROUP BY tag.name";
 
 	private static final String SQL_STAGING_SELECT_CONTENT_RELATED_TAGS = "SELECT tag.number,tag.name,tag.description "
 		+ "FROM mm_tag tag,mm_insrel insrel "
-		+ "WHERE (tag.number=insrel.dnumber AND CONTENTELEMENT_NUMBER=insrel.snumber) AND tag.name is not null "
+		+ "WHERE (tag.number=insrel.dnumber AND CONTENTELEMENT_NUMBER=insrel.snumber) "
 		+ "ORDER BY tag.name";
 	private static final String SQL_LIVE_SELECT_CONTENT_RELATED_TAGS = "SELECT tag.number,tag.name,tag.description "
 		+ "FROM live_tag tag,live_insrel insrel "
-		+ "WHERE (tag.number=insrel.dnumber AND CONTENTELEMENT_NUMBER=insrel.snumber) AND tag.name is not null "
+		+ "WHERE (tag.number=insrel.dnumber AND CONTENTELEMENT_NUMBER=insrel.snumber) "
 		+ "ORDER BY tag.name";
 
 	private static final String SQL_STAGING_SELECT_CHANNEL_RELATED_TAGS = "	 SELECT tag.number, tag.name,tag.description,COUNT(contentelement.number) AS cnt "+ 
 		"FROM mm_tag tag,mm_insrel insrel,mm_contentelement contentelement, mm_contentrel contentrel "+ 
-		"WHERE tag.number=insrel.dnumber AND contentelement.number=insrel.snumber AND contentelement.number = contentrel.dnumber AND contentrel.snumber = CONTENTCHANNEL_NUMBER AND tag.name is not null "+  
+		"WHERE tag.number=insrel.dnumber AND contentelement.number=insrel.snumber AND contentelement.number = contentrel.dnumber AND contentrel.snumber = CONTENTCHANNEL_NUMBER "+  
 		"GROUP BY tag.name,tag.description";
 
 	private static final String SQL_LIVE_SELECT_CHANNEL_RELATED_TAGS = "	 SELECT tag.number, tag.name,tag.description,COUNT(contentelement.number) AS cnt "+ 
 		"FROM live_tag tag,live_insrel insrel,live_contentelement contentelement, live_contentrel contentrel "+ 
-		"WHERE tag.number=insrel.dnumber AND contentelement.number=insrel.snumber AND contentelement.number = contentrel.dnumber AND contentrel.snumber = CONTENTCHANNEL_NUMBER AND tag.name is not null "+  
+		"WHERE tag.number=insrel.dnumber AND contentelement.number=insrel.snumber AND contentelement.number = contentrel.dnumber AND contentrel.snumber = CONTENTCHANNEL_NUMBER "+  
 		"GROUP BY tag.name,tag.description";
 
 	
@@ -72,14 +69,14 @@ public class TagCloudUtil {
 		"FROM mm_tag source_tag,mm_insrel source_insrel,mm_contentelement contentelement, mm_insrel target_insrel, mm_tag target_tag   "+
 		"WHERE source_tag.number=source_insrel.dnumber AND contentelement.number=source_insrel.snumber  "+
 		"AND target_tag.number=target_insrel.dnumber AND contentelement.number=target_insrel.snumber "+
-		"AND LOWER(source_tag.name) = 'TAG_NAME' "+
+		"AND LOWER(source_tag.name) = 'TAG_NAME'  "+
 		"GROUP BY target_tag.name,target_tag.description ";
  
 	private static final String SQL_LIVE_SELECT_TAG_RELATED_TAGS = "SELECT target_tag.number,target_tag.name,target_tag.description,COUNT(contentelement.number) AS cnt "+  
 		"FROM live_tag source_tag,live_insrel source_insrel,live_contentelement contentelement, live_insrel target_insrel, live_tag target_tag   "+
 		"WHERE source_tag.number=source_insrel.dnumber AND contentelement.number=source_insrel.snumber  "+
 		"AND target_tag.number=target_insrel.dnumber AND contentelement.number=target_insrel.snumber "+
-		"AND LOWER(source_tag.name) = 'TAG_NAME' "+
+		"AND LOWER(source_tag.name) = 'TAG_NAME'  "+
 		"GROUP BY target_tag.name,target_tag.description ";
  
 	private static Connection getConnection() {
@@ -140,18 +137,27 @@ public class TagCloudUtil {
 			if (max != null) {
 				st.setMaxRows(max);
 			}
+			String sqlSelect = ServerUtil.isLive()?SQL_LIVE_SELECT_TAGS:SQL_STAGING_SELECT_TAGS;
+			ResultSet rs = st.executeQuery(sqlSelect);
+			while (rs.next()) {
+				Tag tag = new Tag(rs.getInt("tag.number"), rs.getString("tag.name"), rs.getString("tag.description"), 0);
+				tags.add(tag);
+			}
 
 			String sqlSelectCount = ServerUtil.isLive()?SQL_LIVE_SELECT_TAGS_COUNT:SQL_STAGING_SELECT_TAGS_COUNT;
 			ResultSet rsCount = st.executeQuery(sqlSelectCount);
 			while (rsCount.next()) {
-				Tag tag = new Tag(rsCount.getInt("tag.number"), rsCount.getString("tag.name"), rsCount.getString("tag.description"), rsCount.getInt("cnt"));
-				tags.add(tag);				
+				
+				int number = rsCount.getInt("tag.number");
+				int count = rsCount.getInt("cnt");
+
+				for(Tag tag:tags) {
+					if(tag.getNumber() == number) {
+						tag.setCount(tag.getCount()+count);
+					}
+				}
 			}
 
-			Collections.sort(tags, new TagNameComperator("count", "down"));
-			while(max != null && tags.size() > max) {
-				tags.remove(max.intValue());
-			}
 			Collections.sort(tags, new TagNameComperator(orderby, direction));
 		} catch (SQLException e) {
 			log.error("Failed to execute", e);
