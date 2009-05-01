@@ -7,6 +7,7 @@
 <cmscedit:head title="changelanguage.title">
 	<script>
 		function messageAndRefresh() {
+			alert('<fmt:message key="changelanguage.succeeded" />')
 			top.location.href = "../index.jsp";
 		}
 	</script>

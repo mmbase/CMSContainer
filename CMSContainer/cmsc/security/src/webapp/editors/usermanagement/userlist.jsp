@@ -8,7 +8,7 @@
 </cmscedit:head>   
 <body>
 <mm:cloud loginpage="../login.jsp" rank="administrator" jspvar="cloud">
-<div style="float: left; width: 285px;">
+<div style="float: left">
 <cmscedit:sideblock title="userlist.groups" titleClass="side_block_gray">
 		<ul class="shortcuts">
             <li class="usergroupnew">
@@ -17,7 +17,7 @@
 		</ul>
 		<div style="clear:both; height:10px;"></div>
 
-		<table style="position:relative;left:40px;">
+		<table style="padding-left: 30px">
 			<tr>
 				<td><b><fmt:message key="group.name" /></b></td>
 			</tr>
@@ -47,9 +47,9 @@
 	</cmscedit:sideblock>
 </div>
 
-<div style="float: left;padding-left: 5px; width: 285px;">
+<div style="float: left;padding-left: 5px">
 <cmscedit:sideblock title="userlist.users" 
-	titleClass="side_block_green">
+	titleClass="side_block_green" titleStyle="float: left">
 		<ul class="shortcuts">
             <li class="usernew">
 				<a href="UserInitAction.do"><fmt:message key="userlist.newuser" /></a>
@@ -57,7 +57,7 @@
 		</ul>
 		<div style="clear:both; height:10px;"></div>
 
-		<table style="position:relative;left:40px;">
+		<table style="padding-left: 30px">
 			<tr>
 				<td><b><fmt:message key="user.account" /></b></td>
 				<td><b><fmt:message key="user.name" /></b></td>
@@ -70,7 +70,7 @@
 					<td style="padding-right: 10px"><mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /></td>
                <td>
                   <a href="javascript:info('<mm:field name="number" />')">
-                     <img src="../gfx/icons/info.png" width="16" height="16" title="<fmt:message key="userlist.info" />"/>
+                     <img src="../gfx/icons/info.png" width="16" height="16" alt="<fmt:message key="content.info" />"/>
                   </a>
                </td>
 					<td><mm:maydelete>

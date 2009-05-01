@@ -1,166 +1,144 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- */
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
+*/
 package com.finalist.cmsc.resources.forms;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import net.sf.mmapps.commons.util.StringUtil;
+
+import org.apache.struts.action.*;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.storage.search.FieldCompareConstraint;
-import org.mmbase.storage.search.FieldValueConstraint;
 import org.mmbase.storage.search.Step;
-import org.mmbase.storage.search.StepField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.struts.PagerAction;
 
 public abstract class SearchAction extends PagerAction {
 
-   public static final String NUMBER_FIELD = "number";
+    public static final String NUMBER_FIELD = "number";
+    
+    private static final String GETURL = "geturl";
+    
+    private static final String OBJECTID = "objectid";
+    private static final String CONTENTTYPES = "contenttypes";
 
-   private static final String GETURL = "geturl";
-   private static final String STRICT = "strict";
+    private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
 
-   private static final String OBJECTID = "objectid";
-   private static final String CONTENTTYPES = "contenttypes";
+    /**
+     * MMbase logging system
+     */
+    private static Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
 
-   private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response, Cloud cloud) throws Exception {
 
-   /**
-    * MMbase logging system
-    */
-   private static final Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
+        // Initialize
+        SearchForm searchForm = (SearchForm) form;
+        NodeManager nodeManager = cloud.getNodeManager(searchForm.getContenttypes());
+        QueryStringComposer queryStringComposer = new QueryStringComposer();
+        NodeQuery query = cloud.createNodeQuery();
 
-   @Override
-   public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-         HttpServletResponse response, Cloud cloud) throws Exception {
+        // First we add the contenttype parameter
+        queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
-      // Initialize
-      SearchForm searchForm = (SearchForm) form;
-      NodeManager nodeManager = cloud.getNodeManager(searchForm.getContenttypes());
-      QueryStringComposer queryStringComposer = new QueryStringComposer();
-      NodeQuery query = cloud.createNodeQuery();
+        // First add the proper step to the query.
+        Step theStep = query.addStep(nodeManager);
+        query.setNodeStep(theStep);
 
-      // First we add the contenttype parameter
-      queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
+        // Order the result by:
+        String order = searchForm.getOrder();
 
-      // First add the proper step to the query.
-      // CMSC-1260 Content search also finds elements in Recycle bin
-      NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
-      Step channelStep = query.addStep(channelNodeManager);
-      Step theStep = query.addRelationStep(nodeManager, RepositoryUtil.CREATIONREL, "SOURCE").getNext();
-      query.setNodeStep(theStep);
-
-      Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
-      StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-      FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-            trashNumber);
-      SearchUtil.addConstraint(query, channelConstraint);
-      query.setNodeStep(theStep);
-
-      // Order the result by:
-      String order = searchForm.getOrder();
-
-      // set default order field
-      if (StringUtils.isEmpty(order)) {
-         if (nodeManager.hasField("title")) {
-            order = "title";
-         }
-         if (nodeManager.hasField("name")) {
-            order = "name";
-         }
-      }
-
-      if (StringUtils.isNotEmpty(order)) {
-         queryStringComposer.addParameter(ORDER, order);
-         queryStringComposer.addParameter(DIRECTION, "" + searchForm.getDirection());
-         query.addSortOrder(query.getStepField(nodeManager.getField(order)), searchForm.getDirection());
-      }
-
-      query.setDistinct(true);
-
-      addConstraints(searchForm, nodeManager, queryStringComposer, query);
-
-      // Set the objectid constraint
-      if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
-         Integer objectId = null;
-         if (searchForm.getObjectid().matches("^\\d+$")) {
-            objectId = Integer.valueOf(searchForm.getObjectid());
-         } else {
-            if (cloud.hasNode(searchForm.getObjectid())) {
-               objectId = Integer.valueOf(cloud.getNode(searchForm.getObjectid()).getNumber());
-            } else {
-               objectId = Integer.valueOf(-1);
+        // set default order field
+        if (StringUtil.isEmpty(order)) {
+            if (nodeManager.hasField("title")) {
+                order = "title";
             }
-         }
-         SearchUtil.addEqualConstraint(query, nodeManager, NUMBER_FIELD, objectId);
-         queryStringComposer.addParameter(OBJECTID, searchForm.getObjectid());
-      }
+            if (nodeManager.hasField("name")) {
+                order = "name";
+            }
+        }
+        
+        if (!StringUtil.isEmpty(order)) {
+            queryStringComposer.addParameter(ORDER, order);
+            queryStringComposer.addParameter(DIRECTION, "" + searchForm.getDirection());
+            query.addSortOrder(query.getStepField(nodeManager.getField(order)),
+                    searchForm.getDirection());
+        }
 
-      // Set the maximum result size.
-      String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
-      if (resultsPerPage == null || !resultsPerPage.matches("\\d+")) {
-         query.setMaxNumber(25);
-      } else {
-         query.setMaxNumber(Integer.parseInt(resultsPerPage));
-      }
+        query.setDistinct(true);
 
-      // Set the offset (used for paging).
-      if (searchForm.getOffset() != null && searchForm.getOffset().matches("\\d+")) {
-         query.setOffset(query.getMaxNumber() * Integer.parseInt(searchForm.getOffset()));
-         queryStringComposer.addParameter(OFFSET, searchForm.getOffset());
-      }
+        addConstraints(searchForm, nodeManager, queryStringComposer, query);
+        
+        // Set the objectid constraint
+        if (!StringUtil.isEmpty(searchForm.getObjectid())) {
+            Integer objectId = null;
+            if (searchForm.getObjectid().matches("^\\d+$")) {
+                objectId = new Integer(searchForm.getObjectid());
+            }
+            else {
+                if (cloud.hasNode(searchForm.getObjectid())) {
+                    objectId = new Integer(cloud.getNode(searchForm.getObjectid()).getNumber());
+                }
+                else {
+                    objectId = new Integer(-1);
+                }
+            }
+            SearchUtil.addEqualConstraint(query, nodeManager, NUMBER_FIELD, objectId);
+            queryStringComposer.addParameter(OBJECTID, searchForm.getObjectid());
+        }
 
-      log.debug("QUERY: " + query);
+        // Set the maximum result size.
+        String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
+        if (resultsPerPage == null || !resultsPerPage.matches("\\d+")) {
+            query.setMaxNumber(25);
+        }
+        else {
+            query.setMaxNumber(Integer.parseInt(resultsPerPage));
+        }
 
-      int resultCount = Queries.count(query);
-      NodeList results = nodeManager.getList(query);
+        // Set the offset (used for paging).
+        if (searchForm.getOffset() != null && searchForm.getOffset().matches("\\d+")) {
+            query.setOffset(query.getMaxNumber() * Integer.parseInt(searchForm.getOffset()));
+            queryStringComposer.addParameter(OFFSET, searchForm.getOffset());
+        }
 
-      // Set everyting on the request.
-      searchForm.setResultCount(resultCount);
-      searchForm.setResults(results);
-      String show = searchForm.getShow();
-      if (StringUtils.isEmpty(show)) {
-         show = "list";
-      }
-      request.setAttribute(GETURL, queryStringComposer.getQueryString() + "&show=" + show);
-      request.setAttribute(STRICT, searchForm.getStrict());
+        log.debug("QUERY: " + query);
 
-      return super.execute(mapping, form, request, response, cloud);
-   }
+        int resultCount = Queries.count(query);
+        NodeList results = nodeManager.getList(query);
+        
+        // Set everyting on the request.
+        searchForm.setResultCount(resultCount);
+        searchForm.setResults(results);
+        request.setAttribute(GETURL, queryStringComposer.getQueryString());
 
-   protected abstract void addConstraints(SearchForm searchForm, NodeManager nodeManager,
-         QueryStringComposer queryStringComposer, NodeQuery query);
+        return super.execute(mapping, form, request, response, cloud);
+    }
 
-   protected void addField(NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query,
-         String fieldname, String value) {
-      if (StringUtils.isNotEmpty(value)) {
-         Field field = nodeManager.getField(fieldname);
-         if (field.getType() == Field.TYPE_BOOLEAN) {
-            Queries.addConstraints(query, fieldname + "=" + value);
-         } else {
+    protected abstract void addConstraints(SearchForm searchForm, NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query);
+
+    protected void addField(NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query, String fieldname, String value) {
+        if (!StringUtil.isEmpty(value)) {
+            Field field = nodeManager.getField(fieldname);
             SearchUtil.addLikeConstraint(query, field, value);
-         }
-         queryStringComposer.addParameter(fieldname, value);
-      }
-   }
+            queryStringComposer.addParameter(fieldname, value);
+        }
+    }
+
+    
+
 
 }
