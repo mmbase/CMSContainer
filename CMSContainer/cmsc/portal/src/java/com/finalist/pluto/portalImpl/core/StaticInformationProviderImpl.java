@@ -27,29 +27,26 @@ import org.apache.pluto.services.information.StaticInformationProvider;
 import com.finalist.pluto.portalImpl.services.portletdefinitionregistry.PortletDefinitionRegistry;
 
 public class StaticInformationProviderImpl implements StaticInformationProvider {
-   private static Log log = LogFactory.getLog(StaticInformationProviderImpl.class);
+	private static Log log = LogFactory.getLog(StaticInformationProviderImpl.class);
+	
+	private PortalContextProvider provider;
 
-   private PortalContextProvider provider;
+	public StaticInformationProviderImpl(ServletConfig config) {
+		// nothing do to
+	}
 
+	// StaticInformationProvider implementation.
 
-   public StaticInformationProviderImpl(ServletConfig config) {
-      // nothing do to
-   }
+	public PortalContextProvider getPortalContextProvider() {
+		if (provider == null) {
+			provider = new PortalContextProviderImpl();
+		}
 
+		return provider;
+	}
 
-   // StaticInformationProvider implementation.
-
-   public PortalContextProvider getPortalContextProvider() {
-      if (provider == null) {
-         provider = new PortalContextProviderImpl();
-      }
-
-      return provider;
-   }
-
-
-   public PortletDefinition getPortletDefinition(ObjectID portletGUID) {
-      log.debug("portletGUID='" + portletGUID + "'");
-      return PortletDefinitionRegistry.getPortletDefinition(portletGUID);
-   }
+	public PortletDefinition getPortletDefinition(ObjectID portletGUID) {
+		log.debug("portletGUID='"+portletGUID+"'");
+		return PortletDefinitionRegistry.getPortletDefinition(portletGUID);
+	}
 }

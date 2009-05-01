@@ -16,120 +16,105 @@ import java.util.Random;
 
 public class InsertPageImageTag extends CmscTag {
 
-   private static Log log = LogFactory.getLog(InsertPageImageTag.class);
+    private static Log log = LogFactory.getLog(InsertPageImageTag.class);
 
-   // tag parameters
-   private String var;
-   private String name;
-   private String inherit;
-   private String random;
+    // tag parameters
+    private String var;
+    private String name;
+    private String inherit;
+    private String random;
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-   public void setName(String name) {
-      this.name = name;
-   }
+    public void setVar(String var) {
+        this.var = var;
+    }
 
+    public void setInherit(String inherit) {
+        this.inherit = inherit;
+    }
 
-   public void setVar(String var) {
-      this.var = var;
-   }
+    public void setRandom(String random) {
+        this.random = random;
+    }
 
+    @Override
+    public void doTag() {
+        PageContext ctx = (PageContext) getJspContext();
+        HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
+        String image = null;
 
-   public void setInherit(String inherit) {
-      this.inherit = inherit;
-   }
+        if (StringUtils.isNotEmpty(name)) {
+            image = SiteManagement.getPageImageForPage(name, getPath());
+        } else {
+            image = getImagesFromBatch();
+        }
 
-
-   public void setRandom(String random) {
-      this.random = random;
-   }
-
-
-   @Override
-   public void doTag() {
-      PageContext ctx = (PageContext) getJspContext();
-      HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
-
-      Integer image = null;
-      if (StringUtils.isNotEmpty(name)) {
-            List<Integer> images = SiteManagement.getPageImagesForPage(name, getPath());
-            if (images != null && !images.isEmpty()) {
-                image = images.get(0);
+        // handle result
+        if (image != null) {
+            if (var != null) {
+                request.setAttribute(var, image);
+            } else {
+                HttpServletResponse response = (HttpServletResponse) ctx.getResponse();
+                try {
+                    response.getWriter().print(image);
+                } catch (IOException e) {
+                    log.error("Unable to write image to the output: " + e);
+                }
             }
-      }
-      else {
-         image = getImagesFromBatch();
-      }
+        } else {
+            log.debug("Image with name " + name + " not found for path: " + getPath());
+        }
+    }
 
-      // handle result
-      if (image != null) {
-         if (var != null) {
-            request.setAttribute(var, image);
-         }
-         else {
-            HttpServletResponse response = (HttpServletResponse) ctx.getResponse();
-            try {
-               response.getWriter().print(image);
+    private String getImagesFromBatch() {
+        boolean directly = StringUtils.equals(this.inherit, "directly");
+        boolean random = StringUtils.equals(this.random, "true");
+        boolean override = StringUtils.equals(this.inherit, "override");
+
+
+        List<String> images = getCurrentPageImages();
+
+
+        if ((override && images.size() < 1) || directly) {  //inherit from parent.
+            images.addAll(getImagiesOfParent());
+        }
+
+
+        if (images.size() > 0) {
+            if (random) {
+                return images.get(random(images.size()));
+            } else {
+                return images.get(0);
             }
-            catch (IOException e) {
-               log.error("Unable to write image to the output: " + e);
+        }
+        return null;
+    }
+
+    private List<String> getImagiesOfParent() {
+        List<Page> pages = SiteManagement.getListFromPath(getPath());
+
+        if (pages.size() > 2) {
+
+            for (int i = pages.size() - 2; i > 0; i--) {
+                if (pages.get(i).getPageImages().size() > 0)
+                    return pages.get(i).getImages(); //once find image from a closer parent,stop inherint.
             }
-         }
-      }
-      else {
-         log.debug("Image with name " + name + " not found for path: " + getPath());
-      }
-   }
 
-    private Integer getImagesFromBatch() {
-      boolean directly = StringUtils.equals(this.inherit, "directly");
-      boolean random = StringUtils.equals(this.random, "true");
-      boolean override = StringUtils.equals(this.inherit, "override");
+        }
+        return new ArrayList<String>();
+    }
 
-      List<Integer> images = getCurrentPageImages();
-      if ((override && images.size() == 0) || directly) { // inherit from parent.
-         images.addAll(getImagesOfParent());
-      }
+    private List<String> getCurrentPageImages() {
+        List<Page> pages = SiteManagement.getListFromPath(getPath());
+        return (pages.get(pages.size() - 1)).getImages();
+    }
 
-      if (images.size() > 0) {
-         if (random) {
-            return images.get(random(images.size()));
-         }
-         else {
-            return images.get(0);
-         }
-      }
-      return null;
-   }
-
-   /**
-    * Search for images of parent pages and return an image when found.
-    * @return the image of a parent page
-    */
-   private List<Integer> getImagesOfParent() {
-      List<Page> pages = SiteManagement.getPagesFromPath(getPath());
-
-      if (pages.size() > 1) {
-
-         for (int i = pages.size() - 2; i >= 0; i--) {
-            if (pages.get(i).getPageImages().size() > 0)
-               return pages.get(i).getImages(); // when an image is found in a parent,
-                                                // stop recursing
-         }
-
-      }
-      return new ArrayList<Integer>();
-   }
-
-
-   private List<Integer> getCurrentPageImages() {
-      List<Page> pages = SiteManagement.getPagesFromPath(getPath());
-      return (pages.get(pages.size() - 1)).getImages();
-   }
-
-
-   private int random(int length) {
-      Random rand = new Random();
-      return rand.nextInt(length);
-   }
+    private int random(int length) {
+        Random rand = new Random();
+        return rand.nextInt(length);
+    }
 }
+

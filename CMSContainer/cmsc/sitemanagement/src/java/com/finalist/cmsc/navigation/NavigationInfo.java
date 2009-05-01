@@ -19,15 +19,15 @@ import com.finalist.tree.TreeInfo;
 
 public class NavigationInfo implements TreeInfo {
     
-    protected List<Integer> openItems = new ArrayList<Integer>();
+    protected List<Integer> openChannels = new ArrayList<Integer>();
 
     public NavigationInfo() {
         // Default
     }
     
     public NavigationInfo(NavigationInfo navigationInfo) {
-        for (Integer open : navigationInfo.openItems) {
-            openItems.add(open);
+        for (Integer open : navigationInfo.openChannels) {
+            openChannels.add(open);
         }
     }
     
@@ -40,8 +40,8 @@ public class NavigationInfo implements TreeInfo {
         if (o instanceof Integer) {
             number = (Integer) o;
         }
-        if (!openItems.contains(number)) {
-            openItems.add(number);
+        if (!openChannels.contains(number)) {
+            openChannels.add(number);
         }
     }
 
@@ -55,19 +55,19 @@ public class NavigationInfo implements TreeInfo {
             number = (Integer) o;
         }
 
-        if (openItems.contains(number)) {
-            openItems.remove(Integer.valueOf(number));
+        if (openChannels.contains(number)) {
+            openChannels.remove(new Integer(number));
         }
     }
 
     public boolean isOpen(Object o) {
         if (o instanceof Node) {
             Node node = (Node) o;
-            return openItems.contains(node.getNumber());
+            return openChannels.contains(node.getNumber());
         }
         if (o instanceof Integer) {
             Integer integer = (Integer) o;
-            return openItems.contains(integer);
+            return openChannels.contains(integer);
         }
         return false;
     }

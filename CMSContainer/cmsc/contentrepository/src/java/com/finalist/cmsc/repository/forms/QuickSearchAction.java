@@ -11,11 +11,13 @@ package com.finalist.cmsc.repository.forms;
 
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NotFoundException;
 
 import com.finalist.cmsc.repository.RepositoryUtil;
 
-public class QuickSearchAction extends com.finalist.cmsc.struts.QuickSearchAction {
+public class QuickSearchAction 
+    extends com.finalist.cmsc.struts.QuickSearchAction {
 
     @Override
     protected Node getChannelFromPath(Cloud cloud, String quicksearch) {
@@ -26,8 +28,12 @@ public class QuickSearchAction extends com.finalist.cmsc.struts.QuickSearchActio
 		try {
 			Node node = cloud.getNode(channelNumber);
 			if(node != null) {
-				String nodeManagerName = node.getNodeManager().getName();
-                return RepositoryUtil.getTreeManagers().containsKey(nodeManagerName);
+				NodeManager nodeManager = node.getNodeManager();
+				for(String manager:RepositoryUtil.treeManagers) {
+					if(manager.equals(nodeManager.getName())) {
+						return true;
+					}
+				}
 			}
 		}
 		catch(NotFoundException nfe) {
