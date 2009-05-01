@@ -17,6 +17,10 @@ import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.portlet.*;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -24,48 +28,44 @@ import org.apache.commons.fileupload.portlet.PortletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
+import org.mmbase.remotepublishing.PublishManager;
+import org.mmbase.remotepublishing.util.PublishUtil;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.mmbase.RelationUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.EmailSender;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class ResponseFormPortlet extends ContentPortlet {
 
    protected static final String PARAMETER_MAP = "parameterMap";
    protected static final String ERRORMESSAGES = "errormessages";
 
-   protected static final int DEFAULT_MAXFILESIZE = 6; // default file size in MB
-   protected static final long MEGABYTE = 1024 * 1024; // 1 MB (in bytes)
+   private static final int DEFAULT_MAXFILESIZE = 2; // default file size in Meg
+   private static final long MEGABYTE = 1024 * 1024; // 1 Meg
 
-   protected static final String ENCODING_UTF8 = "UTF-8";
+   private static final String ENCODING_UTF8 = "UTF-8";
 
-   protected static final String FIELD_PREFIX = "field_";
-   protected static final int TYPE_TEXTBOX = 1;
-   protected static final int TYPE_TEXTAREA = 2;
-   protected static final int TYPE_RADIO = 4;
-   protected static final int TYPE_CHECKBOX = 6;
-   protected static final int TYPE_ATTACHEMENT = 7;
-   protected static final String CHECKBOX_NO = "nee";
+   private static final String FIELD_PREFIX = "field_";
+   private static final int TYPE_TEXTBOX = 1;
+   private static final int TYPE_TEXTAREA = 2;
+   private static final int TYPE_RADIO = 4;
+   private static final int TYPE_CHECKBOX = 6;
+   private static final int TYPE_ATTACHEMENT = 7;
+   private static final String CHECKBOX_NO = "nee";
 //   private static final String CHECKBOX_YES = "ja";
-   protected static final String RADIO_EMPTY = "[niets gekozen]";
-   protected static final String TEXTBOX_EMPTY = "[niet ingevuld]";
-   protected static final String REGEX = " ";
-   protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
+   private static final String RADIO_EMPTY = "[niets gekozen]";
+   private static final String TEXTBOX_EMPTY = "[niet ingevuld]";
+   private static final String REGEX = " ";
+   private static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
 
    @Override
    @SuppressWarnings("unchecked")
-   public void processView(ActionRequest request, ActionResponse response) {
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       Map<String, String> errorMessages = new Hashtable<String, String>();
       Map<String, Object> parameterMap = new HashMap<String, Object>();
       DataSource attachment = processUserRequest(request, errorMessages, parameterMap);
 
-      // Add extensibility for extra parameters
-      addParameterProcessor(request, response, parameterMap, errorMessages);
-      
       PortletPreferences preferences = request.getPreferences();
       String contentelement = preferences.getValue(CONTENTELEMENT, null);
 
@@ -76,7 +76,8 @@ public class ResponseFormPortlet extends ContentPortlet {
             StringBuffer data = new StringBuffer();
             Map<String, Object> formfields = new HashMap<String, Object>();
 
-            Cloud cloud = getCloudForAnonymousUpdate();
+            CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+            Cloud cloud = cloudProvider.getCloud();
             Node responseForm = cloud.getNode(contentelement);
             NodeList formfieldList = SearchUtil.findRelatedOrderedNodeList(responseForm, "formfield", "posrel",
                   "posrel.pos");
@@ -106,19 +107,19 @@ public class ResponseFormPortlet extends ContentPortlet {
                   errorMessages.put(fieldIdentifier, "view.formfield.empty");
                }
                if (!regex.equals("")
-                       && (((type == TYPE_TEXTBOX) || (type == TYPE_TEXTAREA)) && !value.toString().matches(regex))) {
-                  errorMessages.put(fieldIdentifier, "view.formfield.invalid");
+                     && (((type == TYPE_TEXTBOX) || (type == TYPE_TEXTAREA)) && !value.toString().matches(regex))) {
+                errorMessages.put(fieldIdentifier, "view.formfield.invalid");
                }
                
-               if ((type == TYPE_TEXTBOX) && sendEmail) {   //If data is used as email address, then it should be valid
+               if ((type == TYPE_TEXTBOX) && sendEmail) {   //If data is used as email address, then it should be valid 
                    if (!isEmailAddress(userEmailAddress)) {
-                     errorMessages.put(fieldIdentifier, "view.formfield.invalid");
-                  }
+                      errorMessages.put(fieldIdentifier, "view.formfield.invalid");
+                   }
                }
-
+               
                if (type == TYPE_CHECKBOX) {
                   if(value != null && value instanceof String){
-                     textValue = value.toString();
+                        textValue = value.toString();
                   }
                   else if (value != null && value instanceof ArrayList){
                      textValue = transferParameterValues((ArrayList)value);
@@ -131,11 +132,10 @@ public class ResponseFormPortlet extends ContentPortlet {
                   textValue = (value == null) ? RADIO_EMPTY : value.toString();
                }
                else {
-                  textValue = (value == null || value.toString().trim().length() == 0) ? TEXTBOX_EMPTY : value.toString();
+                  textValue = (value == null || value.toString().trim().length() ==0) ? TEXTBOX_EMPTY : value.toString();
                }
                addFormFieldsData(data, label, textValue);
                formfields.put(number, textValue);
-
             }
 
             if (errorMessages.size() == 0) {
@@ -171,12 +171,6 @@ public class ResponseFormPortlet extends ContentPortlet {
    }
 
 
-   protected void addParameterProcessor(ActionRequest request, ActionResponse response, Map<String, Object> parameterMap,
-         Map<String, String> errorMessages) {
-      // Add extensibility for extra parameters, nothing to do now
-   }
-
-
    private void addFormFieldsData(StringBuffer data, String label, String textValue) {
       data.append(label);
       data.append(": ");
@@ -202,7 +196,7 @@ public class ResponseFormPortlet extends ContentPortlet {
 
       RelationUtil.createRelation(responseForm, savedResponse, "posrel");
       if (ServerUtil.isLive()) {
-         Publish.publish(savedResponse);
+         PublishUtil.publishOrUpdateNode(savedResponse);
       }
 
       NodeManager savedFieldMgr = cloud.getNodeManager("savedfieldvalue");
@@ -214,7 +208,7 @@ public class ResponseFormPortlet extends ContentPortlet {
                                        // form field from staging
          if (ServerUtil.isLive()) {
             Node liveFormFieldNode = cloud.getNode(key);
-            Node stagingFormFieldNode = Publish.getRemoteNode(liveFormFieldNode);
+            Node stagingFormFieldNode = PublishManager.getSourceNode(liveFormFieldNode);
             formFieldNumber = String.valueOf(stagingFormFieldNode.getNumber());
          }
          Node savedFieldValue = savedFieldMgr.createNode();
@@ -224,7 +218,7 @@ public class ResponseFormPortlet extends ContentPortlet {
 
          RelationUtil.createRelation(savedResponse, savedFieldValue, "posrel");
          if (ServerUtil.isLive()) {
-            Publish.publish(savedFieldValue);
+            PublishUtil.publishOrUpdateNode(savedFieldValue);
          }
 
       }
@@ -259,31 +253,30 @@ public class ResponseFormPortlet extends ContentPortlet {
             && isEmailAddress(userEmailAddress)
             && isEmailAddress(userEmailSenderAddress)) {
          try {
-            EmailSender.sendEmail(userEmailSenderAddress, userEmailSenderName, userEmailAddress,
+            EmailSender.getInstance().sendEmail(userEmailSenderAddress, userEmailSenderName, userEmailAddress,
                   userEmailSubject, userEmailText.toString());
             sent = true;
          }
          catch (UnsupportedEncodingException e) {
             getLogger().error("error in mail data: userEmailText = '" + userEmailText +"' " +
-                       " userEmailSenderName = '" + userEmailSenderName +"' " +
-                       " userEmailAddress = '" + userEmailAddress +"' " +
-                       " userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
+              		" userEmailSenderName = '" + userEmailSenderName +"' " +
+              		" userEmailAddress = '" + userEmailAddress +"' " +
+              		" userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
             getLogger().error("error sending email", e);
          }
          catch (MessagingException e) {
             getLogger().error("error in mail data: userEmailText = '" + userEmailText +"' " +
-                       " userEmailSenderName = '" + userEmailSenderName +"' " +
-                       " userEmailAddress = '" + userEmailAddress +"' " +
-                       " userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
+              		" userEmailSenderName = '" + userEmailSenderName +"' " +
+              		" userEmailAddress = '" + userEmailAddress +"' " +
+              		" userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
             getLogger().error("error sending email", e);
          }
       }
       else {
-         // no need to send, but there is need to tell it was a success
+    	  // no need to send, but there is need to tell it was a success
           sent = true;
       }
       return sent;
-
    }
 
 
@@ -325,7 +318,7 @@ public class ResponseFormPortlet extends ContentPortlet {
       }
 
       try {
-         EmailSender.sendEmail(senderEmailAddress, senderName, emailList, emailSubject, emailText.toString(),
+         EmailSender.getInstance().sendEmail(senderEmailAddress, senderName, emailList, emailSubject, emailText.toString(),
                attachment, userEmailAddress);
          sent = true;
       }
@@ -339,7 +332,7 @@ public class ResponseFormPortlet extends ContentPortlet {
    }
 
 
-   public List<String> splitEmailAddresses(String emailAddressesValue) {
+   private List<String> splitEmailAddresses(String emailAddressesValue) {
       List<String> emailList = new ArrayList<String>();
       StringTokenizer addresssTokenizer = new StringTokenizer(emailAddressesValue, " ,;");
       while(addresssTokenizer.hasMoreTokens()) {
@@ -407,7 +400,8 @@ public class ResponseFormPortlet extends ContentPortlet {
       }
       else if (action.equals("delete")) {
          String deleteNumber = request.getParameter("deleteNumber");
-         Cloud cloud = getCloud();
+         CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+         Cloud cloud = cloudProvider.getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
       }
@@ -479,11 +473,10 @@ public class ResponseFormPortlet extends ContentPortlet {
       if (StringUtils.isBlank(emailAddress)) {
          return false;
       }
-
       String emailRegex = getEmailRegex();
       return emailAddress.trim().matches(emailRegex);
    }
-
+	   
    public boolean isEmailAddress(List<String> emailList) {
       if (emailList == null) {
          return false;
@@ -491,7 +484,7 @@ public class ResponseFormPortlet extends ContentPortlet {
       if (emailList.isEmpty()) {
          return false;
       }
-
+            
       String emailRegex = getEmailRegex();
       for (String email : emailList) {
       	if (email == null || StringUtils.isBlank(email)) {
@@ -501,10 +494,10 @@ public class ResponseFormPortlet extends ContentPortlet {
             return false;
          }
       }
-
+      
       return true;
    }
-
+   
    private long getMaxAttachmentSize() {
       long maxFileSize = DEFAULT_MAXFILESIZE;
       String maxFileSizeValue = PropertiesUtil.getProperty("email.maxattachmentsize");
@@ -526,7 +519,9 @@ public class ResponseFormPortlet extends ContentPortlet {
       if (StringUtils.isNotBlank(emailRegex)) {
          return emailRegex;
       }
-      return DEFAULT_EMAILREGEX;
+      else {
+         return DEFAULT_EMAILREGEX;
+      }
    }
 
 }

@@ -10,7 +10,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
@@ -19,7 +19,7 @@ import com.finalist.pluto.portalImpl.core.CmscPortletMode;
  * Fulltext search portlet
  * 
  * @author Wouter Heijke
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.2 $
  */
 public class SearchPortlet extends CmscPortlet {
 
@@ -45,7 +45,7 @@ public class SearchPortlet extends CmscPortlet {
 
    private static final String SEARCH_CATEGORY = "searchCategory";
 
-//   private static final String SEARCH_TARGET = "search.target";
+   private static final String SEARCH_TARGET = "search.target";
 
    private static final String SEARCH_INDEX = "indexName";
 
@@ -53,11 +53,11 @@ public class SearchPortlet extends CmscPortlet {
 
 
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
     *      javax.portlet.ActionResponse)
     */
    @Override
-   public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException {
+   public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       getLogger().debug("===>SearchPortlet.EDIT_DEFAULTS mode");
 
       String action = request.getParameter(ACTION_PARAM);
@@ -105,7 +105,7 @@ public class SearchPortlet extends CmscPortlet {
       String searchText = request.getParameter(SEARCH_TEXT);
       String searchCategory = request.getParameter(SEARCH_CATEGORY);
       if (searchText != null) {
-         //String searchTarget = request.getParameter(SEARCH_TARGET);
+         String searchTarget = request.getParameter(SEARCH_TARGET);
          setAttribute(request, SEARCH_TEXT, searchText);
       }
       if (searchCategory != null) {
@@ -129,7 +129,7 @@ public class SearchPortlet extends CmscPortlet {
 
       int offset = 0;
       String currentOffset = req.getParameter(OFFSET);
-      if (StringUtils.isNotEmpty(currentOffset)) {
+      if (!StringUtil.isEmpty(currentOffset)) {
          offset = Integer.parseInt(currentOffset);
       }
       setAttribute(req, "offset", offset);
@@ -146,22 +146,22 @@ public class SearchPortlet extends CmscPortlet {
       setAttribute(req, ELEMENTS_PER_PAGE, elementsPerPage);
 
       String showPages = preferences.getValue(SHOW_PAGES, null);
-      if (StringUtils.isEmpty(showPages)) {
+      if (StringUtil.isEmpty(showPages)) {
          setAttribute(req, SHOW_PAGES, 10);
       }
 
       String indexPosition = preferences.getValue(INDEX_POSITION, null);
-      if (StringUtils.isEmpty(indexPosition)) {
+      if (StringUtil.isEmpty(indexPosition)) {
          setAttribute(req, INDEX_POSITION, "bottom");
       }
 
       String pagesIndex = preferences.getValue(PAGES_INDEX, null);
-      if (StringUtils.isEmpty(pagesIndex)) {
+      if (StringUtil.isEmpty(pagesIndex)) {
          setAttribute(req, PAGES_INDEX, "center");
       }
 
       String indexName = preferences.getValue(SEARCH_INDEX, null);
-      if (StringUtils.isEmpty(indexName)) {
+      if (StringUtil.isEmpty(indexName)) {
          setAttribute(req, SEARCH_INDEX, "cmsc");
       }
 

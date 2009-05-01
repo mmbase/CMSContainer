@@ -12,9 +12,16 @@ package com.finalist.cmsc.subsite.forms;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import net.sf.mmapps.commons.util.StringUtil;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.BridgeException;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.remotepublishing.CloudManager;
 
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.publish.Publish;
@@ -28,44 +35,45 @@ public class PPContentAction extends MMBaseAction {
 	         HttpServletResponse response, Cloud cloud) throws Exception {
 
 	   int personalpage = Integer.parseInt(request.getParameter("personalpage"));
-
+	  
 	  Node ppNode = cloud.getNode(personalpage);
 	  Node ppChannel = SubSiteUtil.getPersonalpageChannel(ppNode);
-
+	  
 	  if (ppChannel != null) {
 	     String orderby = request.getParameter("orderby");
 	     String direction = request.getParameter("direction");
-	     if (StringUtils.isEmpty(orderby)) {
+	     if (StringUtil.isEmpty(orderby)) {
 	        orderby = null;
 	     }
-	     if (StringUtils.isEmpty(direction)) {
+	     if (StringUtil.isEmpty(direction)) {
 	        direction = null;
 	     }
-
-	     //Cloud remoteCloud = null;
-
+	     
+	     Cloud remoteCloud = null;
+	     
 	     //Retrieve live-cloud (if exists) and continue to search Live for content Elements
 	     try {
-	        //Cloud remoteCloud = CloudManager.getCloud(cloud, "live.server");
+	        remoteCloud = CloudManager.getCloud(cloud, "live.server");	
 
 	        //Retrieve Node & live-channel
 		    //int liveNumber = Publish.getRemoteNumber(ppChannel);
 		    //ppChannel = remoteCloud.getNode(liveNumber);
-
+		    
 		    ppChannel = Publish.getRemoteNode(ppChannel);
 
+		    cloud = remoteCloud; //Use the remoteCloud from now on.
 		 } catch (BridgeException e) {
-			//When no remote nodes are found, use the normal ppChannel and it is fine.
+			//When the remoteCloud could not be found, use the normal cloud and we're fine.
 		 }
-
+	     
          NodeList elements = RepositoryUtil.getLinkedElements(ppChannel, null, orderby, direction, false, -1, -1, -1, -1, -1);
          addToRequest(request, "elements", elements);
-
+         
          String url = "/editors/repository/content.jsp?parentchannel=" + ppChannel.getNumber();
          request.setAttribute("returnUrl", url);
          return new ActionForward(url);
       }
-
+	  
       //return super.execute(mapping, form, request, response, cloud);
       return mapping.findForward(SUCCESS);
    }

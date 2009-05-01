@@ -2,7 +2,7 @@ package com.finalist.cmsc.repository.forms;
 
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -11,6 +11,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.SortOrder;
 
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 
@@ -25,19 +26,19 @@ public class SearchInitAction extends MMBaseAction {
 
       SearchForm searchForm = (SearchForm) form;
 
-      if (StringUtils.isEmpty(searchForm.getExpiredate())) {
+      if (StringUtil.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
 
-      if (StringUtils.isEmpty(searchForm.getPublishdate())) {
+      if (StringUtil.isEmpty(searchForm.getPublishdate())) {
          searchForm.setPublishdate("0");
       }
 
-      if (StringUtils.isEmpty(searchForm.getOffset())) {
+      if (StringUtil.isEmpty(searchForm.getOffset())) {
          searchForm.setOffset("0");
       }
 
-      if (StringUtils.isEmpty(searchForm.getOrder())) {
+      if (StringUtil.isEmpty(searchForm.getOrder())) {
          searchForm.setOrder("title");
       }
 
@@ -47,7 +48,7 @@ public class SearchInitAction extends MMBaseAction {
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
       List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+      List<String> hiddenTypes = PropertiesUtil.getHiddenTypes();
       for (NodeManager manager : types) {
          String name = manager.getName();
          if (!hiddenTypes.contains(name)) {

@@ -61,12 +61,12 @@ public class PublishTag extends NodeReferrerTag {
          }
 
          for (Node toPublishNode : toPublishNodes) {
-         	if (Workflow.isWorkflowType(toPublishNode.getNodeManager().getName())) { 
- 	           List<Node> nodeErrors = Workflow.isReadyToPublish(toPublishNode, publishNumbers);
-    	        if (!nodeErrors.isEmpty()) {
-        	       errors.put(toPublishNode, nodeErrors);
+        	if (Workflow.isWorkflowType(toPublishNode.getNodeManager().getName())) { 
+        		List<Node> nodeErrors = Workflow.isReadyToPublish(toPublishNode, publishNumbers);
+            	if (!nodeErrors.isEmpty()) {
+            		errors.put(toPublishNode, nodeErrors);
             	}
-         	}
+        	}
          }
       }
       else {
@@ -78,12 +78,6 @@ public class PublishTag extends NodeReferrerTag {
          if (RepositoryUtil.isContentChannel(node)) {
             NodeList content = RepositoryUtil.getLinkedElements(node);
             for (Iterator<Node> iter = content.iterator(); iter.hasNext();) {
-               Node child = iter.next();
-               publishNumbers.add(child.getNumber());
-               toPublishNodes.add(child);
-            }
-            NodeList asset = RepositoryUtil.getCreatedAssetElements(node);
-            for (Iterator<Node> iter = asset.iterator(); iter.hasNext();) {
                Node child = iter.next();
                publishNumbers.add(child.getNumber());
                toPublishNodes.add(child);
@@ -137,11 +131,6 @@ public class PublishTag extends NodeReferrerTag {
       else if (RepositoryUtil.isContentChannel(node)) {
          NodeList content = RepositoryUtil.getLinkedElements(node);
          for (Iterator<Node> iter = content.iterator(); iter.hasNext();) {
-            Node child = iter.next();
-            toPublishNodes.add(child);
-         }
-         NodeList asset = RepositoryUtil.getCreatedAssetElements(node);
-         for (Iterator<Node> iter = asset.iterator(); iter.hasNext();) {
             Node child = iter.next();
             toPublishNodes.add(child);
          }

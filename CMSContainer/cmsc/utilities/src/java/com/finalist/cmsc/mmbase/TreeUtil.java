@@ -10,18 +10,18 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.mmbase;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.EncodingUtil;
+import net.sf.mmapps.commons.util.StringUtil;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
+import org.apache.commons.lang.RandomStringUtils;
 
-import com.finalist.cmsc.util.EncodingUtil;
 
-
-public final class TreeUtil {
+public class TreeUtil {
 
 
    private static final String DESTINATION = "DESTINATION";
@@ -59,32 +59,6 @@ public final class TreeUtil {
       RelationUtil.createCountedRelation(parentNode, childNode, relationName, countField);
    }
 
-   public static void uniqueChild(Node parentNode, Node newChildNode, LinkedHashMap<String, String> treeManagers, String relationName) {
-      String fragmentFieldname = getFragmentFieldname(newChildNode, treeManagers);
-      String fragment = newChildNode.getStringValue(fragmentFieldname);
-
-      NodeList children = getChildren(parentNode, relationName);
-      int startsWithIndex = 0;
-      boolean foundExistingChildFragment = false;
-      for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
-         Node child = iter.next();
-         String fragmentfield = getFragmentFieldname(child, treeManagers);
-         String value = child.getStringValue(fragmentfield);
-         if (value.equals(fragment)) {
-            foundExistingChildFragment = true;
-         }
-         else {
-            if (value.startsWith(fragment + "_")) {
-               startsWithIndex++;
-            }
-         }
-      }
-      if (foundExistingChildFragment) {
-         newChildNode.setStringValue(fragmentFieldname, fragment + "_" + (startsWithIndex+1));
-         newChildNode.commit();
-      }
-   }
-   
    public static Node getParent(Node node, String relationName) {
       List<String> treeManagers = new ArrayList<String>();
       treeManagers.add(node.getNodeManager().getName());
@@ -139,7 +113,8 @@ public final class TreeUtil {
 
       // check that the source item is not a parent of the destination item
       List<Node> pathNodes = getPathToRoot(destItem, treeManagers, relationName);
-      for (Node item : pathNodes) {
+      for (Iterator<Node> iter = pathNodes.iterator(); iter.hasNext();) {
+         Node item = iter.next();
          if (item.getNumber() == sourceItem.getNumber()) {
             isParent = true;
          }
@@ -236,7 +211,7 @@ public final class TreeUtil {
       String pathStr = TreePathCache.getPathStringFromCache(getRootManager(treeManagers), node.getNumber());
       if (pathStr == null) {
          pathStr = getPathToRootStringWithoutCache(node, treeManagers, relationName);
-         if (StringUtils.isNotEmpty(pathStr)) {
+         if (!StringUtil.isEmpty(pathStr)) {
             TreePathCache.addToCache(getRootManager(treeManagers), pathStr, node.getNumber());
          }
       }
@@ -258,7 +233,8 @@ public final class TreeUtil {
       for (Iterator<Node> i = path.iterator(); i.hasNext();) {
          Node n = i.next();
 
-         String fragmentFieldname = getFragmentFieldname(n, treeManagers);
+         String nManagerName = n.getNodeManager().getName();
+         String fragmentFieldname = getFragmentFieldname(nManagerName, treeManagers);
 
          pathStr += n.getStringValue(fragmentFieldname);
 
@@ -274,10 +250,7 @@ public final class TreeUtil {
       return path.split(PATH_SEPARATOR);
    }
 
-   public static String getFragmentFieldname(Node node, LinkedHashMap<String, String> treeManagers) {
-      return getFragmentFieldname(node.getNodeManager().getName(), treeManagers);
-   }
-   
+
    public static String getFragmentFieldname(String nManagerName, LinkedHashMap<String, String> treeManagers) {
       return treeManagers.get(nManagerName);
    }
@@ -408,7 +381,8 @@ public final class TreeUtil {
          }
       }
 
-      String fragmentFieldname = getFragmentFieldname(root, treeManagers);
+      String nManagerName = root.getNodeManager().getName();
+      String fragmentFieldname = getFragmentFieldname(nManagerName, treeManagers);
 
       String[] fragments = getPathFragments(path);
       if (root.getStringValue(fragmentFieldname).equals(path)) {
@@ -435,7 +409,8 @@ public final class TreeUtil {
    private static Node getTreeItemFromPath(Cloud cloud, String[] fragments, Node root, LinkedHashMap<String, String> treeManagers,
                                            String relationName, int level) {
 
-      String fragmentFieldname = getFragmentFieldname(root, treeManagers);
+      String nManagerName = root.getNodeManager().getName();
+      String fragmentFieldname = getFragmentFieldname(nManagerName, treeManagers);
 
       String field = root.getStringValue(fragmentFieldname);
 
@@ -447,7 +422,8 @@ public final class TreeUtil {
             NodeIterator nli = nl.nodeIterator();
             while (nli.hasNext()) {
                Node element = nli.nextNode();
-               String elementFieldname = getFragmentFieldname(element, treeManagers);
+               String elementManagerName = element.getNodeManager().getName();
+               String elementFieldname = getFragmentFieldname(elementManagerName, treeManagers);
 
                field = element.getStringValue(elementFieldname);
                if (fragments[level + 1].equalsIgnoreCase(field)) {
@@ -473,7 +449,7 @@ public final class TreeUtil {
    }
 
    public static NodeList getChildren(Node parentNode, String relationName) {
-      return parentNode.getRelatedNodes("object", relationName, DESTINATION);
+      return parentNode.getRelatedNodes(parentNode.getNodeManager().getName(), relationName, DESTINATION);
    }
 
    public static NodeList getChildren(Node parentNode, String nodeManager, String relationName) {
@@ -481,7 +457,7 @@ public final class TreeUtil {
    }
 
    public static int getLevel(String path) {
-      if (StringUtils.isEmpty(path.trim())) {
+      if (StringUtil.isEmpty(path.trim())) {
          return 0;
       }
       String[] fragements = path.split(PATH_SEPARATOR);
@@ -514,7 +490,8 @@ public final class TreeUtil {
       NodeList children = getChildren(parent, relationName);
       for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
          Node child = iter.next();
-         String fragmentfield = getFragmentFieldname(child, treeManagers);
+         String nManagerName = child.getNodeManager().getName();
+         String fragmentfield = getFragmentFieldname(nManagerName, treeManagers);
          String value = child.getStringValue(fragmentfield);
          if (value.equals(fragment)) {
             return true;
@@ -534,7 +511,8 @@ public final class TreeUtil {
       NodeList children = getChildren(parentItem, relationName);
       for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
          Node child = iter.next();
-         String fragmentfield = getFragmentFieldname(child, treeManagers);
+         String nManagerName = child.getNodeManager().getName();
+         String fragmentfield = getFragmentFieldname(nManagerName, treeManagers);
          String value = child.getStringValue(fragmentfield);
          if (value.equals(fragment)) {
             return child;

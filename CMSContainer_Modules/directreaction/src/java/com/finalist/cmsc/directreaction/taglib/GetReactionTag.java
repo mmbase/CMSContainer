@@ -1,19 +1,26 @@
 package com.finalist.cmsc.directreaction.taglib;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.remotepublishing.CloudManager;
 
-import com.finalist.cmsc.directreaction.util.Reaction;
-import com.finalist.cmsc.services.publish.Publish;
+import com.finalist.cmsc.directreaction.util.*;
 
 /**
  * The GetReactionTag will retrieve a single reaction node from the live
  * database and then populate and return a Reaction object.
- *
+ * 
  * @author jderuijter
  */
 public class GetReactionTag extends SimpleTagSupport {
@@ -22,8 +29,7 @@ public class GetReactionTag extends SimpleTagSupport {
    private String var;
 
 
-   @Override
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       Cloud remoteCloud = getLiveCloud();
       Node node = remoteCloud.getNode(number);
 
@@ -38,7 +44,7 @@ public class GetReactionTag extends SimpleTagSupport {
    public Cloud getLiveCloud() {
       CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
       Cloud cloud = cloudProvider.getCloud();
-      Cloud remoteCloud = Publish.getRemoteCloud(cloud);
+      Cloud remoteCloud = CloudManager.getCloud(cloud, "live.server");
       return remoteCloud;
    }
 

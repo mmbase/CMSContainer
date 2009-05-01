@@ -11,7 +11,7 @@ package com.finalist.cmsc.rssfeed.forms;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,7 +25,7 @@ public class RssFeedEdit extends MMBaseFormlessAction {
 
       String action = getParameter(request, "action");
 
-      if (StringUtils.isBlank(action)) {
+      if (StringUtil.isEmptyOrWhitespace(action)) {
          String objectnumber = getParameter(request, "number", true);
 
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?objectnumber="

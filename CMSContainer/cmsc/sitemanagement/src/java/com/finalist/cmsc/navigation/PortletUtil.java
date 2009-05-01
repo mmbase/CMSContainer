@@ -10,22 +10,20 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.navigation;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 import net.sf.mmapps.commons.bridge.CloneUtil;
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.StringUtil;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
-
-public final class PortletUtil {
+public class PortletUtil {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(PortletUtil.class.getName());
+   private static Logger log = Logging.getLoggerInstance(PortletUtil.class.getName());
 
    private static final String SOURCE = "source";
    private static final String DESTINATION = "destination";
@@ -136,7 +134,7 @@ public final class PortletUtil {
 
    /**
     * Delete all parameters associated with a portlet.
-    *
+    * 
     * @param portlet
     *           Portlet whose parameters are to be deleted.
     */
@@ -278,7 +276,7 @@ public final class PortletUtil {
             }
 
             for (String newValue : values) {
-               if (StringUtils.isNotBlank(newValue)) {
+               if (!StringUtil.isEmptyOrWhitespace(newValue)) {
                   if (storedValues.containsKey(newValue)) {
                      storedValues.remove(newValue);
                   }
@@ -297,7 +295,7 @@ public final class PortletUtil {
          }
          else {
             for (String value : values) {
-               if (StringUtils.isNotBlank(value)) {
+               if (!StringUtil.isEmptyOrWhitespace(value)) {
                   log.debug("creating node for node:" + portlet.getNumber());
                   Node newNode = createPortletParameter(portlet.getCloud(), key, value);
                   addPortletParameter(portlet, newNode);
@@ -311,7 +309,7 @@ public final class PortletUtil {
    public static void updatePortletParameter(Node portlet, String key, String value) {
       NodeList plist = SearchUtil.findRelatedNodeList(portlet, PORTLETPARAMETER, PARAMETERREL, KEY_FIELD, key);
       if (!plist.isEmpty()) {
-         if (StringUtils.isBlank(value)) {
+         if (StringUtil.isEmptyOrWhitespace(value)) {
             for (Iterator<Node> iterator = plist.iterator(); iterator.hasNext();) {
                Node foundNode = iterator.next();
                log.debug("removing parameter node:" + foundNode.getNumber());
@@ -334,7 +332,7 @@ public final class PortletUtil {
          }
       }
       else {
-         if (StringUtils.isNotBlank(value)) {
+         if (!StringUtil.isEmptyOrWhitespace(value)) {
             log.debug("creating node for node:" + portlet.getNumber());
             Node newNode = createPortletParameter(portlet.getCloud(), key, value);
             addPortletParameter(portlet, newNode);
@@ -497,11 +495,11 @@ public final class PortletUtil {
 
    public static Node createPortlet(Cloud cloud, String portletName, String definitionId, String viewId) {
       Node viewNode = null;
-      if (StringUtils.isNotEmpty(viewId)) {
+      if (!StringUtil.isEmpty(viewId)) {
          viewNode = cloud.getNode(viewId);
       }
       Node definitionNode = null;
-      if (StringUtils.isNotEmpty(definitionId)) {
+      if (!StringUtil.isEmpty(definitionId)) {
          definitionNode = cloud.getNode(definitionId);
       }
 
@@ -513,7 +511,8 @@ public final class PortletUtil {
          Map<String, Object> parameters) {
       Node portlet = createPortlet(cloud, portletName, definitionNode, viewNode);
       if (parameters != null) {
-         for (Entry<String, Object> entry : parameters.entrySet()) {
+         for (Iterator<Map.Entry<String, Object>> iter = parameters.entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<String, Object> entry = iter.next();
             String key = entry.getKey();
             Object value = entry.getValue();
             if (value instanceof String) {

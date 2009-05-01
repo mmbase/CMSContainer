@@ -26,15 +26,10 @@ public class GeneratorReport extends BatchOperation {
         List<VCSConfig> configs = getConfigs();
         FileOutputStream out = null;
         try {
-           File exportFile = new File(targetReportFileLocation + File.separator + "projectreport.xml");
-           File dir = new File(targetReportFileLocation);
-           if(!dir.exists()) {
-              dir.mkdirs();
-           }
-            //  test if file existed ,content should not be added to the
+            // TODO test if file existed ,content should not be added to the
             // tail of the file.
             out = new FileOutputStream(targetReportFileLocation
-                    + File.separator + "projectreport.xml", false);
+                    + File.separator + "projectreport.xml", true);
             String head = "<?xml version='1.0' encoding='utf-8' ?><?xml-stylesheet type='text/xsl' href='report.xsl'?>";
             append(out, head);
             append(out, "<cmscprojects>");
@@ -121,9 +116,10 @@ public class GeneratorReport extends BatchOperation {
     private String getProjectXmlFile(String pathOfProjectFile,
                                      String pathOfPropertiesFile) {
         StringBuffer sb = new StringBuffer();
-        BufferedReader br = null;
+
         try {
-            br = new BufferedReader(new FileReader(pathOfProjectFile));
+            BufferedReader br = new BufferedReader(new FileReader(
+                    pathOfProjectFile));
             String line;
 
             while ((line = br.readLine()) != null) {
@@ -131,10 +127,9 @@ public class GeneratorReport extends BatchOperation {
                     continue;
                 sb.append(changeProperties(pathOfPropertiesFile, line));
             }
-            br.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return "No project.xml, or project.xml read error";
+            return "No project.xml,or read project.xml read error";
         }
         return sb.toString();
     }
@@ -184,7 +179,6 @@ public class GeneratorReport extends BatchOperation {
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
                 }
-                br.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -210,7 +204,6 @@ public class GeneratorReport extends BatchOperation {
         props.load(in);
         if (props.getProperty(key) != null)
             Property = props.getProperty(key);
-        in.close();
         return Property;
     }
 
@@ -225,7 +218,6 @@ public class GeneratorReport extends BatchOperation {
             InputStream subIn = new BufferedInputStream(new FileInputStream(
                     subFilePath));
             subProps.load(subIn);
-            subIn.close();
         }
         props.load(in);
         if (subProps != null && subProps.getProperty(key) != null) {
@@ -233,7 +225,6 @@ public class GeneratorReport extends BatchOperation {
         } else if (props.getProperty(key) != null) {
             Property = props.getProperty(key);
         }
-        in.close();
         return Property;
     }
 
@@ -289,9 +280,6 @@ public class GeneratorReport extends BatchOperation {
                                      String url) throws IOException {
         File normalroot = new File(path);
         File[] filesOrDirs = normalroot.listFiles();
-        if(filesOrDirs == null || filesOrDirs.length == 0) {
-           return;
-        }
         for (File filesOrDir : filesOrDirs) {
             if (filesOrDir.isFile())
                 continue;
@@ -318,7 +306,6 @@ public class GeneratorReport extends BatchOperation {
         switch (args.length) {
             case 0:
                 printUsage();
-                break;
             case 1:
                 comeOn(args[0], ".", ".");
                 break;
