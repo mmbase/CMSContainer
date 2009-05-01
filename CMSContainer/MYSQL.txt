@@ -32,9 +32,7 @@ RENAME TABLE <table_name> TO <new_table_name>;
 // Alter columns
 ALTER TABLE <table_name> MODIFY <field_name> varchar(<size>);
 
-ALTER TABLE <table_name> CHANGE column <old_field_name> <new_field_name> varchar(<size>);
-
-ALTER TABLE <table_name> DROP column <field_name>;
+alter table <table_name> change column <old_field_name> <new_field_name> varchar(<size>);
 
 // Convert table to InnoDB
 alter table <table_name> ENGINE = INNODB;
@@ -53,7 +51,4 @@ mysqldump -u admin -p <database> --no-create-info --complete-insert > backup-fil
 mysql database < backup-file.sql
 
 show variables
-max_allowed_packet
-
-// update value with replacement string
-UPDATE <table> SET <field_name> = replace(<field_name>, 'old', 'new');
+max_allowed_packet 

@@ -1,134 +1,133 @@
 package com.finalist.cmsc.beans.om;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 /**
  * @author Wouter Heijke
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.1 $
  */
 @SuppressWarnings("serial")
 public class User extends NodeBean {
 
-   private String surname;
-   private String firstname;
-   private String prefix;
-   private String emailaddress;
-   private String department;
-   private String function;
-   private String note;
-   private String website;
-   private boolean emailsignal;
-   private String account;
-   private String password;
+	private String surname;
+	private String firstname;
+	private String prefix;
+	private String emailaddress;
+	private String department;
+	private String function;
+	private String note;
+	private String website;
+	private boolean emailsignal;
+	private String account;
+	private String password;
+    
+    public String getAccount() {
+        return account;
+    }
 
+    
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
-   public String getAccount() {
-      return account;
-   }
+    
+    public String getDepartment() {
+        return department;
+    }
 
+    
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-   public void setAccount(String account) {
-      this.account = account;
-   }
+    
+    public String getEmailaddress() {
+        return emailaddress;
+    }
 
+    
+    public void setEmailaddress(String emailaddress) {
+        this.emailaddress = emailaddress;
+    }
 
-   public String getDepartment() {
-      return department;
-   }
+    
+    public boolean isEmailsignal() {
+        return emailsignal;
+    }
 
+    
+    public void setEmailsignal(boolean emailsignal) {
+        this.emailsignal = emailsignal;
+    }
 
-   public void setDepartment(String department) {
-      this.department = department;
-   }
+    
+    public String getFirstname() {
+        return firstname;
+    }
 
+    
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
-   public String getEmailaddress() {
-      return emailaddress;
-   }
+    
+    public String getFunction() {
+        return function;
+    }
 
+    
+    public void setFunction(String function) {
+        this.function = function;
+    }
 
-   public void setEmailaddress(String emailaddress) {
-      this.emailaddress = emailaddress;
-   }
+    
+    public String getNote() {
+        return note;
+    }
 
+    
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-   public boolean isEmailsignal() {
-      return emailsignal;
-   }
+    
+    public String getPassword() {
+        return password;
+    }
 
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-   public void setEmailsignal(boolean emailsignal) {
-      this.emailsignal = emailsignal;
-   }
+    
+    public String getPrefix() {
+        return prefix;
+    }
 
+    
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
 
-   public String getFirstname() {
-      return firstname;
-   }
+    
+    public String getSurname() {
+        return surname;
+    }
 
+    
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-   public void setFirstname(String firstname) {
-      this.firstname = firstname;
-   }
+    
+    public String getWebsite() {
+        return website;
+    }
 
-
-   public String getFunction() {
-      return function;
-   }
-
-
-   public void setFunction(String function) {
-      this.function = function;
-   }
-
-
-   public String getNote() {
-      return note;
-   }
-
-
-   public void setNote(String note) {
-      this.note = note;
-   }
-
-
-   public String getPassword() {
-      return password;
-   }
-
-
-   public void setPassword(String password) {
-      this.password = password;
-   }
-
-
-   public String getPrefix() {
-      return prefix;
-   }
-
-
-   public void setPrefix(String prefix) {
-      this.prefix = prefix;
-   }
-
-
-   public String getSurname() {
-      return surname;
-   }
-
-
-   public void setSurname(String surname) {
-      this.surname = surname;
-   }
-
-
-   public String getWebsite() {
-      return website;
-   }
-
-
-   public void setWebsite(String website) {
-      this.website = website;
-   }
+    
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 
 }

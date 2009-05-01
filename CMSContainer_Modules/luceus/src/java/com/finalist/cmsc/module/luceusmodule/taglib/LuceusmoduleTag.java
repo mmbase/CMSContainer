@@ -13,6 +13,8 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.module.Module;
 
@@ -24,40 +26,37 @@ import com.finalist.cmsc.module.luceusmodule.LuceusModule;
  * @author Wouter Heijke
  */
 public class LuceusmoduleTag extends SimpleTagSupport {
+	private static Log log = LogFactory.getLog(LuceusmoduleTag.class);
 
-   private LuceusModule mod;
+	private LuceusModule mod;
 
-   /**
-    * JSP variable name.
-    */
-   public String var;
+	/**
+	 * JSP variable name.
+	 */
+	public String var;
+	
+	protected LuceusModule getModule() {
+		if (mod == null) {
+			mod = (LuceusModule) Module.getModule("luceusmodule");
+		}
+		if (mod.hasStarted()) {
+			return mod;
+		}
+		return null;
+	}
+	
+	protected boolean isRunning() {
+		if (getModule() != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	protected Cloud getAnonymousCloud() {
+		return CloudProviderFactory.getCloudProvider().getAnonymousCloud();
+	}
 
-
-   protected LuceusModule getModule() {
-      if (mod == null) {
-         mod = (LuceusModule) Module.getModule("luceusmodule");
-      }
-      if (mod.hasStarted()) {
-         return mod;
-      }
-      return null;
-   }
-
-
-   protected boolean isRunning() {
-      if (getModule() != null) {
-         return true;
-      }
-      return false;
-   }
-
-
-   protected Cloud getAnonymousCloud() {
-      return CloudProviderFactory.getCloudProvider().getAnonymousCloud();
-   }
-
-
-   public void setVar(String var) {
-      this.var = var;
-   }
+	public void setVar(String var) {
+		this.var = var;
+	}
 }

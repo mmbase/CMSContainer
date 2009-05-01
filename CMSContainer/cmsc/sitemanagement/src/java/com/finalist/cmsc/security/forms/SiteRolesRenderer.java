@@ -13,14 +13,13 @@ import com.finalist.cmsc.security.UserRole;
  */
 public class SiteRolesRenderer extends RolesRenderer {
 
-   public SiteRolesRenderer(HttpServletRequest request, Cloud cloud, RolesForm form) {
-      super(request, cloud, form);
-   }
+    public SiteRolesRenderer(HttpServletRequest request, Cloud cloud, RolesForm form) {
+        super(request, cloud, form);
+    }
 
+    protected UserRole getRole(Node page) {
+        return NavigationUtil.getRole(user, page);
+    }
 
-   @Override
-   protected UserRole getRole(Node page) {
-      return NavigationUtil.getRole(user, page);
-   }
-
+    
 }

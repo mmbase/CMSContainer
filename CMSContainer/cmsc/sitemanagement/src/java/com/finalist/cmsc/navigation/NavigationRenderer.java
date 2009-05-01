@@ -1,18 +1,16 @@
 package com.finalist.cmsc.navigation;
 
-import java.util.Locale;
+import javax.servlet.http.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import net.sf.mmapps.commons.util.HttpUtil;
 
 import org.mmbase.bridge.Node;
 
+import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.util.bundles.JstlUtil;
-import com.finalist.tree.TreeCellRenderer;
-import com.finalist.tree.TreeElement;
-import com.finalist.tree.TreeModel;
-import com.finalist.tree.TreeOption;
+import com.finalist.tree.*;
+import com.finalist.util.module.ModuleUtil;
 
 /**
  * Renderer of the Site management tree.
@@ -21,8 +19,9 @@ import com.finalist.tree.TreeOption;
  */
 public abstract class NavigationRenderer implements TreeCellRenderer {
 
-    protected static final String FEATURE_WORKFLOW = "workflowitem";
-	
+    private static final String FEATURE_PAGEWIZARD = "pagewizarddefinition";
+    private static final String FEATURE_WORKFLOW = "workflowitem";
+    
 	private String target = null;
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -34,7 +33,7 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
     }
 
     /**
-     * Render a node of a tree.
+     * Render een node van de tree.
      * 
      * @see com.finalist.tree.TreeCellRenderer#getElement(TreeModel, Object, String)
      */
@@ -44,18 +43,114 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
             id = String.valueOf(parentNode.getNumber());
         }
         
-        NavigationItemManager manager = NavigationManager.getNavigationManager(parentNode);
-    	if(manager != null) {
-    		TreeElement treeElement = manager.getTreeRenderer().getTreeElement(this, parentNode, model);
-			return treeElement;
-    	}
-        return null;
-    }
+        UserRole role = NavigationUtil.getRole(parentNode.getCloud(), parentNode, false);
+        boolean isPage = PagesUtil.isPage(parentNode);
+        
+        String titleFieldName = isPage ? PagesUtil.TITLE_FIELD : SiteUtil.TITLE_FIELD;
+        String name = parentNode.getStringValue(titleFieldName);
+        
+        String fragment = parentNode.getStringValue( NavigationUtil.getFragmentFieldname(parentNode) );
+        
+        boolean secure = parentNode.getBooleanValue(PagesUtil.SECURE_FIELD);
+        String action = null;
+        if (ServerUtil.useServerName()) {
+            String[] pathElements = NavigationUtil.getPathElementsToRoot(parentNode, true);
 
-    public void addParentOptions(TreeElement treeElement, String id) {
-        for (NavigationItemManager managerOption : NavigationManager.getNavigationManagers()) {
-        	managerOption.getTreeRenderer().addParentOption(this, treeElement, id);
+            action = HttpUtil.getWebappUri(request, pathElements[0], secure);
+            for (int i = 1; i < pathElements.length; i++) {
+                action += pathElements[i] + "/";
+            }
+            if (!request.getServerName().equals(pathElements[0])) {
+                action = HttpUtil.addSessionId(request, action);
+            }
+            else {
+                action = response.encodeURL(action);
+            }
         }
+        else {
+            String path = NavigationUtil.getPathToRootString(parentNode, true);
+            String webappuri = HttpUtil.getWebappUri(request, secure);
+            action = response.encodeURL(webappuri + path);
+        }
+        
+        TreeElement element = createElement(getIcon(node, role), id, name, fragment, action, target);
+        
+        if (role != null && SecurityUtil.isWriter(role)) {
+            if (isPage) {
+                if (SecurityUtil.isEditor(role)) {
+                    String labelPageEdit = JstlUtil.getMessage(request, "site.page.edit");
+                    element.addOption(createOption("edit_defaults.png", labelPageEdit,
+                        getUrl("PageEdit.do?number=" + parentNode.getNumber()), target));
+                    
+                    if ((model.getChildCount(parentNode) == 0) || SecurityUtil.isWebmaster(role)) {
+                        String labelPageRemove = JstlUtil.getMessage(request, "site.page.remove");
+                        element.addOption(createOption("delete.png", labelPageRemove,
+                                getUrl("PageDelete.do?number=" + parentNode.getNumber()), target));
+                    }
+                }
+            }
+            else {
+                if (SecurityUtil.isChiefEditor(role)) {
+                    String labelSiteEdit = JstlUtil.getMessage(request, "site.site.edit");
+                    element.addOption(createOption("edit_defaults.png", labelSiteEdit,
+                            getUrl("SiteEdit.do?number=" + parentNode.getNumber()), target));
+
+                    if ((model.getChildCount(parentNode) == 0) || SecurityUtil.isWebmaster(role)) {
+                        String labelSiteRemove = JstlUtil.getMessage(request, "site.site.remove");
+                        element.addOption(createOption("delete.png", labelSiteRemove,
+                            getUrl("SiteDelete.do?number=" + parentNode.getNumber()), target));
+                    }
+                }
+            }
+            if (SecurityUtil.isEditor(role)) {
+                String labelPageNew = JstlUtil.getMessage(request, "site.page.new");
+                element.addOption(createOption("new.png", labelPageNew,
+                        getUrl("PageCreate.do?parentpage=" + parentNode.getNumber()), target));
+                if (NavigationUtil.getChildCount(parentNode) >= 2) {
+                    String labelPageReorder = JstlUtil.getMessage(request, "site.page.reorder");
+                    element.addOption(createOption("reorder.png", labelPageReorder, 
+                            getUrl("reorder.jsp?parent=" + parentNode.getNumber()), target));
+                }
+                
+                if (SecurityUtil.isChiefEditor(role)) {
+                    if (isPage) {
+                        String labelPageCut = JstlUtil.getMessage(request, "site.page.cut");
+                        element.addOption(createOption("cut.png", labelPageCut, "javascript:cut('"
+                                + parentNode.getNumber() + "');", null));
+                        String labelPageCopy = JstlUtil.getMessage(request, "site.page.copy");
+                        element.addOption(createOption("copy.png", labelPageCopy, "javascript:copy('"
+                                + parentNode.getNumber() + "');", null));
+                    }
+                    String labelPagePaste = JstlUtil.getMessage(request, "site.page.paste");
+                    element.addOption(createOption("paste.png", labelPagePaste, "javascript:paste('"
+                            + parentNode.getNumber() + "');", null));
+                }
+                
+                
+		        if(ModuleUtil.checkFeature(FEATURE_PAGEWIZARD)) {
+			        String labelPageWizard = JstlUtil.getMessage(request, "site.page.wizard");
+			        element.addOption(createOption("wizard.png", labelPageWizard,
+			            getUrl("../pagewizard/StartPageWizardAction.do?number=" + parentNode.getNumber()), target));
+		        }
+            }
+
+            if (SecurityUtil.isWebmaster(role)) {
+		        if(ModuleUtil.checkFeature(FEATURE_WORKFLOW)) {
+                   String labelPublish = JstlUtil.getMessage(request, "site.page.publish");
+                   element.addOption(createOption("publish.png", labelPublish,
+                       getUrl("../workflow/publish.jsp?number=" + parentNode.getNumber()), target));
+                   String labelMassPublish = JstlUtil.getMessage(request, "site.page.masspublish");
+                   element.addOption(createOption("masspublish.png", labelMassPublish,
+                       getUrl("../workflow/masspublish.jsp?number=" + parentNode.getNumber()), target));
+		        }
+            }
+            
+            String labelPageRights = JstlUtil.getMessage(request, "site.page.rights");
+            element.addOption(createOption("rights.png", labelPageRights,
+                getUrl("../usermanagement/pagerights.jsp?number=" + parentNode.getNumber()), target));
+        }
+
+        return element;
     }
 
     private String getUrl(String url) {
@@ -64,58 +159,11 @@ public abstract class NavigationRenderer implements TreeCellRenderer {
 
     public String getIcon(Object node, UserRole role) {
         Node n = (Node) node;
-        return getIcon(n.getNodeManager().getName(), role);
+        return "type/" + n.getNodeManager().getName() + "_"+role.getRole().getName()+".png";
     }
 
-    public String getIcon(String name, UserRole role) {
-        return "type/" + name + "_"+role.getRole().getName()+".png";
-    }
+    protected abstract TreeOption createOption(String icon, String label, String action, String target);
+
+    protected abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
     
-    public String getOpenAction(Node parentNode, boolean secure) {
-        String contextPath = request.getContextPath();
-        String action = String.format("/editors/site/NavigatorPanel.do?nodeId=%s",parentNode.getNumber());
-        return contextPath+action;
-    }
-
-    public TreeOption createTreeOption(String icon, String message, String resourcebundle, String action) {
-        String label = getLabel(message, resourcebundle);
-        if (!action.startsWith("javascript:")) {
-            action = getUrl(action);
-        }
-        return createOption(icon, label,  action, target);      
-        
-    }
-
-	public String getLabel(String message, String resourcebundle) {
-		Locale locale = JstlUtil.getLocale(request);
-        String label = JstlUtil.getMessage(resourcebundle, locale, message);
-		return label;
-	}
-    
-    public TreeOption createTreeOption(String icon, String message, String action) {
-        String label = JstlUtil.getMessage(request, message);
-        if (!action.startsWith("javascript:")) {
-            action = getUrl(action);
-        }
-        return createOption(icon, label,  action, target);    	
-    }
-
-    public TreeElement createElement(Node parentNode, UserRole role, String name, String fragment, boolean secure) {
-        String id = String.valueOf(parentNode.getNumber());
-        return createElement(getIcon(parentNode, role), id, name, fragment, getOpenAction(parentNode, secure), target);
-    }
-    
-    public abstract TreeOption createOption(String icon, String label, String action, String target);
-
-    public abstract TreeElement createElement(String icon, String id, String name, String fragment, String action, String target);
-
-    public boolean showChildren(Object node) {
-       Node parentNode = (Node) node;
-       NavigationItemManager manager = NavigationManager.getNavigationManager(parentNode);
-
-       if(manager != null) {
-          return manager.getTreeRenderer().showChildren(parentNode);
-       }
-       return false;
-    }
 }

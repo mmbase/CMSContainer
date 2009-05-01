@@ -6,192 +6,146 @@ OSI Certified is a certification mark of the Open Source Initiative.
 The license (Mozilla version 1.0) can be read at the MMBase site.
 See http://www.MMBase.org/license
 
- */
+*/
 package com.finalist.cmsc.workflow;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import net.sf.mmapps.commons.bridge.RelationUtil;
 
 import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.security.Role;
-import com.finalist.cmsc.security.UserRole;
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.services.workflow.Workflow;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.workflow.WorkflowException;
+import com.finalist.cmsc.services.workflow.Workflow;
+
 
 public class LinkWorkflow extends RepositoryWorkflow {
 
-   /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(LinkWorkflow.class.getName());
+    /** MMbase logging system */
+    private static Logger log = Logging.getLoggerInstance(LinkWorkflow.class.getName());
 
-   public static final String TYPE_LINK = "link";
+    public static final String TYPE_LINK = "link";
 
+    public LinkWorkflow(Cloud cloud) {
+        super(cloud);
+    }
 
-   public LinkWorkflow(Cloud cloud) {
-      super(cloud);
-   }
+    @Override
+    public Node createFor(Node node, String remark) {
+        return createFor(null, node, remark);
+    }
 
+    public Node createFor(Node content, Node channel, String remark) {
+        Node wfItem = createFor(TYPE_LINK, remark, Workflow.STATUS_FINISHED);
+        if (content != null) {
+            RelationUtil.createRelation(wfItem, content, WORKFLOWREL);
+        }
+        if (channel != null) {
+            RelationUtil.createRelation(wfItem, channel, WORKFLOWREL);
+        }
 
-   @Override
-   public Node createFor(Node channel, String remark) {
-      Node wfItem = getWorkflowNode(channel, TYPE_LINK);
-      if (wfItem == null) {
-         wfItem = createFor(TYPE_LINK, remark, Workflow.STATUS_FINISHED, null);
-      }
+        List<Node> users = getUsersWithRights(channel, Role.EDITOR);
+        changeUserRelations(wfItem, users);
 
-      if (channel != null) {
-         RelationUtil.createRelation(wfItem, channel, WORKFLOWREL);
-      }
+       log.debug("Link Workflow " + wfItem.getNumber() + " created for content " + (content != null ? content.getNumber() : ""));
+        return wfItem;
+     }
 
-      List<Node> users = getUsersWithRights(channel, Role.EDITOR);
-      changeUserRelations(wfItem, users);
+    @SuppressWarnings("unused")
+    public void finishWriting(Node content, String remark) {
+        throw new UnsupportedOperationException("Linked workflows are always finished after linking");
+    }
 
-      log.debug("Link Workflow " + wfItem.getNumber() + " created for contentchannel "
-            + (channel != null ? channel.getNumber() : ""));
-      return wfItem;
-   }
-
-
-   @Override
-   public void finishWriting(Node content, String remark) {
-      throw new UnsupportedOperationException("Linked workflows are always finished after linking");
-   }
-
-
-   /**
-    * Status change to 'APPROVED'. The workflow appears on all chiefeditor
-    * workflow screens
-    */
-   @Override
-   public void accept(Node node, String remark) {
-      Node wfItem;
-      Node channel;
-      if (RepositoryUtil.isContentChannel(node)) {
-         wfItem = getWorkflowNode(node, TYPE_LINK);
-         channel = node;
-      }
-      else {
-         if (ContentElementUtil.isContentElement(node)) {
+    /**
+     * Status change to 'APPROVED'. The workflow appears on all chiefeditor workflow screens
+     */
+    public void accept(Node node, String remark) {
+        Node wfItem;
+        Node channel;
+        if (RepositoryUtil.isContentChannel(node)) {
             wfItem = getWorkflowNode(node, TYPE_LINK);
-            channel = RepositoryUtil.getCreationChannel(node);
-         }
-         else {
-            wfItem = node;
-            channel = getLinkChannel(wfItem);
-         }
-      }
-
-      super.accept(wfItem, channel, remark);
-   }
-
-
-   @Override
-   public void reject(Node node, String remark) {
-      Node wfItem;
-      if (RepositoryUtil.isContentChannel(node)) {
-         wfItem = getWorkflowNode(node, TYPE_LINK);
-      }
-      else {
-         if (ContentElementUtil.isContentElement(node)) {
-            wfItem = getWorkflowNode(node, TYPE_LINK);
-         }
-         else {
-            wfItem = node;
-         }
-      }
-      changeWorkflowFailPublished(wfItem, STATUS_FINISHED, remark);
-   }
-
-
-   /**
-    * Put content elements in publishqueue
-    */
-   @Override
-   public void publish(Node node) throws WorkflowException {
-      publish(node, null);
-   }
-
-
-   @Override
-   public void publish(Node node, List<Integer> publishNumbers) throws WorkflowException {
-      Node channel;
-      if (RepositoryUtil.isContentChannel(node)) {
-         channel = node;
-      }
-      else {
-         channel = getLinkChannel(node);
-      }
-      publish(channel, TYPE_LINK, publishNumbers);
-   }
-
-
-   @Override
-   protected void publishInternal(Node wf, Node node) {
-      NodeList nodes = getAllWorkflowNodes(wf);
-      if (nodes.size() == 1) {
-         if (nodes.getNode(0).getNumber() == node.getNumber()) {
-            Publish.publish(node);
-         }
-      }
-      else {
-         for (Iterator<Node> iterator = nodes.iterator(); iterator.hasNext();) {
-            Node nodeItem = iterator.next();
-            if (nodeItem.getNumber() == node.getNumber()) {
-               iterator.remove();
+            channel = node;
+        }
+        else {
+            if (ContentElementUtil.isContentElement(node)) {
+                wfItem = getWorkflowNode(node, TYPE_LINK);
+                channel = RepositoryUtil.getCreationChannel(node);
             }
-         }
-         Publish.publish(node, nodes);
-      }
-   }
+            else {
+                wfItem = node;
+                channel = getLinkChannel(wfItem);
+            }
+        }
+
+       super.accept(wfItem, channel, remark);
+    }
 
 
-   @Override
-   public void complete(Node contentNode) {
-      complete(contentNode, TYPE_LINK);
-   }
+    public void reject(Node node, String remark) {
+        Node wfItem;
+        if (RepositoryUtil.isContentChannel(node)) {
+            wfItem = getWorkflowNode(node, TYPE_LINK);
+        }
+        else {
+            if (ContentElementUtil.isContentElement(node)) {
+                wfItem = getWorkflowNode(node, TYPE_LINK);
+            }
+            else {
+                wfItem = node;
+            }
+        }
+        changeWorkflow(wfItem, STATUS_FINISHED, remark);
+    }
 
+    /**
+     * Put content elements in publishqueue
+     */
+    public void publish(Node node) throws WorkflowException {
+       publish(node, null);
+    }
 
-   public boolean hasWorkflow(Node node) {
-      return hasWorkflow(node, TYPE_LINK);
-   }
+    public void publish(Node node, List<Integer> publishNumbers) throws WorkflowException {
+        Node channel;
+        if (RepositoryUtil.isContentChannel(node)) {
+            channel = node;
+        }
+        else {
+            channel = getLinkChannel(node);
+        }
+       publish(channel, false, TYPE_LINK, publishNumbers);
+    }
 
+    public void complete(Node contentNode) {
+        complete(contentNode, TYPE_LINK);
+    }
+
+    public boolean hasWorkflow(Node node) {
+        return hasWorkflow(node, TYPE_LINK);
+    }
 
    @Override
    public boolean isWorkflowElement(Node node, boolean isWorkflowItem) {
-      if (isWorkflowItem) {
-         return TYPE_LINK.equals(node.getStringValue(TYPE_FIELD));
-      }
+       if (isWorkflowItem) {
+           return TYPE_LINK.equals(node.getStringValue(TYPE_FIELD));
+       }
       return RepositoryUtil.isContentChannel(node) || RepositoryUtil.isCollectionChannel(node);
    }
 
-
-   @Override
-   protected Node getWorkflowNode(Node node) {
-      return getWorkflowNode(node, TYPE_LINK);
-   }
-
-
-   @Override
-   public UserRole getUserRole(Node node) {
-      Node channel;
-      if (RepositoryUtil.isContentChannel(node)) {
-         channel = node;
-      }
-      else {
-         channel = getLinkChannel(node);
-      }
-      return RepositoryUtil.getRole(node.getCloud(), channel, false);
-   }
-
-   @Override
-   public void addUserToWorkflow(Node node) {
-      addUserToWorkflow(node, TYPE_LINK);
-   }
+    @Override
+    public UserRole getUserRole(Node node) {
+        Node channel;
+        if (RepositoryUtil.isContentChannel(node)) {
+            channel = node;
+        }
+        else {
+            channel = getLinkChannel(node);
+        }
+        return RepositoryUtil.getRole(node.getCloud(), channel, false);
+    }
 
 }

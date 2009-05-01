@@ -23,49 +23,46 @@ import org.mmbase.util.logging.Logging;
  */
 public class SecondaryContentEventListener implements NodeEventListener {
 
-   private static final Logger log = Logging.getLoggerInstance(SecondaryContentEventListener.class.getName());
+	private static Logger log = Logging.getLoggerInstance(SecondaryContentEventListener.class.getName());
 
-   protected final static String TYPE_IMAGES = "images";
+	protected final static String TYPE_IMAGES = "images";
 
-   protected final static String TYPE_URLS = "urls";
+	protected final static String TYPE_URLS = "urls";
 
-   protected final static String TYPE_ATTACHMENTS = "attachments";
+	protected final static String TYPE_ATTACHMENTS = "attachments";
 
-   private LuceusModule module;
+	private LuceusModule module;
 
+	public SecondaryContentEventListener(LuceusModule module) {
+		this.module = module;
+		if (module.isDoImages()) {
+			addEventListener(TYPE_IMAGES);
+		}
+		if (module.isDoUrls()) {
+			addEventListener(TYPE_URLS);
+		}
+		if (module.isDoAttachments()) {
+			addEventListener(TYPE_ATTACHMENTS);
+		}
+	}
 
-   public SecondaryContentEventListener(LuceusModule module) {
-      this.module = module;
-      if (module.isDoImages()) {
-         addEventListener(TYPE_IMAGES);
-      }
-      if (module.isDoUrls()) {
-         addEventListener(TYPE_URLS);
-      }
-      if (module.isDoAttachments()) {
-         addEventListener(TYPE_ATTACHMENTS);
-      }
-   }
+	private void addEventListener(String builder) {
+		MMBase.getMMBase().addNodeRelatedEventsListener(builder, this);
+		log.info("registered listener for: " + builder);
+	}
 
+	public void notify(NodeEvent event) {
+		log.debug("SecondaryContentEventListener NodeEvent: " + event.getNodeNumber());
 
-   private void addEventListener(String builder) {
-      MMBase.getMMBase().addNodeRelatedEventsListener(builder, this);
-      log.info("registered listener for: " + builder);
-   }
-
-
-   public void notify(NodeEvent event) {
-      log.debug("SecondaryContentEventListener NodeEvent: " + event.getNodeNumber());
-
-      switch (event.getType()) {
-         // case Event.TYPE_DELETE:
-         // TODO NIJ-341
-         case Event.TYPE_NEW:
-         case Event.TYPE_CHANGE:
-            if (event.getNewValues().size() > 0 || event.getOldValues().size() > 0) {
-               module.updateSecondaryContentIndex(event.getNodeNumber());
-            }
-            break;
-      }
-   }
+		switch (event.getType()) {
+		// case Event.TYPE_DELETE:
+		// TODO NIJ-341
+		case Event.TYPE_NEW:
+		case Event.TYPE_CHANGE:
+			if (event.getNewValues().size() > 0 || event.getOldValues().size() > 0) {
+				module.updateSecondaryContentIndex(event.getNodeNumber());
+			}
+			break;
+		}
+	}
 }
