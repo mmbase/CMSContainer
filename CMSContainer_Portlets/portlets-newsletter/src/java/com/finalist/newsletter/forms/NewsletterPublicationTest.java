@@ -14,19 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
 
+import com.finalist.cmsc.navigation.NavigationUtil;
+import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.struts.MMBaseFormlessAction;
+import com.finalist.newsletter.publisher.NewsletterPublisher;
 
 public class NewsletterPublicationTest extends MMBaseFormlessAction {
 
-   /**
-    * name of submit button in jsp to confirm removal
-    */
+   /** name of submit button in jsp to confirm removal */
    private static final String ACTION_REMOVE = "remove";
 
-   /**
-    * name of submit button in jsp to cancel removal
-    */
+   /** name of submit button in jsp to cancel removal */
    private static final String ACTION_CANCEL = "cancel";
 
    @Override
@@ -35,24 +36,17 @@ public class NewsletterPublicationTest extends MMBaseFormlessAction {
       int number = Integer.parseInt(getParameter(request, "number", true));
 
       if (isSendAction(request)) {
-         // String email = getParameter(request, "email");
-         // String mimeType = getParameter(request, "minetype");
+         Node newsletterPublicationNode = cloud.getNode(number);
 
-         // UserRole role =
-         // NavigationUtil.getRole(newsletterPublicationNode.getCloud(),
-         // newsletterPublicationNode, false);
-         // boolean isWebMaster = (role != null &&
-         // SecurityUtil.isWebmaster(role));
-         //
-         // if (NavigationUtil.getChildCount(newsletterPublicationNode) > 0
-         // && !isWebMaster) {
-         // return mapping.findForward("confirmationpage");
-         // }
-         // Thread publisher = new NewsletterPublisher(number);
-         // publisher.start();
-         // NewsletterPublicationService publicationService =
-         // (NewsletterPublicationService)
-         // ApplicationContextFactory.getBean("publicationService");
+         UserRole role = NavigationUtil.getRole(newsletterPublicationNode.getCloud(), newsletterPublicationNode, false);
+         boolean isWebMaster = (role != null && SecurityUtil.isWebmaster(role));
+
+         if (NavigationUtil.getChildCount(newsletterPublicationNode) > 0 && !isWebMaster) {
+            return mapping.findForward("confirmationpage");
+         }
+         Thread publisher = new NewsletterPublisher(number);
+         publisher.start();
+
          return mapping.findForward(SUCCESS);
       }
 
@@ -61,6 +55,7 @@ public class NewsletterPublicationTest extends MMBaseFormlessAction {
          forwardPath = forwardPath.concat("?showpage=" + number);
          return new ActionForward(forwardPath);
       }
+
       // neither remove or cancel, show confirmation page
       return mapping.findForward("inputpage");
    }

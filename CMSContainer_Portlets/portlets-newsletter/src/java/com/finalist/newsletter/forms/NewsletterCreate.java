@@ -1,49 +1,42 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
- * 
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
  */
 package com.finalist.newsletter.forms;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.bridge.RelationUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeManager;
 
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.struts.MMBaseFormlessAction;
-import com.finalist.newsletter.util.NewsletterUtil;
 
-/**
- * Create Newsletter Action
- *
- * @author Lisa
- */
 public class NewsletterCreate extends MMBaseFormlessAction {
-   /**
-    * @param mapping
-    * @param request
-    * @param cloud
-    * @return ActionForward , refresh the Newsletter List
-    * @throws Exception
-    */
 
+   @Override
    public ActionForward execute(ActionMapping mapping, HttpServletRequest request, Cloud cloud) throws Exception {
 
       String parentnewsletter = getParameter(request, "parentnewsletter", true);
       String action = getParameter(request, "action");
 
-      if (StringUtils.isBlank(action)) {
+      if (StringUtil.isEmptyOrWhitespace(action)) {
          request.getSession().setAttribute("parentnewsletter", parentnewsletter);
-         ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?action=create"
-                  + "&contenttype=newsletter" + "&returnurl=" + mapping.findForward("returnurl").getPath());
+
+         ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?action=create" + "&contenttype=newsletter"
+               + "&returnurl=" + mapping.findForward("returnurl").getPath());
          ret.setRedirect(true);
          return ret;
       } else {
@@ -56,17 +49,26 @@ public class NewsletterCreate extends MMBaseFormlessAction {
             PagesUtil.linkPortlets(newNewsletter, layoutNode);
             request.getSession().removeAttribute("parentnewsletter");
 
-            // NewsletterPublicationUtil.createDefaultTerm(newNewsletter);
-            NewsletterUtil.addScheduleForNewsletter(newNewsletter);
-            newNewsletter.setStringValue("scheduledescription", NewsletterUtil.getScheduleMessageByExpression(
-                     newNewsletter.getStringValue("schedule")));
-            newNewsletter.commit();
-//            if(ServerUtil.isStaging() && !ServerUtil.isSingle()) {
-//               Publish.publish(newNewsletter);
-//            }
+            // Create a default theme for this newsletter
+            String newsletterTitle = "" + newNewsletter.getStringValue("title");
+            String newsletterDescription = "" + newNewsletter.getStringValue("description");
+
+            String themeTitle = newsletterTitle;
+            String themeDescription = newsletterDescription;
+            String themeShortDescription = newsletterDescription;
+
+            NodeManager themeNodeManager = cloud.getNodeManager("newslettertheme");
+            Node themeNode = themeNodeManager.createNode();
+
+            themeNode.setStringValue("title", themeTitle);
+            themeNode.setStringValue("description", themeDescription);
+            themeNode.setStringValue("shortdescription", themeShortDescription);
+            themeNode.commit();
+
+            RelationUtil.createRelation(newNewsletter, themeNode, "defaulttheme");
+
             addToRequest(request, "showpage", ewnodelastedited);
-            ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?nodeId="
-                     + ewnodelastedited + "&fresh=fresh");
+            ActionForward ret = mapping.findForward(SUCCESS);
             return ret;
          }
          request.getSession().removeAttribute("parentnewsletter");
@@ -74,4 +76,5 @@ public class NewsletterCreate extends MMBaseFormlessAction {
          return ret;
       }
    }
+
 }

@@ -1,6 +1,7 @@
 package com.finalist.cmsc.portalImpl;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;
@@ -18,65 +19,36 @@ import com.finalist.cmsc.beans.om.Portlet;
 import com.finalist.cmsc.beans.om.PortletDefinition;
 import com.finalist.cmsc.beans.om.View;
 import com.finalist.cmsc.navigation.NavigationItemRenderer;
+import com.finalist.cmsc.portalImpl.registry.PortalRegistry;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.pluto.portalImpl.aggregation.EmptyFragment;
 import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
 import com.finalist.pluto.portalImpl.aggregation.ScreenFragment;
-import com.finalist.pluto.portalImpl.core.*;
 
 public class PageNavigationRenderer implements NavigationItemRenderer {
 
    private static Log log = LogFactory.getLog(PageNavigationRenderer.class);
 
-   public String getContentType() {
-       return "text/html";
-   }
-   
    public void render(NavigationItem item, HttpServletRequest request, HttpServletResponse response,
-         ServletConfig sc) throws IOException {
+         ServletConfig sc) {
       if (item instanceof Page) {
+         ScreenFragment screen = getScreen((Page) item, sc);
 
-          PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
-          PortalURL currentURL = env.getRequestedPortalURL();
-
-          PortalControlParameter control = new PortalControlParameter(currentURL);
-          if (isActionUrl(control)) {
-              // portlet action phase
-             String id = control.getPortletWindowOfAction();
-
-             log.debug("===>CONTROL='" + control.toString() + "'");
-             log.debug("===>WINDOW='" + id + "'");
-             ScreenFragment screen = getActionScreen((Page) item, sc, id);
-             if (screen == null) {
-                 screen = getScreen((Page) item, sc);
-             }
-             if (screen != null) {
-                screen.processAction(request, response, id);
-             }
-             else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-             }
-             return; // we issued an redirect, so return directly
-          }
-          else {
-             // portlet render phase
-             try {
-                 ScreenFragment screen = getScreen((Page) item, sc);
-                 if (screen != null) {
-                    screen.service(request, response);
-                 }
-                 else {
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                 }
-             }
-             catch (ServletException e) {
-                throw new RenderException("ServletException while rendering", e);
-             }
-             catch (IOException e) {
-                // TODO Auto-generated catch block
-                throw new RenderException("IOException while rendering", e);
-             }
-          }
+         PortalRegistry registry = PortalRegistry.getPortalRegistry(request);
+         
+         registry.setScreen(screen);
+         log.debug("===>SERVICE");
+         try {
+            screen.service(request, response);
+         }
+         catch (ServletException e) {
+            throw new RenderException("ServletException while rendering", e);
+         }
+         catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RenderException("IOException while rendering", e);
+         }
+         log.debug("===>SERVICE DONE");
       }
       else {
          throw new IllegalArgumentException(
@@ -85,10 +57,6 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
       }
    }
 
-   protected boolean isActionUrl(PortalControlParameter control) {
-      String id = control.getPortletWindowOfAction();
-      return id != null;
-   }
 
    protected ScreenFragment getScreen(Page page, ServletConfig sc) {
       try {
@@ -97,11 +65,25 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
          // place portletfragments and emptyfragments in the screenfragment
 
          Set<String> names = layout.getNames();
-		 for (String layoutId : names) {
-            PortletFragment pf = getPortlet(page, sc, sf, layoutId);
-            if (pf != null) {
-                sf.addChild(pf);
-             }
+         for (Iterator<String> iter = names.iterator(); iter.hasNext();) {
+            String layoutId = iter.next();
+            Integer portletId = page.getPortlet(layoutId);
+            Portlet portlet = SiteManagement.getPortlet(portletId);
+            if (portlet != null) {
+               PortletDefinition definition = SiteManagement.getPortletDefinition(portlet.getDefinition());
+               View view = SiteManagement.getView(portlet.getView());
+
+               PortletFragment pf = new PortletFragment(sc, sf, layoutId, portlet, definition, view);
+               if (pf != null) {
+                  sf.addChild(pf);
+               }
+            }
+            else {
+               PortletFragment pf = createDefaultPortlet(sf, page, layoutId, sc);
+               if (pf != null) {
+                  sf.addChild(pf);
+               }
+            }
          }
 
          return sf;
@@ -112,44 +94,6 @@ public class PageNavigationRenderer implements NavigationItemRenderer {
       return null;
    }
 
-   private ScreenFragment getActionScreen(Page page, ServletConfig sc, String id) {
-       try {
-           Layout layout = SiteManagement.getLayout(page.getLayout());
-           ScreenFragment sf = new ScreenFragment(sc, page, layout);
-           // place portletfragments and emptyfragments in the screenfragment
-
-           Set<String> names = layout.getNames();
-           for (String layoutId : names) {
-              if (layoutId.equals(id)) {
-                  PortletFragment pf = getPortlet(page, sc, sf, layoutId);
-                  if (pf != null) {
-                      sf.addChild(pf);
-                  }
-              }
-           }
-
-           return sf;
-        }
-        catch (Exception e) {
-           log.error("Error while constructing screen for page: '" + page.getId() + "'", e);
-        }
-        return null;
-   }
-
-    private PortletFragment getPortlet(Page page, ServletConfig sc, ScreenFragment sf, String layoutId)
-            throws Exception {
-        Integer portletId = page.getPortlet(layoutId);
-        Portlet portlet = SiteManagement.getPortlet(portletId);
-        if (portlet != null) {
-           PortletDefinition definition = SiteManagement.getPortletDefinition(portlet.getDefinition());
-           View view = SiteManagement.getView(portlet.getView());
-    
-           return new PortletFragment(sc, sf, layoutId, portlet, definition, view);
-        }
-        else {
-           return createDefaultPortlet(sf, page, layoutId, sc);
-        }
-    }
 
    private PortletFragment createDefaultPortlet(ScreenFragment sf, Page page, String layoutId, ServletConfig sc) {
       try {

@@ -8,48 +8,46 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.mmbase.applications.crontab.AbstractCronJob;
+import org.mmbase.applications.crontab.CronEntry;
 import org.mmbase.applications.crontab.CronJob;
-import org.mmbase.bridge.*;
-import org.mmbase.bridge.util.HugeNodeListIterator;
-import org.mmbase.bridge.util.SearchUtil;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.util.ServerUtil;
-
-public class LinkValidatorCronJob extends AbstractCronJob implements CronJob {
-
-    private static final String URL_MANAGER = "urls";
-    private static final String URL_FIELD = "url";
-    private static final String VALID_FIELD = "valid";
+public class LinkValidatorCronJob implements CronJob {
 
    private static final int TIMEOUT = 15000;
-   private static final Logger log = Logging.getLoggerInstance(LinkValidatorCronJob.class.getName());
+   private static Logger log = Logging.getLoggerInstance(LinkValidatorCronJob.class.getName());
 
 
-   @Override
+   public void init(CronEntry cronEntry) {
+      // empty
+   }
+
+
+   public void stop() {
+      // empty
+   }
+
+
    public void run() {
-      if (ServerUtil.isReadonly()) {
-         return;
-      }
       checkExternalLinks();
    }
 
 
    private void checkExternalLinks() {
-        log.info("LinkValidation thread started");
+      log.info("LinkValidation thread started [freek]");
 
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
 
-      NodeQuery urlQuery = cloud.getNodeManager(URL_MANAGER).createQuery();
-      SearchUtil.addSortOrder(urlQuery, urlQuery.getNodeManager(),URL_FIELD, "UP");
-      HugeNodeListIterator iterator = new HugeNodeListIterator(urlQuery);
+      NodeList linkElements = cloud.getNodeManager("urls").getList("", "url", null);
 
       Protocol.registerProtocol("https", new Protocol("https", new EasySSLProtocolSocketFactory(), 443));
-      while (iterator.hasNext()) {
-         Node linkNode = iterator.nextNode();
-         String url = linkNode.getStringValue(URL_FIELD);
+      for (int i = 0; i < linkElements.size(); i++) {
+         Node linkNode = linkElements.getNode(i);
+         String url = linkNode.getStringValue("url");
          boolean valid;
          if (url.startsWith("#") || url.startsWith("mailto:")) {
             valid = true;
@@ -58,12 +56,9 @@ public class LinkValidatorCronJob extends AbstractCronJob implements CronJob {
             valid = isValid(url);
          }
          log.debug("Found url: [" + url + "] (" + valid + ")");
-         if (linkNode.getBooleanValue(VALID_FIELD) != valid) {
-             linkNode.setBooleanValue(VALID_FIELD, valid);
-             linkNode.commit();
-         }
+         linkNode.setStringValue("valid", valid ? "1" : "0");
+         linkNode.commit();
       }
-      log.info("LinkValidation thread done");
    }
 
 

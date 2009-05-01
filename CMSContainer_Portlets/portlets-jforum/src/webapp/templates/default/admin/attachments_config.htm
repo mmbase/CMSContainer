@@ -1,13 +1,16 @@
-<#setting number_format = "#"/>
-<style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css?${startupTime} );</style>
+<#include "../header.htm"/>
 
-<form accept-charset="${encoding}" name="form" action="${contextPath}/jforum${extension}" method="post">
+<#setting number_format = "#"/>
+<STYLE type=text/css>@import url( ${contextPath}/templates/${templateName}/admin/style.css );</STYLE>
+
+<form accept-charset="${encoding}" name="form" action='${JForumContext.encodeURL("/jforum")}' method="post">
 <input type="hidden" name="action" value="configurationsSave" />
 <input type="hidden" name="module" value="${moduleName}" />
+<input type="hidden" name="securityHash" value="${securityHash}" />
 
-<table class="forumline" cellspacing="1" cellpadding="3" width="100%" border="0">
+<table class='forumline' cellspacing='1' cellpadding='3' width="100%" border='0'>
 <tr>
-<th class="thhead" valign="middle" colspan="2" height="25">${I18n.getMessage("AdminAttachments.configTitle")}</th>
+<th class='thhead' valign='center' colspan='2' height='25'>${I18n.getMessage("AdminAttachments.configTitle")}</th>
 </tr>
 
 <!-- ICON -->
@@ -18,7 +21,7 @@
 				<td class="row1" width="80%"><span class="gen"><b>${I18n.getMessage("AdminAttachments.configIcon")}</b></span><br />
 				<span class="gensmall">${I18n.getMessage("AdminAttachments.configIconDesc")}</span></td>
 
-				<td class="row2"><input type="text" size="25" maxlength="100" name="p_attachments.icon" value="${icon}" /></td>
+				<td class="row2"><input type="text" size="25" maxlength="100" name="p_attachments.icon" value="${icon}" class="liteoption" /></td>
 			</tr>
 		</table>
 	</td>
@@ -53,9 +56,9 @@
 
 				<td class="row2">
 					<span class="gensmall">
-					<input type="text" size="10" maxlength="4" name="p_attachments.images.thumb.maxsize.w" value="${thumbW}" />
+					<input type="text" size="10" maxlength="4" name="p_attachments.images.thumb.maxsize.w" value="${thumbW}" class="liteoption" />
 					x
-					<input type="text" size="10" maxlength="4" name="p_attachments.images.thumb.maxsize.h" value="${thumbH}" />
+					<input type="text" size="10" maxlength="4" name="p_attachments.images.thumb.maxsize.h" value="${thumbH}" class="liteoption" />
 					(${I18n.getMessage("AdminAttachments.width")} x ${I18n.getMessage("AdminAttachments.height")})</span>
 				</td>
 			</tr>
@@ -91,7 +94,7 @@
 				<span class="gensmall">${I18n.getMessage("AdminAttachments.maxAttachsDesc")}</span></td>
 
 				<td class="row2">
-					<input type="text" size="5" maxlength="2" name="p_attachments.max.post" value="${maxPost}" />
+					<input type="text" size="5" maxlength="2" name="p_attachments.max.post" value="${maxPost}" class="liteoption" />
 				</td>
 			</tr>
 		</table>
@@ -104,3 +107,5 @@
 
 </table>
 </form>
+<#include "../bottom.htm"/>
+

@@ -1,16 +1,16 @@
 <html:hidden property="contenttypes" value="urls" />
 <table border="0">
    <tr>
-      <td style="width: 105px"><fmt:message key="urlform.title" /></td>
-      <td><html:text style="width: 200px" property="title"/></td>
+      <td style="width: 150px"><fmt:message key="urlform.name" /></td>
+      <td><html:text style="width: 250px" property="name"/></td>
    </tr>
    <tr>
-      <td><fmt:message key="imageform.description" /></td>
-      <td><html:text style="width: 200px" property="description"/></td>
+      <td><fmt:message key="urlform.description" /></td>
+      <td><html:text style="width: 250px" property="description"/></td>
    </tr>
    <tr>
       <td><fmt:message key="urlform.url" /></td>
-      <td><html:text style="width: 200px" property="url"/></td>
+      <td><html:text style="width: 250px" property="url"/></td>
    </tr>
    <tr>
       <td><fmt:message key="urlform.valid" /></td>
@@ -25,6 +25,6 @@
    <tr>
       <td></td>
       <td><input type="submit" name="submitButton" onclick="setOffset(0);" 
-               value="<fmt:message key="urlform.submit" />"/></td>
+      			value="<fmt:message key="urlform.submit" />"/></td>
    </tr>
 </table>

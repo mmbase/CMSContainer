@@ -4,17 +4,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 /**
  * Utility class for generating xls files
- *
+ * 
  * @author Cati Macarov
  */
-public final class ExcelUtils {
+public class ExcelUtils {
 
    private static ExcelUtils instance = null;
    private static final int ROW_TITLE = 1;
@@ -30,7 +34,7 @@ public final class ExcelUtils {
 
    /**
     * Singleton access method
-    *
+    * 
     * @return an instance of the ExcelUtils
     */
    public static synchronized ExcelUtils getInstance() {

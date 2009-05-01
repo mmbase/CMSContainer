@@ -9,14 +9,12 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.mmbase;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.functions.Function;
 
-import com.finalist.cmsc.util.ServerUtil;
+import net.sf.mmapps.commons.util.StringUtil;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 public class EmailUtil {
 
@@ -31,32 +29,21 @@ public class EmailUtil {
    public static void send(Cloud cloud, String name, String email, String nameFrom, String emailFrom, String subject,
          String body) {
 
-      if(!ServerUtil.isProduction()){
-         return ;
-      }
-
       if (cloud == null) {
          cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
       }
 
-      if (StringUtils.isEmpty(emailFrom) || StringUtils.isEmpty(nameFrom)) {
+      if (StringUtil.isEmpty(emailFrom) || StringUtil.isEmpty(nameFrom)) {
          emailFrom = PropertiesUtil.getProperty("mail.system.email");
          nameFrom = PropertiesUtil.getProperty("mail.system.name");
       }
-      
-      if (StringUtils.isEmpty(emailFrom)){
-         throw new IllegalStateException("The 'mail.system.email' setting is missing in the System properties.");
-      }      
-      if (StringUtils.isEmpty(nameFrom)){
-         throw new IllegalStateException("The 'mail.system.name' setting is missing in the System properties.");
-      }
-             
+
       Node emailNode = cloud.getNodeManager(EMAIL).createNode();
       emailNode.setStringValue("subject", subject);
       emailNode.setStringValue("body", body);
 
-      String from = StringUtils.isEmpty(nameFrom) ? emailFrom : nameFrom + "<" + emailFrom + ">";
-      String to = StringUtils.isEmpty(name) ? email : name + "<" + email + ">";
+      String from = StringUtil.isEmpty(nameFrom) ? emailFrom : nameFrom + "<" + emailFrom + ">";
+      String to = StringUtil.isEmpty(name) ? email : name + "<" + email + ">";
 
       emailNode.setStringValue("from", from);
       emailNode.setStringValue("to", to);

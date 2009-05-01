@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.mmbase.applications.crontab.AbstractCronJob;
+import org.mmbase.applications.crontab.CronEntry;
 import org.mmbase.applications.crontab.CronJob;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
@@ -30,23 +30,28 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
+import com.finalist.cmsc.security.SecurityUtil;
 
-public class TaskCronJob extends AbstractCronJob implements CronJob {
-   private static final Logger log = Logging.getLoggerInstance(TaskCronJob.class.getName());
+public class TaskCronJob implements CronJob {
+   private static Logger log = Logging.getLoggerInstance(TaskCronJob.class.getName());
 
    private long lastExecutionTime;
 
    private ResourceBundle bundle;
 
 
-   @Override
-   public void init() {
+   public void init(CronEntry cronEntry) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getAnonymousCloud();
       lastExecutionTime = TasksUtil.getLastTaskCreationTime(cloud, TasksUtil.TYPE_EXPIRE);
       bundle = ResourceBundle.getBundle("cmsc-tasks");
    }
 
-   @Override
+
+   public void stop() {
+      // nothing to do
+   }
+
+
    public void run() {
       log.debug("TaskCronJob running");
       long fromTime = lastExecutionTime;
@@ -80,11 +85,13 @@ public class TaskCronJob extends AbstractCronJob implements CronJob {
       }
 
       if (!usersToNotify.isEmpty()) {
+         Node cloudUserNode = SecurityUtil.getUserNode(cloud);
+
          for (Node user : usersToNotify) {
             NodeQuery taskQuery = SearchUtil.createRelatedNodeListQuery(user, TasksUtil.TASK, TasksUtil.ASSIGNEDREL,
                   TasksUtil.STATUS, TasksUtil.STATUS_INIT, null, null, SearchUtil.SOURCE);
             int numberOfTasks = Queries.count(taskQuery);
-            TasksUtil.sendExpireNotification(user, null, numberOfTasks);
+            TasksUtil.sendExpireNotification(user, cloudUserNode, numberOfTasks);
 
             HugeNodeListIterator taskListIterator = new HugeNodeListIterator(taskQuery);
             while (taskListIterator.hasNext()) {

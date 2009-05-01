@@ -1,16 +1,11 @@
-<!DOCTYPE html 
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-<title>${I18n.getMessage("PrivateMessage.findUser")}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=${encoding}" />
+
+<!-- Jahia fork -->
+<div class="jforum">
 <style type="text/css">@import url( ${contextPath}/templates/${templateName}/styles/style.css );</style>
-</head>
 
-<body>
+<div>
 
-<script type="text/javascript">
+<script>
 <!--
 function refreshUsername()
 {
@@ -25,7 +20,7 @@ function refreshUsername()
 -->
 </script>
 
-<form action="${contextPath}/jforum${extension}" method="post" name="search" id="search" accept-charset="${encoding}">
+<form action='${JForumContext.encodeURL("/jforum")}' method="post" name="search" id="search" accept-charset="${encoding}">
 <input type="hidden" name="action" value="${action}" />
 <input type="hidden" name="module" value="${moduleName}" />
 	<table cellspacing="0" cellpadding="10" width="100%" border="0">
@@ -38,7 +33,7 @@ function refreshUsername()
 					<tr>
 						<td class="row1" valign="top">
 							<span class="genmed"><br />
-							<input type="text" class="post" name="username" value="${username?default("")}"/>&nbsp; 
+							<input class="post" name="username" value="${username?default("")}"/>&nbsp;
 							<input class="liteoption" type="submit" value="${I18n.getMessage("ForumBase.search")}" name="search" />
 							</span><br />
 							<span class="gensmall">${I18n.getMessage("PrivateMessage.searchTip")}</span><br />
@@ -57,13 +52,13 @@ function refreshUsername()
 				</table>
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td align="center">
-				<span class="copyright">Powered by <a class="copyright" href="http://www.jforum.net/" target="_blank">JForum ${version}</a> &copy; <a class="copyright" href="http://www.jforum.net/team.jsp" target="_blank">JForum Team</a></span>
+				<span class="copyright">Powered by <a class="copyright" href="http://www.jforum.net/" target="_blank">JForum ${version} </a>&copy; Rafael Steil</span>
 			</td>
 		</tr>
 	</table>
 </form>
-</body>
-</html>
+</div>
+</div>

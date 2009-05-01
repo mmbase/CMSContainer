@@ -2,7 +2,7 @@ package com.finalist.cmsc.beans.om;
 
 import java.util.Date;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 @SuppressWarnings("serial")
 public class NavigationItem extends NodeBean implements Comparable<NavigationItem> {
@@ -13,7 +13,7 @@ public class NavigationItem extends NodeBean implements Comparable<NavigationIte
    private Date creationdate;
    private Date lastmodifieddate;
    private Date publishdate;
-   private Date expiredate;
+   private Date expirydate;
    private boolean use_expiry;
    private String lastmodifier;
    private boolean inmenu;
@@ -85,13 +85,13 @@ public class NavigationItem extends NodeBean implements Comparable<NavigationIte
    }
 
 
-   public Date getExpiredate() {
-      return expiredate;
+   public Date getExpirydate() {
+      return expirydate;
    }
 
 
-   public void setExpiredate(Date expirydate) {
-      this.expiredate = expirydate;
+   public void setExpirydate(Date expirydate) {
+      this.expirydate = expirydate;
    }
 
 

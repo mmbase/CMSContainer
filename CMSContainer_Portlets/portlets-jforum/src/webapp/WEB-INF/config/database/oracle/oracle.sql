@@ -11,7 +11,7 @@ CategoryModel.addNew = INSERT INTO jforum_categories (categories_id, title, disp
 # #############
 # RankingModel
 # #############
-RankingModel.addNew = INSERT INTO jforum_ranks (rank_id, rank_title, rank_min, rank_special ) VALUES (jforum_ranks_seq.nextval, ?, ?, ? )
+RankingModel.addNew = INSERT INTO jforum_ranks (rank_id, rank_title, rank_min ) VALUES (jforum_ranks_seq.nextval, ?, ? )
 
 # #############
 # ConfigModel
@@ -21,10 +21,11 @@ ConfigModel.insert = INSERT INTO jforum_config (config_id, config_name, config_v
 # ##########
 # UserModel
 # ##########
-UserModel.addNew = INSERT INTO jforum_users (user_id, username, user_password, user_email, user_regdate, user_actkey, rank_id) VALUES (jforum_users_seq.nextval, ?, ?, ?, ?, ?, 0)
+UserModel.addNew = INSERT INTO jforum_users (user_id, username, user_password, user_email, user_regdate, user_actkey) VALUES (jforum_users_seq.nextval, ?, ?, ?, ?, ?)
+
 
 UserModel.selectAllByLimit = SELECT * FROM ( \
-        SELECT user_email, user_id, user_posts, user_regdate, username, deleted, user_karma, user_from, user_website, user_viewemail, ROW_NUMBER() OVER(ORDER BY username) - 1 LINENUM  \
+        SELECT user_email, user_id, user_posts, user_regdate, username, deleted, user_karma, user_from, user_website, user_viewemail, ROW_NUMBER() OVER(ORDER BY user_id) - 1 LINENUM  \
         FROM jforum_users ORDER BY username \
         ) \
         WHERE LINENUM >= ? AND LINENUM < ?
@@ -50,42 +51,21 @@ UserModel.selectAllByGroup = SELECT * FROM ( \
 	AND ug.group_id = ? \
 	ORDER BY username ) WHERE LINENUM >= ? AND LINENUM <= ?
 
+# ################
+# PermissionControl
+# ################
+PermissionControl.addGroupRole = INSERT INTO jforum_roles (role_id, group_id, name, role_type ) VALUES (jforum_roles_seq.nextval, ?, ?, ?)
+PermissionControl.addUserRole = INSERT INTO jforum_roles (role_id, user_id, name, role_type ) VALUES (jforum_roles_seq.nextval, ?, ?, ?)
+
 # #############
 # PostModel
 # #############
-PostModel.selectLatestByForumForRSS = SELECT * FROM ( \
-		SELECT p.topic_id, p.topic_id, p.post_id, p.forum_id, pt.post_subject AS subject, pt.post_text, p.post_time, p.user_id, u.username,
-		ROW_NUMBER() OVER(ORDER BY t.topic_id DESC) - 1 LINENUM \
-		FROM jforum_topics t, jforum_posts p, jforum_posts_text pt, jforum_users u \
-		WHERE p.post_id = t.topic_first_post_id \
-		AND p.topic_id = t.topic_id \
-		AND p.user_id = u.user_id \
-		AND p.post_id = pt.post_id \
-		AND p.need_moderate = 0 \
-		AND t.forum_id = ? \
-		ORDER BY t.topic_id DESC \
-	) \
-	WHERE LINENUM <= ?
-	
-PostModel.selectHotForRSS = SELECT * FROM ( \
-		SELECT t.topic_id, t.topic_title AS subject, p.post_id, t.forum_id, pt.post_text, p.post_time, p.user_id, u.username, \
-		ROW_NUMBER() OVER(ORDER BY topic_first_post_id DESC) \
-		FROM jforum_topics t, jforum_posts p, jforum_posts_text pt, jforum_users u \
-		WHERE p.post_id = t.topic_first_post_id \
-		AND p.topic_id = t.topic_id \
-		AND p.user_id = u.user_id \
-		AND p.post_id = pt.post_id \
-		AND p.need_moderate = 0  \
-		ORDER BY topic_first_post_id DESC \
-	) \
-	WHERE LINENUM <= ?
-
 PostModel.addNewPost = INSERT INTO jforum_posts (post_id, topic_id, forum_id, user_id, post_time, poster_ip, enable_bbcode, enable_html, enable_smilies, enable_sig, post_edit_time, need_moderate) \
 	VALUES (jforum_posts_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSDATE, ?)
 
 PostModel.addNewPostText = INSERT INTO jforum_posts_text ( post_text, post_id, post_subject ) VALUES (EMPTY_BLOB(), ?, ?)
 PostModel.addNewPostTextField = SELECT post_text from jforum_posts_text WHERE post_id = ? FOR UPDATE
-PostModel.updatePostText = UPDATE jforum_posts_text SET post_subject = ?, post_text = EMPTY_BLOB() WHERE post_id = ?
+PostModel.updatePostText = UPDATE jforum_posts_text SET post_subject = ? WHERE post_id = ?
 
 PostModel.lastGeneratedPostId = SELECT jforum_posts_seq.currval FROM DUAL
 
@@ -102,17 +82,17 @@ PostModel.selectAllByTopicByLimit = SELECT * FROM ( \
 ) \
 WHERE LINENUM >= ? AND LINENUM < ?
 
+
 PostModel.selectByUserByLimit = SELECT * FROM ( \
     SELECT p.post_id, topic_id, forum_id, p.user_id, post_time, poster_ip, enable_bbcode, p.attach, \
 	enable_html, enable_smilies, enable_sig, post_edit_time, post_edit_count, status, pt.post_subject, pt.post_text, username, p.need_moderate, \
-	ROW_NUMBER() OVER(ORDER BY p.post_id DESC) - 1 LINENUM \
+	ROW_NUMBER() OVER(ORDER BY p.post_time ASC) - 1 LINENUM \
 	FROM jforum_posts p, jforum_posts_text pt, jforum_users u \
 	WHERE p.post_id = pt.post_id \
 	AND p.user_id = u.user_id \
 	AND p.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND forum_id IN(:fids:) \
-	ORDER BY post_id DESC \
+	ORDER BY post_time ASC \
 ) \
 WHERE LINENUM >= ? AND LINENUM < ?
 
@@ -123,7 +103,6 @@ TopicModel.selectByUserByLimit = SELECT * FROM ( \
 	WHERE p.post_id = t.topic_last_post_id \
 	AND t.user_id = ? \
 	AND p.need_moderate = 0 \
-	AND t.forum_id IN(:fids:) \
 	ORDER BY t.topic_last_post_id DESC \
 ) \
 WHERE LINENUM >= ? AND LINENUM < ?
@@ -157,14 +136,14 @@ TopicModel.selectAllByForumByLimit = SELECT * FROM ( \
        SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach,  \
        ROW_NUMBER() OVER(ORDER BY topic_type DESC, topic_last_post_id DESC) - 1 LINENUM \
        FROM jforum_topics t, jforum_posts p \
-       WHERE (t.forum_id = ? OR t.topic_moved_id = ?) \
+       WHERE t.forum_id = ? \
        AND p.post_id = t.topic_last_post_id \
        AND p.need_moderate = 0 \
 	) \
 	WHERE LINENUM >= ? AND LINENUM < ?
 
 TopicModel.selectRecentTopicsByLimit = SELECT * FROM ( \
-       SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach,  \
+       SELECT t.*, p.user_id AS last_user_id, p.post_time, 0 AS attach,  \
        ROW_NUMBER() OVER(ORDER BY topic_type DESC, topic_last_post_id DESC) - 1 LINENUM \
        FROM jforum_topics t, jforum_posts p \
        WHERE p.post_id = t.topic_last_post_id \
@@ -172,17 +151,22 @@ TopicModel.selectRecentTopicsByLimit = SELECT * FROM ( \
 	) \
 	WHERE LINENUM < ?
 
-TopicModel.selectHottestTopicsByLimit = SELECT * FROM (\
-	SELECT t.*, p.user_id AS last_user_id, p.post_time, p.attach AS attach, \
-	ROW_NUMBER() OVER(ORDER BY topic_views DESC) - 1 LINENUM \
-    FROM jforum_topics t, jforum_posts p \
-    WHERE p.post_id = t.topic_last_post_id \
-    AND p.need_moderate = 0 \
-    ORDER BY topic_views DESC \
-	) \
-	WHERE LINENUM < ?
+TopicModel.notifyUsers = SELECT u.user_id AS user_id, u.username AS username, \
+	u.user_lang AS user_lang, u.user_email AS user_email \
+	FROM jforum_topics_watch tw, jforum_users u \
+	WHERE   tw.user_id = u.user_id AND \
+	        tw.topic_id = ? \
+	AND tw.is_read = 1 \
+	AND u.user_id NOT IN ( ?, ? )
 
 TopicModel.lastGeneratedTopicId = SELECT jforum_topics_seq.currval FROM DUAL
+
+TopicModel.selectLastN = SELECT * FROM ( \
+    SELECT topic_title, topic_time, topic_id, topic_type, ROW_NUMBER() OVER(ORDER BY topic_time DESC) - 1 LINENUM \
+    FROM jforum_topics \
+    ORDER BY topic_time DESC \
+    ) \
+    WHERE LINENUM < ?
 
 TopicModel.topicPosters = SELECT user_id, username, user_karma, user_avatar, user_allowavatar, user_regdate, user_posts, user_icq, \
 	user_from, user_email, rank_id, user_sig, user_attachsig, user_viewemail, user_msnm, user_yim, user_website, user_sig, user_aim \
@@ -201,6 +185,47 @@ PrivateMessagesModel.addText = INSERT INTO jforum_privmsgs_text ( privmsgs_id, p
 PrivateMessagesModel.addTextField = SELECT privmsgs_text from jforum_privmsgs_text WHERE privmsgs_id = ? FOR UPDATE
 PrivateMessagesModel.lastGeneratedPmId = SELECT jforum_privmsgs_seq.currval FROM DUAL
 
+# ############
+# SearchModel
+# ############
+SearchModel.insertWords = INSERT INTO jforum_search_words (word_id, word, word_hash) VALUES (jforum_search_words_seq.nextval, ?, ?)
+
+SearchModel.insertTopicsIds = INSERT INTO jforum_search_results ( topic_id, session_id, search_time ) SELECT DISTINCT t.topic_id, ?, sysdate FROM jforum_topics t, jforum_posts p \
+	WHERE t.topic_id = p.topic_id \
+	AND p.post_id IN (:posts:)
+
+SearchModel.selectTopicData = INSERT INTO jforum_search_topics (topic_id, forum_id, topic_title, user_id, topic_time, \
+	topic_views, topic_status, topic_replies, topic_vote_id, topic_type, topic_first_post_id, topic_last_post_id, moderated, session_id, search_time) \
+	SELECT t.topic_id, t.forum_id, t.topic_title, t.user_id, t.topic_time, \
+	t.topic_views, t.topic_status, t.topic_replies, t.topic_vote_id, t.topic_type, t.topic_first_post_id, t.topic_last_post_id, t.moderated, ?, sysdate \
+	FROM jforum_topics t, jforum_search_results s \
+	WHERE t.topic_id = s.topic_id \
+	AND s.session_id = ?
+
+SearchModel.lastGeneratedWordId = SELECT jforum_search_words_seq.currval FROM DUAL
+
+SearchModel.getPostsToIndex = SELECT * FROM ( \
+		SELECT p.post_id, pt.post_text, pt.post_subject,  \
+		ROW_NUMBER() OVER(ORDER BY p.post_id ASC) - 1 LINENUM \
+		FROM jforum_posts p, jforum_posts_text pt \
+		WHERE p.post_id = pt.post_id \
+		AND p.post_id BETWEEN ? AND ? \
+		ORDER BY p.post_id ASC \
+	) \
+	WHERE LINENUM >= ? AND LINENUM < ?
+
+#
+# The construction ((SYSDATE - time_field)*24) > 1.0 mean following:
+# (SYSDATE - time_field) return days. E.q if delta is 20 minuts it return 0.0125. If multyply on 24, that it would be hours - 0.3
+# So, ((SYSDATE - time_field)*24) > 1.0 totally mean 'delta' > 1 hour   
+#
+SearchModel.cleanSearchResults = DELETE FROM jforum_search_results WHERE session_id = ? OR ((SYSDATE - search_time)*24) > 1.0
+SearchModel.cleanSearchTopics = DELETE FROM jforum_search_topics WHERE session_id = ? OR ((SYSDATE - search_time)*24) > 1.0
+
+SearchModel.searchByTime = INSERT INTO jforum_search_results (topic_id, session_id, search_time) SELECT DISTINCT t.topic_id, ?, SYSDATE FROM jforum_topics t, jforum_posts p \
+	WHERE t.topic_id = p.topic_id \
+	AND p.post_time > ?
+
 # #############
 # SmiliesModel
 # #############
@@ -211,8 +236,12 @@ SmiliesModel.lastGeneratedSmilieId = SELECT jforum_smilies_seq.currval FROM DUAL
 # ##################
 # PermissionControl
 # ##################
-PermissionControl.addGroupRole = INSERT INTO jforum_roles (role_id, group_id, name) VALUES (jforum_roles_seq.nextval, ?, ?)
 PermissionControl.lastGeneratedRoleId = SELECT jforum_roles_seq.currval FROM DUAL
+
+PermissionControl.loadGroupRoles = SELECT r.role_id, r.name, rv.role_value, rv.role_type AS rv_type, r.role_type \
+	FROM jforum_roles r, jforum_role_values rv \
+	WHERE rv.role_id(+) = r.role_id AND r.group_id = ? \
+	ORDER BY r.role_id 
 
 # ##############
 # CategoryModel
@@ -236,6 +265,7 @@ BookmarkModel.add = INSERT INTO jforum_bookmarks (bookmark_id, user_id, relation
 AttachmentModel.addQuotaLimit = INSERT INTO jforum_quota_limit (quota_limit_id, quota_desc, quota_limit, quota_type) VALUES (jforum_quota_limit_seq.nextval, ?, ?, ?)
 AttachmentModel.lastGeneratedAttachmentId = SELECT jforum_attach_seq.currval FROM dual
 
+# fork jahia #
 AttachmentModel.addExtensionGroup = INSERT INTO jforum_extension_groups (extension_group_id, name, allow, upload_icon, download_mode) \
 	VALUES (jforum_extension_groups_seq.nextval, ?, ?, ?, ?)
 
@@ -246,36 +276,7 @@ AttachmentModel.addAttachment = INSERT INTO jforum_attach (attach_id, post_id, p
 
 AttachmentModel.addAttachmentInfo = INSERT INTO jforum_attach_desc (attach_desc_id, attach_id, physical_filename, real_filename, description, \
 	mimetype, filesize, upload_time, thumb, extension_id ) VALUES (jforum_attach_desc_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		
-AttachmentModel.setGroupQuota = INSERT INTO jforum_attach_quota (attach_quota_id, group_id, quota_limit_id) VALUES (jforum_attach_quota_seq.nextval, ?, ?)
 
-# ###############
-# BanlistModel
-# ###############
-BanlistModel.lastGeneratedBanlistId = SELECT jforum_banlist_seq.currval FROM dual
-BanlistModel.insert = INSERT INTO jforum_banlist (banlist_id, user_id, banlist_ip, banlist_email) VALUES (jforum_banlist_seq.nextval, ?, ?, ?)
-
-# #############
-# SearchModel
-# ############
-SearchModel.lastPostIdByDate = SELECT * FROM (\
-	SELECT post_id, ROW_NUMBER() OVER(ORDER BY post_id DESC) -1 LINENUM \
-	FROM jforum_posts WHERE post_time < ? ORDER BY post_id DESC) \
-	WHERE LINENUM = 0
-
-# ################
-# ModerationLog
-# ################
-ModerationLog.addNew = INSERT INTO jforum_moderation_log (log_id, user_id, log_description, log_original_message, log_date, log_type, post_id, topic_id, post_user_id) VALUES (jforum_moderation_log_seq.nextval, ?, EMPTY_BLOB(), EMPTY_BLOB(), ?, ?, ?, ?, ?)
-ModerationLog.setDescription = SELECT log_description FROM jforum_moderation_log WHERE log_id = ? FOR UPDATE
-ModerationLog.setOriginalMessage = SELECT log_original_message FROM jforum_moderation_log WHERE log_id = ? FOR UPDATE
-ModerationLog.lastGeneratedModerationLogId = SELECT jforum_moderation_log_seq.currval FROM dual
-
-ModerationLog.selectAll = SELECT * FROM ( \
-	SELECT l.*, u.username, u2.username AS poster_username, ROW_NUMBER() OVER(ORDER BY l.log_id DESC) -1 LINENUM \
-	FROM jforum_moderation_log l \
-    LEFT JOIN jforum_users u2 ON u2.user_id = l.post_user_id \
-    LEFT JOIN jforum_users u ON l.user_id = u.user_id \
-    ORDER BY log_id DESC \
-	) \
-	WHERE LINENUM >= ? AND LINENUM < ?
+# fork jahia #
+AttachmentModel.deleteGroupQuota = DELETE FROM jforum_attach_quota
+AttachmentModel.setGroupQuota = INSERT INTO jforum_attach_quota (attach_quota_id, group_id, quota_limit_id) VALUES (jforum_attach_quota_seq.nextval,?, ?)

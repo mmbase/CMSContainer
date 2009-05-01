@@ -11,8 +11,7 @@ package com.finalist.cmsc.excel2menu;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,13 +19,12 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.util.UploadUtil;
-import com.finalist.cmsc.util.UploadUtil.BinaryData;
+import net.sf.mmapps.commons.util.UploadUtil;
 
 public class MenuImportRequest {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(MenuImportRequest.class.getName());
+   private static Logger log = Logging.getLoggerInstance(MenuImportRequest.class.getName());
 
 
    public void process(Cloud cloud, HttpServletRequest request) {
@@ -40,7 +38,8 @@ public class MenuImportRequest {
          ExcelConfig config = new ExcelConfig(params);
          Excel2Menu t = new Excel2Menu(cloud, config);
 
-         for (BinaryData binary : binaries) {
+         for (Iterator<UploadUtil.BinaryData> iter = binaries.iterator(); iter.hasNext();) {
+            UploadUtil.BinaryData binary = iter.next();
             t.convert(binary.getInputStream());
          }
       }

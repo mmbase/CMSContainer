@@ -9,8 +9,6 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.subsite;
 
-import java.io.IOException;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +26,7 @@ public class PersonalPageNavigationRenderer extends PageNavigationRenderer imple
 
     @Override
     public void render(NavigationItem item, HttpServletRequest request,
-            HttpServletResponse response, ServletConfig sc) throws IOException {
+            HttpServletResponse response, ServletConfig sc) {
 
         if (item instanceof PersonalPage) {
             PersonalPage pp = (PersonalPage) item;

@@ -39,11 +39,11 @@ public class ScriptReader {
    private String fileName;
 
    /** MMBase logging system */
-   private static final Logger log = Logging.getLoggerInstance(ScriptReader.class.getName());
+   private static Logger log = Logging.getLoggerInstance(ScriptReader.class.getName());
 
 
    /**
-    * Creates a new instance which automatically runs load and execute
+    * Creates a new instance which automaticly runs load and execute
     * 
     * @param fileName -
     *           file to load

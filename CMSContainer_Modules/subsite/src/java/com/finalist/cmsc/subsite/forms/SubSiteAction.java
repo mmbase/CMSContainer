@@ -14,7 +14,7 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
@@ -48,7 +48,7 @@ public class SubSiteAction extends PagerAction {
     /**
      * MMBase logging system
      */
-    private static final Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
+    private static Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
 	
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -84,9 +84,7 @@ public class SubSiteAction extends PagerAction {
 		  subsiteNode = cloud.getNode(subsite);
 	  }
       
-      if (subsiteNode != null){
-    	  request.setAttribute("subsite", String.valueOf(subsiteNode.getNumber()));
-      }
+      request.setAttribute("subsite", String.valueOf(subsiteNode.getNumber()));
 	  
 	  if (subsiteNode == null){ //If there are no subsites at all, return empty list
 		  searchForm.setResultCount(0);
@@ -100,7 +98,7 @@ public class SubSiteAction extends PagerAction {
       String order = searchForm.getOrder();
 
       // set default order field
-      if (order != null && StringUtils.isEmpty(order)) {
+      if (order != null && StringUtil.isEmpty(order)) {
           if (nodeManager.hasField("title")) {
               order = "title";
           }
@@ -129,7 +127,7 @@ public class SubSiteAction extends PagerAction {
       NodeQuery query = createLinkedElementsQuery(subsiteNode, order, direction, offset*maxNumber, maxNumber, -1, -1, -1);
 
       // Add the title constraint:
-      if (StringUtils.isNotEmpty(searchForm.getTitle())) {
+      if (!StringUtil.isEmpty(searchForm.getTitle())) {
           Field field = nodeManager.getField(PagesUtil.TITLE_FIELD);
           Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
           SearchUtil.addConstraint(query, titleConstraint);
@@ -166,13 +164,13 @@ public class SubSiteAction extends PagerAction {
          Field field = query.getCloud().getNodeManager(destinationManager).getField("publishdate"); //Does this work?
          StepField basicStepField = query.getStepField(field);
           if(year != -1) {
-             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, Integer.valueOf(year), FieldValueDateConstraint.YEAR));
+             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, new Integer(year), FieldValueDateConstraint.YEAR));
           }
           if(month != -1) {
-             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, Integer.valueOf(month), FieldValueDateConstraint.MONTH));
+             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, new Integer(month), FieldValueDateConstraint.MONTH));
           }
           if(day != -1) {
-             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, Integer.valueOf(day), FieldValueDateConstraint.DAY_OF_MONTH));
+             SearchUtil.addConstraint(query, new BasicFieldValueDateConstraint(basicStepField, new Integer(day), FieldValueDateConstraint.DAY_OF_MONTH));
           }
        }
 

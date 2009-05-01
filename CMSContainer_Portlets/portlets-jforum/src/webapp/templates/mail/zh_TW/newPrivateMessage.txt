@@ -1,6 +1,9 @@
 <#setting number_format = "#"/>
-${user.username} æ‚¨å¥½,
+${user.username} ±z¦n,
 
-æ‚¨æœ‰å€‹ç§äººè¨Šæ¯åœ¨ ${forumName}. æ‚¨å¯ä»¥åˆ©ç”¨ä¸‹åˆ—çš„ç¶²å€ä¾†é–±è®€å®ƒ:
+±z¦b JForum.net ¦³­Ó¨p¤H°T®§. ±z¥i¥H§Q¥Î¤U¦Cªº³sµ²¨Ó¾\Åª¥¦:
 
 ${path}
+
+---
+JForum.net ¤u§@¹Î¶¤·q¤W
