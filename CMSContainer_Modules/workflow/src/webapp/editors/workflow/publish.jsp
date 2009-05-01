@@ -4,17 +4,19 @@
 <c:set var="mass" value="${param.mass == 'true'}"/>
 <c:set var="resourceName" value="${mass?'masspublish':'publish'}"/>
 <c:set var="isConfirmed" value="${!empty param.confirm}"/>
-<c:set var="showConfirm" value="${!isConfirmed}"/>
+<c:set var="showConfirm" value="${mass && !isConfirmed}"/>
 
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
-<cmscedit:head title="${resourceName}.title">
+<head>
+	<title><fmt:message key="${resourceName}.title" /></title>
+	<link href="../css/main.css" type="text/css" rel="stylesheet" />
 	<script>
 	function select(wizard) {
 		document.location.href="ChooseWizardAction.do?parentPage=${parentPage}&wizard="+wizard;
 	}
 	</script>
-</cmscedit:head>
+</head>
 <body>
     <div class="tabs">
         <div class="tab_active">
@@ -41,7 +43,7 @@
 						</fmt:message>
 						<ul class="shortcuts">
 						   <li class="masspublish"> 
-								<a href="?number=${param.number}&mass=${mass}&confirm=yes"><fmt:message key="${resourceName}.publish"/></a>
+								<a href="?number=${param.number}&mass=true&confirm=yes"><fmt:message key="${resourceName}.publish"/></a>
 							</li>
 						</ul>
 					</p>
