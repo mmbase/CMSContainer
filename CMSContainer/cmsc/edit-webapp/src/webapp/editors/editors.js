@@ -1,6 +1,5 @@
 var repositoryUrl = 'repository/index.jsp';
 var siteUrl = 'site/index.jsp';
-var taskUrl = 'taskmanagement/index.jsp'
 
 function openRepository() {
 	window.bottompane.location = repositoryUrl;
@@ -25,12 +24,9 @@ function openSite() {
 function openSiteWithPage(pagenumber) {
 	window.bottompane.location = siteUrl + '?page=' + pagenumber;
 }
+
 function initMenu() {
 	if (window.toppane && window.toppane.initMenu) {
 		window.toppane.initMenu();
 	}
-}
-
-function openTasksWithTask(tasknumber) {
-	window.bottompane.location = taskUrl + '?tasknumber=' + tasknumber;
 }

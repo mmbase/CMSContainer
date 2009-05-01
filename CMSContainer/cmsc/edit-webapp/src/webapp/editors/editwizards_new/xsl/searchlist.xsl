@@ -15,15 +15,11 @@
    <!-- Import original stylesheet -->
    <xsl:import href="ew:xsl/searchlist.xsl"/>
 
-  <xsl:template name="extrastyle">
-    <link rel="stylesheet" type="text/css" href="{$ew_context}{$templatedir}style/extra/searchlist.css" />
+  <xsl:template name="colorstyle">
+    <link rel="stylesheet" type="text/css" href="{$ew_context}{$templatedir}style/color/searchlist.css" />
     <style type="text/css" xml:space="preserve">
       body { behavior: url(../../../../editors/css/hover.htc);}
     </style>
-  </xsl:template>
-
-  <xsl:template name="colorstyle">
-    <link rel="stylesheet" type="text/css" href="{$ew_context}{$templatedir}style/color/searchlist.css" />
   </xsl:template>
 
   <xsl:template name="bodycontent" >
@@ -92,21 +88,11 @@
                     </a>
                   </td>
                   <td>
-                    <xsl:for-each select="field">
-                       <xsl:if test="string-length(text())>0">
-                          <xsl:choose>
-                             <xsl:when test="position() = 1">
-                             <b>
-                               <xsl:value-of select="." />
-                             </b>
-                             </xsl:when>
-                             <xsl:otherwise>
-                                <br />
-                                <xsl:value-of select="." />
-                             </xsl:otherwise>
-                          </xsl:choose>
-                       </xsl:if>
-                    </xsl:for-each>
+                    <b>
+                      <xsl:value-of select="field[1]" />
+                    </b>
+                    <br />
+                    <xsl:value-of select="field[2]" />
                   </td>
                 </xsl:when>
                 <xsl:when test="@type=&apos;audioparts&apos;">

@@ -24,54 +24,52 @@ import javax.servlet.jsp.*;
 
 public abstract class JumpTagSupport extends PageTagSupport {
 
-   static final String CURRENT = "current", INDEXED = "indexed";
+	static final String
+	    CURRENT = "current",
+	    INDEXED = "indexed";
 
-   private String unless = null;
+	private String unless = null;
 
+	public final void setUnless(String value) throws JspException {
+		if (!(value == null || CURRENT.equals(value) || INDEXED.equals(value)))
+		{
+			throw new JspTagException("value for attribute \"unless\" " +
+				"must be either \"current\" or \"indexed\".");
+		}
+		unless = value;
+	}
 
-   public final void setUnless(String value) throws JspException {
-      if (!(value == null || CURRENT.equals(value) || INDEXED.equals(value))) {
-         throw new JspTagException("value for attribute \"unless\" " + "must be either \"current\" or \"indexed\".");
-      }
-      unless = value;
-   }
+	public final String getUnless() {
+		return unless;
+	}
 
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
-   public final String getUnless() {
-      return unless;
-   }
+		int jumpPage = getJumpPage();
 
+		if (CURRENT.equals(unless)) {
+			if (jumpPage == pagerTag.getPageNumber())
+				return SKIP_BODY;
+		} else if (INDEXED.equals(unless)) {
+			int firstPage = pagerTag.getFirstIndexPage();
+			int lastPage = pagerTag.getLastIndexPage(firstPage);
 
-   public int doStartTag() throws JspException {
-      super.doStartTag();
+			if (jumpPage >= firstPage && jumpPage <= lastPage)
+				return SKIP_BODY;
+		}
 
-      int jumpPage = getJumpPage();
+		setPageAttributes(jumpPage);
 
-      if (CURRENT.equals(unless)) {
-         if (jumpPage == pagerTag.getPageNumber())
-            return SKIP_BODY;
-      }
-      else if (INDEXED.equals(unless)) {
-         int firstPage = pagerTag.getFirstIndexPage();
-         int lastPage = pagerTag.getLastIndexPage(firstPage);
+		return EVAL_BODY_INCLUDE;
+	}
 
-         if (jumpPage >= firstPage && jumpPage <= lastPage)
-            return SKIP_BODY;
-      }
+	public void release() {
+		unless = null;
+		super.release();
+	}
 
-      setPageAttributes(jumpPage);
-
-      return EVAL_BODY_INCLUDE;
-   }
-
-
-   public void release() {
-      unless = null;
-      super.release();
-   }
-
-
-   protected abstract int getJumpPage();
+	protected abstract int getJumpPage();
 }
 
 /* vim:set ts=4 sw=4: */
