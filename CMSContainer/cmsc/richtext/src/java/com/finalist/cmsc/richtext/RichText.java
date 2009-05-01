@@ -114,11 +114,13 @@ public class RichText {
             try {
                if (hasRichtextItems(fieldValue)) {
                   Document doc = getRichTextDocument(fieldValue);
-
                   RichTextGetProcessor richTextGetProcessor = new RichTextGetProcessor();
                   richTextGetProcessor.resolve(sourceNode,destinationNode,doc,copiedNodes);
                   String out = getRichTextString(doc);
                   out = WordHtmlCleaner.fixEmptyAnchors(out);
+                  if(log.isDebugEnabled()) {
+                     log.debug("final richtext text = " + out);
+                  }
                   return out;
                }
             }

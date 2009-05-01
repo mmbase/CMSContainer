@@ -22,15 +22,14 @@
 <% UserRole role = RepositoryUtil.getRole(cloud, parentchannelnode, false); %>
 <% if (role != null && SecurityUtil.isWriter(role)) { %>
 <ul class="shortcuts">
-    <li class="new">
-        <form name="initForm" action="../WizardInitAction.do" method="post">
+    <li class="new" style="text-decoration: none;"><fmt:message key="content.new"/>
+        <form name="initForm" action="../WizardInitAction.do" method="post" style="display:inline;text-decoration:none">
             <input type="hidden" name="action" value="create"/>
             <input type="hidden" name="creation" value="<mm:write referid="parentchannel" />"/>
             <input type="hidden" name="returnurl" value="<%= returnurl %>"/>
             <input type="hidden" name="order" value="${orderby}" />
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
-            <fmt:message key="content.new"/>
             <select name="contenttype">
                 <c:forEach var="type" items="${typesList}">
                     <option value="${type.value}">${type.label}</option>
@@ -85,6 +84,7 @@
 <div class="body">
 <mm:import externid="elements" from="request" required="true"/>
 <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+<mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
 
 <c:set var="listSize" value="${elementCount}"/>
 <c:set var="offset" value="${param.offset}"/>
@@ -100,7 +100,7 @@
 <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
 <% if (role != null && SecurityUtil.isWriter(role)) { %>
 <c:if test="${fn:length(elements) >1}">
-<input type="button" class="button" value="<fmt:message key="content.delete.massdelete" />" onclick="massDelete('<fmt:message key="content.delete.massdeleteconfirm" />', 'contentForm')"/>
+<input type="submit" class="button" value="<fmt:message key="content.delete.massdelete" />"/>
 <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
 </c:if>
 <% } %>
@@ -118,9 +118,9 @@
         <th><a href="javascript:sortBy('Content','title','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.titlecolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifiercolumn"/></a></th>
+        <fmt:message key="content.authorcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifieddatecolumn"/></a></th>
+        <fmt:message key="content.lastmodifiedcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','number','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.numbercolumn"/></a></th>
         <th><fmt:message key="content.creationchannelcolumn"/></th>

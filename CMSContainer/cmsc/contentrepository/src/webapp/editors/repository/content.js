@@ -145,9 +145,3 @@ function massMove( parentChannel,url) {
     moveParentChannel = parentChannel;
     openPopupWindow('selectchannel', 340, 400,url);
 }
-
-function massDelete(confirmmessage, formname) {
-   if(confirm(confirmmessage)){
-      document.forms[formname].submit();
-   }
-}

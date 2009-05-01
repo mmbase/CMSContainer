@@ -14,7 +14,7 @@
    </edit:ui-tabs>
    <div class="editor">
       <div class="body">
-         <form method="post" name="form" action="SubscriptionManagement.do">
+         <form method="POST" name="form" action="SubscriptionManagement.do">
             <input type="hidden" name="action" value="listSubscribers"/>
             <table>
                <tr>
@@ -55,7 +55,7 @@
 </body>
 </html>
 </mm:content>
-<script type="text/javascript">
+<script>
    function exportsubscription() {
       var subscriptions = document.getElementsByName('ids');
       var hasSelection = false;
@@ -76,3 +76,5 @@
       return false;
    }
 </script>
+
+

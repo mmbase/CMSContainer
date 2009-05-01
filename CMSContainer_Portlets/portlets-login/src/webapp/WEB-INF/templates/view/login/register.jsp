@@ -56,7 +56,7 @@
          </c:if>
          <c:if test="${useterms eq 'yes'}">
             <tr>
-               <td><a href="<cmsc:link dest='${termsPage}'/>"><fmt:message key="register.terms.title"/></a></td>
+               <td><a href="<cmsc:link dest='${page}'/>"><fmt:message key="register.terms.title"/></a></td>
                <td><input type="checkbox" name="agreedToTerms"/><fmt:message key="register.terms.agree" /></td>
             </tr>
             <c:if test="${!empty errormessages['agreedToTerms']}">
@@ -67,7 +67,7 @@
          </c:if>
          <tr>
           <td></td>
-          <td><input type="submit" value="<fmt:message key="register.submit" />" /></td>
+          <td id="Submit"><input type="submit" value="<fmt:message key="register.submit" />" /></td>
           </tr>
         </table>
    </div>

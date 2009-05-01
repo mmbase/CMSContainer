@@ -7,9 +7,9 @@
   <version>${version}</version>
   <name>Custom CMS Container community web application</name>
   <properties>
-    <cmsc.version>1.7-SNAPSHOT</cmsc.version>
-    <cmscportlets.version>1.7-SNAPSHOT</cmscportlets.version>
-    <cmscmodules.version>1.7-SNAPSHOT</cmscmodules.version>
+    <cmsc.version>1.6.1</cmsc.version>
+    <cmscportlets.version>1.6.1</cmscportlets.version>
+    <cmscmodules.version>1.6.1</cmscmodules.version>
     <mmbase.version>1.8.6-20080927</mmbase.version>
   </properties>
   <repositories>
@@ -32,7 +32,7 @@
     <!--dependency>
       <groupId>finalist</groupId>
       <artifactId>cmsc-demo-webapp</artifactId>
-      <version>1.7-SNAPSHOT</version>
+      <version>1.6.1</version>
       <type>mmbase-module</type>
     </dependency-->
     <dependency>
@@ -493,9 +493,14 @@
       <version>1.2</version>
     </dependency>
     <dependency>
-		<groupId>net.sf.ehcache</groupId>
-		<artifactId>ehcache</artifactId>
-		<version>1.5.0</version>
+      <groupId>ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>ehcache</groupId>
+      <artifactId>ehcache-constructs</artifactId>
+      <version>0.6</version>
     </dependency>
   </dependencies>
   <!--reporting>

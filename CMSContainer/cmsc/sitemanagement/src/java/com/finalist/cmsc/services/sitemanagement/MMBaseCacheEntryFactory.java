@@ -11,7 +11,6 @@ package com.finalist.cmsc.services.sitemanagement;
 
 import java.io.Serializable;
 
-import net.sf.ehcache.Element;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
@@ -41,7 +40,7 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
    }
 
 
-   protected abstract Object loadEntry(Object key) throws Exception;
+   protected abstract Serializable loadEntry(Serializable key) throws Exception;
 
 
    protected final void registerListener(String nodeType) {
@@ -49,12 +48,12 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
    }
 
 
-   public Object createEntry(Object key) throws Exception {
+   public Serializable createEntry(Serializable key) throws Exception {
       return loadEntry(key);
    }
 
 
-   protected Node getNode(Object key) {
+   protected Node getNode(Serializable key) {
       if (key == null) {
          return null;
       }
@@ -100,7 +99,7 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
    public void refreshEntry(final Serializable key) {
       try {
          if (cache.getKeys().contains(key)) {
-            cache.put(new Element(key, null));
+            cache.put(key, null);
             cache.get(key);
          }
       }
@@ -112,7 +111,7 @@ public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, Node
 
    public void deleteEntry(final Serializable key) {
       try {
-         cache.put(new Element(key, null));
+         cache.put(key, null);
       }
       catch (Exception e) {
          log.debug("Failed to delete " + key + ":" + e.getMessage(), e);
