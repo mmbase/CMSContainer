@@ -93,15 +93,9 @@ var ajaxTreeHandler = {
 	},
 	makeDraggable : function (oItem){
 		if(!oItem) return;
-		//if document.onmousedown is not null, it means that oItem is copyObject but not
-		//dargObject. Then do nothing and return
-		if(document.onmousedown) return;
 		document.onmousedown = function(ev){
-		//if document.onmouseup is not null, it means that document.onmousedown has not
-		//been destroyed.If you down another mouse button here, it should do nothing and return		
-		if(document.onmouseup) return;
 		document.onmousemove = alldragObject.mouseMove(ev);
-		document.onmouseup = alldragObject.mouseUp(ev);
+		document.onmouseup   = alldragObject.mouseUp(ev);
 		oItem.onclick = ajaxTreeHandler.isclick;
 		alldragObject.dragObject = ajaxTreeHandler.all[oItem.id.replace('-icon','')];
 		alldragObject.copyObject = ajaxTreeHandler.initcopy(ajaxTreeHandler.all[oItem.id.replace('-icon','')]);
@@ -252,16 +246,10 @@ AjaxTreeAction.prototype.execute = function(action, persistentId) {
 
 AjaxTreeAction.prototype.buildTree = function(request) {
 	try {
-		if(!request.responseXML||!request.responseText){
-			window.parent.location.href="#";
-			}
-		else{
 		var treeXml = request.responseXML.getElementsByTagName("tree")[0];
 		var tree = this.createTree(treeXml);
 		var element = document.getElementById(this.elementId);
 		element.innerHTML = tree.toString();
-				}
-		
 		try {
 			alphaImages();
 		}
@@ -307,11 +295,7 @@ AjaxTreeAction.prototype.buildChildren = function(request) {
 }
 
 AjaxTreeAction.prototype.errorRequest = function(request) {
-   if (request.status == 401 /* unauthorized */) {
-      window.location = '../login.jsp?reason=failed';
-   } else {
-      alert(request.responseText);
-   }
+	alert(request.responseText);
 }
 
 AjaxTreeAction.prototype.createTree = function(treeXml) {
@@ -520,31 +504,15 @@ AjaxTreeAbstractNode.prototype.doExpand = function() {
 }
 
 AjaxTreeAbstractNode.prototype.openTreeItem = function() {
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.openIcon; }
-	if (this.childNodes.length) {  document.getElementById(this.id + '-cont').style.display = 'block'; }
-	this.open = true;
-	try {
-		alphaImages();
-	}
-	catch(e2) {
-		// ignore
-	}
-}
-
-AjaxTreeAbstractNode.prototype.closeTreeItem = function() {
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.icon; }
-	if (this.childNodes.length) { document.getElementById(this.id + '-cont').style.display = 'none'; }
-	this.open = false;
-	try {
-		alphaImages();
-	}
-	catch(e2) {
-		// ignore
-	}
+		if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.openIcon; }
+		if (this.childNodes.length) {  document.getElementById(this.id + '-cont').style.display = 'block'; }
+		this.open = true;
 }
 
 AjaxTreeAbstractNode.prototype.doCollapse = function() {
-	this.closeTreeItem();
+	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.icon; }
+	if (this.childNodes.length) { document.getElementById(this.id + '-cont').style.display = 'none'; }
+	this.open = false;
 	if (ajaxTreeConfig.usePersistence) {
 		ajaxTreeLoader.collapse(this);
 	}
@@ -1077,8 +1045,8 @@ function mouseAction(){
 
 mouseAction.prototype.mouseCoords = function (ev){
 
-	if(ev.pageX || ev.pageY){
-		return {x:ev.pageX, y:ev.pageY};
+	if(ev.clientX || ev.clientY){
+		return {x:ev.clientX, y:ev.clientY};
 	}
 	return {
 		x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
@@ -1129,12 +1097,10 @@ mouseAction.prototype.mouseUp = function (ev){
 			alldragObject.insertitem = ajaxTreeHandler.all[dropTarget.replace('-anchor','')];
 		}
 	}
-	
+
 	alldragObject.dragObject = null;
 	alldragObject.iMouseDown = false;
 	document.onmousemove = null;
-	document.onmouseup = null;
-	document.onmousedown = null;
 	alldragObject.copyObject.style.display = 'none';
 	alldragObject.pastenode();
 	alldragObject.insertitem = null;

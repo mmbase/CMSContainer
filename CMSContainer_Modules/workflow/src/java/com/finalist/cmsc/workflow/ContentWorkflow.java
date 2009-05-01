@@ -11,28 +11,25 @@ package com.finalist.cmsc.workflow;
 
 import java.util.List;
 
+import net.sf.mmapps.commons.bridge.RelationUtil;
+
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.WorkflowException;
 
 public class ContentWorkflow extends RepositoryWorkflow {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(ContentWorkflow.class.getName());
+   private static Logger log = Logging.getLoggerInstance(ContentWorkflow.class.getName());
 
    public static final String TYPE_CONTENT = "content";
-   public static final String NODETYPE_ARTICLE = "article";
-   public static final String NODETYPE_BANNERS = "banners";
-   public static final String NODETYPE_LINK = "link";
-   public static final String NODETYPE_FAQITEM = "faqitem";
 
 
    public ContentWorkflow(Cloud cloud) {
@@ -40,14 +37,13 @@ public class ContentWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public Node createFor(Node content, String remark) {
       synchronized (content) {
          if (hasWorkflow(content)) {
             return (Node) getWorkflows(content).get(0);
          }
          else {
-            Node wfItem = createFor(TYPE_CONTENT, remark, content.getNodeManager().getName());
+            Node wfItem = createFor(TYPE_CONTENT, remark);
             RelationUtil.createRelation(wfItem, content, WORKFLOWREL);
             log.debug("Workflow " + wfItem.getNumber() + " created for content " + content.getNumber());
             return wfItem;
@@ -56,7 +52,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public void finishWriting(Node node, String remark) {
       Node wfItem;
       Node content;
@@ -77,7 +72,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
     * Status change to 'APPROVED'. The workflow appears on all chiefeditor
     * workflow screens
     */
-   @Override
    public void accept(Node node, String remark) {
       Node wfItem;
       Node content;
@@ -98,7 +92,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
     * Status change to 'DRAFT'. The workflow appears on the writer workflow
     * screens
     */
-   @Override
    public void reject(Node node, String remark) {
       if (ContentElementUtil.isContentElement(node)) {
          if (hasWorkflow(node, TYPE_CONTENT)) {
@@ -122,16 +115,14 @@ public class ContentWorkflow extends RepositoryWorkflow {
 
    /**
     * Put content elements in publishqueue
-    *
+    * 
     * @param content
     */
-   @Override
    public void publish(Node node) throws WorkflowException {
       publish(node, null);
    }
 
 
-   @Override
    public void publish(Node node, List<Integer> publishNumbers) throws WorkflowException {
       Node content;
       if (ContentElementUtil.isContentElement(node)) {
@@ -144,7 +135,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public void complete(Node contentNode) {
       complete(contentNode, TYPE_CONTENT);
    }
@@ -155,7 +145,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
    }
 
 
-   @Override
    public boolean isWorkflowElement(Node node, boolean isWorkflowItem) {
       if (isWorkflowItem) {
          return TYPE_CONTENT.equals(node.getStringValue(TYPE_FIELD));
@@ -193,11 +182,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
          creationNode = RepositoryUtil.getCreationChannel(content);
       }
       return RepositoryUtil.getRole(node.getCloud(), creationNode, false);
-   }
-
-   @Override
-   public void addUserToWorkflow(Node node) {
-      addUserToWorkflow(node, TYPE_CONTENT);
    }
 
 }
