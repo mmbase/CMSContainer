@@ -34,7 +34,7 @@
       <script src="<c:url value='/js/transparent_png.js'/>" type="text/javascript"></script>
 
       <!--the reset button needs  -->
-	  <script src="<c:url value='/editors/newsletter/newsletter.js'/>" type="text/javascript"></script>
+      <script src="<c:url value='/editors/newsletter/newsletter.js'/>" type="text/javascript"></script>
       <script language="javascript"> 
          function submits(){
          var startDate = document.getElementsByName("startDate");

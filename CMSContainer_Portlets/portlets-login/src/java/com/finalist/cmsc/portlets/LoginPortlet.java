@@ -91,6 +91,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
             
             if (Community.isAuthenticated()) {
                request.getPortletSession().setAttribute("username", userName, PortletSession.APPLICATION_SCOPE);
+               
                String pageid = preferences.getValue(PAGE, null);
                if (StringUtils.isNotEmpty(pageid)) {
                   Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();

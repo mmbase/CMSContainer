@@ -1,7 +1,7 @@
 package com.finalist.cmsc.knownvisitor.ntlm;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,6 +24,7 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
  * @author Jeoffrey Bakker, Finalist IT Group
  */
 public class NtlmVisitorFilter implements Filter {
+
    private static final String realm = "jCIFS";
 
    private static final Logger log = Logging.getLoggerInstance(NtlmVisitorFilter.class);
@@ -55,7 +56,7 @@ public class NtlmVisitorFilter implements Filter {
       final HttpServletRequest req = (HttpServletRequest) request;
       final HttpServletResponse resp = (HttpServletResponse) response;
 
-      if (isEnabled()) {
+      if (isEnabled() && !alreadyLoggedIn(req)) {
          List<String> exceptions = getIpExceptions();
          if (!exceptions.isEmpty()) {
             String clientIp = req.getHeader("X-Forwarded-For");
@@ -68,14 +69,24 @@ public class NtlmVisitorFilter implements Filter {
                return;
             }
          }
-
          if (!negotiate(req, resp, false)) {
             return;
          }
       }
+
       chain.doFilter(req, resp);
    }
 
+   protected boolean alreadyLoggedIn(HttpServletRequest req) {
+      return KnownVisitorModule.getInstance().getVisitor(req) != null;
+   }
+
+   public void justLoggedIn(HttpServletRequest request, NtlmPasswordAuthentication ntlm) {
+      NtlmVisitor visitor = new NtlmVisitor();
+      visitor.setIdentifier(ntlm.getUsername());
+      ((NtlmKnownVisitorModule) KnownVisitorModule.getInstance()).readLdapInfo(visitor);
+      ((NtlmKnownVisitorModule) KnownVisitorModule.getInstance()).setVisitor(request, visitor);
+   }
 
    /**
     * Negotiate password hashes with MSIE clients using NTLM SSP
@@ -166,7 +177,7 @@ public class NtlmVisitorFilter implements Filter {
             return true;
          }
          req.getSession().setAttribute("NtlmHttpAuth", ntlm);
-         ((NtlmKnownVisitorModule) KnownVisitorModule.getInstance()).justLoggedIn(req, ntlm);
+         justLoggedIn(req, ntlm);
       }
       else {
          if (!skipAuthentication) {
@@ -211,13 +222,22 @@ public class NtlmVisitorFilter implements Filter {
       return Boolean.parseBoolean(PropertiesUtil.getProperty(NtlmKnownVisitorModule.PROPERTY_ENABLED));
    }
 
-
    private String getDomainController() {
       return PropertiesUtil.getProperty(NtlmKnownVisitorModule.PROPERTY_DOMAIN_CONTROLLER);
    }
 
    private List<String> getIpExceptions() {
-       return PropertiesUtil.getPropertyAsList(NtlmKnownVisitorModule.PROPERTY_IPEXCEPTIONS);
+       String prop = PropertiesUtil.getProperty(NtlmKnownVisitorModule.PROPERTY_IPEXCEPTIONS);
+       return convertToList(prop);
    }
 
+   private static List<String> convertToList(String prop) {
+      List<String> list = new ArrayList<String>();
+      StringTokenizer tokenizer = new StringTokenizer(prop, ", \t\n\r\f");
+      while (tokenizer.hasMoreTokens()) {
+         String str = tokenizer.nextToken();
+         list.add(str);
+      }
+      return list;
+   }
 }

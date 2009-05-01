@@ -29,5 +29,6 @@ public class PublicationSentCronJob extends AbstractCronJob {
          NewsletterPublicationService service = (NewsletterPublicationService) ApplicationContextFactory.getBean("publicationService");
          service.deliverAllPublications();
       }
+      
    }
 }

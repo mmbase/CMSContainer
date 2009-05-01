@@ -307,11 +307,7 @@ AjaxTreeAction.prototype.buildChildren = function(request) {
 }
 
 AjaxTreeAction.prototype.errorRequest = function(request) {
-   if (request.status == 401 /* unauthorized */) {
-      window.location = '../login.jsp?reason=failed';
-   } else {
-      alert(request.responseText);
-   }
+	alert(request.responseText);
 }
 
 AjaxTreeAction.prototype.createTree = function(treeXml) {
@@ -520,31 +516,15 @@ AjaxTreeAbstractNode.prototype.doExpand = function() {
 }
 
 AjaxTreeAbstractNode.prototype.openTreeItem = function() {
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.openIcon; }
-	if (this.childNodes.length) {  document.getElementById(this.id + '-cont').style.display = 'block'; }
-	this.open = true;
-	try {
-		alphaImages();
-	}
-	catch(e2) {
-		// ignore
-	}
-}
-
-AjaxTreeAbstractNode.prototype.closeTreeItem = function() {
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.icon; }
-	if (this.childNodes.length) { document.getElementById(this.id + '-cont').style.display = 'none'; }
-	this.open = false;
-	try {
-		alphaImages();
-	}
-	catch(e2) {
-		// ignore
-	}
+		if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.openIcon; }
+		if (this.childNodes.length) {  document.getElementById(this.id + '-cont').style.display = 'block'; }
+		this.open = true;
 }
 
 AjaxTreeAbstractNode.prototype.doCollapse = function() {
-	this.closeTreeItem();
+	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.icon; }
+	if (this.childNodes.length) { document.getElementById(this.id + '-cont').style.display = 'none'; }
+	this.open = false;
 	if (ajaxTreeConfig.usePersistence) {
 		ajaxTreeLoader.collapse(this);
 	}

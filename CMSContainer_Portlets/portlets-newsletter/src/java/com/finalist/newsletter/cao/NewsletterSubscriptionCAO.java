@@ -38,8 +38,7 @@ public interface NewsletterSubscriptionCAO {
    public List<Subscription> getSubscriptionByUserIdAndStatus(int userId, Subscription.STATUS status);
 
    public List<Node> getAllSubscriptions();
-
-   public List<Node> getSubscriptionsByTerms(int newsletterId, String terms);
+   public List<Node>getSubscriptionsByTerms(int newsletterId, String terms);
 
    void updateLastBounce(int subscriptionId);
 
@@ -47,15 +46,16 @@ public interface NewsletterSubscriptionCAO {
 
    public void pause(int subscriptionId);
 
-   public Set<Node> getRecordByNewsletterAndName(int newsletterId, String termName);
+   public Set<Node> getRecordByNewsletterAndName(int newsletterId,String termName);
 
    public Set<Node> getNewslettersByScriptionRecord(int authenticationId);
-
+   
    public List<Newsletter> getNewslettersByScription(int subscriberId, String title, boolean paging);
 
    public Set<Node> getTermsByScriptionRecord(int authenticationId);
 
-   public int countSubscription(int id);
-
+   public int countSubscription(int newsletterId);
+   
    public void deleteSubscriptionsByAuthId(Long anthId); 
+
 }

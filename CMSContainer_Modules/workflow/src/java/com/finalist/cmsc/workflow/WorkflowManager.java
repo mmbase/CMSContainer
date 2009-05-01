@@ -1,40 +1,18 @@
 package com.finalist.cmsc.workflow;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.Query;
-import org.mmbase.bridge.RelationManager;
-import org.mmbase.bridge.util.SearchUtil;
+import org.mmbase.bridge.*;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
-import org.mmbase.storage.search.AggregatedField;
-import org.mmbase.storage.search.CompositeConstraint;
-import org.mmbase.storage.search.Constraint;
-import org.mmbase.storage.search.FieldCompareConstraint;
-import org.mmbase.storage.search.FieldValueConstraint;
-import org.mmbase.storage.search.FieldValueInConstraint;
-import org.mmbase.storage.search.RelationStep;
-import org.mmbase.storage.search.Step;
+import org.mmbase.storage.search.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.security.Role;
-import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.services.workflow.WorkflowException;
@@ -53,7 +31,6 @@ public abstract class WorkflowManager {
    public final static String NUMBER_FIELD = "number";
    public final static String STATUS_FIELD = "status";
    public final static String TYPE_FIELD = "type";
-   public final static String NODETYPE_FIELD = "nodetype";
    public final static String REMARK_FIELD = "remark";
    public static final String CREATIONDATE_FIELD = "creationdate";
    public static final String LASTMODIFIEDDATE_FIELD = "lastmodifieddate";
@@ -110,19 +87,6 @@ public abstract class WorkflowManager {
       return null;
    }
 
-   protected Node getWorkflowNode(Node node, String type, String nodetype) {
-      NodeList list = getWorkflows(node);
-      for (Iterator<Node> iter = list.iterator(); iter.hasNext();) {
-         Node workflow = iter.next();
-         if (!workflow.getStringValue(TYPE_FIELD).equals(type)||!workflow.getStringValue(NODETYPE_FIELD).equals(nodetype)) {
-            iter.remove();
-         }
-      }
-      if (!list.isEmpty()) {
-         return list.getNode(0);
-      }
-      return null;
-   }
 
    /**
     * Check if a contentnode has a workflow
@@ -136,15 +100,6 @@ public abstract class WorkflowManager {
          return false;
       }
       NodeList list = getWorkflows(node, type);
-      log.debug("Node " + node.getNumber() + " has workflow " + !list.isEmpty());
-      return !list.isEmpty();
-   }
-   
-   protected boolean hasWorkflow(Node node, String type, String nodetype) {
-      if (!isWorkflowElement(node, false)) {
-         return false;
-      }
-      NodeList list = getWorkflows(node, type, nodetype);
       log.debug("Node " + node.getNumber() + " has workflow " + !list.isEmpty());
       return !list.isEmpty();
    }
@@ -169,25 +124,6 @@ public abstract class WorkflowManager {
       }
    }
 
-   protected void addUserToWorkflow(Node node, String type, String nodetype) {
-      Node user = SecurityUtil.getUserNode(cloud);
-
-      NodeList items = getWorkflows(node, type, nodetype);
-      for (Iterator<Node> iterator = items.iterator(); iterator.hasNext();) {
-         Node workflowItem = iterator.next();
-         NodeList assignedUsers = getAssignedUsers(workflowItem);
-         boolean found = false;
-         for (Iterator<Node> iterator2 = assignedUsers.iterator(); iterator2.hasNext();) {
-            Node assignedUser = iterator2.next();
-            if (user.getNumber() == assignedUser.getNumber()) {
-               found = true;
-            }
-         }
-         if (!found) {
-            relateToUser(workflowItem, user);
-         }
-      }
-   }
 
    public abstract boolean isWorkflowElement(Node node, boolean isWorkflowItem);
 
@@ -317,18 +253,6 @@ public abstract class WorkflowManager {
       return list;
    }
 
-   protected NodeList getWorkflows(Node node, String type, String nodetype) {
-      NodeList list = getWorkflows(node);
-      if (!TYPE_ALL.equals(type)) {
-         for (Iterator<Node> iter = list.iterator(); iter.hasNext();) {
-            Node workflow = iter.next();
-            if (!workflow.getStringValue(TYPE_FIELD).equals(type)||!workflow.getStringValue(NODETYPE_FIELD).equals(nodetype)) {
-               iter.remove();
-            }
-         }
-      }
-      return list;
-   }
 
    /**
     * Get status of the workflow of a node
@@ -367,16 +291,15 @@ public abstract class WorkflowManager {
    }
 
 
-   protected Node createFor(String type, String remark, String nodetype) {
-      return createFor(type, remark, STATUS_DRAFT, nodetype);
+   protected Node createFor(String type, String remark) {
+      return createFor(type, remark, STATUS_DRAFT);
    }
 
 
-   protected Node createFor(String type, String remark, String status, String nodetype) {
+   protected Node createFor(String type, String remark, String status) {
       NodeManager workflow = getManager();
       Node wfItem = workflow.createNode();
       wfItem.setStringValue(TYPE_FIELD, type);
-      wfItem.setStringValue(NODETYPE_FIELD, nodetype);
       changeWorkflow(wfItem, status, remark);
 
       Node user = SecurityUtil.getUserNode(cloud);
@@ -480,10 +403,10 @@ public abstract class WorkflowManager {
    protected void rejectWorkflow(Node wfItem, String remark) {
       if (isStatusPublished(wfItem)) {
          if (Workflow.isAcceptedStepEnabled()) {
-          changeWorkflowFailPublished(wfItem, STATUS_APPROVED,remark);
+        	 changeWorkflowFailPublished(wfItem, STATUS_APPROVED,remark);
          }
          else {
-          changeWorkflowFailPublished(wfItem, STATUS_FINISHED,remark);
+        	 changeWorkflowFailPublished(wfItem, STATUS_FINISHED,remark);
          }
       }
       else {
@@ -569,14 +492,6 @@ public abstract class WorkflowManager {
          deleteWorkflow(workflow);
       }
    }
-   
-   protected void complete(Node contentNode, String type, String nodetype) {
-      NodeList workflows = getWorkflows(contentNode, type, nodetype);
-      for (Iterator<Node> iter = workflows.iterator(); iter.hasNext();) {
-         Node workflow = iter.next();
-         deleteWorkflow(workflow);
-      }
-   }
 
 
    private void deleteWorkflow(Node workflow) {
@@ -650,36 +565,12 @@ public abstract class WorkflowManager {
 
    public static Constraint getTypeConstraint(NodeQuery query, String type) {
       Field field = getManager(query.getCloud()).getField(TYPE_FIELD);
-      Constraint constraint;
-      if(StringUtils.isNotBlank(type)&&RepositoryWorkflow.TYPE_ALLCONTENT.equals(type)){
-         FieldValueConstraint contentConstraint = query.createConstraint(query.getStepField(field), FieldCompareConstraint.EQUAL,
-               ContentWorkflow.TYPE_CONTENT);
-         FieldValueConstraint assetConstraint = query.createConstraint(query.getStepField(field), FieldCompareConstraint.EQUAL,
-               AssetWorkflow.TYPE_ASSET);
-         constraint = query.createConstraint(contentConstraint, CompositeConstraint.LOGICAL_OR, assetConstraint);
-      }else{
-         constraint = query.createConstraint(query.getStepField(field), FieldCompareConstraint.EQUAL,
-               type);
-      }
+      FieldValueConstraint constraint = query.createConstraint(query.getStepField(field), FieldCompareConstraint.EQUAL,
+            type);
       return constraint;
    }
 
-   public static Query addNodetypeConstraint(Cloud cloud, NodeQuery query, String nodetype) {
-      Query typesQuery = cloud.getNodeManager(nodetype).createQuery();
-      NodeList types = typesQuery.getList();
-      List<String> typeNames = new ArrayList<String>(); 
-      for (int i = 0; i < types.size(); i++) {
-         typeNames.add(((Node)types.get(i)).getNodeManager().getName());
-      }
-      if(typeNames.isEmpty()){
-         typeNames.add(nodetype);
-      }
-      Field field = getManager(query.getCloud()).getField(NODETYPE_FIELD);
-      FieldValueInConstraint constraint = query.createConstraint(query.getStepField(field), new TreeSet<String>(typeNames));
-      SearchUtil.addConstraint(query, constraint);
-      return query;
-   }
-   
+
    public static Query createStatusQuery(Cloud cloud) {
       Node userNode = SecurityUtil.getUserNode(cloud);
 
@@ -695,7 +586,6 @@ public abstract class WorkflowManager {
       Query clone = query.aggregatingClone();
 
       clone.addAggregatedField(step3, workflowManager.getField(TYPE_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
-      clone.addAggregatedField(step3, workflowManager.getField(NODETYPE_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
       clone
             .addAggregatedField(step3, workflowManager.getField(STATUS_FIELD),
                   AggregatedField.AGGREGATION_TYPE_GROUP_BY);
