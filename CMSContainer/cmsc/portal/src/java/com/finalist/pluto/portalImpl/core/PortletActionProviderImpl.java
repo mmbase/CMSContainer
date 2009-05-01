@@ -25,53 +25,50 @@ import org.apache.pluto.services.information.PortletActionProvider;
 
 public class PortletActionProviderImpl implements PortletActionProvider {
 
-   private HttpServletRequest request;
+	private HttpServletRequest request;
 
-   private PortletWindow portletWindow;
+	private PortletWindow portletWindow;
 
+	public PortletActionProviderImpl(HttpServletRequest request, ServletConfig config, PortletWindow portletWindow) {
+		this.request = request;
+		this.portletWindow = portletWindow;
+	}
 
-   public PortletActionProviderImpl(HttpServletRequest request, ServletConfig config, PortletWindow portletWindow) {
-      this.request = request;
-      this.portletWindow = portletWindow;
-   }
+	// PortletActionProvider implementation.
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.pluto.services.information.PortletActionProvider#changePortletMode(PortletWindow,
+	 *      PortletMode)
+	 */
+	public void changePortletMode(PortletMode mode) {
+		PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
 
-   // PortletActionProvider implementation.
+		PortalURL url = env.getRequestedPortalURL();
+		PortalControlParameter controlURL = new PortalControlParameter(url);
+		if (!(controlURL.getMode(portletWindow).equals(mode)) && mode != null) {
+			controlURL.setMode(portletWindow, mode);
+			env.changeRequestedPortalURL(url, controlURL);
+		}
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.services.information.PortletActionProvider#changePortletMode(PortletWindow,
-    *      PortletMode)
-    */
-   public void changePortletMode(PortletMode mode) {
-      PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.pluto.services.information.PortletActionProvider#changePortletWindowState(PortletWindow,
+	 *      WindowState)
+	 */
+	public void changePortletWindowState(WindowState state) {
+		PortalEnvironment env = (PortalEnvironment) request.getAttribute(PortalEnvironment.REQUEST_PORTALENV);
 
-      PortalURL url = env.getRequestedPortalURL();
-      PortalControlParameter controlURL = new PortalControlParameter(url);
-      if (!(controlURL.getMode(portletWindow).equals(mode)) && mode != null) {
-         controlURL.setMode(portletWindow, mode);
-         env.changeRequestedPortalURL(url, controlURL);
-      }
-   }
+		PortalURL url = env.getRequestedPortalURL();
+		PortalControlParameter controlURL = new PortalControlParameter(url);
 
-
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.services.information.PortletActionProvider#changePortletWindowState(PortletWindow,
-    *      WindowState)
-    */
-   public void changePortletWindowState(WindowState state) {
-       PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
-
-      PortalURL url = env.getRequestedPortalURL();
-      PortalControlParameter controlURL = new PortalControlParameter(url);
-
-      if (!(controlURL.getState(portletWindow).equals(state)) && state != null) {
-         controlURL.setState(portletWindow, state);
-         env.changeRequestedPortalURL(url, controlURL);
-      }
-   }
+		if (!(controlURL.getState(portletWindow).equals(state)) && state != null) {
+			controlURL.setState(portletWindow, state);
+			env.changeRequestedPortalURL(url, controlURL);
+		}
+	}
 
 }

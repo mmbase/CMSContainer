@@ -25,160 +25,146 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pluto.om.window.PortletWindow;
 import org.apache.pluto.services.information.PortletURLProvider;
-
 /**
  * @changes pluto-1.0.1 Logging
- */
+  */
 public class PortletURLProviderImpl implements PortletURLProvider {
-   private static Log log = LogFactory.getLog(PortletURLProviderImpl.class);
+	private static Log log = LogFactory.getLog(PortletURLProviderImpl.class);
 
-   protected String windowid;
-   protected String page;
-   protected String host;
+    protected String windowid;
+    protected String page;
+    
+	private DynamicInformationProviderImpl provider;
 
-   private DynamicInformationProviderImpl provider;
+	private PortletWindow portletWindow;
 
-   private PortletWindow portletWindow;
+	private PortletMode mode;
 
-   private PortletMode mode;
+	private WindowState state;
 
-   private WindowState state;
+	private boolean action;
 
-   private boolean action;
+	private boolean secure;
 
-   private boolean secure;
+	private boolean clearParameters;
 
-   private boolean clearParameters;
+	private Map parameters;
 
-   private Map parameters;
+	public PortletURLProviderImpl(DynamicInformationProviderImpl provider, PortletWindow portletWindow) {
+		this.provider = provider;
+		this.portletWindow = portletWindow;
+	}
 
+	// PortletURLProvider implementation.
 
-   public PortletURLProviderImpl(DynamicInformationProviderImpl provider, PortletWindow portletWindow) {
-      this.provider = provider;
-      this.portletWindow = portletWindow;
-   }
+	public void setPortletMode(PortletMode mode) {
+		this.mode = mode;
+	}
 
+	public void setWindowState(WindowState state) {
+		this.state = state;
+	}
 
-   // PortletURLProvider implementation.
+	public void setAction() {
+		action = true;
+	}
 
-   public void setPortletMode(PortletMode mode) {
-      this.mode = mode;
-   }
+	public void setSecure() {
+		secure = true;
+	}
 
+	public void clearParameters() {
+		clearParameters = true;
+	}
 
-   public void setWindowState(WindowState state) {
-      this.state = state;
-   }
+	public void setParameters(Map parameters) {		
+		this.parameters = parameters;
 
+        Iterator entries = this.parameters.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry)entries.next();
+            String name = (String) entry.getKey();
+            Object value = entry.getValue();
+            String[] values = value instanceof String ?
+                new String[]{(String) value} : (String[]) value;
+        }
+	}
 
-   public void setAction() {
-      action = true;
-   }
+	public String toString() {
+        PortalURL url = null;
+        if (page != null) {
+            url = new PortalURL(provider.request, page);
+        }
+        else {
+            url = PortalEnvironment.getPortalEnvironment(provider.request).getRequestedPortalURL();
+        }
 
+        PortalControlParameter controlURL = new PortalControlParameter(url);
 
-   public void setSecure() {
-      secure = true;
-   }
+        if (page != null) {
+    		if (mode != null) {
+    			controlURL.setMode(windowid, mode);
+    		}
+    		if (state != null) {
+    			controlURL.setState(windowid, state);
+    		}
 
-
-   public void clearParameters() {
-      clearParameters = true;
-   }
-
-
-   public void setParameters(Map parameters) {
-      this.parameters = parameters;
-
-      Iterator entries = this.parameters.entrySet().iterator();
-      while (entries.hasNext()) {
-         Map.Entry entry = (Map.Entry) entries.next();
-         String name = (String) entry.getKey();
-         Object value = entry.getValue();
-         String[] values = value instanceof String ? new String[] { (String) value } : (String[]) value;
-      }
-   }
-
-
-   public String toString() {
-      PortalURL url = null;
-      if (page != null) {
-         url = new PortalURL(host, provider.request, page);
-      }
-      else {
-         url = PortalEnvironment.getPortalEnvironment(provider.request).getRequestedPortalURL();
-      }
-
-      PortalControlParameter controlURL = new PortalControlParameter(url);
-
-      if (page != null) {
-         if (mode != null) {
-            controlURL.setMode(windowid, mode);
-         }
-         if (state != null) {
-            controlURL.setState(windowid, state);
-         }
-
-         // set portlet id for associated request parms
-         controlURL.setPortletId(windowid);
-         if (action) {
-            controlURL.setAction(windowid);
-         }
-      }
-      else {
-         if (mode != null) {
-            controlURL.setMode(portletWindow, mode);
-         }
-         if (state != null) {
-            controlURL.setState(portletWindow, state);
-         }
-         if (clearParameters) {
-            controlURL.clearRenderParameters(portletWindow);
-         }
-
-         // set portlet id for associated request parms
-         controlURL.setPortletId(portletWindow);
-         if (action) {
-            controlURL.setAction(portletWindow);
-         }
-      }
-
-      if (parameters != null) {
-         Iterator names = parameters.keySet().iterator();
-         while (names.hasNext()) {
-            String name = (String) names.next();
-            Object value = parameters.get(name);
-            String[] values = value instanceof String ? new String[] { (String) value } : (String[]) value;
+            // set portlet id for associated request parms
+            controlURL.setPortletId(windowid);
             if (action) {
-               // controlURL.setRequestParam(NamespaceMapperAccess.getNamespaceMapper().encode(portletWindow.getId(),
-               // name),values);
-               controlURL.setRequestParam(name, values);
+                controlURL.setAction(windowid);
             }
-            else {
-               if (page != null) {
-                  controlURL.setRenderParam(windowid, name, values);
-               }
-               else {
-                  controlURL.setRenderParam(portletWindow, name, values);
-               }
+        }
+        else {
+            if (mode != null) {
+                controlURL.setMode(portletWindow, mode);
             }
-         }
-      }
+            if (state != null) {
+                controlURL.setState(portletWindow, state);
+            }
+            if (clearParameters) {
+                controlURL.clearRenderParameters(portletWindow);
+            }
 
-      return url.toString(controlURL, Boolean.valueOf(secure));
-   }
+            // set portlet id for associated request parms
+            controlURL.setPortletId(portletWindow);
+            if (action) {
+                controlURL.setAction(portletWindow);
+            }
+        }
 
+		if (parameters != null) {
+			Iterator names = parameters.keySet().iterator();
+			while (names.hasNext()) {
+				String name = (String) names.next();
+				Object value = parameters.get(name);
+				String[] values = value instanceof String ? new String[] { (String) value } : (String[]) value;
+				if (action) {
+					// controlURL.setRequestParam(NamespaceMapperAccess.getNamespaceMapper().encode(portletWindow.getId(),
+					// name),values);
+					controlURL.setRequestParam(name, values);
+				} else {
+                    if (page != null) {
+                        controlURL.setRenderParam(windowid, name, values);
+                    }
+                    else {
+                        controlURL.setRenderParam(portletWindow, name, values);
+                    }
+				}
+			}
+		}
 
-   public void setPage(String page) {
-      this.page = page;
-   }
+		return url.toString(controlURL, new Boolean(secure));
+	}
 
+    
+    public void setPage(String page) {
+        this.page = page;
+    }
 
-   public void setWindowid(String windowid) {
-      this.windowid = windowid;
-   }
-   
-   public void setHost(String host) {
-      this.host = host;
-   }
+    
+    public void setWindowid(String windowid) {
+        this.windowid = windowid;
+    }
 
 }

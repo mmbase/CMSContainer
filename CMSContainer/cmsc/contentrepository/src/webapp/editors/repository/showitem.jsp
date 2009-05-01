@@ -6,12 +6,19 @@
 <mm:cloud jspvar="cloud" rank="basic user" method='http'>
    <mm:import externid="objectnumber" vartype="Integer" required="true"/>
    <mm:node number="$objectnumber">
-   <c:set var="showitemTitle"><fmt:message key="showitem.title"><fmt:param><mm:field name="title" /></fmt:param></fmt:message></c:set>
-<cmscedit:head title="${showitemTitle}" titleMode="plain"/>
-<body>
-   <c:set var="sideblockTitle"><mm:nodeinfo type="guitype"/>: <mm:field name="title" /></c:set>
-   <cmscedit:sideblock title="${sideblockTitle}" titleMode="plain"
-       titleClass="side_block_green" titleStyle="width: 100%">         
+         <head>
+            <title><fmt:message key="showitem.title"><fmt:param><mm:field name="title" /></fmt:param></fmt:message></title>
+			<link href="../css/main.css" type="text/css" rel="stylesheet" />
+         </head>
+         <body>
+         
+		<div class="side_block_green" style="width:100%">
+			<!-- bovenste balkje -->
+			<div class="header">
+				<div class="title"><mm:nodeinfo type="guitype"/>: <mm:field name="title" /></div>
+				<div class="header_end"></div>
+			</div>
+	      <div class="body">
             <table class="listcontent">
                <mm:field name="number">
                <tr>
@@ -30,9 +37,9 @@
             <table class="listcontent">
                <tr>
                   <td>
-                     <hr/>
+                  	<hr/>
                      <fmt:message key="showchannels.linked">
-                        <fmt:param><mm:write referid="objectnumber" /></fmt:param>
+                     	<fmt:param><mm:write referid="objectnumber" /></fmt:param>
                      </fmt:message>
                      <table>
                         <mm:relatednodes type="contentchannel" role="contentrel" id="contentrels">
@@ -56,7 +63,7 @@
                   <td>
                      <hr />
                      <fmt:message key="showchannels.created">
-                        <fmt:param><mm:write referid="objectnumber" /></fmt:param>
+                     	<fmt:param><mm:write referid="objectnumber" /></fmt:param>
                      </fmt:message>
                   </td>
                </tr>
@@ -76,15 +83,15 @@
                </mm:isempty>
                <mm:relatednodes type="contentchannel" role="deletionrel">
                   <mm:first>
-                     <tr>
-                        <td>
-                           <hr />
-                           <fmt:message key="showchannels.deleted">
-                              <fmt:param><mm:write referid="objectnumber" /></fmt:param>
-                           </fmt:message>
-                        </td>
-                     </tr>
-                 </mm:first>
+	                  <tr>
+	                     <td>
+	                        <hr />
+	                        <fmt:message key="showchannels.deleted">
+	                        	<fmt:param><mm:write referid="objectnumber" /></fmt:param>
+	                        </fmt:message>
+	                     </td>
+	                  </tr>
+	              </mm:first>
                   <tr>
                      <td>
                         <b><mm:field name="path" /></b>
@@ -93,13 +100,16 @@
                </mm:relatednodes>
             </table>
             <br />
-         <ul class="shortcuts">
+			<ul class="shortcuts">
                <li class="close">
-                  <a href="#" onClick="window.close()"><fmt:message key="showitem.close" /></a>
-            </li>
-         </ul>
-   </cmscedit:sideblock>            
-   </body>
+	               <a href="#" onClick="window.close()"><fmt:message key="showitem.close" /></a>
+				</li>
+			</ul>
+			</div>
+			<div class="side_block_end"></div>
+		</div>
+            
+         </body>
    </mm:node>
 </mm:cloud>
 </html:html>

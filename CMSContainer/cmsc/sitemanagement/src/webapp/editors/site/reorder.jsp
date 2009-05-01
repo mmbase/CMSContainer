@@ -3,12 +3,16 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="pagereorder.title">
+<head>
+  <title><fmt:message key="pagereorder.title" /></title>
+  <link rel="stylesheet" type="text/css" href="../css/main.css" />
   <script type="text/javascript" src="../repository/reorder.js"></script>
   <style type="text/css">
     input.button { width : 100; }
   </style>
-</cmscedit:head>
+
+  <script type="text/javascript" src="../utils/transparent_png.js" ></script>
+</head>
 <body onload="fillHidden();alphaImages();">
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
    <mm:import externid="parent" jspvar="parent"  from="parameters"/>

@@ -1,26 +1,24 @@
-<%@page language="java" contentType="text/html;charset=utf-8"
-%><%@page import="com.finalist.cmsc.navigation.*"
-%><%@include file="../globals.jsp"
-%><mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=utf-8"%>
+<%@page import="com.finalist.cmsc.navigation.*"%>
+<%@include file="../globals.jsp"%>
+<mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<c:set var="treeUrl"><mm:url page="SelectorPage.do"/></c:set>
-<c:if test="${param.related eq true}">
-   <c:set var="treeUrl"><mm:url page="SelectorRelatedpage.do"/></c:set>
-</c:if>
-<c:if test="${not empty param.type}">
-   <c:set var="treeUrl"><mm:url page="${param.type}.do?method=${param.method}"/></c:set>
-</c:if>
-<cmscedit:head title="selector.title" ajax="true">
+	<head>
+	<title><fmt:message key="selector.title" /></title>
+	<link href="../../css/main.css" type="text/css" rel="stylesheet" />
 	<link href="../../utils/ajaxtree/addressbar.css" type="text/css" rel="stylesheet" />
-	<link href="../../utils/ajaxtree/ajaxtree.css" type="text/css" rel="stylesheet" />
 
+	<link href="../../utils/ajaxtree/ajaxtree.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="../../js/prototype.js"></script>
+	<script type="text/javascript" src="../../js/scriptaculous/scriptaculous.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/ajaxtree.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/addressbar.js"></script>
+    <script type="text/javascript" src="../../utils/transparent_png.js" ></script>
 
 	<script type="text/javascript">
 		ajaxTreeConfig.resources = '../../utils/ajaxtree/images/';
-		ajaxTreeConfig.url = '${treeUrl}';
+		ajaxTreeConfig.url = '<mm:url page="SelectorPage.do"/>';
 		ajaxTreeConfig.addressbarId = 'addressbar';
 		
 		treeNumbers = new Array();
@@ -48,8 +46,9 @@
 			width: 80%
 		}
 	</style>
-</cmscedit:head>
-<body style="overflow: auto" onload="loadFunction();">
+	</head>
+	<body style="overflow: auto" onload="loadFunction();">
+
    <div class="side_block">
       <div class="header">
          <div class="title"><fmt:message key="selector.title" /></div>
@@ -68,7 +67,7 @@
 				<mm:import id="pagepath"></mm:import>
 			</mm:compare>
 	
-			<form action="${treeUrl}" id="addressBarForm">
+			<form action="SelectorPage.do" id="addressBarForm">
 				   <div class="search_form">
 						<input type="text" name="path" value="${channelPath}" id="addressbar" class="width80" />
 					</div>
