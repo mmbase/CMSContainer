@@ -12,12 +12,12 @@ See http://www.MMBase.org/license
     <name>CMS Container publish-cleaner</name>
     <shortDescription>CMS Container publish-cleaner</shortDescription>
 	<dependencies>
-      <dependency>
-         <groupId>finalist</groupId>
-         <artifactId>cmsc-modules-publish-remote</artifactId>
-         <version>${cmscmodules.version}</version>
-         <type>jar</type>
-      </dependency>
+		<dependency>
+			<groupId>mmapps</groupId>
+			<artifactId>remotepublishing</artifactId>
+			<version>1.0.10</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 </project>
 

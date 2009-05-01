@@ -1,1 +1,1 @@
-build cleanbuild cmsc ..\..\CMSContainer_Modules ..\..\CMSContainer_Portlets
+build cleanbuild tools cmsc

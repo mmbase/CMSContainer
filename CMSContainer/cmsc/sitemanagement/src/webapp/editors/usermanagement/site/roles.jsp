@@ -6,13 +6,15 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="siteroles.title">
-	<style>
-		input.select { font-height: 4px;}
-	</style>
-</cmscedit:head>
+<head>
+	<link href="../css/main.css" type="text/css" rel="stylesheet" />
+<title><fmt:message key="siteroles.title" /></title>
+</head>
 <body style="overflow: auto">
 <mm:cloud jspvar="cloud" rank='administrator'>
+<style>
+	input.select { font-height: 4px;}
+</style>
 <html:form action="/editors/usermanagement/SiteRolesAction">
 <input type="hidden" name="savetree" id="savetree" value="true">
 <input type="hidden" name="channel" id="channel">
@@ -68,8 +70,8 @@ RolesInfo info = form.getRolesInfo();
 </p>
 </div>
 <br>
-<html:submit style="width:90"><fmt:message key="siteroles.submit"/></html:submit>
 <html:cancel style="width:90"><fmt:message key="siteroles.cancel"/></html:cancel>
+<html:submit style="width:90"><fmt:message key="siteroles.submit"/></html:submit>
 </div>
 <div class="side_block_end"></div>
 </div>	

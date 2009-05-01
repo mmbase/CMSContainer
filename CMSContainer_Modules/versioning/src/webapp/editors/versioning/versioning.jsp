@@ -1,9 +1,13 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
 <%@include file="globals.jsp"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<%--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">--%>
 <html:html xhtml="true">
-<cmscedit:head title="versioning.title.content" />
+<head>
+   <title><fmt:message key="versioning.title.content" /></title>
+   <link rel="stylesheet" type="text/css" href="../css/main.css" />
+   <script src="../utils/rowhover.js" type="text/javascript"></script>
+</head>
 <body>
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
 <mm:import externid="archiveNodes" jspvar="nodeList" vartype="List" />
@@ -52,7 +56,6 @@
                      <tr>
                         <th nowrap="true"><fmt:message key="versioning.date"/></th>
                         <th><fmt:message key="versioning.author"/></th>
-                        <th><fmt:message key="versioning.publish"/></th>
                         <th>&nbsp;</th>
                      </tr>
                   </thead>
@@ -72,8 +75,6 @@
                   <mm:node number="${author_number}" notfound="skipbody">
                      <mm:field name="firstname"/> <mm:field name="prefix"/>  <mm:field name="surname"/> (<mm:field name="username"/>)
                   </mm:node>
-               </td>
-               <td><mm:field name="publish"/>
                </td>
                <td>
                   <c:url value="/editors/versioning/RestoreAction.do" var="restoreUrl">

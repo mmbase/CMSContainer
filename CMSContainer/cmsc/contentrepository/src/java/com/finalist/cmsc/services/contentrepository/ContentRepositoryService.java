@@ -11,7 +11,8 @@ package com.finalist.cmsc.services.contentrepository;
 
 import java.util.List;
 
-import com.finalist.cmsc.beans.NodetypeBean;
+import net.sf.mmapps.commons.beans.NodetypeBean;
+
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.services.Service;
@@ -21,42 +22,22 @@ import com.finalist.cmsc.services.Service;
  */
 public abstract class ContentRepositoryService extends Service {
 
-   abstract public List<ContentElement> getContentElements(ContentChannel channel);
+	abstract public List<ContentElement> getContentElements(ContentChannel channel);
 
+	abstract public List<NodetypeBean> getContentTypes();
 
-   abstract public List<NodetypeBean> getContentTypes();
+    abstract public List<ContentElement> getContentElements(String channel);
 
+    abstract public int countContentElements(String channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day);
 
-   abstract public List<ContentElement> getContentElements(String channel);
+	abstract public List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day);
 
+    abstract public List<ContentChannel> getContentChannels(ContentChannel channel);
 
-   abstract public int countContentElements(String channel, List<String> contenttypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
-         int day);
+    abstract public List<ContentChannel> getContentChannels(String channel);
 
+    abstract public boolean mayEdit(String number);
 
-   abstract public List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
-         int day);
+    abstract public ContentElement getContentElement(String elementId);
 
-
-   abstract public List<ContentChannel> getContentChannels(ContentChannel channel);
-
-
-   abstract public List<ContentChannel> getContentChannels(String channel);
-
-
-   abstract public boolean mayEdit(String number);
-
-
-   abstract public ContentElement getContentElement(String elementId);
-
-   abstract public int countContentElements(String channel, List<String> contenttypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
-         int day, int maxDays);
-
-
-   abstract List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month,
-         int day, int maxDays);
 }

@@ -17,7 +17,6 @@ import org.mmbase.remotepublishing.util.PublishUtil;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.workflow.Workflow;
 
 
@@ -36,14 +35,14 @@ public class ContentPublisher extends Publisher {
     public void publish(Node node) {
         Set<Integer> clouds = new HashSet<Integer>();
 
-        if (isPublished(node)) {
+        if (PublishManager.isPublished(node)) {
             clouds.addAll(PublishManager.getPublishedClouds(node));
         }
         else {
-            NodeList channels = RepositoryUtil.getContentChannelsForContent(node);
+            NodeList channels = RepositoryUtil.getContentChannels(node);
             for (Iterator<Node> iter = channels.iterator(); iter.hasNext();) {
                 Node channel = iter.next();
-                if (isPublished(channel)) {
+                if (PublishManager.isPublished(channel)) {
                     clouds.addAll(PublishManager.getPublishedClouds(channel));
                 }
             }
@@ -54,7 +53,6 @@ public class ContentPublisher extends Publisher {
             for (Integer cloudNumber : clouds) {
                 for (Node pnode : nodes) {
                     PublishUtil.publishOrUpdateNode(cloud, pnode.getNumber(), cloudNumber, publishDate);
-                    Versioning.setPublishVersion(pnode);
                 }
             }
         }
@@ -66,7 +64,14 @@ public class ContentPublisher extends Publisher {
     @Override
     public void remove(Node node) {
         List<Node> nodes = findContentBlockNodes(node);
-        removeNodes(nodes);
+        for (Node pnode : nodes) {
+            PublishUtil.removeFromQueue(pnode);
+        }
+    }
+    
+    @Override
+    public void unpublish(Node node) {
+        PublishUtil.removeNode(cloud, node.getNumber());
     }
     
 }
