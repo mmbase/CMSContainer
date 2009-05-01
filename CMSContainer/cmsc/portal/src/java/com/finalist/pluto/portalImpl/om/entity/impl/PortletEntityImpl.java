@@ -38,127 +38,111 @@ import com.finalist.pluto.portalImpl.services.portletdefinitionregistry.PortletD
 import com.finalist.pluto.portalImpl.util.ObjectID;
 
 public class PortletEntityImpl implements PortletEntity, PortletEntityCtrl, Serializable, Support {
-   private static Log log = LogFactory.getLog(PortletEntityImpl.class);
+	private static Log log = LogFactory.getLog(PortletEntityImpl.class);
 
-   private String id;
+	private String id;
 
-   private String definitionId;
+	private String definitionId;
 
-   protected PreferenceSet preferences;
+	protected PreferenceSet preferences;
 
-   private PreferenceSet origPreferences;
+	private PreferenceSet origPreferences;
 
-   private PortletApplicationEntity applicationEntity;
+	private PortletApplicationEntity applicationEntity;
 
-   private PortletWindowList portletWindows;
+	private PortletWindowList portletWindows;
 
-   private ObjectID objectId;
+	private ObjectID objectId;
 
-   private DescriptionSet descriptions;
+	private DescriptionSet descriptions;
 
+	public PortletEntityImpl() {
+		id = "";
+		definitionId = "";
+		preferences = new PreferenceSetImpl();
+		origPreferences = new PreferenceSetImpl();
+		portletWindows = new PortletWindowListImpl();
+		descriptions = new DescriptionSetImpl();
+	}
 
-   public PortletEntityImpl() {
-      id = "";
-      definitionId = "";
-      preferences = new PreferenceSetImpl();
-      origPreferences = new PreferenceSetImpl();
-      portletWindows = new PortletWindowListImpl();
-      descriptions = new DescriptionSetImpl();
-   }
+	// PortletEntity implementation.
 
+	public ObjectID getId() {
+		if (objectId == null && applicationEntity != null) {
+			objectId = ObjectID.createFromString(applicationEntity.getId().toString() + "." + id);
+		}
+		return objectId;
+	}
 
-   // PortletEntity implementation.
+	public PreferenceSet getPreferenceSet() {
+		return preferences;
+	}
 
-   public ObjectID getId() {
-      if (objectId == null && applicationEntity != null) {
-         objectId = ObjectID.createFromString(applicationEntity.getId().toString() + "." + id);
-      }
-      return objectId;
-   }
+	public PortletDefinition getPortletDefinition() {
+		return PortletDefinitionRegistry.getPortletDefinition(ObjectID.createFromString(definitionId));
+	}
 
+	public void setPortletDefinition(PortletDefinition portletDefinition) {
+		this.definitionId = portletDefinition.getId().toString();
+	}
 
-   public PreferenceSet getPreferenceSet() {
-      return preferences;
-   }
+	public PortletApplicationEntity getPortletApplicationEntity() {
+		return applicationEntity;
+	}
 
+	public PortletWindowList getPortletWindowList() {
+		return portletWindows;
+	}
 
-   public PortletDefinition getPortletDefinition() {
-      return PortletDefinitionRegistry.getPortletDefinition(ObjectID.createFromString(definitionId));
-   }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.apache.pluto.om.entity.PortletEntity#getDescriptionSet()
+	 */
+	public Description getDescription(Locale locale) {
+		return descriptions.get(locale);
+	}
 
+	// PortletEntityCtrl implementation.
 
-   public void setPortletDefinition(PortletDefinition portletDefinition) {
-      this.definitionId = portletDefinition.getId().toString();
-   }
+	public void setId(String id) {
+		log.debug("====>PortletEntityImpl:" + id);
+		this.id = id;
+		objectId = null;
+	}
 
+	public void store() throws java.io.IOException {
+		// TODO WOUTZ commented, see if it works
+		// PortletEntityRegistry.store();
 
-   public PortletApplicationEntity getPortletApplicationEntity() {
-      return applicationEntity;
-   }
+		// save preferences as original preferences
+		origPreferences = new PreferenceSetImpl();
+		((PreferenceSetImpl) origPreferences).addAll((Collection) preferences);
+	}
 
+	public void reset() throws java.io.IOException {
+		// reset by re-activating original preferences
+		preferences = new PreferenceSetImpl();
+		((PreferenceSetImpl) preferences).clear();
+		((PreferenceSetImpl) preferences).addAll((Collection) origPreferences);
+	}
 
-   public PortletWindowList getPortletWindowList() {
-      return portletWindows;
-   }
+	protected void setPortletApplicationEntity(PortletApplicationEntity applicationEntity) {
+		this.applicationEntity = applicationEntity;
+	}
 
+	protected void setPortletWindowList(PortletWindowList portletWindows) {
+		this.portletWindows = portletWindows;
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.pluto.om.entity.PortletEntity#getDescriptionSet()
-    */
-   public Description getDescription(Locale locale) {
-      return descriptions.get(locale);
-   }
+	public String getDefinitionId() {
+		return definitionId;
+	}
 
+	public void setDefinitionId(String definitionId) {
+		this.definitionId = definitionId;
+	}
 
-   // PortletEntityCtrl implementation.
-
-   public void setId(String id) {
-      log.debug("====>PortletEntityImpl:" + id);
-      this.id = id;
-      objectId = null;
-   }
-
-
-   public void store() throws java.io.IOException {
-      // TODO WOUTZ commented, see if it works
-      // PortletEntityRegistry.store();
-
-      // save preferences as original preferences
-      origPreferences = new PreferenceSetImpl();
-      ((PreferenceSetImpl) origPreferences).addAll((Collection) preferences);
-   }
-
-
-   public void reset() throws java.io.IOException {
-      // reset by re-activating original preferences
-      preferences = new PreferenceSetImpl();
-      ((PreferenceSetImpl) preferences).clear();
-      ((PreferenceSetImpl) preferences).addAll((Collection) origPreferences);
-   }
-
-
-   protected void setPortletApplicationEntity(PortletApplicationEntity applicationEntity) {
-      this.applicationEntity = applicationEntity;
-   }
-
-
-   protected void setPortletWindowList(PortletWindowList portletWindows) {
-      this.portletWindows = portletWindows;
-   }
-
-
-   public String getDefinitionId() {
-      return definitionId;
-   }
-
-
-   public void setDefinitionId(String definitionId) {
-      this.definitionId = definitionId;
-   }
-
-
-   public void postLoad(Object parameter) throws Exception {
-   }
+    public void postLoad(Object parameter) throws Exception {
+    }
 }

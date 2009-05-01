@@ -19,6 +19,4 @@
     </xsl:choose>
   </xsl:template>
 	
-  <xsl:template name="prompt_new">new</xsl:template>
-
 </xsl:stylesheet>

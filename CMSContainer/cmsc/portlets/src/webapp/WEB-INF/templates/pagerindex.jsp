@@ -1,6 +1,6 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 
-<cmsc:pager maxPageItems="${elementsPerPage}" items="${totalElements}" 
+<pg:pager url="${renderUrl}" maxPageItems="${elementsPerPage}" items="${totalElements}" 
 		index="${pagesIndex}" maxIndexPages="${showPages}" isOffset="true"
 		export="offset,currentPage=pageNumber">
 
@@ -38,4 +38,4 @@
    </pg:last>
 </p>
 
-</cmsc:pager>
+</pg:pager>

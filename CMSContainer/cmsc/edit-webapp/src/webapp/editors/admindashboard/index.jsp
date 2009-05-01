@@ -9,7 +9,7 @@
 	<mm:hasrank minvalue="administrator">
 	    <%@include file="system/index.jsp" %>
 		<mm:haspage page="/editors/admindashboard/publish">
-	 	   <jsp:include page="publish/index.jsp" />
+	 	   <%@include file="publish/index.jsp" %>
 		</mm:haspage>
 	</mm:hasrank>
 </mm:cloud>

@@ -3,24 +3,21 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="user.edit.title">
+<cmscedit:head title="user.title">
 	<style>
 		input.select { font-height: 4px;}
 	</style>
 </cmscedit:head>
 <body style="overflow: auto">
-<cmscedit:contentblock title="user.edit.title" titleClass="content_block_pink">
+<cmscedit:contentblock title="user.title" titleClass="content_block_pink">
 <mm:cloud loginpage="../login.jsp" rank='administrator'>
 	<mm:cloudinfo type="user" id="cloudusername" write="false" />
 	<html:form action="/editors/usermanagement/UserAction">
 		<html:hidden property="id" />
 		<div id="user">
 		<table class="formcontent">
-         <tr>
-            <td><fmt:message key="user.notice" /></td>
-         </tr>
 			<tr>
-				<td class="fieldname" width='180'><fmt:message key="user.account" />*</td>
+				<td class="fieldname" width='180'><fmt:message key="user.account" /></td>
 				<td>
 					<logic:equal name="UserForm" property="id" value="-1">
 						<html:text property="username" size='15' maxlength='15' />
@@ -33,43 +30,43 @@
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.firstname" /></td>
-				<td><html:text property="firstname" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
+				<td><html:text property="firstname" size='30' /></td>
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.prefix" /></td>
-				<td><html:text property="prefix" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
+				<td><html:text property="prefix" size='15' /></td>
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.surname" /></td>
-				<td><html:text property="surname" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
+				<td><html:text property="surname" size='30' /></td>
 			</tr>
 			<tr>
-				<td class="fieldname"><fmt:message key="user.email" />*</td>
-				<td><html:text property="email" size='30' maxlength='255' />
+				<td class="fieldname"><fmt:message key="user.email" /></td>
+				<td><html:text property="email" size='30' />
 					<span class="notvalid"><html:errors bundle="SECURITY" property="email" /></span>
 				</td>
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.company" /></td>
-				<td><html:text property="company" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
+				<td><html:text property="company" size='30' /></td>
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.department" /></td>
-				<td><html:text property="department" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
+				<td><html:text property="department" size='30' /></td>
 			</tr>
 			<tr>
 				<td class="fieldname"><fmt:message key="user.note" /></td>
 				<td><html:textarea property="note" cols='60' rows='5' /></td>
 			</tr>
 			<tr>
-				<td class="fieldname"><fmt:message key="user.password" />*</td>
+				<td class="fieldname"><fmt:message key="user.password" /></td>
 				<td>
-					<html:password property="password1" size='15' maxlength='15' />
-					<span class="notvalid"><html:errors bundle="SECURITY" property="password1" /></span>
+					<html:password property="password" size='15' maxlength='15' />
+					<span class="notvalid"><html:errors bundle="SECURITY" property="password" /></span>
 				</td>
 			</tr>
 			<tr>
-				<td class="fieldname" nowrap><fmt:message key="user.confirmpassword" />*</td>
+				<td class="fieldname" nowrap><fmt:message key="user.confirmpassword" /></td>
 				<td>
 					<html:password property="password2" size='15' maxlength='15' />
 					<span class="notvalid"><html:errors bundle="SECURITY" property="password2" /></span>
@@ -83,7 +80,6 @@
 		      		<html:option value=""><fmt:message key="changelanguage.default" /></html:option>
 		      		<html:option value="en"><fmt:message key="changelanguage.english" /></html:option>
 		      		<html:option value="nl"><fmt:message key="changelanguage.dutch" /></html:option>
-		      		<html:option value="zh"><fmt:message key="changelanguage.chinese" /></html:option>
 		      	</html:select>
 		      </td>
 		   </tr>
@@ -133,8 +129,8 @@
 
 		<br />
 		<div style="padding: 5px;">
-			<html:submit style="width:90"><fmt:message key="user.submit"/></html:submit>
 			<html:cancel style="width:90"><fmt:message key="user.cancel"/></html:cancel>
+			<html:submit style="width:90"><fmt:message key="user.submit"/></html:submit>
 		</div>
 	</html:form>
 </mm:cloud>

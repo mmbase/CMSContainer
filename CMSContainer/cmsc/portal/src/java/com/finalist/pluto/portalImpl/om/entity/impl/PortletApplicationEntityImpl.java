@@ -28,61 +28,54 @@ import com.finalist.pluto.portalImpl.services.portletdefinitionregistry.PortletD
 import com.finalist.pluto.portalImpl.util.ObjectID;
 
 public class PortletApplicationEntityImpl implements PortletApplicationEntity, Serializable, Support {
-   private static Log log = LogFactory.getLog(PortletApplicationEntityImpl.class);
+	private static Log log = LogFactory.getLog(PortletApplicationEntityImpl.class);
 
-   private String id = "";
+	private String id = "";
 
-   private String definitionId = "";
+	private String definitionId = "";
 
-   private PortletEntityList portlets = new PortletEntityListImpl();
+	private PortletEntityList portlets = new PortletEntityListImpl();
 
-   private ObjectID objectId;
+	private ObjectID objectId;
 
+	// PortletApplicationEntity implementation.
 
-   // PortletApplicationEntity implementation.
+	public ObjectID getId() {
+		if (objectId == null) {
+			objectId = ObjectID.createFromString(id);
+		}
+		// log.debug("====>PortletApplicationEntityImpl:" + objectId);
+		return objectId;
+	}
 
-   public ObjectID getId() {
-      if (objectId == null) {
-         objectId = ObjectID.createFromString(id);
-      }
-      // log.debug("====>PortletApplicationEntityImpl:" + objectId);
-      return objectId;
-   }
+	public PortletEntityList getPortletEntityList() {
+		return portlets;
+	}
 
+	public PortletApplicationDefinition getPortletApplicationDefinition() {
+		return PortletDefinitionRegistry.getPortletApplicationDefinitionList().get(ObjectID.createFromString(definitionId));
+	}
 
-   public PortletEntityList getPortletEntityList() {
-      return portlets;
-   }
+	// additional methods.
 
+	// additional internal methods
 
-   public PortletApplicationDefinition getPortletApplicationDefinition() {
-      return PortletDefinitionRegistry.getPortletApplicationDefinitionList().get(
-            ObjectID.createFromString(definitionId));
-   }
+	public void setId(String id) {
+		log.debug("====>PortletApplicationEntityImpl:" + id);
+		this.id = id;
+		objectId = null;
+	}
 
+	public String getDefinitionId() {
+		return definitionId;
+	}
 
-   // additional methods.
+	public void setDefinitionId(String definitionId) {
+		this.definitionId = definitionId;
+	}
+    
 
-   // additional internal methods
-
-   public void setId(String id) {
-      log.debug("====>PortletApplicationEntityImpl:" + id);
-      this.id = id;
-      objectId = null;
-   }
-
-
-   public String getDefinitionId() {
-      return definitionId;
-   }
-
-
-   public void setDefinitionId(String definitionId) {
-      this.definitionId = definitionId;
-   }
-
-
-   public void postLoad(Object parameter) throws Exception {
-   }
+    public void postLoad(Object parameter) throws Exception {
+    }
 
 }

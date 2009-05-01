@@ -15,34 +15,30 @@
  */
 package com.finalist.cmsc.richtext;
 
-import java.util.Map;
+import net.sf.mmapps.commons.util.XmlUtil;
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.Node;
-import org.mmbase.datatypes.DataType;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
-
-import com.finalist.cmsc.util.XmlUtil;
 
 /**
  * Class for storing constants for richtext handling classes.
  */
 public class RichText {
 
-   /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(RichText.class.getName());
-
-   public final static String RICHTEXT_ROOT_OPEN = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<richtext>";
+    /** MMbase logging system */
+    private static Logger log = Logging.getLoggerInstance(RichText.class.getName());
+    
+   public final static String RICHTEXT_ROOT_OPEN =
+      "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+      "<richtext>";
 
    public final static String RICHTEXT_ROOT_CLOSE = "</richtext>";
 
    public final static String LINK_TAGNAME = "a";
    public final static String IMG_TAGNAME = "img";
-
+   
    public final static String DESTINATION_ATTR = "destination";
    public final static String RELATIONID_ATTR = "relationID";
 
@@ -58,76 +54,41 @@ public class RichText {
    public static final String WIDTH_ATTR = "width";
    public static final String HEIGHT_ATTR = "height";
 
-   // MMBase stuff
+   // mmbase stuff
    public final static String RICHTEXT_TYPE = "cmscrichtext";
    public final static String INLINEREL_NM = "inlinerel";
    public final static String IMAGEINLINEREL_NM = "imageinlinerel";
    public static final String REFERID_FIELD = "referid";
-   public static final String TITLE_FIELD = "title";
-
 
    public final static boolean hasRichtextItems(String in) {
-      return (in.indexOf("<" + RichText.LINK_TAGNAME) > -1 || in.indexOf("<" + RichText.IMG_TAGNAME) > -1);
+       return (in.indexOf("<"+RichText.LINK_TAGNAME) > -1 || in.indexOf("<"+RichText.IMG_TAGNAME) > -1);
    }
 
-
-   public final static String cleanRichText(String originalValue, boolean replaceHeaders, boolean replaceParagraphs) {
-      // if string is null or empty, (re)set it's value to empty string
-      String newValue = "";
-      if (originalValue != null && !"".equals(originalValue.trim())) {
-         // Edited value: clean.
-         log.debug("before cleaning: " + originalValue);
-         newValue = WordHtmlCleaner.cleanHtml(originalValue, replaceHeaders, replaceParagraphs);
-         log.debug("after cleaning: " + newValue);
-      }
-      return newValue;
+   public final static String cleanRichText(String originalValue) {
+       // if string is null or empty, (re)set it's value to empty string
+       String newValue = "";
+       if (originalValue != null && !"".equals(originalValue.trim())) {
+           // Edited value: clean.
+           log.debug("before cleaning: " + originalValue);
+           newValue = WordHtmlCleaner.cleanHtml(originalValue);
+           log.debug("after cleaning: " + newValue);
+       }
+       return newValue;
    }
-
 
    public final static String getRichTextString(Document doc) {
-      // to string and strip root node, doctype and xmldeclaration
-      String out = XmlUtil.serializeDocument(doc, false, false, true, true);
-      out = out.replaceAll("<.?richtext.?>", "");
-      out = XmlUtil.unescapeXMLEntities(out);
-      return out;
+       // to string and strip root node, doctype and xmldeclaration
+       String out = XmlUtil.serializeDocument(doc, false, false, true, true);
+       out = out.replaceAll("<.?richtext.?>", "");
+       out = XmlUtil.unescapeXMLEntities(out);
+       return out;
    }
-
 
    public final static Document getRichTextDocument(String in) {
-      String out = XmlUtil.escapeXMLEntities(in);
-      out = RichText.RICHTEXT_ROOT_OPEN + out + RichText.RICHTEXT_ROOT_CLOSE;
-      Document doc = XmlUtil.toDocument(out, false);
-      return doc;
-   }
-   
-   public final static Object stripLinkAndImage(Node sourceNode,Node destinationNode,Field field,Map<Integer, Integer> copiedNodes) {
-      DataType dataType = field.getDataType();
-      while (StringUtils.isEmpty(dataType.getName())) {
-         dataType = dataType.getOrigin();
-      }
-      if ("cmscrichtext".equals(dataType.getName())) {
-         String fieldname = field.getName();
-         String fieldValue = (String) sourceNode.getValueWithoutProcess(fieldname);
-         log.debug("richtext field: " + fieldname.trim());
-       //  htmlFields.add(fieldname);
-         if (StringUtils.isNotEmpty(fieldValue)) {
-            try {
-               if (hasRichtextItems(fieldValue)) {
-                  Document doc = getRichTextDocument(fieldValue);
-
-                  RichTextGetProcessor richTextGetProcessor = new RichTextGetProcessor();
-                  richTextGetProcessor.resolve(sourceNode,destinationNode,doc,copiedNodes);
-                  String out = getRichTextString(doc);
-                  out = WordHtmlCleaner.fixEmptyAnchors(out);
-                  return out;
-               }
-            }
-            catch (Exception e) {
-               log.error("An error occured while resolving inline resources!", e);
-            }
-         }
-      }
-      return sourceNode.getValueWithoutProcess(field.getName());
+       String out = XmlUtil.escapeXMLEntities(in);
+       out = RichText.RICHTEXT_ROOT_OPEN + out + RichText.RICHTEXT_ROOT_CLOSE;
+       Document doc = XmlUtil.toDocument(out, false);
+       return doc;
    }
 
 }
