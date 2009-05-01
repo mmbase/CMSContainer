@@ -63,7 +63,7 @@ public class NewsletterPublicationServiceImpl implements NewsletterPublicationSe
     * deliver all READY publications in the system
     */
    public void deliverAllPublications() {
-      log.debug("starting deliver all publications in READY status");
+      log.info("starting deliver all publications in READY status");
 
       List<Integer> publications = publicationCAO.getIntimePublicationIds();
 
@@ -107,15 +107,12 @@ public class NewsletterPublicationServiceImpl implements NewsletterPublicationSe
       }
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Node edition = cloud.getNode(publicationId);  
-      if(!sendSuccess.isEmpty()){
-         edition.setDateValue("sendtime", new java.util.Date());
-      }
       NewsletterPublicationUtil.setIsSent(edition);
       sendResults.put(SEND_SUCCESS, sendSuccess);
       sendResults.put(SEND_FAIL, sendFails);
 
       publicationCAO.setStatus(publicationId, STATUS.DELIVERED);
-//      publicationCAO.renamePublicationTitle(publicationId);
+      publicationCAO.renamePublicationTitle(publicationId);
       return sendResults;
    }
 

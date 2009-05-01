@@ -32,7 +32,7 @@
          <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
             <mm:node number="${param.objectnumber}">
                  <div style="float:left; padding:5px;">
-                       <fmt:message key="urlinfo.name" />: <b><mm:field name="title"/></b><br/>
+                       <fmt:message key="urlinfo.name" />: <b><mm:field name="name"/></b><br/>
                        <fmt:message key="urlinfo.description" />: <mm:field name="description"/><br/>
                        <fmt:message key="urlinfo.url" />: <mm:field name="url"/><br/>
                         <fmt:message key="urlform.valid" />: 
@@ -41,10 +41,10 @@
                                     <c:when test="${empty isValidUrl}">
                                         <fmt:message key="urlsearch.validurl.unknown" />
                                     </c:when>
-                                    <c:when test="${isValidUrl eq false}">
+                                    <c:when test="${!isValidUrl}">
                                         <fmt:message key="urlsearch.validurl.invalid" />
                                     </c:when>
-                                    <c:when test="${isValidUrl eq true}">
+                                    <c:when test="${isValidUrl}">
                                         <fmt:message key="urlsearch.validurl.valid" />
                                     </c:when>
                                     <c:otherwise>

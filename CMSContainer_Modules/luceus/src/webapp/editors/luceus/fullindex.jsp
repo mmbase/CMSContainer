@@ -20,7 +20,7 @@
 		</form>
 	</c:when>
 	<c:otherwise>
-		<p><fmt:message key="fullindex.busy" /></p>
+		<h2><fmt:message key="fullindex.busy" /></h2>
 		<luceusmodule:fullindex erase="${param.doerase}" />
 	</c:otherwise>
 </c:choose>

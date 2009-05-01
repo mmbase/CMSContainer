@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -22,7 +21,7 @@ import com.finalist.preferences.util.ProfileUtil;
 
 public class ProfilePortlet extends CmscPortlet {
 
-   private static List<String> formUrls;
+   public static final String PREFERENCES_TYPE = "perference";
 
    enum PREFERENCETYPE {
       profile, preference
@@ -33,6 +32,7 @@ public class ProfilePortlet extends CmscPortlet {
       doView(request, response);// doEditDefaults(request, response);
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
       if (!ProfileUtil.isUserLogin()) {
@@ -48,22 +48,9 @@ public class ProfilePortlet extends CmscPortlet {
       UserProfile profile = ProfileUtil.getUserProfile();
       request.setAttribute("profile", profile);
       doInclude("view", "/community/profile/user.jsp", request, response);
-      
-      if (formUrls == null) {
-         fillAggregatedViewFiles(getPortletContext());
-      }
-      request.setAttribute("preferenceFormUrls", formUrls);
-      
-      List<PreferenceVO> preferences = ProfileUtil.getPreferences();
-      request.setAttribute("preferences", preferences);
-      
-      doInclude("view", "/community/preferences.jsp", request, response);
-   }
 
-   protected static synchronized void fillAggregatedViewFiles(PortletContext portletContext) {
-      //Fill formUrls only
-      formUrls = new ArrayList<String>();
-      Set<String> webInfResources = portletContext.getResourcePaths(getAggregationDir(portletContext) + "view/community/preferences");
+      Set<String> webInfResources = getPortletContext().getResourcePaths(getAggregationDir() + "view/community/preferences");
+      List<String> formUrls = new ArrayList<String>();
       if (webInfResources != null) {
          for (String resource : webInfResources) {
             if (resource.lastIndexOf("/") > 0) {
@@ -72,6 +59,12 @@ public class ProfilePortlet extends CmscPortlet {
             }
          }
       }
+      List<PreferenceVO> preferences = ProfileUtil.getPreferences();
+      request.setAttribute("preferences", preferences);
+      request.setAttribute("preferenceFormUrls", formUrls);
+      doInclude("view", "/community/preferences.jsp", request, response);
+      // super.doView(request,response);
+
    }
 
    @Override
@@ -117,8 +110,8 @@ public class ProfilePortlet extends CmscPortlet {
 
    }
 
-   private static String getAggregationDir(PortletContext portletContext) {
-      String aggregationDir = portletContext.getInitParameter("cmsc.portal.aggregation.base.dir");
+   private String getAggregationDir() {
+      String aggregationDir = getPortletContext().getInitParameter("cmsc.portal.aggregation.base.dir");
       if (StringUtils.isEmpty(aggregationDir)) {
          aggregationDir = "/WEB-INF/templates/";
       }

@@ -144,9 +144,6 @@ public abstract class NewsletterPublicationUtil {
       Node node = relatedNewsletters.get(0);
       new POConvertUtils<Newsletter>().convert(newsletter, node);
       newsletter.setReplyAddress(node.getStringValue("replyto_mail"));
-      newsletter.setReplyName(node.getStringValue("replyto_name"));
-      newsletter.setFromAddress(node.getStringValue("from_mail"));
-      newsletter.setFromName(node.getStringValue("from_name"));
       pub.setNewsletter(newsletter);
 
       return pub;
@@ -182,7 +179,7 @@ public abstract class NewsletterPublicationUtil {
     * @throws MessagingException 
     */
    public static void freezeEdition(Node edition) throws MessagingException {
-      //publish(edition);
+      publish(edition);
       String static_html = getStaticHtml(edition.getNumber());
       edition.setStringValue("process_status", EditionStatus.FROZEN.value());
 //      edition.setValue("static_html", StringEscapeUtils.escapeHtml(static_html));

@@ -16,7 +16,6 @@ import org.mmbase.remotepublishing.PublishManager;
 import org.mmbase.remotepublishing.util.PublishUtil;
 
 import com.finalist.cmsc.mmbase.TypeUtil;
-import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.workflow.Workflow;
@@ -86,9 +85,6 @@ public abstract class Publisher {
                        findContentBlockNodes(childNode, nodes);
                    }
                }
-               else if(AssetElementUtil.isAssetElement(childNode)){
-                  nodes.add(childNode);
-               }
                else {
                    if (!RepositoryUtil.isContentChannel(childNode) &&
                            !Workflow.isWorkflowElement(childNode)) {
@@ -99,7 +95,6 @@ public abstract class Publisher {
         }
     }
 
-
     public int getRemoteNumber(Node node) {
        if (PublishManager.isPublished(node)) {
            Map<Integer,Integer> numbers = PublishManager.getPublishedNodeNumbers(node);
@@ -107,11 +102,6 @@ public abstract class Publisher {
            if (iter.hasNext()) {
                return iter.next();
            }
-       }
-       else {
-          if (PublishManager.isImported(node)) {
-             return PublishManager.getSourceNodeNumber(node);
-          }
        }
        return -1;
     }

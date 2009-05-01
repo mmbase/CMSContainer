@@ -38,6 +38,7 @@ import com.finalist.newsletter.domain.Schedule;
 import com.finalist.newsletter.domain.Term;
 import com.finalist.newsletter.domain.StatisticResult.HANDLE;
 import com.finalist.newsletter.services.impl.StatisticServiceImpl;
+import com.finalist.portlets.newsletter.NewsletterContentPortlet;
 
 public abstract class NewsletterUtil {
    
@@ -56,7 +57,6 @@ public abstract class NewsletterUtil {
    public static final String NUMBER = "number";
    public static final String ARTICLE = "article";
    public static final String NEWSLETTER = "newsletter";
-   public static final String M_VALUE = "value";
    public static final String NEWSLETTERPUBLICATION = "newsletterpublication";
    public static final String RELATED = "related";
 
@@ -96,25 +96,6 @@ public abstract class NewsletterUtil {
       Node newsletterNode = cloud.getNode(number);
       deleteSubscriptionByNewsletter(newsletterNode);
       deleteNewsletterLogForNewsletter(number);
-      deleteSubscriptionForNewsletter(number);
-   }
-   
-   public static void deleteSubscriptionForNewsletter(int newsletterNumber) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
-      NodeManager nodeparameterManager = cloud.getNodeManager("nodeparameter");
-      NodeQuery query = cloud.createNodeQuery();
-      Step step = query.addStep(nodeparameterManager);
-      query.setNodeStep(step);
-      SearchUtil.addEqualConstraint(query, nodeparameterManager.getField(M_VALUE), newsletterNumber);
-  
-      NodeList nodeparameters = query.getList();
-      if (nodeparameters != null) {
-         for (int i = 0; i < nodeparameters.size(); i++) {
-            Node logNode = nodeparameters.getNode(i);
-            logNode.deleteRelations();
-            logNode.delete();
-         }
-      }
    }
 
    public static void deleteNewsletterLogForNewsletter(int newsletterNumber) {
@@ -478,16 +459,15 @@ public abstract class NewsletterUtil {
          for (Node portlet : relatedportlets) {
             List<Node> portletdefNodes = portlet.getRelatedNodes(PORTLETDEFINITION);
             String portletDefinition = portletdefNodes.get(0).getStringValue("definition");
-//            if (portletDefinition.equals(NewsletterContentPortlet.DEFINITION)) {
-//               RelationList relations = portlet.getRelations(PORTLETREL, publicationNode.getNodeManager());
-//               String name = relations.getRelation(0).getStringValue("name");
-//               url += "/_rp_".concat(name).concat("_").concat(NewsletterContentPortlet.NEWSLETTER_TERMS_PARAM).concat("/1_").concat(termIds);
-//           }
+            if (portletDefinition.equals(NewsletterContentPortlet.DEFINITION)) {
+               RelationList relations = portlet.getRelations(PORTLETREL, publicationNode.getNodeManager());
+               String name = relations.getRelation(0).getStringValue("name");
+               url += "/_rp_".concat(name).concat("_").concat(NewsletterContentPortlet.NEWSLETTER_TERMS_PARAM).concat("/1_").concat(termIds);
+            }
          }
       }
       return url;
    }
-
 
 
    public static String getServerURL() {
@@ -583,7 +563,7 @@ public abstract class NewsletterUtil {
          if(null!=language){
             schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression"),language));
          }else{
-            schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression")));
+         schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression")));
          }
          schedules.add(schedule);
       }
@@ -750,18 +730,14 @@ public abstract class NewsletterUtil {
    }
    
    public static String getScheduleMessageByExpression(String stringValue) {
-      
       return getScheduleMessageByExpression(stringValue,null);
    }
-
    public static void addNewsletterCreationChannel(int newsletterId ,int editionId) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       RelationManager relManager = cloud.getRelationManager(NEWSLETTER, NEWSLETTERPUBLICATION, RELATED);
       relManager.createRelation(cloud.getNode(newsletterId), cloud.getNode(editionId)).commit();
    }
-
    public static void getSchedulesBynewsletterId(Integer valueOf) {
       getSchedulesBynewsletterId(valueOf,null);
-      
    }
 }

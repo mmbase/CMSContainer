@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.RelationManager;
 
 import com.finalist.cmsc.security.SecurityUtil;
@@ -24,11 +25,6 @@ import com.finalist.cmsc.struts.MMBaseFormlessAction;
 import com.finalist.cmsc.tasks.TasksUtil;
 
 public class TaskCreate extends MMBaseFormlessAction {
-
-   private static final String TASK="task";
-   private static final String USER="user";
-   private static final String CREATORREL="creatorrel";
-   private static final String USERNAME="username";
 
    @Override
    public ActionForward execute(ActionMapping mapping, HttpServletRequest request, Cloud cloud) throws Exception {
@@ -41,16 +37,18 @@ public class TaskCreate extends MMBaseFormlessAction {
 			Node taskNode = cloud.getNode(lastEdited);
 
 			Node curUserNode = SecurityUtil.getUserNode(cloud);
-			RelationManager creatorrel = cloud.getRelationManager(TASK, USER, CREATORREL);
+			RelationManager creatorrel = cloud.getRelationManager("task", "user", "creatorrel");
 			taskNode.createRelation(curUserNode, creatorrel).commit();
 
-			Node assignUserNode = TasksUtil.getAssignedUser(taskNode);
-			String assignUserName = (assignUserNode != null) ? assignUserNode.getStringValue(USERNAME) : "";
+			NodeList assignUserNodes = taskNode.getRelatedNodes("user", "assignedrel", "destination");
+			String assignUserName = (assignUserNodes != null) ? assignUserNodes.getNode(0).getStringValue("username") : "";
+
+			Node assignUserNode = (assignUserNodes.size() > 0) ? assignUserNodes.getNode(0) : null;
 
 			if (assignUserNode != null) {
 				TasksUtil.sendNotification(assignUserNode, curUserNode, taskNode);
 			}
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("task.create.message", assignUserName));
+			messages.add("createSuccess", new ActionMessage("task.create.message", assignUserName));
 			saveMessages(request, messages);
 		}
 		return mapping.findForward(SUCCESS);

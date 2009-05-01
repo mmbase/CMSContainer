@@ -1,48 +1,38 @@
 <%@include file="globals.jsp"
-%><%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"
-%><fmt:setBundle basename="cmsc-community" scope="request" /><mm:content type="text/html" encoding="UTF-8" expires="0"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<cmscedit:head title="community.data.title"/>
+%><%@ taglib uri="http://jakarta.apache.org/struts/tags-html"	prefix="html"%>
+<fmt:setBundle basename="cmsc-community" scope="request" />
+<mm:content type="text/html" encoding="UTF-8" expires="0">
+<cmscedit:head title="ewsletter.subscription.manage.newsletteroverview"/>
 <script language="javascript">
 function checkid(chk){
  var i=0;
  var id=0;
  for(i=0;i<chk.length;i++){
     if(chk[i].checked==true){
-       putid=chk[i].id;
-       sid=putid+1;
-       //sid=did+1;
-       CheckedSpan=document.getElementById(sid);
-      // alert(did);
-       CheckedDiv=document.getElementById("msg");
-      // FmtParam=document.getElementById("inmsg");
-
-       if (getOs()) {
-           Text=CheckedDiv.innerText;
-           Text=Text.replace("#",CheckedSpan.innerText);
-           if(confirm(Text)&&checkExtention()){
-               document.forms[0].submit();}
-        } else {
-             Text=CheckedDiv.textContent;
-             Text=Text.replace("#",CheckedSpan.textContent);
-             if(confirm(Text)&&checkExtention())
-                {document.forms[0].submit();}
-        }
+                            putid=chk[i].id;
+                            sid=putid+1;
+                            //sid=did+1;
+                            CheckedSpan=document.getElementById(sid);
+                           // alert(did);
+                            CheckedDiv=document.getElementById("msg");
+                           // FmtParam=document.getElementById("inmsg");
+                            if (getOs()) {
+                                         Text=CheckedDiv.innerText;
+                                         Text=Text.replace("#",CheckedSpan.innerText);
+	                                     if(confirm(Text))
+		                                           {document.forms[0].submit();}
+                             } else {
+                                        Text=CheckedDiv.textContent;
+                                         Text=Text.replace("#",CheckedSpan.textContent);
+	                                     if(confirm(Text))
+		                                           {document.forms[0].submit();}
+                             }
      } 
   }
 } 
-function checkExtention(){
-   var ext = document.forms[0].file.value;
-      ext = ext.substring(ext.length-3,ext.length);
-      ext = ext.toLowerCase();
-      if(ext != 'xml'&& ext != 'csv') {
-         alert('Only CSV or XML files are accepted.');
-         return false; }
-      else{
-         return true; }
-}
 function getOs()
 {
-
+   
    if(navigator.userAgent.indexOf("MSIE")>0) {
         return true;
    }
@@ -61,10 +51,9 @@ function getOs()
 		</div>
 	</div>
 </div>
-
 <div class="editor">
 	<div class="body">
-   <div style="color:red;"></div>
+
 		<html:form action="/editors/community/ReferenceImportExportAction"
 			enctype="multipart/form-data">
 			<tr>
@@ -85,19 +74,21 @@ function getOs()
 			<br>
 			<br>
 			<br>
-			
-         <input type="file" accept="text/xml,text/csv" name="file"/>
+			<html:file property="datafile" />
 			<input type="hidden" name="action" value="importsubscription" />
 			<input type="hidden" name="newsletterId"
 				value="${requestScope.newsletterId}" />
-         <input type="hidden" name="groupId" value="${groupId}"/>
 			<input type="button" value="Import" id="bn" onclick="checkid(level);" />
 		</html:form>
-      <c:if test="${not empty invalidMessage}">
-         <div style="margin:4px;color:red;">
-            <fmt:message key="${invalidMessage}"/>
-         </div>
-      </c:if>
+		<div style="margin:4px;color:red;">
+			<html:messages id="file" message="false">
+				<bean:write name="file" />
+				<br>
+			</html:messages>
+		</div>
+		
+	</div>
+
 </div>
 </div>
 </mm:content>
