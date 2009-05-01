@@ -1,6 +1,9 @@
 package com.finalist.cmsc.staticdownload.taglib;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
@@ -13,7 +16,7 @@ public class StartTag extends SimpleTagSupport {
    private String startedVar;
 
 
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
 
       PageContext ctx = (PageContext) getJspContext();
       HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
@@ -21,11 +24,10 @@ public class StartTag extends SimpleTagSupport {
       String liveUrl = PropertiesUtil.getProperty("staticdownload.liveurl");
       String tempPath = PropertiesUtil.getProperty("staticdownload.temppath");
       String storePath = PropertiesUtil.getProperty("staticdownload.storepath");
-      String wgetPath = PropertiesUtil.getProperty("staticdownload.wgeturl");
+      String wgetPath = PropertiesUtil.getProperty("staticdownload.wgetpath");
       String downloadUrl = PropertiesUtil.getProperty("staticdownload.downloadurl");
-      String webappName = PropertiesUtil.getProperty("staticdownload.webappName");
-      DownloadSettings downloadSettings = new DownloadSettings(50,liveUrl, tempPath, storePath, wgetPath, downloadUrl,webappName, 
-    		  ctx.getServletContext());
+      DownloadSettings downloadSettings = new DownloadSettings(50, tempPath, storePath, wgetPath, downloadUrl, ctx
+            .getServletContext());
 
       // DownloadThread downloadThread = new
       // DownloadThread("http://www.cmscontainer.org", downloadSettings);
@@ -35,7 +37,7 @@ public class StartTag extends SimpleTagSupport {
       boolean started = StaticDownload.startDownload(liveUrl, downloadSettings);
 
       if (startedVar != null) {
-         request.setAttribute(startedVar, Boolean.valueOf(started));
+         request.setAttribute(startedVar, new Boolean(started));
       }
    }
 

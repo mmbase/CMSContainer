@@ -22,8 +22,9 @@ public class OutFinishHtml {
     private String middleFileLocation;
 
     ChangeContentXml ccx;
+    ChangeHtml ch = new ChangeHtml();
 
-    public OutFinishHtml(String odtLocation, String middleFileLocation) throws IOException {
+    public OutFinishHtml(String odtLocation, String middleFileLocation) {
         this.odtLocation = odtLocation;
         this.middleFileLocation = middleFileLocation;
         ccx = new ChangeContentXml();

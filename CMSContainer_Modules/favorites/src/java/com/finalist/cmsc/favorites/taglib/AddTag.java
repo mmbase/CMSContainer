@@ -1,5 +1,8 @@
 package com.finalist.cmsc.favorites.taglib;
 
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.finalist.cmsc.favorites.util.FavoritesUtil;
@@ -11,7 +14,7 @@ public class AddTag extends SimpleTagSupport {
    private String url;
 
 
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       FavoritesUtil.addFavorite(user, name, url);
    }
 

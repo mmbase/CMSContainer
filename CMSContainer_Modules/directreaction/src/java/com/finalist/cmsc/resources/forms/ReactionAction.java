@@ -1,21 +1,28 @@
 package com.finalist.cmsc.resources.forms;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.apache.struts.action.*;
-import org.mmbase.bridge.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.remotepublishing.CloudManager;
 import org.mmbase.storage.search.RelationStep;
 import org.mmbase.storage.search.Step;
-import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
+import org.mmbase.util.logging.Logger;
 
 public class ReactionAction extends SearchAction {
 
@@ -54,27 +61,26 @@ public class ReactionAction extends SearchAction {
 
    @Override
    public Cloud getCloud() {
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      Cloud cloud = cloudProvider.getCloud();
+
       /* The DirectReactions should use the staging cloud if we are
-       *  running in single-war-file mode.
+       *  running in single-war-file mode. 
        */
-      return getCloudForAnonymousUpdate(ServerUtil.isLive());
-   }
-
-   public Cloud getCloudForAnonymousUpdate(boolean isRemote) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      if (isRemote) {
-         return Publish.getRemoteCloud(cloud);
+      try{
+    	  Cloud remoteCloud = CloudManager.getCloud(cloud, "live.server");
+          return remoteCloud;	//In case there is a live.server
+      } catch(NoClassDefFoundError e){
+    	  return cloud;			//In case there is only a staging (single) server
       }
-      return cloud;
    }
 
-   @Override
+
    public String getRequiredRankStr() {
       return null;
    }
 
 
-   @Override
    protected void addConstraints(SearchForm searchForm, NodeManager nodeManager,
          QueryStringComposer queryStringComposer, NodeQuery query) {
       ReactionForm form = (ReactionForm) searchForm;

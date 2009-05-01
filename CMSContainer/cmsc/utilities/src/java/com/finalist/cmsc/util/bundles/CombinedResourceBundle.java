@@ -32,7 +32,8 @@ public class CombinedResourceBundle extends ResourceBundle {
       Object retVal = null;
 
       // resource not found in PropertyResourceBundle, check all parents.
-      for (ResourceBundle rb : bundles) {
+      for (Iterator<ResourceBundle> iter = bundles.iterator(); iter.hasNext();) {
+         ResourceBundle rb = iter.next();
          try {
             retVal = rb.getObject(key);
          }
@@ -58,7 +59,8 @@ public class CombinedResourceBundle extends ResourceBundle {
       Vector<String> temp = new Vector<String>();
 
       // add all keys from parent bundles if they exist.
-      for (ResourceBundle rb : bundles) {
+      for (Iterator<ResourceBundle> iter = bundles.iterator(); iter.hasNext();) {
+         ResourceBundle rb = iter.next();
          // get all keys for this parent.
          for (Enumeration<String> g = rb.getKeys(); g.hasMoreElements();) {
             String k = g.nextElement();

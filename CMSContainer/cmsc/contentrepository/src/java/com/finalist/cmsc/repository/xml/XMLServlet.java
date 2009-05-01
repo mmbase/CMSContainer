@@ -2,14 +2,14 @@ package com.finalist.cmsc.repository.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import net.sf.mmapps.commons.util.HttpUtil;
+import net.sf.mmapps.commons.util.StringUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,14 +24,13 @@ import org.xml.sax.SAXException;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.XsltUtil;
 
 /**
  * The XMLServlet is a basic servlet for retrieving data from MMBase. A remote
  * system can request content and this Servlet will access MMBase, generate the
  * proper XML and send it back.
- *
+ * 
  * @author Nico Klasens
  */
 @SuppressWarnings("serial")
@@ -39,7 +38,7 @@ public class XMLServlet extends HttpServlet {
    /**
     * MMBase logging system
     */
-   static final Logger log = Logging.getLoggerInstance(XMLServlet.class.getName());
+   static Logger log = Logging.getLoggerInstance(XMLServlet.class.getName());
 
    private static final String CHANNEL = "channel";
    private static final String CONTENT_TYPE = "contentType";
@@ -58,11 +57,10 @@ public class XMLServlet extends HttpServlet {
     */
    public static final String CS = "/";
 
-   private XMLController xmlController;
+   private final XMLController xmlController;
 
-   @Override
-   public void init() throws ServletException {
-      super.init();
+
+   public XMLServlet() {
       List<String> disallowedTypes = getDisallowedTypes();
       List<String> allowedTypes = getAllowedTypes();
 
@@ -75,6 +73,7 @@ public class XMLServlet extends HttpServlet {
       xmlController = new XMLController(disallowedRelationTypes, allowedRelationTypes, disallowedTypes, allowedTypes,
             disallowedFields, allowedFields);
    }
+
 
    protected List<String> getAllowedFields() {
       return null;
@@ -110,7 +109,7 @@ public class XMLServlet extends HttpServlet {
     * This method handles all requests, checks the request to see what data is
     * required and calls the proper methods for creating the xml. After
     * processing the proper XML is written out to the HttpServletResponse.
-    *
+    * 
     * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest,
     *      javax.servlet.http.HttpServletResponse)
     * @param request
@@ -125,7 +124,7 @@ public class XMLServlet extends HttpServlet {
 
       // Primary key request
       String pk = request.getParameter(PK);
-      if (StringUtils.isNotBlank(pk)) {
+      if (!StringUtil.isEmptyOrWhitespace(pk)) {
          processSingle(response, cloud, xsl, pk);
          return;
       }
@@ -155,7 +154,7 @@ public class XMLServlet extends HttpServlet {
       for (int i = 0; i < contentTypes.length; i++) {
          log.debug("CONTENTTYPE " + contentTypes[i]);
 
-         if (StringUtils.isBlank(contentTypes[i])) {
+         if (StringUtil.isEmptyOrWhitespace(contentTypes[i])) {
             sendError("Content type is empty", response);
             return;
          }
@@ -185,8 +184,9 @@ public class XMLServlet extends HttpServlet {
          else {
             xml = xmlController.toXml(node, RepositoryUtil.CONTENTCHANNEL);
          }
-         String transformedXml = transformXml(xsl, xml);
-         HttpUtil.sendXml(transformedXml, response);
+         xml = transformXml(xsl, xml);
+         HttpUtil.sendXml(xml, response);
+         return;
       }
       catch (IOException e) {
          if (log.isDebugEnabled()) {
@@ -225,7 +225,8 @@ public class XMLServlet extends HttpServlet {
 
    protected Cloud getCloud() {
       // This cloud can only be read from.
-      return CloudProviderFactory.getCloudProvider().getAnonymousCloud();
+      Cloud cloud = CloudProviderFactory.getCloudProvider().getAnonymousCloud();
+      return cloud;
    }
 
 
@@ -233,7 +234,7 @@ public class XMLServlet extends HttpServlet {
          List<String> contentTypes, String fromIndex, String toIndex, String filterName, String filterValue,
          String sortName, String sortDirection, String previewdateParam, String numbersOnly) {
 
-      if (StringUtils.isBlank(channel)) {
+      if (StringUtil.isEmptyOrWhitespace(channel)) {
          sendError("Channel is empty", response);
          return;
       }
@@ -263,7 +264,7 @@ public class XMLServlet extends HttpServlet {
       int offSet = -1;
       int maxNumber = -1;
 
-      if (StringUtils.isNotBlank(fromIndex) && StringUtils.isNotBlank(toIndex)) {
+      if (!StringUtil.isEmptyOrWhitespace(fromIndex) && !StringUtil.isEmptyOrWhitespace(toIndex)) {
          offSet = getInt(fromIndex, 0);
          maxNumber = Math.max(getInt(toIndex, -1) - getInt(fromIndex, 0), -1);
       }
@@ -275,8 +276,8 @@ public class XMLServlet extends HttpServlet {
       NodeManager queryNodeManager = query.getNodeManager();
 
       // add other constraints
-      if (StringUtils.isNotBlank(filterName) && StringUtils.isNotBlank(filterValue)) {
-         // check if field exists
+      if (!StringUtil.isEmptyOrWhitespace(filterName) && !StringUtil.isEmptyOrWhitespace(filterValue)) {
+         // check if field exsists
          if (queryNodeManager.hasField(filterName)) {
             Field field = queryNodeManager.getField(filterName);
             FieldValueConstraint constraint = query.createConstraint(query.getStepField(field),
@@ -292,7 +293,7 @@ public class XMLServlet extends HttpServlet {
       if (previewdateParam != null) {
          Integer date = null;
          if (previewdateParam.matches("^\\d+$")) {
-            date = Integer.valueOf(previewdateParam);
+            date = new Integer(previewdateParam);
             ContentElementUtil.addLifeCycleConstraint(query, date);
          }
       }
@@ -300,17 +301,17 @@ public class XMLServlet extends HttpServlet {
       int contentSize = Queries.count(query);
 
       NodeList contentlist = queryNodeManager.getList(query);
+      String xml = "";
       try {
-         String xml = "";
-         if (Boolean.parseBoolean(numbersOnly)) {
+         if (Boolean.valueOf(numbersOnly).booleanValue()) {
             xml = xmlController.toXmlNumbersOnly(channelNode, contentlist, contentSize);
          }
          else {
             xml = xmlController.toXml(channelNode, contentlist, contentSize);
          }
 
-         String transformedXml = transformXml(xsl, xml);
-         HttpUtil.sendXml(transformedXml, response);
+         xml = transformXml(xsl, xml);
+
       }
       catch (IOException e) {
          if (log.isDebugEnabled()) {
@@ -347,13 +348,15 @@ public class XMLServlet extends HttpServlet {
          sendError("Creating xml failed", response);
          return;
       }
+
+      HttpUtil.sendXml(xml, response);
    }
 
 
    private String transformXml(String xsl, String xml) throws IOException, TransformerException {
-      if (StringUtils.isNotEmpty(xsl)) {
+      if (!StringUtil.isEmpty(xsl)) {
          // get xslt source and xml source
-         InputStream xslSrc = Thread.currentThread().getContextClassLoader().getResourceAsStream(xsl);
+         InputStream xslSrc = getClass().getClassLoader().getResourceAsStream(xsl);
          // transform
          XsltUtil xsltUtil = new XsltUtil(xml, xslSrc, null);
          xml = xsltUtil.transformToString(null);
@@ -370,7 +373,7 @@ public class XMLServlet extends HttpServlet {
    /**
     * Retrieves the int-value held in a String. This method will return the
     * default value if the String could not be properly parsed.
-    *
+    * 
     * @param value
     *           The String holding the int value.
     * @param dflt
@@ -390,7 +393,7 @@ public class XMLServlet extends HttpServlet {
 
    /**
     * This method sends an error-response to the HttpServletResponse.
-    *
+    * 
     * @param error
     *           The error to output.
     * @param response

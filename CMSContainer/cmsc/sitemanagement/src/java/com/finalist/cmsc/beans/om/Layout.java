@@ -11,7 +11,7 @@ package com.finalist.cmsc.beans.om;
 
 import java.util.*;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 /**
  * @author Wouter Heijke
@@ -71,7 +71,7 @@ public class Layout extends NodeBean implements Comparable<Layout> {
          definitions = new ArrayList<Integer>();
          allowedDefinitions.put(name, definitions);
       }
-      Integer nr = Integer.valueOf(number);
+      Integer nr = new Integer(number);
       if (!definitions.contains(nr)) {
          definitions.add(nr);
       }

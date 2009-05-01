@@ -10,14 +10,13 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.richtext.builders;
 
 import org.mmbase.module.Module;
-import org.mmbase.module.core.MMBase;
-import org.mmbase.module.core.MMObjectNode;
+import org.mmbase.module.core.*;
 import org.mmbase.module.corebuilders.InsRel;
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
+
+import org.mmbase.util.logging.*;
 
 public class InlineRel extends InsRel {
-   static final Logger log = Logging.getLoggerInstance(InlineRel.class.getName());
+   static Logger log = Logging.getLoggerInstance(InlineRel.class.getName());
    MMBase mmbaseroot = null;
 
 
@@ -29,7 +28,7 @@ public class InlineRel extends InsRel {
 
       node.setValue("referid", mmbaseroot.getStorageManager().createKey() + "");
    }
-
+   
    /**
     * This method is here to solve
     * MMB-1713  Bridge transaction always commits nodes even when not changed
@@ -44,4 +43,5 @@ public class InlineRel extends InsRel {
       }
       return super.commit(node);
    }
+
 }

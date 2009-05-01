@@ -11,12 +11,7 @@ package com.finalist.cmsc.portlets;
 
 import java.io.IOException;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
 
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
@@ -28,13 +23,13 @@ public class JspPortlet extends CmscPortlet {
 
    private static final String VIEW = "view";
 
+
    /**
-    * @see com.finalist.cmsc.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
+    * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
     *      javax.portlet.ActionResponse)
     */
    @Override
-   public void processEditDefaults(ActionRequest request, ActionResponse response)
-         throws PortletException, IOException {
+   public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       getLogger().debug("===>MenuPortlet.EDIT mode");
       PortletPreferences preferences = request.getPreferences();
       String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
@@ -43,25 +38,25 @@ public class JspPortlet extends CmscPortlet {
       if (action == null) {
          response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
       }
-      else
-         if (action.equals("edit")) {
-            if (portletId != null) {
-               // get the values submitted with the form
-               setPortletView(portletId, request.getParameter(VIEW));
-            }
-            else {
-               getLogger().error("No portletId");
-            }
+      else if (action.equals("edit")) {
+         if (portletId != null) {
+            // get the values submitted with the form
+            setPortletView(portletId, request.getParameter(VIEW));
          }
          else {
-            getLogger().error("Unknown action: '" + action + "'");
+            getLogger().error("No portletId");
          }
-      super.processEditDefaults(request, response);
+         // switch to View mode
+         response.setPortletMode(PortletMode.VIEW);
+      }
+      else {
+         getLogger().error("Unknown action: '" + action + "'");
+      }
    }
 
+
    @Override
-   protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException,
-         PortletException {
+   protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException, PortletException {
       addViewInfo(req);
       super.doEditDefaults(req, res);
    }

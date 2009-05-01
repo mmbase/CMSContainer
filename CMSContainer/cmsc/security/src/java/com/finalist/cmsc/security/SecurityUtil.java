@@ -11,25 +11,24 @@ package com.finalist.cmsc.security;
 
 import java.util.*;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.security.implementation.cloudcontext.builders.Contexts;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.TreePathComparator;
 import com.finalist.cmsc.mmbase.TreeUtil;
+import com.finalist.cmsc.security.builders.Contexts;
 import com.finalist.cmsc.util.NameUtil;
 
 
-public final class SecurityUtil {
+public class SecurityUtil {
 
 
     /** MMbase logging system */
-    private static final Logger log = Logging.getLoggerInstance(SecurityUtil.class.getName());
+    private static Logger log = Logging.getLoggerInstance(SecurityUtil.class.getName());
 
     private static final String CMSC_USERROLES = "cmsc.userroles.";
 
@@ -44,14 +43,14 @@ public final class SecurityUtil {
     public static final String NUMBER_FIELD = "number";
     public static final String USERNAME_FIELD = "username";
     public static final String ROLE_FIELD = "role";
-
+    
     private static final String DESTINATION = "DESTINATION";
     private static final String SOURCE = "SOURCE";
 
     private SecurityUtil() {
         // utility
     }
-
+    
     public static Node getUserNode(Cloud userCloud) {
 //        User user = (User) userCloud.getUser();
 //        return userCloud.getNode(user.getNode().getNumber());
@@ -61,7 +60,7 @@ public final class SecurityUtil {
     public static Node getUserNode(Cloud cloud, String username) {
         return SearchUtil.findNode(cloud, USER, USERNAME_FIELD, username);
     }
-
+    
     public static boolean isLoggedInUser(Cloud cloud, Node userNode) {
 //        User user = (User) cloud.getUser();
         return cloud.getUser().getIdentifier().equals(userNode.getStringValue(USERNAME_FIELD));
@@ -106,7 +105,7 @@ public final class SecurityUtil {
        }
        return resultRole;
     }
-
+    
     public static Map<Integer,UserRole> buildRolesFromRequest(HttpServletRequest request) {
         Map<Integer,UserRole> roles = new HashMap<Integer,UserRole>();
         Enumeration<String> requestEnum = request.getParameterNames();
@@ -115,10 +114,10 @@ public final class SecurityUtil {
            if (name.startsWith("role_")) {
               String role = request.getParameter(name);
               if (!role.equals("-1")) {
-                 roles.put( Integer.valueOf(name.substring(5)), new UserRole( Integer.parseInt(role),false));
+                 roles.put( new Integer(name.substring(5)), new UserRole( Integer.parseInt(role),false));
               }
               else {
-                 roles.put( Integer.valueOf(name.substring(5)), null);
+                 roles.put( new Integer(name.substring(5)), null);
               }
            }
         }
@@ -132,7 +131,7 @@ public final class SecurityUtil {
         return getLoggedInRoleMap(cloud, treeManagers, relationName);
     }
 
-
+    
     public static TreeMap<String, UserRole> getLoggedInRoleMap(Cloud cloud,  LinkedHashMap<String,String> treeManagers,
             String relationName) {
 
@@ -163,7 +162,7 @@ public final class SecurityUtil {
 		            Node extraGroup = groups.getNode(i);
 		            fillChannelsWithRole(extraGroup, extraRoles, treeManagers, relationName);
 
-                  // upgrade user role map based on the data of the new group data map
+		            // upgrade user role map based on the data of the new group data map
                   for (Map.Entry<String, UserRole> entry : channelsWithRole.entrySet()) {
                      String path = entry.getKey();
                      UserRole userRole = entry.getValue();
@@ -172,7 +171,7 @@ public final class SecurityUtil {
                          channelsWithRole.put(path, newGroupRole);
                      }
                  }
-
+                 
                  // add missing data to user role map based on new group data map
                  for (Map.Entry<String, UserRole> entry : extraRoles.entrySet()) {
                      String extraPath = entry.getKey();
@@ -219,18 +218,18 @@ public final class SecurityUtil {
         checkGroup(group);
         Cloud cloud = group.getCloud();
         List<String> managers = TreeUtil.convertToList(treeManagers);
-
+        
         for (int i = managers.size() - 1; i >= 0; i--) {
             String managerName = managers.get(i);
 
             if (cloud.hasRelationManager(GROUP, managerName, ROLEREL)) {
                 // retrieve a list of all channels with a rolerel to this group
-                NodeList channelNodeList = cloud.getList(null,
-                        managerName + "," + ROLEREL + "," + GROUP,
-                        ROLEREL + "." + ROLE_FIELD+ ", " + managerName + "." + NUMBER_FIELD,
+                NodeList channelNodeList = cloud.getList(null, 
+                        managerName + "," + ROLEREL + "," + GROUP, 
+                        ROLEREL + "." + ROLE_FIELD+ ", " + managerName + "." + NUMBER_FIELD, 
                         "[" + GROUP + "." + NUMBER_FIELD + "] = " + group.getNumber(),
                         null, null, null, true);
-
+    
                 NodeIterator nodeIterator = channelNodeList.nodeIterator();
                 while (nodeIterator.hasNext()) {
                     Node channelRoleGroupNode = nodeIterator.nextNode();
@@ -243,26 +242,26 @@ public final class SecurityUtil {
             }
         }
     }
-
+    
     public static void setGroupRights(Cloud cloud, Node group, Map<Integer, UserRole> rights, String managerName) {
         checkGroup(group);
         List<String> treeManagers = new ArrayList<String>();
         treeManagers.add(managerName);
         setGroupRights(cloud, group, rights, treeManagers);
     }
-
+    
     public static void setGroupRights(Cloud cloud, Node group, Map<Integer, UserRole> rights, List<String> treeManagers) {
         checkGroup(group);
         clearUserRoles(cloud, treeManagers);
-
+        
         List<Integer> rolesDone = new ArrayList<Integer>();
-
+        
         for (String managerName : treeManagers) {
             if (cloud.hasRelationManager(GROUP, managerName, ROLEREL)) {
                 RelationList list = group.getRelations(ROLEREL, cloud.getNodeManager(managerName), DESTINATION);
                 for (RelationIterator iter = list.relationIterator(); iter.hasNext();) {
                    Relation rolerel = iter.nextRelation();
-                   Integer channelNumber = Integer.valueOf(rolerel.getDestination().getNumber());
+                   Integer channelNumber = new Integer(rolerel.getDestination().getNumber());
                    if (rights.containsKey(channelNumber)) {
                       rolesDone.add(channelNumber);
                       UserRole role = rights.get(channelNumber);
@@ -301,21 +300,21 @@ public final class SecurityUtil {
             }
         }
     }
-
+    
     public static void addRole(Cloud cloud, String channelNumber, Node group, Role role, List<String> treeManagers) {
         Node channelNode = cloud.getNode(channelNumber);
         addRole(cloud, channelNode, group, role, treeManagers);
     }
-
+    
     public static void addRole(Cloud cloud, Node channelNode, Node group, Role role,  List<String> treeManagers) {
         addRole(group, channelNode, role);
         clearUserRoles(cloud, treeManagers);
     }
-
+    
     public static void addRole(Node group, Node channelNode, Role role) {
         checkGroup(group);
 
-        RelationManager rolemanager =
+        RelationManager rolemanager = 
             group.getCloud().getRelationManager(GROUP, channelNode.getNodeManager().getName(), ROLEREL);
           Relation relation = rolemanager.createRelation(group, channelNode);
           relation.setIntValue(ROLE_FIELD, role.getId());
@@ -340,7 +339,7 @@ public final class SecurityUtil {
           }
        }
     }
-
+    
     public static boolean isWriter(UserRole role) {
         return role.getRole().getId() >= Role.WRITER.getId();
     }
@@ -419,7 +418,7 @@ public final class SecurityUtil {
                 r.delete();
             }
         }
-
+        
         clearUserRoles(cloud);
     }
 
@@ -438,7 +437,7 @@ public final class SecurityUtil {
         checkUser(user);
         return user.getRelatedNodes(GROUP, CONTAINS, SOURCE);
     }
-
+    
     public static Node getRank(Node userNode) {
         checkUser(userNode);
         Node rankNode = null;
@@ -466,7 +465,7 @@ public final class SecurityUtil {
     }
 
     public static Node getContext(Cloud cloud) {
-        int newContext = Contexts.getBuilder().getDefaultContextNode().getNumber();
+        int newContext = ((Contexts) Contexts.getBuilder()).getDefaultContextNode().getNumber();
         Node newContextNode = cloud.getNode(newContext);
         return newContextNode;
     }
@@ -474,8 +473,8 @@ public final class SecurityUtil {
     public static String getFullname(Node user) {
         checkUser(user);
 
-        return NameUtil.getFullName(user.getStringValue("firstname"),
-                user.getStringValue("prefix"),
+        return NameUtil.getFullName(user.getStringValue("firstname"), 
+                user.getStringValue("prefix"), 
                 user.getStringValue("surname"));
     }
 
@@ -491,7 +490,7 @@ public final class SecurityUtil {
             throw new IllegalArgumentException("Node " + user.getNumber() + " is not a " + USER);
         }
     }
-
+    
     private static void checkRank(Node rank) {
         if (!RANK.equals(rank.getNodeManager().getName())) {
             throw new IllegalArgumentException("Node " + rank.getNumber() + " is not a " + RANK);
@@ -529,17 +528,18 @@ public final class SecurityUtil {
               }
            }
         }
-
+        
         List<Node> users = new ArrayList<Node>();
         Iterator<Node> groupIter = groups.iterator();
         while (groupIter.hasNext()) {
            Node group = groupIter.next();
            List<Node> userNodes = getMembers(group);
-           for (Node user : userNodes) {
+           for (Iterator<Node> iterator = userNodes.iterator(); iterator.hasNext();) {
+                Node user = iterator.next();
                 addToList(users, user);
            }
         }
-
+        
         return users;
     }
 
