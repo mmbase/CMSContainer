@@ -12,7 +12,7 @@ public interface NewsletterPublicationService {
    public static final String SEND_SUCCESS = "sendSucess";
    public static final String SEND_FAIL = "sendFail";
 
-   public void deliverAllPublications();
+   public void deliverAllPublication();
 
    public void deliver(int publicationId, String email, String mimeType);
 
@@ -33,5 +33,4 @@ public interface NewsletterPublicationService {
    public List<Publication> searchPublication(int newsletterId, String title, String subject, Date startDate, Date endDate, boolean paging);
 
    public List<Publication> searchPublication(String title, String subject, String description, String intro, boolean paging);
-   
 }

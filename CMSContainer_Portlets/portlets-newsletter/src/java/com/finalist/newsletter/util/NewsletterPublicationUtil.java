@@ -16,8 +16,8 @@ import org.mmbase.bridge.NodeManager;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.navigation.PortletUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.cao.impl.NewsletterPublicationCAOImpl;
 import com.finalist.newsletter.domain.EditionStatus;
 import com.finalist.newsletter.domain.Newsletter;
@@ -144,26 +144,20 @@ public abstract class NewsletterPublicationUtil {
       Node node = relatedNewsletters.get(0);
       new POConvertUtils<Newsletter>().convert(newsletter, node);
       newsletter.setReplyAddress(node.getStringValue("replyto_mail"));
-      newsletter.setReplyName(node.getStringValue("replyto_name"));
-      newsletter.setFromAddress(node.getStringValue("from_mail"));
-      newsletter.setFromName(node.getStringValue("from_name"));
       pub.setNewsletter(newsletter);
 
       return pub;
    }
-   
-   public static String getPublicationURL(Cloud cloud, int publicationId) {
-      Node publicationNode = cloud.getNode(publicationId);
+   public static String getPublicationURL(Cloud cloud,int publciationId) {
+      Node publicationNode = cloud.getNode(publciationId);
       String hostUrl = NewsletterUtil.getServerURL();
       String newsletterPath = getNewsletterPath(publicationNode);
       return "".concat(hostUrl).concat(newsletterPath);
    }
-   
    public static String getNewsletterPath(Node newsletterPublicationNode) {
       return NavigationUtil.getPathToRootString(newsletterPublicationNode, true);
    }
-   
-   public static STATUS getStatus(Cloud cloud, int publicationId) {
+   public static STATUS getStatus(Cloud cloud,int publicationId) {
       return getPublication(cloud,publicationId).getStatus();
    }
    
@@ -172,7 +166,7 @@ public abstract class NewsletterPublicationUtil {
          Publish.publish(node);
       }
    }
-   public static void publish(Cloud cloud, int number) {
+   public static void publish(Cloud cloud ,Integer number) {
       Node node = cloud.getNode(number);
       publish(node);
    }
@@ -182,7 +176,6 @@ public abstract class NewsletterPublicationUtil {
     * @throws MessagingException 
     */
    public static void freezeEdition(Node edition) throws MessagingException {
-      //publish(edition);
       String static_html = getStaticHtml(edition.getNumber());
       edition.setStringValue("process_status", EditionStatus.FROZEN.value());
 //      edition.setValue("static_html", StringEscapeUtils.escapeHtml(static_html));
@@ -199,17 +192,14 @@ public abstract class NewsletterPublicationUtil {
       edition.setStringValue("static_html", null);
       edition.commit();
    }
-   
    /**
     * Approve a edition
     */
-   public static void approveEdition(Node edition) {
+   public static void approveEdition(Node edition,String user) {
       edition.setStringValue("process_status", EditionStatus.APPROVED.value());
-      String user=edition.getCloud().getUser().getIdentifier();
       edition.setStringValue("approved_by", user);
       edition.commit();
    }
-   
    /**
     * Revoke approval of a edition
     */
@@ -219,19 +209,19 @@ public abstract class NewsletterPublicationUtil {
    }
    
    /**
-    * change the status of the edition to be beingsend
+    * change the status of the edition to be beingsent
     */
-   public static void setBeingSend(Node edition) {
+   public static void setBeingSent(Node edition) {
       edition.setStringValue("process_status", EditionStatus.BEING_SENT.value());
       edition.commit();
    }
    /**
-    * change the status of the edition to be beingsend
+    * change the status of the edition to be beingsent
     */
-   public static void setBeingSend(int number) {
+   public static void setBeingSent(Integer number) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Node edition = cloud.getNode(number);    
-      setBeingSend(edition);
+      setBeingSent(edition);
    }
    /**
     * change the status  of a edition to be issent
@@ -240,18 +230,24 @@ public abstract class NewsletterPublicationUtil {
       edition.setStringValue("process_status", EditionStatus.IS_SENT.value());
       edition.commit();
    }
-   
+   /**
+    * change the status  of a edition to be issent
+    */
+   public static void setIsSent(Integer number) {
+      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
+      Node edition = cloud.getNode(number);  
+      setIsSent(edition);
+   }
    /**
     * get the process status  of a edition
     */
    public static String getEditionStatus(Node edition) {
       return edition.getStringValue("process_status");
    }
-   
    /**
-    * get the process status of an edition
+    * get the process status  of a edition
     */
-   public static String getEditionStatus(int number) {
+   public static String getEditionStatus(Integer number) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Node edition = cloud.getNode(number);      
       return edition.getStringValue("process_status");
@@ -268,7 +264,6 @@ public abstract class NewsletterPublicationUtil {
       subscription.setMimeType(MIMEType.HTML.type());
       return getBody(publication, subscription);
    }
-   
    private static String getBody(Publication publication, Subscription subscription)
             throws MessagingException {     
       String url = NewsletterUtil.getTermURL(publication.getUrl(), subscription

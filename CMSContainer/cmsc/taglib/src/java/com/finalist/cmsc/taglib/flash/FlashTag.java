@@ -1,7 +1,5 @@
 package com.finalist.cmsc.taglib.flash;
 
-import static org.apache.commons.lang.StringEscapeUtils.escapeJavaScript;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -16,6 +14,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,8 +41,8 @@ public class FlashTag extends SimpleTagSupport {
 
    // REQUIRED ATTRIBUTES
    private String swfUrl;
-   private String width;
-   private String height;
+   private int width;
+   private int height;
 
    // OPTIONAL ATTRIBUTES
    private String version = "9.0.0";
@@ -145,18 +144,18 @@ public class FlashTag extends SimpleTagSupport {
       builder.append("swfobject.embedSWF(");
 
       // required
-      builder.append("'").append(escapeJavaScript(getSwfUrl())).append("'");
-      builder.append(", '").append(escapeJavaScript(getId())).append("'");
-      builder.append(", '").append(escapeJavaScript(getWidth())).append("'");
-      builder.append(", '").append(escapeJavaScript(getHeight())).append("'");
-      builder.append(", '").append(escapeJavaScript(getVersion())).append("'");
+      builder.append("'").append(StringEscapeUtils.escapeJavaScript(getSwfUrl())).append("'");
+      builder.append(", '").append(StringEscapeUtils.escapeJavaScript(getId())).append("'");
+      builder.append(", '").append(StringEscapeUtils.escapeJavaScript(Integer.toString(getWidth()))).append("'");
+      builder.append(", '").append(StringEscapeUtils.escapeJavaScript(Integer.toString(getHeight()))).append("'");
+      builder.append(", '").append(StringEscapeUtils.escapeJavaScript(getVersion())).append("'");
 
       // optional, but we have to keep the order intact
       String installSwfUrl = getExpressInstallSwfUrl();
       if (installSwfUrl == null) {
          builder.append(", ").append(false);
       } else {
-         builder.append(", '").append(escapeJavaScript(installSwfUrl)).append("'");
+         builder.append(", '").append(StringEscapeUtils.escapeJavaScript(installSwfUrl)).append("'");
       }
       builder.append(", ").append(toObjectNotation(flashVars));
       builder.append(", ").append(toObjectNotation(params));
@@ -215,7 +214,7 @@ public class FlashTag extends SimpleTagSupport {
 
             if (value != null) {
                builder.append(entry.getKey()).append(": ");
-               builder.append("'").append(escapeJavaScript(value)).append("'");
+               builder.append("'").append(StringEscapeUtils.escapeJavaScript(value)).append("'");
                builder.append(delimeter);
             }
          }
@@ -259,7 +258,7 @@ public class FlashTag extends SimpleTagSupport {
     *
     * @return the width
     */
-   public String getWidth() {
+   public int getWidth() {
       return width;
    }
 
@@ -269,7 +268,7 @@ public class FlashTag extends SimpleTagSupport {
     * @param width
     *           the width to set
     */
-   public void setWidth(String width) {
+   public void setWidth(int width) {
       this.width = width;
    }
 
@@ -278,7 +277,7 @@ public class FlashTag extends SimpleTagSupport {
     *
     * @return the height
     */
-   public String getHeight() {
+   public int getHeight() {
       return height;
    }
 
@@ -288,7 +287,7 @@ public class FlashTag extends SimpleTagSupport {
     * @param height
     *           the height to set
     */
-   public void setHeight(String height) {
+   public void setHeight(int height) {
       this.height = height;
    }
 

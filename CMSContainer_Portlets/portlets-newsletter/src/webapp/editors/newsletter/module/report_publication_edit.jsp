@@ -49,44 +49,27 @@
 
    <div class="editor">
       <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
-      <c:if test="${not empty errors}">
-	  <div style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.errors'><fmt:param value="${errors}"/> </fmt:message>&nbsp;</div>
-	  </c:if>
-	  <c:remove var="errors"/>
-	  <c:if test="${not empty needajax}">
-	  <script language="JavaScript">workfor("<cmsc:staticurl page='/editors/newsletter/NewsletterEditionFreezeAjax.do?'/>","${needajax}");</script>
-	  <div id="needajax" style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;<img src="<cmsc:staticurl page='/images/loading.gif'/>" alt=""/>&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.auto'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
-	  <div id="working" style="display:none;color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.fail'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
-	  </c:if>
-	  <c:remove var="needajax"/>
       <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>
-             <cmsc:rights nodeNumber="${result.id}" var="rights"/>
                <c:if test="${result.process_status == 'concept edition'}">
                <a href="../site/NavigatorPanel.do?nodeId=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit.gif'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.editproperty'/>"></a>
                </c:if>
                <c:if test="${result.process_status != 'concept edition'}">
                <img src="<cmsc:staticurl page='/editors/gfx/icons/edit_gray.gif'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.editproperty'/>">
                </c:if>
-               <c:if test="${rights == 'chiefeditor' || rights == 'webmaster'}">
                <a href="../newsletter/NewsletterPublicationDelete.do?number=${result.id}&parent=${requestScope.newsletterId}&forward=publicationedit"><img src="<cmsc:staticurl page='/editors/gfx/icons/delete.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.remove'/>"></a>
-               </c:if>
-               <c:if test="${rights == 'chiefeditor' || rights == 'webmaster' || rights == 'editor' }">
                  <a href="../newsletter/NewsletterPublicationEdit.do?number=${result.id}&parent=${requestScope.newsletterId}&forward=publicationedit"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit_defaults.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.edit'/>"></a>
-               </c:if>
-               <c:if test="${rights == 'chiefeditor' || rights == 'webmaster' || rights == 'editor' || rights == 'writer' }">
                <a href="../newsletter/NewsletterPublicationTest.do?number=${result.id}&forward=publicationedit&newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/type/email_go.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.sendemail'/>"></a>
                <a href="../newsletter/NewsletterPublicationPublish.do?number=${result.id}&forward=publicationedit&newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/type/email_error.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.sendedition'/>"></a>
-               </c:if>
-               <c:if test="${result.process_status == 'concept edition' && (rights == 'chiefeditor' || rights == 'webmaster' || rights == 'editor' || rights == 'writer')}">
+               <c:if test="${result.process_status == 'concept edition'}">
                   <a   href="../newsletter/NewsletterEditionFreeze.do?number=${result.id}&forward=publicationedit&newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/status_finished.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.freeze'/>"></a>
                </c:if>
-               <c:if test="${result.process_status == 'Frozen' && (rights == 'chiefeditor' || rights == 'webmaster' || rights == 'editor' || rights == 'writer')}">
+               <c:if test="${result.process_status == 'Frozen'}">
                   <a href="../newsletter/NewsletterEditionDefrost.do?number=${result.id}&forward=publicationedit&newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/status_approved.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.defrost'/>"></a>
                   <a href="../newsletter/NewsletterEditionApprove.do?number=${result.id}&newsletterId=${requestScope.newsletterId}&forward=publicationedit"><img src="<cmsc:staticurl page='/editors/gfx/icons/status_published.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.approve'/>"></a>
                </c:if>
-                <c:if test="${result.process_status=='Approved' && (rights == 'chiefeditor' || rights == 'webmaster' || rights == 'editor' || rights == 'writer')}">
+                <c:if test="${result.process_status=='Approved'}">
                   <a href="../newsletter/NewsletterEditionRevoke.do?number=${result.id}&newsletterId=${requestScope.newsletterId}&forward=publicationedit"><img src="<cmsc:staticurl page='/editors/gfx/icons/status_onlive.png'/>" width="16" height="16" title="<fmt:message key='site.newsletteredition.revokeapproval'/>"></a></c:if>
                <a href="../usermanagement/pagerights.jsp?number=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/rights.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.userright'/>"></a></nobr>
             </edit:ui-tcolumn>

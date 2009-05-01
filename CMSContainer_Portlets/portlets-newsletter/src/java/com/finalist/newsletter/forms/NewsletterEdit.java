@@ -62,7 +62,7 @@ public class NewsletterEdit extends MMBaseFormlessAction {
 //         }
 
          int nodeId = Integer.parseInt(request.getParameter("objectnumber"));
-         ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?nodeId=" + nodeId+ "&fresh=fresh");
+         ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?nodeId=" + nodeId);
          if (forwardType.equals("manage")) {
             ret = mapping.findForward("newslettermanage");
          }

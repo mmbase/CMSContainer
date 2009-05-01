@@ -1,6 +1,6 @@
 <edit:ui-table items="${personForShow}" var="person" size="${totalCount}"
-               requestURI="/editors/community/SearchConditionalUser.do" bulkbox="true">
-   <edit:ui-tcolumn title="" width="62px">
+               requestURI="/editors/community/SearchConditionalUser.do">
+   <edit:ui-tcolumn title="">
       <input type="checkbox" name="chk_" value="${person.authId}"/>&nbsp;
       <c:if test="${not hiddenOperation}">
       <a href="${pageContext.request.contextPath }/editors/community/userAddInitAction.do?authid=${person.authId}&&group=${groupName},${option}">
@@ -34,42 +34,14 @@
    </edit:ui-tcolumn>
    <edit:ui-tcolumn titlekey="community.search.state">
 		<select onchange="selectState('${pageContext.request.contextPath }/editors/community/SearchConditionalUser.do?page=${page}&sortby=${param.sortby}&dir=${param.dir}&authid=${person.authId}',this)" >
-			<option value="${person.active}">${person.active}</option>
-			<option value="Unconfirmed"><fmt:message key="community.search.state.unconfirmed"/> </option>
-			<option value="Active"><fmt:message key="community.search.state.active"/></option>
-			<option value="Blocked"><fmt:message key="community.search.state.blocked"/></option>
-		</select>          
+			<option selected="selected" value="${person.active}">${person.active}</option>
+			<option value="UNCONFIRMED"><fmt:message key="community.search.state.unconfirmed"/> </option>
+			<option value="ACTIVE"><fmt:message key="community.search.state.active"/></option>
+			<option value="BLOCKED"><fmt:message key="community.search.state.blocked"/></option>
+		</select>         
    </edit:ui-tcolumn>
 </edit:ui-table>
 <script language="JavaScript">
- (function onState(){
-    var sels = document.getElementsByTagName("select");
-    for (i = 0; i < sels.length; i++) {
-        var sel = sels[i];
-        var options = sel.getElementsByTagName("option");
-        var v = options[0];
-        if ("" == v.value) {
-            options[0].parentNode.removeChild(options[0]);
-        }
-        for (j = 1; j < options.length; j++) {
-            if (v.value.toUpperCase() == options[j].value.toUpperCase()) {
-                options[j].selected=true;
-                options[0].parentNode.removeChild(options[0]);
-            }
-        }
-    }
- })();
- function selectState(url,ele){
-   surl=url+"&state="+ele.value
-   //	alert(surl);
-	window.location.href =surl;
- }
- function selectAll(value, formName, elementPrefix) {
-   var elements = document.forms[formName].elements;
-   for (var i = 0; i < elements.length; i++) {
-      if (elements[i].name.indexOf(elementPrefix) == 0) {
-          elements[i].checked = value;
-      }
-   }
-}
+ onState();
 </script>
+

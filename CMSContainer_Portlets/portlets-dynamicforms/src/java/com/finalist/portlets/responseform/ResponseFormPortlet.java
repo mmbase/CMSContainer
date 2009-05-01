@@ -27,33 +27,32 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.EmailSender;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class ResponseFormPortlet extends ContentPortlet {
 
    protected static final String PARAMETER_MAP = "parameterMap";
    protected static final String ERRORMESSAGES = "errormessages";
 
-   protected static final int DEFAULT_MAXFILESIZE = 6; // default file size in MB
-   protected static final long MEGABYTE = 1024 * 1024; // 1 MB (in bytes)
+   private static final int DEFAULT_MAXFILESIZE = 2; // default file size in Meg
+   private static final long MEGABYTE = 1024 * 1024; // 1 Meg
 
-   protected static final String ENCODING_UTF8 = "UTF-8";
+   private static final String ENCODING_UTF8 = "UTF-8";
 
-   protected static final String FIELD_PREFIX = "field_";
-   protected static final int TYPE_TEXTBOX = 1;
-   protected static final int TYPE_TEXTAREA = 2;
-   protected static final int TYPE_RADIO = 4;
-   protected static final int TYPE_CHECKBOX = 6;
-   protected static final int TYPE_ATTACHEMENT = 7;
-   protected static final String CHECKBOX_NO = "nee";
+   private static final String FIELD_PREFIX = "field_";
+   private static final int TYPE_TEXTBOX = 1;
+   private static final int TYPE_TEXTAREA = 2;
+   private static final int TYPE_RADIO = 4;
+   private static final int TYPE_CHECKBOX = 6;
+   private static final int TYPE_ATTACHEMENT = 7;
+   private static final String CHECKBOX_NO = "nee";
 //   private static final String CHECKBOX_YES = "ja";
-   protected static final String RADIO_EMPTY = "[niets gekozen]";
-   protected static final String TEXTBOX_EMPTY = "[niet ingevuld]";
-   protected static final String REGEX = " ";
-   protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
+   private static final String RADIO_EMPTY = "[niets gekozen]";
+   private static final String TEXTBOX_EMPTY = "[niet ingevuld]";
+   private static final String REGEX = " ";
+   private static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
 
    @Override
@@ -259,32 +258,32 @@ public class ResponseFormPortlet extends ContentPortlet {
             && isEmailAddress(userEmailAddress)
             && isEmailAddress(userEmailSenderAddress)) {
          try {
-            EmailSender.sendEmail(userEmailSenderAddress, userEmailSenderName, userEmailAddress,
+            EmailSender.getInstance().sendEmail(userEmailSenderAddress, userEmailSenderName, userEmailAddress,
                   userEmailSubject, userEmailText.toString());
             sent = true;
          }
          catch (UnsupportedEncodingException e) {
             getLogger().error("error in mail data: userEmailText = '" + userEmailText +"' " +
-                       " userEmailSenderName = '" + userEmailSenderName +"' " +
-                       " userEmailAddress = '" + userEmailAddress +"' " +
-                       " userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
+              		" userEmailSenderName = '" + userEmailSenderName +"' " +
+              		" userEmailAddress = '" + userEmailAddress +"' " +
+              		" userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
             getLogger().error("error sending email", e);
          }
          catch (MessagingException e) {
             getLogger().error("error in mail data: userEmailText = '" + userEmailText +"' " +
-                       " userEmailSenderName = '" + userEmailSenderName +"' " +
-                       " userEmailAddress = '" + userEmailAddress +"' " +
-                       " userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
+              		" userEmailSenderName = '" + userEmailSenderName +"' " +
+              		" userEmailAddress = '" + userEmailAddress +"' " +
+              		" userEmailSenderAddress = '" + userEmailSenderAddress +"' ");
             getLogger().error("error sending email", e);
          }
       }
       else {
-         // no need to send, but there is need to tell it was a success
+    	  // no need to send, but there is need to tell it was a success
           sent = true;
       }
       return sent;
-
    }
+
 
 
    private boolean sendResponseFormEmail(Node responseform, final String userEmailAddress, String responseformData,
@@ -325,7 +324,7 @@ public class ResponseFormPortlet extends ContentPortlet {
       }
 
       try {
-         EmailSender.sendEmail(senderEmailAddress, senderName, emailList, emailSubject, emailText.toString(),
+         EmailSender.getInstance().sendEmail(senderEmailAddress, senderName, emailList, emailSubject, emailText.toString(),
                attachment, userEmailAddress);
          sent = true;
       }

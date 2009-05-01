@@ -81,4 +81,5 @@
       </list>
     </property>
   </bean>
+   <bean name="subscriptionHService" class="com.finalist.newsletter.services.impl.NewsletterSubscriptionHibernateService" />
 </beans>

@@ -1,11 +1,6 @@
 package com.finalist.newsletter.services.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -15,17 +10,11 @@ import org.mmbase.bridge.Node;
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.PersonService;
 import com.finalist.cmsc.util.DateUtil;
-import com.finalist.newsletter.cao.NewsLetterStatisticCAO;
-import com.finalist.newsletter.cao.NewsletterCAO;
-import com.finalist.newsletter.cao.NewsletterSubscriptionCAO;
-import com.finalist.newsletter.domain.Newsletter;
-import com.finalist.newsletter.domain.Subscription;
-import com.finalist.newsletter.domain.Term;
+import com.finalist.newsletter.cao.*;
+import com.finalist.newsletter.domain.*;
 import com.finalist.newsletter.domain.StatisticResult.HANDLE;
 import com.finalist.newsletter.domain.Subscription.STATUS;
-import com.finalist.newsletter.services.CommunityModuleAdapter;
-import com.finalist.newsletter.services.NewsletterService;
-import com.finalist.newsletter.services.NewsletterSubscriptionServices;
+import com.finalist.newsletter.services.*;
 import com.finalist.newsletter.util.NewsletterSubscriptionUtil;
 
 public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptionServices {
@@ -357,32 +346,32 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
 
    public String getNewsletterNameList(int authenticationId) {
       Set<Node> newsletterList = subscriptionCAO.getNewslettersByScriptionRecord(authenticationId);
-      StringBuilder tmpTitle = new StringBuilder();
+      String tmpTitle = "";
       for (Node newsletterNode : newsletterList) {
          if (StringUtils.isNotBlank(newsletterNode.getStringValue("title"))) {
-            tmpTitle.append(newsletterNode.getStringValue("title") + ", ");
+            tmpTitle += newsletterNode.getStringValue("title") + ", ";
          }
       }
       if (tmpTitle.length() > 0) {
          return tmpTitle.substring(0, tmpTitle.length() - 2);
       } else {
-         return tmpTitle.toString();
+         return tmpTitle;
       }
 
    }
 
    public String getTermsNameList(int authenticationId) {
       Set<Node> termList = subscriptionCAO.getTermsByScriptionRecord(authenticationId);
-      StringBuilder tmpNames = new StringBuilder();
+      String tmpNames = "";
       for (Node termNode : termList) {
          if (StringUtils.isNotBlank(termNode.getStringValue("name"))) {
-            tmpNames.append(termNode.getStringValue("name") + ", ");
+            tmpNames += termNode.getStringValue("name") + ", ";
          }
       }
       if (tmpNames.length() > 0) {
          return tmpNames.substring(0, tmpNames.length() - 2);
       } else {
-         return tmpNames.toString();
+         return tmpNames;
       }
 
    }
@@ -390,18 +379,18 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
    public Set<Long> getAuthenticationIdsByTerms(int newsletterId, String terms) {
       List<Node> subscriptions = subscriptionCAO.getSubscriptionsByTerms(newsletterId, terms);
 
-      Set<Long> subscriberIds = new HashSet<Long>();
+      Set<Long> subscirberIds = new HashSet<Long>();
       for (Node subscription : subscriptions) {
-         subscriberIds.add(Long.valueOf(subscription.getIntValue("subscriber")));
+         subscirberIds.add(new Long(subscription.getIntValue("subscriber")));
       }
-      return subscriberIds;
+      return subscirberIds;
    }
 
    public Set<Long> getAuthenticationIdsByNewsletter(int newsletterId) {
       List<Subscription> subscriptions = subscriptionCAO.getSubscription(newsletterId);
       Set<Long> subscriberIds = new HashSet<Long>();
       for(Subscription subscription: subscriptions){
-         subscriberIds.add(Long.valueOf(Integer.parseInt(subscription.getSubscriberId())));
+         subscriberIds.add(new Long(Integer.parseInt(subscription.getSubscriberId())));
       }
       return subscriberIds;
    }
@@ -410,7 +399,7 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
       List<Node> subscriptions = subscriptionCAO.getAllSubscriptions();
       Set<Long> subscriberIds = new HashSet<Long>();
       for(Node subscription: subscriptions){
-         subscriberIds.add(Long.valueOf(subscription.getIntValue("subscriber")));
+         subscriberIds.add(new Long(subscription.getIntValue("subscriber")));
       }
       return subscriberIds;
    }
@@ -425,29 +414,5 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
       }
    }
    
-   public List<Subscription>  getSubscriptions(String[] allowedLetters, int userId) {
-      List<Subscription> subscriptionList = new ArrayList<Subscription>();
-      if (null != allowedLetters) {
-         for (String allowedLetter : allowedLetters) {
-            Subscription subscription = getSubscription(allowedLetter, Integer.toString(userId));
-            if(subscription.getId() != 0) {
-               subscriptionList.add(subscription);
-            }
-         }
-      }
-      return subscriptionList;
-   } 
 
-   public void deleteSubscriptionsByAuthId(Long anthId) {
-      subscriptionCAO.deleteSubscriptionsByAuthId(anthId);
-   } 
-   
-   public List<Object[]> getSubscribersRelatedInfo(Set<Long> authenticationIds, String fullName, String userName, String email, boolean paging) {
-      return personService.getSubscribersRelatedInfo(authenticationIds, fullName, userName, email, paging);
-   }
-   
-   public int getSubscribersRelatedInfoCount(Set<Long> authenticationIds, String fullName, String userName, String email, boolean paging) {
-      return personService.getSubscribersRelatedInfoCount(authenticationIds, fullName, userName, email, paging);
-   }
- 
 }

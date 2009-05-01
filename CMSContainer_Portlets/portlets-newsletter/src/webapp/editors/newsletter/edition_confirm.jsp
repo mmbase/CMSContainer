@@ -12,6 +12,7 @@
    </style>
 </cmscedit:head>
 <mm:import externid="number" required="true" from="parameters"/>
+<mm:import externid="forward"  from="parameters"/>
 <mm:import externid="newsletterId"/>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <body>
@@ -39,7 +40,7 @@
       </fmt:message>
    </p>
    <form action="?">
-      <input type="hidden" name="forward" value="${param.forward}"/>      
+      <input type="hidden" name="forward" value="${forward}"/>      
       <input type="hidden" name="newsletterId" value="${newsletterId}"/>
       <html:hidden property="number" value="${number}" />
       <html:submit property="save"><fmt:message key="confirm_send.yes"/></html:submit>&nbsp;

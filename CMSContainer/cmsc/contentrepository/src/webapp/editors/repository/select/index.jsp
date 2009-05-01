@@ -57,8 +57,8 @@
 			window.onresize= resizeTree;
 
 			function resizeTree() {
-			  if(window.frames["selectchannels"].resizeTreeDiv) {
-			  	window.frames["selectchannels"].resizeTreeDiv();
+			  if(document.frames["selectchannels"].resizeTreeDiv) {
+			  	document.frames["selectchannels"].resizeTreeDiv();
 			  }
 			}
 		</script>

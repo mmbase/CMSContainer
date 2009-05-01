@@ -1,4 +1,7 @@
 <%@include file="globals.jsp"
+%><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
+%><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"
+%><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc"
 %><%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -15,7 +18,7 @@
 
       <div class="editor">
          <div class="body">
-            <form method="post" name="form" action="SubscriptionManagement.do">
+            <form method="POST" name="form" action="SubscriptionManagement.do">
                <input type="hidden" name="action" value="listSubscriptionByPerson"/>
                <input type="hidden" name="subsriberId" value="${requestScope.subsriberId}"/>
                <table border="0">
@@ -45,3 +48,5 @@
    </body>
 </html>
 </mm:content>
+
+

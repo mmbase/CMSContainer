@@ -97,22 +97,6 @@ function updateErrormesg(el, err, silent) {
     }
 }
 
-function updatePrompt(el, err, silent) {
-    var prompt = document.getElementById("prompt_" + el.name);
-    if (prompt && !silent) {
-        var orgprompt = prompt.getAttribute("prompt");
-        var description = prompt.getAttribute("description");
-        if (err.length > 0) {
-            prompt.title = description+" \n\n"+getToolTipValue(form,"message_thisnotvalid",
-                                  "This field is not valid")+":\n "+err;
-            prompt.className = "notvalid";
-        } else {
-            prompt.className = "valid";
-            prompt.title = description;
-        }
-    }
-}
-
 function updateButtons(allvalid) {
     var savebut = document.getElementById("bottombutton-save");
     var saveonlybut = document.getElementById("bottombutton-saveonly");
@@ -175,12 +159,6 @@ function resizeEditTable() {
             textareas[i].style.width = '99%';
         }
     }
-
-    var iframes = document.getElementsByTagName("iframe");
-
-    for (var i = 0 ; i < iframes.length ; i++) {
-        iframes[i].style.width = '99%';
-    }
 }
 
 function inits(){
@@ -194,9 +172,7 @@ function inits(){
       }
    }
 
-  if(calvalue == null  || calvalue == "") {
-    return;
-  }
+  if(calvalue == null  || calvalue == "") return;
 
   var calendartype =document.getElementById("calendar-type");
   var calendarexpression =document.getElementById("calendar-expression");
@@ -206,12 +182,13 @@ function inits(){
      if(expression != null && expression.length >0) {
        type = expression[0];
      }
-     calendartype.options[type].selected = true;
+     calendartype.options[type-1].selected = true;
+
      if(type == '1') {
         message += "Once,start datetime:"+expression[1]+" "+expression[2]+":"+expression[3];
      }
      else if(type == '2') {
-        message += "Per day,start datetime:"+expression[1]+" "+expression[2]+":"+expression[3];
+        message += "Days of years,start datetime:"+expression[1]+" "+expression[2]+":"+expression[3];
         if(expression[4] == "0") {
             message += "<br/>  dayly"; 
          }
@@ -219,12 +196,12 @@ function inits(){
             message += "<br/>  weekday"; 
          }
           else if(expression[4] == "2") {
-            message += "<br/>   frequency: "+expression[5] +" day(s) "; 
+            message += "<br/>   day of year: "+expression[5]; 
          }
      }
      else if(type == '3') {
-         message += "Per week,start time:"+expression[1]+":"+expression[2];
-         message += "<br/> frequency: "+expression[3]+" week(s) ";
+         message += "weeks of year,start time:"+expression[1]+":"+expression[2];
+         message += "<br/> week of year "+expression[3];
 
         var varWeek = "";
         for(var i = 0 ; i < expression[4].length;i++) {
@@ -259,10 +236,10 @@ function inits(){
         message += "<br/> week: "+varWeek;
      }
      else if(type == '4') {
-         message += "Per month,start time:"+expression[1]+":"+expression[2];
+         message += "Months of year,start time:"+expression[1]+":"+expression[2];
          var months = "";
           if(expression[3] == "0") {
-            message += "<br/> months: "+expression[4]+"";
+            message += "<br/> day of month: "+expression[4]+"";
              if(expression[4] == "1") {
                message += "st";
             }
@@ -368,36 +345,4 @@ function inits(){
 
      }
   calendarexpression.innerHTML  = message;
-}
-
-function resetCalendar(calendarType,fieldName) {
-   if(calendarType == '0') {
-      document.getElementById('calendar-expression').innerHTML='';
-      document.getElementById(fieldName).value='';
-   }
-}
-
-function selectAssets(ele,type){
-    Data[type] = ele.value;
-}
-
-var Data = {
-    attachments: "",
-	images:"",
-	urls:""
-}
-
-function getAssets(type, channelid){    
-    //alert(Data[type]);
-	var iWidth=800; 
-    var iHeight=200;
-	var xposition = 0;
-            var yposition = 0;
-            if ((parseInt(navigator.appVersion) >= 4)) {
-                xposition = (screen.width-iWidth ) / 2;
-                yposition = (screen.height-iHeight - 25) / 2;
-            }
-	var url='../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assettypes='+type+'&strict='+type;
-	window.open(url, 
-	'contentselector', 'width=730,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,left='+xposition+',top='+yposition+',menubar=no');
 }

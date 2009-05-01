@@ -80,7 +80,8 @@ public class CmscPortlet extends GenericPortlet {
     * Answers whether the given {@link PortletMode} is restricted for this {@link Portlet} instance.
     * If a certain mode is restricted, an authorized user is required to continue the request.
     * 
-    * @param mode the mode to check
+    * @param mode
+    *           the mode to check
     * @return <code>true</code> if the given mode is restricted, <code>false</code> otherwise.
     */
    protected boolean isRestrictedPortletMode(PortletMode mode) {
@@ -123,18 +124,19 @@ public class CmscPortlet extends GenericPortlet {
    }
 
    /*
-    * @see javax.portlet.GenericPortlet#processAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse)
+    * @see javax.portlet.GenericPortlet#processAction(javax.portlet.ActionRequest,
+    *      javax.portlet.ActionResponse)
     */
    @Override
    public void processAction(ActionRequest req, ActionResponse res) throws PortletException, IOException {
       if (getLogger().isDebugEnabled()) {
          getLogger().debug("===> process " + getPortletName() + " mode = " + req.getPortletMode());
       }
-      
-      if (isRequestAllowed(req)) {
-         
-         PortletMode mode = req.getPortletMode();
 
+      if (isRequestAllowed(req)) {
+
+         PortletMode mode = req.getPortletMode();
+   
          if (mode.equals(PortletMode.VIEW)) {
             processView(req, res);
          }
@@ -168,19 +170,16 @@ public class CmscPortlet extends GenericPortlet {
       }
    }
 
-   @SuppressWarnings("unused")
    public void processPrint(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
    }
 
-   @SuppressWarnings("unused")
    public void processPreview(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
    }
-   
-   @SuppressWarnings("unused") 
+
    public void processHelp(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
@@ -215,30 +214,25 @@ public class CmscPortlet extends GenericPortlet {
       response.setPortletMode(PortletMode.VIEW);
    }
 
-   @SuppressWarnings("unused")
    protected void saveParameters(ActionRequest request, String portletId) {
       // convenience method
    }
 
-   @SuppressWarnings("unused")
    public void processEdit(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
    }
 
-   @SuppressWarnings("unused") 
    public void processConfig(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
    }
 
-   @SuppressWarnings("unused") 
    public void processAbout(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
    }
 
-   @SuppressWarnings("unused") 
    public void processView(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {
       // convenience method
@@ -365,12 +359,57 @@ public class CmscPortlet extends GenericPortlet {
     * @param template
     */
    protected void setResourceBundle(RenderRequest req, String template) {
-      String baseName = getResourceBaseName(template);
+      String baseName = null;
+      if (StringUtils.isNotEmpty(template)) {
+         int extnsionIndex = template.lastIndexOf(".");
+         if (extnsionIndex > -1) {
+            baseName = template.substring(0, extnsionIndex);
+         }
+         else {
+            baseName = template;
+         }
+      }
 
       List<Locale> locales = getLocales(req);
       int count = 0;
       for (Locale locale : locales) {
-         ResourceBundle bundle = getResourceBundle(locale, baseName);
+         ResourceBundle bundle = null;
+         CombinedResourceBundle cbundle = null;
+
+         while (StringUtils.isNotEmpty(baseName)) {
+            try {
+               ResourceBundle otherbundle = ResourceBundle.getBundle(baseName, locale);
+               if (cbundle == null) {
+                  cbundle = new CombinedResourceBundle(otherbundle);
+               }
+               else {
+                  cbundle.addBundles(otherbundle);
+               }
+            }
+            catch (java.util.MissingResourceException mre) {
+               log.debug("Resource bundel not found for basename " + baseName);
+            }
+            int lastIndex = baseName.lastIndexOf("/");
+            if (lastIndex > -1) {
+               baseName = baseName.substring(0, lastIndex);
+            }
+            else {
+               baseName = null;
+            }
+         }
+         ResourceBundle portletbundle = getResourceBundle(locale);
+         if (portletbundle == null) {
+            bundle = cbundle;
+         }
+         else {
+            if (cbundle == null) {
+               bundle = portletbundle;
+            }
+            else {
+               cbundle.addBundles(portletbundle);
+               bundle = cbundle;
+            }
+         }
 
          // this is JSTL specific, but the problem is that a RenderRequest is
          // not a ServletRequest
@@ -386,61 +425,6 @@ public class CmscPortlet extends GenericPortlet {
             count++;
          }
       }
-   }
-
-   protected String getResourceBaseName(String template) {
-      String baseName = null;
-      if (StringUtils.isNotEmpty(template)) {
-         int extensionIndex = template.lastIndexOf(".");
-         if (extensionIndex > -1) {
-            baseName = template.substring(0, extensionIndex);
-         }
-         else {
-            baseName = template;
-         }
-      }
-      return baseName;
-   }
-
-   protected ResourceBundle getResourceBundle(Locale locale, String baseName) {
-      ResourceBundle bundle = null;
-      CombinedResourceBundle cbundle = null;
-
-      while (StringUtils.isNotEmpty(baseName)) {
-         try {
-            ResourceBundle otherbundle = ResourceBundle.getBundle(baseName, locale);
-            if (cbundle == null) {
-               cbundle = new CombinedResourceBundle(otherbundle);
-            }
-            else {
-               cbundle.addBundles(otherbundle);
-            }
-         }
-         catch (java.util.MissingResourceException mre) {
-            log.debug("Resource bundel not found for basename " + baseName);
-         }
-         int lastIndex = baseName.lastIndexOf("/");
-         if (lastIndex > -1) {
-            baseName = baseName.substring(0, lastIndex);
-         }
-         else {
-            baseName = null;
-         }
-      }
-      ResourceBundle portletbundle = getResourceBundle(locale);
-      if (portletbundle == null) {
-         bundle = cbundle;
-      }
-      else {
-         if (cbundle == null) {
-            bundle = portletbundle;
-         }
-         else {
-            cbundle.addBundles(portletbundle);
-            bundle = cbundle;
-         }
-      }
-      return bundle;
    }
 
    @Override

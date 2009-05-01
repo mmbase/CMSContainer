@@ -1,6 +1,7 @@
 package com.finalist.cmsc.mmbase;
 
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
@@ -71,48 +72,6 @@ public class PropertiesUtil {
       return getProp(key, cloud);
    }
 
-   /**
-    * Returns the list of values of the field <CODE>field</CODE> of the node whose id
-    * equals <CODE>key</CODE>.
-    * 
-    * @param key
-    *           The node-id of the properties node to be retrieved.
-    * @return The list of values of the properties node.
-    */
-   public static List<String> getPropertyAsList(String key) {
-      return getPropertyAsList(key, CloudProviderFactory.getCloudProvider().getCloud());
-   }
-   
-   /**
-    * Returns the list of values of the field <CODE>field</CODE> of the node whose id
-    * equals <CODE>key</CODE>.
-    * 
-    * @param key
-    *           The node-id of the properties node to be retrieved.
-    * @param cloud
-    *           cloud to read property from.
-    * @return The list of values of the properties node.
-    */
-   public static List<String> getPropertyAsList(String key, Cloud cloud) {
-      if (DEFAULT.equals(environment)) {
-         setEnvironment(cloud);
-         log.debug("Environment " + environment);
-      }
-      String prop = getProp(key, cloud);
-      return convertToList(prop);
-   }
-
-   private static List<String> convertToList(String prop) {
-      List<String> list = new ArrayList<String>();
-      StringTokenizer tokenizer = new StringTokenizer(prop, ", \t\n\r\f");
-      while (tokenizer.hasMoreTokens()) {
-         String str = tokenizer.nextToken();
-         list.add(str);
-      }
-      return list;
-   }
-
-
 
    private static void setEnvironment(Cloud cloud) {
       String propertyKey = "mmservers";
@@ -150,7 +109,7 @@ public class PropertiesUtil {
 
 
    private static Node getPropertyNodes(Cloud cloud, String propertyKey) {
-      NodeManager propertiesManager = getPropertiesNodeManager(cloud);
+      NodeManager propertiesManager = cloud.getNodeManager("properties");
       NodeQuery query = propertiesManager.createQuery();
       Field keyField = propertiesManager.getField("key");
       FieldValueConstraint constraint = query.createConstraint((query.getStepField(keyField)),
@@ -163,6 +122,7 @@ public class PropertiesUtil {
       }
       return null;
    }
+
 
    private static boolean isServerInEnv(String machineName, String servers) {
       String[] serversArray = servers.split(",");
@@ -207,7 +167,7 @@ public class PropertiesUtil {
 
 
    public static void setProp(Cloud cloud, String key, String value) {
-      NodeManager propertiesManager = getPropertiesNodeManager(cloud);
+      NodeManager propertiesManager = cloud.getNodeManager("properties");
       Node property = getPropertyNodes(cloud, key);
       if (property == null) {
          property = propertiesManager.createNode();
@@ -223,7 +183,7 @@ public class PropertiesUtil {
    public static Map<String, String> getModuleProperties(String module) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Map<String, String> result = new TreeMap<String, String>();
-      NodeManager propertiesManager = getPropertiesNodeManager(cloud);
+      NodeManager propertiesManager = cloud.getNodeManager("properties");
       NodeQuery query = propertiesManager.createQuery();
       Field keyField = propertiesManager.getField("module");
       FieldValueConstraint constraint = query.createConstraint((query.getStepField(keyField)),
@@ -237,13 +197,6 @@ public class PropertiesUtil {
       }
 
       return result;
-   }
-
-   private static NodeManager getPropertiesNodeManager(Cloud cloud) {
-//      if (cloud.hasNodeManager("systemproperties")) {
-//         return cloud.getNodeManager("systemproperties");
-//      }
-      return cloud.getNodeManager("properties");
    }
 
 }

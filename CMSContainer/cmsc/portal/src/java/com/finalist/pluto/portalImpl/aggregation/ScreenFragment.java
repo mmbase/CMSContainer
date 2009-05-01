@@ -13,8 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import com.finalist.cmsc.beans.om.Layout;
 import com.finalist.cmsc.beans.om.Page;
 import com.finalist.cmsc.portalImpl.PortalConstants;
-import com.finalist.cmsc.services.security.LoginSession;
-import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 
 /**
  * @author Wouter Heijke
@@ -67,44 +65,23 @@ public class ScreenFragment extends AbstractFragment {
          }
       }
 
-      LoginSession ls = SiteManagement.getLoginSession(request);
-      if (!ls.isAuthenticated()) {
-         if (expirationCache > -1) {
-            response.setHeader("Cache-Control", "maxage=" + expirationCache);
-            if (expirationCache > 30) {
-               /*
-               If a response includes both an Expires header and a max-age
-               directive, the max-age directive overrides the Expires header, even
-               if the Expires header is more restrictive.  This rule allows an
-               origin server to provide, for a given response, a longer expiration
-               time to an HTTP/1.1 (or later) cache than to an HTTP/1.0 cache.  This
-               might be useful if certain HTTP/1.0 caches improperly calculate ages
-               or expiration times, perhaps due to desynchronized clocks.
-               */
-               long now = System.currentTimeMillis();
-               response.setDateHeader("Date", now);
-               long expires = now + (expirationCache * 1000); // seconds to milliseconds
-               response.setDateHeader("Expires", expires);
-            }
-         }
+
+      long expires = System.currentTimeMillis();
+      if (expirationCache > -1) {
+         expires += expirationCache * 1000; // seconds to milliseconds
       }
+      response.setDateHeader("Expires", expires);
 
       if (page != null) {
          if (layout != null) {
-             log.debug("using layout:'" + layout.getResource() + "' for page:'" + page.getTitle() + "'");
+            log.debug("using layout:'" + layout.getResource() + "' for page:'" + page.getTitle() + "'");
 
-             request.setAttribute(PortalConstants.FRAGMENT, this);
-
-             FragmentResouceRender render = FragmentResouceRenderFactory.getRender(layout.getResource());
-
-             if (null != render) {
-                 render.render(layout.getResource(), request, response);
-             } else {
-                 RequestDispatcher rd = getMainRequestDispatcher(layout.getResource(), response.getContentType());
-                 rd.include(request, response);
-             }
-             request.removeAttribute(PortalConstants.FRAGMENT);
-         } else {
+            request.setAttribute(PortalConstants.FRAGMENT, this);
+            RequestDispatcher rd = getMainRequestDispatcher(layout.getResource(), response.getContentType());
+            rd.include(request, response);
+            request.removeAttribute(PortalConstants.FRAGMENT);
+         }
+         else {
             log.error("No layout for Screen");
          }
       }
@@ -165,12 +142,4 @@ public class ScreenFragment extends AbstractFragment {
       log.debug("getFragment: '" + id + "':'" + fragment + "'");
       return fragment;
    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Screen[page:%s(%s) layout:%s(%s)]",
-                page.getTitle(), page.getId(), layout.getNames(), layout.getId()
-        );
-    }
 }

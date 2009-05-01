@@ -6,6 +6,8 @@ import java.util.List;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -16,7 +18,10 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.newsletter.domain.NewsletterBounce;
 import com.finalist.newsletter.services.CommunityModuleAdapter;
+
 public class NewsletterBounceUtil {
+
+   private static Log log = LogFactory.getLog(NewsletterBounceUtil.class);
 
    public static List<NewsletterBounce> getBounceRecord(int offset, int pageSize, String order, String direction) {
       List<NewsletterBounce> bounces = new ArrayList<NewsletterBounce>();
@@ -31,12 +36,12 @@ public class NewsletterBounceUtil {
       NodeList bounceNodes = query.getList();
       bounces = convertNodeListToList(bounceNodes);
       if (null != order && !bounceManager.hasField(order)) {
-         bounces = newsletterSort(bounces, offset, pageSize, direction, order);
+         bounces = nesletterSort(bounces, offset, pageSize, direction, order);
       }
       return bounces;
    }
 
-   private static List<NewsletterBounce> newsletterSort(List<NewsletterBounce> bounces, int offset, int pageSize,
+   private static List<NewsletterBounce> nesletterSort(List<NewsletterBounce> bounces, int offset, int pageSize,
          String direction, String order) {
       ComparisonUtil comparator = new ComparisonUtil();
       comparator.setFields_user(new String[] { order });

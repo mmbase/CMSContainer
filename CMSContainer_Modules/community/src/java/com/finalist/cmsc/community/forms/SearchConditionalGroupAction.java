@@ -1,5 +1,6 @@
 package com.finalist.cmsc.community.forms;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class SearchConditionalGroupAction extends AbstractCommunityAction {
 
    /**
     * @param mapping goto jsp
-    * @param form get parameter
+    * @param form get paramate
     * @param request setSharedAttributes
     * @param response do nothing
     * @return ActionForward chose jsp
@@ -34,15 +35,15 @@ public class SearchConditionalGroupAction extends AbstractCommunityAction {
       SearchGroupForm searchform = (SearchGroupForm) form;
       PagingStatusHolder holder = setPagingInformation(request);
       HashMap map = getParameterMap(searchform);
-      List <Authority> authorities = getAuthorityService().getAssociatedAuthorities(map, holder);
+      List < Authority > authorities = getAuthorityService().getAssociatedAuthorities(map, holder);
       int totalCount = getAuthorityService().getAssociatedAuthoritiesNum(map, holder);
       setSharedAttributes(request, authorities, totalCount);
       return mapping.findForward("success");
    }
 
-   private void setSharedAttributes(HttpServletRequest request, List <Authority> authorities, int totalCount) {
+   private void setSharedAttributes(HttpServletRequest request, List < Authority > authorities, int totalCount) {
       request.setAttribute("totalCount", totalCount);
-      request.setAttribute("results", convertAuthorityTOVO(authorities));
+      request.setAttribute("results", convertAuthrityTOVO(authorities));
    }
 
    private PagingStatusHolder setPagingInformation(HttpServletRequest request) {
@@ -65,30 +66,24 @@ public class SearchConditionalGroupAction extends AbstractCommunityAction {
       return map;
    }
 
-   private List <GroupForShowVO> convertAuthorityTOVO(List <Authority> authorities) {
-      List <GroupForShowVO> groupForShow = new ArrayList <GroupForShowVO> ();
+   private List < GroupForShowVO > convertAuthrityTOVO(List < Authority > authorities) {
+      List < GroupForShowVO > groupForShow = new ArrayList < GroupForShowVO > ();
       for (Authority authority : authorities) {
          if (null != authority) {
             GroupForShowVO group = new GroupForShowVO();
             group.setGroupName(authority.getName());
             group.setGroupId(authority.getId().toString());
             StringBuffer userNames = new StringBuffer();
-            Set <Authentication> authentications = authority.getAuthentications();
+            Set < Authentication > authentications = authority.getAuthentications();
             if (!authentications.isEmpty()) {
-               group.setUserAmount(authentications.size());
-               
-               Iterator<Authentication> iterator = authentications.iterator();
-               int loopTimes = (authentications.size() > 10)? 10 : authentications.size();
-               for (int i = 0 ; i < loopTimes; i++) {
-                  Authentication au = iterator.next();
+               for (Authentication au : authentications) {
                   Person person = getPersonService().getPersonByAuthenticationId(au.getId());
                   if (person != null) {
-                     userNames.append(person.getFullName() + ", ");
+                     userNames.append(person.getFirstName() + " " + person.getLastName() + ", ");
                   }
                }
                group.setUsers(userNames.substring(0, userNames.length() - 2));
             } else {
-               group.setUserAmount(0);
                group.setUsers("");
             }
             groupForShow.add(group);

@@ -23,7 +23,6 @@ import com.finalist.cmsc.mmbase.TreeUtil;
 import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.security.forms.RolesInfo;
 import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
 public final class NavigationUtil {
 
@@ -76,13 +75,10 @@ public final class NavigationUtil {
     }
 
     public static void appendChild(Cloud cloud, String parent, String child) {
-       Node parentNode = cloud.getNode(parent);
-       Node childNode = cloud.getNode(child);
-       appendChild(parentNode, childNode);
+        TreeUtil.appendChild(cloud, parent, child, NAVREL);
     }
 
     public static void appendChild(Node parentNode, Node childNode) {
-        TreeUtil.uniqueChild(parentNode, childNode, treeManagers, NAVREL);
         TreeUtil.appendChild(parentNode, childNode, NAVREL);
     }
 
@@ -317,16 +313,6 @@ public final class NavigationUtil {
         return children;
     }
 
-    /**
-     * Get sorted StrictPage child nodes
-     * 
-     * @param parentNode
-     *           - parent
-     * @return list of sorted children
-     */
-    public static NodeList getStrictPageOrderedChildren(Node parentNode) {
-       return SearchUtil.findRelatedOrderedNodeList(parentNode, "page", NAVREL, NAVREL + ".pos");
-    }
 
     public static NodeList getOrderedChildren(Node parentNode) {
         return SearchUtil.findRelatedOrderedNodeList(parentNode, null, NAVREL, NAVREL + ".pos");
@@ -338,17 +324,6 @@ public final class NavigationUtil {
 
     public static int getChildCount(Node parent) {
         return TreeUtil.getChildCount(parent, "object", NAVREL);
-    }
-
-    /**
-     * Get number of strict page children
-     * 
-     * @param parent
-     *           - parent
-     * @return number of children
-     */
-    public static int getStrictPageChildCount(Node parent) {
-       return TreeUtil.getChildCount(parent, "page", NAVREL);
     }
 
     public static void movePage(Node sourcePage, Node destPage) {
@@ -521,7 +496,7 @@ public final class NavigationUtil {
      * @param request
      * @param response
      * @param parentNode
-     * @return the url of a navigation item
+     * @return
      */
 	public static String getNavigationItemUrl(HttpServletRequest request, HttpServletResponse response, Node parentNode) {
 

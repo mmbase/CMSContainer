@@ -11,17 +11,16 @@ package com.finalist.cmsc.security;
 
 import java.util.*;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.security.implementation.cloudcontext.builders.Contexts;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.TreePathComparator;
 import com.finalist.cmsc.mmbase.TreeUtil;
+import com.finalist.cmsc.security.builders.Contexts;
 import com.finalist.cmsc.util.NameUtil;
 
 
@@ -89,15 +88,7 @@ public final class SecurityUtil {
 
           // most specific keys are first in order so when the path of the channel startswith
           // the keypath we have the channel where the rights are from inherited.
-          boolean onPath = false;
-          if (path.length() == keyPath.length()) {
-             onPath = path.equals(keyPath);
-          }
-          else {
-             onPath = path.startsWith(keyPath + "/");
-          }
-          
-          if (onPath) {
+          if (path.startsWith(keyPath)) {
              UserRole userRole = channelsWithRole.get(keyPath);
              // when path is equal to the keypath than is the role not inherited
              resultRole = new UserRole(userRole.getRole(), !path.equals(keyPath));
@@ -466,7 +457,7 @@ public final class SecurityUtil {
     }
 
     public static Node getContext(Cloud cloud) {
-        int newContext = Contexts.getBuilder().getDefaultContextNode().getNumber();
+        int newContext = ((Contexts) Contexts.getBuilder()).getDefaultContextNode().getNumber();
         Node newContextNode = cloud.getNode(newContext);
         return newContextNode;
     }

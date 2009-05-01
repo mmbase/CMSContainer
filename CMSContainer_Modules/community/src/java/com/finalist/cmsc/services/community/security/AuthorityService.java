@@ -83,6 +83,4 @@ public interface AuthorityService {
     */
    int getAssociatedAuthoritiesNum(Map map, PagingStatusHolder holder);
 
-   Authority findAuthorityById(Long authorityId);
-
 }

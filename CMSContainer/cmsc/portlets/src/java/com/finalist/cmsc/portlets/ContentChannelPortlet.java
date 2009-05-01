@@ -19,10 +19,10 @@ import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.beans.om.ContentElement;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.services.contentrepository.ContentRepository;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * Portlet to edit content elements
@@ -50,7 +50,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    protected static final String DIRECTION = "direction";
    protected static final String ORDERBY = "orderby";
    protected static final String CONTENTCHANNEL = "contentchannel";
-   protected static final String MAX_DAYS = "maxDays";
 
    protected static final String VIEW_TYPE = "viewtype";
    protected static final String DISPLAY_TYPE = "displaytype";
@@ -80,7 +79,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       setPortletParameter(portletId, VIEW_TYPE, request.getParameter(VIEW_TYPE));
       setPortletNodeParameter(portletId, ARCHIVE_PAGE, request.getParameter(ARCHIVE_PAGE));
       setPortletParameter(portletId, START_INDEX, request.getParameter(START_INDEX));
-      setPortletParameter(portletId,MAX_DAYS,request.getParameter(MAX_DAYS));
    }
 
 
@@ -188,18 +186,14 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
             useLifecycleBool = false;
          }
 
-         int maxDays = Integer.parseInt(preferences.getValue(MAX_DAYS, "0"));
-         if(maxDays < 0){
-            maxDays = 0;
-         }
          int totalItems = countContentElements(req, contenttypes, channel, offset, orderby, direction, archive,
-               elementsPerPage, year, month, day, useLifecycleBool, maxDays);
+               elementsPerPage, year, month, day, useLifecycleBool);
          if (startIndex > 0) {
             totalItems = totalItems - startIndex;
          }
 
          List<ContentElement> elements = getContentElements(req, contenttypes, channel, offset, orderby, direction,
-               archive, elementsPerPage, year, month, day, useLifecycleBool, maxDays);
+               archive, elementsPerPage, year, month, day, useLifecycleBool);
 
          setAttribute(req, ELEMENTS, elements);
          if (contenttypes != null && !contenttypes.isEmpty()) {
@@ -254,20 +248,22 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,
-         boolean useLifecycleBool, int maxDays) {
+         boolean useLifecycleBool) {
       int totalItems = ContentRepository.countContentElements(channel, contenttypes, orderby, direction,
-            useLifecycleBool, archive, offset, elementsPerPage, year, month, day, maxDays);
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day);
       return totalItems;
    }
-   
+
+
    protected List<ContentElement> getContentElements(RenderRequest req, List<String> contenttypes, String channel,
          int offset, String orderby, String direction, String archive, int elementsPerPage, int year, int month,
-         int day, boolean useLifecycleBool, int maxDays) {
+         int day, boolean useLifecycleBool) {
       List<ContentElement> elements = ContentRepository.getContentElements(channel, contenttypes, orderby, direction,
-            useLifecycleBool, archive, offset, elementsPerPage, year, month, day,maxDays);
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day);
       return elements;
    }
-   
+
+
    public int getOffset(int currentPage, int pageSize) {
       return ((currentPage - 1) * pageSize) + 1;
    }

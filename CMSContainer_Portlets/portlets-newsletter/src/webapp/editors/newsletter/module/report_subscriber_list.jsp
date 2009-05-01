@@ -1,4 +1,7 @@
 <%@include file="globals.jsp"
+%><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
+%><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"
+%><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc"
 %><%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -14,7 +17,7 @@
    </edit:ui-tabs>
    <div class="editor">
       <div class="body">
-         <form method="post" name="form" action="SubscriptionManagement.do">
+         <form method="POST" name="form" action="SubscriptionManagement.do">
             <input type="hidden" name="action" value="listSubscribers"/>
             <table>
                <tr>
@@ -55,7 +58,7 @@
 </body>
 </html>
 </mm:content>
-<script type="text/javascript">
+<script>
    function exportsubscription() {
       var subscriptions = document.getElementsByName('ids');
       var hasSelection = false;
@@ -76,3 +79,5 @@
       return false;
    }
 </script>
+
+

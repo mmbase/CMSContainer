@@ -1,5 +1,8 @@
-<%@include file="/WEB-INF/templates/portletglobals.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" %>
+<%@ taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
 
 <cmsc:protected>
 	<fmt:setBundle basename="cmsc-portal" scope="request" />

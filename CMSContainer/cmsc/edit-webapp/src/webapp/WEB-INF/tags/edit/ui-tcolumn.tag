@@ -20,12 +20,7 @@
                <fmt:message key="${titlekey}"/>
             </c:when>
             <c:when test="${'' eq title}">
-               <c:if test="${not empty bulkbox && size > 1}">
-                  <input type="checkbox"  name="selectall"  onclick="selectAll(this.checked, 'selectform', 'chk_');" value="on"/>
-             </c:if>
-             <c:if test="${empty bulkbox}">
-                &nbsp;
-             </c:if>
+               &nbsp;
             </c:when>
          </c:choose>
       </c:set>
@@ -40,6 +35,7 @@
                ${content}
             </c:otherwise>
          </c:choose>
+
       </th>
    </c:when>
    <c:otherwise>

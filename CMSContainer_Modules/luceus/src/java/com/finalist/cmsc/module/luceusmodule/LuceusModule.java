@@ -70,8 +70,6 @@ public class LuceusModule extends Module {
    private List<String> excludeTypes = new ArrayList<String>();
 
    private CustomContentHandler customContentHandler;
-   
-   private CustomObjectHandler customObjectHandler;
 
    private Set<String> secondaryCache = Collections.synchronizedSet(new HashSet<String>());
 
@@ -211,7 +209,7 @@ public class LuceusModule extends Module {
          }
       }
 
-      // read customContentHandlerClass and create instance
+      // read customhandlerclass and create instance
       String customContentHandlerClassname = getInitParameter("custom-content-handler-classname");
       if (customContentHandlerClassname != null) {
          try {
@@ -222,17 +220,6 @@ public class LuceusModule extends Module {
          }
       }
 
-      // read customObjectHandlerClass and create instance
-      String customObjectHandlerClassname = getInitParameter("custom-object-handler-classname");
-      if (customObjectHandlerClassname != null) {
-         try {
-            customObjectHandler = (CustomObjectHandler) Class.forName(customObjectHandlerClassname).newInstance();
-         }
-         catch (Exception e) {
-            log.warn("Unable to create CustomObjectHandler! (" + e.getMessage() + ")");
-         }
-      }      
-      
       in = new LinkedBlockingQueue<QueuedUpdate>(updateQueueSize);
 
       if (doListeners) {
@@ -243,9 +230,6 @@ public class LuceusModule extends Module {
          if (customContentHandler != null) {
             customContentHandler.registerListeners(this);
          }
-         if (customObjectHandler != null) {
-             customObjectHandler.registerListeners(this);
-          }
       }
 
       ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(execs);
@@ -314,23 +298,17 @@ public class LuceusModule extends Module {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_DELETE_PAGE_INDEX, nodeNumber));
    }
 
-   public void deleteCustomObjectIndex(int nodeNumber) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_DELETE_CUSTOMOBJECT_INDEX, nodeNumber));
-    }
-   
 
    // aka fullindex
    public void createContentIndex(Node node) {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_CREATE_CONTENT_INDEX, node.getNumber()));
    }
 
-   public void createCustomObjectIndex(Node node) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_CREATE_CUSTOMOBJECT_INDEX, node.getNumber()));
-    }
-   
+
    public void updateContentIndex(Node node) {
       updateContentIndex(node.getNumber());
    }
+
 
    public void updateContentIndex(int nodeNumber) {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_CONTENT_INDEX, nodeNumber));
@@ -351,13 +329,6 @@ public class LuceusModule extends Module {
       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_SECONDARYCONTENT_INDEX, nodeNumber));
    }
 
-   public void updateCustomObjectIndex(Node node) {
-       updateCustomObjectIndex(node.getNumber());
-    }   
-   
-   public void updateCustomObjectIndex(int nodeNumber) {
-       addToQueue(new QueuedUpdate(QueuedUpdate.METHOD_UPDATE_CUSTOMOBJECT_INDEX, nodeNumber));
-   }
 
    public Cloud getAnonymousCloud() {
       return CloudProviderFactory.getCloudProvider().getAnonymousCloud();
@@ -416,10 +387,6 @@ public class LuceusModule extends Module {
                updateContentIndex(currentNode);
             }
          }
-         
-         //if (customObjectHandler != null) {
-         //    customObjectHandler.fullIndex(erase);
-         //}
 
          log.info("===>fullIndex done<==");
       }
@@ -487,10 +454,7 @@ public class LuceusModule extends Module {
       return customContentHandler;
    }
 
-   public CustomObjectHandler getCustomObjectHandler() {
-       return customObjectHandler;
-    }
-   
+
    public boolean hasProcessedSecondary(String scId) {
       return secondaryCache.contains(scId);
    }

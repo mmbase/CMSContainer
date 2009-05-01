@@ -1,7 +1,11 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" %>
+
 <fmt:setBundle basename="portlets-newslettersubscription" scope="request"/>
-<form method="post" name="<portlet:namespace />form_subscribe"
+<form method="POST" name="<portlet:namespace />form_subscribe"
       action="<cmsc:actionURL><cmsc:param name="action" value="pause"/></cmsc:actionURL>"
       >
    <div class="content">
@@ -25,7 +29,7 @@
          <div>
             <label for="timeduration"><fmt:message
                   key="subscription.subscribe.operation.pause.form.timeduration"/></label>
-            <input type="text" name="timeduration" id="timeduration"/>
+            <input type="text" name="timeduration" id="timeduration">
             <select name="durationunit" id="durationunit">
                <option value="d"><fmt:message key="subscription.subscribe.operation.pause.form.day"/></option>
                <option value="w"><fmt:message key="subscription.subscribe.operation.pause.form.week"/></option>
@@ -34,7 +38,7 @@
          </div>
          <div>
             <label for="resumeDate"><fmt:message key="subscription.subscribe.operation.pause.form.resumeDate"/></label>
-            <input type="text" name="resumeDate" id="resumeDate"/>
+            <input type="text" name="resumeDate" id="resumeDate">
          </div>
 
       </fieldset>
@@ -44,3 +48,6 @@
       </a>
    </div>
 </form>
+
+
+

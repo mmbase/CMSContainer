@@ -95,12 +95,17 @@ public class PortalURL {
 
 
    public PortalURL(String host, HttpServletRequest request, String globalNavigation) {
-      this(request.getContextPath(), request.isSecure(), request.getServerPort(), globalNavigation);
+      this(request, globalNavigation);
       this.host = host;
    }
 
 
-   private PortalURL(String basePortalURL, boolean secure, int port, String globalNavigation) {
+   public PortalURL(HttpServletRequest request, String globalNavigation) {
+      this(request.getContextPath(), request.isSecure(), request.getServerPort(), globalNavigation);
+   }
+
+
+   public PortalURL(String basePortalURL, boolean secure, int port, String globalNavigation) {
       this.basePortalURL = basePortalURL;
       this.secure = secure;
       this.port = port;

@@ -15,13 +15,7 @@
  */
 package com.finalist.cmsc.richtext;
 
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.Node;
-import org.mmbase.datatypes.DataType;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
@@ -71,13 +65,13 @@ public class RichText {
    }
 
 
-   public final static String cleanRichText(String originalValue, boolean replaceHeaders, boolean replaceParagraphs) {
+   public final static String cleanRichText(String originalValue, boolean replaceHeaders) {
       // if string is null or empty, (re)set it's value to empty string
       String newValue = "";
       if (originalValue != null && !"".equals(originalValue.trim())) {
          // Edited value: clean.
          log.debug("before cleaning: " + originalValue);
-         newValue = WordHtmlCleaner.cleanHtml(originalValue, replaceHeaders, replaceParagraphs);
+         newValue = WordHtmlCleaner.cleanHtml(originalValue, replaceHeaders);
          log.debug("after cleaning: " + newValue);
       }
       return newValue;
@@ -98,36 +92,6 @@ public class RichText {
       out = RichText.RICHTEXT_ROOT_OPEN + out + RichText.RICHTEXT_ROOT_CLOSE;
       Document doc = XmlUtil.toDocument(out, false);
       return doc;
-   }
-   
-   public final static Object stripLinkAndImage(Node sourceNode,Node destinationNode,Field field,Map<Integer, Integer> copiedNodes) {
-      DataType dataType = field.getDataType();
-      while (StringUtils.isEmpty(dataType.getName())) {
-         dataType = dataType.getOrigin();
-      }
-      if ("cmscrichtext".equals(dataType.getName())) {
-         String fieldname = field.getName();
-         String fieldValue = (String) sourceNode.getValueWithoutProcess(fieldname);
-         log.debug("richtext field: " + fieldname.trim());
-       //  htmlFields.add(fieldname);
-         if (StringUtils.isNotEmpty(fieldValue)) {
-            try {
-               if (hasRichtextItems(fieldValue)) {
-                  Document doc = getRichTextDocument(fieldValue);
-
-                  RichTextGetProcessor richTextGetProcessor = new RichTextGetProcessor();
-                  richTextGetProcessor.resolve(sourceNode,destinationNode,doc,copiedNodes);
-                  String out = getRichTextString(doc);
-                  out = WordHtmlCleaner.fixEmptyAnchors(out);
-                  return out;
-               }
-            }
-            catch (Exception e) {
-               log.error("An error occured while resolving inline resources!", e);
-            }
-         }
-      }
-      return sourceNode.getValueWithoutProcess(field.getName());
    }
 
 }

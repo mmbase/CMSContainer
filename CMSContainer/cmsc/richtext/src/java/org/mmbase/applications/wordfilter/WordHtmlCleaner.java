@@ -105,21 +105,6 @@ public final class WordHtmlCleaner {
     * @return clean html code
     */
    public static String cleanHtml(String textStr, boolean replaceHeaders) {
-      /* replaceParagraphs - is set to true, to keep old functionality working */
-      boolean replaceParagraphs = true;
-      return cleanHtml(textStr, replaceHeaders, replaceParagraphs);
-   }
-   
-   /**
-    * Cleans html code
-    * 
-    * @param textStr
-    *           ugly html code
-    * @param replaceHeaders 
-    * @param replaceParagraphs 
-    * @return clean html code
-    */
-   public static String cleanHtml(String textStr, boolean replaceHeaders, boolean replaceParagraphs) {
       log.debug("old value : " + textStr);
       if (textStr != null) {
          try {
@@ -130,13 +115,9 @@ public final class WordHtmlCleaner {
             xmlStr = fixBadLists(xmlStr);
             xmlStr = fixNiceLists(xmlStr);
             xmlStr = removeHtmlIfComments(xmlStr);
-            xmlStr = removeComments(xmlStr);
             xmlStr = fixBR(xmlStr);
             xmlStr = removeEmptyFonts(xmlStr);
-            
-            if (replaceParagraphs) {
-               xmlStr = replaceParagraph(xmlStr);
-            }
+            xmlStr = replaceParagraph(xmlStr);
             if (replaceHeaders) {
                 xmlStr = replaceHeaders(xmlStr);
             }
@@ -205,15 +186,6 @@ public final class WordHtmlCleaner {
       return text;
    }
 
-   /**
-    * CMSC-1337: Remove inline style from e.g. Word
-    */
-   private static String removeComments(String text) {
-      Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(text);
-      text = matcher.replaceAll("");
-      return text;
-   }
 
    /**
     * remove xml namespace declarations
@@ -303,7 +275,7 @@ public final class WordHtmlCleaner {
     * tabs before and behind the dots of the lists.
     */
    private static String fixBadLists(String text) {
-      text = text.replaceAll("[งท]", ""); //UTF-8: &#192;
+      text = text.replaceAll("[งท]", "");
 
       int pos = -1;
       while ((pos = text.indexOf("<!--[if !supportLists", pos + 1)) != -1) {

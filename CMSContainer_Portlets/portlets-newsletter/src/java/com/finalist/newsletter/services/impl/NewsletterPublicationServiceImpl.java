@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.RegisterStatus;
 import com.finalist.newsletter.NewsletterSendFailException;
+import com.finalist.newsletter.cao.NewsLetterStatisticCAO;
 import com.finalist.newsletter.cao.NewsletterPublicationCAO;
 import com.finalist.newsletter.cao.NewsletterSubscriptionCAO;
 import com.finalist.newsletter.domain.Publication;
@@ -62,8 +59,8 @@ public class NewsletterPublicationServiceImpl implements NewsletterPublicationSe
    /**
     * deliver all READY publications in the system
     */
-   public void deliverAllPublications() {
-      log.debug("starting deliver all publications in READY status");
+   public void deliverAllPublication() {
+      log.info("starting deliver all publications in READY status");
 
       List<Integer> publications = publicationCAO.getIntimePublicationIds();
 
@@ -87,15 +84,15 @@ public class NewsletterPublicationServiceImpl implements NewsletterPublicationSe
       Map<String, List<String>> sendResults = new HashMap<String, List<String>>();
       List<Subscription> subscriptions = subscriptionCAO.getSubscription(newsletterId);
       log.debug("deliver publication " + publicationId + " which has " + subscriptions.size() + " subscriptions");
-      NewsletterPublicationUtil.setBeingSend(publicationId);
+      NewsletterPublicationUtil.setBeingSent(publicationId);
       Publication publication = publicationCAO.getPublication(publicationId);
       for (Subscription subscription : subscriptions) {
          Set<Term> terms = subscriptionCAO.getTerms(subscription.getId());
-         Person subscriber = CommunityModuleAdapter.getUserById(subscription.getSubscriberId());
-         if(subscriber == null || RegisterStatus.BLOCKED.getName().equalsIgnoreCase(subscriber.getActive())) {
+         Person subscripber = CommunityModuleAdapter.getUserById(subscription.getSubscriberId());
+         if(subscripber == null || RegisterStatus.BLOCKED.getName().equals(subscripber.getActive())) {
             continue;
          }
-         subscription.setEmail(subscriber.getEmail());
+         subscription.setEmail(subscripber.getEmail());
          subscription.setTerms(terms);
          try {
             publisher.deliver(publication, subscription);
@@ -105,17 +102,12 @@ public class NewsletterPublicationServiceImpl implements NewsletterPublicationSe
             log.error(e.getMessage());
          }
       }
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      Node edition = cloud.getNode(publicationId);  
-      if(!sendSuccess.isEmpty()){
-         edition.setDateValue("sendtime", new java.util.Date());
-      }
-      NewsletterPublicationUtil.setIsSent(edition);
+      NewsletterPublicationUtil.setIsSent(publicationId);
       sendResults.put(SEND_SUCCESS, sendSuccess);
       sendResults.put(SEND_FAIL, sendFails);
 
       publicationCAO.setStatus(publicationId, STATUS.DELIVERED);
-//      publicationCAO.renamePublicationTitle(publicationId);
+      publicationCAO.renamePublicationTitle(publicationId);
       return sendResults;
    }
 

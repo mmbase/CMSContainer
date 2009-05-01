@@ -18,10 +18,7 @@
     <!-- ========== Global Forward Definitions =================================== -->
     <!-- ========== Action Mapping Definitions =================================== -->
     <action-mappings>
-        <!-- ========== Ajax Definitions =================================== -->
-	    <action path="/editors/site/SelectSiteName" type="com.finalist.cmsc.navigation.forms.SelectSiteNameAction"
-	                unknown="false" validate="false">
-	    </action>
+    	
         <!-- ==== Site management ==== -->
 
         <action path="/editors/site/SiteCreate" type="com.finalist.cmsc.navigation.forms.SiteCreate"
@@ -100,16 +97,9 @@
         <!-- ==== Select page nodes ==== -->
 
         <action path="/editors/site/select/SelectorPage" type="com.finalist.cmsc.navigation.select.forms.SelectorAction"
-                unknown="false" className="com.finalist.cmsc.navigation.select.forms.SelectorPageActionMapping">
+                unknown="false" className="com.finalist.cmsc.struts.SelectorActionMapping">
             <set-property property="linkPattern" value="selectedpage.jsp?page={0}&amp;path={1}"/>
-            <set-property property="strictPageOnly" value="true" />
             <forward name="success" path="/editors/site/select/selectorpopup.jsp" redirect="false"/>
-        </action>
-        <action path="/editors/site/select/SelectorRelatedpage" type="com.finalist.cmsc.navigation.select.forms.SelectorAction"
-                unknown="false" className="com.finalist.cmsc.navigation.select.forms.SelectorPageActionMapping">
-            <set-property property="linkPattern" value="selectedpage.jsp?page={0}&amp;path={1}&amp;related=true"/>
-            <set-property property="strictPageOnly" value="true" />
-            <forward name="success" path="/editors/site/select/selectorpopup.jsp?related=true" redirect="false"/>
         </action>
 
         <!-- ==== Security role management ==== -->

@@ -96,11 +96,9 @@
     </style>
   </xsl:template>
 
-  <xsl:template name="extrajavascript">
-    <script type="text/javascript" src="{$ew_context}/js/prototype.js"><xsl:comment>help IE</xsl:comment></script>
-    <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/override.js"><xsl:comment>help IE</xsl:comment></script>
-    <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/my-validator.js"><xsl:comment>help IE</xsl:comment></script>
-   <script type="text/javascript">
+  <xsl:template name="extrajavascript">     
+    <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/override.js"><xsl:comment>help IE</xsl:comment></script>    
+	<script type="text/javascript">
       var isWebmaster = "<xsl:value-of select="$WEBMASTER"/>";
     </script>
     <xsl:call-template name="extrajavascript-custom"/>
@@ -218,7 +216,7 @@
           <tr class="fieldcanvas">
             <xsl:apply-templates select="."/>
           </tr>
-        </xsl:when>
+        </xsl:when>   
         <xsl:when test="name()='list'">
           <tr class="listcanvas">
             <td colspan="2">
@@ -238,7 +236,7 @@
           <tr class="fieldsetcanvas">
             <xsl:apply-templates select="."/>
           </tr>
-        </xsl:when>
+        </xsl:when>           
         <xsl:otherwise>
           <xsl:apply-templates select="."/>
         </xsl:otherwise>
@@ -320,14 +318,8 @@
       <xsl:when test="@ftype=&apos;image&apos;">
         <xsl:call-template name="ftype-image"/>
       </xsl:when>
-      <xsl:when test="@ftype=&apos;imagedata&apos;">
-        <xsl:call-template name="ftype-imagedata"/>
-      </xsl:when>
       <xsl:when test="@ftype=&apos;file&apos;">
         <xsl:call-template name="ftype-file"/>
-      </xsl:when>
-      <xsl:when test="@ftype=&apos;filedata&apos;">
-        <xsl:call-template name="ftype-filedata"/>
       </xsl:when>
       <xsl:when test="@ftype=&apos;radio&apos;">
          <xsl:call-template name="ftype-radio"/>
@@ -388,18 +380,18 @@
     </tr>
     
               
-    <xsl:if test="@status=&apos;invalid&apos;">
+   	<xsl:if test="@status=&apos;invalid&apos;">
     <tr>
       <td colspan="2">
         <div class="messagebox_red">
           <div class="box">
-            <div class="top"><div></div></div>                  
+            <div class="top"><div></div></div>						
               <div class="body">
                 <xsl:call-template name="prompt_invalid_list">
                   <xsl:with-param name="minoccurs" select="@minoccurs" />
                   <xsl:with-param name="maxoccurs" select="@maxoccurs" />
                 </xsl:call-template>
-              </div>                                    
+              </div>												
             <div class="bottom"><div></div></div>
           </div>
         </div>
@@ -470,127 +462,6 @@
                 </xsl:choose>
                 <xsl:call-template name="prompt_search"/>
               </a>
-            </td>
-          </tr>
-        </table>
-      </xsl:for-each>
-      <xsl:for-each select="command[@name=&apos;contenttypeselector&apos;]">
-        <script type="text/javascript">
-        function searchtypedef(){
-            window.open('../../../../editors/contenttype/ContentTypeAction.do?cmd=<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />&amp;objectnumber=<xsl:value-of select="../@number" />&amp;searchvalue=' + form[&quot;searchvalue&quot;].value, 'pageselector', 'width=401,height=401,status=yes,toolbar=no,titlebar=no,scrollbars=no,resizable=yes,menubar=no');
-        }
-        </script>
-        <table class="searchcontent">
-          <tr>
-            <xsl:if test="prompt">
-              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
-            </xsl:if>
-            <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <xsl:call-template name="listsearch-fields"/>
-            </td>
-            <td>
-              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="var s = form[&apos;searchfields_{../command[@name=&apos;add-item&apos;]/@cmd}&apos;]; s[s.selectedIndex].setAttribute(&apos;default&apos;, this.value); form[&apos;searchvalue&apos;].value = this.value; " />
-              <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
-              <input type="hidden" name="searchvalue" />
-            </td>
-            <td>
-              <a href="#" title="{$tooltip_search}" class="button">
-                <xsl:for-each select="@*">
-                  <xsl:copy/>
-                </xsl:for-each>
-                <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
-                <xsl:attribute name="onclick">javascript:searchtypedef();</xsl:attribute>
-                <xsl:choose>
-                  <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="prompt_search"/>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </xsl:for-each>
-      <xsl:for-each select="command[@name=&apos;assetsselector&apos;]">
-        <table class="searchcontent">
-          <tr>
-            <xsl:if test="prompt">
-              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
-            </xsl:if>
-            <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <xsl:call-template name="listsearch-fields"/>
-            </td>
-            <td>
-              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="selectAssets(this,'{@nodepath}')"/>
-              <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
-            </td>
-            <td>
-           <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';getAssets('{@nodepath}','current')" class="button">
-                <xsl:for-each select="@*">
-                  <xsl:copy/>
-                </xsl:for-each>
-                <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
-                <xsl:choose>
-                  <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="prompt_search"/>
-           </a>
-            </td>
-          </tr>
-        </table>
-      </xsl:for-each>
-      <xsl:for-each select="command[@name=&apos;siteassetsselector&apos;]">
-        <table class="searchcontent">
-          <tr>
-            <xsl:if test="prompt">
-              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
-            </xsl:if>
-            <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <xsl:call-template name="listsearch-fields"/>
-            </td>
-            <td>
-              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="selectAssets(this,'{@nodepath}')"/>
-              <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
-            </td>
-            <td>
-           <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';getAssets('{@nodepath}','siteassets')" class="button">
-                <xsl:for-each select="@*">
-                  <xsl:copy/>
-                </xsl:for-each>
-                <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
-                <xsl:choose>
-                  <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="prompt_search"/>
-           </a>
             </td>
           </tr>
         </table>
@@ -714,27 +585,15 @@
   </xsl:template>
 
   <xsl:template name="listnewselectors-custom">
-     <!-- Crash CMSc 1.1 customer wizard-custom.xsl, because we use xsl:apply-templates now -->
+  	<!-- Crash CMSc 1.1 customer wizard-custom.xsl, because we use xsl:apply-templates now -->
   </xsl:template>
 
   <xsl:template match="command[@name=&apos;add-item&apos;]" mode="listnewbuttons">
-     <!-- add-item is used to check for a new action -->
+  	<!-- add-item is used to check for a new action -->
   </xsl:template>
 
   <xsl:template match="command[@name=&apos;search&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
-  </xsl:template>
-  
-  <xsl:template match="command[@name=&apos;contenttypeselector&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
-  </xsl:template>
-  
-  <xsl:template match="command[@name=&apos;assetsselector&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
-  </xsl:template>
-  
-  <xsl:template match="command[@name=&apos;siteassetsselector&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
+  	<!-- Search is handled by the listsearch template -->
   </xsl:template>
 
   <xsl:template match="command[@name=&apos;startwizard&apos;]" mode="listnewbuttons">
@@ -904,248 +763,23 @@
   <xsl:template name="ftype-unknown">
     <xsl:choose>
       <xsl:when test="@ftype=&apos;calendar&apos;">
-         <xsl:call-template name="ftype-calendar"/>
+      	<xsl:call-template name="ftype-calendar"/>
       </xsl:when>
       <xsl:otherwise>
-          <xsl:call-template name="ftype-other"/>
+      	 <xsl:call-template name="ftype-other"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
   <xsl:template name="ftype-calendar">
-     <nobr><select name="calendar-type" id="calendar-type" onchange="resetCalendar(this.value,'{@fieldname}')">
-   <option value="0"><xsl:value-of select="$prompt_newsletter_never" /></option>
-   <option value="1"><xsl:value-of select="$prompt_newsletter_once" /></option>
-   <option value="2"><xsl:value-of select="$prompt_newsletter_daily" /></option>
-   <option value="3"><xsl:value-of select="$prompt_newsletter_weekly" /></option>
-   <option value="4"><xsl:value-of select="$prompt_newsletter_monthly" /></option>
+     <nobr><select name="calendar-type" id="calendar-type">
+	<option value="1"><xsl:value-of select="$prompt_newsletter_once" /></option>
+	<option value="2"><xsl:value-of select="$prompt_newsletter_daily" /></option>
+	<option value="3"><xsl:value-of select="$prompt_newsletter_weekly" /></option>
+	<option value="4"><xsl:value-of select="$prompt_newsletter_monthly" /></option>
       </select> &#x0020;
       <input type="hidden" name="{@fieldname}" value="{value}" title="new-calendar" id="{@fieldname}"/>
-      <a href="#" id="calendarSelect" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', 'height=400, width=500, top='+eval((window.screen.availHeight - 400)/2)+', left='+eval((window.screen.availWidth - 500)/2)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" id="calendarDelete" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
-      <div id="calendar-expression"></div>      
+      <a href="#" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', 'height=400, width=500, top='+eval((window.screen.availHeight - 400)/2)+', left='+eval((window.screen.availWidth - 500)/2)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
+      <div id="calendar-expression"></div>   	
   </xsl:template>
-
-   <xsl:template name="ftype-image">
-   <xsl:if test="@maywrite!=&apos;false&apos;">
-      <xsl:choose>
-         <xsl:when test="@dttype=&apos;binary&apos; and not(upload)">
-            <div class="imageupload">
-               <div>
-                  <input type="hidden" name="{@fieldname}" value="" dttype="binary" ftype="image" >
-                     <xsl:if test="@dtrequired=&apos;true&apos; and @size &lt;= 0">
-                        <xsl:attribute name="dtrequired">true</xsl:attribute>
-                     </xsl:if>
-                  </input>
-                  <a href="{$uploadpage}&amp;popupid={$popupid}&amp;did={@did}&amp;wizard={/wizard/@instance}&amp;maxsize={@dtmaxsize}&amp;filetype={'image'}" onclick="return doStartUpload(this);">
-                     <xsl:call-template name="prompt_image_upload"/>
-                  </a>
-                  <br/>
-                  <xsl:if test="@size &gt; 0">
-                     <img src="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,cache(&apos;, $imagesize, &apos;))&apos;))}" hspace="0" vspace="0" border="0" title="{field[@name=&apos;description&apos;]}"/>
-                     <xsl:if test="@size &lt; 2048">
-                        (<xsl:value-of select="@size"/><xsl:text>byte</xsl:text>)
-                     </xsl:if>
-                     <xsl:if test="@size &gt; =2048 and @size &lt; (2*1024*1024)">
-                        (<xsl:value-of select="format-number(@size div 1024,'#,##0.0')"/><xsl:text>K</xsl:text>)
-                     </xsl:if>
-                     <xsl:if test="@size &gt; =(2*1024*1024)">
-                        (<xsl:value-of select="format-number(@size div (1024*1024),'#,##0.0')"/><xsl:text>M</xsl:text>)
-                     </xsl:if>
-                     <br/>
-                     <a
-                        href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey,&apos;)&apos;))}"
-                        target="_new">
-                        <xsl:call-template name="prompt_image_full" />
-                     </a>
-                     <br/>
-                  </xsl:if>
-               </div>
-            </div>
-         </xsl:when>
-         <xsl:when test="@dttype=&apos;binary&apos; and upload">
-            <div class="imageupload">
-               <input type="hidden" name="{@fieldname}" value="YES" dttype="binary" ftype="image" >
-                  <xsl:if test="@dtrequired=&apos;true&apos;">
-                     <xsl:attribute name="dtrequired">true</xsl:attribute>
-                  </xsl:if>
-               </input>
-                  <xsl:if test="contains(upload/path, '/') or contains(upload/path, '\')">
-                     <img src="{upload/path}" hspace="0" vspace="0" border="0" width="128" height="128"/>
-                     <br/>
-                  </xsl:if>
-               <span>
-                  <xsl:value-of select="upload/@name"/>
-                  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                  <xsl:if test="upload/@size &lt; 2048">
-                     (<xsl:value-of select="upload/@size"/><xsl:text>byte</xsl:text>)
-                  </xsl:if>
-                  <xsl:if test="upload/@size &gt; =2048 and upload/@size &lt; (2*1024*1024)">
-                     (<xsl:value-of select="format-number(upload/@size div 1024,'#,##0.0')"/><xsl:text>K</xsl:text>)
-                  </xsl:if>
-                  <xsl:if test="upload/@size &gt; =(2*1024*1024)">
-                     (<xsl:value-of select="format-number(upload/@size div (1024*1024),'#,##0.0')"/><xsl:text>M</xsl:text>)
-                  </xsl:if>
-               </span>
-               <br/>
-               <a href="{$uploadpage}&amp;popupid={$popupid}&amp;did={@did}&amp;wizard={/wizard/@instance}&amp;maxsize={@dtmaxsize}&amp;filetype={'image'}" onclick="return doStartUpload(this);">
-                  <xsl:call-template name="prompt_image_replace"/>
-               </a>
-            </div>
-         </xsl:when>
-         <xsl:otherwise>
-            <span>
-            <img src="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,cache(&apos;, $imagesize, &apos;))&apos;))}" hspace="0" vspace="0" border="0" title="{field[@name=&apos;description&apos;]}"/>
-            <br/>
-            <a
-               href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey,&apos;)&apos;))}"
-               target="_new">
-               <xsl:call-template name="prompt_image_full" />
-            </a>
-            <br/>
-            </span>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:if>
-   <xsl:if test="@maywrite=&apos;false&apos;">
-      <span class="readonly">
-         <img src="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,cache(&apos;, $imagesize, &apos;))&apos;))}" hspace="0" vspace="0" border="0"/>
-      </span>
-   </xsl:if>
-   </xsl:template>
-   
-   <xsl:template name="ftype-imagedata">
-      <span class="readonly">
-         <img src="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,cache(&apos;, $imagesize, &apos;))&apos;))}" hspace="0" vspace="0" border="0"/>
-         <br/>
-         <a href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey,&apos;)&apos;))}" target="_new">
-            <xsl:call-template name="prompt_image_full" />
-         </a>
-      </span>
-   </xsl:template>
-
-   <xsl:template name="ftype-file">
-   <xsl:choose>
-   <xsl:when test="@dttype=&apos;data&apos; or @maywrite=&apos;false&apos;">
-      <a  href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,number)&apos;))}">
-         <xsl:call-template name="prompt_do_download"/>
-      </a>
-   </xsl:when>
-   <xsl:otherwise>
-      <xsl:choose>
-         <xsl:when test="not(upload)">
-            <input type="hidden" name="{@fieldname}" value="" dttype="binary" ftype="file" >
-               <xsl:if test="@dtrequired=&apos;true&apos; and @size &lt;= 0">
-                  <xsl:attribute name="dtrequired">true</xsl:attribute>
-               </xsl:if>
-            </input>
-            <xsl:if test="@size &lt;= 0">
-               <xsl:call-template name="prompt_no_file"/><br/>
-            </xsl:if>
-            <xsl:if test="@size &gt; 0">
-               <a href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,number)&apos;))}">
-                  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                  <xsl:call-template name="prompt_do_download"/>
-                  <xsl:if test="@size &lt; 2048">
-                     (<xsl:value-of select="@size"/><xsl:text>byte</xsl:text>)
-                  </xsl:if>
-                  <xsl:if test="@size &gt; =2048 and @size &lt; (2*1024*1024)">
-                     (<xsl:value-of select="format-number(@size div 1024,'#,##0.0')"/><xsl:text>K</xsl:text>)
-                  </xsl:if>
-                  <xsl:if test="@size &gt; =(2*1024*1024)">
-                     (<xsl:value-of select="format-number(@size div (1024*1024),'#,##0.0')"/><xsl:text>M</xsl:text>)
-                  </xsl:if>
-               </a>
-            <br/>
-            </xsl:if>
-         </xsl:when>
-         <xsl:otherwise>
-            <input type="hidden" name="{@fieldname}" value="YES" dttype="binary" ftype="file" >
-               <xsl:if test="@dtrequired=&apos;true&apos;">
-                  <xsl:attribute name="dtrequired">true</xsl:attribute>
-               </xsl:if>
-            </input>
-            <xsl:call-template name="prompt_uploaded"/>
-            <xsl:value-of select="upload/@name"/>
-            <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-               <xsl:if test="upload/@size &lt; 2048">
-                  (<xsl:value-of select="upload/@size"/><xsl:text>byte</xsl:text>)
-               </xsl:if>
-               <xsl:if test="upload/@size &gt; =2048 and upload/@size &lt; (2*1024*1024)">
-                  (<xsl:value-of select="format-number(upload/@size div 1024,'#,##0.0')"/><xsl:text>K</xsl:text>)
-               </xsl:if>
-               <xsl:if test="upload/@size &gt; =(2*1024*1024)">
-                  (<xsl:value-of select="format-number(upload/@size div (1024*1024),'#,##0.0')"/><xsl:text>M</xsl:text>)
-               </xsl:if>
-            <br/>
-            <a  href="file://{upload/path}">
-               <xsl:call-template name="prompt_do_download"/>
-            </a>
-            <br/>
-         </xsl:otherwise>
-      </xsl:choose>
-      <a href="{$uploadpage}&amp;popupid={$popupid}&amp;did={@did}&amp;wizard={/wizard/@instance}&amp;maxsize={@dtmaxsize}" onclick="return doStartUpload(this);">
-         <xsl:call-template name="prompt_do_upload"/>
-      </a>
-   </xsl:otherwise>
-   </xsl:choose>
-   </xsl:template>
-   
-   <xsl:template name="ftype-filedata">
-      <a href="{node:saxonFunction($cloud, string(@number), concat(&apos;servletpath(&apos;, $cloudkey, &apos;,number)&apos;))}">
-         <xsl:call-template name="prompt_do_download"/>
-      </a>
-   </xsl:template>
-   
-  <!--CMSC-1049 Time display in article creation author: Rain.Tang-->
-  <!--template new-loop-options is new added only used in hours and minutes display-->
-  <xsl:template name="new-loop-options">
-    <xsl:param name="value">0</xsl:param>
-    <xsl:param name="selected"/>
-    <xsl:param name="end">0</xsl:param>
-
-    <xsl:call-template name="gen-option">
-      <xsl:with-param name="value" select="format-number($value,'00')" />
-      <xsl:with-param name="selected" select="$selected" />
-      <xsl:with-param name="text" select="$value" />
-    </xsl:call-template>
-
-    <xsl:if test="$value &lt; $end">
-      <xsl:call-template name="new-loop-options">
-        <xsl:with-param name="value" select="format-number($value + 1,'00')" />
-        <xsl:with-param name="selected" select="$selected" />
-        <xsl:with-param name="end" select="$end" />
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="ftype-datetime-time">
-    <select name="internal_{@fieldname}_hours" super="{@fieldname}">
-      <xsl:call-template name="new-loop-options">
-        <xsl:with-param name="value">00</xsl:with-param>
-        <xsl:with-param name="selected" select="date:getHours(string(value), string($timezone))" />
-        <xsl:with-param name="end" select="23" />
-      </xsl:call-template>
-    </select>
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;:&amp;nbsp;</xsl:text>
-    <select name="internal_{@fieldname}_minutes" super="{@fieldname}">
-      <xsl:call-template name="new-loop-options">
-        <xsl:with-param name="value">00</xsl:with-param>
-        <xsl:with-param name="selected" select="date:getMinutes(string(value), string($timezone))" />
-        <xsl:with-param name="end" select="59" />
-      </xsl:call-template>
-    </select>
-    <xsl:if test="@ftype=&apos;duration&apos;">
-      <xsl:text disable-output-escaping="yes">&amp;nbsp;:&amp;nbsp;</xsl:text>
-      <select name="internal_{@fieldname}_seconds" super="{@fieldname}">
-        <xsl:call-template name="new-loop-options">
-          <xsl:with-param name="value">00</xsl:with-param>
-          <xsl:with-param name="selected" select="date:getSeconds(string(value), string($timezone))" />
-          <xsl:with-param name="end" select="59" />
-        </xsl:call-template>
-      </select>
-    </xsl:if>
-  </xsl:template>
-
-   <!--End of CMSC-1049-->
-   
 </xsl:stylesheet>

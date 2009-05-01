@@ -56,14 +56,7 @@
 
 <div class="editor">
 <div class="body">
-
-<mm:listnodes type="subsite" orderby="title">
-<mm:first>
-   <c:set var="subsiteExists" value="true"/>
-   <p><%@include file="personalpages_newbuttons.jsp" %></p>
-</mm:first>
-</mm:listnodes>
-
+<p><%@include file="personalpages_newbuttons.jsp" %> </p>
 <html:form action="/editors/subsite/SubSiteAction" method="post">
 	<html:hidden property="action" value="${action}"/>
 	<html:hidden property="search" value="true"/>
@@ -73,41 +66,41 @@
 	<mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
 	
 	<table>
-     <c:if test="${subsiteExists eq true}">
-        <tr>
-           <td style="width:105px"><fmt:message key="subsite.name" />:</td>
-           <td>
-              <cmsc:select var="subsite" onchange="document.forms[0].submit();">
-              <mm:listnodes type="subsite" orderby="title">
-                 <mm:field name="number" id="subsitenumber" write="false" vartype="String" />
-                 <cmsc:option value="${subsitenumber}" name="${_node.title}" />
-              </mm:listnodes>
-              </cmsc:select>
-            </td>
-        </tr>
-     </c:if>
-     <c:if test="${subsiteExists ne true}">
-       <tr>
-          <td colspan="2"><b><fmt:message key="subsite.notfound" /></b></td>
-       </tr>
-	  </c:if>
     <tr>
-       <td style="width:105px"><fmt:message key="subsitedelete.subtitle" /></td>
-       <td colspan="3"><html:text property="title" style="width:200px"/></td>
-       
-       <td style="width:20px">
-       </td>
-   </tr>
-   <tr>
-      <td></td>
-   <td>
-     <input type="submit" class="button" name="submitButton" onClick="setOffset(0);" value="<fmt:message key="site.personal.search" />"/>
-     </td>
-   </tr>
+    
+    </tr>
+	   <tr>
+         <td style="width:105px"><fmt:message key="subsite.name" />:</td>
+         <td>
+            <cmsc:select var="subsite" onchange="document.forms[0].submit();">
+            <mm:listnodes type="subsite" orderby="title">
+               <mm:field name="number" id="subsitenumber" write="false" vartype="String" />
+	            <cmsc:option value="${subsitenumber}" name="${_node.title}" />
+            </mm:listnodes>
+            </cmsc:select>
+         </td>
+      </tr>
+	
+	   <tr>
+	      <td style="width:105px"><fmt:message key="subsitedelete.subtitle" /></td>
+	      <td colspan="3"><html:text property="title" style="width:200px"/></td>
+	      
+	      <td style="width:20px">
+	      </td>
+         
+	   </tr>
+       <tr>
+       <td></td>
+       <td>
+	      <input type="submit" class="button" name="submitButton" onClick="setOffset(0);" value="<fmt:message key="site.personal.search" />"/>
+	      </td>
+       </tr>
 	</table>
 </html:form>
 </div>
 </div>
+
+
 
 <div class="editor">
 <br />
@@ -130,8 +123,8 @@
     <tr>
         <th></th>
         <th><a href="#" class="headerlink" onClick="orderBy('title');" ><fmt:message key="pp.title" /></a></th>
-        <th><a href="#" class="headerlink" onclick="orderBy('creationdate');" ><fmt:message key="pp.creationdate" /></a></th>
-        <th><a href="#" class="headerlink" onclick="orderBy('publishdate');" ><fmt:message key="pp.publishdate" /></a></th>
+        <th><a href="#" class="headerlink" onclick="orderBy('creationdate');" ><fmt:message key="pp.creationdate" /></th>
+        <th><a href="#" class="headerlink" onclick="orderBy('publishdate');" ><fmt:message key="pp.publishdate" /></th>
     </tr>
 </thead>
 <tbody class="hover">
@@ -201,6 +194,7 @@
 </mm:isempty>
    
 <br />
+
 
 </div>
 </div>

@@ -21,11 +21,10 @@ import org.mmbase.servlet.BridgeServlet;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
@@ -128,15 +127,7 @@ public class RedirectServlet extends BridgeServlet {
                     if (hostIndex > -1) {
                         // The same host as the contenturl. strip servername and port
                         int firstSlash = redirect.indexOf("/", hostIndex + "://".length());
-                        if (firstSlash > -1) {
-                           redirect = redirect.substring(firstSlash);
-                        }
-                        else {
-                           // firstSlash is -1 when there is a contentportlet on the homepage
-                           // and servername is true
-                           response.sendRedirect(redirect);
-                           return;
-                        }
+                        redirect = redirect.substring(firstSlash);
                     }
                     else {
                         // can not convert so just redirect.
@@ -193,12 +184,6 @@ public class RedirectServlet extends BridgeServlet {
         @Override
         public String getServletPath() {
             return pagePath;
-        }
-        
-        @Override
-        public StringBuffer getRequestURL() {
-          String webapp = HttpUtil.getWebappUri(this);
-          return new StringBuffer(webapp).append(pagePath.substring(1));
         }
     }
 }
