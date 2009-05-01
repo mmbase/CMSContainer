@@ -13,9 +13,7 @@
 	<c:if test="${empty types}">
 		<mm:listnodes type="editwizards">
 		   <mm:field name="nodepath" jspvar="nodepath" id="nodepath" vartype="String">
-			 <% 
-			  List<String> hiddenTypes = com.finalist.cmsc.repository.ContentElementUtil.getHiddenTypes();
-			  if (com.finalist.cmsc.repository.ContentElementUtil.isContentType(nodepath)&& !hiddenTypes.contains(nodepath)) { %>
+			  <% if (com.finalist.cmsc.repository.ContentElementUtil.isContentType(nodepath)) { %>
 				<mm:param name="contenttype" value="${nodepath}"/>
 			  <% } %>
 		   </mm:field>

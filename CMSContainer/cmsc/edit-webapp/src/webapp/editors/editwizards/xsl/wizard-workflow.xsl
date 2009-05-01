@@ -22,7 +22,7 @@
   <xsl:variable name="REASON-PUBLISH">Dit object staat klaar om gepubliceerd te worden. Zolang dit niet gebeurd is kan dit object niet bewerkt worden.</xsl:variable>
 <!--
   END
--->  
+-->
    <xsl:include href="templatesi18n:xsl/prompts-workflow.xsl"/>
 
    <xsl:template name="formhiddenargs">
@@ -80,11 +80,9 @@
 		    </div>
 		  </div>
 		</xsl:if>
-
-
 	</xsl:if>
   </xsl:template>
-  
+
 
   <xsl:template name="finishbutton">
     <a href="javascript:doFinish();" id="bottombutton-finish" unselectable="on" titlesave="{$tooltip_finish}" titlenosave="{$tooltip_no_finish}">

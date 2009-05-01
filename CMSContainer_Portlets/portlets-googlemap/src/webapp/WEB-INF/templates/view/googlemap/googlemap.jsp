@@ -1,4 +1,4 @@
-<div id="map" style="width: ${width}; height: ${height};"></div>
+<div id="map" style="width: 370px; height: 260px;"></div>
 
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${key}"
         type="text/javascript"></script>
@@ -33,3 +33,4 @@
     //]]>
 
 </script>
+

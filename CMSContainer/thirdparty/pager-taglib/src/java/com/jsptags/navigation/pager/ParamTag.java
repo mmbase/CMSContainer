@@ -24,44 +24,38 @@ import javax.servlet.jsp.*;
 
 public final class ParamTag extends PagerTagSupport {
 
-   private String name = null;
-   private String value = null;
+	private String name = null;
+	private String value = null;
 
+	public final void setName(String val) {
+		name = val;
+	}
 
-   public final void setName(String val) {
-      name = val;
-   }
+	public final String getName() {
+		return name;
+	}
 
+	public final void setValue(String val) {
+		value = val;
+	}
 
-   public final String getName() {
-      return name;
-   }
+	public final String getValue() {
+		return value;
+	}
 
+	public int doStartTag() throws JspException {
+		super.doStartTag();
 
-   public final void setValue(String val) {
-      value = val;
-   }
+		pagerTag.addParam(name, value);
 
+		return EVAL_BODY_INCLUDE;
+	}
 
-   public final String getValue() {
-      return value;
-   }
-
-
-   public int doStartTag() throws JspException {
-      super.doStartTag();
-
-      pagerTag.addParam(name, value);
-
-      return EVAL_BODY_INCLUDE;
-   }
-
-
-   public void release() {
-      name = null;
-      value = null;
-      super.release();
-   }
+	public void release() {
+		name = null;
+		value = null;
+		super.release();
+	}
 }
 
 /* vim:set ts=4 sw=4: */
