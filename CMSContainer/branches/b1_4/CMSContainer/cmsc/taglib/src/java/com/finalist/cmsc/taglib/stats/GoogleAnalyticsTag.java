@@ -11,9 +11,7 @@ package com.finalist.cmsc.taglib.stats;
 
 import java.io.IOException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.naming.*;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
@@ -36,6 +34,8 @@ public class GoogleAnalyticsTag extends SimpleTagSupport {
 			.getLoggerInstance(GoogleAnalyticsTag.class.getName());
 
 	private final static String TYPE_BASIC = "basic"; // init and page counter code (default)
+   private final static String TYPE_SCRIPT = "script"; // init script
+   private final static String TYPE_PAGE_COUNTER = "pagecounter"; // page counter code
 	private final static String TYPE_EVENT = "event"; // event code, category and action are required
 
 	private String accountParameter;
@@ -70,8 +70,7 @@ public class GoogleAnalyticsTag extends SimpleTagSupport {
 		 * production)
 		 */
 		String account = null;
-		boolean isLiveProduction = (ServerUtil.isLive() && ServerUtil
-				.isProduction());
+		boolean isLiveProduction = (ServerUtil.isLive() && ServerUtil.isProduction());
 		if (StringUtils.isNotBlank(accountParameter) && isLiveProduction) {
 			account = accountParameter;
 		} else if (contextAccount != null) {
@@ -84,21 +83,19 @@ public class GoogleAnalyticsTag extends SimpleTagSupport {
 		if (StringUtils.isNotBlank(account)) {
 
 			StringBuilder javascript = new StringBuilder();
-			javascript.append("<script type=\"text/javascript\">");
-			if (typeParameter.equals(TYPE_BASIC)) {
-				javascript.append("\r\nvar gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\r\n");
-				javascript.append("document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\r\n");
-				javascript.append("</script>\r\n");
-				javascript.append("<script type=\"text/javascript\">\r\n");
-				javascript.append("try{\r\n");
-				javascript.append("var pageTracker = _gat._getTracker(\"");
-				javascript.append(account);
-				javascript.append("\");\r\n");
-				javascript.append("pageTracker._trackPageview();\r\n");
-				javascript.append("} catch(err) {}\r\n");
-			}
+         if (typeParameter.equals(TYPE_BASIC)) {
+            appendGAScript(javascript);
+            appendPageCounter(javascript, account);
+         }
+         if (typeParameter.equals(TYPE_SCRIPT)) {
+            appendGAScript(javascript);
+         }
+         if (typeParameter.equals(TYPE_PAGE_COUNTER)) {
+            appendPageCounter(javascript, account);
+         }
 
 			if (typeParameter.equals(TYPE_EVENT)) {
+            javascript.append("<script type=\"text/javascript\">");
 				if (StringUtils.isNotBlank(nodeNumberParameter)) {
 					actionParameter = getActionFromNodeNumber(nodeNumberParameter);
 				}
@@ -122,13 +119,34 @@ public class GoogleAnalyticsTag extends SimpleTagSupport {
 					}
 				}
 				javascript.append("');\r\n");
+            javascript.append("</script>\r\n");
 			}
 
-			javascript.append("</script>\r\n");
+         PageContext ctx = (PageContext) getJspContext();
+         ctx.getOut().write(javascript.toString());
+      }
+   }
 
-			PageContext ctx = (PageContext) getJspContext();
-			ctx.getOut().write(javascript.toString());
-		}
+   private void appendGAScript(StringBuilder javascript) {
+      javascript.append("<script type=\"text/javascript\">\r\n");
+      javascript.append("var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\r\n");
+      javascript.append("document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\r\n");
+		javascript.append("</script>\r\n");
+   }
+
+   private void appendPageCounter(StringBuilder javascript, String account) {
+		PageContext ctx = (PageContext) getJspContext();
+      String domain = ctx.getRequest().getServerName();
+      
+      javascript.append("<script type=\"text/javascript\">\r\n");
+      javascript.append("try{\r\n");
+      javascript.append("var pageTracker = _gat._getTracker(\"").append(account).append("\");\r\n");
+      // Workaround for http://support.microsoft.com/kb/310676
+      // Internet Explorer does not set a cookie for two-letter domains like 12.nl
+      javascript.append("pageTracker._setDomainName(\"").append(domain).append("\");\r\n");
+      javascript.append("pageTracker._trackPageview();\r\n");
+      javascript.append("} catch(err) {}\r\n");
+      javascript.append("</script>\r\n");
 	}
 
 	private String escapeParameter(String parameter) {
