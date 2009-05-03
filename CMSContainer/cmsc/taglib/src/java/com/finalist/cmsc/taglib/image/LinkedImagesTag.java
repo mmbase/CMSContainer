@@ -14,7 +14,7 @@ import java.util.Iterator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.jsp.taglib.NodeReferrerTag;
@@ -67,6 +67,7 @@ public class LinkedImagesTag extends NodeReferrerTag {
 
    /** Holds value of property template. */
    private Attribute template = Attribute.NULL;
+
 
    public void setPosition(String position) throws JspTagException {
       this.position = getAttribute(position);
@@ -121,7 +122,7 @@ public class LinkedImagesTag extends NodeReferrerTag {
    public void setPopup(String popup) throws JspTagException {
       this.popup = getAttribute(popup);
    }
-
+   
    public void setTemplate(String template) throws JspTagException {
       this.template = getAttribute(template);
    }
@@ -153,7 +154,7 @@ public class LinkedImagesTag extends NodeReferrerTag {
          NodeList list = imagerelManager.getList(query);
 
          String pos = position.getString(this);
-         if (StringUtils.isNotEmpty(pos)) {
+         if (!StringUtil.isEmpty(pos)) {
             // filter list on position
             // Other option to filter on position is to add a constraint to the
             // query
@@ -223,7 +224,7 @@ public class LinkedImagesTag extends NodeReferrerTag {
                imgTag.setPageContext(pageContext);
                // Issue NIJ-149: legendType was not set
                imgTag.setLegendtype(legendType);
-
+               
                if (this.template != Attribute.NULL) {
                   template = this.template.getString(this);
                }

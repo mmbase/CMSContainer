@@ -1,5 +1,8 @@
 package com.finalist.cmsc.directreaction.taglib;
 
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.finalist.cmsc.directreaction.util.*;
@@ -14,7 +17,7 @@ public class AddTag extends SimpleTagSupport {
    private String link;
 
 
-   public void doTag() {
+   public void doTag() throws JspException, IOException {
       ReactionUtil.addReaction(number, title, body, name, email, link);
    }
 

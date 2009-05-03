@@ -3,7 +3,9 @@ package com.finalist.cmsc.resources.forms;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
@@ -13,7 +15,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class DeleteSecondaryContentAction extends MMBaseAction {
 
-   private static final Logger log = Logging.getLoggerInstance(DeleteSecondaryContentAction.class.getName());
+   private static transient Logger log = Logging.getLoggerInstance(DeleteSecondaryContentAction.class.getName());
 
    private static final String ACTION_REMOVE = "remove";
    private static final String ACTION_CANCEL = "cancel";

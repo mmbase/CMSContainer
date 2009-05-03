@@ -1,9 +1,8 @@
 package com.finalist.cmsc.beans.om;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import com.finalist.cmsc.beans.NodeBean;
+import net.sf.mmapps.commons.beans.NodeBean;
 
 /**
  * @author Wouter Heijke
@@ -12,10 +11,11 @@ import com.finalist.cmsc.beans.NodeBean;
 public class Portlet extends NodeBean implements Comparable<Portlet> {
 
    private String title;
+
    private int definition;
-   private int expirationcache = -1; // when field is not present or virtual then this is the default value
 
    private List<Object> portletparameters = new ArrayList<Object>();
+
    private List<Integer> views = new ArrayList<Integer>();
 
 
@@ -43,12 +43,12 @@ public class Portlet extends NodeBean implements Comparable<Portlet> {
       if (views.isEmpty()) {
          return -1;
       }
-      return views.get(0);
+      return views.get(0).intValue();
    }
 
 
    public void addView(int view) {
-      this.views.add(Integer.valueOf(view));
+      this.views.add(new Integer(view));
    }
 
 
@@ -68,7 +68,8 @@ public class Portlet extends NodeBean implements Comparable<Portlet> {
 
 
    public String getParameterValue(String key) {
-      for (Object param : portletparameters) {
+      for (Iterator<Object> iter = portletparameters.iterator(); iter.hasNext();) {
+         Object param = iter.next();
          if (param instanceof NodeParameter) {
             NodeParameter nodeparam = (NodeParameter) param;
             if (key.equals(nodeparam.getKey())) {
@@ -88,17 +89,5 @@ public class Portlet extends NodeBean implements Comparable<Portlet> {
 
    public int compareTo(Portlet o) {
       return title.compareTo(o.title);
-   }
-
-
-
-   public int getExpirationcache() {
-      return expirationcache;
-   }
-
-
-
-   public void setExpirationcache(int expirationcache) {
-      this.expirationcache = expirationcache;
    }
 }

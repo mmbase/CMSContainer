@@ -13,7 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.mmapps.commons.util.StringUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.mmbase.util.logging.Logger;
@@ -24,7 +24,7 @@ public class MMBaseForm extends ActionForm {
    private static final long serialVersionUID = 4264517673164742392L;
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(MMBaseForm.class.getName());
+   private static Logger log = Logging.getLoggerInstance(MMBaseForm.class.getName());
 
    private int id;
 
@@ -59,7 +59,7 @@ public class MMBaseForm extends ActionForm {
 
    protected Date convertToDate(String deadline) {
       Date input = null;
-      if (StringUtils.isNotEmpty(deadline)) {
+      if (!StringUtil.isEmpty(deadline)) {
          try {
             input = DateFormat.getDateInstance().parse(deadline);
          }
