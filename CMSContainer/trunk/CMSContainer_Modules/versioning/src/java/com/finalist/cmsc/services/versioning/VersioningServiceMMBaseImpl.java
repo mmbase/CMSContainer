@@ -203,9 +203,10 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
             formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
             if (data.equals(formerArchiveXml)) {
                versionNode.setBooleanValue("publish", true);
+               versionNode.setBooleanValue("onlive", true);
             }
             else {
-               versionNode.setBooleanValue("publish", false); 
+               versionNode.setBooleanValue("onlive", false);
             }
             versionNode.commit();
          }
