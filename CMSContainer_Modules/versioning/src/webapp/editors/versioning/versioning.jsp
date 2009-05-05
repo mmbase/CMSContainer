@@ -54,6 +54,7 @@
                         <th><fmt:message key="versioning.author"/></th>
                         <th><fmt:message key="versioning.publish"/></th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                      </tr>
                   </thead>
                   <tbody class="hover">
@@ -73,7 +74,7 @@
                      <mm:field name="firstname"/> <mm:field name="prefix"/>  <mm:field name="surname"/> (<mm:field name="username"/>)
                   </mm:node>
                </td>
-               <td><mm:field name="publish"/>
+               <td><mm:field name="onlive"/>
                </td>
                <td>
                   <c:url value="/editors/versioning/RestoreAction.do" var="restoreUrl">
@@ -86,6 +87,18 @@
                      <fmt:message key="versioning.restore"/>
                   </a>
                   </c:if>
+               </td>
+               <td>
+               <mm:field name="publish" jspvar="isPublished" write="false"/>
+               <c:if test="${isPublished}">
+                   <c:set var="status" value="published"/>
+               </c:if>
+               <c:if test="${!isPublished}">
+                   <c:set var="status" value="draft"/>
+               </c:if>
+               <img src="../gfx/icons/status_${status}.png"
+             alt="<fmt:message key="versioning.status.${status}" />"
+             title="<fmt:message key="versioning.status.${status}" />"/>
                </td>
             </tr>
             <mm:last>

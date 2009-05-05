@@ -94,7 +94,7 @@
             </editor>
             <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
-        <field>
+        <field name="publish">
          <descriptions>
             <description xml:lang="nl"></description>
             <description xml:lang="en"></description>
@@ -112,11 +112,31 @@
                <search>-1</search>
             </positions>
          </editor>
-         <datatype base="yesno" xmlns="http://www.mmbase.org/xmlns/datatypes" />
-         <db>
-            <name>publish</name>
-            <type key="false" required="true" state="persistent">BOOLEAN</type>
-         </db>
+         <datatype base="yesno" xmlns="http://www.mmbase.org/xmlns/datatypes">
+            <required value="true"/>
+         </datatype>
+      </field>
+      <field name="onlive">
+         <descriptions>
+            <description xml:lang="nl"></description>
+            <description xml:lang="en"></description>
+            <description xml:lang="zh"></description>
+         </descriptions>
+         <gui>
+            <guiname xml:lang="nl">publish</guiname>
+            <guiname xml:lang="en">publish</guiname>
+            <guiname xml:lang="zh">发布</guiname>
+         </gui>
+         <editor>
+            <positions>
+               <input>10</input>
+               <list>-1</list>
+               <search>-1</search>
+            </positions>
+         </editor>
+         <datatype base="yesno" xmlns="http://www.mmbase.org/xmlns/datatypes">
+            <required value="true"/>
+         </datatype>
       </field>
     </fieldlist>
 </builder>
