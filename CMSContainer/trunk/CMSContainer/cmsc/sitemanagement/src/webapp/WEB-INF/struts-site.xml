@@ -60,6 +60,7 @@
                 unknown="false" validate="false">
             <forward name="pagedelete" path="/editors/site/pagedelete.jsp" redirect="false"/>
             <forward name="success" path="/editors/site/refreshpages.jsp" redirect="false"/>
+            <forward name="linkedlist" path="/editors/site/linkedlist.jsp" redirect="false"/>
         </action>
 
         <action path="/editors/site/Navigator" type="com.finalist.cmsc.navigation.forms.NavigatorAction"
