@@ -63,8 +63,8 @@ public class PageDelete extends MMBaseFormlessAction {
          return mapping.findForward(SUCCESS);
       }
       //CMSC-1306
-      if(PortletUtil.findLinkedPorlets(pageNode).size() > 0) {
-         NodeList porlets = PortletUtil.findLinkedPorlets(pageNode);
+      if(PortletUtil.findLinkedPortlets(pageNode).size() > 0) {
+         NodeList porlets = PortletUtil.findLinkedPortlets(pageNode);
          Map<String,Integer> hashMap = new HashMap<String,Integer>();
          for(int i = 0 ; i < porlets.size() ; i++) {
             Node portlet = porlets.getNode(i);
