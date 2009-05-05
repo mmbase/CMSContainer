@@ -744,7 +744,7 @@ public final class PortletUtil {
    /**
     * using the click-through links at that page
     */
-   public static NodeList findLinkedPorlets(Node page) {
+   public static NodeList findLinkedPortlets(Node page) {
       NodeManager nodeParameterManager = page.getCloud().getNodeManager(NODEPARAMETER);
       NodeQuery query = nodeParameterManager.createQuery();
       SearchUtil.addEqualConstraint(query, nodeParameterManager.getField("value"), page.getNumber());
