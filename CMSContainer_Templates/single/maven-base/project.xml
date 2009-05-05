@@ -32,7 +32,7 @@
 	<repository>
 		<connection>scm:cvs:pserver:guest@cvs.mmbase.org:/var/cvs:contributions/CMSContainer</connection>
 		<developerConnection>scm:cvs:pserver:${maven.username}@cvs.mmbase.org:/var/cvs:contributions/CMSContainer</developerConnection>
-		<url>http://cvs.mmbase.org/viewcvs/contributions/CMSContainer</url>
+		<url>https://scm.mmbase.org/CMSContainer/</url>
 	</repository>
 	<developers>
 		<developer>
