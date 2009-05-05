@@ -51,12 +51,12 @@ public class NewsletterGenerator {
          in.close();
 
          inputString = buffer.toString().trim();
+         inputString = new String(inputString.getBytes(), "UTF-8");
 
          if ("text/plain".equalsIgnoreCase(mimeType)) {
             inputString = getContentFromPage(inputString);
          }
          inputString = NewsletterUtil.calibrateRelativeURL(inputString);
-
          return (inputString);
          
       } catch (FileNotFoundException e) {
