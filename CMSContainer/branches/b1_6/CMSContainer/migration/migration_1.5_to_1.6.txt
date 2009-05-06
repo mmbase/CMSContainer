@@ -214,3 +214,16 @@ Type: add dependency to maven-base/project.xml
 *
 *
 *
+
+
+Name: Fix field nodetype of workflowitems, needed for 1.6 upgrades
+Goal: 
+Type: user action: run the script on the database in the Editors.
+--- Start script ---
+Run this script in staging only:
+/editors/maintenance/fix_workflowitem_nodetype.jsp
+--- End script ---
+*
+*
+*
+
