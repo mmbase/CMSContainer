@@ -148,12 +148,10 @@
       </td>
    </c:if>
    <td>
-      <mm:field name="workflowitem.remark" escape="none" jspvar="w_remar" write="false"/>
-      <a href="javascript:editRemark(${workflowNumber},'${w_remar}')">
-         <img src="../gfx/icons/edit2.png" align="top" alt="<fmt:message key="workflow.editremark"/>"
-              title="<fmt:message key="workflow.editremark"/>"/>
-      </a>
-      <mm:field name="workflowitem.remark" escape="none"/>
+      <mm:field name="workflowitem.remark" escape="js-both-quotes" jspvar="w_remark" write="false"/>
+      <a href="javascript:editRemark(${workflowNumber},'${w_remark}')"><img src="../gfx/icons/edit2.png" align="top" alt="<fmt:message key="workflow.editremark"/>"
+              title="<fmt:message key="workflow.editremark"/>"/></a>
+      ${w_remark}
    </td>
 </tr>
 </c:if>
