@@ -16,8 +16,6 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.functions.Function;
 
-import com.finalist.cmsc.util.ServerUtil;
-
 public class EmailUtil {
 
    private static final String EMAIL = "email";
@@ -30,10 +28,6 @@ public class EmailUtil {
 
    public static void send(Cloud cloud, String name, String email, String nameFrom, String emailFrom, String subject,
          String body) {
-
-      if(!ServerUtil.isProduction()){
-         return ;
-      }
 
       if (cloud == null) {
          cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
