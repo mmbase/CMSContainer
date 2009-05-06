@@ -116,8 +116,7 @@ public class WizardController {
 
             if (PagesUtil.isPageType(node)) {
                creationNode = node;
-               Cloud adminCloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
-               Node repositoryRootNode = RepositoryUtil.getRootNode(adminCloud);;
+               Node repositoryRootNode = RepositoryUtil.getRootNode(node.getCloud());
                session.setAttribute(SESSION_CREATION, "" + repositoryRootNode.getNumber());
             }
             if (ContentElementUtil.isContentType(elementtype) || AssetElementUtil.isAssetType(elementtype)) {
