@@ -21,7 +21,6 @@ import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.community.security.Authentication;
 import com.finalist.cmsc.services.community.security.AuthenticationService;
 import com.finalist.cmsc.util.EmailSender;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.services.NewsletterSubscriptionServices;
 
 public class UnsubscribePortlet extends AbstractLoginPortlet {
@@ -67,9 +66,7 @@ public class UnsubscribePortlet extends AbstractLoginPortlet {
                      + "' set in the edit_defaults properties is not available or working!");
             } else {
                try {
-                  if(ServerUtil.isProduction()){
-                     EmailSender.sendEmail(emailFrom, nameFrom, email, emailSubject, emailText, email, "text/plain;charset=utf-8");
-                  }
+                  EmailSender.sendEmail(emailFrom, nameFrom, email, emailSubject, emailText, email, "text/plain;charset=utf-8");
                } catch (Exception ex) {
                   log.error("Subscriptions are successfully cancelled but email could not be sent.", ex);
                }
