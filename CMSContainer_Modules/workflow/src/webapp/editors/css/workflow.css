@@ -71,8 +71,5 @@ a {
    left: 15px;
    color: #000000;
    width: 600px;
-   height: 300px;
-   overflow: scroll;
+   height: auto;
 }
-
-
