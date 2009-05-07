@@ -3,7 +3,13 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="versioning.title.content" />
+<cmscedit:head title="versioning.title.content" >
+   <script type="text/javascript">
+      function diff(objectNumber,archiveNumber) {
+         openPopupWindow("diff", 500, 500, "../versioning/DiffAction.do?objectnumber=" + objectNumber+"&archivenumber="+archiveNumber);
+      }
+   </script>
+</cmscedit:head>
 <body>
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
 <mm:import externid="archiveNodes" jspvar="nodeList" vartype="List" />
@@ -101,6 +107,9 @@
                         </c:url>
                         <a href="${returnurl}" class="button">
                            <fmt:message key="versioning.restore"/>
+                        </a>
+                        <a href="#" class="button" onclick="diff('${number}','<mm:field name="number"/>')">
+                            <fmt:message key="versioning.diff"/>
                         </a>
                      </c:if> 
                      <c:if test="${action == 'workflow' && !isPublished}">

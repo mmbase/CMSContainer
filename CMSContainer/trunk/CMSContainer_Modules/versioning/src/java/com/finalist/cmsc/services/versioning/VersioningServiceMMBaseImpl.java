@@ -13,7 +13,7 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.mmbase.bridge.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -157,11 +158,11 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       Document document = parser.parse(new InputSource(new StringReader(xml)));
       NodeManager nodeManager = n.getNodeManager();
       String nodeManagerName = nodeManager.getName();
-      NodeList nodeManagerTag = document.getElementsByTagName(nodeManagerName);
+      org.w3c.dom.NodeList nodeManagerTag = document.getElementsByTagName(nodeManagerName);
       if (nodeManagerTag.getLength() == 0) {
          throw new VersioningException("Could not match xml with given node!");
       }
-      NodeList fields = nodeManagerTag.item(0).getChildNodes();
+      org.w3c.dom.NodeList fields = nodeManagerTag.item(0).getChildNodes();
       for (int i = 0; i < fields.getLength(); i++) {
          org.w3c.dom.Node field = fields.item(i);
          String name = field.getNodeName();
@@ -191,55 +192,77 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
    
    @Override
    public void setPublishVersion(Node node) {
+      String data = "";
       try {
-         String data = xmlController.toXml(node, false);
-         org.mmbase.bridge.NodeList archiveNodeList = findRalatedVersions(node);
-         String formerArchiveXml = null;
-         for (int i = 0 ; i < archiveNodeList.size() ; i++) {
-            Node versionNode = archiveNodeList.getNode(i);
-            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
-            if (data.equals(formerArchiveXml)) {
-               versionNode.setBooleanValue("publish", true);
-               versionNode.setBooleanValue(ONLIVE, true);
-            }
-            else {
-               versionNode.setBooleanValue(ONLIVE, false);
-            }
-            versionNode.commit();
-         }
+         data = xmlController.toXml(node, false);
       }
       catch (Exception e) {
          log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
-      }  
+      }
+      org.mmbase.bridge.NodeList archiveNodeList = findRelatedVersions(node);
+      String formerArchiveXml = null;
+      for (int i = 0 ; i < archiveNodeList.size() ; i++) {
+         Node versionNode = archiveNodeList.getNode(i);
+         try {
+            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
+         } 
+         catch (UnsupportedEncodingException e) {
+            log.error("UnsupportedEncodingException while change charset,", e);
+         }
+         if (data.equals(formerArchiveXml)) {
+            versionNode.setBooleanValue("publish", true);
+            versionNode.setBooleanValue(ONLIVE, true);
+         }
+         else {
+            versionNode.setBooleanValue(ONLIVE, false);
+         }
+         versionNode.commit();
+      }
    }
    
    @Override
    public boolean isOnLive(Node node) {
 
-     try {
-         String data = xmlController.toXml(node, false);
-         org.mmbase.bridge.NodeList archiveNodeList = findRalatedVersions(node);
-         String formerArchiveXml = null;
-         for (int i = 0 ; i < archiveNodeList.size() ; i++) {
-            Node versionNode = archiveNodeList.getNode(i);
-            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
-            if (data.equals(formerArchiveXml) && versionNode.getBooleanValue(ONLIVE)) {
-               return true;
-            }
-         }
-      } 
+      String data = "";
+      try {
+         data = xmlController.toXml(node, false);
+      }
       catch (Exception e) {
          log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
       }
+      org.mmbase.bridge.NodeList archiveNodeList = findRelatedVersions(node);
+      String formerArchiveXml = null;
+      for (int i = 0 ; i < archiveNodeList.size() ; i++) {
+         Node versionNode = archiveNodeList.getNode(i);
+         try {
+            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
+         } 
+         catch (UnsupportedEncodingException e) {
+            log.error("UnsupportedEncodingException while change charset,", e);
+         }
+         if (data.equals(formerArchiveXml) && versionNode.getBooleanValue(ONLIVE)) {
+            return true;
+         }
+      }
       return false;
-   
    }
    
-   public org.mmbase.bridge.NodeList findRalatedVersions(Node node) {
+   public NodeList findRelatedVersions(Node node) {
       NodeManager manager = node.getCloud().getNodeManager(ARCHIVE);
       NodeQuery query = manager.createQuery();
       SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
       SearchUtil.addSortOrder(query, manager, DATE, "UP");
       return manager.getList(query); 
+   }
+   
+   public String toXml(Node node) {
+      String data = null;
+      try {
+         data = xmlController.toXml(node, false);
+      }
+      catch (Exception e) {
+         log.error("Exception while chanslate a node to XMl, node number= " + node.getNumber(), e);
+      }  
+      return data;
    }
 }
