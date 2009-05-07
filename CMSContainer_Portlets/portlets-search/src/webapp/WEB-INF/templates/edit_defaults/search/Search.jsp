@@ -7,10 +7,10 @@
 		<table class="editcontent">
 
 			<%-- Portletdefinition display --%>
-			<c:import url="sections/definitiondisplay.jsp" />
+			<c:import url="../sections/definitiondisplay.jsp" />
 		
 			<%-- View selector --%>
-			<c:import url="sections/viewselector.jsp" />
+			<c:import url="../sections/viewselector.jsp" />
 
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.elementsperpage" />:</td>
@@ -60,7 +60,7 @@
 			</tr>
 
 			<%-- Save button --%>
-			<c:import url="sections/savebutton.jsp" />
+			<c:import url="../sections/savebutton.jsp" />
 			
 		</table>
 	</form>
