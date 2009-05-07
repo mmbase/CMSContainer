@@ -40,11 +40,15 @@
          <c:if test="${empty archiveNodes}">
             <p><fmt:message key="versioning.no.versions"/></p>
          </c:if>
+         <c:if test="${action == 'workflow' }">
+             <fmt:message key="versioning.workflow.restore" />
+         </c:if>
          </div>
          <div class="ruler_green">
             <div><fmt:message key="versioning.title.content" /></div>
          </div>
 		<div class="body">
+
          <mm:list referid="archiveNodes">
             <mm:first>
                <table>
@@ -76,20 +80,35 @@
                </td>
                <td><mm:field name="onlive"/>
                </td>
+               <mm:field name="publish" jspvar="isPublished" write="false"/>
                <td>
                   <c:url value="/editors/versioning/RestoreAction.do" var="restoreUrl">
                      <c:param name="archivenumber"><mm:field name="number"/></c:param>
                      <c:param name="nodenumber"><mm:field name="original_node"/></c:param>
                   </c:url>
-
                   <c:if test="${isAllowed}">
-                  <a href="${restoreUrl}" class="button">
-                     <fmt:message key="versioning.restore"/>
-                  </a>
+                     <c:if test="${empty action}">
+                        <a href="${restoreUrl}" class="button">
+                           <fmt:message key="versioning.restore"/>
+                        </a>
+                     </c:if>
+                     <c:if test="${action == 'workflow' && isPublished}">
+                        <c:url value="/editors/workflow/WorkflowItemDelete.do" var="returnurl">
+                           <c:param name="number">${number}</c:param>
+                           <c:param name="action">delete</c:param>
+                           <c:param name="archivenumber"><mm:field name="number"/></c:param>
+                           <c:param name="returnurl">${returnUrl}</c:param>
+                        </c:url>
+                        <a href="${returnurl}" class="button">
+                           <fmt:message key="versioning.restore"/>
+                        </a>
+                     </c:if> 
+                     <c:if test="${action == 'workflow' && !isPublished}">
+                        <fmt:message key="versioning.restore"/>
+                     </c:if> 
                   </c:if>
                </td>
                <td>
-               <mm:field name="publish" jspvar="isPublished" write="false"/>
                <c:if test="${isPublished}">
                    <c:set var="status" value="published"/>
                </c:if>
