@@ -56,4 +56,11 @@ public abstract class VersioningService extends Service {
     * @return
     */
    public abstract boolean isOnLive(Node node);
+   
+   /**
+    * Change a node to XML 
+    * @param node
+    * @return
+    */
+   public abstract String toXml(Node node);
 }

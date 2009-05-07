@@ -33,4 +33,9 @@ public class DummyVersioningService extends VersioningService {
    public boolean isOnLive(Node node) {
       return false;
    }
+   
+   @Override
+   public String toXml(Node node) {
+      return null;
+   }
 }
