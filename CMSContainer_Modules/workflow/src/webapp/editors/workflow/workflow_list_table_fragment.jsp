@@ -122,6 +122,15 @@
                     title="<fmt:message key="workflow.icon.versioning.title" />"
                     alt="<fmt:message key="workflow.icon.versioning.title"/>"/></a>
          </mm:haspage>
+         <c:if test="${status != 'published'}">
+           <mm:url page="WorkflowItemDelete.do" id="deleteAction" write="false">
+             <mm:param name="number" value="${number}"/>
+             <mm:param name="returnurl" value="/editors/workflow/${returnAction}?status=${param.status}&workflowNodetype=${param.workflowNodetype}"/>
+           </mm:url>
+           <a href="${deleteAction}" ">
+             <img src="../gfx/icons/delete.png" title="<fmt:message key="workflow.item.delete" />"
+              alt="<fmt:message key="workflow.item.delete"/>"/></a>
+        </c:if>
       </c:if>
    </td>
    <td style="white-space: nowrap;">

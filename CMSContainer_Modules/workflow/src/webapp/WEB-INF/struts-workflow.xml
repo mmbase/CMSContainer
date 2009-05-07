@@ -46,6 +46,11 @@
          type="com.finalist.cmsc.workflow.forms.WorkflowTreeStatusAction"
          unknown="false" validate="false">
       </action>
+      <action path="/editors/workflow/WorkflowItemDelete"
+         type="com.finalist.cmsc.workflow.forms.WorkflowItemDelete"
+         unknown="false" validate="false">
+             <forward name="version" path="/editors/versioning/versioning.jsp" redirect="false" />
+      </action>
 	</action-mappings>
 
 	<message-resources parameter="cmsc-workflow" key="WORKFLOW" />
