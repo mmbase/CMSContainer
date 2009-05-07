@@ -33,6 +33,7 @@ import java.text.ParseException;
  */
 public class VersioningServiceMMBaseImpl extends VersioningService {
 
+   private static final String ONLIVE = "onlive";
    private final XMLController xmlController;
 
 
@@ -187,6 +188,8 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
          }
       }
    }
+   
+   @Override
    public void setPublishVersion(Node node) {
       Cloud cloud = node.getCloud();
       try {
@@ -203,10 +206,10 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
             formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
             if (data.equals(formerArchiveXml)) {
                versionNode.setBooleanValue("publish", true);
-               versionNode.setBooleanValue("onlive", true);
+               versionNode.setBooleanValue(ONLIVE, true);
             }
             else {
-               versionNode.setBooleanValue("onlive", false);
+               versionNode.setBooleanValue(ONLIVE, false);
             }
             versionNode.commit();
          }
@@ -214,5 +217,31 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       catch (Exception e) {
          log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
       }  
+   }
+   
+   @Override
+   public boolean isOnLive(Node node) {
+
+     try {
+         String data = xmlController.toXml(node, false);
+         NodeManager manager = node.getCloud().getNodeManager(ARCHIVE);
+         NodeQuery query = manager.createQuery();
+         SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
+         SearchUtil.addSortOrder(query, manager, DATE, "UP");
+         org.mmbase.bridge.NodeList archiveNodeList = manager.getList(query);
+         String formerArchiveXml = null;
+         for (int i = 0 ; i < archiveNodeList.size() ; i++) {
+            Node versionNode = archiveNodeList.getNode(i);
+            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
+            if (data.equals(formerArchiveXml) && versionNode.getBooleanValue(ONLIVE)) {
+               return true;
+            }
+         }
+      } 
+      catch (Exception e) {
+         log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
+      }
+      return false;
+   
    }
 }
