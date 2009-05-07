@@ -28,4 +28,8 @@ public class Versioning {
    public static void setPublishVersion(Node node) {
       cService.setPublishVersion(node);
    }
+   
+   public static boolean isOnLive(Node node) {
+      return cService.isOnLive(node);
+   }
 }
