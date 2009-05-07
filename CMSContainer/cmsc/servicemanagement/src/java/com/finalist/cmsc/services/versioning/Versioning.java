@@ -32,4 +32,8 @@ public class Versioning {
    public static boolean isOnLive(Node node) {
       return cService.isOnLive(node);
    }
+   
+   public static String toXml(Node node) {
+      return cService.toXml(node);
+   }
 }
