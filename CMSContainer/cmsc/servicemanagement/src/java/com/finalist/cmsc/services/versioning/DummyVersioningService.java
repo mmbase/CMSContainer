@@ -28,4 +28,9 @@ public class DummyVersioningService extends VersioningService {
    public void setPublishVersion(Node node) {
       
    }
+   
+   @Override
+   public boolean isOnLive(Node node) {
+      return false;
+   }
 }

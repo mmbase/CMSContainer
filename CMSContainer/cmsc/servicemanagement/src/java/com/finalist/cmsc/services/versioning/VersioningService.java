@@ -49,4 +49,11 @@ public abstract class VersioningService extends Service {
     *           
     */
    public abstract void setPublishVersion(Node node);
+   
+   /**
+    *  Check the element version is on live
+    * @param node
+    * @return
+    */
+   public abstract boolean isOnLive(Node node);
 }
