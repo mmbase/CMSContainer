@@ -191,15 +191,9 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
    
    @Override
    public void setPublishVersion(Node node) {
-      Cloud cloud = node.getCloud();
       try {
          String data = xmlController.toXml(node, false);
-
-         NodeManager manager = cloud.getNodeManager(ARCHIVE);
-         NodeQuery query = manager.createQuery();
-         SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
-         SearchUtil.addSortOrder(query, manager, DATE, "UP");
-         org.mmbase.bridge.NodeList archiveNodeList = manager.getList(query);
+         org.mmbase.bridge.NodeList archiveNodeList = findRalatedVersions(node);
          String formerArchiveXml = null;
          for (int i = 0 ; i < archiveNodeList.size() ; i++) {
             Node versionNode = archiveNodeList.getNode(i);
@@ -224,11 +218,7 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
 
      try {
          String data = xmlController.toXml(node, false);
-         NodeManager manager = node.getCloud().getNodeManager(ARCHIVE);
-         NodeQuery query = manager.createQuery();
-         SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
-         SearchUtil.addSortOrder(query, manager, DATE, "UP");
-         org.mmbase.bridge.NodeList archiveNodeList = manager.getList(query);
+         org.mmbase.bridge.NodeList archiveNodeList = findRalatedVersions(node);
          String formerArchiveXml = null;
          for (int i = 0 ; i < archiveNodeList.size() ; i++) {
             Node versionNode = archiveNodeList.getNode(i);
@@ -243,5 +233,13 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       }
       return false;
    
+   }
+   
+   public org.mmbase.bridge.NodeList findRalatedVersions(Node node) {
+      NodeManager manager = node.getCloud().getNodeManager(ARCHIVE);
+      NodeQuery query = manager.createQuery();
+      SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
+      SearchUtil.addSortOrder(query, manager, DATE, "UP");
+      return manager.getList(query); 
    }
 }
