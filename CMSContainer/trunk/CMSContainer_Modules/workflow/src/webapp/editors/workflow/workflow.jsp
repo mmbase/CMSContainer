@@ -335,7 +335,9 @@
 			</div>
 			</div>
 		</c:if>
-
+      <c:if test="${not empty param.errMessage}">
+         <fmt:message key="${param.errMessage}" />
+		</c:if>
 		<div class="ruler_green">
 			<div> 
 		       <c:if test="${not empty workflowType and empty workflowNodetype}">
