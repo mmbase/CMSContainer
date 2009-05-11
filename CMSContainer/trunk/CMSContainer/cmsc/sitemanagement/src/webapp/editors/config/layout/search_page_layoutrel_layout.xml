@@ -18,7 +18,7 @@
 		</field>
 	</item>
 	
-	<command name="search" nodepath="layout" age="-1" fields="title" orderby="title">
+	<command name="layoutsearch" nodepath="layout" age="-1" fields="title" orderby="title">
 		<prompt xml:lang="en">Search layout</prompt>
 		<prompt xml:lang="nl">Zoek template</prompt>
 		<prompt xml:lang="zh">查找布局</prompt>

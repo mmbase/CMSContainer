@@ -50,6 +50,8 @@
             <forward name="cancel" path="/editors/empty.html" redirect="true"/>
             <forward name="success" path="/editors/site/NavigatorPanel.do" redirect="false"/>
         </action>
+        <action path="/editors/site/LayoutAction" type="com.finalist.cmsc.navigation.forms.LayoutAction" unknown="false" validate="false">                
+        </action>
         <action path="/editors/site/PageEdit" type="com.finalist.cmsc.navigation.forms.PageEdit" unknown="false"
                 validate="false">
             <forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false"/>
