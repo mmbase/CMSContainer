@@ -43,7 +43,7 @@
          <fmt:message key="searchpages.page"/>:
          <c:if test="${page + 1> 1}">
             <a href="<%=request.getContextPath()%>${link}page=${page-1}&sortby=${param.sortby}&dir=${param.dir}">
-               <fmt:message key="pages.previous"/>&gt;&gt;
+               &lt;&lt;<fmt:message key="pages.previous"/>
             </a>
             &nbsp;
          </c:if>
