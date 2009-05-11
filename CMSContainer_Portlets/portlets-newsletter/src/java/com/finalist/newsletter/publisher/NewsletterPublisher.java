@@ -92,7 +92,7 @@ public class NewsletterPublisher {
          setContent(message, publication, subscription, originalBody);
          setRecipient(message, subscription.getEmail());
          // setBody(publication, subscription, message);
-         setTitle(message, newsletter.getTitle());
+         setTitle(message, publication.getSubject());
          // setMIME(message, subscription.getMimeType());
          Transport.send(message);
 
@@ -214,7 +214,7 @@ public class NewsletterPublisher {
             content = getPersonalise().personalise(content, subscription, publication);
             log.debug("the content sent is Personalized:" + content);
          }else {
-            log.info("url---->" + url);
+            log.debug("url---->" + url);
             content = NewsletterGenerator.generate(url, subscription.getMimeType());
          }
          cache.add(url, content);

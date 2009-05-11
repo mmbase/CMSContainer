@@ -139,6 +139,7 @@ public abstract class NewsletterPublicationUtil {
       pub.setId(newsletterPublicationNode.getNumber());
       pub.setStatus(Publication.STATUS.valueOf(newsletterPublicationNode.getStringValue("status")));
       pub.setUrl(getPublicationURL(cloud,number));
+      pub.setSubject(newsletterPublicationNode.getStringValue("subject"));
       Newsletter newsletter = new Newsletter();
 
       Node node = relatedNewsletters.get(0);
