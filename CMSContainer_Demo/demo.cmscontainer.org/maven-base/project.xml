@@ -610,6 +610,15 @@
 			<type>plugin</type>
 			<url>http://mmapps.sourceforge.net/maven-mmbase-module-plugin/</url>
 		</dependency>
+		
+<!-- json -->
+   		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20070829</version>
+			<type>jar</type>
+		</dependency>
+
 
 	</dependencies>
 	<build>
