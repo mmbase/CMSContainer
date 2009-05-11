@@ -474,6 +474,65 @@
           </tr>
         </table>
       </xsl:for-each>
+      <xsl:for-each select="command[@name=&apos;layoutsearch&apos;]">
+        <script type="text/javascript">
+		<![CDATA[
+		function ajaxFunction(){
+			var xmlhttp;
+			if (window.XMLHttpRequest){
+				// code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp=new XMLHttpRequest();
+			} else if(window.ActiveXObject){
+				// code for IE6, IE5
+				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			} else {
+				alert("Your browser does not support XMLHTTP!");
+			}
+			  
+			xmlhttp.onreadystatechange=function() {
+				if(xmlhttp.readyState==4) {
+					var aOptions = eval(xmlhttp.responseText);
+					var htmlOptions = new Array();
+					if(aOptions.length == 1){
+						layoutsearch(aOptions[0].id);
+					} else if(aOptions.length > 1){
+						htmlOptions[0] = new Option("","");
+						for(var i = 0; i < aOptions.length; i++){
+							htmlOptions[htmlOptions.length] = new Option(aOptions[i].title,aOptions[i].id);
+						}
+						for(var i= 0; i < htmlOptions.length; i++){
+							document.getElementById("layoutselect").options.add(htmlOptions[i]);
+						}					
+					}
+				}
+			}
+			
+			xmlhttp.open("GET","../../../../editors/site/LayoutAction.do",true);
+			xmlhttp.send(null);
+		}
+		ajaxFunction();
+		]]>
+        function layoutsearch(value){
+			if(value != null){
+				doAdd("|" + value, '<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />' );
+			}
+        }
+        </script>
+        <table class="searchcontent">
+          <tr>
+            <xsl:if test="prompt">
+              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
+            </xsl:if>
+            <td>
+              <xsl:call-template name="listsearch-age"/>
+            </td>
+            <td>
+              <select id="layoutselect" class="searchpossibilities" onchange="javascript:layoutsearch(this.value);" >
+			  </select>
+            </td>
+          </tr>
+        </table>
+      </xsl:for-each>
       <xsl:for-each select="command[@name=&apos;contenttypeselector&apos;]">
         <script type="text/javascript">
         function searchtypedef(){
@@ -726,6 +785,10 @@
   </xsl:template>
   
   <xsl:template match="command[@name=&apos;contenttypeselector&apos;]" mode="listnewbuttons">
+     <!-- Search is handled by the listsearch template -->
+  </xsl:template>
+  
+  <xsl:template match="command[@name=&apos;layoutsearch&apos;]" mode="listnewbuttons">
      <!-- Search is handled by the listsearch template -->
   </xsl:template>
   
