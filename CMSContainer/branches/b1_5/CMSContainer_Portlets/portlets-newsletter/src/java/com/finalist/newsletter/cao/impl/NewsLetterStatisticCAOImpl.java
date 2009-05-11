@@ -260,7 +260,7 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setNodeStep(parameterStep);
       Queries.addSortOrders(query, "logdate", "DOWN");
       query.setMaxNumber(3);
-      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), Integer.valueOf(newsletterId));
+      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), newsletterId);
 
       SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), Integer.valueOf(userId));
       NodeList logs = query.getList();
