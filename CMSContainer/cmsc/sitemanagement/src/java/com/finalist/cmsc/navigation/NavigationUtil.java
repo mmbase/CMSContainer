@@ -491,8 +491,11 @@ public final class NavigationUtil {
         RolesInfo info = new RolesInfo();
         TreeMap<String,UserRole> pagesWithRole = SecurityUtil.getRoleMap(treeManagers, NAVREL, group);
         for (String path : pagesWithRole.keySet()) {
-            Node page = getPageFromPath(cloud, path);
-            info.expand(page.getNumber());
+           Node page = getPageFromPath(cloud, path);
+           List <Node> pathNodes = getPathToRoot(page);
+           for (Node node : pathNodes) {
+              info.expand(node.getNumber());
+           }
         }
         return info;
     }
