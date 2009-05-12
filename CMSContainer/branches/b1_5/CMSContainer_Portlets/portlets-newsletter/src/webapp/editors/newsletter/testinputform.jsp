@@ -51,14 +51,15 @@
       <mm:import externid="newsletterId"/>
       <input type="hidden" name="forward" value="${forward}"/>
       <input type="hidden" name="newsletterId" value="${newsletterId}"/>
+      <input type="hidden" id="mimetype" name="mimetype" value="text/html"/>
       <table>
          <tr>
             <td><fmt:message key="testinput.email"/></td>
             <td><input type="text" name="email" id="email" style="width:170px"/></td>
          </tr>
+         <!--
          <tr>
             <td><fmt:message key="testinput.mimetype"/></td>
-
             <td>
                <select name="mimetype" id="mimetype">
                 <option value="text/html">text/html</option>
@@ -66,6 +67,7 @@
              </select>
             </td>
         </tr>
+        -->
       </table>
       <br/>
          <input type="button" onclick="sendEmail()" value='<fmt:message key="testinput.send"/>'/>
