@@ -617,8 +617,10 @@
 			<artifactId>json</artifactId>
 			<version>20070829</version>
 			<type>jar</type>
+            <properties>
+                <war.bundle>${war.bundle}</war.bundle>
+            </properties>
 		</dependency>
-
 
 	</dependencies>
 	<build>
