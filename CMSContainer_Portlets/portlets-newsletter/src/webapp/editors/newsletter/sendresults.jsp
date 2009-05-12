@@ -1,17 +1,17 @@
-<%@page language="java" contentType="text/html;charset=utf-8"%>
-<%@include file="../globals.jsp" %>
+<%@page language="java" contentType="text/html;charset=utf-8"
+%><%@include file="../globals.jsp" %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <fmt:setBundle basename="newsletter" scope="request" />
-
 <mm:content type="text/html" encoding="UTF-8" expires="0">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<mm:import externid="number" required="true" from="parameters"/>
+<c:url var="actionUrl" value="/editors/site/refreshpagesandshow.jsp?showpage=${number}"/>
+
 <html:html xhtml="true">
 <cmscedit:head title="sendsuccess.title">
 	<style type="text/css">
 	input { width: 100px;}
 	</style>
 </cmscedit:head>
-<mm:import externid="number" required="true" from="parameters"/>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <body>
 <cmscedit:sideblock title="sendsuccess.title" titleClass="side_block_green">
@@ -36,6 +36,7 @@
             <c:otherwise>
                <p> <fmt:message key="sendsuccess.test.subtitle" />
 	            </p>
+               <p><input type="button" onclick="document.location='${actionUrl}'" value='<fmt:message key="newsletter.confirm_send.ok"/>'/></p>
             </c:otherwise>
          </c:choose>
       </c:if>
