@@ -975,7 +975,10 @@ public final class RepositoryUtil {
         TreeMap<String,UserRole> channelsWithRole = SecurityUtil.getRoleMap(treeManagers, CHILDREL, group);
         for (String path : channelsWithRole.keySet()) {
             Node channel = getChannelFromPath(cloud, path);
-            info.expand(channel.getNumber());
+            List <Node> pathNodes = getPathToRoot(channel);
+            for (Node node : pathNodes) {
+               info.expand(node.getNumber());
+            }
         }
         return info;
     }
