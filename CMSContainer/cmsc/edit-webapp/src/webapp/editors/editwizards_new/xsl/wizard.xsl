@@ -476,6 +476,12 @@
       </xsl:for-each>
       <xsl:for-each select="command[@name=&apos;layoutsearch&apos;]">
         <script type="text/javascript">
+		<xsl:variable name="i18n_prompt">
+            <xsl:call-template name="i18n">
+              <xsl:with-param name="nodes" select="prompt"/>
+            </xsl:call-template>
+		</xsl:variable>
+		var prompt = '<xsl:value-of select="$i18n_prompt"/>';
 		<![CDATA[
 		function ajaxFunction(){
 			var xmlhttp;
@@ -496,7 +502,7 @@
 					if(aOptions.length == 1){
 						layoutsearch(aOptions[0].id);
 					} else if(aOptions.length > 1){
-						htmlOptions[0] = new Option("","");
+						htmlOptions[0] = new Option(prompt,"");
 						for(var i = 0; i < aOptions.length; i++){
 							htmlOptions[htmlOptions.length] = new Option(aOptions[i].title,aOptions[i].id);
 						}
@@ -510,8 +516,8 @@
 			xmlhttp.open("GET","../../../../editors/site/LayoutAction.do",true);
 			xmlhttp.send(null);
 		}
-		ajaxFunction();
 		]]>
+		ajaxFunction();
         function layoutsearch(value){
 			if(value != null){
 				doAdd("|" + value, '<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />' );
@@ -520,9 +526,6 @@
         </script>
         <table class="searchcontent">
           <tr>
-            <xsl:if test="prompt">
-              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
-            </xsl:if>
             <td>
               <xsl:call-template name="listsearch-age"/>
             </td>
