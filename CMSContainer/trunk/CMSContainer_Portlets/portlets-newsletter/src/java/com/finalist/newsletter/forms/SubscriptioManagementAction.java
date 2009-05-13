@@ -173,9 +173,9 @@ public class SubscriptioManagementAction extends DispatchActionSupport {
             tmpFullName += " " + result[1].toString();
          }
          tmpFullName += " " + result[2].toString(); //Add Lastname
-         String tmpEmail = result[2].toString();
-         int tmpAuthenticationId = Integer.parseInt(result[3].toString());
-         String tmpUserName = result[4].toString();
+         String tmpEmail = result[3].toString();
+         int tmpAuthenticationId = Integer.parseInt(result[4].toString());
+         String tmpUserName = result[5].toString();
          addToSubscriptionMap(results, tmpFullName, tmpUserName, tmpEmail, tmpAuthenticationId);
       }
       return results;
