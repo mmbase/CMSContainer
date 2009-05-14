@@ -3,11 +3,11 @@
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="changemyprofileinfor.title" />
+<cmscedit:head title="changeprofileinfor.title" />
 
 <c:choose>
 <c:when test="${param.succeeded}">
-      <body onload="alert('<fmt:message key="changemyprofileinfor.succeeded" />')">
+      <body onload="alert('<fmt:message key="changeprofileinfor.succeeded" />')">
       </body>
 </c:when>
 <c:otherwise>
@@ -18,7 +18,7 @@
          <div class="tab_active">
             <div class="body">
                <div>
-                  <a name="activetab"><fmt:message key="changemyprofileinfor.title" /></a>
+                  <a name="activetab"><fmt:message key="changeprofileinfor.title" /></a>
                </div>
             </div>
          </div>
@@ -68,21 +68,21 @@
          <td class="field"><html:checkbox property="emailSignal" style="width: auto;"/></td>
       </tr>
       <tr>
-         <td class="fieldname" nowrap width="105px"><fmt:message key="changemyprofileinfor.current" /></td>
+         <td class="fieldname" nowrap width="105px"><fmt:message key="changeprofileinfor.current" /></td>
 	      <td class="fieldname">
 	         <html:password property="password1" size='15' maxlength='15' style="width:200px"/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="password1"/></span>
 	      </td>
 	   </tr>
 	   <tr>
-         <td class="fieldname" nowrap><fmt:message key="changemyprofileinfor.new" /></td>
+         <td class="fieldname" nowrap><fmt:message key="changeprofileinfor.new" /></td>
 	      <td class="fieldname">
 	         <html:password property="newpassword" size='15' maxlength='15'  style="width:200px"/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="newpassword"/></span>
 	      </td>
 	   </tr>
       <tr>
-   	   <td class="fieldname" nowrap><fmt:message key="changemyprofileinfor.confirm" /></td>
+   	   <td class="fieldname" nowrap><fmt:message key="changeprofileinfor.confirm" /></td>
 	      <td class="fieldname">
 	         <html:password property="confirmnewpassword" size='15' maxlength='15'  style="width:200px"/>
 	         <span class="notvalid"><html:errors bundle="SECURITY" property="confirmnewpassword"/></span>
@@ -91,7 +91,7 @@
 	   <tr>
 	      <td >&nbsp;</td>
 	      <td>
-	      <html:submit ><fmt:message key="changemyprofileinfor.submit" /></html:submit>
+	      <html:submit ><fmt:message key="changeprofileinfor.submit" /></html:submit>
  		  <html:cancel ><fmt:message key="user.cancel"/></html:cancel>
 	      </td>
 	   </tr>
