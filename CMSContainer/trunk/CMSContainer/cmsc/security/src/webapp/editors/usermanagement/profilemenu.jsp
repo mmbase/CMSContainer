@@ -9,13 +9,13 @@
 	<cmscedit:sideblock title="profile.title">
 		<ul class="shortcuts">
 			<li class="password">
-				<a href="./ChangeProfileInitAction.do" target="rightpane"><fmt:message key="changemyprofileinfor.title" /></a>
+				<a href="./ChangeProfileInitAction.do" target="rightpane"><fmt:message key="changeprofileinfor.title" /></a>
 			</li>
 			<li class="language">
 				<a href="changelanguage.jsp" target="rightpane"><fmt:message key="changelanguage.title" /></a>
 			</li>
 		</ul>
-	</cmscedit:sideblock>			
+	</cmscedit:sideblock>
 </mm:cloud>
 </body>
 </html:html>
