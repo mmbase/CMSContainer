@@ -9,7 +9,7 @@
 	<cmscedit:sideblock title="profile.title">
 		<ul class="shortcuts">
 			<li class="password">
-				<a href="changepassword.jsp" target="rightpane"><fmt:message key="changepassword.title" /></a>
+				<a href="./ChangeMyprofileInitAction.do" target="rightpane"><fmt:message key="changemyprofileinfor.title" /></a>
 			</li>
 			<li class="language">
 				<a href="changelanguage.jsp" target="rightpane"><fmt:message key="changelanguage.title" /></a>
