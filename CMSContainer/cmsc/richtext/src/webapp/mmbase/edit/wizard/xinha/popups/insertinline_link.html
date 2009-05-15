@@ -3,6 +3,7 @@
 
 <head>
   <title>Insert/Modify Link</title>
+  <script type="text/javascript" src="../../../../../js/window.js"></script>
   <script type="text/javascript" src="popup.js"></script>
   <link rel="stylesheet" type="text/css" href="popup.css" />
    
@@ -113,23 +114,23 @@ function onCancel() {
 };
 
 function onElement() {
-  openPopupWindow('../../../../../editors/repository/select/index.jsp','filterwindow2',950,550);
+  openPopupWindow('filterwindow2',950,550,'../../../../../editors/repository/select/index.jsp');
   return false;
 };
 
 function onPage() {
-  openPopupWindow('../../../../../editors/site/select/SelectorPage.do','filterwindow2',340, 400);
+  openPopupWindow('filterwindow2',340, 400,'../../../../../editors/site/select/SelectorPage.do');
   return false;
 };
 
 
 function onAsset() {
-  openPopupWindow('../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=attachments','filterwindow2',750,600);
+  openPopupWindow('filterwindow2',750,600,'../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=attachments');
   return false;
 };
 
 function onUrl() {
-  openPopupWindow('../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=urls','filterwindow2',750,600);
+  openPopupWindow('filterwindow2',750,600,'../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=urls');
   return false;
 };
 
@@ -183,39 +184,6 @@ function selectPage(element_id, url) {
    if (url != undefined && url.length != 0 ) {
       document.getElementById("f_href").value = url;
    }
-}
-
-function openPopupWindow(url, windowName, width, height) {
-   debug = false;
-   if (!width) {w = 750;} else { w = width; }
-   if (!height) {h = 750;} else { h = height; }
-   var left = (screen.availWidth - w)/2;
-   var top = (screen.availHeight - h)/2;
-   if (screen.availWidth < w) {
-      w = screen.availWidth;
-      left = 0;
-   }
-   if (screen.availHeight < h) {
-      h = screen.availHeight - 25;
-      top = 0;
-   }
-   if (debug) {
-      alert("width: " + w + " " + left);
-      alert("height: " + h + " " + top);
-   }
-   str = 'window.open(url,"' + windowName + '","width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',scrollbars=yes,status=no,toolbar=no,menubar=no,location=no,resizable=yes")';
-
-   if (debug) {
-      alert(str);
-   }
-
-   obj = eval(str);
-   if (document.all) {
-      // set a opener for ie because its a dialog and not a popup (unlike mozilla)
-      obj.opener = this;
-   }
-
-   return true;
 }
 </script>
 
