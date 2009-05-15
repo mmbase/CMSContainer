@@ -24,11 +24,9 @@ public class ChangeProfileInforAction extends MMBaseAction {
    /** MMbase logging system */
    private static final Logger log = Logging.getLoggerInstance(ChangeProfileInforAction.class.getName());
 
-
    /**
     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
-    *      org.apache.struts.action.ActionForm,
-    *      javax.servlet.http.HttpServletRequest,
+    *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest,
     *      javax.servlet.http.HttpServletResponse)
     */
    @Override
@@ -45,7 +43,9 @@ public class ChangeProfileInforAction extends MMBaseAction {
             ChangeProfileInforForm changeMyprofileInforForm = (ChangeProfileInforForm) form;
             Node userNode = SecurityUtil.getUserNode(userCloud);
             userNode.setStringValue("username", changeMyprofileInforForm.getUsername());
-            userNode.setStringValue("password", changeMyprofileInforForm.getNewpassword());
+            if (changeMyprofileInforForm.getNewpassword().trim().length() != 0) {
+               userNode.setStringValue("password", changeMyprofileInforForm.getNewpassword());
+            }
             userNode.setStringValue("firstname", changeMyprofileInforForm.getFirstname());
             userNode.setStringValue("prefix", changeMyprofileInforForm.getPrefix());
             userNode.setStringValue("surname", changeMyprofileInforForm.getSurname());
@@ -58,8 +58,7 @@ public class ChangeProfileInforAction extends MMBaseAction {
          ActionForward af = mapping.findForward(SUCCESS);
          af = new ActionForward(af.getPath() + "?succeeded=true");
          return af;
-      }
-      else {
+      } else {
          return mapping.findForward("cancel");
       }
    }
