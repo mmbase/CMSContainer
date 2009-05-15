@@ -19,7 +19,6 @@
 		ajaxTreeConfig.addressbarId = 'addressbar';
 	</script>
 	<style type="text/css">
-	body { overflow: hidden; }
 	.tooltip {
 		position: absolute;
 		display: none;
@@ -57,7 +56,7 @@
         }
    </script>
 </cmscedit:head>
-<body onload="loadFunction();">
+<body style="overflow: auto" onload="loadFunction();">
 	<mm:cloud jspvar="cloud" loginpage="../login.jsp">
 		<mm:import externid="channel" from="request" />
 		<mm:compare referid="channel" value="" inverse="true">

@@ -41,28 +41,28 @@ function move(direction, objectNumber, channel) {
 
 
    
-function sortBy(action, orderColumn, channel) {
-    var offset = document.forms['initForm'].offset.value;
-    var oldOrderColumn = document.forms['initForm'].order.value;
+function sortBy(orderColumn, channel) {
+    var offset = document.forms[0].offset.value;
+    var oldOrderColumn = document.forms[0].order.value;
     
     if (oldOrderColumn == orderColumn) {
        // order column is not changed so change direction
-       var oldDirection = document.forms['initForm'].direction.value;
+       var oldDirection = document.forms[0].direction.value;
        
        if (oldDirection == 'down') {
-          document.forms['initForm'].direction.value = 'up';
+          document.forms[0].direction.value = 'up';
        }
        else {
-          document.forms['initForm'].direction.value = 'down';
+          document.forms[0].direction.value = 'down';
        }
     }
     else {
-       document.forms['initForm'].order.value = orderColumn;
-       document.forms['initForm'].direction.value = 'down';
+       document.forms[0].order.value = orderColumn;
+       document.forms[0].direction.value = 'down';
     }
-    newDirection=document.forms['initForm'].direction.value;
-    type=document.forms['initForm'].order.value;
-    var url = action + '.do?' + 'type=' + action.toLowerCase() + '&orderby='+type+'&parentchannel=' + channel+'&direction='+newDirection+'&offset='+offset;
+    newDirection=document.forms[0].direction.value;
+    type=document.forms[0].order.value;
+    var url = 'Content.do?orderby='+type+'&parentchannel=' + channel+'&direction='+newDirection+'&offset='+offset;
     
     document.location = url;
     
@@ -144,10 +144,4 @@ function massMove( parentChannel,url) {
     moveContentNumber = objectnumbers.substr(0,objectnumbers.length - 1);
     moveParentChannel = parentChannel;
     openPopupWindow('selectchannel', 340, 400,url);
-}
-
-function massDelete(confirmmessage, formname) {
-   if(confirm(confirmmessage)){
-      document.forms[formname].submit();
-   }
 }

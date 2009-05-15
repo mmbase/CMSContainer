@@ -96,14 +96,6 @@ public class ChannelDelete extends MMBaseFormlessAction {
             moveElementToTrash(cloud, channelNode, elementNode);
          }
       }
-      // get relations of content elements to channels other then the creationchannel
-      NodeList createdAssetElements = RepositoryUtil.getCreatedAssetElements(channelNode);
-
-      for (Iterator<Node> iter = createdAssetElements.iterator(); iter.hasNext();) {
-         Node elementNode = iter.next();
-         // get relations
-         moveAssetElementToTrash(cloud, channelNode, elementNode);
-      }
       deleteChannel(channelNode);
    }
 
@@ -114,21 +106,18 @@ public class ChannelDelete extends MMBaseFormlessAction {
          deleteAction(cloud, childChannel);
       }
       
-      NodeList createdContentElements = RepositoryUtil.getCreatedElements(channelNode);
-      for (Iterator<Node> iter = createdContentElements.iterator(); iter.hasNext();) {
+      NodeList createdElements = RepositoryUtil.getCreatedElements(channelNode);
+      for (Iterator<Node> iter = createdElements.iterator(); iter.hasNext();) {
          Node objectNode = iter.next();
          moveElementToTrash(cloud, channelNode, objectNode);
-      }
-      NodeList createdAssetElements = RepositoryUtil.getCreatedAssetElements(channelNode);
-      for (Iterator<Node> iter = createdAssetElements.iterator(); iter.hasNext();) {
-         Node objectNode = iter.next();
-         moveAssetElementToTrash(cloud, channelNode, objectNode);
       }
       deleteChannel(channelNode);
    }
 
    private void deleteChannel(Node channelNode) {
-      unpublish(channelNode);
+      Publish.remove(channelNode);
+      Workflow.remove(channelNode);
+      Publish.unpublish(channelNode);
       
       channelNode.delete(true);
    }
@@ -139,34 +128,24 @@ public class ChannelDelete extends MMBaseFormlessAction {
       RepositoryUtil.removeCreationRelForContent(elementNode);
       RepositoryUtil.addCreationChannel(elementNode, newChannelNode);
 
-      unpublish(elementNode);
+      // unpublish and remove from workflow
+      Publish.remove(elementNode);
+      Workflow.remove(elementNode);
+      Publish.unpublish(elementNode);
    }
 
    private void moveElementToTrash(Cloud cloud, Node channelNode, Node elementNode) {
-      // remove the Content element
+      // remove the element
       RepositoryUtil.removeContentFromChannel(elementNode, channelNode);
       RepositoryUtil.removeCreationRelForContent(elementNode);
 
       RepositoryUtil.removeContentFromAllChannels(elementNode);
       RepositoryUtil.addContentToChannel(elementNode, RepositoryUtil.getTrashNode(cloud));
 
-      //remove the Asset Element
-      RepositoryUtil.removeContentFromChannel(elementNode, channelNode);
-      unpublish(elementNode);
-   }
-   private void moveAssetElementToTrash(Cloud cloud, Node channelNode, Node elementNode) {
-
-      //remove the Asset Element
-      RepositoryUtil.removeAssetFromChannel(elementNode, channelNode);
-      RepositoryUtil.removeCreationRelForAsset(elementNode);
-      RepositoryUtil.addAssetToChannel(elementNode, RepositoryUtil.getTrashNode(cloud));
       // unpublish and remove from workflow
-      unpublish(elementNode);
-   }
-
-   private void unpublish(Node elementNode) {
       Publish.remove(elementNode);
       Workflow.remove(elementNode);
       Publish.unpublish(elementNode);
-   } 
+   }
+    
 }
