@@ -31,9 +31,12 @@
 <tr>
 	<td colspan="2"><fmt:message key="edit_defaults.window" />:</td>
 	<td>
+		<cmsc:property key="system.relatedcontentpositions.hide" var="ignore" />
 		<cmsc:select var="relatedWindow">
 			<c:forEach var="position" items="${relatedpagepositions}">
-				<cmsc:option value="${position}" />
+				<c:if test="${! fn:containsIgnoreCase(ignore, position) }">
+					<cmsc:option value="${position}" />
+				</c:if>
 			</c:forEach>
 		</cmsc:select>
 	</td>
