@@ -388,16 +388,47 @@ var Data = {
 }
 
 function getAssets(type, channelid){    
-    //alert(Data[type]);
-	var iWidth=800; 
-    var iHeight=200;
-	var xposition = 0;
-            var yposition = 0;
-            if ((parseInt(navigator.appVersion) >= 4)) {
-                xposition = (screen.width-iWidth ) / 2;
-                yposition = (screen.height-iHeight - 25) / 2;
-            }
+	//alert(Data[type]);
+	var width=730; 
+	var height=550;
 	var url='../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assettypes='+type+'&strict='+type;
-	window.open(url, 
-	'contentselector', 'width=730,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,left='+xposition+',top='+yposition+',menubar=no');
+	var windowName='contentselector';
+	var options = getPopupPositionProps(width, height) + ',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no';
+	window.open(url, windowName, options);
+}
+
+// override doHelp() from editwizard.jsp. (fix CMSC-1124)
+function doHelp() {
+    var w=window.open("","Help", getPopupPositionProps(350, 400)+",scrollbars=yes,toolbar=no,statusbar=no,resizable=yes");
+    try {
+        var str=document.getElementById("help_text").innerHTML;
+
+        w.document.writeln('<html><head>');
+        w.document.writeln('<link rel="stylesheet" href="../style/layout/help.css">');
+        w.document.writeln('<link rel="stylesheet" href="../style/color/help.css">');
+        w.document.writeln('</head><body>');
+        w.document.writeln(str);
+        w.document.writeln('</body></html>');
+    } catch (e) {
+        w.close();
+    }
+}
+
+// override showSearchScreen() from editwizard.jsp. (fix CMSC-1124)
+function showSearchScreen(cmd, url) {
+	var windowPopup = window.open("","Search", getPopupPositionProps(400, 400)+",scrollbars=yes,toolbar=no,status=yes,resizable=yes");
+	try {
+		windowPopup.document.writeln('<span>...searching...</span>');
+	} catch (e) {
+		windowPopup.close();
+	}
+   	windowPopup.document.location.replace(url);
+}
+
+// override doStartUpload() from editwizard.jsp. (fix CMSC-1124)
+function doStartUpload(el) {
+    var href = el.getAttribute("href");
+    window.open(href,null,getPopupPositionProps(300, 300)+",status=yes,toolbar=no,titlebar=no,scrollbars=no,resizable=no,menubar=no");
+
+    return false;
 }
