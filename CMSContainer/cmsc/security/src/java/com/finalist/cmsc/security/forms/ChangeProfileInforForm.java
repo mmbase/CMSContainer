@@ -70,6 +70,9 @@ public class ChangeProfileInforForm extends ActionForm {
 
          }
       }
+      if (getEmail() == null || getEmail().length() == 0) {
+         errors.add("email", new ActionMessage("error.email.empty"));
+      }
       return errors;
    }
 

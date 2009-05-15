@@ -32,6 +32,9 @@
 <html:form action="/editors/usermanagement/ChangeProfileInforAction">
    <table class="formcontent">
       <tr>
+            <td><fmt:message key="user.notice" /></td>
+         </tr>
+      <tr>
          <td class="fieldname" width='180'><fmt:message key="user.account" /></td>
          <td>
              <bean:write name="ChangeProfileInforForm" property="username" />
@@ -50,7 +53,7 @@
          <td><html:text property="surname" size='30' maxlength='40' />&nbsp;&nbsp;<fmt:message key="user.textlength" /></td>
       </tr>
       <tr>
-         <td class="fieldname"><fmt:message key="user.email" /></td>
+         <td class="fieldname"><fmt:message key="user.email" />*</td>
          <td><html:text property="email" size='30' maxlength='255' />
             <span class="notvalid"><html:errors bundle="SECURITY" property="email" /></span>
          </td>
