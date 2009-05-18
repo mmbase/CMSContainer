@@ -549,5 +549,26 @@ public class HttpUtil {
         }
         return msg;
     }
+
+   /**
+    * Adds server document root to the URL 
+    * @param request
+    * @param url
+    * @return absolute url
+    */
+   public static String makeAbsolute(HttpServletRequest request, String url) {
+      if (url.indexOf("://") > -1) {
+         return url;
+      }
+      String webapp = getServerDocRoot(request);
+      
+      if (url.startsWith("/")) {
+         url = webapp + url.substring(1);
+      }
+      else {
+         url = webapp + url;
+      }
+      return url;
+   }
     
 }
