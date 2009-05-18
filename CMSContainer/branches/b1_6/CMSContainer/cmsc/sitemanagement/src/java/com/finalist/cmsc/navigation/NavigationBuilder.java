@@ -12,8 +12,18 @@ package com.finalist.cmsc.navigation;
 import java.util.LinkedHashMap;
 
 import com.finalist.cmsc.builders.TreeBuilder;
+import com.finalist.cmsc.mmbase.TypeUtil;
 
 public abstract class NavigationBuilder extends TreeBuilder {
+
+   @Override
+   public boolean init() {
+      boolean result = super.init();
+      if (result) {
+         TypeUtil.fillTypeCache(this);
+      }
+      return result;
+   }
 
     @Override
     protected String getRelationName() {
