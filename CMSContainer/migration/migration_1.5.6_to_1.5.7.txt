@@ -1,0 +1,16 @@
+Migration document:
+
+From version: 1.5.6
+To version: 1.5.7
+
+
+Name: Upgrade MMBase in customer project / implementation
+Goal: Upgrade MMBase
+Type: do it yourself
+--- Start script ---
+New:
+mmbase.version=1.8.7-20090515
+--- End script ---
+*
+*
+*
