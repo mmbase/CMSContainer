@@ -18,6 +18,7 @@ import org.mmbase.bridge.jsp.taglib.NodeReferrerTag;
 import org.mmbase.bridge.jsp.taglib.util.Attribute;
 
 import com.finalist.cmsc.mmbase.ResourcesUtil;
+import com.finalist.cmsc.util.HttpUtil;
 
 @SuppressWarnings("serial")
 public class ContentUrlTag extends NodeReferrerTag {
@@ -83,28 +84,8 @@ public class ContentUrlTag extends NodeReferrerTag {
    }
 
 
-   private String makeAbsolute(String url) {
-      String webapp = getServerDocRoot((HttpServletRequest) pageContext.getRequest());
-      if (url.startsWith("/")) {
-         url = webapp + url.substring(1);
-      }
-      else {
-         url = webapp + url;
-      }
-      return url;
-   }
-
-
-   public static String getServerDocRoot(HttpServletRequest request) {
-      StringBuffer s = new StringBuffer();
-      s.append(request.getScheme()).append("://").append(request.getServerName());
-
-      int serverPort = request.getServerPort();
-      if (serverPort != 80 && serverPort != 443) {
-         s.append(':').append(Integer.toString(serverPort));
-      }
-      s.append('/');
-      return s.toString();
+   public String makeAbsolute(String url) {
+      return HttpUtil.makeAbsolute((HttpServletRequest) pageContext.getRequest(), url);
    }
 
 

@@ -679,6 +679,12 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>Defines if the URL should include the scheme, server name and port</description>
+            <name>absolute</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
     <tag>
         <name>renderURL</name>
@@ -720,7 +726,13 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-    </tag>
+        <attribute>
+          <description>Defines if the URL should include the scheme, server name and port</description>
+          <name>absolute</name>
+          <required>false</required>
+          <rtexprvalue>true</rtexprvalue>
+       </attribute>
+     </tag>
 
     <!-- ############## -->
     <!-- HTML Form Tags -->
