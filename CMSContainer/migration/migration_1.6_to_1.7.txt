@@ -39,3 +39,16 @@ update live_portletparameter set m_key="relatedWindow" where m_key="window" and 
 *
 *
 *
+
+
+Name: Upgrade MMBase in customer project / implementation
+Goal: Upgrade MMBase
+Type: do it yourself
+--- Start script ---
+New:
+mmbase.version=1.8.7-20090515
+--- End script ---
+*
+*
+*
+
