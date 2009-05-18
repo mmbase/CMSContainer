@@ -165,6 +165,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/svnkit/jars/svnkit-1.1.6.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jcvsii/jars/jcvsii-5.3.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/sshtools/jars/j2ssh-core-0.2.2.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/org.json/jars/json-20070829.jar"/>	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
