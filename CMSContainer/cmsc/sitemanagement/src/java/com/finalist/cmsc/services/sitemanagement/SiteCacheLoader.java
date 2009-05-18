@@ -113,6 +113,7 @@ public class SiteCacheLoader {
        q.addStep(navrel);
 
        StepField sourceField = q.addField(NavigationUtil.NAVREL + ".snumber");
+       q.addField(NavigationUtil.NAVREL + ".dnumber");
        StepField posField = q.addField(NavigationUtil.NAVREL + ".pos");
 
        q.addSortOrder(sourceField, SortOrder.ORDER_ASCENDING);
