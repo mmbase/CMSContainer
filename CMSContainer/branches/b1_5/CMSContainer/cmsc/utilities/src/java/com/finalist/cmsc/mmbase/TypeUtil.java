@@ -9,11 +9,20 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.mmbase;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import org.mmbase.cache.Cache;
+import org.mmbase.module.core.*;
+import org.mmbase.storage.search.*;
+import org.mmbase.storage.search.implementation.BasicSearchQuery;
+import org.mmbase.util.logging.Logger;
+import org.mmbase.util.logging.Logging;
 
 public final class TypeUtil {
 
+   /** MMbase logging system */
+   private static final Logger log = Logging.getLoggerInstance(TypeUtil.class.getName());
+   
    private TypeUtil() {
       // utility
    }
@@ -93,4 +102,29 @@ public final class TypeUtil {
       return isSystemType(name, false);
    }
 
+   public static  void fillTypeCache(MMObjectBuilder builder) {
+      MMBase mmbase = builder.getMMBase();
+      try {
+         Cache typeCache = Cache.getCache("TypeCache");
+         if (typeCache != null) {
+            BasicSearchQuery query = new BasicSearchQuery();
+            Step step = query.addStep(builder);
+            query.addField(step, builder.getField("number"));
+            query.addField(step, builder.getField("otype"));
+            
+            List nodes = mmbase.getSearchQueryHandler().getNodes(query, new ResultBuilder(mmbase, query));
+            if (nodes != null) {
+               for (Iterator iterator = nodes.iterator(); iterator.hasNext();) {
+                  MMObjectNode tempNode = (MMObjectNode) iterator.next();
+                  Integer otype = Integer.valueOf(tempNode.getIntValue(MMObjectBuilder.FIELD_OBJECT_TYPE));
+                  Integer number = Integer.valueOf(tempNode.getNumber());
+                  typeCache.put(number, otype);
+               }
+            }
+         }
+      }
+      catch (SearchQueryException e) {
+         log.info("failed to preload typeCache fir " + builder.getTableName(), e);
+      }
+   }
 }
