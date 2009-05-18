@@ -3,6 +3,7 @@ package com.finalist.cmsc.taglib.portlet;
 import java.io.IOException;
 
 import javax.portlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
+import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.ServerUtil;
 
 /**
@@ -45,6 +47,7 @@ public abstract class BasicURLTag extends TagSupport {
    protected String portletMode;
    protected String secure;
    protected Boolean secureBoolean;
+   protected boolean absolute;
    protected String windowState;
    protected String var;
 
@@ -118,27 +121,28 @@ public abstract class BasicURLTag extends TagSupport {
     */
    @Override
    public int doEndTag() throws JspException {
+      String urlString;
+      if (url == null) {
+         urlString = contenturl;
+      }
+      else {
+         urlString = url.toString();
+      }
+      if (absolute) {
+         urlString = HttpUtil.makeAbsolute((HttpServletRequest) pageContext.getRequest(), urlString);
+      }
+      
       if (var == null) {
          try {
             JspWriter writer = pageContext.getOut();
-            if (url == null) {
-               writer.print(contenturl);
-            }
-            else {
-               writer.print(url);
-            }
+            writer.print(urlString);
          }
          catch (IOException ioe) {
             throw new JspException("actionURL/renderURL Tag Exception: cannot write to the output writer.", ioe);
          }
       }
       else {
-         if (url == null) {
-            pageContext.setAttribute(var, contenturl, PageContext.PAGE_SCOPE);
-         }
-         else {
-            pageContext.setAttribute(var, url.toString(), PageContext.PAGE_SCOPE);
-         }
+         pageContext.setAttribute(var, urlString, PageContext.PAGE_SCOPE);
       }
       page = null;
       window = null;
@@ -318,5 +322,15 @@ public abstract class BasicURLTag extends TagSupport {
 
    public void setElementId(String elementId) {
       this.elementId = elementId;
+   }
+
+
+   public void setAbsolute(boolean absolute) {
+      this.absolute = absolute;
+   }
+
+
+   public boolean isAbsolute() {
+      return absolute;
    }
 }
