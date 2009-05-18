@@ -14,3 +14,28 @@ mmbase.version=1.8.7-20090515
 *
 *
 *
+
+
+
+Name: Add templates.bundle = false to mmbase-email-section in project.xml
+Goal: Prevent mmbase-email from packaging.
+Type: do it yourself
+--- Start script ---
+Add:
+<mmbase.templates.bundle>false</mmbase.templates.bundle>
+
+To this section:
+<dependency>
+         <groupId>mmbase</groupId>
+         <artifactId>mmbase-email</artifactId>
+         <version>${mmbase.version}</version>
+         <type>mmbase-module</type>
+         <properties>
+            <mmbase.config.bundle>false</mmbase.config.bundle>
+            <mmbase.templates.bundle>false</mmbase.templates.bundle>
+         </properties>
+      </dependency>
+--- End script ---
+*
+*
+*
