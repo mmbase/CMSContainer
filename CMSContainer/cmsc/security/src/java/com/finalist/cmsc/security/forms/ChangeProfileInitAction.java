@@ -22,7 +22,7 @@ public class ChangeProfileInitAction extends MMBaseAction {
          HttpServletResponse response, Cloud cloud) throws Exception {
       Cloud userCloud = getCloudFromSession(request);
       Node node = SecurityUtil.getUserNode(userCloud);
-      ChangeProfileInforForm changeMyprofileInforForm = (ChangeProfileInforForm) form;
+      ChangeProfileForm changeMyprofileInforForm = (ChangeProfileForm) form;
       changeMyprofileInforForm.setUsername(node.getStringValue("username"));
       changeMyprofileInforForm.setSurname(node.getStringValue("surname"));
       changeMyprofileInforForm.setFirstname(node.getStringValue("firstname"));

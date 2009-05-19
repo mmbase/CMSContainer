@@ -19,10 +19,10 @@ import com.finalist.cmsc.struts.MMBaseAction;
  * 
  * @author Nico Klasens
  */
-public class ChangeProfileInforAction extends MMBaseAction {
+public class ChangeProfileAction extends MMBaseAction {
 
    /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(ChangeProfileInforAction.class.getName());
+   private static final Logger log = Logging.getLoggerInstance(ChangeProfileAction.class.getName());
 
    /**
     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
@@ -40,19 +40,19 @@ public class ChangeProfileInforAction extends MMBaseAction {
 
          log.debug("ChangePasswordAction - doPerform()");
          if (!isCancelled(request)) {
-            ChangeProfileInforForm changeMyprofileInforForm = (ChangeProfileInforForm) form;
+            ChangeProfileForm changeMyprofileForm = (ChangeProfileForm) form;
             Node userNode = SecurityUtil.getUserNode(userCloud);
-            userNode.setStringValue("username", changeMyprofileInforForm.getUsername());
-            if (changeMyprofileInforForm.getNewpassword().trim().length() != 0) {
-               userNode.setStringValue("password", changeMyprofileInforForm.getNewpassword());
+            userNode.setStringValue("username", changeMyprofileForm.getUsername());
+            if (changeMyprofileForm.getNewpassword().trim().length() != 0) {
+               userNode.setStringValue("password", changeMyprofileForm.getNewpassword());
             }
-            userNode.setStringValue("firstname", changeMyprofileInforForm.getFirstname());
-            userNode.setStringValue("prefix", changeMyprofileInforForm.getPrefix());
-            userNode.setStringValue("surname", changeMyprofileInforForm.getSurname());
-            userNode.setStringValue("company", changeMyprofileInforForm.getCompany());
-            userNode.setStringValue("department", changeMyprofileInforForm.getDepartment());
-            userNode.setBooleanValue("emailsignal", changeMyprofileInforForm.isEmailSignal());
-            userNode.setStringValue("emailaddress", changeMyprofileInforForm.getEmail());
+            userNode.setStringValue("firstname", changeMyprofileForm.getFirstname());
+            userNode.setStringValue("prefix", changeMyprofileForm.getPrefix());
+            userNode.setStringValue("surname", changeMyprofileForm.getSurname());
+            userNode.setStringValue("company", changeMyprofileForm.getCompany());
+            userNode.setStringValue("department", changeMyprofileForm.getDepartment());
+            userNode.setBooleanValue("emailsignal", changeMyprofileForm.isEmailSignal());
+            userNode.setStringValue("emailaddress", changeMyprofileForm.getEmail());
             userNode.commit();
          }
          ActionForward af = mapping.findForward(SUCCESS);
