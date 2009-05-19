@@ -16,7 +16,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
  * @author Nico Klasens
  */
 @SuppressWarnings("serial")
-public class ChangeProfileInforForm extends ActionForm {
+public class ChangeProfileForm extends ActionForm {
 
    private String username;
    private String password1;
