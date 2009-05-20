@@ -1,13 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
 <head>
   <title>Insert Inline Image</title>
   <script type="text/javascript" src="popup.js"></script>
   <link rel="stylesheet" type="text/css" href="popup.css" />
 
-  <script type="text/javascript">
-    window.resizeTo(450, 100);
+<script type="text/javascript">
 
 HTMLArea = window.opener.HTMLArea;
 function i18n(str) {
@@ -45,8 +43,9 @@ function Init() {
       document.getElementById("f_border").disabled = true;
       document.getElementById("f_align").disabled = true;
   }
-
+  
   document.getElementById("f_url").focus();
+  window.resizeTo(450, 300);
 }
 
 function onOK() {
@@ -95,25 +94,24 @@ function selectElement(element_id, title, url, width, height, description) {
       document.getElementById("f_align").disabled = false;
       ratio = "";
    }
-   if (document.getElementById("f_alt").value == undefined 
-         || document.getElementById("f_alt").value.length == 0 ) {
+   if (title != undefined && title.length != 0) {
       document.getElementById("f_alt").value = title;
    }
-  var imagePosition = document.getElementById("f_align").value
-  if ("left" == imagePosition) {
-      if (width && height) {
-         if (width > IMAGE_WIDTH_LEFT) {
-            height = Math.round((IMAGE_WIDTH_LEFT / width) * height);
-            width = IMAGE_WIDTH_LEFT;
-         }  
-         document.getElementById("f_width").value = width;
-         document.getElementById("f_height").value = height;
-      }
+   var imagePosition = document.getElementById("f_align").value
+   if ("left" == imagePosition) {
+	   if (width && height) {
+	      if (width > IMAGE_WIDTH_LEFT) {
+	    	   height = Math.round((IMAGE_WIDTH_LEFT / width) * height);
+	         width = IMAGE_WIDTH_LEFT;
+	      }  
+	      document.getElementById("f_width").value = width;
+	      document.getElementById("f_height").value = height;
+	   }
    }
    if ("right" == imagePosition) {
       if (width && height) {
          if (width > IMAGE_WIDTH_RIGHT) {
-            height = Math.round((IMAGE_WIDTH_RIGHT / width) * height);
+       	   height = Math.round((IMAGE_WIDTH_RIGHT / width) * height);
             width = IMAGE_WIDTH_RIGHT;
          }
          document.getElementById("f_width").value = IMAGE_WIDTH_RIGHT;
@@ -130,7 +128,7 @@ function selectElement(element_id, title, url, width, height, description) {
          document.getElementById("f_height").value = height;
       }
    }
-  
+
   //Store the original sizes of image for aspect ratio 
   saveOriginalSizes();
 }
@@ -199,28 +197,28 @@ function openPopupWindow(url, windowName, width, height) {
 <script type="text/javascript">
    var width_orig = 1;
    var height_orig = 1;
-   
+
    function saveOriginalSizes() {
       width_orig = document.getElementById("f_width").value;
       height_orig = document.getElementById("f_height").value;
-   }
-    
-   function calculateWidth() {
-      if ( document.getElementById("f_lock_ratio").checked ) {
+}
+ 
+ function calculateWidth() {
+   if ( document.getElementById("f_lock_ratio").checked ) {
          var height = document.getElementById("f_height").value;
          if (!isNaN(height) && height > 0) {
              document.getElementById("f_width").value = Math.round ((width_orig / height_orig) * height);
          } 
-      }
    }
-    
-   function calculateHeight() {
-      if ( document.getElementById("f_lock_ratio").checked ) {
+ }
+ 
+ function calculateHeight() {
+   if ( document.getElementById("f_lock_ratio").checked ) {
          var width = document.getElementById("f_width").value;
          if (!isNaN(width) && width > 0) {
         	   document.getElementById("f_height").value = Math.round ((height_orig / width_orig) * width);
-         }
-      }
+   }
+ }
    }
 </script>
 
@@ -246,14 +244,12 @@ function openPopupWindow(url, windowName, width, height) {
               </tbody>
          </table>
 
-         <p />
-
          <fieldset style="float: left; margin-left: 5px;">
             <legend>Layout</legend>
             <div class="space"></div>
             
             <div class="fl">Alignment:</div>
-            <select size="1" name="align" id="f_align" title="Positioning of this image" onchange="onSelectPosition()">
+               	  <select size="1" name="align" id="f_align" title="Positioning of this image" onchange="onSelectPosition()">
                   <option value="">Not set</option>
                   <option value="left">Left</option>
                   <option value="right">Right</option>  
