@@ -298,36 +298,16 @@
 			</div>
 			<div class="body">
 			<p><fmt:message key="workflow.publish.failed" /></p>
-			<table>
-				<thead>
-					<tr>
-						<th><fmt:message key="workflow.content.type" /></th>
-						<th><fmt:message key="workflow.title" /></th>
-						<th><fmt:message key="workflow.lastmodifier" /></th>
-						<th><fmt:message key="workflow.lastmodifieddate" /></th>
-					</tr>
-				</thead>
-				<tbody>
-					<mm:listnodes referid="errors">
-						<tr>
-							<td><mm:nodeinfo type="guitype" /></td>
-							<td><mm:hasfield name="title">
-								<mm:field name="title" />
-							</mm:hasfield> <mm:hasfield name="name">
-								<mm:field name="name" />
-							</mm:hasfield></td>
-							<td><mm:hasfield name="lastmodifier">
-								<mm:field name="lastmodifier" />
-							</mm:hasfield></td>
-							<td><mm:hasfield name="lastmodifieddate">
-								<mm:field name="lastmodifieddate">
-									<cmsc:dateformat displaytime="true" />
-								</mm:field>
-							</mm:hasfield></td>
-						</tr>
-					</mm:listnodes>
-				</tbody>
-			</table>
+         <form name="errorWorkflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
+            <input type="hidden" name="status" value="${status}" />
+            <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
+            <c:if test="${fn:length(errors) > 0}">
+            <%@ include file="error_workflow_list_table_fragment.jsp"%>
+            </c:if>
+            &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll" onclick="checkAllElement(this, 'errorWorkflowForm', '')" /> <fmt:message key="workflow.select_all" />
+            <input type="hidden" name="actionvalue" value="publish" /><br />
+            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />" style="background-color: #cc0000 !important;"/>
+         </form>
 			</div>
 			<div class="bottom">
 			<div></div>
@@ -353,13 +333,12 @@
 			key="workflow.wait" /></div>
 		<div class="body" id="workflow-canvas"><c:set var="orderby"
 			value="${param.orderby}" />
-		<form action='?' method="post" onsubmit="return submitValid(false);">
+		<form name="workflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
          <input type="hidden" name="orderby" value="${orderby}" /> 
          <input type="hidden" name="status" value="${status}" />
          <input type="hidden" name="laststatus" />
          <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
       <c:set var="lastvalue" value='<%=request.getAttribute("laststatus")%>' />
-      <c:set var="resultsPerPage" value="50" />
       <c:set var="offset" value="${param.offset}" />
       <c:set var="listSize">${fn:length(nodeList)}</c:set>
 
@@ -370,7 +349,7 @@
 		</c:if> <c:set var="remark">
 			<fmt:message key="workflow.action.reject.remark" />
 		</c:set> &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll"
-			onclick="checkAllElement(this, '')" /> <fmt:message
+			onclick="checkAllElement(this, 'workflowForm', '')" /> <fmt:message
 			key="workflow.select_all" /> <input type="hidden" name="actionvalue"
 			value="" /> <input type='hidden' id="remark" name="remark"
 			value="[unchanged-item]" /> <br />
