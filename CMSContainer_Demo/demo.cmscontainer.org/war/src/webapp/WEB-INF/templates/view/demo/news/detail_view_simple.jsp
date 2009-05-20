@@ -32,11 +32,14 @@
       <cmsc-bm:linkedimages width="220" position="top-left" style="float: left; padding: 0px 20px 20px 0px;" />
       <cmsc-bm:linkedimages width="220" position="top-right" style="float: right; padding: 0px 0px 20px 20px;" />
 
+	<c:if test="${edit}">
+		<div id="content_${elementId}_intro" class="intro">
+	</c:if>
       <mm:field name="intro" escape="none">
         <mm:isnotempty>
-          <p class="intro" id="content_${elementId}_intro"><mm:write /></p>
+          <p><mm:write /></p>
           <c:if test="${edit}">
-          
+  		  	</div>
   		  	<script type="text/javascript">
 				new InPlaceEditor.Local('content_${elementId}_intro', {minHeight:300, htmlarea:true, formId:'contentportlet'});
 		  	</script>
@@ -45,11 +48,11 @@
       </mm:field>
 
 	<c:if test="${edit}">
-		<div id="content_${elementId}_body">
+		<div id="content_${elementId}_body" class="body">
 	</c:if>
       <mm:field name="body" escape="none">
         <mm:isnotempty>
-          <p class="body"><mm:write /></p>
+          <p><mm:write /></p>
         </mm:isnotempty>
       </mm:field>
 	<c:if test="${edit}">
