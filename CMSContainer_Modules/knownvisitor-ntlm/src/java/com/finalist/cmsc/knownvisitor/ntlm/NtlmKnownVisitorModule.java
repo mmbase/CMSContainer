@@ -1,15 +1,12 @@
 package com.finalist.cmsc.knownvisitor.ntlm;
 
-import java.util.Hashtable;
+import java.util.List;
 
-import javax.naming.*;
-import javax.naming.directory.*;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import jcifs.smb.NtlmPasswordAuthentication;
 
 import com.finalist.cmsc.knownvisitor.KnownVisitorModule;
 import com.finalist.cmsc.mmbase.PropertiesUtil;
@@ -17,85 +14,124 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 public class NtlmKnownVisitorModule extends KnownVisitorModule {
    static Log log = LogFactory.getLog(NtlmKnownVisitorModule.class);
 
-   private static final String SESSION_ATTRIBUTE = "NtlmVisitor";
+   private static final String PROPERTY_ENABLED = "knownvisitor-ntlm.enabled";
+   private static final String PROPERTY_IPEXCEPTIONS = "knownvisitor-ntlm.ipexceptions";
 
-   public static final String PROPERTY_ENABLED = "knownvisitor-ntlm.enabled";
-   public static final String PROPERTY_DOMAIN_CONTROLLER = "knownvisitor-ntlm.domaincontroller";
-   public static final String PROPERTY_DOMAIN = "knownvisitor-ntlm.domain";
-   public static final String PROPERTY_IPEXCEPTIONS = "knownvisitor-ntlm.ipexceptions";
-   public static final String PROPERTY_BASIC_AUTH = "basic-authentication";
+   private static final String PROPERTY_DOMAIN_CONTROLLER = "knownvisitor-ntlm.domaincontroller";
+   private static final String PROPERTY_DOMAIN = "knownvisitor-ntlm.domain";
 
-   public static final String PROPERTY_FIELD_EMAIL = "knownvisitor-ntlm.field.email";
-   public static final String PROPERTY_FIELD_REALNAME = "knownvisitor-ntlm.field.realname";
-   public static final String PROPERTY_FIELD_USERNAME = "knownvisitor-ntlm.field.username";
-   public static final String PROPERTY_LOGONNAME = "knownvisitor-ntlm.logonname";
-   public static final String PROPERTY_LOGONPASSWORD = "knownvisitor-ntlm.logonpassword";
-   public static final String PROPERTY_SEARCHDN = "knownvisitor-ntlm.searchDN";
+   private static final String PROPERTY_FIELD_EMAIL = "knownvisitor-ntlm.field.email";
+   private static final String PROPERTY_FIELD_REALNAME = "knownvisitor-ntlm.field.realname";
+   private static final String PROPERTY_FIELD_USERNAME = "knownvisitor-ntlm.field.username";
+   private static final String PROPERTY_LOGONNAME = "knownvisitor-ntlm.logonname";
+   private static final String PROPERTY_LOGONPASSWORD = "knownvisitor-ntlm.logonpassword";
+   private static final String PROPERTY_SEARCHDN = "knownvisitor-ntlm.searchDN";
 
+   private static final String PROPERTY_BASIC_AUTH = "knownvisitor-ntlm.basic-authentication";
+   private static final String PROPERTY_NTLM_AUTH = "knownvisitor-ntlm.ntlm-authentication";
 
    public NtlmKnownVisitorModule() {
       // nothing
    }
-
-
-   @Override
-   public NtlmVisitor getVisitor(HttpServletRequest request) {
-      return (NtlmVisitor) request.getSession().getAttribute(NtlmKnownVisitorModule.SESSION_ATTRIBUTE);
-   }
-
 
    @Override
    public void init() {
       KnownVisitorModule.setInstance(this);
    }
 
-
-   public void justLoggedIn(HttpServletRequest request, NtlmPasswordAuthentication ntlm) {
-      NtlmVisitor visitor = new NtlmVisitor();
-      visitor.setIdentifier(ntlm.getUsername());
-      readLdapInfo(visitor);
-      request.getSession().setAttribute(NtlmKnownVisitorModule.SESSION_ATTRIBUTE, visitor);
+   public String getDomainController() {
+      return getProperty(PROPERTY_DOMAIN_CONTROLLER);
    }
 
-
-   public void readLdapInfo(NtlmVisitor visitor) {
-      DirContext ctx;
-      String query = "(" + getProperty(PROPERTY_FIELD_USERNAME) + "=" + visitor.getIdentifier() + ")";
-      String searchDN = getProperty(PROPERTY_SEARCHDN);
-      String server = getProperty(PROPERTY_DOMAIN_CONTROLLER);
-
-      // Assemble a hash with data to use when connecting...
-      Hashtable<String, String> env = new Hashtable<String, String>();
-      env.put(Context.SECURITY_AUTHENTICATION, "simple");
-      env.put(Context.SECURITY_PRINCIPAL, "cn=" + getProperty(PROPERTY_LOGONNAME) + "," + searchDN);
-      env.put(Context.SECURITY_CREDENTIALS, getProperty(PROPERTY_LOGONPASSWORD));
-
-      // Make a directory context by connecting with the above details.
-      try {
-         ctx = new InitialDirContext(env);
-         NamingEnumeration<SearchResult> answer = ctx.search("ldap://" + server + "/" + searchDN, query, null);
-         if (answer.hasMoreElements()) {
-            SearchResult result = answer.next();
-            Attribute values = result.getAttributes().get(getProperty(PROPERTY_FIELD_REALNAME));
-            if (values.size() > 0) {
-               visitor.setDisplayName((String) values.get(0));
-            }
-
-            values = result.getAttributes().get(getProperty(PROPERTY_FIELD_EMAIL));
-            if (values.size() > 0) {
-               visitor.setEmail((String) values.get(0));
-            }
-         }
+   public String getDomain() {
+      return getProperty(PROPERTY_DOMAIN);
+   }
+   
+   public boolean isEnabled() {
+      String property = PropertiesUtil.getProperty(PROPERTY_ENABLED);
+      if (property != null) {
+         return Boolean.parseBoolean(property);
       }
-      catch (NamingException e) {
-         log.error("problem reading user from LDAP: ", e);
-         visitor.setDisplayName("LDAP failed");
+      return super.isEnabled();
+   }
+   
+   public boolean offerNtlm(HttpServletRequest req) {
+      String property = PropertiesUtil.getProperty(PROPERTY_NTLM_AUTH);
+      if (StringUtils.isNotBlank(property)) {
+         return Boolean.parseBoolean(property);
       }
+      return false;
    }
 
-
-   private String getProperty(String key) {
-      return PropertiesUtil.getProperty(key);
+   
+   public List<String> getIpExceptions() {
+      List<String> property = PropertiesUtil.getPropertyAsList(PROPERTY_IPEXCEPTIONS);
+      if (property != null && !property.isEmpty()) {
+         return property;
+      }
+      return super.getIpExceptions();
+   }
+   
+   @Override
+   public String getBasicAuth() {
+      return PropertiesUtil.getProperty(PROPERTY_BASIC_AUTH);
+   }
+   
+   @Override
+   public String getLdapServer() {
+      String ldapServer = super.getLdapServer();
+      if (StringUtils.isNotBlank(ldapServer)) {
+         return ldapServer;
+      }
+      return getDomainController();
+   }
+   
+   public String getLdapPassword() {
+      String property = getProperty(PROPERTY_LOGONPASSWORD);
+      if (StringUtils.isNotBlank(property)) {
+         return property;
+      }
+      return super.getLdapPassword();
    }
 
+   public String getLdapPrincipal() {
+      String property = getProperty(PROPERTY_LOGONNAME);
+      if (StringUtils.isNotBlank(property)) {
+         return "cn=" + property + "," + getLdapBaseDN();
+      }
+      return super.getLdapPrincipal();
+   }
+
+   public String getLdapBaseDN() {
+      String property = getProperty(PROPERTY_SEARCHDN);
+      if (StringUtils.isNotBlank(property)) {
+         return property;
+      }
+      return super.getLdapBaseDN();
+   }
+
+   public String getLdapUsernameField() {
+      String property = getProperty(PROPERTY_FIELD_USERNAME);
+      if (StringUtils.isNotBlank(property)) {
+         return property;
+      }
+      return super.getLdapUsernameField();
+   }
+
+   public String getLdapEmailField() {
+      String property = getProperty(PROPERTY_FIELD_EMAIL);
+      if (StringUtils.isNotBlank(property)) {
+         return property;
+      }
+      return super.getLdapEmailField();
+   }
+
+   public String getLdapRealnameField() {
+      String property = getProperty(PROPERTY_FIELD_REALNAME);
+      if (StringUtils.isNotBlank(property)) {
+         return property;
+      }
+      return super.getLdapRealnameField();
+   }
+   
 }
