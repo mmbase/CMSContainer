@@ -3,10 +3,9 @@
 <head>
   <title>Insert Inline Image</title>
   <script type="text/javascript" src="popup.js"></script>
-<link rel="stylesheet" type="text/css" href="popup.css" />
+  <link rel="stylesheet" type="text/css" href="popup.css" />
 
-  <script type="text/javascript">
-    window.resizeTo(450, 100);
+<script type="text/javascript">
 
 HTMLArea = window.opener.HTMLArea;
 function i18n(str) {
@@ -45,8 +44,8 @@ function Init() {
       document.getElementById("f_align").disabled = true;
   }
   
-  
   document.getElementById("f_url").focus();
+  window.resizeTo(450, 300);
 }
 
 function onOK() {
@@ -95,8 +94,7 @@ function selectElement(element_id, title, url, width, height, description) {
       document.getElementById("f_align").disabled = false;
       ratio = "";
    }
-   if (document.getElementById("f_alt").value == undefined 
-         || document.getElementById("f_alt").value.length == 0 ) {
+   if (title != undefined && title.length != 0) {
       document.getElementById("f_alt").value = title;
    }
    var imagePosition = document.getElementById("f_align").value
@@ -194,10 +192,7 @@ function openPopupWindow(url, windowName, width, height) {
 
     return true;
 }
-
 </script>
-
-
 
 <script type="text/javascript">
    var width_orig = 1;
@@ -248,8 +243,6 @@ function openPopupWindow(url, windowName, width, height) {
                  </tr>
               </tbody>
          </table>
-
-         <p />
 
          <fieldset style="float: left; margin-left: 5px;">
             <legend>Layout</legend>
