@@ -9,6 +9,7 @@
 	<mm:cloud>
 		<mm:node number="${requestScope['com.finalist.cmsc.beans.om.definitionId']}" notfound="skip">
 			<td>
+				<c:set var="portletId" scope="request"><mm:field name='number'/></c:set>
 				<input type="text" name="portletname" value="<mm:field name='title'/>" disabled="disabled"/>
 			</td>
 		</mm:node>

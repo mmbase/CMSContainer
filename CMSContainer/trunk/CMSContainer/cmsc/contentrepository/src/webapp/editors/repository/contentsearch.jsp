@@ -20,6 +20,7 @@
 <body>
 <mm:import id="searchinit"><c:url value='/editors/repository/SearchInitAction.do'/></mm:import>
 <mm:import externid="action">search</mm:import><%-- either: search, link, of select --%>
+<mm:import externid="portletId" from="parameters" />
 <mm:import externid="mode" id="mode">basic</mm:import>
 <mm:import externid="returnurl"/>
 <mm:import externid="linktochannel"/>
@@ -84,6 +85,7 @@
 
          <html:form action="/editors/repository/ContentSearchAction" method="post">
             <html:hidden property="action" value="${action}"/>
+			<html:hidden property="portletId" value="${portletId}"/>
             <html:hidden property="mode"/>
             <html:hidden property="search" value="true"/>
             <html:hidden property="linktochannel"/>
@@ -119,10 +121,15 @@
                   <td style="width:300px"><html:text property="keywords" style="width:200px"/></td>
                   <td style="width:105px"><fmt:message key="searchform.contenttype" /></td>
                   <td>
-                     <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
-                        <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
-                        <html:optionsCollection name="typesList" value="value" label="label"/>
-                     </html:select>                     
+                     <c:if test="${fn:length(typesList) == 1}" >
+						<input type="text" name="contenttypes" value="${typesList[0].value}" readonly="readonly" />
+					 </c:if>
+					 <c:if test="${fn:length(typesList) != 1}" >
+						 <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
+							<html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
+							<html:optionsCollection name="typesList" value="value" label="label"/>
+						 </html:select>                     
+					 </c:if>
                   </td>
                </tr>              
                   <tr>
