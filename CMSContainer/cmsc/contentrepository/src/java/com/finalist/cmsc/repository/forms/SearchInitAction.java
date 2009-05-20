@@ -1,21 +1,22 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.NodeManager;
 import org.mmbase.storage.search.SortOrder;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class SearchInitAction extends MMBaseAction {
 
@@ -25,6 +26,7 @@ public class SearchInitAction extends MMBaseAction {
 
       SearchForm searchForm = (SearchForm) form;
 
+      String portletId = request.getParameter("portletId");
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -46,7 +48,10 @@ public class SearchInitAction extends MMBaseAction {
       }
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
-      List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
+      List<NodeManager> types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
+      if(types.size() == 0){
+    	  types = ContentElementUtil.getContentTypes(cloud);
+      }
       List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
       for (NodeManager manager : types) {
          String name = manager.getName();
@@ -56,6 +61,7 @@ public class SearchInitAction extends MMBaseAction {
          }
       }
       addToRequest(request, "typesList", typesList);
+      addToRequest(request, "portletId", portletId);
 
       return mapping.findForward("searchoptions");
    }

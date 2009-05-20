@@ -10,7 +10,7 @@
 		<a href="javascript:openRepositoryWithChannel()">
 			<img src="<cmsc:staticurl page='/editors/gfx/icons/preview.png'/>" alt="<fmt:message key="edit_defaults.preview"/>"/>
 		</a>
-		<a href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${contentchannel}' />" target="selectchannel" onclick="openPopupWindow('selectchannel', 340, 400)"> 
+		<a href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${contentchannel}&portletId=${portletId}' />" target="selectchannel" onclick="openPopupWindow('selectchannel', 340, 400)"> 
 			<img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" />"/>
 		</a>
 		<a href="javascript:erase('contentchannel');erase('contentchannelpath')">

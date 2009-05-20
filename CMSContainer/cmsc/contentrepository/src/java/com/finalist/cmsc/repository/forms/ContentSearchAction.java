@@ -72,6 +72,7 @@ public class ContentSearchAction extends PagerAction {
       // Initialize
       SearchForm searchForm = (SearchForm) form;
 
+      String portletId = request.getParameter("portletId");
       String deleteContentRequest = request.getParameter("deleteContentRequest");
       String index = searchForm.getIndex();
       if (StringUtils.isEmpty(index)) {
@@ -94,7 +95,10 @@ public class ContentSearchAction extends PagerAction {
       // First prepare the typeList, we'll need this one anyway:
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
-      List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
+      List<NodeManager> types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
+      if(types.size() == 0){
+    	  types = ContentElementUtil.getContentTypes(cloud);
+      }
       List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
       for (NodeManager manager : types) {
          String name = manager.getName();
