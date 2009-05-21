@@ -16,6 +16,7 @@
       <builder maintainer="finalist.com" version="0">stylerel</builder>
       <builder maintainer="finalist.com" version="0">viewrel</builder>
       <!-- These are the application specific builders -->
+      <builder maintainer="finalist.com" version="0">navigationitem</builder>
       <builder maintainer="finalist.com" version="1">layout</builder>
       <builder maintainer="finalist.com" version="0">namedrel</builder>
       <builder maintainer="finalist.com" version="0">nodeparameter</builder>

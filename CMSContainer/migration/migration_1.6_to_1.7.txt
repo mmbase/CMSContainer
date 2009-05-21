@@ -52,3 +52,17 @@ mmbase.version=1.8.7-20090515
 *
 *
 
+Name: Migration from page/rssfeed/pagealias to navigationitem table
+Goal:  migrate all page/rssfeed/pagealias to new navigationitem table
+Type:  sql-script
+--- Start script ---
+* First start CMSC 1.6 for the first time (it needs to create the navigationitem tables!)
+* Execute the following script on database:
+INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_page;
+INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_rssfeed;
+INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_pagealias;
+
+INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_page;
+INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_rssfeed;
+INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_pagealias;
+--- End script ---
