@@ -53,7 +53,7 @@ mmbase.version=1.8.7-20090515
 *
 
 Name: Migration from page/rssfeed/pagealias to navigationitem table
-Goal:  migrate all page/rssfeed/pagealias to new navigationitem table
+Goal:  Migrate all page/rssfeed/pagealias to new navigationitem table ,CMSC-1036 Introduce supertype NavigationItem
 Type:  sql-script
 --- Start script ---
 * First start CMSC 1.6 for the first time (it needs to create the navigationitem tables!)
