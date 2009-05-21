@@ -1,4 +1,13 @@
 <%@ include file="globals.jsp" %>
+<table border="0" width="100%">
+   <tr>
+      <td style="width:50%;">
+            <fmt:message key="workflow.block.totalresults">
+               <fmt:param>${fn:length(errors)}</fmt:param>
+            </fmt:message>
+      </td>
+   </tr>
+</table>
 <table>
    <thead>
       <tr>
@@ -10,9 +19,9 @@
          <th><fmt:message key="workflow.lastmodifieddate" /></th>
       </tr>
    </thead>
-   <tbody>
+   <tbody class="hover">
       <mm:listnodes referid="errors">
-         <tr>
+         <tr <mm:even inverse="true">class="swap"</mm:even>>
             <td>
                <mm:field name="number" id="errorElemNumber" write="false"/>
                <input type="checkbox" name="check_${errorElemNumber}" value="on"/>
@@ -53,16 +62,16 @@
                  </c:if>
                </c:if>
             </td>
-            <td><mm:nodeinfo type="guitype" /></td>
-            <td><mm:hasfield name="title">
+            <td style="white-space: nowrap;"><mm:nodeinfo type="guitype" /></td>
+            <td style="white-space: nowrap;"><mm:hasfield name="title">
                <mm:field name="title" />
             </mm:hasfield> <mm:hasfield name="name">
                <mm:field name="name" />
             </mm:hasfield></td>
-            <td><mm:hasfield name="lastmodifier">
+            <td style="white-space: nowrap;"><mm:hasfield name="lastmodifier">
                <mm:field name="lastmodifier" />
             </mm:hasfield></td>
-            <td><mm:hasfield name="lastmodifieddate">
+            <td style="white-space: nowrap;"><mm:hasfield name="lastmodifieddate">
                <mm:field name="lastmodifieddate">
                   <cmsc:dateformat displaytime="true" />
                </mm:field>
@@ -70,4 +79,13 @@
          </tr>
       </mm:listnodes>
    </tbody>
+</table>
+<table border="0" width="100%">
+   <tr>
+      <td style="width:50%;">
+            <fmt:message key="workflow.block.totalresults">
+               <fmt:param>${fn:length(errors)}</fmt:param>
+            </fmt:message>
+      </td>
+   </tr>
 </table>

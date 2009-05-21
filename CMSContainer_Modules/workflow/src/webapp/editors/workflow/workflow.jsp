@@ -298,6 +298,13 @@
 			</div>
 			<div class="body">
 			<p><fmt:message key="workflow.publish.failed" /></p>
+			</div>
+			<div class="bottom">
+			<div></div>
+			</div>
+			</div>
+			</div>
+         <div class="body">
          <form name="errorWorkflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
             <input type="hidden" name="status" value="${status}" />
             <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
@@ -306,14 +313,9 @@
             </c:if>
             &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll" onclick="checkAllElement(this, 'errorWorkflowForm', '')" /> <fmt:message key="workflow.select_all" />
             <input type="hidden" name="actionvalue" value="publish" /><br />
-            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />" style="background-color: #cc0000 !important;"/>
+            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />"/>
          </form>
-			</div>
-			<div class="bottom">
-			<div></div>
-			</div>
-			</div>
-			</div>
+         </div>
 		</c:if>
       <c:if test="${not empty param.errMessage}">
          <fmt:message key="${param.errMessage}" />
