@@ -95,9 +95,14 @@ public class ContentSearchAction extends PagerAction {
       // First prepare the typeList, we'll need this one anyway:
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
-      List<NodeManager> types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
-      if(types.size() == 0){
+      List<NodeManager> types;
+      if(StringUtils.isEmpty(portletId)){
     	  types = ContentElementUtil.getContentTypes(cloud);
+      } else {
+          types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
+          if(types.size() == 0){
+        	  types = ContentElementUtil.getContentTypes(cloud);
+          }
       }
       List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
       for (NodeManager manager : types) {
