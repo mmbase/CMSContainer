@@ -29,7 +29,7 @@ GOTO end
 	copy /Y %MAVEN_HOME_LOCAL%\repository\finalist\mmbase-modules\cmsc-*-%VERSION%.* \\intranet\cmscontainer.org\public_html\files\maven\finalist\mmbase-modules\
 	
 	mkdir \\intranet\cmscontainer.org\public_html\files\%VERSION%
-	copy /Y %MAVEN_HOME_LOCAL%\repository\finalist\wars\cmsc-*-%VERSION%.* \\intranet\cmscontainer.org\public_html\files\
+	copy /Y %MAVEN_HOME_LOCAL%\repository\finalist\wars\cmsc-*-%VERSION%.war \\intranet\cmscontainer.org\public_html\files\%VERSION%\
 
 	svn copy -m "Release %VERSION%" https://scm.mmbase.org/CMSContainer/branches/b%BRANCH% https://scm.mmbase.org/CMSContainer/tags/v%TAG%
 
