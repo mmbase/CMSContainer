@@ -17,7 +17,7 @@
         <c:otherwise>
     		<%com.finalist.cmsc.services.sitemanagement.SiteManagement.resetSiteCache();%>
             <cmscedit:sideblock title="resetcache.title">
-	            <h2><fmt:message key="resetcache.success" /></h2>
+	            <p><fmt:message key="resetcache.success" /></p>
             </cmscedit:sideblock>
         </c:otherwise>
     </c:choose>
