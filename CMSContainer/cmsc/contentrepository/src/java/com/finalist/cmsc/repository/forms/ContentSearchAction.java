@@ -49,8 +49,11 @@ import com.finalist.cmsc.util.KeywordUtil;
 
 public class ContentSearchAction extends PagerAction {
 
+   private static final String TYPES_LIST = "typesList";
+   private static final String DESTINATION = "destination";
+   private static final String ALLOWREL = "allowrel";
+   private static final String TYPEDEF = "typedef";
    public static final String GETURL = "geturl";
-
    public static final String PERSONAL = "personal";
    public static final String MODE = "mode";
    public static final String AUTHOR = "author";
@@ -102,7 +105,7 @@ public class ContentSearchAction extends PagerAction {
       if(StringUtils.isEmpty(portletId)){
     	  types = ContentElementUtil.getContentTypes(cloud);
       } else {
-          types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
+          types = cloud.getNode(portletId).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
           if(types.size() == 0){
         	  types = ContentElementUtil.getContentTypes(cloud);
           }
@@ -116,7 +119,7 @@ public class ContentSearchAction extends PagerAction {
             validTypes.add(manager.getNumber());
          }
       }
-      addToRequest(request, "typesList", typesList);
+      addToRequest(request, TYPES_LIST, typesList);
 
       // Switching tab, no searching.
       if ("false".equalsIgnoreCase(searchForm.getSearch())) {

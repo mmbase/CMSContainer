@@ -20,13 +20,20 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class SearchInitAction extends MMBaseAction {
 
-   @Override
+   private static final String SEARCHOPTIONS = "searchoptions";
+   private static final String TYPES_LIST = "typesList";
+   private static final String PORTLET_ID = "portletId";
+   private static final String DESTINATION = "destination";
+   private static final String ALLOWREL = "allowrel";
+   private static final String TYPEDEF = "typedef";
+
+@Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
 
       SearchForm searchForm = (SearchForm) form;
 
-      String portletId = request.getParameter("portletId");
+      String portletId = request.getParameter(PORTLET_ID);
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -52,7 +59,7 @@ public class SearchInitAction extends MMBaseAction {
       if(StringUtils.isEmpty(portletId)){
     	  types = ContentElementUtil.getContentTypes(cloud);
       } else {
-          types = cloud.getNode(portletId).getRelatedNodes("typedef", "allowrel", "destination");
+          types = cloud.getNode(portletId).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
           if(types.size() == 0){
         	  types = ContentElementUtil.getContentTypes(cloud);
           }
@@ -65,10 +72,10 @@ public class SearchInitAction extends MMBaseAction {
             typesList.add(bean);
          }
       }
-      addToRequest(request, "typesList", typesList);
-      addToRequest(request, "portletId", portletId);
+      addToRequest(request, TYPES_LIST, typesList);
+      addToRequest(request, PORTLET_ID, portletId);
 
-      return mapping.findForward("searchoptions");
+      return mapping.findForward(SEARCHOPTIONS);
    }
 
 }
