@@ -44,7 +44,7 @@
 
 
 <mm:notpresent referid="channelsurl">
-	<mm:url page="/editors/repository/select/SelectorContent.do" id="channelsurl" write="false" />
+	<mm:url page="/editors/repository/select/SelectorContent.do?portletId=${portletId}" id="channelsurl" write="false" />
 </mm:notpresent>
 <mm:notpresent referid="contenturl">
 	<mm:url page="/editors/repository/SearchInitAction.do?action=select&mode=advanced&portletId=${portletId}" id="contenturl" write="false" />

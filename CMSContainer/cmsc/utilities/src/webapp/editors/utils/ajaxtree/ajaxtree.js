@@ -210,10 +210,10 @@ var ajaxTreeHandler = {
 };
 
 ajaxTreeLoader = {
-	initTree : function (persistentId, elementId) {
+	initTree : function (persistentId, elementId, portletId) {
 		var treeAction = new AjaxTreeAction();
 		treeAction.elementId = elementId;
-		treeAction.execute('inittree', persistentId);
+		treeAction.execute('inittree', persistentId, portletId);
 	},
 	loadChildren : function (node) {
 		var treeAction = new AjaxTreeAction();
@@ -236,11 +236,14 @@ ajaxTreeLoader = {
 function AjaxTreeAction() {
 }
 
-AjaxTreeAction.prototype.execute = function(action, persistentId) {
+AjaxTreeAction.prototype.execute = function(action, persistentId, portletId) {
     var options  = {asynchronous : true, onFailure: this.errorRequest };
     options.onSuccess = null;
 	options.parameters = 'action=' + action;
 	options.parameters += '&persistentid=' + persistentId;
+	if(portletId != null && portletId != undefined){
+		options.parameters += '&portletId=' + portletId;	
+	}
 	if (action == 'inittree') {
 		options.onSuccess = this.buildTree.bind(this);
 	}
