@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
 import org.mmbase.storage.search.FieldCompareConstraint;
 import org.mmbase.storage.search.FieldValueConstraint;
+import org.mmbase.storage.search.FieldValueInConstraint;
 import org.mmbase.storage.search.SortOrder;
 import org.mmbase.storage.search.Step;
 import org.mmbase.storage.search.StepField;
@@ -94,6 +96,7 @@ public class ContentSearchAction extends PagerAction {
 
       // First prepare the typeList, we'll need this one anyway:
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+      TreeSet<Integer> validTypes = new TreeSet<Integer>();
 
       List<NodeManager> types;
       if(StringUtils.isEmpty(portletId)){
@@ -110,6 +113,7 @@ public class ContentSearchAction extends PagerAction {
          if (!hiddenTypes.contains(name)) {
             LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
             typesList.add(bean);
+            validTypes.add(manager.getNumber());
          }
       }
       addToRequest(request, "typesList", typesList);
@@ -135,6 +139,9 @@ public class ContentSearchAction extends PagerAction {
       Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
       if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
          query.addNode(channelStep, cloud.getNode(searchForm.getParentchannel()));
+         StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
+         FieldValueInConstraint contentConstraint = query.createConstraint(contentStepField, validTypes);
+         SearchUtil.addConstraint(query, contentConstraint);
          query.setNodeStep(contentStep);
          queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
       } else {
@@ -144,6 +151,9 @@ public class ContentSearchAction extends PagerAction {
          FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
                trashNumber);
          SearchUtil.addConstraint(query, channelConstraint);
+         StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
+         FieldValueInConstraint contentConstraint = query.createConstraint(contentStepField, validTypes);
+         SearchUtil.addConstraint(query, contentConstraint);
          query.setNodeStep(contentStep);
       }
       // Order the result by:
