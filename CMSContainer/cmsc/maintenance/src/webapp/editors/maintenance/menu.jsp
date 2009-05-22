@@ -37,6 +37,10 @@
            <c:url var="cleanICaches" value="/editors/maintenance/clean-duplicate-icaches.jsp"/>
            <a href="${cleanICaches}" target="rightpane"><fmt:message key="maintenance.icaches.cleanduplicates"/></a>
         </li>
+        <li class="advancedpublish">
+           <c:url var="fixCreationrels" value="/editors/maintenance/fix-creationrel.jsp"/>
+           <a href="${fixCreationrels}" target="rightpane"><fmt:message key="maintenance.creationrels.create"/></a>
+        </li>
 
 			<mm:haspage page="/editors/publish-remote">
             <li class="advancedpublish">
