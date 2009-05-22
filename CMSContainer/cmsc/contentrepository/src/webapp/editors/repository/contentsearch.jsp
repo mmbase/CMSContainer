@@ -186,7 +186,7 @@
                                        <td height="32">
                                           <mm:fieldinfo type="guiname"/>:
                                           <mm:fieldinfo type="name" id="fieldName" write="false">
-                                             <c:set var="fields">${fields}, ${contenttypes}+"."+${fieldName}</c:set>
+                                             <c:set var="fields">${fields},${contenttypes}.${fieldName}</c:set>
                                           </mm:fieldinfo>
                                     </tr>
                                   </c:if>
