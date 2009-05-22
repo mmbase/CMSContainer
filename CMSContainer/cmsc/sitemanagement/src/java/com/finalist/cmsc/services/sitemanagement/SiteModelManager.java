@@ -36,8 +36,21 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    /** MMbase logging system */
    private static final Logger log = Logging.getLoggerInstance(SiteModelManager.class.getName());
 
+   private static SiteModelManager siteModelManager;
+   static {
+      try {
+         siteModelManager = new SiteModelManager();
+      }
+      catch (CacheException e) {
+         throw new ExceptionInInitializerError(e);
+      }
+   }
 
-   public SiteModelManager() throws CacheException {
+   public static SiteModelManager getInstance() {
+      return siteModelManager;
+   }
+   
+   private SiteModelManager() throws CacheException {
       super();
 
       selectDefinition = new PortletDefinition();
