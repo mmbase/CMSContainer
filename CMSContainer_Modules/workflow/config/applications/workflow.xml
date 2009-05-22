@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE application PUBLIC "-//MMBase/DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
-<application name="workflow" maintainer="finalist.com" version="3" auto-deploy="true">
+<application name="workflow" maintainer="finalist.com" version="1" auto-deploy="true">
    <requirements>
-      <requires name="contentrepository" maintainer="finalist.com" version="3" type="application"/>
+      <requires name="contentrepository" maintainer="finalist.com" version="2" type="application"/>
       <requires name="sitemanagement" maintainer="finalist.com" version="1" type="application"/>
    </requirements>
    <neededbuilderlist>
@@ -16,12 +16,11 @@
         <reldef source="workflowrel" target="workflowrel" direction="bidirectional" guisourcename="workflowrel" guitargetname="workflowrel" builder="workflowrel" />
    </neededreldeflist>
    <allowedrelationlist>
-      <relation from="workflowitem" to="user" type="assignedrel" />
-      <relation from="workflowitem" to="user" type="creatorrel" />
-      <relation from="workflowitem" to="contentelement" type="workflowrel" />
-      <relation from="workflowitem" to="assetelement" type="workflowrel" />
-      <relation from="workflowitem" to="contentchannel" type="workflowrel" />
-      <relation from="workflowitem" to="page" type="workflowrel" />
+       <relation from="workflowitem" to="user" type="assignedrel" />
+       <relation from="workflowitem" to="user" type="creatorrel" />
+	   <relation from="workflowitem" to="contentelement" type="workflowrel" />
+	   <relation from="workflowitem" to="contentchannel" type="workflowrel" />
+	   <relation from="workflowitem" to="page" type="workflowrel" />
    </allowedrelationlist>
 
    <datasourcelist>

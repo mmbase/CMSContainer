@@ -583,7 +583,7 @@ public abstract class NewsletterUtil {
          if(null!=language){
             schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression"),language));
          }else{
-            schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression")));
+         schedule.setScheduleDescription(getScheduleMessageByExpression(scheduleNode.getStringValue("expression")));
          }
          schedules.add(schedule);
       }
@@ -750,18 +750,14 @@ public abstract class NewsletterUtil {
    }
    
    public static String getScheduleMessageByExpression(String stringValue) {
-      
       return getScheduleMessageByExpression(stringValue,null);
    }
-
    public static void addNewsletterCreationChannel(int newsletterId ,int editionId) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       RelationManager relManager = cloud.getRelationManager(NEWSLETTER, NEWSLETTERPUBLICATION, RELATED);
       relManager.createRelation(cloud.getNode(newsletterId), cloud.getNode(editionId)).commit();
    }
-
    public static void getSchedulesBynewsletterId(Integer valueOf) {
       getSchedulesBynewsletterId(valueOf,null);
-      
    }
 }

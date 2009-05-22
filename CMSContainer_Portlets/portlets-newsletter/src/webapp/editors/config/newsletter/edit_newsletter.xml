@@ -102,4 +102,5 @@
    <list include="config/stylesheet/search_page_stylerel_stylesheet.xml" />
    <list include="config/images/search_page_namedrel_images.xml" />
    <list include="config/newsletter/search_newsletter_posrel_term.xml" />
+
 </form-schema>

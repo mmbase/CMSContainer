@@ -3,10 +3,6 @@ package com.finalist.cmsc.resources.forms;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
 
-/**
- * @author Billy
- *
- */
 public class AttachmentAction extends SearchAction {
 
    public static final String TITLE_FIELD = "title";

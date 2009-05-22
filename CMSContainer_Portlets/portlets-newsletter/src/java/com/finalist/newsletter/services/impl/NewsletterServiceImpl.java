@@ -48,7 +48,7 @@ public class NewsletterServiceImpl implements NewsletterService {
    public String getNewsletterName(int newsletterId) {
       String name = "";
 
-      if (newsletterId > 0) {
+      if (newsletterId >0) {
          name = newsletterCAO.getNewsletterById(newsletterId).getTitle();
       }
 
@@ -125,4 +125,5 @@ public class NewsletterServiceImpl implements NewsletterService {
    public void processBouncesOfPublication(String publicationId, String userId, String bounceContent) {
       newsletterCAO.processBouncesOfPublication(publicationId, userId, bounceContent);
    }
+
 }

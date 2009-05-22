@@ -5,7 +5,6 @@
 <mm:import externid="channel" from="parameters" />
 <mm:import externid="contentnumber" from="parameters" />
 <mm:import externid="action" from="parameters" />
-<mm:import externid="portletId" from="parameters" />
 
 <mm:cloud loginpage="../../login.jsp">
 
@@ -44,10 +43,10 @@
 
 
 <mm:notpresent referid="channelsurl">
-	<mm:url page="/editors/repository/select/SelectorContent.do?portletId=${portletId}" id="channelsurl" write="false" />
+	<mm:url page="/editors/repository/select/SelectorContent.do" id="channelsurl" write="false" />
 </mm:notpresent>
 <mm:notpresent referid="contenturl">
-	<mm:url page="/editors/repository/SearchInitAction.do?action=select&mode=advanced&portletId=${portletId}" id="contenturl" write="false" />
+	<mm:url page="/editors/repository/SearchInitAction.do?action=select&mode=advanced" id="contenturl" write="false" />
 </mm:notpresent>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
@@ -58,8 +57,8 @@
 			window.onresize= resizeTree;
 
 			function resizeTree() {
-			  if(window.frames["selectchannels"].resizeTreeDiv) {
-			  	window.frames["selectchannels"].resizeTreeDiv();
+			  if(document.frames["selectchannels"].resizeTreeDiv) {
+			  	document.frames["selectchannels"].resizeTreeDiv();
 			  }
 			}
 		</script>

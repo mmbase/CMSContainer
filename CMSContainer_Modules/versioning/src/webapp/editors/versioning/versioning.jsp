@@ -3,13 +3,7 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="versioning.title.content" >
-   <script type="text/javascript">
-      function diff(objectNumber,archiveNumber) {
-         openPopupWindow("diff", 500, 500, "../versioning/DiffAction.do?objectnumber=" + objectNumber+"&archivenumber="+archiveNumber);
-      }
-   </script>
-</cmscedit:head>
+<cmscedit:head title="versioning.title.content" />
 <body>
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
 <mm:import externid="archiveNodes" jspvar="nodeList" vartype="List" />
@@ -46,15 +40,11 @@
          <c:if test="${empty archiveNodes}">
             <p><fmt:message key="versioning.no.versions"/></p>
          </c:if>
-         <c:if test="${action == 'workflow' }">
-             <fmt:message key="versioning.workflow.restore" />
-         </c:if>
          </div>
          <div class="ruler_green">
             <div><fmt:message key="versioning.title.content" /></div>
          </div>
 		<div class="body">
-
          <mm:list referid="archiveNodes">
             <mm:first>
                <table>
@@ -62,8 +52,6 @@
                      <tr>
                         <th nowrap="true"><fmt:message key="versioning.date"/></th>
                         <th><fmt:message key="versioning.author"/></th>
-                        <th><fmt:message key="versioning.publish"/></th>
-                        <th>&nbsp;</th>
                         <th>&nbsp;</th>
                      </tr>
                   </thead>
@@ -84,49 +72,17 @@
                      <mm:field name="firstname"/> <mm:field name="prefix"/>  <mm:field name="surname"/> (<mm:field name="username"/>)
                   </mm:node>
                </td>
-               <td><mm:field name="onlive"/>
-               </td>
-               <mm:field name="publish" jspvar="isPublished" write="false"/>
                <td>
                   <c:url value="/editors/versioning/RestoreAction.do" var="restoreUrl">
                      <c:param name="archivenumber"><mm:field name="number"/></c:param>
                      <c:param name="nodenumber"><mm:field name="original_node"/></c:param>
                   </c:url>
+
                   <c:if test="${isAllowed}">
-                     <c:if test="${empty action}">
-                        <a href="${restoreUrl}" class="button">
-                           <fmt:message key="versioning.restore"/>
-                        </a>
-                     </c:if>
-                     <c:if test="${action == 'workflow' && isPublished}">
-                        <c:url value="/editors/workflow/WorkflowItemDelete.do" var="returnurl">
-                           <c:param name="number">${number}</c:param>
-                           <c:param name="action">delete</c:param>
-                           <c:param name="archivenumber"><mm:field name="number"/></c:param>
-                           <c:param name="returnurl">${returnUrl}</c:param>
-                        </c:url>
-                        <a href="${returnurl}" class="button">
-                           <fmt:message key="versioning.restore"/>
-                        </a>
-                        <a href="#" class="button" onclick="diff('${number}','<mm:field name="number"/>')">
-                            <fmt:message key="versioning.diff"/>
-                        </a>
-                     </c:if> 
-                     <c:if test="${action == 'workflow' && !isPublished}">
-                        <fmt:message key="versioning.restore"/>
-                     </c:if> 
+                  <a href="${restoreUrl}" class="button">
+                     <fmt:message key="versioning.restore"/>
+                  </a>
                   </c:if>
-               </td>
-               <td>
-               <c:if test="${isPublished}">
-                   <c:set var="status" value="published"/>
-               </c:if>
-               <c:if test="${!isPublished}">
-                   <c:set var="status" value="draft"/>
-               </c:if>
-               <img src="../gfx/icons/status_${status}.png"
-             alt="<fmt:message key="versioning.status.${status}" />"
-             title="<fmt:message key="versioning.status.${status}" />"/>
                </td>
             </tr>
             <mm:last>

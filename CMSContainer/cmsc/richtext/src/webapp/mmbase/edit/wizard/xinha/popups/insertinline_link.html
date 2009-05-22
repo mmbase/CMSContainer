@@ -3,10 +3,9 @@
 
 <head>
   <title>Insert/Modify Link</title>
-  <script type="text/javascript" src="../../../../../js/window.js"></script>
   <script type="text/javascript" src="popup.js"></script>
   <link rel="stylesheet" type="text/css" href="popup.css" />
-   
+
   <script type="text/javascript">
     window.resizeTo(420, 200);
 
@@ -26,86 +25,98 @@ function onTargetChanged() {
 }
 
 function Init() {
-      __dlg_translate('cmscrichtext');
-      __dlg_init();
+  __dlg_translate('cmscrichtext');
+  __dlg_init();
 
-      // Make sure the translated string appears in the drop down. (for gecko)
-      document.getElementById("f_target").selectedIndex = 1;
-      document.getElementById("f_target").selectedIndex = 0;
+  // Make sure the translated string appears in the drop down. (for gecko)
+  document.getElementById("f_target").selectedIndex = 1;
+  document.getElementById("f_target").selectedIndex = 0;
 
-      var param = window.dialogArguments;
-      var target_select = document.getElementById("f_target");
-      var use_target = true;
-
-      if (param) {
-            if ( typeof param["f_usetarget"] != "undefined" ) {
-                  use_target = param["f_usetarget"];
-            }
-            if ( typeof param["f_href"] != "undefined" ) {
-                  document.getElementById("f_href").value = param["f_href"];
-                  document.getElementById("f_title").value = param["f_title"];
-                  document.getElementById("f_tooltip").value = param["f_tooltip"];
-                  document.getElementById("f_destination").value = param["f_destination"];
-                  comboSelectValue(target_select, param["f_target"]);
-				  
-                  if (target_select.value != param.f_target) {
-                        var opt = document.createElement("option");
-                        opt.value = param.f_target;
-                        opt.innerHTML = opt.value;
-                        target_select.appendChild(opt);
-                        opt.selected = true;
-                  }
-            }
+  var param = window.dialogArguments;
+  var target_select = document.getElementById("f_target");
+  var use_target = true;
+  if (param) {
+    if ( typeof param["f_usetarget"] != "undefined" ) {
+      use_target = param["f_usetarget"];
+    }
+    if ( typeof param["f_href"] != "undefined" ) {
+      document.getElementById("f_href").value = param["f_href"];
+      document.getElementById("f_title").value = param["f_title"];
+      document.getElementById("f_destination").value = param["f_destination"];
+      comboSelectValue(target_select, param["f_target"]);
+      if (target_select.value != param.f_target) {
+        var opt = document.createElement("option");
+        opt.value = param.f_target;
+        opt.innerHTML = opt.value;
+        target_select.appendChild(opt);
+        opt.selected = true;
       }
-      if (! use_target) {
-            document.getElementById("f_target_label").style.visibility = "hidden";
-            document.getElementById("f_target").style.visibility = "hidden";
-            document.getElementById("f_target_other").style.visibility = "hidden"; 
-      }
-      var opt = document.createElement("option");
-      opt.value = "_other";
-      opt.innerHTML = i18n("Other");
-      target_select.appendChild(opt);
-      target_select.onchange = onTargetChanged;
-      document.getElementById("f_href").focus();
-      document.getElementById("f_href").select();
+  }
+  }
+  if (! use_target) {
+    document.getElementById("f_target_label").style.visibility = "hidden";
+    document.getElementById("f_target").style.visibility = "hidden";
+    document.getElementById("f_target_other").style.visibility = "hidden";
+  }
+  var opt = document.createElement("option");
+  opt.value = "_other";
+  opt.innerHTML = i18n("Other");
+  target_select.appendChild(opt);
+  target_select.onchange = onTargetChanged;
+  document.getElementById("f_href").focus();
+  document.getElementById("f_href").select();
 }
 
 function onOK() {
-      var elhref = document.getElementById("f_href");
-      var re = new RegExp("\://|javascript\:|mailto\:");
-      var destination = document.getElementById("f_destination");
-      if(!elhref.value.match(re) && !destination.value ){
-            if (!elhref.value.match(re)) {
-                  var message = i18n("URL is missing protocol (eg http://)");
-                  alert(message);
-                  elhref.focus();
-                  return false;
-            }
-            if(!destination.value) {
-                  var message = i18n("You must select an item");
-                  alert(message);
-                  return false;
-            }
-      }
-      var tmpLinkName = document.getElementById("f_title");
-      if(!tmpLinkName.value){
-            // set the defult linkname the same as href's value
-            tmpLinkName.value = elhref.value;
-      }
-      // pass data back to the calling window
-      var fields = ["f_href", "f_title", "f_tooltip", "f_target", "f_destination" ];
-      var param = new Object();
-      for (var i in fields) {
-            var id = fields[i];
-            var el = document.getElementById(id);
-            param[id] = el.value;
-      }
-      if (param.f_target == "_other"){
-            param.f_target = document.getElementById("f_other_target").value;
-      }
-      __dlg_close(param);
+  var elhref = document.getElementById("f_href");
+
+  if (HTMLArea.is_ie ? elhref.readOnly : elhref.hasAttribute("readonly")) {
+    var el = document.getElementById("f_destination");
+    if(!el.value) {
+      var message = i18n("You must select an item");
+      alert(message);
       return false;
+    }
+    else {
+      var el = document.getElementById("f_title");
+      if (!el.value) {
+        var message = i18n("You must enter a title");
+        alert(message);
+        el.focus();
+        return false;
+      }
+    }
+  }
+  else {
+    if (!elhref.value) {
+      var message = i18n("You must enter the URL where this link points to");
+      alert(message);
+      elhref.focus();
+      return false;
+    }
+    else {
+      var re = new RegExp("\://|javascript\:|mailto\:");
+      if (!elhref.value.match(re)) {
+        var message = i18n("Url is missing protocol (eg http://)");
+        alert(message);
+        elhref.focus();
+        return false;
+      }
+    }
+  }
+
+  // pass data back to the calling window
+  var fields = ["f_href", "f_title", "f_target", "f_destination" ];
+  var param = new Object();
+  for (var i in fields) {
+    var id = fields[i];
+    var el = document.getElementById(id);
+    param[id] = el.value;
+  }
+  if (param.f_target == "_other")
+    param.f_target = document.getElementById("f_other_target").value;
+  __dlg_close(param);
+  return false;
 }
 
 function onCancel() {
@@ -114,23 +125,23 @@ function onCancel() {
 };
 
 function onElement() {
-  openPopupWindow('filterwindow2',950,550,'../../../../../editors/repository/select/index.jsp');
+  openPopupWindow('../../../../../editors/repository/select/index.jsp','filterwindow2',950,550);
   return false;
 };
 
 function onPage() {
-  openPopupWindow('filterwindow2',340, 400,'../../../../../editors/site/select/SelectorPage.do');
+  openPopupWindow('../../../../../editors/site/select/SelectorPage.do','filterwindow2',340, 400);
   return false;
 };
 
 
-function onAsset() {
-  openPopupWindow('filterwindow2',750,600,'../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=attachments');
+function onAttachment() {
+  openPopupWindow('../../../../../editors/resources/AttachmentInitAction.do?action=select','filterwindow2',750,550);
   return false;
 };
 
 function onUrl() {
-  openPopupWindow('filterwindow2',750,600,'../../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid=current&assettypes=urls');
+  openPopupWindow('../../../../../editors/resources/UrlInitAction.do?action=select','filterwindow2',750,550);
   return false;
 };
 
@@ -142,7 +153,7 @@ function onNewUrl() {
   else {
     elhref.removeAttribute("readonly");
   }
-  elhref.value = "http://";
+  elhref.value = '';
   elhref.focus();
   document.getElementById("f_destination").value = '';
   return false;
@@ -162,11 +173,9 @@ function selectElement(element_id, title, url) {
    if (url != undefined && url.length != 0 ) {
       document.getElementById("f_href").value = url;
    }
-   sourceTitle = document.getElementById("f_title").value;
-   if(sourceTitle == undefined || sourceTitle.length == 0 ){
-      if(title != undefined && title.length != 0 ) {
-         document.getElementById("f_title").value = title;
-      }
+   if (document.getElementById("f_title").value == undefined
+         || document.getElementById("f_title").value.length == 0 ) {
+      document.getElementById("f_title").value = title;
    }
 }
 
@@ -185,11 +194,44 @@ function selectPage(element_id, url) {
       document.getElementById("f_href").value = url;
    }
 }
+
+function openPopupWindow(url, windowName, width, height) {
+   debug = false;
+   if (!width) {w = 750;} else { w = width; }
+   if (!height) {h = 750;} else { h = height; }
+   var left = (screen.availWidth - w)/2;
+   var top = (screen.availHeight - h)/2;
+   if (screen.availWidth < w) {
+      w = screen.availWidth;
+      left = 0;
+   }
+   if (screen.availHeight < h) {
+      h = screen.availHeight - 25;
+      top = 0;
+   }
+   if (debug) {
+      alert("width: " + w + " " + left);
+      alert("height: " + h + " " + top);
+   }
+   str = 'window.open(url,"' + windowName + '","width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',scrollbars=yes,status=no,toolbar=no,menubar=no,location=no,resizable=yes")';
+
+   if (debug) {
+      alert(str);
+   }
+
+   obj = eval(str);
+   if (document.all) {
+      // set a opener for ie because its a dialog and not a popup (unlike mozilla)
+      obj.opener = this;
+   }
+
+   return true;
+}
 </script>
 
 </head>
 
-<body class="dialog" onLoad="Init()">
+<body class="dialog" onload="Init()">
 <div class="title">Insert/Modify Link</div>
 
 <form name="inlineLinkForm" action="#">
@@ -201,12 +243,8 @@ function selectPage(element_id, url) {
     <td><input type="text" id="f_href" style="width: 100%" readonly /></td>
   </tr>
   <tr>
-    <td class="label">Title:</td>
+    <td class="label">Title (tooltip):</td>
     <td><input type="text" id="f_title" style="width: 100%" /></td>
-  </tr>
-  <tr>
-    <td class="label">Tooltip:</td>
-    <td><input type="text" id="f_tooltip" style="width: 100%" /></td>
   </tr>
   <tr>
     <td class="label"><span id="f_target_label">Target:</span></td>
@@ -220,14 +258,14 @@ function selectPage(element_id, url) {
     </td>
   </tr>
 </table>
-      <button name="asset" onClick="return onAsset();" title="Search for an asset">Attachment</button>
-      <button name="element" onClick="return onElement();" title="Search for an element">Element</button>
-      <button name="page" onClick="return onPage();" title="Search for a page">Page</button>
-      <button name="urlelement" onClick="return onUrl();" title="Search for an URL">URL</button>
-      <button name="newurlelement" onClick="return onNewUrl();" title="Enter new URL" style="width: 90px;">New URL</button>
+      <button name="attachment" onclick="return onAttachment();" title="Search for an attachment">Attachment</button>
+      <button name="element" onclick="return onElement();" title="Search for an element">Element</button>
+      <button name="page" onclick="return onPage();" title="Search for a page">Page</button>
+      <button name="urlelement" onclick="return onUrl();" title="Search for an url">Url</button>
+      <button name="newurlelement" onclick="return onNewUrl();" title="Enter new url" style="width: 90px;">New Url</button>
 <div id="buttons">
-  <button type="button" name="ok" onClick="return onOK();">OK</button>
-  <button type="button" name="cancel" onClick="return onCancel();">Cancel</button>
+  <button type="button" name="ok" onclick="return onOK();">OK</button>
+  <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>
 
 </form>

@@ -16,8 +16,9 @@ import com.finalist.cmsc.struts.MMBaseFormlessAction;
 
 /**
  * using for add newsletter term
- *
+ * 
  * @author Lisa
+ * 
  */
 public class NewsletterTermsAddAction extends MMBaseFormlessAction {
 

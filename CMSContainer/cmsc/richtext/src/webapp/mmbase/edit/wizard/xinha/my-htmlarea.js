@@ -46,7 +46,7 @@ createDefaultConfig = function() {
 
   xinha_config.toolbar = [
     ['bold', 'italic', 'underline', "strikethrough", 'separator',
-     'superscript', 'subscript','separator',
+     'superscript', 'subscript','separator', 
      'formatblock', 'separator',
 //     'justifyleft','justifycenter','justifyright', 'separator',
      'insertorderedlist', 'insertunorderedlist', 'separator',
@@ -56,7 +56,7 @@ createDefaultConfig = function() {
      'htmlmode', 'separator', 'my-validatesave', "separator", "showhelp", "popupeditor"
     ]
   ];
-
+  
    xinha_config.formatblock = ({
                 "Heading 1": "h1",
                 "Heading 2": "h2",
@@ -64,7 +64,7 @@ createDefaultConfig = function() {
                 "Heading 4": "h4",
                 "Normal": "p"
    });
-
+  
   xinha_config.pageStyle="body, td {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;color: #0000;font-size: 90%;}";
   xinha_config.pageStyle+="p {font-size: 100%;}";
   xinha_config.pageStyle+="h1 {font-weight: bold;font-size: 100%;}";
@@ -72,7 +72,7 @@ createDefaultConfig = function() {
   xinha_config.pageStyle+="h3 {font-weight: normal; color:#0000AA;	font-size: 100%; }";
   xinha_config.pageStyle+="h4 {font-weight: normal;	color:#000055;	font-size: 100%;}";
   xinha_config.pageStyle+="a {color: #0000FF; }";
-
+  
   return xinha_config;
 }
 
@@ -112,9 +112,9 @@ function updateValue(editor) {
 	  // doSave, doSaveOnly, gotoForm and doStartWizard
 	  value = wizardClean(value);
 	  value = clean(value);
-
+	
 	  editor._textArea.value = value;
-
+	
 	  if (editor._editMode == "wysiwyg") {
 	      var html = editor.inwardHtml(value);
 	      editor.deactivateEditor();
@@ -125,7 +125,7 @@ function updateValue(editor) {
 }
 
 function wizardClean(value) {
-// editors in IE will maybe complain that it is very messy with
+// editors in IE will maybe complain that it is very messy with 
 // <strong> and <b> tags mixed when they edit, but without this function
 // they would also do when others would use Gecko browsers.
 // Now we are backwards compatible with the old editwizard wysiwyg and the
@@ -140,7 +140,7 @@ function wizardClean(value) {
   //replace <BR> by <BR/>
   value = value.replace(/<BR>/gi, "<br/>");
   value = value.replace(/<br>/gi, "<br/>");
-
+  
   return value;
 }
 
@@ -160,7 +160,7 @@ function clean(value) {
   value = value.replace(/<\/?\w+:[^>]*>/gi, "");
   // Replace the &nbsp;
   value = value.replace(/&nbsp;/gi, " " );
-
+  
   return value;
 }
 
@@ -191,108 +191,69 @@ function setWidthForTables(editor) {
 	}
 }
 
-
 HTMLArea.prototype._insertInlineLink = function(link) {
-	var editor = this;
-	var outparam = null;
-	if (typeof link == "undefined") {
-      	link = this.getParentElement();
-      	while (link) {
-            	if (/^a$/i.test(link.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
-            	if (/^body$/i.test(link.tagName)) { link = null; break } //Stop searching when Body-tag is found, don't go too deep.
-            	link = link.parentNode;
-      	}
-	}
-	var sel = editor._getSelection();
-	var sel_value = sel;
-	var range = this._createRange(sel);
-	if(HTMLArea.is_ie) sel_value = range.text;
-	if (link){
-         	outparam = {
-               	f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
-                f_destination : link.destination ,
-               	f_title   : link.name?link.name: sel_value,
-				f_tooltip : link.title,
-               	f_target : link.target,
-               	f_usetarget : editor.config.makeLinkShowsTarget
-         	};
-	}
-	else{
-         	outparam = {
-               	f_href   : "Click \"New Url\" to enter URL",
-                f_destination : null,
-               	f_title   : sel_value?sel_value:'',
-				f_tooltip : '',
-               	f_target : '',
-               	f_usetarget : editor.config.makeLinkShowsTarget
-         	};
-	}
-	this._popupDialog( "insertinline_link.html", function(param) {
-      	if (!param) { return false; } //user must have pressed cancel
-		var a = link;
-		if ( !a ){
-                  try
-			{
-                        editor._doc.execCommand("createlink", false, param.f_href);
-                        a = editor.getParentElement();
-                        var sel = editor._getSelection();
-                        var range = editor._createRange(sel);
-                        if(editor._selectionEmpty(sel))
-                        {
-                              editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + "' name='"+param.f_title+"' destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
+        var editor = this;
+        var outparam = null;
+        if (typeof link == "undefined") {
+            link = this.getParentElement();
+            while (link) {
+        	   if (/^a$/i.test(link.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+        	   if (/^body$/i.test(link.tagName)) { link = null; break } //Stop searching when Body-tag is found, don't go too deep.
+        	   link = link.parentNode;
+            }
+        }
+        if (link) outparam = {
+                f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
+                f_destination : HTMLArea.is_ie ? link.destination : link.getAttribute("destination"),
+                f_title  : link.title,
+                f_target : link.target
+             };
+        this._popupDialog("insertinline_link.html", function(param) {
+                if (!param)
+                        return false;
+                var a = link;
+                if (!a) {
+                    editor._doc.execCommand("createlink", false, param.f_href);
+                    a = editor.getParentElement();
+                    var sel = editor._getSelection();
+                    var range = editor._createRange(sel);
+                    if (!HTMLArea.is_ie) {
+	                    if (a == null || !(/^a$/i.test(a.tagName))) {
+	                        a = range.startContainer;
+	                        if ( ! ( /^a$/i.test(a.tagName) ) ) {
+	                              a = a.nextSibling;
+	                              if ( a === null ) {
+	                                    a = range.startContainer.parentNode;
+	                              }
+	                        }
+	                    }
+                    }
+                    else {
+                        while (a) {
+                     	   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+                     	   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
+                     	   a = a.parentNode;
                         }
-                        else{
-                              if ( !HTMLArea.is_ie )
-                              {
-                                    a = range.startContainer;
-                                    if ( ! ( /^a$/i.test(a.tagName) ) )
-                                    {
-                                          a = a.nextSibling;
-                                          if ( a === null )
-                                          {
-                                                a = range.startContainer.parentNode;
-                                          }
-                                    }
-                                    a.innerHTML = param.f_title.trim();
-                              }
-                        }
-			} catch(ex) {}
-		}
-		else
-		{
-			var href = param.f_href.trim();
-			editor.selectNodeContents(a);
-			if ( href === '' )
-			{
-      			  editor._doc.execCommand("unlink", false, null);
-      			  editor.updateToolbar();
-      			  return false;
-			}
-			else
-			{
-      			  a.href = href;
-                  a.innerHTML = param.f_title.trim();
-			}
-		}
-		a.target = param.f_target.trim();
-		a.title = param.f_tooltip.trim();
+                    }
+                } else a.href = param.f_href.trim();
 
-            if (HTMLArea.is_ie) {
+                a.title = param.f_title.trim();
+                if (HTMLArea.is_ie) {
                   a.destination = param.f_destination.trim();
                   if (!a.destination && a.relationID) {
-                        a.relationID = "";
+                    a.relationID = "";
                   }
-            }
-            else {
+                }
+                else {
                   a.setAttribute("destination", param.f_destination.trim());
                   if (!a.getAttribute("destination") && a.getAttribute("relationID")) {
-                        a.removeAttribute("relationID");
+                    a.removeAttribute("relationID");
                   }
-            }
-		editor.selectNodeContents(a);
-		editor.updateToolbar();
-	},
-	outparam);
+                }
+                a.target = param.f_target.trim();
+                editor.selectNodeContents(a);
+                editor.updateToolbar();
+  }, outparam);
 };
 
 HTMLArea.prototype._insertImage = function(image) {
@@ -347,7 +308,7 @@ HTMLArea.prototype._insertImage = function(image) {
                             case "f_border" :  HTMLArea.is_ie ? img.border = parseInt(value || "0") : img.setAttribute("border", parseInt(value || "0")); break;
                             case "f_align"  :  HTMLArea.is_ie ? img.align = value : img.setAttribute("align", value); break;
                             case "f_width"  :  HTMLArea.is_ie ? img.width = parseInt(value || "100") : img.setAttribute("width", parseInt(value || "100")); break;
-                            case "f_height"  :
+                            case "f_height"  :  
                               if (HTMLArea.is_ie) {
                                 if (!value) {
                                   img.height = "100";

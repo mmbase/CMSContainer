@@ -136,6 +136,6 @@
                 <war.bundle>${war.bundle}</war.bundle>
            </properties>
         </dependency>
-        -->
+ -->
 	</dependencies>
 </project>

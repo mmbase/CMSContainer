@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.security.Rank;
 import org.mmbase.storage.search.AggregatedField;
 
 import com.finalist.cmsc.mmbase.EmailUtil;
@@ -187,11 +186,6 @@ public final class TasksUtil {
    }
 
 
-   public static Node getCreator(Node task) {
-      return SearchUtil.findRelatedNode(task, SecurityUtil.USER, CREATORREL);
-   }
-
-
    public static long getLastTaskCreationTime(Cloud cloud, String type) {
       NodeManager taskManager = cloud.getNodeManager(TASK);
       NodeQuery query = taskManager.createQuery();
@@ -217,27 +211,6 @@ public final class TasksUtil {
       NodeManager manager = contentNode.getCloud().getNodeManager(TASK);
       int count = contentNode.countRelatedNodes(manager, TASKREL, "source");
       return count > 0;
-   }
-
-   /**
-    * Task is deleteable if and only if it is in one of the situations below:
-    * 1)The task is created by the cloud user.
-    * 2)The task is assigned to the cloud user and has been finished.
-    * 3)The task is assigned to the cloud user and the cloud user has the rank 'siteadmin'.
-    * 
-    * @param task
-    * @param cloud
-    * @return
-    */
-   public static boolean isDeleteable(Node task, Cloud cloud) {
-      Node creator = getCreator(task);;
-      Node assignee = getAssignedUser(task);
-      Node user = SecurityUtil.getUserNode(cloud);
-      String status = task.getStringValue(STATUS);
-      if (user.equals(creator) || (user.equals(assignee) && (STATUS_DONE.equals(status) || cloud.getUser().getRank().compareTo(Rank.BASICUSER) > 0))) {
-         return true;
-      }
-      return false;
    }
 
 }

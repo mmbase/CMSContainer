@@ -59,7 +59,7 @@
 	  <div id="working" style="display:none;color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.fail'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
 	  </c:if>
 	  <c:remove var="needajax"/>
-      <div class="body">
+	  <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>
              <cmsc:rights nodeNumber="${result.id}" var="rights"/>

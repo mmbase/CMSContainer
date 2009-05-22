@@ -356,16 +356,16 @@ Step 3  : Configure DataSouce
    Add DataSouce in the context xml file,e.g.: the name should be "jdbc/jforum",create database "jforum"
 
     <Resource name="jdbc/jforum" auth="Container" type="javax.sql.DataSource"
-      removeAbandoned="true" 
-      removeAbandonedTimeout="60"
-      logAbandoned="true" 
-      maxActive="10"
-      maxIdle="1" 
-      maxWait="10000" 
-      username="root" 
-      password="1234"
-      driverClassName="com.mysql.jdbc.Driver" 
-      url="jdbc:mysql://localhost:3306/jforum" />
+		removeAbandoned="true" 
+		removeAbandonedTimeout="60"
+		logAbandoned="true" 
+		maxActive="10"
+		maxIdle="1" 
+		maxWait="10000" 
+		username="root" 
+		password="1234"
+		driverClassName="com.mysql.jdbc.Driver" 
+		url="jdbc:mysql://localhost:3306/jforum" />
 
 
 Step 4: If you like to use Single Sign On (SSO)
@@ -376,19 +376,19 @@ Step 4: If you like to use Single Sign On (SSO)
 Step 5: If you run CMSc application in the Staging/Live mode.
 5.1. Add a DataSource in both Staging and Live context.xml files. They are equal.
   <Resource name="jdbc/jforum" auth="Container" type="javax.sql.DataSource"
-      removeAbandoned="true" 
-      removeAbandonedTimeout="60"
-      logAbandoned="true" 
-      maxActive="10"
-      maxIdle="1" 
-      maxWait="10000" 
-      username="root" 
-      password="1234"
-      driverClassName="com.mysql.jdbc.Driver"
-      factory="org.apache.commons.dbcp.BasicDataSourceFactory"
-      url="jdbc:mysql://localhost:3306/jforum" />
+		removeAbandoned="true" 
+		removeAbandonedTimeout="60"
+		logAbandoned="true" 
+		maxActive="10"
+		maxIdle="1" 
+		maxWait="10000" 
+		username="root" 
+		password="1234"
+		driverClassName="com.mysql.jdbc.Driver"
+		factory="org.apache.commons.dbcp.BasicDataSourceFactory"
+		url="jdbc:mysql://localhost:3306/jforum" />
 
-      
+		
 5.2 Add a property named "system.stagingpath" in live. The value is the url of staging 
    like http://localhost:8080/cmsc-demo-staging
    

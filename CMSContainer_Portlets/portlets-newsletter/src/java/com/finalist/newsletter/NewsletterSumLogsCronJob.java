@@ -13,6 +13,7 @@ import com.finalist.newsletter.services.StatisticService;
 
 /**
  * @author nikko
+ * 
  */
 public class NewsletterSumLogsCronJob extends AbstractCronJob implements CronJob {
 
@@ -32,14 +33,14 @@ public class NewsletterSumLogsCronJob extends AbstractCronJob implements CronJob
    @Override
    public void run() {
       StatisticService service = (StatisticService) ApplicationContextFactory.getBean("statisticService");
-      List<StatisticResult> listRecorder = service.getLogs();
+      List < StatisticResult > listRecorder = service.getLogs();
       if (null != listRecorder) {
          insetStatRecord(service, listRecorder);
          listRecorder.clear();
       }
    }
 
-   private int insetStatRecord(StatisticService service, List<StatisticResult> listRecorder) {
+   private int insetStatRecord(StatisticService service, List < StatisticResult > listRecorder) {
       if (null != listRecorder) {
          return service.pushSumedLogs(listRecorder);
       } else {

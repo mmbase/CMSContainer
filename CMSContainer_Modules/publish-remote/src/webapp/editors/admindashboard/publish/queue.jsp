@@ -36,8 +36,8 @@
 		<b><fmt:message key="admindashboard.publish.queue.size" />:</b> ${size}
 		<br/>
 		<input id="refreshBox" type="checkbox" onclick="tryRefresh()" <c:if test="${param.refresh}">checked</c:if>/> <a href="javascript:forceRefresh()"><fmt:message key="admindashboard.publish.queue.refresh" /></a> 
-		&nbsp;&nbsp;
-      <a href="viewqueue.jsp" target="_parent"><fmt:message key="admindashboard.publish.queue.view" /></a>
+		<br/>
+		<a href="viewqueue.jsp" target="_parent"><fmt:message key="admindashboard.publish.queue.view" /></a>
 		
 		
 	</mm:hasrank>

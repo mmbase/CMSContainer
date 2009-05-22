@@ -16,6 +16,7 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.newsletter.domain.NewsletterBounce;
 import com.finalist.newsletter.services.CommunityModuleAdapter;
+
 public class NewsletterBounceUtil {
 
    public static List<NewsletterBounce> getBounceRecord(int offset, int pageSize, String order, String direction) {

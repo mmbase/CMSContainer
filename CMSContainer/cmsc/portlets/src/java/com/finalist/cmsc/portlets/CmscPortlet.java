@@ -80,7 +80,8 @@ public class CmscPortlet extends GenericPortlet {
     * Answers whether the given {@link PortletMode} is restricted for this {@link Portlet} instance.
     * If a certain mode is restricted, an authorized user is required to continue the request.
     * 
-    * @param mode the mode to check
+    * @param mode
+    *           the mode to check
     * @return <code>true</code> if the given mode is restricted, <code>false</code> otherwise.
     */
    protected boolean isRestrictedPortletMode(PortletMode mode) {
@@ -123,18 +124,19 @@ public class CmscPortlet extends GenericPortlet {
    }
 
    /*
-    * @see javax.portlet.GenericPortlet#processAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse)
+    * @see javax.portlet.GenericPortlet#processAction(javax.portlet.ActionRequest,
+    *      javax.portlet.ActionResponse)
     */
    @Override
    public void processAction(ActionRequest req, ActionResponse res) throws PortletException, IOException {
       if (getLogger().isDebugEnabled()) {
          getLogger().debug("===> process " + getPortletName() + " mode = " + req.getPortletMode());
       }
-      
-      if (isRequestAllowed(req)) {
-         
-         PortletMode mode = req.getPortletMode();
 
+      if (isRequestAllowed(req)) {
+
+         PortletMode mode = req.getPortletMode();
+   
          if (mode.equals(PortletMode.VIEW)) {
             processView(req, res);
          }
@@ -179,7 +181,7 @@ public class CmscPortlet extends GenericPortlet {
          IOException {
       // convenience method
    }
-   
+
    @SuppressWarnings("unused") 
    public void processHelp(ActionRequest req, ActionResponse res) throws PortletException,
          IOException {

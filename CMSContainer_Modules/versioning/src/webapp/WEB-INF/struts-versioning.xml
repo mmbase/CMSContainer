@@ -21,10 +21,6 @@
 			type="com.finalist.cmsc.versioning.forms.ShowVersionsAction" unknown="false" validate="false">
 			<forward name="success" path="/editors/versioning/versioning.jsp" redirect="false" />
 		</action>
-      <action path="/editors/versioning/DiffAction"
-			type="com.finalist.cmsc.versioning.forms.DiffAction" unknown="false" validate="false">
-			<forward name="success" path="/editors/versioning/diff.jsp" redirect="false" />
-		</action>
 	</action-mappings>
 
 	<message-resources parameter="cmsc-versioning" key="VERSIONING" />

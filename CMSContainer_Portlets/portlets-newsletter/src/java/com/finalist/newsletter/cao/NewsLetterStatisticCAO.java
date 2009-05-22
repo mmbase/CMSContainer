@@ -2,7 +2,6 @@ package com.finalist.newsletter.cao;
 
 import java.util.Date;
 import java.util.List;
-
 import com.finalist.newsletter.domain.StatisticResult;
 import com.finalist.newsletter.domain.StatisticResult.HANDLE;
 
@@ -15,7 +14,7 @@ public interface NewsLetterStatisticCAO {
 
    public List<StatisticResult> getRecordsByNewsletterAndPeriod(Date startDate, Date endDate, int newsletterId);
 
-   public void logPubliction(int userId, int newsletterId, HANDLE handle);
+   public void logPubliction(int userId,int newsletterId, HANDLE handle);
 
    /**
     * @param listRecorder which get from data
@@ -24,8 +23,7 @@ public interface NewsLetterStatisticCAO {
    public int insertSumedLogs(List<StatisticResult> listRecorder);
 
    /**
-    * @return List which sumLogs about StatisticResult
+    * @return List which sumLogs about StatisticResult 
     */
-   public List<StatisticResult> getLogs();
-   
+   public List<StatisticResult>  getLogs();
 }

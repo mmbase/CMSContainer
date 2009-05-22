@@ -58,7 +58,6 @@ public class UnregisterPortlet extends AbstractLoginPortlet {
       AuthenticationService authenticationService = (AuthenticationService) ApplicationContextFactory
       .getBean("authenticationService");
       PersonService personHibernateService = (PersonService) ApplicationContextFactory.getBean("personService");
-
       if (authenticationService.authenticationExists(register_email)) {
         Long authId = authenticationService.getAuthenticationIdForUserId(register_email);
         personHibernateService.deletePersonByAuthenticationId(authId);

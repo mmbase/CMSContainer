@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.mmbase.applications.editwizard.Config;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.security.Rank;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -62,12 +61,12 @@ public class WizardWorkflowController extends WizardController {
     */
    @Override
    public void openWizard(HttpServletRequest request, Config ewconfig, Config.WizardConfig config, Cloud cloud,
-         Map<String, String> params, UserRole userrole, String elementtype) {
+         Map<String, String> params, UserRole userrole, String contenttype) {
 
       String objectnr = config.objectNumber;
 
-      if (isMainWizard(ewconfig, config) && elementtype != null && !"".equals(elementtype)
-            && Workflow.isWorkflowType(elementtype)) {
+      if (isMainWizard(ewconfig, config) && contenttype != null && !"".equals(contenttype)
+            && Workflow.isWorkflowType(contenttype)) {
 
          params.put("WORKFLOW", TRUE);
          params.put("WORKFLOW-ACCEPTED-ENABLED", Boolean.toString(Workflow.isAcceptedStepEnabled()));
@@ -105,7 +104,7 @@ public class WizardWorkflowController extends WizardController {
             }
          }
          else {
-            if (PagesUtil.isPageType(cloud.getNodeManager(elementtype))) {
+            if (PagesUtil.isPageType(cloud.getNodeManager(contenttype))) {
                // disable workflow for a new page
                params.put("WORKFLOW", OFF);
             }
@@ -113,14 +112,8 @@ public class WizardWorkflowController extends WizardController {
          log.debug("activity " + activity);
          params.put("ACTIVITY", activity);
       }
-      else if (isMainWizard(ewconfig, config) && elementtype != null && !"".equals(elementtype)
-            && !Workflow.isWorkflowType(elementtype)) {
-         if(cloud.getUser().getRank() != Rank.ADMIN) {
-            params.put("WORKFLOW", OFF);
-         }
-      }
       else {
-         if (elementtype != null && !"".equals(elementtype) && Workflow.isWorkflowType(elementtype)) {
+         if (contenttype != null && !"".equals(contenttype) && Workflow.isWorkflowType(contenttype)) {
             params.put("WORKFLOW", FALSE);
          }
          else {
@@ -132,9 +125,9 @@ public class WizardWorkflowController extends WizardController {
 
    @Override
    public void closeWizard(HttpServletRequest request, Config ewconfig, Config.WizardConfig wizardConfig, Cloud cloud,
-         Node editNode, String elementtype) {
+         Node editNode, String contenttype) {
 
-      if (isMainWizard(ewconfig, wizardConfig) && editNode != null && Workflow.isWorkflowType(elementtype)) {
+      if (isMainWizard(ewconfig, wizardConfig) && editNode != null && Workflow.isWorkflowType(contenttype)) {
 
          String objectnr = wizardConfig.objectNumber;
 
@@ -143,24 +136,14 @@ public class WizardWorkflowController extends WizardController {
 
          if (wizardConfig.wiz.committed()) {
             if (NEW_OBJECT.equals(objectnr)) {
-               if (wizardConfig.wiz.committed()) {
-                  if (!Workflow.hasWorkflow(editNode)) {
-                     Workflow.create(editNode, workflowcomment);
-                  }
-                  else {
-                     Workflow.addUserToWorkflow(editNode);
-                  }
+               if (wizardConfig.wiz.committed() && !Workflow.hasWorkflow(editNode)) {
+                  Workflow.create(editNode, workflowcomment);
                }
             }
             else {
-               if (!CANCEL.equals(workflowCommand)) {
-                  if (!Workflow.hasWorkflow(editNode)) {
-                     log.debug("object " + objectnr + " missing workflow. creating one. ");
-                     Workflow.create(editNode, "");
-                  }
-                  else {
-                     Workflow.addUserToWorkflow(editNode);
-                  }
+               if (!Workflow.hasWorkflow(editNode) && !CANCEL.equals(workflowCommand)) {
+                  log.debug("object " + objectnr + " missing workflow. creating one. ");
+                  Workflow.create(editNode, "");
                }
             }
 
@@ -207,15 +190,12 @@ public class WizardWorkflowController extends WizardController {
          }
       }
       else {
-         if (editNode != null && !Workflow.isWorkflowType(elementtype)) {
+         if (editNode != null && !Workflow.isWorkflowType(contenttype)) {
 
             String workflowCommand = request.getParameter(WORKFLOWCOMMAND);
-            if(isMainWizard(ewconfig, wizardConfig) && cloud.getUser().getRank() == Rank.ADMIN) {
-               if (PUBLISH.equals(workflowCommand)) {
-                  // update only nodes in live clouds.
-                  // PublishUtil.PublishOrUpdateNode(editNode);
-                  Publish.publish(editNode); 
-               }
+            if (PUBLISH.equals(workflowCommand)) {
+               // update only nodes in live clouds.
+               // PublishUtil.PublishOrUpdateNode(editNode);
             }
 
             if (!CANCEL.equals(workflowCommand)) {

@@ -225,6 +225,4 @@ public class AuthorityHibernateService extends HibernateService implements Autho
       Query q = getSession().createSQLQuery(strb.toString());
       return q.list().size();
    }
-
-
 }

@@ -50,24 +50,24 @@
             <version>${cmscportlets.version}</version>
             <type>mmbase-module</type>
         </dependency>
+      <dependency>
+         <groupId>supercsv</groupId>
+         <artifactId>SuperCSV</artifactId>
+         <version>1.52</version>
+         <type>jar</type>
+         <properties>
+           <war.bundle>${war.bundle}</war.bundle>
+         </properties>
+       </dependency>
          <dependency>
-            <groupId>supercsv</groupId>
-            <artifactId>SuperCSV</artifactId>
-            <version>1.52</version>
-            <type>jar</type>
-            <properties>
-              <war.bundle>${war.bundle}</war.bundle>
-            </properties>
-          </dependency>
-            <dependency>
-            <groupId>spiffyframework</groupId>
-            <artifactId>spiffy-with_source-all</artifactId>
-            <version>0.05</version>
-            <type>jar</type>
-            <properties>
-              <war.bundle>${war.bundle}</war.bundle>
-            </properties>
-          </dependency>
+         <groupId>spiffyframework</groupId>
+         <artifactId>spiffy-with_source-all</artifactId>
+         <version>0.05</version>
+         <type>jar</type>
+         <properties>
+           <war.bundle>${war.bundle}</war.bundle>
+         </properties>
+       </dependency>
 <!-- Hibernate dependencies (for Community Module) -->
         <dependency>
             <groupId>asm</groupId>
@@ -227,7 +227,7 @@
       </dependency>
 
 <!--begin dependency by JForum portlet. -->
-
+<!--
         <dependency>
             <groupId>freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -310,7 +310,7 @@
                 <war.bundle>${war.bundle}</war.bundle>
            </properties>
         </dependency>
-
+-->
 <!-- jboss -->
 <!--
         <dependency>

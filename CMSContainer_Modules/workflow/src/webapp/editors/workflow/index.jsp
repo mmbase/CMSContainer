@@ -1,26 +1,16 @@
 <%
-String type = request.getParameter("workflowType");
+String type = request.getParameter("workflow.type");
 if (type == null || "".equals(type)) {
-	type = (String) session.getAttribute("workflowType");
-}
-String nodetype = request.getParameter("workflowNodetype");
-if (nodetype == null || "".equals(nodetype)) {
-   nodetype = (String) session.getAttribute("workflowNodetype");
+	type = (String) session.getAttribute("workflow.type");
 }
 String status = request.getParameter("workflow.status");
 if (status == null || "".equals(status)) {
 	status = (String) session.getAttribute("workflow.status");
 }
 
-String redirectTo = "AllcontentWorkflowAction.do";
-if ("allcontent".equals(type)) {
-   redirectTo = "AllcontentWorkflowAction.do";
-}
+String redirectTo = "ContentWorkflowAction.do";
 if ("content".equals(type)) {
     redirectTo = "ContentWorkflowAction.do";
-}
-if ("asset".equals(type)) {
-   redirectTo = "AssetWorkflowAction.do";
 }
 if ("link".equals(type)) {
     redirectTo = "LinkWorkflowAction.do";
@@ -29,11 +19,9 @@ if ("page".equals(type)) {
     redirectTo = "PageWorkflowAction.do";
 }
 if (status != null && !"".equals(status)) {
-   redirectTo += "?fromIndex=yes&status=" + status;
+    redirectTo += "?status=" + status;
 }
-if (nodetype != null && !"".equals(nodetype)) {
-    redirectTo += "&nodetype=" + nodetype;
-}
+
 
 String offset = request.getParameter("offset");
 if (offset != null && !"".equals(offset)) {
@@ -41,7 +29,7 @@ if (offset != null && !"".equals(offset)) {
 	    redirectTo += "&offset=" ;
 	}
 	else {
-	    redirectTo += "?fromIndex=yes&offset=" ;
+	    redirectTo += "?offset=" ;
 	}
 	redirectTo += offset;
 }
@@ -51,11 +39,10 @@ if (orderby != null && !"".equals(orderby)) {
 	    redirectTo += "&orderby=" ;
 	}
 	else {
-	    redirectTo += "?fromIndex=yes&orderby=" ;
+	    redirectTo += "?orderby=" ;
 	}
 	redirectTo += orderby;
 }
-redirectTo += "?fromIndex=yes";
 redirectTo = response.encodeRedirectURL(redirectTo);
 response.sendRedirect(redirectTo);
 %>

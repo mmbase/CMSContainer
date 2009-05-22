@@ -17,8 +17,6 @@ import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.Role;
 
 public abstract class RepositoryWorkflow extends WorkflowManager {
-   
-   public static final String TYPE_ALLCONTENT = "allcontent";
 
    public RepositoryWorkflow(Cloud cloud) {
       super(cloud);
@@ -27,15 +25,6 @@ public abstract class RepositoryWorkflow extends WorkflowManager {
 
    protected Node getContentNode(Node wfItem) {
       NodeList list = wfItem.getRelatedNodes(RepositoryUtil.CONTENTELEMENT, WORKFLOWREL, DESTINATION);
-      if (!list.isEmpty()) {
-         return list.getNode(0);
-      }
-      return null;
-   }
-
-
-   protected Node getAssetNode(Node wfItem) {
-      NodeList list = wfItem.getRelatedNodes(RepositoryUtil.ASSETELEMENT, WORKFLOWREL, DESTINATION);
       if (!list.isEmpty()) {
          return list.getNode(0);
       }

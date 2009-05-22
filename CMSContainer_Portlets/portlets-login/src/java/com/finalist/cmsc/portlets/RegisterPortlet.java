@@ -21,7 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
+import com.finalist.cmsc.repository.forms.SearchAction;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.PersonService;
@@ -34,6 +36,7 @@ import com.finalist.cmsc.util.EmailSender;
 
 public class RegisterPortlet extends AbstractLoginPortlet {
 
+    private static final boolean DEBUG = true; 
    public static final String ACEGI_SECURITY_FORM_EMAIL_KEY = "email";
    public static final String ACEGI_SECURITY_FORM_FIRSTNAME_KEY = "firstName";
    public static final String ACEGI_SECURITY_FORM_INFIX_KEY = "infix";
@@ -113,6 +116,8 @@ public class RegisterPortlet extends AbstractLoginPortlet {
          Long authenticationId = authenticationService.getAuthenticationIdForUserId(emailTo);
    
          if (authenticationId == null) {
+            // TODO check if password is mandatory
+            //if (passwordText == null) passwordText="";
             Authentication authentication = authenticationService.createAuthentication(emailTo, passwordText);
             if (authentication.getId() != null) {
                authId = authentication.getId();
@@ -141,7 +146,12 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                   if (!isEmailAddress(emailFrom)) {
                      errorMessages.put(ACEGI_SECURITY_DEFAULT, "Email address '" + emailFrom + "' set in the edit_defaults properties is not available or working!");
                   } else {
+                      Boolean debugMode = Boolean.valueOf(PropertiesUtil.getProperty("register.debug"));
+                      if (debugMode) {
+                          log.warn("DEBUG MODE: sendEmail from: " + emailFrom + " to: " + emailTo);
+                      } else {
                      EmailSender.sendEmail(emailFrom, nameFrom, emailTo, emailSubject, emailText, emailTo, "text/plain;charset=utf-8");
+                      }
                   }
                } catch (AddressException e) {
                   log.error("Email address failed", e);
@@ -151,7 +161,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                   errorMessages.put(ACEGI_SECURITY_DEFAULT, "Sending email failed, from '" + emailFrom + "' to '" + emailTo + "'!");
                }
                if (errorMessages.isEmpty()) {
-                  response.setRenderParameter("email", emailTo);
+                  response.setRenderParameter(ACEGI_SECURITY_FORM_EMAIL_KEY, emailTo);
                } else {
                   //Email could not be sent, but the user is created..should remove user & authentication
                   personHibernateService.deletePersonByAuthenticationId(authId);
@@ -163,7 +173,13 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                errorMessages.put(ACEGI_SECURITY_DEFAULT, "adding of authenticationId in database failed");
             }
          } else {
-            errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
+            if (!isExistingUserAllowed()) {
+                errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
+            } else {
+                authId = authenticationId;
+                response.setRenderParameter("active", "subscribed");
+                request.getPortletSession().setAttribute("active", "subscribed");
+            }
          }
       }
 
@@ -178,7 +194,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
       }
    }
 
-
+   
    @Override
    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
       String screenId = (String) request.getAttribute(PortalConstants.CMSC_OM_PAGE_ID);
@@ -188,7 +204,6 @@ public class RegisterPortlet extends AbstractLoginPortlet {
       String template;
       
       Map<String, String> errorMessages = (HashMap<String, String>) portletSession.getAttribute(ERRORMESSAGES);
-      
       
       String email = request.getParameter("email");
       String active = request.getParameter("active");
@@ -229,6 +244,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
        String lastName = request.getParameter(ACEGI_SECURITY_FORM_LASTNAME_KEY);
        String passwordText = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
        String passwordConfirmation = request.getParameter(ACEGI_SECURITY_FORM_PASSWORDCONF_KEY);
+ 
       if (StringUtils.isBlank(firstName)) {
          errorMessages.put(ACEGI_SECURITY_FORM_FIRSTNAME_KEY, "register.firstname.empty");
       }
@@ -275,5 +291,12 @@ public class RegisterPortlet extends AbstractLoginPortlet {
        throw new IllegalArgumentException("Unknown key: " + key);
    }
    
+   /* 
+    * For newsletter registration it is okay to have an existing user
+    * for ordinary registration it is not okay.
+    */
+   protected boolean isExistingUserAllowed() {
+       return false;
+   }
    
 }

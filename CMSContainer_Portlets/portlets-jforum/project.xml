@@ -34,7 +34,7 @@
             <artifactId>jcaptcha-all</artifactId>
             <version>1.0-RC-2.0.1</version>
             <type>jar</type>
-        </dependency>      
+        </dependency>
         <dependency>
             <groupId>jforum</groupId>
             <artifactId>jforum</artifactId>

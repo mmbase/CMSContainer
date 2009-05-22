@@ -27,9 +27,6 @@
 	<classpathentry kind="src" path="tasks/src/java"/>
 	<classpathentry kind="src" path="versioning/src/java"/>
 	<classpathentry kind="src" path="workflow/src/java"/>
-	<classpathentry kind="src" path="fileupload/src/java"/>
-	<classpathentry kind="src" path="linkvalidator/src/tests"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_7"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.7.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/beanutils/apidocs/"/>
@@ -50,7 +47,7 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/fileupload/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.1.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/httpclient/apidocs/"/>
 		</attributes>
@@ -181,7 +178,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-dbcp/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/spiffyframework/jars/spiffy-with_source-all-0.05.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/supercsv/jars/SuperCSV-1.52.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-codec/jars/commons-codec-1.3.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/supercsv/jars/SuperCSV-1.52.jar"/>	
+	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_5"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

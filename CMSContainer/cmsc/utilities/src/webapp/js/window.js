@@ -3,9 +3,9 @@ function openPopupWindow(windowName, width, height, url) {
     if (!width) {w = 750;} else { w = width; }
     if (!height) {h = 550;} else { h = height; }
     if (!url) {url = "";}
-    var options = getPopupPositionProps(w, h) + ',scrollbars=yes,status=no,toolbar=no,menubar=no,location=no,resizable=yes';
+	var options = getPopupPositionProps(w, h) + ',scrollbars=yes,status=no,toolbar=no,menubar=no,location=no,resizable=yes';
     var w = window.open(url, windowName, options);    
-    w.focus();
+	w.focus();
     return false;
 }
 
@@ -25,7 +25,7 @@ function getFrameWidth (win) {
     } else if (document.documentElement && document.documentElement.clientWidth) {
        width = document.documentElement.clientWidth;
     } else {
-        width = 863;   // default value for 1024x768
+        width = 863;   // default value for 1024x786
     }
     return width;
 }
@@ -43,10 +43,10 @@ function getFrameHeight (win) {
         height = win.innerHeight;
     } else if (win.document.body.clientHeight) {
         height = win.document.body.clientHeight;
-    } else if (document.documentElement && document.documentElement.clientHeight) {
+    } else if (document.documentElement && document.documentElement.clientWidth) {
        height = document.documentElement.clientHeight;
     } else {
-        height = 543;   // default value for 1024x768
+        height = 543;   // default value for 1024x786
     }
     return height;
 }
@@ -58,12 +58,10 @@ function getOuterFrameWidth (win) {
     var width;
     if(win.document.layers || (win.document.getElementById && !win.document.all)){
        width = win.outerWidth;
-    } else if(win.document.all && win.document.body.clientWidth){
+	} else if(win.document.all){
        width = win.document.body.clientWidth;
-    } else if (win.document.all && document.documentElement && document.documentElement.clientWidth){
-       width = document.documentElement.clientWidth;
     } else {
-        width = 1024;   // default value for 1024x768
+        width = 1024;   // default value for 1024x786
     }
     return width;
 }
@@ -75,12 +73,10 @@ function getOuterFrameHeight (win) {
     var height;
     if(win.document.layers || (win.document.getElementById && !win.document.all)){
        height = win.outerHeight;
-    } else if(win.document.all && win.document.body.clientHeight){
+	} else if(win.document.all){
        height = win.document.body.clientHeight;
-    } else if (win.document.all && document.documentElement && document.documentElement.clientHeight){
-       width = document.documentElement.clientHeight;
     } else {
-       height = 768;   // default value for 1024x768
+       height = 786;   // default value for 1024x786
     }
     return height;
 }
@@ -114,10 +110,10 @@ function getPopupPositionProps(width, height) {
     
     var screenMinX = screen.availLeft != null ? screen.availLeft : 0;
     var screenMinY = screen.availTop != null ? screen.availTop : 0;
-    var screenMaxX = screen.availWidth != null ? screen.availWidth : 1024;   // default value for 1024x768
-    var screenMaxY = screen.availHeight != null ? screen.availHeight : 768;   // default value for 1024x768
+    var screenMaxX = screen.availWidth != null ? screen.availWidth : 0;
+    var screenMaxY = screen.availHeight != null ? screen.availHeight : 0;
 
-	var x = openerx + Math.round((openerw - width) / 2);
+    var x = openerx + Math.round((openerw - width) / 2);
     var y = openery + Math.round((openerh - height) / 2);
     
     // adjust to right of screen
@@ -209,7 +205,6 @@ function openUrlInFrame(name, url, win, parentcall) {
 
 // addLoadEvent(functieNaam)
 function addLoadEvent(func, windowElement) {
-  if (typeof func != 'function') return;
   if (windowElement == undefined) {
      windowElement = window; 
   }

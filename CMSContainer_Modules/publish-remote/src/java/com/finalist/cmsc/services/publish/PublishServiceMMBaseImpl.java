@@ -68,17 +68,13 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
    public boolean isPublishable(Node node) {
       Cloud cloud = node.getCloud();
       return !TypeUtil.isSystemType(node.getNodeManager().getName())
-            && (getAssetPublisher(cloud).isPublishable(node) || getContentPublisher(cloud).isPublishable(node) || getPagePublisher(cloud).isPublishable(node) || getChannelPublisher(
+            && (getContentPublisher(cloud).isPublishable(node) || getPagePublisher(cloud).isPublishable(node) || getChannelPublisher(
                   cloud).isPublishable(node));
    }
 
 
    private Publisher getPublisher(Node node) {
-      Publisher publisher = getAssetPublisher(node.getCloud());
-      if (publisher.isPublishable(node)) {
-         return publisher;
-      }
-      publisher = getContentPublisher(node.getCloud());
+      Publisher publisher = getContentPublisher(node.getCloud());
       if (publisher.isPublishable(node)) {
          return publisher;
       }
@@ -110,10 +106,6 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
       return new NodePublisher(cloud);
    }
 
-   private Publisher getAssetPublisher(Cloud cloud) {
-      return new AssetPublisher(cloud);
-   }
-   
    private Publisher getContentPublisher(Cloud cloud) {
       return new ContentPublisher(cloud);
    }
