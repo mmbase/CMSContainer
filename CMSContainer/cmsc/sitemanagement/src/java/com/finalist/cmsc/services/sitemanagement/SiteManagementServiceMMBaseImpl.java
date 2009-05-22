@@ -41,8 +41,6 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    private static Log log = LogFactory.getLog(SiteManagementServiceMMBaseImpl.class);
 
    private CloudProvider cloudProvider;
-   private SiteModelManager siteModelManager;
-
 
    @Override
    public void init(ServletConfig config, Properties aProperties) throws Exception {
@@ -50,8 +48,6 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
       log.info("SiteManagementService STARTED");
 
       waitForMMBase();
-
-      siteModelManager = new SiteModelManager();
    }
 
 
@@ -74,12 +70,12 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    public boolean isNavigation(String path) {
       log.debug("isNavigation:'" + path + "'");
       if (ServerUtil.isStaging()) {
-          NavigationItem item = siteModelManager.getNavigationItem(path);
+          NavigationItem item = SiteModelManager.getInstance().getNavigationItem(path);
           return showNavigation(item);
       }
       else {
           // live has a faster check
-          return siteModelManager.hasNavigationItem(path);
+          return SiteModelManager.getInstance().hasNavigationItem(path);
       }
    }
 
@@ -151,14 +147,14 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public List<Site> getSites() {
-       List<Site> sites = siteModelManager.getSites(); 
+       List<Site> sites = SiteModelManager.getInstance().getSites(); 
        removeInvalidNavigationsFromList(sites);
        return sites;
    }
 
    public <E extends NavigationItem> List<E> getNavigationItems(NavigationItem parent, Class<E> childClazz) {
        if (parent != null) {
-          List<E> children = siteModelManager.getChildren(parent, childClazz);
+          List<E> children = SiteModelManager.getInstance().getChildren(parent, childClazz);
           removeInvalidNavigationsFromList(children);
           return children;
        }
@@ -167,7 +163,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public NavigationItem getNavigationItem(int channel) {
-      NavigationItem navigationItem = siteModelManager.getNavigationItem(channel);
+      NavigationItem navigationItem = SiteModelManager.getInstance().getNavigationItem(channel);
       if (showNavigation(navigationItem)) {
           return navigationItem;
       }
@@ -224,7 +220,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
       List<Integer> stylesheetNumbers = page.getStylesheet();
       for (int j = 0; j < stylesheetNumbers.size(); j++) {
          Integer stylesheetNumber = stylesheetNumbers.get(j);
-         Stylesheet stylesheet = siteModelManager.getStylesheet(stylesheetNumber.intValue());
+         Stylesheet stylesheet = SiteModelManager.getInstance().getStylesheet(stylesheetNumber.intValue());
          stylesheets.add(stylesheet);
       }
       return stylesheets;
@@ -232,7 +228,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public NavigationItem getNavigationItemFromPath(String path) {
-       NavigationItem navigationItem = siteModelManager.getNavigationItem(path);
+       NavigationItem navigationItem = SiteModelManager.getInstance().getNavigationItem(path);
        if (showNavigation(navigationItem)) {
            return navigationItem;
        }
@@ -242,7 +238,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public Site getSiteFromPath(String path) {
-       Site navigationItem = siteModelManager.getSite(path);
+       Site navigationItem = SiteModelManager.getInstance().getSite(path);
        if (showNavigation(navigationItem)) {
            return navigationItem;
        }
@@ -252,7 +248,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public <E extends NavigationItem> List<E> getListFromPath(String path, Class<E> clazz) {
-      List<E> itemsForPath = siteModelManager.getItemsForPath(path, clazz);
+      List<E> itemsForPath = SiteModelManager.getInstance().getItemsForPath(path, clazz);
       if (ServerUtil.isStaging()) {
           for (E child : itemsForPath) {
              if (!showNavigation(child)) {
@@ -268,43 +264,43 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public String getPath(NavigationItem item, boolean includeRoot) {
-      return siteModelManager.getPath(item, includeRoot);
+      return SiteModelManager.getInstance().getPath(item, includeRoot);
    }
 
 
    @Override
    public String getPath(int itemId, boolean includeRoot) {
-      NavigationItem item = siteModelManager.getNavigationItem(itemId);
+      NavigationItem item = SiteModelManager.getInstance().getNavigationItem(itemId);
       if (item == null) {
          return null;
       }
       else {
-         return siteModelManager.getPath(item, includeRoot);
+         return SiteModelManager.getInstance().getPath(item, includeRoot);
       }
    }
 
 
    @Override
    public List<View> getViews(String screenId, String layoutId) {
-      return siteModelManager.getViews(screenId, layoutId);
+      return SiteModelManager.getInstance().getViews(screenId, layoutId);
    }
 
 
    @Override
    public List<View> getViews(String definitionId) {
-      return siteModelManager.getViews(definitionId);
+      return SiteModelManager.getInstance().getViews(definitionId);
    }
 
 
    @Override
    public List<View> getViews(PortletDefinition definition) {
-      return siteModelManager.getViews(definition);
+      return SiteModelManager.getInstance().getViews(definition);
    }
 
 
    @Override
    public List<PortletDefinition> getSingletonPortlets(String screenId, String layoutId) {
-      List<PortletDefinition> defs = siteModelManager.getSingletonPortlets(screenId, layoutId);
+      List<PortletDefinition> defs = SiteModelManager.getInstance().getSingletonPortlets(screenId, layoutId);
       removeDefinitionsBasedOnRank(defs);
       return defs;
    }
@@ -312,7 +308,7 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public List<PortletDefinition> getPortletDefintions(String screenId, String layoutId) {
-      List<PortletDefinition> defs = siteModelManager.getPortletDefintions(screenId, layoutId);
+      List<PortletDefinition> defs = SiteModelManager.getInstance().getPortletDefintions(screenId, layoutId);
       removeDefinitionsBasedOnRank(defs);
       return defs;
    }
@@ -346,13 +342,13 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public List<String> getContentTypes(String portletId) {
-      return siteModelManager.getContentTypes(portletId);
+      return SiteModelManager.getInstance().getContentTypes(portletId);
    }
 
 
    @Override
    public Set<String> getPagePositions(String pageId) {
-      return siteModelManager.getPagePositions(Integer.valueOf(pageId));
+      return SiteModelManager.getInstance().getPagePositions(Integer.valueOf(pageId));
    }
 
 
@@ -373,36 +369,36 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
 
    @Override
    public Layout getLayout(int layout) {
-      return siteModelManager.getLayout(layout);
+      return SiteModelManager.getInstance().getLayout(layout);
    }
 
 
    @Override
    public Portlet getPortlet(int portletId) {
-      return siteModelManager.getPortlet(portletId);
+      return SiteModelManager.getInstance().getPortlet(portletId);
    }
 
 
    @Override
    public PortletDefinition getPortletDefinition(int definition) {
-      return siteModelManager.getPortletDefinition(definition);
+      return SiteModelManager.getInstance().getPortletDefinition(definition);
    }
 
 
    @Override
    public View getView(int view) {
-      return siteModelManager.getView(view);
+      return SiteModelManager.getInstance().getView(view);
    }
 
 
    @Override
    public String getSite(NavigationItem item) {
-      return siteModelManager.getSite(item);
+      return SiteModelManager.getInstance().getSite(item);
    }
 
 
    @Override
    public void resetSiteCache() {
-      siteModelManager.resetSiteCache();
+      SiteModelManager.getInstance().resetSiteCache();
    }
 }

@@ -40,15 +40,13 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
    private static Log log = LogFactory.getLog(SiteManagementAdminServiceMMBaseImpl.class);
 
    private CloudProvider cloudProvider;
-   private SiteModelManager siteModelManager;
+   
 
 
    @Override
    public void init(ServletConfig config, Properties aProperties) throws Exception {
       this.cloudProvider = CloudProviderFactory.getCloudProvider();
       log.info("SiteManagementService STARTED");
-
-      siteModelManager = new SiteModelManager();
    }
 
 
@@ -64,7 +62,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.updatePortletParameter(cloud, portletId, key, values);
          updatePageForPortlet(portletId);
 
-         siteModelManager.clearPortlet(portletId);
+         SiteModelManager.getInstance().clearPortlet(portletId);
       }
 
       log.debug("++++ Param for portlet:'" + portletId + "'");
@@ -94,7 +92,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.updateNodeParameter(cloud, portletId, key, nodeList);
          updatePageForPortlet(portletId);
 
-         siteModelManager.clearPortlet(portletId);
+         SiteModelManager.getInstance().clearPortlet(portletId);
       }
 
       log.debug("++++ Param for portlet:'" + portletId + "'");
@@ -111,7 +109,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.updatePortletView(cloud, portletId, viewId);
          updatePageForPortlet(portletId);
 
-         siteModelManager.clearPortlet(portletId);
+         SiteModelManager.getInstance().clearPortlet(portletId);
       }
       catch (Exception e) {
          log.error("something went wrong while setting view (" + viewId + ") for portlet (" + portletId + ")");
@@ -134,7 +132,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.setPagePortlet(cloud, pageId, portletId, id);
          updatePage(pageId);
 
-         siteModelManager.clearItem(pageId);
+         SiteModelManager.getInstance().clearItem(pageId);
       }
       catch (Exception e) {
          log.error("something went wrong while adding portlet (" + portletId + ")", e);
@@ -155,7 +153,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.setPagePortlet(cloud, pageId, newNode, layoutId);
          updatePage(pageId);
 
-         siteModelManager.clearItem(pageId);
+         SiteModelManager.getInstance().clearItem(pageId);
       }
       catch (Exception e) {
          log.error("something went wrong while creating portlet (" + portletName + ")", e);
@@ -172,7 +170,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
          PortletUtil.deletePagePortlet(getUserCloud(), page.getId(), portlet.getId(), layoutId);
          updatePage(page.getId());
 
-         siteModelManager.clearItem(page.getId());
+         SiteModelManager.getInstance().clearItem(page.getId());
       }
    }
 
@@ -203,7 +201,7 @@ public class SiteManagementAdminServiceMMBaseImpl extends SiteManagementAdminSer
       try {
          Cloud cloud = getUserCloud();
          if (cloud != null) {
-             PortletDefinition definition = siteModelManager.getPortletDefinition(portlet.getDefinition());
+             PortletDefinition definition = SiteModelManager.getInstance().getPortletDefinition(portlet.getDefinition());
              if (definition.isSingle()) {
                 result = cloud.getUser().getRank().getInt() >= definition.getRank();
              }
