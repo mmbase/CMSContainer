@@ -1,8 +1,7 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
-                 com.finalist.cmsc.repository.RepositoryUtil,
-                 java.util.ArrayList"
+                 com.finalist.cmsc.repository.RepositoryUtil"
 %><%@ page import="com.finalist.cmsc.security.UserRole" 
 %><%@ page import="com.finalist.cmsc.security.SecurityUtil" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -167,30 +166,30 @@
                         </html:select>
                      </td>
                      <td rowspan="5">
-                     <% ArrayList fields = new ArrayList(); %>
+                        <c:set var="fields" value=""/>
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
                               <mm:fieldlist nodetype="${contenttypes}">
                                  <%-- check if the field is from contentelement --%>
-                                 <% boolean showField = true; %>
+                                 <c:set var="showField" value="true"/>
                                  <mm:fieldinfo type="name" id="fname">
                                      <mm:fieldlist nodetype="contentelement">
                                          <mm:fieldinfo type="name" id="cefname">
                                             <mm:compare referid="fname" referid2="cefname">
-                                               <% showField=false; %>
+                                               <c:set var="showField" value="false"/>
                                             </mm:compare>
                                          </mm:fieldinfo>
                                      </mm:fieldlist>
                                  </mm:fieldinfo>
-                                 <% if (showField) { %>
+                                 <c:if test="${showField}">
                                     <tr rowspan="5">
                                        <td height="32">
-                                          <mm:fieldinfo type="guiname" jspvar="guiname"/>:
-                                          <mm:fieldinfo type="name" jspvar="name" write="false">
-                                             <% fields.add(contenttypes + "." + name); %>
+                                          <mm:fieldinfo type="guiname"/>:
+                                          <mm:fieldinfo type="name" id="fieldName" write="false">
+                                             <c:set var="fields">${fields}, ${contenttypes}+"."+${fieldName}</c:set>
                                           </mm:fieldinfo>
                                     </tr>
-                                 <% } %>
+                                  </c:if>
                               </mm:fieldlist>
                            </table>
                         </mm:compare>
@@ -198,14 +197,13 @@
                      <td rowspan="5">
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
-                              <% for (int i = 0; i < fields.size(); i++) {
-                                 String field = (String) fields.get(i); %>
+                              <c:forEach items="${fields}" var="field">
                                  <tr>
                                     <td height="32">
-                                       <input type="text" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
+                                       <input type="text" name="${field}" value="${param.field}" />
                                     </td>
                                  </tr>
-                              <% } %>
+                              </c:forEach>
                            </table>
                         </mm:compare>
                      </td>
