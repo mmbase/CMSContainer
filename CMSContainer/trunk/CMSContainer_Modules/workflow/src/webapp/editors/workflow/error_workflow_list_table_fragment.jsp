@@ -8,7 +8,7 @@
       </td>
    </tr>
 </table>
-<table>
+<table style="background-color:#CC0000;">
    <thead>
       <tr>
          <th />
@@ -19,9 +19,9 @@
          <th><fmt:message key="workflow.lastmodifieddate" /></th>
       </tr>
    </thead>
-   <tbody class="hover">
+   <tbody>
       <mm:listnodes referid="errors">
-         <tr <mm:even inverse="true">class="swap"</mm:even>>
+         <tr>
             <td>
                <mm:field name="number" id="errorElemNumber" write="false"/>
                <input type="checkbox" name="check_${errorElemNumber}" value="on"/>
