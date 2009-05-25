@@ -178,7 +178,7 @@
                         </html:select>
                      </td>
                      <td rowspan="5">
-                        <c:set var="fields" value=""/>
+                        <c:set var="fields"/>
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
                               <mm:fieldlist nodetype="${contenttypes}">
@@ -198,7 +198,14 @@
                                        <td height="32">
                                           <mm:fieldinfo type="guiname"/>:
                                           <mm:fieldinfo type="name" id="fieldName" write="false">
+                                          <c:choose>
+                                             <c:when test="${empty fields}">
+                                                <c:set var="fields">${contenttypes}.${fieldName}</c:set>
+                                             </c:when>
+                                             <c:otherwise>
                                              <c:set var="fields">${fields},${contenttypes}.${fieldName}</c:set>
+                                             </c:otherwise>
+                                          </c:choose>
                                           </mm:fieldinfo>
                                     </tr>
                                   </c:if>
