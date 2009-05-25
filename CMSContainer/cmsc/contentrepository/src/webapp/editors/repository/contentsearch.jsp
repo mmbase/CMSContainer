@@ -197,13 +197,13 @@
                      <td rowspan="5">
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
-                              <c:forEach items="${fields}" var="field">
+                              <c:forTokens items="${fields}" var="field" delims=",">
                                  <tr>
                                     <td height="32">
                                        <input type="text" name="${field}" value="${param.field}" />
                                     </td>
                                  </tr>
-                              </c:forEach>
+                              </c:forTokens>
                            </table>
                         </mm:compare>
                      </td>
