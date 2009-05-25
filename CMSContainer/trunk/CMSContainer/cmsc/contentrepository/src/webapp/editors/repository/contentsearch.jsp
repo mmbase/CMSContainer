@@ -10,6 +10,18 @@
 <cmscedit:head title="search.title">
       <script src="content.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
+<script type="text/javascript">
+		function selectChannel(channel, path) {
+		    var newDirection=document.forms[0].direction.value;
+		    var type=document.forms[0].order.value;
+		    var offset = document.forms[0].offset.value;
+		    document.location = "../MoveContentFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+		}
+		
+		<c:if test="${not empty param.message}">
+		addLoadEvent(alert('${param.message}'));
+		</c:if>
+</script>
     <c:if test="${not empty requestScope.refreshChannels}">
         <script>
         refreshFrame('channels');
@@ -344,7 +356,10 @@
          <mm:compare referid="action" value="link" inverse="true">
              <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
-               <div align="left"> <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/></div>
+               <div align="left">
+                  <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/>
+                  <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
+               </div>
                </c:if>
               </mm:hasrank> 
          </mm:compare>
@@ -524,6 +539,7 @@
           <mm:compare referid="action" value="link" inverse="true">
              <c:if test="${fn:length(results) >1}">
              <input type="submit" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.removeconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/>
+             <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
              </c:if>
          </mm:compare>
             <mm:compare referid="linktochannel" value="" inverse="true">
