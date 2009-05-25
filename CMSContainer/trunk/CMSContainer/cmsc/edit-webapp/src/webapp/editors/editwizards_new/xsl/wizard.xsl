@@ -98,6 +98,7 @@
 
   <xsl:template name="extrajavascript">
     <script type="text/javascript" src="{$ew_context}/js/prototype.js"><xsl:comment>help IE</xsl:comment></script>
+    <script type="text/javascript" src="{$ew_context}/js/window.js"><xsl:comment>help fix popup position </xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/override.js"><xsl:comment>help IE</xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/my-validator.js"><xsl:comment>help IE</xsl:comment></script>
    <script type="text/javascript">
@@ -539,7 +540,8 @@
       <xsl:for-each select="command[@name=&apos;contenttypeselector&apos;]">
         <script type="text/javascript">
         function searchtypedef(){
-            window.open('../../../../editors/contenttype/ContentTypeAction.do?cmd=<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />&amp;objectnumber=<xsl:value-of select="../@number" />&amp;searchvalue=' + form[&quot;searchvalue&quot;].value, 'pageselector', 'width=401,height=401,status=yes,toolbar=no,titlebar=no,scrollbars=no,resizable=yes,menubar=no');
+            var options = getPopupPositionProps(401, 401) + ',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no';
+            window.open('../../../../editors/contenttype/ContentTypeAction.do?cmd=<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />&amp;objectnumber=<xsl:value-of select="../@number" />&amp;searchvalue=' + form[&quot;searchvalue&quot;].value, 'pageselector', options);
         }
         </script>
         <table class="searchcontent">
@@ -849,7 +851,7 @@
 
   <xsl:template match="command[@name=&apos;pageselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/site/select/SelectorPage.do', 'pageselector', 'width=350,height=500,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/site/select/SelectorPage.do', 'pageselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -857,7 +859,7 @@
 
   <xsl:template match="command[@name=&apos;contentselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/SearchInitAction.do?action=selectforwizard', 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/SearchInitAction.do?action=selectforwizard', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -865,7 +867,7 @@
 
   <xsl:template match="command[@name=&apos;channelselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', 'width=350,height=500,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -987,7 +989,7 @@
    <option value="4"><xsl:value-of select="$prompt_newsletter_monthly" /></option>
       </select> &#x0020;
       <input type="hidden" name="{@fieldname}" value="{value}" title="new-calendar" id="{@fieldname}"/>
-      <a href="#" id="calendarSelect" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', 'height=400, width=500, top='+eval((window.screen.availHeight - 400)/2)+', left='+eval((window.screen.availWidth - 500)/2)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" id="calendarDelete" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
+      <a href="#" id="calendarSelect" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', getPopupPositionProps(400,500)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" id="calendarDelete" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
       <div id="calendar-expression"></div>      
   </xsl:template>
 
