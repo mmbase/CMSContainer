@@ -50,7 +50,7 @@
 					    var newDirection=document.forms[0].direction.value;
 					    var type=document.forms[0].order.value;
 					    var offset = document.forms[0].offset.value;
-					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveAssetNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
 					}
 					
 				    <c:if test="${not empty param.message}">
