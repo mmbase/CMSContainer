@@ -76,3 +76,22 @@ function selectAssettype(initUrl) {
     // document.forms[0].action=initUrl;
     document.forms[0].submit();
  }
+
+var moveContentNumber;
+
+function massMoveFromSearch(url) {
+   var checkboxs = document.getElementsByTagName("input");
+   var objectnumbers = '';
+   for(i = 0; i < checkboxs.length; i++) {
+      if(checkboxs[i].type == 'checkbox' && checkboxs[i].name.indexOf('chk_') == 0 && checkboxs[i].checked) {
+         var num1 = checkboxs[i].value;
+         var num2 = num1.split(":");
+         objectnumbers += num2[1]+",";
+      }
+   }
+   if(objectnumbers == ''){
+      return ;
+   }
+   moveContentNumber = objectnumbers.substr(0,objectnumbers.length - 1);
+   openPopupWindow('selectchannel', 340, 400,url);
+}

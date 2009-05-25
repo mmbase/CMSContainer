@@ -46,7 +46,17 @@
                       }
                    }
                 }
-            </script>
+					function selectChannel(channel, path) {
+					    var newDirection=document.forms[0].direction.value;
+					    var type=document.forms[0].order.value;
+					    var offset = document.forms[0].offset.value;
+					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveAssetNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+					}
+					
+				    <c:if test="${not empty param.message}">
+				    addLoadEvent(alert('${param.message}'));
+				    </c:if>
+      </script>
     <c:if test="${not empty requestScope.refreshChannels}">
         <script>
         refreshFrame('channels');
@@ -347,6 +357,7 @@
                   <input type="submit" class="button" name="massdelete" 
                         onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
                         value="<fmt:message key="asset.delete.massdelete" />"/>
+                  <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                </div>
                </c:if>
             </mm:hasrank>
@@ -450,6 +461,7 @@
          <input type="submit" class="button" name="massdelete" 
                onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
                value="<fmt:message key="asset.delete.massdelete" />"/>
+         <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
       </div>
       </c:if>
    </mm:hasrank>
