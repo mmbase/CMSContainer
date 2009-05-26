@@ -8,7 +8,7 @@
       </td>
    </tr>
 </table>
-<table style="background-color:#CC0000;">
+<table>
    <thead>
       <tr>
          <th />
@@ -21,7 +21,7 @@
    </thead>
    <tbody>
       <mm:listnodes referid="errors">
-         <tr>
+         <tr <mm:even inverse="true">style="background-color:#BB0000;"</mm:even>>
             <td>
                <mm:field name="number" id="errorElemNumber" write="false"/>
                <input type="checkbox" name="check_${errorElemNumber}" value="on"/>
