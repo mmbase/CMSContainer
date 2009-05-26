@@ -304,7 +304,7 @@
 			</div>
 			</div>
 			</div>
-         <div class="body">
+         <div class="body" style="background-color:#CC0000;">
          <form name="errorWorkflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
             <input type="hidden" name="status" value="${status}" />
             <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
@@ -313,7 +313,7 @@
             </c:if>
             &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll" onclick="checkAllElement(this, 'errorWorkflowForm', '')" /> <fmt:message key="workflow.select_all" />
             <input type="hidden" name="actionvalue" value="publish" /><br />
-            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />"/>
+            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />" style="background-color:#CC0000;"/>
          </form>
          </div>
 		</c:if>
