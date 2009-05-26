@@ -8,6 +8,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
+      <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
       <script src="content.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -179,6 +180,7 @@
                      </td>
                      <td rowspan="5">
                         <c:set var="fields"/>
+                        <c:set var="fieldtypes"/>
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
                               <mm:fieldlist nodetype="${contenttypes}">
@@ -197,16 +199,19 @@
                                     <tr rowspan="5">
                                        <td height="32">
                                           <mm:fieldinfo type="guiname"/>:
-                                          <mm:fieldinfo type="name" id="fieldName" write="false">
-                                          <c:choose>
-                                             <c:when test="${empty fields}">
-                                                <c:set var="fields">${contenttypes}.${fieldName}</c:set>
-                                             </c:when>
-                                             <c:otherwise>
-                                             <c:set var="fields">${fields},${contenttypes}.${fieldName}</c:set>
-                                             </c:otherwise>
-                                          </c:choose>
+                                          <mm:fieldinfo type="name" id="fieldname" write="false">
+                                             <c:choose>
+                                                <c:when test="${empty fields}">
+                                                   <c:set var="fields">${contenttypes}.${fieldname}</c:set>
+                                                   <c:set var="fieldtypes"><mm:fieldinfo type="typedescription"/></c:set>
+                                                </c:when>
+                                                <c:otherwise>
+                                                <c:set var="fields">${fields},${contenttypes}.${fieldname}</c:set>
+                                                <c:set var="fieldtypes">${fieldtypes},<mm:fieldinfo type="typedescription"/></c:set>
+                                                </c:otherwise>
+                                             </c:choose>
                                           </mm:fieldinfo>
+                                       </td>
                                     </tr>
                                   </c:if>
                               </mm:fieldlist>
@@ -216,12 +221,14 @@
                      <td rowspan="5">
                         <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                            <table>
-                              <c:forTokens items="${fields}" var="field" delims=",">
+                              <c:forTokens items="${fields}" var="field" delims="," varStatus="status">
+                                 <c:forTokens items="${fieldtypes}" var="fieldtype" delims="," begin="${status.index}" end="${status.index}">
                                  <tr>
                                     <td height="32">
-                                       <input type="text" name="${field}" value="${param.field}" />
+                                       <input type="text" name="${field}" dttype="${fieldtype}" value="${param.field}" />
                                     </td>
                                  </tr>
+                                 </c:forTokens>
                               </c:forTokens>
                            </table>
                         </mm:compare>
@@ -330,7 +337,7 @@
 			   <tr>
                      <td></td>
                      <td>
-                        <input type="submit" class="button" name="submitButton" onclick="setOffset(0);" value="<fmt:message key="searchform.submit" />"/>
+                        <input type="submit" class="button" name="submitButton" onclick="return validateInputs();" value="<fmt:message key="searchform.submit" />"/>
                      </td>
                   </tr>
             </table>
