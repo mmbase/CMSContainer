@@ -162,30 +162,37 @@
                         </html:select>
                      </td>
                      <td rowspan="5">
-                     <% ArrayList fields = new ArrayList(); %>
+                     <c:set var="fields"/>
                         <mm:compare referid="assettypes" value="assetelement" inverse="true">
                            <table>
                               <mm:fieldlist nodetype="${assettypes}">
                                  <%-- check if the field is from assetelement --%>
-                                 <% boolean showField = true; %>
+                                 <c:set var="showField" value="true"/>
                                  <mm:fieldinfo type="name" id="fname">
                                      <mm:fieldlist nodetype="assetelement">
                                          <mm:fieldinfo type="name" id="cefname">
                                             <mm:compare referid="fname" referid2="cefname">
-                                               <% showField=false; %>
+                                               <c:set var="showField" value="false"/>
                                             </mm:compare>
                                          </mm:fieldinfo>
                                      </mm:fieldlist>
                                  </mm:fieldinfo>
-                                 <% if (showField) { %>
+                                 <c:if test="${showField}">
                                     <tr rowspan="5">
                                        <td height="32">
                                           <mm:fieldinfo type="guiname" jspvar="guiname"/>:
-                                          <mm:fieldinfo type="name" jspvar="name" write="false">
-                                             <% fields.add(assettypes + "." + name); %>
+                                          <mm:fieldinfo type="name" jspvar="fieldname" write="false">
+                                          <c:choose>
+                                             <c:when test="${empty fields}">
+                                                <c:set var="fields">${assettypes}.${fieldname}</c:set>
+                                             </c:when>
+                                             <c:otherwise>
+                                             <c:set var="fields">${fields},${assettypes}.${fieldname}</c:set>
+                                             </c:otherwise>
+                                          </c:choose>
                                           </mm:fieldinfo>
                                     </tr>
-                                 <% } %>
+                                 </c:if>
                               </mm:fieldlist>
                            </table>
                         </mm:compare>
@@ -193,14 +200,13 @@
                      <td rowspan="5">
                         <mm:compare referid="assettypes" value="assetelement" inverse="true">
                            <table>
-                              <% for (int i = 0; i < fields.size(); i++) {
-                                 String field = (String) fields.get(i); %>
+                              <c:forTokens items="${fields}" var="field" delims=",">
                                  <tr>
                                     <td height="32">
-                                       <input type="text" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
+                                       <input type="text" name="${field}" value="${param.field}" />
                                     </td>
                                  </tr>
-                              <% } %>
+                              </c:forTokens>
                            </table>
                         </mm:compare>
                      </td>
