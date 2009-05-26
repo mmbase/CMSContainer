@@ -40,12 +40,6 @@
       <definition>contentchannelportlet</definition>
       <type>multiple</type>
    </node>
-   <node number="470" owner="default">
-      <title>DetailPortlet</title>
-      <description>Detail view of one element</description>
-      <definition>contentportlet</definition>
-      <type>multiple</type>
-   </node>
    <node number="547" owner="default">
       <title>Linklist</title>
       <definition>contentchannelportlet</definition>
@@ -57,15 +51,15 @@
       <definition>contentportlet</definition>
       <type>multiple</type>
    </node>
-   <node number="472" owner="default">
-      <title>IFramePortlet</title>
-      <description>IFramePortlet</description>
-      <definition>iframeportlet</definition>
-      <type>multiple</type>
-   </node>
    <node number="87189" owner="default">
       <title>SitemapPortlet</title>
       <definition>jspportlet</definition>
       <type>single</type>
+   </node>
+   <node number="87239" owner="default">
+      <title>GoogleMapPortlet</title>
+      <description>GoogleMapPortlet</description>
+      <definition>googlemapportlet</definition>
+      <type>multiple</type>
    </node>
 </portletdefinition>
