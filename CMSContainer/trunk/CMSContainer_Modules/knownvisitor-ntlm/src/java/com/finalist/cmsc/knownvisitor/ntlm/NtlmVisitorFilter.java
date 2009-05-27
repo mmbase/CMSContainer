@@ -26,6 +26,7 @@ public class NtlmVisitorFilter extends VisitorFilter {
 
    private static final Logger log = Logging.getLoggerInstance(NtlmVisitorFilter.class);
 
+   private static final String NTLM_HTTP_AUTH_USERNAME = "NtlmHttpAuthUsername";
    private static final String NTLM_HTTP_AUTH = "NtlmHttpAuth";
 
 
@@ -104,20 +105,49 @@ public class NtlmVisitorFilter extends VisitorFilter {
          }
          req.getSession().setAttribute(NTLM_HTTP_AUTH, ntlm);
          String username = ntlm.getUsername();
+
+         addUserCookie(resp, username);
+
          justLoggedIn(req, username);
       }
       else {
-         HttpSession ssn = req.getSession(false);
-         if (ssn == null || (ntlm = (NtlmPasswordAuthentication) ssn.getAttribute(NTLM_HTTP_AUTH)) == null) {
-            log.debug("Not NTLM authenticated, starting authentication.");
-            sendChallenge(resp, module, offerBasic, offerNtlm);
-            return false;
+         String cookie = getUserCookie(req.getCookies());
+         if (cookie != null) {
+            justLoggedIn(req, cookie);
+            return true;
+         }
+         else {
+            HttpSession ssn = req.getSession(false);
+            if (ssn == null || (ntlm = (NtlmPasswordAuthentication) ssn.getAttribute(NTLM_HTTP_AUTH)) == null) {
+               log.debug("Not NTLM authenticated, starting authentication.");
+               sendChallenge(resp, module, offerBasic, offerNtlm);
+               return false;
+            }
          }
       }
 
       return ntlm != null;
    }
 
+   private void addUserCookie(HttpServletResponse resp, String username) {
+      Cookie cookie = new Cookie(NTLM_HTTP_AUTH_USERNAME, username);
+      cookie.setMaxAge(0x7fffffff);
+      resp.addCookie(cookie);
+   }
+
+   private String getUserCookie(Cookie cookies[]) {
+      if (cookies != null) {
+         for (int i = 0; i < cookies.length; i++) {
+            Cookie cookie = cookies[i];
+            if (NTLM_HTTP_AUTH_USERNAME.equals(cookie.getName())) { 
+               return cookie.getValue();
+            }
+         }
+      }
+      return null;
+   }
+
+   
    private void sendChallenge(HttpServletResponse resp, NtlmKnownVisitorModule module,
          boolean offerBasic, boolean offerNtlm) throws IOException {
       if (offerNtlm) {
