@@ -12,49 +12,50 @@ xinha_init = xinha_init ? xinha_init : function() {
 //   'Stylist',
 //   'SuperClean',
    'TableOperations'
+
   ];
   // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-  if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+  if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
   xinha_config = createDefaultConfig();
-  xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-  HTMLArea.startEditors(xinha_editors);
+  xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+  Xinha.startEditors(xinha_editors);
 }
 
 createDefaultConfig = function() {
-  var xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+  var xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
   xinha_config.registerButton({
     id        : "my-validatesave",
-    tooltip   : HTMLArea._lc("Controleer de html"),
+    tooltip   : Xinha._lc("Controleer de html"),
     image     : _editor_url + xinha_config.imgURL +  "ed_validate_save.gif",
     textMode  : true,
     action    : myValidateSaveAction
   });
   xinha_config.registerButton({
     id        : "insertimage",
-    tooltip   : HTMLArea._lc("Insert Image"),
+    tooltip   : Xinha._lc("Insert Image"),
     image     : _editor_url + xinha_config.imgURL + "ed_image.gif",
     textMode  : false,
     action    : function(e) {e._insertImage();}
   });
   xinha_config.registerButton({
-    id        : "createlink",
-    tooltip   : HTMLArea._lc("Insert/Modify Link"),
+    id        : "inlinelink",
+    tooltip   : Xinha._lc("Insert/Modify Link"),
     image     : _editor_url + xinha_config.imgURL +  "ed_link.gif",
     textMode  : false,
     action    : function(e) {e._insertInlineLink();}
   });
 
   xinha_config.toolbar = [
-    ['bold', 'italic', 'underline', "strikethrough", 'separator',
-     'superscript', 'subscript','separator',
-     'formatblock', 'separator',
-//     'justifyleft','justifycenter','justifyright', 'separator',
-     'insertorderedlist', 'insertunorderedlist', 'separator',
-     'cut', 'copy', 'paste', 'separator', 'undo', 'redo'
-    ],
-    ['createlink', 'insertimage', 'inserttable', 'separator',
-     'htmlmode', 'separator', 'my-validatesave', "separator", "showhelp", "popupeditor"
-    ]
+    ["popupeditor"],
+    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
+    ["separator","forecolor","hilitecolor"],
+    ["separator","subscript","superscript"],
+    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
+    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
+    ["separator","inserthorizontalrule","inlinelink","insertimage","inserttable"],
+    ["linebreak","separator","undo","redo","selectall"], 
+    ["separator","lefttoright", "righttoleft"],
+    ["separator","htmlmode","showhelp","my-validatesave"]
   ];
 
    xinha_config.formatblock = ({
@@ -85,7 +86,7 @@ myValidateSaveAction = function(editor) {
 
 // overrides editwizard.jsp
 function doCheckHtml() {
-  if (HTMLArea.checkSupportedBrowser()) {
+  if (Xinha.checkSupportedBrowser()) {
     for (var editorname in xinha_editors) {
       editor = xinha_editors[editorname];
       updateValue(editor);
@@ -105,12 +106,15 @@ function updateValue(editor) {
   }
   if(editor != null && editor.getHTML) {
 	  setWidthForTables(editor);
+     if(!Xinha.is_ie) {
+        setDimensionForImages(editor);
+     }
 	  value = editor.outwardHtml(editor.getHTML());
 	  // These two lines could cause editors to complain about responsetime
 	  // when they leave a form with many large htmlarea fields.
 	  // this is the case when doCheckHtml() is called by the editwizard.jsp with
 	  // doSave, doSaveOnly, gotoForm and doStartWizard
-	  value = wizardClean(value);
+	 
 	  value = clean(value);
 
 	  editor._textArea.value = value;
@@ -191,8 +195,23 @@ function setWidthForTables(editor) {
 	}
 }
 
+function setDimensionForImages(editor) {
+	if(editor._doc != null) {
+		var images = editor._doc.getElementsByTagName('img');
+		for (var i = 0 ; i < images.length ; i++) {
+			var image = images[i];
+			if (image.style.width) {
+				image.width = image.style.width;
+         }
+         if (image.style.height)
+         {
+            image.height = image.style.height;
+         }
+		}
+	}
+}
 
-HTMLArea.prototype._insertInlineLink = function(link) {
+Xinha.prototype._insertInlineLink = function(link) {
 	var editor = this;
 	var outparam = null;
 	if (typeof link == "undefined") {
@@ -206,10 +225,10 @@ HTMLArea.prototype._insertInlineLink = function(link) {
 	var sel = editor._getSelection();
 	var sel_value = sel;
 	var range = this._createRange(sel);
-	if(HTMLArea.is_ie) sel_value = range.text;
+	if(Xinha.is_ie) sel_value = range.text;
 	if (link){
          	outparam = {
-               	f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
+               	f_href   : Xinha.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
                 f_destination : link.destination ,
                	f_title   : link.name?link.name: sel_value,
 				f_tooltip : link.title,
@@ -227,7 +246,7 @@ HTMLArea.prototype._insertInlineLink = function(link) {
                	f_usetarget : editor.config.makeLinkShowsTarget
          	};
 	}
-	this._popupDialog( "insertinline_link.html", function(param) {
+	this._popupDialog( "../modules/CreateLink/insertinline_link.html", function(param) {
       	if (!param) { return false; } //user must have pressed cancel
 		var a = link;
 		if ( !a ){
@@ -242,7 +261,7 @@ HTMLArea.prototype._insertInlineLink = function(link) {
                               editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + "' name='"+param.f_title+"' destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
                         }
                         else{
-                              if ( !HTMLArea.is_ie )
+                              if ( !Xinha.is_ie )
                               {
                                     a = range.startContainer;
                                     if ( ! ( /^a$/i.test(a.tagName) ) )
@@ -277,7 +296,7 @@ HTMLArea.prototype._insertInlineLink = function(link) {
 		a.target = param.f_target.trim();
 		a.title = param.f_tooltip.trim();
 
-            if (HTMLArea.is_ie) {
+            if (Xinha.is_ie) {
                   a.destination = param.f_destination.trim();
                   if (!a.destination && a.relationID) {
                         a.relationID = "";
@@ -295,7 +314,7 @@ HTMLArea.prototype._insertInlineLink = function(link) {
 	outparam);
 };
 
-HTMLArea.prototype._insertImage = function(image) {
+Xinha.prototype._insertImage = function(image) {
         var editor = this;	// for nested functions
         var outparam = null;
         if (typeof image == "undefined") {
@@ -304,21 +323,21 @@ HTMLArea.prototype._insertImage = function(image) {
                         image = null;
         }
         if (image) outparam = {
-                f_url    : HTMLArea.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
+                f_url    : Xinha.is_ie ? editor.stripBaseURL(image.src) : image.getAttribute("src"),
                 f_alt    : image.alt,
                 f_border : image.border,
                 f_align  : image.align,
                 f_width  : image.width,
                 f_height : image.height,
-                f_destination : HTMLArea.is_ie ? image.destination : image.getAttribute("destination")
+                f_destination : Xinha.is_ie ? image.destination : image.getAttribute("destination")
         };
-        this._popupDialog("insertinline_image.html", function(param) {
-                if (!param) {	// user must have pressed Cancel
+        this._popupDialog("../modules/InsertImage/insertinline_image.html", function(param) {
+                if (!param) {// user must have pressed Cancel
                         return false;
                 }
                 var img = image;
                 if (!img) {
-                  if ( HTMLArea.is_ie ) {
+                  if ( Xinha.is_ie ) {
                     var sel = editor._getSelection();
                     var range = editor._createRange(sel);
                     editor._doc.execCommand("insertimage", false, param.f_url);
@@ -344,11 +363,11 @@ HTMLArea.prototype._insertImage = function(image) {
                         var value = param[field];
                         switch (field) {
                             case "f_alt"    :  img.alt = value; img.title = value; break;
-                            case "f_border" :  HTMLArea.is_ie ? img.border = parseInt(value || "0") : img.setAttribute("border", parseInt(value || "0")); break;
-                            case "f_align"  :  HTMLArea.is_ie ? img.align = value : img.setAttribute("align", value); break;
-                            case "f_width"  :  HTMLArea.is_ie ? img.width = parseInt(value || "100") : img.setAttribute("width", parseInt(value || "100")); break;
+                            case "f_border" :  Xinha.is_ie ? img.border = parseInt(value || "0") : img.setAttribute("border", parseInt(value || "0")); break;
+                            case "f_align"  :  Xinha.is_ie ? img.align = value : img.setAttribute("align", value); break;
+                            case "f_width"  :  Xinha.is_ie ? img.width = parseInt(value || "100") : img.setAttribute("width", parseInt(value || "100")); break;
                             case "f_height"  :
-                              if (HTMLArea.is_ie) {
+                              if (Xinha.is_ie) {
                                 if (!value) {
                                   img.height = "100";
                                 }
@@ -365,14 +384,14 @@ HTMLArea.prototype._insertImage = function(image) {
                                 }
                               }
                               break;
-                            case "f_destination"  : HTMLArea.is_ie ? img.destination = value : img.setAttribute("destination", value); break;
+                            case "f_destination"  : Xinha.is_ie ? img.destination = value : img.setAttribute("destination", value); break;
                         }
                 }
         }, outparam);
 };
 
 // Called when the user clicks the Insert Table button
-HTMLArea.prototype._insertTable = function()
+Xinha.prototype._insertTable = function()
 {
   var sel = this._getSelection();
   var range = this._createRange(sel);
@@ -441,7 +460,7 @@ HTMLArea.prototype._insertTable = function()
           td.appendChild(doc.createTextNode('\u00a0'));
         }
       }
-      if ( HTMLArea.is_ie )
+      if ( Xinha.is_ie )
       {
         range.pasteHTML(table.outerHTML);
       }
@@ -456,86 +475,3 @@ HTMLArea.prototype._insertTable = function()
   );
 };
 
-HTMLArea.prototype._insertTable = function()
-{
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
-  var editor = this;	// for nested functions
-  this._popupDialog(
-    editor.config.URIs.insert_table,
-    function(param)
-    {
-      // user must have pressed Cancel
-      if ( !param )
-      {
-        return false;
-      }
-      var doc = editor._doc;
-      // create the table element
-      var table = doc.createElement("table");
-      // assign the given arguments
-
-      for ( var field in param )
-      {
-        var value = param[field];
-        if ( !value )
-        {
-          continue;
-        }
-        switch (field)
-        {
-          case "f_width":
-            table.width = value + param.f_unit;
-          break;
-          case "f_align":
-            table.align = value;
-          break;
-          case "f_border":
-            table.border = parseInt(value, 10);
-          break;
-          case "f_spacing":
-            table.cellSpacing = parseInt(value, 10);
-          break;
-          case "f_padding":
-            table.cellPadding = parseInt(value, 10);
-          break;
-        }
-      }
-      var cellwidth = 0;
-      if ( param.f_fixed )
-      {
-        cellwidth = Math.floor(100 / parseInt(param.f_cols, 10));
-      }
-      var tbody = doc.createElement("tbody");
-      table.appendChild(tbody);
-      for ( var i = 0; i < param.f_rows; ++i )
-      {
-        var tr = doc.createElement("tr");
-        tbody.appendChild(tr);
-        for ( var j = 0; j < param.f_cols; ++j )
-        {
-          var td = doc.createElement("td");
-          // @todo : check if this line doesnt stop us to use pixel width in cells
-          if (cellwidth)
-          {
-            td.style.width = cellwidth + "%";
-          }
-          tr.appendChild(td);
-          // Browsers like to see something inside the cell (&nbsp;).
-          td.appendChild(doc.createTextNode('\u00a0'));
-        }
-      }
-      if ( HTMLArea.is_ie )
-      {
-        range.pasteHTML(table.outerHTML);
-      }
-      else
-      {
-        // insert the table
-        editor.insertNodeAtSelection(table);
-      }
-      return true;
-    },
-    null
-  );
-};
