@@ -197,7 +197,7 @@ public class ResponseFormPortlet extends ContentPortlet {
    }
 
 
-   private void saveResponseForm(Cloud cloud, Map<String, Object> formfields, Node responseForm) {
+   protected void saveResponseForm(Cloud cloud, Map<String, Object> formfields, Node responseForm) {
 
       NodeManager savedFormMgr = cloud.getNodeManager("savedform");
       Node savedResponse = savedFormMgr.createNode();
