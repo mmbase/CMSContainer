@@ -73,12 +73,12 @@ public abstract class KnownVisitorModule extends Module {
          if (answer.hasMoreElements()) {
             SearchResult result = answer.next();
             Attribute values = result.getAttributes().get(getLdapRealnameField());
-            if (values.size() > 0) {
+            if (values != null && values.size() > 0) {
                visitor.setDisplayName((String) values.get(0));
             }
 
             values = result.getAttributes().get(getLdapEmailField());
-            if (values.size() > 0) {
+            if (values != null && values.size() > 0) {
                visitor.setEmail((String) values.get(0));
             }
          }
