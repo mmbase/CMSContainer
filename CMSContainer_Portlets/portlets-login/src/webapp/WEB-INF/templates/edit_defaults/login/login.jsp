@@ -6,13 +6,13 @@
       document.forms['<portlet:namespace />form'].registrationpage.value = page;
       document.forms['<portlet:namespace />form'].registrationpagepathuri.value = path;
    }
-function selectRedirectPage(page, path) {
-   document.forms['<portlet:namespace />form'].page.value = page;
-   document.forms['<portlet:namespace />form'].pagepath.value = path;
-}
-function erase(field) {
-   document.forms['<portlet:namespace />form'][field].value = '';
-}
+   function selectRedirectPage(page, path) {
+      document.forms['<portlet:namespace />form'].page.value = page;
+      document.forms['<portlet:namespace />form'].pagepath.value = path;
+   }
+   function erase(field) {
+      document.forms['<portlet:namespace />form'][field].value = '';
+   }
 </script>
 	<form name="<portlet:namespace />form" method="post" target="_parent" action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
 		<table class="editcontent">
@@ -57,13 +57,14 @@ function erase(field) {
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
-            <mm:cloud>
-               <mm:node number="${registrationpage}" notfound="skip">
-                  <mm:field name="path" id="registrationpagepathuri" write="false" />
-               </mm:node>
-            </mm:cloud>
-            <input type="hidden" name="registrationpage" value="${registrationpage}" />
-            <input type="text" name="registrationpagepathuri" value="${registrationpagepathuri}" disabled="true" />
+               <mm:cloud>
+                  <mm:node number="${registrationpage}" notfound="skip">
+                     <mm:field name="path" id="registrationpagepathuri" write="false" />
+                  </mm:node>
+               </mm:cloud>
+               <input type="hidden" name="registrationpage" value="${registrationpage}" />
+               <input type="text" name="registrationpagepathuri" value="${registrationpagepathuri}" disabled="true" />
+            </td>
          </tr>
         <tr>
            <td nowrap><fmt:message key="edit_defaults.login.redirect" />:</td>
@@ -75,13 +76,14 @@ function erase(field) {
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
-            <mm:cloud>
-               <mm:node number="${page}" notfound="skip">
-                  <mm:field name="path" id="pagepath" write="false" />
-               </mm:node>
-            </mm:cloud>
-            <input type="hidden" name="page" value="${page}" />
-            <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+               <mm:cloud>
+                  <mm:node number="${page}" notfound="skip">
+                     <mm:field name="path" id="pagepath" write="false" />
+                  </mm:node>
+               </mm:cloud>
+               <input type="hidden" name="page" value="${page}" />
+               <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+            </td>
          </tr>
 			<%-- Save button --%>
 			<c:import url="../sections/savebutton.jsp" />
