@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.finalist.cmsc.navigation.ServerUtil;
 import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
 import com.finalist.pluto.portalImpl.servlet.ServletObjectAccess;
 import com.finalist.pluto.portalImpl.servlet.ServletResponseImpl;
@@ -79,7 +80,9 @@ public class InsertPortletTag extends SimpleTagSupport {
              }
           }
           else {
-             log.warn("No (Portlet)Fragment to insert for position: " + layoutid);
+             if (!ServerUtil.isProduction()) {
+                log.warn("No (Portlet)Fragment to insert for position: " + layoutid);
+             }
           }
        }
        else {
