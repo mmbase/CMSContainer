@@ -31,8 +31,7 @@
   method="post" 
   name="<portlet:namespace />form" 
   action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>" 
-  target="_parent"
->
+  target="_parent">
 
 <table class="editcontent">
    <tr>
@@ -104,13 +103,14 @@
             <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
       </td>
       <td>
-      <mm:cloud>
-         <mm:node number="${termsPage}" notfound="skip">
-            <mm:field name="path" id="pagepath" write="false" />
-         </mm:node>
-      </mm:cloud>
-      <input type="hidden" name="termsPage" value="${termsPage}" />
-      <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+         <mm:cloud>
+            <mm:node number="${termsPage}" notfound="skip">
+               <mm:field name="path" id="pagepath" write="false" />
+            </mm:node>
+         </mm:cloud>
+         <input type="hidden" name="termsPage" value="${termsPage}" />
+         <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+      </td>
    </tr>
    <tr>
       <td colspan="3">
