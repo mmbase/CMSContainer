@@ -97,17 +97,18 @@
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
-            <mm:cloud>
-               <mm:node number="${termsPage}" notfound="skip">
-                  <mm:field name="path" id="pagepath" write="false" />
-               </mm:node>
-            </mm:cloud>
-            <input type="hidden" name="termsPage" value="${termsPage}" />
-            <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+               <mm:cloud>
+                  <mm:node number="${termsPage}" notfound="skip">
+                     <mm:field name="path" id="pagepath" write="false" />
+                  </mm:node>
+               </mm:cloud>
+               <input type="hidden" name="termsPage" value="${termsPage}" />
+               <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+            </td>
          </tr>
 
 			<%-- Save button --%>
-			<c:import url="sections/savebutton.jsp" />
+			<c:import url="../sections/savebutton.jsp" />
 
 		</table>
 	</form>
