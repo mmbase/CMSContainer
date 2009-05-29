@@ -57,13 +57,14 @@
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
-            <mm:cloud>
-               <mm:node number="${registrationpage}" notfound="skip">
-                  <mm:field name="path" id="registrationpagepathuri" write="false" />
-               </mm:node>
-            </mm:cloud>
-            <input type="hidden" name="registrationpage" value="${registrationpage}" />
-            <input type="text" name="registrationpagepathuri" value="${registrationpagepathuri}" disabled="true" />
+               <mm:cloud>
+                  <mm:node number="${registrationpage}" notfound="skip">
+                     <mm:field name="path" id="registrationpagepathuri" write="false" />
+                  </mm:node>
+               </mm:cloud>
+               <input type="hidden" name="registrationpage" value="${registrationpage}" />
+               <input type="text" name="registrationpagepathuri" value="${registrationpagepathuri}" disabled="true" />
+            </td>
          </tr>
         <tr>
            <td nowrap><fmt:message key="edit_defaults.login.redirect" />:</td>
@@ -75,13 +76,14 @@
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
-            <mm:cloud>
-               <mm:node number="${page}" notfound="skip">
-                  <mm:field name="path" id="pagepath" write="false" />
-               </mm:node>
-            </mm:cloud>
-            <input type="hidden" name="page" value="${page}" />
-            <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+               <mm:cloud>
+                  <mm:node number="${page}" notfound="skip">
+                     <mm:field name="path" id="pagepath" write="false" />
+                  </mm:node>
+               </mm:cloud>
+               <input type="hidden" name="page" value="${page}" />
+               <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+            </td>
          </tr>
 			<%-- Save button --%>
 			<c:import url="../sections/savebutton.jsp" />
