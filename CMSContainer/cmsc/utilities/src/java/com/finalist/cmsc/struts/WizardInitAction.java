@@ -131,9 +131,10 @@ public class WizardInitAction extends MMBaseFormlessAction {
       }
 
       // Editwizard starten:
-      String actionForward = mapping.findForward("wizard").getPath() + "?wizard=" + wizardConfigName + "&objectnumber="
+      String queryInfo = "?wizard=" + wizardConfigName + "&objectnumber="
             + objectNumber + "&templates=" + templates + "&referrer=" + mapping.findForward("referrer").getPath()
             + "&sessionkey=" + sessionkey + "&language=" + cloud.getLocale().getLanguage();
+      String actionForward = mapping.findForward("wizard").getPath() + queryInfo.replaceAll("/","%2F");
 
       if (log.isDebugEnabled()) {
          log.debug("actionForward: " + actionForward);
