@@ -454,20 +454,21 @@ public final class NavigationUtil {
         if (info == null) {
             info = new NavigationInfo();
             cloud.setProperty(NavigationInfo.class.getName(), info);
-            addAllSiteToInfo(cloud, info);
+            //addAllSiteToInfo(cloud, info); //Turned off for better user experience 
             addPagesWithRoleToInfo(cloud, info);
         }
         return info;
     }
 
-	private static void addAllSiteToInfo(Cloud cloud, NavigationInfo info) {
+    
+/*	private static void addAllSiteToInfo(Cloud cloud, NavigationInfo info) {
 		NodeList allSites = SiteUtil.getSites(cloud);
 		for(NodeIterator i = allSites.nodeIterator(); i.hasNext(); ) {
 			Node site = i.nextNode();
 			info.expand(site.getNumber());
 		}
 	}
-
+*/
 	private static void addPagesWithRoleToInfo(Cloud cloud, NavigationInfo info) {
 		TreeMap<String,UserRole> pagesWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, NAVREL);
         for(Map.Entry<String,UserRole> entry : pagesWithRole.entrySet()) {
@@ -476,17 +477,15 @@ public final class NavigationUtil {
                 String path = entry.getKey();
                 Node page = getPageFromPath(cloud, path);
                 if(page != null) {
-                    if (!SiteUtil.isSite(page)) {
-                        List<Node> pathNodes = getPathToRoot(page);
-                        for (Node pathNode : pathNodes) {
-                           info.expand(pathNode.getNumber());
-                           String pathToRoot = getPathToRootString(pathNode);
-                           UserRole pathRole = pagesWithRole.get(pathToRoot);
-                           if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
-                              break;
-                           }
-                        }
-                    }
+                   List<Node> pathNodes = getPathToRoot(page);
+                   for (Node pathNode : pathNodes) {
+                      info.expand(pathNode.getNumber());
+                      String pathToRoot = getPathToRootString(pathNode);
+                      UserRole pathRole = pagesWithRole.get(pathToRoot);
+                      if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
+                         break;
+                      }
+                   }
                 }
             }
         }
