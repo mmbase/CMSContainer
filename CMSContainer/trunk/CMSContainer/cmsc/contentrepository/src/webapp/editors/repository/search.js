@@ -60,6 +60,11 @@ function validateFloat(el, form, v) {
    return "";
 }
 
+function setOffset(offset) {
+   document.forms[0].offset.value = offset;
+   document.forms[0].submit();
+}
+
  function setOffset(offset, pagerOffset) {
     document.forms[0].offset.value = offset;
     document.forms[0]['pager.offset'].value = Math.ceil(pagerOffset);
