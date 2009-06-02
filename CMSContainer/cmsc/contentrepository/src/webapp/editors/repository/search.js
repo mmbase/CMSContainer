@@ -41,7 +41,7 @@
           return false;
        }
     }
-    setOffset(0);
+    setOffset(0, 0);
  }
 
 //Refers to the function 'validateInt' in validator.js 
@@ -60,8 +60,9 @@ function validateFloat(el, form, v) {
    return "";
 }
 
- function setOffset(offset) {
+ function setOffset(offset, pagerOffset) {
     document.forms[0].offset.value = offset;
+    document.forms[0]['pager.offset'].value = Math.ceil(pagerOffset);
     document.forms[0].submit();
  }
 

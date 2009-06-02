@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.AssetElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
@@ -16,6 +17,7 @@
 <mm:import externid="assettypes" jspvar="assettypes"><%= AssetElementUtil.ASSETELEMENT %></mm:import>
 <mm:import externid="results" jspvar="nodeList" vartype="List" />
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
@@ -51,7 +53,8 @@
 					    var newDirection=document.forms[0].direction.value;
 					    var type=document.forms[0].order.value;
 					    var offset = document.forms[0].offset.value;
-					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+					    var pagerDOToffset = document.forms[0]['pager.offset'].value;
+					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
 					}
 					
 				    <c:if test="${not empty param.message}">
@@ -95,6 +98,7 @@
             <html:hidden property="mode"/>
             <html:hidden property="search" value="true"/>
             <html:hidden property="offset"/>
+            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="searchShow" value="${searchShow}"/>
             <html:hidden property="direction"/>
@@ -363,7 +367,7 @@
 <c:if test="${searchShow eq 'list'}">
    <mm:list referid="results">
       <mm:first>
-         <%@include file="searchpages.jsp" %>
+         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
             <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
                <div align="left">
@@ -478,7 +482,7 @@
       </div>
       </c:if>
    </mm:hasrank>
-   <%@include file="searchpages.jsp" %>
+   <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
    </mm:last>
    </mm:list>
 </c:if>
@@ -486,7 +490,7 @@
 <c:if test="${searchShow eq 'thumbnail'}">
    <mm:list referid="results">
       <mm:first>
-         <%@include file="searchpages.jsp" %>
+         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
       </mm:first>
 
    <mm:field name="number" id="number" write="false">
@@ -541,7 +545,7 @@
    </mm:field>
    </mm:list>
    <div style="clear:both;"></div>
-   <%@include file="searchpages.jsp" %>
+   <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
 </c:if>
 </div>
    </div>

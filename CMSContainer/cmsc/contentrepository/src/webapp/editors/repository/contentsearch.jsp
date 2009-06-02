@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil"
 %><%@ page import="com.finalist.cmsc.security.UserRole" 
@@ -16,7 +17,8 @@
 		    var newDirection=document.forms[0].direction.value;
 		    var type=document.forms[0].order.value;
 		    var offset = document.forms[0].offset.value;
-		    document.location = "../MoveContentFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
+		    var pagerDOToffset = document.forms[0]['pager.offset'].value;
+		    document.location = "../MoveContentFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
 		}
 		
 		<c:if test="${not empty param.message}">
@@ -40,6 +42,7 @@
 <mm:import externid="contenttypes" jspvar="contenttypes"><%= ContentElementUtil.CONTENTELEMENT %></mm:import>
 <mm:import externid="results" jspvar="nodeList" vartype="List" />
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 <c:set var="returnurl" value="${fn:replace(returnurl,'&amp;','&')}"/>
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
@@ -102,6 +105,7 @@
             <html:hidden property="search" value="true"/>
             <html:hidden property="linktochannel"/>
             <html:hidden property="offset"/>
+            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
             <html:hidden property="index" value="${param.index}"/>
@@ -364,7 +368,7 @@
    </mm:node>
    <mm:list referid="results">
       <mm:first>
-         <%@include file="searchpages.jsp" %>
+         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
 
          <form action="LinkToChannelAction.do" name="linkForm">
          <mm:compare referid="action" value="link" inverse="true">
@@ -562,7 +566,7 @@
             </mm:compare>
 
           </form>
-         <%@include file="searchpages.jsp" %>
+         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
       </mm:last>
    </mm:list>
    </div>
