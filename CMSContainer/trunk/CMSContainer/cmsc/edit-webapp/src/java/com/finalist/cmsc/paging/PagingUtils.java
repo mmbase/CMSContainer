@@ -20,7 +20,7 @@ public class PagingUtils {
 
    public static String generatePageUrl(PageContext pagecontext) {
 
-      Long currentPage = (Long) pagecontext.findAttribute("currentPage");
+      Integer currentPage = (Integer) pagecontext.findAttribute("currentPage");
       Integer pagenumber = (Integer) pagecontext.findAttribute("count");
       String style = "page_list_navfalse";
 
@@ -28,51 +28,52 @@ public class PagingUtils {
          style = "page_list_navtrue";
       }
 
-      StringBuffer href = href(pagecontext, Integer.toString(pagenumber - 1));
+      StringBuffer href = href(pagecontext, pagenumber);
 
       String link = "<a href=\"%s\" class=\"%s\">%s</a>";
 
       return String.format(link, href, style, pagenumber);
    }
 
-   private static StringBuffer href(PageContext pagecontext, String pageNumber) {
-      String type = (String) pagecontext.findAttribute("type");
-      String status = (String) pagecontext.findAttribute("status");
-      String orderby = (String) pagecontext.findAttribute("orderby");
+   private static StringBuffer href(PageContext pagecontext, Integer pageNumber) {
+      Integer elementsPerPage = Integer.parseInt((String)pagecontext.findAttribute("elementsPerPage"));
+      Integer pagerOffset = elementsPerPage*(pageNumber-1);
       String extraparams = (String) pagecontext.findAttribute("extraparams");
       StringBuffer href = new StringBuffer("?fun=paging");
-      if (StringUtils.isNotEmpty(type)) {
-         href.append("&type=" + type);
-      }
-
-      if (StringUtils.isNotEmpty(status)) {
-         href.append("&status=" + status);
-      }
-
-      if (StringUtils.isNotEmpty(orderby)) {
-         href.append("&orderby=" + orderby);
+      if (pagerOffset != null) {
+         href.append("&pager.offset=" + pagerOffset);
       }
 
       if (StringUtils.isNotEmpty(extraparams)) {
          href.append(extraparams);
       }
 
-      href.append("&offset=" + pageNumber);
+      href.append("&offset=" + (pageNumber-1));
       return href;
    }
 
    public static String nextPage(PageContext pagecontext) {
-      Long currentPage = (Long) pagecontext.findAttribute("currentPage");
+      Integer currentPage = (Integer) pagecontext.findAttribute("currentPage");
       // the offset value is 1 lesser than current page.
-      Long nextPage = currentPage;
-      return href(pagecontext, nextPage.toString()).toString();
+      Integer nextPage = currentPage+1;
+      return href(pagecontext, nextPage).toString();
    }
 
    public static String previousPage(PageContext pagecontext) {
-      Long currentPage = (Long) pagecontext.findAttribute("currentPage");
+      Integer currentPage = (Integer) pagecontext.findAttribute("currentPage");
       // the offset value is 1 lesser than current page.
-      Long nextPage = currentPage - 2;
-      return href(pagecontext, nextPage.toString()).toString();
+      Integer previousPage = currentPage - 1;
+      return href(pagecontext, previousPage).toString();
+   }
+
+   public static String firstPage(PageContext pagecontext) {
+      Integer firstPage = 1;
+      return href(pagecontext, firstPage).toString();
+   }
+
+   public static String lastPage(PageContext pagecontext) {
+      Integer lastPage = ((Double) pagecontext.findAttribute("pagesSize")).intValue();
+      return href(pagecontext, lastPage).toString();
    }
 
    public static int getSystemPageSize() {
