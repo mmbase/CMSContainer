@@ -19,7 +19,7 @@
    <tr>
       <td></td>
       <td>
-         <input type="submit" name="submitButton" onclick="setOffset(0);" 
+         <input type="submit" name="submitButton" onclick="setOffset(0, 0);" 
          value="<fmt:message key="newspubform.submit" />"/>
       </td>
    </tr>
