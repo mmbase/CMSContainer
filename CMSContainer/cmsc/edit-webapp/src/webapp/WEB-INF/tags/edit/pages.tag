@@ -61,7 +61,7 @@
          <td style="text-align:right;width:70%;">
             <fmt:message key="searchpages.page"/>:
             <pg:pager items="${totalElements}" maxPageItems="${elementsPerPage}" maxIndexPages="${showPages}" 
-               index="${pagesIndex}" isOffset="true" export="pageOffset,currentPage=pageNumber">
+               index="${pagesIndex}" isOffset="true" export="currentPage=pageNumber">
                <c:if test="${not search}">
                   <c:url var="previousPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.previousPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
                   <c:url var="nextPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.nextPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
@@ -69,10 +69,10 @@
                   <c:url var="LastPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.lastPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
                </c:if>
                <c:if test="${search}">
-                  <c:url var="previousPageUrl" value="javascript:setOffset('${currentPage - 2}');"/>
-                  <c:url var="nextPageUrl" value="javascript:setOffset('${currentPage}');"/>
-                  <c:url var="FirstPageUrl" value="javascript:setOffset('0');"/>
-                  <c:url var="LastPageUrl" value="javascript:setOffset('${pagesSize - 1}');"/>
+                  <c:url var="previousPageUrl" value="javascript:setOffset('${currentPage - 2}', '${(currentPage-2)*elementsPerPage}');"/>
+                  <c:url var="nextPageUrl" value="javascript:setOffset('${currentPage}', '${currentPage*elementsPerPage}');"/>
+                  <c:url var="FirstPageUrl" value="javascript:setOffset('0', '0');"/>
+                  <c:url var="LastPageUrl" value="javascript:setOffset('${pagesSize - 1}', '${(pagesSize-1)*elementsPerPage}');"/>
                </c:if>
                <pg:first unless="current">
                   <a href="${FirstPageUrl}" class="page_list_navtrue">&lt;&lt;<fmt:message key="pages.first"/></a>
@@ -90,7 +90,7 @@
                            ${count}
                         </c:when>
                         <c:otherwise>
-                           <a href="javascript:setOffset('${count - 1}');">${count}</a>
+                           <a href="javascript:setOffset('${count - 1}', '${(count-1)*elementsPerPage}');">${count}</a>
                         </c:otherwise>
                      </c:choose>
                   </c:if>
