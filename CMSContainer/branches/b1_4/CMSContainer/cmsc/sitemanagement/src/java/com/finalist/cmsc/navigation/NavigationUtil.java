@@ -460,7 +460,12 @@ public class NavigationUtil {
                     if (!SiteUtil.isSite(page)) {
                         List<Node> pathNodes = getPathToRoot(page);
                         for (Node pathNode : pathNodes) {
-                            info.expand(pathNode.getNumber());
+                           info.expand(pathNode.getNumber());
+                           String pathToRoot = getPathToRootString(pathNode);
+                           UserRole pathRole = pagesWithRole.get(pathToRoot);
+                           if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
+                              break;
+                           }
                         }
                     }
                 }

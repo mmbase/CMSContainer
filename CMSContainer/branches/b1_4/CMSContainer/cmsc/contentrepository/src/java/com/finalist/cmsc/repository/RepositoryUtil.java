@@ -946,6 +946,12 @@ public class RepositoryUtil {
         if (info == null) {
             info = new RepositoryInfo();
             cloud.setProperty(RepositoryInfo.class.getName(), info);
+            addChannelsWithRoleToInfo(cloud, info);
+        }
+        return info;
+    }
+
+   private static void addChannelsWithRoleToInfo(Cloud cloud, RepositoryInfo info) {
             TreeMap<String,UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
             
             for(Map.Entry<String,UserRole> entry : channelsWithRole.entrySet()) {
@@ -961,13 +967,17 @@ public class RepositoryUtil {
                             List<Node> pathNodes = getPathToRoot(channel);
                             for (Node pathNode : pathNodes) {
                                 info.expand(pathNode.getNumber());
+                          
+                          String pathToRoot = getPathToRootString(pathNode);
+                          UserRole pathRole = channelsWithRole.get(pathToRoot);
+                          if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
+                             break;
                             }
                         }
                     }
                 }
             }
         }
-        return info;
     }
 
     public static RolesInfo getRolesInfo(Cloud cloud, Node group) {
