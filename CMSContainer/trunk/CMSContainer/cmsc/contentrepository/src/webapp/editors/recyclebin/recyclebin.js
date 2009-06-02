@@ -1,15 +1,16 @@
-   function restoreAsset(objectnumber, offset) {
-       return restore(objectnumber, offset, "RestoreAssetAction.do");
+   function restoreAsset(objectnumber, offset, pagerDOToffset) {
+       return restore(objectnumber, offset, pagerDOToffset, "RestoreAssetAction.do");
    }
    
-   function restoreContent(objectnumber, offset) {
-	   return restore(objectnumber, offset, "RestoreAction.do");
+   function restoreContent(objectnumber, offset, pagerDOToffset) {
+	   return restore(objectnumber, offset, pagerDOToffset, "RestoreAction.do");
    }
 
-   function restore(objectnumber, offset, url) {
+   function restore(objectnumber, offset, pagerDOToffset, url) {
        url += "?objectnumber=" + objectnumber;
        url += "&returnurl=" + escape(document.location);
        url += "&offset=" + offset;
+       url += "&pager.offset=" + pagerDOToffset;
        document.location.href = url;
    }
    
@@ -34,13 +35,14 @@
       openPopupWindow('contentinfo', '500', '500', url);
    }
     
-    function permanentDelete(objectnumber, message, offset, type) {
+    function permanentDelete(objectnumber, message, offset, pagerDOToffset, type) {
        if (confirm(message)) {
           var url = "DeleteAction.do";
           url += "?objectnumber=" + objectnumber;
           url += "&returnurl=" + escape(document.location);
-	      url += "&offset=" + offset;
-	      url += "&type=" + type;
+          url += "&offset=" + offset;
+          url += "&type=" + type;
+          url += "&pager.offset=" + pagerDOToffset;
 
           document.location.href = url;
        }
