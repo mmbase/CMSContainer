@@ -1,5 +1,9 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.*" %>
+<%@ page import="static com.finalist.cmsc.mmbase.PropertiesUtil.getProperty" %>
 <%@ include file="globals.jsp" %>
+<c:if test="${empty elementsPerPage}">
+   <c:set var="elementsPerPage"><%=getProperty("repository.search.results.per.page")%></c:set>
+</c:if>
 <table>
 <thead>
    <tr>
@@ -42,7 +46,7 @@
 </thead>
 
 <tbody class="hover">
-<mm:list referid="results" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
+<mm:list referid="results" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
 
    <c:if test="${workflowType == 'allcontent' }">
       <mm:field name="workflowitem.type" id="itemType" write="false"/>
