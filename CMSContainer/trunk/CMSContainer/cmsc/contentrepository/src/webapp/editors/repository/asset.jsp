@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html;charset=utf-8"
 %><%@ include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@ page import="com.finalist.cmsc.repository.RepositoryUtil"
 %><%@ page import="com.finalist.cmsc.security.*"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -9,6 +10,7 @@
          <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
          <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Asset.do?type=asset&parentchannel=<mm:write
          referid="parentchannel"/>&direction=up</mm:import>
+         <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
          <cmscedit:head title="images.title">
             <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
@@ -28,9 +30,9 @@
                   var assetsMode = document.getElementsByTagName("option");
                   for(i = 0; i < assetsMode.length; i++){
                      if(assetsMode[i].selected & assetsMode[i].id=="a_list"){
-                         document.location.href = 'Asset.do?type=asset&parentchannel=<mm:write referid="parentchannel"/>&direction=up&show=list&offset='+offset+'&imageOnly=no';
+                         document.location.href = 'Asset.do?type=asset&parentchannel=<mm:write referid="parentchannel"/>&direction=up&show=list&offset='+offset+'&imageOnly=no&pager.offset='+${pagerDOToffset};
                      }else if(assetsMode[i].selected & assetsMode[i].id=="a_thumbnail"){
-                            document.location.href = 'Asset.do?type=asset&parentchannel=<mm:write referid="parentchannel"/>&direction=up&show=thumbnail&offset='+offset;
+                            document.location.href = 'Asset.do?type=asset&parentchannel=<mm:write referid="parentchannel"/>&direction=up&show=thumbnail&offset='+offset+'&pager.offset='+${pagerDOToffset};
                      }
                   }
                }
@@ -69,6 +71,7 @@
                            <input type="hidden" name="order" value="${orderby}" />
                            <input type="hidden" name="direction" value="${direction}"/>
                            <input type="hidden" name="offset" value="${param.offset}"/>
+                           <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
                            <input type="hidden" name="assettype" value="urls"/>
                            <input type="submit" name="submitButton" value="<fmt:message key="asset.create" />" class="button"/>
                         </form>
@@ -108,15 +111,14 @@
             <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
             <c:set var="listSize" value="${elementCount}"/>
             <c:set var="offset" value="${param.offset}"/>
-            <c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}&show=${show}"/>
-            <c:set var="orderby" value="${param.orderby}" scope="page" />
-            <c:set var="type" value="asset" scope="page" />
+            <c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=asset&show=${show}"/>
 
-            <%@ include file="../pages.jsp" %>
+            <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 
             <c:if test="${show eq 'list'}">
                <form action="AssetMassDeleteAction.do" name="assetForm">
                   <input type="hidden" name="offset" value="${param.offset}"/>
+                  <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
                   <input type="hidden" name="orderby" value="${orderby}" />
                   <input type="hidden" name="direction" value="${direction}"/>
                   <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
@@ -218,10 +220,10 @@
 
             <c:if test="${show eq 'thumbnail'}">
                <c:if test="${imageOnly eq 'no'}">
-                  <c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}&show=thumbnail&imageOnly=no"/>
+                  <c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=asset&show=thumbnail&imageOnly=no"/>
                </c:if>
                <c:if test="${imageOnly eq 'yes'}">
-                  <c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}&show=thumbnail&imageOnly=yes"/>
+                  <c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=asset&show=thumbnail&imageOnly=yes"/>
                </c:if>
                <div width="100%;float:left;">
                   <mm:listnodes referid="elements">
@@ -269,7 +271,7 @@
                   <div style="clear:both;"></div>
                </div>
          </c:if>
-         <%@ include file="../pages.jsp" %>
+         <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
          </div>
       </mm:node>
    </div>
