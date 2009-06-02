@@ -946,29 +946,39 @@ public final class RepositoryUtil {
         if (info == null) {
             info = new RepositoryInfo();
             cloud.setProperty(RepositoryInfo.class.getName(), info);
-            TreeMap<String,UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
-
-            for(Map.Entry<String,UserRole> entry : channelsWithRole.entrySet()) {
-                UserRole role = entry.getValue();
-                if (!Role.NONE.equals(role.getRole())) {
-                    String path = entry.getKey();
-                    Node channel = getChannelFromPath(cloud, path);
-                    if(channel != null) {
-                        if (isRoot(channel)) {
-                            info.expand(channel.getNumber());
-                        }
-                        else {
-                            List<Node> pathNodes = getPathToRoot(channel);
-                            for (Node pathNode : pathNodes) {
-                                info.expand(pathNode.getNumber());
-                            }
-                        }
-                    }
-                }
-            }
+            addChannelsWithRoleToInfo(cloud, info);
         }
         return info;
     }
+
+   private static void addChannelsWithRoleToInfo(Cloud cloud, RepositoryInfo info) {
+      TreeMap<String,UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
+
+      for(Map.Entry<String,UserRole> entry : channelsWithRole.entrySet()) {
+          UserRole role = entry.getValue();
+          if (!Role.NONE.equals(role.getRole())) {
+              String path = entry.getKey();
+              Node channel = getChannelFromPath(cloud, path);
+              if(channel != null) {
+                  if (isRoot(channel)) {
+                      info.expand(channel.getNumber());
+                  }
+                  else {
+                      List<Node> pathNodes = getPathToRoot(channel);
+                      for (Node pathNode : pathNodes) {
+                          info.expand(pathNode.getNumber());
+                          
+                          String pathToRoot = getPathToRootString(pathNode);
+                          UserRole pathRole = channelsWithRole.get(pathToRoot);
+                          if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
+                             break;
+                          }
+                      }
+                  }
+              }
+          }
+      }
+   }
 
     public static RolesInfo getRolesInfo(Cloud cloud, Node group) {
         RolesInfo info = new RolesInfo();
