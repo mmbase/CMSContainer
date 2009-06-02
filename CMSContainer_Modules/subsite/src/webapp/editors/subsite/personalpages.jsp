@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
@@ -35,6 +36,7 @@
 <mm:import externid="results" jspvar="nodeList" vartype="List" />
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <mm:import externid="returnurl"/>
 
 <mm:import externid="subsite" from="parameters" />
@@ -68,6 +70,7 @@
 	<html:hidden property="action" value="${action}"/>
 	<html:hidden property="search" value="true"/>
 	<html:hidden property="offset"/>
+	<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
 	<html:hidden property="order"/>
 	<html:hidden property="direction"/>
 	<mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
@@ -101,7 +104,7 @@
    <tr>
       <td></td>
    <td>
-     <input type="submit" class="button" name="submitButton" onClick="setOffset(0);" value="<fmt:message key="site.personal.search" />"/>
+     <input type="submit" class="button" name="submitButton" onClick="setOffset(0, 0);" value="<fmt:message key="site.personal.search" />"/>
      </td>
    </tr>
 	</table>
@@ -122,7 +125,7 @@
 <c:set var="extraparams" value="&subsite=${subsite}&title=${SearchForm.title}&order=${SearchForm.order}"/>
 
 <mm:isempty referid="results" inverse="true">
-   <%@ include file="../pages.jsp" %>
+   <edit:pages search="false" totalElements="${listSize}" elementsPerPage="${resultsPerPage}" offset="${offset}" extraparams="${extraparams}"/>
 </mm:isempty>
 
 <table>
@@ -197,7 +200,7 @@
 </table>
 
 <mm:isempty referid="results" inverse="true">
-<%@ include file="../pages.jsp" %>
+<edit:pages search="false" totalElements="${listSize}" elementsPerPage="${resultsPerPage}" offset="${offset}" extraparams="${extraparams}"/>
 </mm:isempty>
    
 <br />
