@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><fmt:setBundle basename="cmsc-reactions" scope="request" /><%@page import="java.util.Iterator,
                  com.finalist.cmsc.mmbase.PropertiesUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -40,9 +41,11 @@
       <div class="body">
 
          <mm:import id="searchinit"><c:url value='/editors/resources/ReactionInitAction.do'/></mm:import>
+         <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
          <html:form action="/editors/resources/ReactionAction" method="post">
 			<html:hidden property="action" value="${action}"/>
             <html:hidden property="offset"/>
+            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
 
@@ -59,7 +62,7 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
 <c:if test="${resultCount > 0}">
-<%@include file="../repository/searchpages.jsp" %>
+<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
 
          <table>
             <tr class="listheader">
@@ -105,7 +108,7 @@
 	<fmt:message key="reactionsearch.noresult" />
 </c:if>
 <c:if test="${resultCount > 0}">
-	<%@include file="../repository/searchpages.jsp" %>
+	<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
 </c:if>	
 </mm:cloud>
    </body>
