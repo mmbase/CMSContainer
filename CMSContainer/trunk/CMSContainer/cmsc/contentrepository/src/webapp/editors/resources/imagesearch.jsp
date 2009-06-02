@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -87,6 +88,7 @@
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
    <c:if test="${action eq 'search'}">
       <div class="tabs"><!-- actieve TAB -->
@@ -127,6 +129,7 @@
             <html:hidden property="assetShow" value="${assetShow}"/>
             <html:hidden property="strict" value="${strict}"/>
             <html:hidden property="offset"/>
+            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <c:if test="${action eq 'often'}">
             <html:hidden property="assettypes" value="images"/>
             <html:hidden property="channelid" value="${channelid}"/>
@@ -157,7 +160,7 @@
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
          <c:if test="${resultCount > 0}">
-            <%@include file="../repository/searchpages.jsp" %>
+            <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
 
             <c:if test="${assetShow eq 'thumbnail'}">
             <div id="assetList" class="hover" style="width:100%" href="">
@@ -253,7 +256,7 @@
          </c:if>
          <div style="clear:both" ></div>
          <c:if test="${resultCount > 0}">
-            <%@include file="../repository/searchpages.jsp" %>
+            <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
          </c:if>
       </div>
       <c:if test="${action == 'often'}">
@@ -261,7 +264,7 @@
       <mm:url page="/editors/repository/select/SelectorChannel.do" id="select_channel_url" write="false" />
       <mm:url page="/editors/resources/ImageInitAction.do?action=search&strict=${strict}" id="search_image_url" write="false" />
       <mm:url page="/editors/resources/imageupload.jsp?uploadedNodes=0&channelid=${channelid}&strict=${strict}" id="new_image_url" write="false" />
-      <mm:url page="/editors/repository/HighFrequencyAsset.do?action=often&assetShow=${assetShow}&offset=0&channelid=all&assettypes=images&strict=${strict}" id="often_show_images" write="false"/>
+      <mm:url page="/editors/repository/HighFrequencyAsset.do?action=often&assetShow=${assetShow}&offset=0&pager.offset=0&channelid=all&assettypes=images&strict=${strict}" id="often_show_images" write="false"/>
       <ul class="shortcuts">
          <li><a href="${often_show_images}"><fmt:message key="imageselect.link.allchannel" /></a></li>
          <li><a onclick="openPopupWindow('selectchannel', 340, 400);" target="selectchannel" href="${select_channel_url}"><fmt:message key="imageselect.link.channel" /></a></li>
