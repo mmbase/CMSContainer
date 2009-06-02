@@ -4,6 +4,7 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.tabClass"%>
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ include file="globals.jsp"%>
+<%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" %>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
@@ -306,6 +307,7 @@
 			</div>
          <div class="body" style="background-color:#CC0000;">
          <form name="errorWorkflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
+            <input type="hidden" name="orderby" value="${orderby}" /> 
             <input type="hidden" name="status" value="${status}" />
             <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
             <c:if test="${fn:length(errors) > 0}">
@@ -343,11 +345,12 @@
       <c:set var="lastvalue" value='<%=request.getAttribute("laststatus")%>' />
       <c:set var="offset" value="${param.offset}" />
       <c:set var="listSize">${fn:length(nodeList)}</c:set>
+      <c:set var="extraparams" value="&orderby=${orderby}&status=${status}&workflowNodetype=${workflowNodetype}"/>
 
 		<c:if test="${fn:length(results) > 0}">
-			<%@ include file="../pages.jsp"%>
+			<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 			<%@ include file="workflow_list_table_fragment.jsp"%>
-			<%@ include file="../pages.jsp"%>
+			<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 		</c:if> <c:set var="remark">
 			<fmt:message key="workflow.action.reject.remark" />
 		</c:set> &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll"
