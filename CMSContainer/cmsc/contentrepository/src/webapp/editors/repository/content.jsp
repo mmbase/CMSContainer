@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" 
 %><%@ include file="globals.jsp" 
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@ page import="com.finalist.cmsc.repository.RepositoryUtil" 
 %><%@ page import="com.finalist.cmsc.security.*" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -8,6 +9,7 @@
 <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
 <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Content.do?type=content&parentchannel=<mm:write
         referid="parentchannel"/>&direction=down</mm:import>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
 <div class="editor">
 <div class="body">
@@ -30,6 +32,7 @@
             <input type="hidden" name="order" value="${orderby}" />
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
+             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
             <fmt:message key="content.new"/>
             <select name="contenttype">
                 <c:forEach var="type" items="${typesList}">
@@ -88,13 +91,12 @@
 
 <c:set var="listSize" value="${elementCount}"/>
 <c:set var="offset" value="${param.offset}"/>
-<c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}"/>
-<c:set var="orderby" value="${param.orderby}" scope="page" />
-<c:set var="type" value="content" scope="page" />
-<%@ include file="../pages.jsp" %>
+<c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=content"/>
+<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 
 <form action="contentMassDelete.do" name="contentForm">
 <input type="hidden" name="offset" value="${param.offset}"/>
+<input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
 <input type="hidden" name="orderby" value="${orderby}" />
 <input type="hidden" name="direction" value="${direction}"/>
 <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
@@ -275,7 +277,7 @@
 </c:if>
 <% } %>
 </form>
-<%@ include file="../pages.jsp" %>
+<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 </div>
 </div>
 </mm:node>
