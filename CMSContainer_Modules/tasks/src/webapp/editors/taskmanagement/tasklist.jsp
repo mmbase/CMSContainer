@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"
 %><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -70,10 +71,12 @@ function showMessage(message){
          </mm:relatednodescontainer>
       </mm:listnodes>
    </mm:listnodescontainer>
+   <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
+   <c:set var="extraparams" value="&sortBy=${sortBy}&direction=${direction}&status=${status}"/>
 
    <div class="editor">
    <div class="body">
-<%@include file="../pages.jsp" %>
+   <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
       <c:url value="/editors/taskmanagement/MassDeleteTaskAction.do" var="taskFormAction" />
       <form action="${taskFormAction}" name="taskForm">
       <mm:hasrank minvalue="basic user">
@@ -81,14 +84,14 @@ function showMessage(message){
             <input type="submit" class="button" value="<fmt:message key="task.delete.massdelete"/>" onclick="massDeleteTask('<fmt:message key="task.massdeleteconfirm" />');return false;" />
          </c:if>
       </mm:hasrank> 
-<%@ include file="tasklist_table.jspf"%>
+      <%@ include file="tasklist_table.jspf"%>
       <mm:hasrank minvalue="basic user">
          <c:if test="${fn:length(resultList)>1}">
             <input type="submit" class="button" value="<fmt:message key="task.delete.massdelete"/>" onclick="massDeleteTask('<fmt:message key="task.massdeleteconfirm" />');return false;" />
          </c:if>
       </mm:hasrank>
       </form>
-<%@include file="../pages.jsp" %>
+   <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
 
       <html:form action="/editors/taskmanagement/showTaskAction">
          <html:select property="taskShowType" onchange="this.form.submit();">

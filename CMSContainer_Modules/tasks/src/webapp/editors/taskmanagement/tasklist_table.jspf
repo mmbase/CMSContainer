@@ -1,3 +1,6 @@
+<c:if test="${empty elementsPerPage}">
+   <c:set var="elementsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
+</c:if>
 <table>
    <thead>
       <tr>
@@ -7,13 +10,13 @@
 				</c:if>
           </mm:hasrank></th>
 <c:if test="${empty dashboardTaskSize }">
-        <th><a href="tasklist.jsp?sortBy=creationdate&direction=${direction}&offset=${offset}"><fmt:message key="task.created" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=deadline&direction=${direction}&offset=${offset}"><fmt:message key="task.deadline" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=title&direction=${direction}&offset=${offset}"><fmt:message key="task.title" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=status&direction=${direction}&offset=${offset}"><fmt:message key="task.status" /></th>
+        <th><a href="tasklist.jsp?sortBy=creationdate&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.created" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=deadline&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.deadline" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=title&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.title" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=status&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.status" /></th>
         <th><fmt:message key="task.contenttitle" /></th>
         <th><fmt:message key="task.nodetype" /></th>
-        <th><a href="tasklist.jsp?sortBy=description&direction=${direction}&offset=${offset}"><fmt:message key="task.description" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=description&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.description" /></a></th>
 </c:if>
 <c:if test="${!empty dashboardTaskSize }">
         <th><fmt:message key="task.created" /></th>
@@ -30,7 +33,7 @@
    <tbody class="hover">
         <c:set var="taskList" value="" />
         <c:set var="isSwapClass" value="true"/>
-        <mm:listnodes referid="resultList" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
+        <mm:listnodes referid="resultList" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
          <c:set var="taskId"><mm:field name="number"/></c:set>
          <tr <c:if test="${isSwapClass}">class="swap"</c:if>>
               <td style="white-space: nowrap;">
