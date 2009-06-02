@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" language="java" pageEncoding="utf-8" %>
 <%@ include file="globals.jsp" %>
+<%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -90,8 +91,9 @@
 					<c:when test="${fn:length(results) gt 0}">
 					<c:set var="listSize" value="${listFilesForm.resultCount}"/>
 					<c:set var="resultsPerPage" value="${listFilesForm.resultsPerPage}" />
+					<c:set var="offset" value="${listFilesForm.offset}" />
 					<c:set var="extraparams" value="&searchTitle=${listFilesForm.searchTitle}&searchFilename=${listFilesForm.searchFilename}"/>
-					<%@ include file="../pages.jsp" %>
+					<edit:pages search="false" totalElements="${listSize}" elementsPerPage="${resultsPerPage}" offset="${offset}" extraparams="${extraparams}"/>
 					
 						<table>
 							<thead>
