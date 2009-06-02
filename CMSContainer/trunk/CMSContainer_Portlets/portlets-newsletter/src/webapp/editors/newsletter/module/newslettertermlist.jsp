@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -26,7 +27,7 @@ function update(number) {
   );
 }
 
-function deleteInfo(number,offset,resultLength) {
+function deleteInfo(number,offset,pagerDOToffset,resultLength) {
    if(confirm('<fmt:message key="newsletter.term.delete.confirm" />')) {
       if(resultLength == "1") {
          offset = eval(offset -1);
@@ -35,6 +36,7 @@ function deleteInfo(number,offset,resultLength) {
          offset = 0;
       }
       document.forms[0].offset.value = offset;
+      document.forms[0]['pager.offset'].value = pagerDOToffset;
       document.forms[0].method.value = "delete";
       $("id").value = number;
       document.forms[0].submit();
@@ -57,6 +59,7 @@ function postUpdate(originalRequest) {
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 <mm:import externid="newsletterId"/>
 <mm:import externid="action">search</mm:import><%-- either: search of select --%>
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
 <div class="tabs">
 <div class="tab_active">
@@ -74,6 +77,7 @@ function postUpdate(originalRequest) {
    <input type="hidden" name="id" id="id" value=""/>
    <input type="hidden" name="deleteRequest" value=""/>
    <html:hidden property="offset"/>
+   <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
    <input type="hidden" name="newsletter" value="${newsletterId}"/>
    <mm:notpresent referid="newsletterId">
       <mm:hasrank minvalue="administrator">
@@ -93,7 +97,7 @@ function postUpdate(originalRequest) {
       <tr>
       <td></td>
       <td>
-         <input type="submit" name="submitButton" onclick="setOffset(0);" value="<fmt:message key="newsletter.term.search" />"/>   
+         <input type="submit" name="submitButton" onclick="setOffset(0, 0);" value="<fmt:message key="newsletter.term.search" />"/>   
      </td>
    </tr>
    </table>
@@ -113,7 +117,7 @@ function postUpdate(originalRequest) {
 <mm:import jspvar="resultCount" vartype="Integer">${resultCount}</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">${offset}</mm:import>
 <c:if test="${resultCount > 0}">
-<%@include file="../../repository/searchpages.jsp" %>
+<edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
 <mm:notpresent referid="newsletterId">
 <c:if test="${fn:length(resultList) >1}">
 <input type="button" class="button" value="<fmt:message key="newsletter.term.action.delete" />" onclick="massDelete('<fmt:message key="newsletter.term.delete.confirm" />')"/>
@@ -138,7 +142,7 @@ function postUpdate(originalRequest) {
                    <input type="checkbox" name="chk_<mm:field name="number" />" id="chk_<mm:field name="number" />" value="<mm:field name="number"/>">
                     <mm:notpresent referid="newsletterId">
                      <mm:hasrank minvalue="administrator">
-                         <a href="javascript:deleteInfo('<mm:field name="number"/>','${offset}',${fn:length(resultList)})">
+                         <a href="javascript:deleteInfo('<mm:field name="number"/>','${offset}','${pagerDOToffset}',${fn:length(resultList)})">
                                   <img src="../../gfx/icons/delete.png" title="<fmt:message key="newsletter.term.action.delete" />"/></a>
                      </mm:hasrank>  
                     </mm:notpresent> 
@@ -181,7 +185,7 @@ function postUpdate(originalRequest) {
 <fmt:message key="newsletter.term.add.success" />
 </c:if>
 <c:if test="${resultCount > 0}">
-<%@include file="../../repository/searchpages.jsp" %>
+<edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
 </c:if>
 </mm:cloud>
 </body>
