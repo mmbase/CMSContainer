@@ -7,32 +7,14 @@
  */
 package com.finalist.cmsc.repository;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import net.sf.mmapps.commons.bridge.CloneUtil;
 import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationIterator;
-import org.mmbase.bridge.RelationList;
-import org.mmbase.bridge.RelationManager;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.FieldValueDateConstraint;
@@ -1358,27 +1340,38 @@ public final class RepositoryUtil {
       if (info == null) {
          info = new RepositoryInfo();
          cloud.setProperty(RepositoryInfo.class.getName(), info);
+            addChannelsWithRoleToInfo(cloud, info);
+        }
+        return info;
+    }
+
+   private static void addChannelsWithRoleToInfo(Cloud cloud, RepositoryInfo info) {
          TreeMap<String, UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
 
-         for (Map.Entry<String, UserRole> entry : channelsWithRole.entrySet()) {
-            UserRole role = entry.getValue();
-            if (!Role.NONE.equals(role.getRole())) {
-               String path = entry.getKey();
-               Node channel = getChannelFromPath(cloud, path);
-               if (channel != null) {
-                  if (isRoot(channel)) {
-                     info.expand(channel.getNumber());
-                  } else {
-                     List<Node> pathNodes = getPathToRoot(channel);
-                     for (Node pathNode : pathNodes) {
-                        info.expand(pathNode.getNumber());
+      for (Map.Entry<String, UserRole> entry : channelsWithRole.entrySet()) {
+         UserRole role = entry.getValue();
+         if (!Role.NONE.equals(role.getRole())) {
+            String path = entry.getKey();
+            Node channel = getChannelFromPath(cloud, path);
+            if (channel != null) {
+               if (isRoot(channel)) {
+                  info.expand(channel.getNumber());
+               }
+               else {
+                  List<Node> pathNodes = getPathToRoot(channel);
+                  for (Node pathNode : pathNodes) {
+                     info.expand(pathNode.getNumber());
+                       
+                     String pathToRoot = getPathToRootString(pathNode);
+                     UserRole pathRole = channelsWithRole.get(pathToRoot);
+                     if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
+                        break;
                      }
                   }
                }
             }
          }
       }
-      return info;
    }
 
    public static RolesInfo getRolesInfo(Cloud cloud, Node group) {
@@ -1441,6 +1434,7 @@ public final class RepositoryUtil {
       contentChannels.add(0, getRootNode(cloud));
       return contentChannels;
    }
+   
    /**   Remove a asset element from a channel
     *   
     * @param asset
@@ -1449,6 +1443,7 @@ public final class RepositoryUtil {
    public static void removeAssetFromChannel(Node asset, Node channelNode) {
       RepositoryUtil.addDeletionRelation(asset, channelNode);
    }
+   
    public static int countLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,int maxDays){
       NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
       if(maxDays > 0){
@@ -1456,6 +1451,7 @@ public final class RepositoryUtil {
       }
       return Queries.count(query);
    }
+   
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
       NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
       if(maxDays > 0){
@@ -1463,6 +1459,7 @@ public final class RepositoryUtil {
       }
       return query.getNodeManager().getList(query);
    }
+   
    /**
     *    Clone nodes related with a node or channel
     * @param sourceNode source channel 
@@ -1580,28 +1577,27 @@ public final class RepositoryUtil {
       if (isRelation(localNode)) {
          return CloneUtil.cloneRelation(localNode);
       }
-      else {
-        NodeManager localNodeManager = localNode.getNodeManager();
-        NodeManager nodeManager = localNode.getCloud().getNodeManager(localNodeManager.getName());
-        Node newNode = nodeManager.createNode();
-        newNode.commit();
-        FieldIterator fields = localNodeManager.getFields().fieldIterator();
-        while (fields.hasNext()) {
-           Field field = fields.nextField();
-           String fieldName = field.getName();
-           
-           if (field.getState() == Field.STATE_PERSISTENT) {
-               if (!(fieldName.equals("owner") || fieldName.equals("number") ||
-                     fieldName.equals("otype") ||
-                     (fieldName.indexOf("_") == 0))) {
-                  cloneNodeField(localNode, newNode, field,copiedNodes);
-               }
-           }
+      
+     NodeManager localNodeManager = localNode.getNodeManager();
+     NodeManager nodeManager = localNode.getCloud().getNodeManager(localNodeManager.getName());
+     Node newNode = nodeManager.createNode();
+     newNode.commit();
+     FieldIterator fields = localNodeManager.getFields().fieldIterator();
+     while (fields.hasNext()) {
+        Field field = fields.nextField();
+        String fieldName = field.getName();
+        
+        if (field.getState() == Field.STATE_PERSISTENT) {
+            if (!(fieldName.equals("owner") || fieldName.equals("number") ||
+                  fieldName.equals("otype") ||
+                  (fieldName.indexOf("_") == 0))) {
+               cloneNodeField(localNode, newNode, field,copiedNodes);
+            }
         }
-        newNode.commit();
+     }
+     newNode.commit();
 
-        return newNode;
-      }
+     return newNode;
    }
    
    /**
