@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -22,9 +23,11 @@
 <div class="editor" style="height:500px">
 <div class="ruler_green"><div><fmt:message key="newsletter.term.search.result" /></div></div>
 <div class="body">
+<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <form action="${actionUrl}" name="termForm" method="post">
 <input type="hidden" name="method" value="list"/>
 <input type="hidden" name="offset" value="${offset}"/>
+<input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
 <input type="hidden" name="direction" value="${direction}"/>
 <input type="hidden" name="order" value="${order}"/>
 
@@ -33,7 +36,7 @@
 <mm:import externid="direction" jspvar="direction" vartype="String">${direction}</mm:import>
 <mm:import externid="order" jspvar="order" vartype="String">${order}</mm:import>
 <c:if test="${resultCount > 0}">
-<%@include file="../../repository/searchpages.jsp" %>
+<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
    <table>
       <tr class="listheader">
          <th><a href="javascript:sortBy('userName')"> <fmt:message key="newsletter.bounce.subscriber" /></a> </th>
@@ -71,7 +74,7 @@
 <fmt:message key="newsletter.bounce.noresult" />
 </c:if>
 <c:if test="${resultCount > 0}">
-<%@include file="../../repository/searchpages.jsp" %>
+<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
 </c:if>
 </mm:cloud>
 </body>
