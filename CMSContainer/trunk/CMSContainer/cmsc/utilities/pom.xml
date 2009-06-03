@@ -13,6 +13,13 @@
     <packaging>war</packaging>
     <name>CMS Container utilities</name>
 
+	<dependencies>
+  		<dependency>
+  			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+	</dependencies>
+
     <build>
         <testSourceDirectory>src/tests</testSourceDirectory>
         <plugins>

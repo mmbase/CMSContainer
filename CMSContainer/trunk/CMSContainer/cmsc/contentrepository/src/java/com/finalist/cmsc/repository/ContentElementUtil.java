@@ -27,6 +27,9 @@ public final class ContentElementUtil {
    private static final String SOURCE = "SOURCE";
    private static final String DESTINATION = "DESTINATION";
 
+   private static final String ALLOWREL = "allowrel";
+   private static final String TYPEDEF = "typedef";
+
    public static final String NUMBER_FIELD = "number";
    public static final String TITLE_FIELD = "title";
    public static final String CREATIONDATE_FIELD = "creationdate";
@@ -67,15 +70,35 @@ public final class ContentElementUtil {
             result.add(nm);
          }
       }
+      sortContentTypes(result);
+      return result;
+   }
+
+
+   private static void sortContentTypes(List<NodeManager> result) {
       Collections.sort(result, new Comparator<NodeManager>() {
          public int compare(NodeManager o1, NodeManager o2) {
             return o1.getGUIName().compareTo(o2.getGUIName());
          }
       });
-
-      return result;
    }
 
+
+   public static List<NodeManager> getAllowedContentTypes(Cloud cloud, String nodeNumber) {
+      List<NodeManager> types = new ArrayList<NodeManager>();
+
+      NodeList allowedTypes = cloud.getNode(nodeNumber).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
+      for (Iterator<Node> iterator = allowedTypes.iterator(); iterator.hasNext();) {
+         Node node = iterator.next();
+         if (node.isNodeManager()) {
+            types.add(node.toNodeManager());
+         }
+      }
+      sortContentTypes(types);
+      return types;
+   }
+
+   
 
    public static boolean isContentElementField(Field field) {
       Cloud cloud = field.getNodeManager().getCloud();

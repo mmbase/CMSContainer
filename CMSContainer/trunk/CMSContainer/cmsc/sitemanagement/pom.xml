@@ -42,6 +42,13 @@
             <classifier>classes</classifier>
             <scope>provided</scope>
         </dependency>
+        
+   		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20070829</version>
+		</dependency>
+
     </dependencies>
     <build>
         <testSourceDirectory>src/tests</testSourceDirectory>

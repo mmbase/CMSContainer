@@ -1,7 +1,6 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,8 +10,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.*;
 import org.mmbase.storage.search.SortOrder;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
@@ -23,11 +21,8 @@ public class SearchInitAction extends MMBaseAction {
    private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
-   private static final String DESTINATION = "destination";
-   private static final String ALLOWREL = "allowrel";
-   private static final String TYPEDEF = "typedef";
 
-@Override
+   @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
 
@@ -59,9 +54,9 @@ public class SearchInitAction extends MMBaseAction {
       if(StringUtils.isEmpty(portletId)){
     	  types = ContentElementUtil.getContentTypes(cloud);
       } else {
-          types = cloud.getNode(portletId).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
+         types = ContentElementUtil.getAllowedContentTypes(cloud, portletId);
           if(types.size() == 0){
-        	  types = ContentElementUtil.getContentTypes(cloud);
+        	     types = ContentElementUtil.getContentTypes(cloud);
           }
       }
       List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
