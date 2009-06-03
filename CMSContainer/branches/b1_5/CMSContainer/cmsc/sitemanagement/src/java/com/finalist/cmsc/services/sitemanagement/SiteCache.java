@@ -229,7 +229,12 @@ public final class SiteCache implements RelationEventListener, NodeEventListener
                }
                int destinationNumber = event.getRelationDestinationNumber();
                PageTreeNode destTreeNode = getPageTreeNode(destinationNumber);
-               int childIndex = (Integer) event.getNodeEvent().getNewValue(TreeUtil.RELATION_POS_FIELD);
+               Integer childIndexInt = (Integer) event.getNodeEvent().getNewValue(TreeUtil.RELATION_POS_FIELD);
+               int childIndex = 0;
+               if (childIndexInt != null) {
+                  childIndex = childIndexInt;
+               }
+               
                if (destTreeNode == null) {
                   // create new PageYreeNode
                   Node destNode = loader.getCloud().getNode(destinationNumber);
