@@ -22,7 +22,7 @@
 <fmt:message key="pages.message" var="error"/>
 <fmt:message key="pages.go" var="go"/>
 <fmt:message key="searchpages.showresults" var="searchresult">
-   <fmt:param>${(totalElements>0)?(offset * elementsPerPage):0 }</fmt:param>
+   <fmt:param>${(totalElements>0)?(offset * elementsPerPage+1):0 }</fmt:param>
    <fmt:param>${(totalElements>((offset+1)*elementsPerPage))?((offset+1)*elementsPerPage):totalElements }</fmt:param>
    <fmt:param>${totalElements}</fmt:param>
 </fmt:message>
@@ -74,7 +74,7 @@
                   <c:url var="FirstPageUrl" value="javascript:setOffset('0', '0');"/>
                   <c:url var="LastPageUrl" value="javascript:setOffset('${pagesSize - 1}', '${(pagesSize-1)*elementsPerPage}');"/>
                </c:if>
-               <pg:first unless="current">
+               <pg:first unless="indexed">
                   <a href="${FirstPageUrl}" class="page_list_navtrue">&lt;&lt;<fmt:message key="pages.first"/></a>
                </pg:first>
                <pg:prev ifnull="false">
@@ -99,7 +99,7 @@
                <pg:next ifnull="false">
                   <a href="${nextPageUrl}" class="page_list_navtrue"><fmt:message key="pages.next"/>&gt;</a>
                </pg:next>
-               <pg:last unless="current">
+               <pg:last unless="indexed">
                   <a href="${LastPageUrl}" class="page_list_navtrue"><fmt:message key="pages.last"/>&gt;&gt;</a>
                </pg:last>
                <c:if test="${pagesSize>13}">
