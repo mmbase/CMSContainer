@@ -1,18 +1,13 @@
 package com.finalist.cmsc.module.glossary;
 
+import java.util.Iterator;
+
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
-import org.mmbase.module.core.MMBase;
-
-import com.finalist.cmsc.util.ServerUtil;
-
-import java.util.Iterator;
-
-// Referenced classes of package com.finalist.cmsc.module.glossary:
-//            Glossary
 
 public class GlossaryFactory {
 
@@ -20,10 +15,6 @@ public class GlossaryFactory {
    @SuppressWarnings("unchecked")
    public static Glossary getGlossary() {
       Glossary glossary = Glossary.instance();
-
-      if(ServerUtil.isStaging()) {
-         MMBase.getMMBase().addNodeRelatedEventsListener("glossary", new GlossaryEventListener(glossary));
-      }
 
       if (glossary.getTerms().size() > 0)
          return glossary;
