@@ -47,9 +47,6 @@ function showMessage(message){
 
 <mm:import externid="direction" jspvar="direction">down</mm:import>
 <mm:import externid="sortBy" jspvar="sortBy">status</mm:import>
-<c:set var="direction">
-   <c:out value="${direction =='up'?'down':'up' }"/>
-</c:set>
 
    <mm:cloudinfo type="user" id="cloudusername" write="false" />
    <mm:listnodescontainer type="user">
