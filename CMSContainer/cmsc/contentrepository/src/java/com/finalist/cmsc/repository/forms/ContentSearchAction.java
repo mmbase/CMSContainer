@@ -50,9 +50,7 @@ import com.finalist.cmsc.util.KeywordUtil;
 public class ContentSearchAction extends PagerAction {
 
    private static final String TYPES_LIST = "typesList";
-   private static final String DESTINATION = "destination";
-   private static final String ALLOWREL = "allowrel";
-   private static final String TYPEDEF = "typedef";
+
    public static final String GETURL = "geturl";
    public static final String PERSONAL = "personal";
    public static final String MODE = "mode";
@@ -105,7 +103,7 @@ public class ContentSearchAction extends PagerAction {
       if(StringUtils.isEmpty(portletId)){
     	  types = ContentElementUtil.getContentTypes(cloud);
       } else {
-          types = cloud.getNode(portletId).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
+         types = ContentElementUtil.getAllowedContentTypes(cloud, portletId);
           if(types.size() == 0){
         	  types = ContentElementUtil.getContentTypes(cloud);
           }
