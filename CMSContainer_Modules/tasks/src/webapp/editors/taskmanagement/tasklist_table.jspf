@@ -10,10 +10,11 @@
 				</c:if>
           </mm:hasrank></th>
 <c:if test="${empty dashboardTaskSize }">
-        <th><a href="tasklist.jsp?sortBy=creationdate&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.created" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=deadline&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.deadline" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=title&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.title" /></a></th>
-        <th><a href="tasklist.jsp?sortBy=status&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.status" /></th>
+        <c:set var="reverse" value="${direction =='up'?'down':'up'}"/>
+        <th><a href="tasklist.jsp?sortBy=creationdate&direction=${reverse}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.created" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=deadline&direction=${reverse}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.deadline" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=title&direction=${reverse}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.title" /></a></th>
+        <th><a href="tasklist.jsp?sortBy=status&direction=${reverse}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.status" /></th>
         <th><fmt:message key="task.contenttitle" /></th>
         <th><fmt:message key="task.nodetype" /></th>
         <th><a href="tasklist.jsp?sortBy=description&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}"><fmt:message key="task.description" /></a></th>
