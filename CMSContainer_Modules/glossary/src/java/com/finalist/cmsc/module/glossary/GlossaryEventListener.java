@@ -2,11 +2,13 @@ package com.finalist.cmsc.module.glossary;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.mmbase.bridge.Node; 
+import org.mmbase.bridge.Node;
 import org.mmbase.core.event.Event;
 import org.mmbase.core.event.NodeEvent;
 import org.mmbase.core.event.NodeEventListener;
 import org.mmbase.remotepublishing.util.PublishUtil;
+
+import com.finalist.cmsc.util.ServerUtil;
 
 public class GlossaryEventListener implements NodeEventListener {
 
@@ -29,7 +31,9 @@ public class GlossaryEventListener implements NodeEventListener {
          String newTerm = (String)event.getNewValue("term");
          if(newTerm != null) {
             glossary.addTerm(newTerm, (String)event.getNewValue("definition"));
-            PublishUtil.publishOrUpdateNode(event.getNodeNumber());
+            if(ServerUtil.isStaging()) {
+               PublishUtil.publishOrUpdateNode(event.getNodeNumber());
+            }
          }
          break;
       case Event.TYPE_CHANGE:
@@ -58,7 +62,9 @@ public class GlossaryEventListener implements NodeEventListener {
          }
          
          if(changed) {
-            PublishUtil.publishOrUpdateNode(event.getNodeNumber());
+            if(ServerUtil.isStaging()) {
+               PublishUtil.publishOrUpdateNode(event.getNodeNumber());
+            }
          }
          break;
       

@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mmbase.module.core.MMBase;
+
 public class Glossary {
    public static final String LINKPATTERN = "<dfn class=\"glossaryWord\" title=\"%2$s - %s\" id=\"_glossary_%2$s\">%2$s</dfn>";
    public static final String GLOSSARY = "glossary";
@@ -40,7 +42,7 @@ public class Glossary {
                break;
             }
          }
-      }
+      } 
       return material;
 
    }
@@ -75,6 +77,12 @@ public class Glossary {
          }
       }
 
+      int openImg = materialBefore.lastIndexOf("<img");
+      int closeImg = materialBefore.lastIndexOf(">");
+      if(openImg > closeImg) {
+         return true;
+      }
+
       return false;
    }
    
@@ -82,6 +90,7 @@ public class Glossary {
    public static synchronized Glossary instance() {
       if (null == glossary) {
          glossary = new Glossary();
+         MMBase.getMMBase().addNodeRelatedEventsListener("glossary", new GlossaryEventListener(glossary));
       }
       return glossary;
    }
