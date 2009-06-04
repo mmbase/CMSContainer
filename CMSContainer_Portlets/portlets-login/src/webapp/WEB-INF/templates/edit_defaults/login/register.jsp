@@ -1,6 +1,10 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp"%>
 <%@include file="/WEB-INF/templates/edit_defaults/sections/globals.jsp"%>
 <script type="text/javascript">
+   function selectTermsPage(page, path) {
+      document.forms['<portlet:namespace />form'].termsPage.value = page;
+      document.forms['<portlet:namespace />form'].termsPagePath.value = path;
+   }
    function selectElement(contentelement, title) {
       document.forms['<portlet:namespace />form'].contentelement.value = contentelement;
       document.forms['<portlet:namespace />form'].contentelementtitle.value = title;
@@ -82,28 +86,28 @@
             <td></td>
             <td>
                <select name="useterms">
-                  <option ${(useterms eq 'yes')?'selected':''} value="yes"><fmt:message key="edit_defaults.yes"/></option>
-                  <option ${(useterms eq 'yes')?'':'selected'} value="no"><fmt:message key="edit_defaults.no"/></option>
+                  <option ${(useterms eq 'yes')?'selected="selected"':''} value="yes"><fmt:message key="edit_defaults.yes"/></option>
+                  <option ${(useterms eq 'yes')?'':'selected="selected"'} value="no"><fmt:message key="edit_defaults.no"/></option>
                </select>
             </td>
          </tr>
          <tr>
             <td><fmt:message key="edit_defaults.register.termspage" />:</td>
             <td align="right">
-               <a href="<c:url value='/editors/site/select/SelectorPage.do?channel=${page}' />"
+               <a href="<c:url value='/editors/site/select/SelectorPage.do?channel=${termsPage}&type=SelectorExtPage&method=selectTermsPage' />"
                   target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)"> 
-                     <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.pageselect" />"/></a>
-               <a href="javascript:erase('page');erase('pagepath');eraseList('window')">
+                  <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.pageselect" />"/></a>
+               <a href="javascript:erase('termsPage');erase('termsPagePath');eraseList('window')">
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
                <mm:cloud>
                   <mm:node number="${termsPage}" notfound="skip">
-                     <mm:field name="path" id="pagepath" write="false" />
+                     <mm:field name="path" id="termsPagePath" write="false" />
                   </mm:node>
                </mm:cloud>
                <input type="hidden" name="termsPage" value="${termsPage}" />
-               <input type="text" name="pagepath" value="${pagepath}" disabled="true" />
+               <input type="text" name="termsPagePath" value="${termsPagePath}" disabled="true" />
             </td>
          </tr>
 
