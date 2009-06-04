@@ -11,9 +11,10 @@ package com.finalist.cmsc.taglib.stats;
 
 import java.io.IOException;
 
-import javax.naming.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import net.sf.mmapps.commons.util.EncodingUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
@@ -24,11 +25,14 @@ import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.beans.om.Site;
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
+import com.finalist.cmsc.services.sitemanagement.SiteManagement;
+import com.finalist.cmsc.taglib.CmscTag;
 import com.finalist.cmsc.util.ServerUtil;
 
-public class GoogleAnalyticsTag extends SimpleTagSupport {
+public class GoogleAnalyticsTag extends CmscTag {
    /** MMbase logging system */
    private static Logger log = Logging
          .getLoggerInstance(GoogleAnalyticsTag.class.getName());
@@ -62,21 +66,25 @@ public class GoogleAnalyticsTag extends SimpleTagSupport {
    public void doTag() throws IOException {
 
       /*
-       * Find out where to get our account from, search order: 1) The
-       * "account"-parameter passed to the tag (only when available, live and
-       * production) 2) The "googleAnalytics/account" setting in the context
-       * XML (only when available) 3) The "googleanalytics.account" system
-       * property, from the system properties (only when available, live and
-       * production)
+       * Find out where to get our account from, search order: 
+       * 1) The "account"-parameter passed to the tag (only when available, live and production) 
+       * 2) The "googleAnalytics/account" setting in the context XML (only when available, one of the two prefered methods) 
+       * 3) The "googleanalytics.account" system property, from the system properties (only  when available, live and production)
+       * 4) The googleanaliticsId field of the site (only when available, the other prefered method)
        */
       String account = null;
       boolean isLiveProduction = (ServerUtil.isProduction() && (ServerUtil.isLive() || ServerUtil.isSingle()));
+      String parameterAccount = PropertiesUtil.getProperty("googleanalytics.account");
+      
       if (StringUtils.isNotBlank(accountParameter) && isLiveProduction) {
          account = accountParameter;
-      } else if (contextAccount != null) {
+      } else if (StringUtils.isNotBlank(contextAccount)) {
          account = contextAccount;
+      } else if (StringUtils.isNotBlank(parameterAccount) && isLiveProduction) {
+         account = parameterAccount;
       } else if (isLiveProduction) {
-         account = PropertiesUtil.getProperty("googleanalytics.account");
+         Site site = SiteManagement.getSiteFromPath(getPath());
+         account = site.getGoogleanalyticsid();
       }
 
       // Include the google analytics code
