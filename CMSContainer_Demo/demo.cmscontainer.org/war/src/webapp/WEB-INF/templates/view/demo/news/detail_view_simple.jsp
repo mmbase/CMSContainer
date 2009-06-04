@@ -17,8 +17,9 @@
 		<%@include file="/WEB-INF/templates/edit/itemheader.jsp" %>
 	</c:if>
 
-
-    <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
+    <div class="heading">
+      <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
+    </div>
     <div class="content">
       <!-- top images -->      
       <cmsc-bm:linkedimages width="525" position="top" style="display: block; clear: both; padding-bottom: 20px;" />
