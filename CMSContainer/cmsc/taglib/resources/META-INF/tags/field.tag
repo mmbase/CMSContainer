@@ -5,23 +5,29 @@
 %><%@ attribute name="name" required="true" rtexprvalue="true"
 %><%@ attribute name="edit" required="false" rtexprvalue="true"
 %><%@ attribute name="container" required="false" rtexprvalue="true"
+%><%@ attribute name="containerclass" required="false" rtexprvalue="true"
 %><%@ attribute name="options" required="false" rtexprvalue="true"
 %><c:set var="edit" value="${empty edit ? false :edit }"/>
-<c:set var="container" value="${empty container ? 'p' :container }"/>
+<c:set var="container" value="${empty container ? 'div' :container }"/>
+<c:set var="containerclass" value="${empty containerclass ? name :containerclass }"/>
 <c:set var="istitle" value="${name eq 'title' || name eq 'subtitle' ? true :false }"/>
-<c:if test="${edit && !istitle}">
-   <div id="content_${elementId}_${name}" class="${name}">
+<c:if test="${edit || istitle}">
+   <${container} id="content_${elementId}_${name}" class="${containerclass}">
 </c:if>
 <mm:field name="${name}" escape="none">
   <mm:isnotempty>
-    <${container}><mm:write /></${container}>
+    <c:if test="${!istitle}">
+      <p>
+    </c:if>
+    <mm:write />
+    <c:if test="${!istitle}">
+      </p>
+    </c:if>
   </mm:isnotempty>
 </mm:field>
-<c:if test="${edit && !istitle}">
-   </div>
-</c:if>
-<c:if test="${edit}">
-<script type="text/javascript">
+<c:if test="${edit || istitle}">
+   </${container}>
+   <script type="text/javascript">
    new InPlaceEditor.Local('content_${elementId}_${name}', {${options}});
-</script>
+   </script>
 </c:if>
