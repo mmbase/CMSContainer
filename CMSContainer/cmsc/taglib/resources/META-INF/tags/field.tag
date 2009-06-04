@@ -7,15 +7,16 @@
 %><%@ attribute name="container" required="false" rtexprvalue="true"
 %><%@ attribute name="options" required="false" rtexprvalue="true"
 %><c:set var="edit" value="${empty edit ? false :edit }"/>
-<c:set var="container" value="${empty container ? 'div' :container }"/>
+<c:set var="container" value="${empty container ? 'p' :container }"/>
+<c:set var="class" value="${name eq 'title' ? 'heading' :name }"/>
 <c:if test="${edit}">
-   <${container} id="content_${elementId}_${name}" class="${name}">
+   <div id="content_${elementId}_${name}" class="${class}">
 </c:if>
 <mm:field name="${name}" escape="none">
   <mm:isnotempty>
-    <p><mm:write /></p>
+    <${container}><mm:write /></${container}>
     <c:if test="${edit}">
-   </${container}>
+   </div>
    <script type="text/javascript">
       new InPlaceEditor.Local('content_${elementId}_${name}', {${options}});
    </script>
