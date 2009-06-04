@@ -17,32 +17,13 @@
 			</mm:relatednodes>
 		</cmsc:portletmode>
 		
-		<mm:field name="title"> 
-	    	<c:if test="${edit}">				
-				<h2 id="content_${elementId}_title"><mm:write/></h2>
-			</c:if>
-			<c:if test="${!edit}">				
-					<h2><mm:write/></h2>			
-			</c:if>
-		</mm:field>		
-		<mm:field name="body">
-	 		<c:if test="${edit}">
-				<div id="content_${elementId}_body">     
-			</c:if>						
-	       		<mm:isnotempty><mm:write escape="none" /></mm:isnotempty>	
-			<c:if test="${edit}">
-				</div>
-			</c:if>	               
-	    </mm:field> 
+		<cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>	
+		<cmsc:field elementid="${elementId}" name="body" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
 	</mm:node>
 </mm:cloud>
 
 <cmsc:portletmode name="edit">
 	</form>
-	<script type="text/javascript">
-		new InPlaceEditor.Local('content_${elementId}_title');
-		new InPlaceEditor.Local('content_${elementId}_body', {minHeight:300, htmlarea:true, formId:'contentportlet'});
-	</script>
 </cmsc:portletmode>
 
 <cmsc:portletmode name="edit">
