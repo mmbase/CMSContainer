@@ -19,9 +19,7 @@
 	</c:if>
 
 
-    <div class="heading">
-      <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
-    </div>
+    <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
     <div class="content">
       <div class="eventinfo">
         <mm:field name="publishdate"><mm:time format="dd-MM-yyyy" /></mm:field>
