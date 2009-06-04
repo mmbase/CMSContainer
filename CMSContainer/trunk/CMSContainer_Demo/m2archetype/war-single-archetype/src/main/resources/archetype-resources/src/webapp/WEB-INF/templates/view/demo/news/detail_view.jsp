@@ -30,7 +30,8 @@
       <cmsc-bm:linkedimages width="220" position="top-left" style="float: left; padding: 0px 20px 20px 0px;" />
       <cmsc-bm:linkedimages width="220" position="top-right" style="float: right; padding: 0px 0px 20px 20px;" />
 
-   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" />
+   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
+
    <cmsc:field elementid="${elementId}" name="body" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
        
       <div class="divider3"></div>
