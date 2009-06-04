@@ -18,9 +18,7 @@
 	</c:if>
 
 
-    <div class="heading">
-      <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
-    </div>
+   <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
     <div class="content">
       <div class="eventinfo">
         <mm:field name="publishdate"><mm:time format="dd-MM-yyyy" /></mm:field>
@@ -31,7 +29,7 @@
       <cmsc-bm:linkedimages width="220" position="top-left" style="float: left; padding: 0px 20px 20px 0px;" />
       <cmsc-bm:linkedimages width="220" position="top-right" style="float: right; padding: 0px 0px 20px 20px;" />
 
-   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" options=""/>
+   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
 
    <cmsc:field elementid="${elementId}" name="body" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
        
