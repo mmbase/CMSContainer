@@ -17,8 +17,9 @@
 	  		  action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
 		<%@include file="/WEB-INF/templates/edit/itemheader.jsp" %>
 	</c:if>
-
+   <div class="heading">
     <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
+   </div>
     <div class="content">
       <div class="eventinfo">
         <mm:field name="publishdate"><mm:time format="dd-MM-yyyy" /></mm:field>
