@@ -10,22 +10,16 @@
 	<mm:import externid="elementId" required="true" />
 	<mm:node number="${elementId}" notfound="skip">
 
-		<h1 id="content_${elementId}_title"><mm:field name="title" /></h1>
-		<h2 id="content_${elementId}_subtitle"><mm:field name="subtitle" /></h2>
-		<div class="intro" id="content_${elementId}_intro"><mm:field name="intro" escape="none" /></div>
+		<cmsc:field elementid="${elementId}" name="title" edit="true" container="h1"/>
+		<cmsc:field elementid="${elementId}" name="subtitle" edit="true" container="h2"/>
+		<cmsc:field elementid="${elementId}" name="intro" edit="true" options="minHeight:100, htmlarea:true, formId:'contentportlet'"/>
 
 		<cmsc-bm:linkedimages position="top-left" style="float: left;" />
 		<cmsc-bm:linkedimages position="top-right" style="float: right;" />
-		<div class="body" id="content_${elementId}_body"><mm:field name="body" escape="none" /></div>
+		<cmsc:field elementid="${elementId}" name="body" edit="true" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
 		<cmsc-bm:linkedimages position="bottom-left" style="float: left;" />
 		<cmsc-bm:linkedimages position="bottom-right" style="float: right;" />
 
-		<script type="text/javascript">
-			new InPlaceEditor.Local('content_${elementId}_title');
-			new InPlaceEditor.Local('content_${elementId}_subtitle');
-			new InPlaceEditor.Local('content_${elementId}_intro', {minHeight:100, htmlarea:true, formId:'contentportlet'});
-			new InPlaceEditor.Local('content_${elementId}_body', {minHeight:300, htmlarea:true, formId:'contentportlet'});
-		</script>
 	</mm:node>
 <p>
 <input type="submit" value="<fmt:message key="edit.save" />" />
