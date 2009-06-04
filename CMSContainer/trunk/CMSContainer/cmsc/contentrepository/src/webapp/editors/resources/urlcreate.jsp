@@ -24,7 +24,6 @@
 
     function sayWait() {
         document.getElementById("busy").style.visibility="visible";
-        document.getElementById("notbusy").style.visibility="hidden";
     }
 
 
