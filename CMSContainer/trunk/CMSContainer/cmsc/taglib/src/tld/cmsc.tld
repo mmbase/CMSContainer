@@ -1528,9 +1528,10 @@
         Meant to put in the body of a page, please note that if you want to use events, 
         there has to be a normal tag first. 
         Search order of the google analytics account used:
-		 * 1) The "account"-parameter passed to the tag (only when available, live and production)
-		 * 2) The "googleAnalytics/account" setting in the context XML (only when available, this is the prefered manner)
-		 * 3) The "googleanalytics.account" system property, from the system properties (only when available, live and production)
+       * 1) The "account"-parameter passed to the tag (only when available, live and production) 
+       * 2) The "googleAnalytics/account" setting in the context XML (only when available, one of the two prefered methods) 
+       * 3) The "googleanalytics.account" system property, from the system properties (only  when available, live and production)
+       * 4) The googleanaliticsId field of the site (only when available, the other prefered method)
         </description>
         <name>google-analytics</name>
         <tag-class>com.finalist.cmsc.taglib.stats.GoogleAnalyticsTag</tag-class>
