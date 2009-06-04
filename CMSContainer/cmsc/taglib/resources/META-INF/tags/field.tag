@@ -8,18 +8,20 @@
 %><%@ attribute name="options" required="false" rtexprvalue="true"
 %><c:set var="edit" value="${empty edit ? false :edit }"/>
 <c:set var="container" value="${empty container ? 'p' :container }"/>
-<c:set var="class" value="${name eq 'title' ? 'heading' :name }"/>
-<c:if test="${edit}">
-   <div id="content_${elementId}_${name}" class="${class}">
+<c:set var="istitle" value="${name eq 'title' || name eq 'subtitle' ? true :false }"/>
+<c:if test="${edit && !istitle}">
+   <div id="content_${elementId}_${name}" class="${name}">
 </c:if>
 <mm:field name="${name}" escape="none">
   <mm:isnotempty>
     <${container}><mm:write /></${container}>
-    <c:if test="${edit}">
-   </div>
-   <script type="text/javascript">
-      new InPlaceEditor.Local('content_${elementId}_${name}', {${options}});
-   </script>
-  </c:if>
   </mm:isnotempty>
 </mm:field>
+<c:if test="${edit && !istitle}">
+   </div>
+</c:if>
+<c:if test="${edit}">
+<script type="text/javascript">
+   new InPlaceEditor.Local('content_${elementId}_${name}', {${options}});
+</script>
+</c:if>
