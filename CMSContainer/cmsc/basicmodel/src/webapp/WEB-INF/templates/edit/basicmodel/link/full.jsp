@@ -10,32 +10,21 @@
 	<mm:import externid="elementId" required="true" />
 	<mm:node number="${elementId}" notfound="skip">
 
-		<h1 id="content_${elementId}_title"><mm:field name="title" /></h1>
-		<script type="text/javascript">
-			new InPlaceEditor.Local('content_${elementId}_title');
-		</script>
+		<cmsc:field elementid="${elementId}" name="title" edit="true" container="h1"/>
 
 		<mm:relatednodes type="attachments" role="posrel">
 			<mm:first><ul></mm:first>
 			<mm:field name="number" id="attachmentNumber" write="false" />
-			<li><span id="content_${attachmentNumber}_title"><mm:field name="title" /></span><br />
-				<span id="content_${attachmentNumber}_description"><mm:field name="description" /></span></li>
-			<script type="text/javascript">
-				new InPlaceEditor.Local('content_${attachmentNumber}_title');
-				new InPlaceEditor.Local('content_${attachmentNumber}_description');
-			</script>
+			<li><cmsc:field elementid="${attachmentNumber}" name="title" edit="true" container="span"/><br />
+				<cmsc:field elementid="${attachmentNumber}" name="description" edit="true" container="span"/></li>
 			<mm:last></ul></mm:last>
 		</mm:relatednodes>
 		<mm:relatednodes type="urls" role="posrel">
 			<mm:first><ul></mm:first>
 			<mm:field name="number" id="urlNumber" write="false" />
 			<mm:field name="url" id="url" write="false" />
-			<li><span id="content_${urlNumber}_name"><mm:field name="name" /></span><br />
-				<span id="content_${urlNumber}_url"><mm:field name="url" /></span></li>
-			<script type="text/javascript">
-				new InPlaceEditor.Local('content_${urlNumber}_name');
-				new InPlaceEditor.Local('content_${urlNumber}_url');
-			</script>
+			<li><cmsc:field elementid="${urlNumber}" name="name" edit="true" container="span"/><br />
+				<cmsc:field elementid="${urlNumber}" name="url" edit="true" container="span"/></li>
 			<mm:last></ul></mm:last>
 		</mm:relatednodes>
 	</mm:node>
