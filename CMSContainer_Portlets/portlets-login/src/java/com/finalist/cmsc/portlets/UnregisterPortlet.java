@@ -19,6 +19,7 @@ import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.community.person.PersonService;
 import com.finalist.cmsc.services.community.security.AuthenticationService;
+import com.finalist.cmsc.util.EmailSender;
 
 public class UnregisterPortlet extends AbstractLoginPortlet {
    private static final String CONFIRMATION_TEXT = "confirmationText";
@@ -53,7 +54,7 @@ public class UnregisterPortlet extends AbstractLoginPortlet {
       Map<String, String> errorMessages = new HashMap<String, String>();
       if (StringUtils.isBlank(register_email)) {
          errorMessages.put(EMAIL_REGISTER, REGISTER_EMAIL_EMPTY);
-      } else if (!isEmailAddress(register_email)) {
+      } else if (!EmailSender.isEmailAddress(register_email)) {
          errorMessages.put(EMAIL_REGISTER, REGISTER_EMAIL_MATCH);
       }
       AuthenticationService authenticationService = (AuthenticationService) ApplicationContextFactory.getBean("authenticationService");
