@@ -1,5 +1,5 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<%@page language="java" contentType="text/html;charset=UTF-8"
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <%@include file="globals.jsp" %>
 <mm:import externid="bottomurl" from="parameters">dashboard.jsp</mm:import>
 
@@ -14,13 +14,16 @@
          </c:if>
          <mm:setfield name="language">${language}</mm:setfield>
       </c:if>
-      
    </mm:listnodes>
 
-   
+   <%-- The language variable can only be empty when the user does not exist in the users table 
+        and does exists in the mmbaseusers table --%>
+   <c:if test="${empty language}">
+      <c:set var="language" value="en"/>
+   </c:if>
+
    <mm:write referid="language" jspvar="lang" vartype="String">
       <%request.getSession().setAttribute("org.apache.struts.action.LOCALE", new Locale(lang));%>
-     
    </mm:write>
 </mm:cloud>
 
@@ -50,4 +53,3 @@
     </fmt:bundle>
    </mm:cloud>
 </mm:locale>
-
