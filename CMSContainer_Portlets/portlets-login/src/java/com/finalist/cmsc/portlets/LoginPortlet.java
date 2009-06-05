@@ -54,7 +54,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
 
    protected static final String ACEGI_SECURITY_FORM_USERNAME_KEY = "j_username";
    protected static final String ACEGI_SECURITY_FORM_PASSWORD_KEY = "j_password";
-   protected static final String EMAIL_TEMPLATE_DIR = "../templates/view/login/forgotpassword.txt";
+   protected static final String EMAIL_TEMPLATE_DIR = "/WEB-INF/templates/view/login/forgotpassword.txt";
    
    protected static final String SEND_PASSWORD = "send_password";
 
@@ -147,17 +147,17 @@ public class LoginPortlet extends AbstractLoginPortlet {
                  String nameFrom = preferences.getValue(EMAIL_FROMNAME, null);
                  emailText = getEmailBody(emailText,request, authentication, person);
                  if (StringUtils.isNotBlank(emailFrom) && !isEmailAddress(emailFrom)) {
-                    throw new AddressException("Email address "+emailFrom+"is not availalbe");
+                    throw new AddressException("Email address '" + emailFrom + "' is not available");
                  }
                  EmailSender.sendEmail(emailFrom, nameFrom, email, emailSubject, emailText,
                              email, "text/plain;charset=utf-8");
                  sendMessage = "view.account.success";
               } 
               catch (AddressException e) {
-                 log.error("Email address failed",e);
+                 log.error("Email address incorrect",e);
               } 
               catch (MessagingException e) {
-                 log.error("Email MessagingException failed",e);
+                 log.error("Email MessagingException",e);
               }
               catch (Exception e) {
                  log.error(e);
@@ -205,8 +205,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
       doInclude("view", template, request, response);
    }
    
-   protected String getEmailBody(String emailText,ActionRequest request,
-         Authentication authentication, Person person) {
+   protected String getEmailBody(String emailText, ActionRequest request, Authentication authentication, Person person) {
       super.DEFAULT_EMAIL_CONFIRM_TEMPLATE = EMAIL_TEMPLATE_DIR;
       return String.format(emailText == null?getConfirmationTemplate():emailText, authentication
             .getUserId(), authentication.getPassword(), person.getFirstName(),
