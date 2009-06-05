@@ -8,7 +8,7 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.services.publish.Publish;
+import com.finalist.cmsc.directreaction.util.ReactionUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 public class DeleteReactionAction extends DeleteSecondaryContentAction {
@@ -25,7 +25,7 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
       String number = deleteForm.getObjectnumber();
       if (MMBaseAction.ADMINISTRATOR.equals(cloud.getUser().getRank().toString())) {
          log.debug("deleting secondary content: " + number);
-         Cloud remoteCloud = Publish.getRemoteCloud(cloud);
+         Cloud remoteCloud = ReactionUtil.getRemoteCloud(cloud);
          remoteCloud.getNode(number).delete(true);
       }
       else {
