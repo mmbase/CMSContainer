@@ -1,26 +1,26 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
-%><fmt:setBundle basename="cmsc-reactions" scope="request" /><%@page import="java.util.Iterator,
-                 com.finalist.cmsc.mmbase.PropertiesUtil"
-%><mm:content type="text/html" encoding="UTF-8" expires="0">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%><fmt:setBundle basename="cmsc-reactions" scope="request" 
+/><%@page import="java.util.Iterator, com.finalist.cmsc.mmbase.PropertiesUtil"
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="reactions.title">
-      <script src="../repository/search.js" type="text/javascript"></script>
-      <script src="../repository/content.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			function selectElement(element, title, src) {
-				if(window.top.opener != undefined) {
-					window.top.opener.selectElement(element, title, src);
-					window.top.close();
-				}
+   <script src="../repository/search.js" type="text/javascript"></script>
+   <script src="../repository/content.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		function selectElement(element, title, src) {
+			if(window.top.opener != undefined) {
+				window.top.opener.selectElement(element, title, src);
+				window.top.close();
 			}
-			
-			function showInfo(objectnumber) {
-				openPopupWindow('reactioninfo', '500', '500', 'reactioninfo.jsp?objectnumber='+objectnumber);
-            }
-		</script>
+		}
+		
+		function showInfo(objectnumber) {
+			openPopupWindow('reactioninfo', '500', '500', 'reactioninfo.jsp?objectnumber='+objectnumber);
+      }
+	</script>
 </cmscedit:head>
    <body>
       <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
@@ -111,6 +111,8 @@
 	<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
 </c:if>	
 </mm:cloud>
+</div>
+</div>
    </body>
 </html:html>
 </mm:content>

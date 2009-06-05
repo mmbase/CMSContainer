@@ -12,8 +12,15 @@ import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.Relation;
 
+import com.finalist.cmsc.services.publish.Publish;
+import com.finalist.cmsc.util.ServerUtil;
+
 public class ReactionUtil {
 
+   private ReactionUtil() {
+      //Utility only
+   }
+   
    private static final String REACTION = "reaction";
 
 
@@ -60,6 +67,25 @@ public class ReactionUtil {
       Node element = cloud.getNode(number);
       Relation posrel = element.createRelation(message, cloud.getRelationManager("posrel"));
       posrel.commit();
+   }
+   
+   public static Cloud getRemoteCloud() {
+      return getRemoteCloud(null);
+   }
+   
+   public static Cloud getRemoteCloud(Cloud cloud) {
+      /* It should use the staging cloud if it runs in single-war mode.
+       * At live, the local cloud can be used.
+       */
+      if (cloud == null) {
+         cloud = CloudProviderFactory.getCloudProvider().getCloud();
+      }
+      
+      if (ServerUtil.isSingle() || ServerUtil.isLive()) {
+         return cloud;         
+      }
+      
+      return Publish.getRemoteCloud(cloud);
    }
 
 
