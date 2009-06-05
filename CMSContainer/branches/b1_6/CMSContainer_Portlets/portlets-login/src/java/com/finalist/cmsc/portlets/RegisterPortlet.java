@@ -113,6 +113,8 @@ public class RegisterPortlet extends AbstractLoginPortlet {
          Long authenticationId = authenticationService.getAuthenticationIdForUserId(emailTo);
    
          if (authenticationId == null) {
+            // TODO check if password is mandatory
+            //if (passwordText == null) passwordText="";
             Authentication authentication = authenticationService.createAuthentication(emailTo, passwordText);
             if (authentication.getId() != null) {
                authId = authentication.getId();
@@ -151,7 +153,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                   errorMessages.put(ACEGI_SECURITY_DEFAULT, "Sending email failed, from '" + emailFrom + "' to '" + emailTo + "'!");
                }
                if (errorMessages.isEmpty()) {
-                  response.setRenderParameter("email", emailTo);
+                  response.setRenderParameter(ACEGI_SECURITY_FORM_EMAIL_KEY, emailTo);
                } else {
                   //Email could not be sent, but the user is created..should remove user & authentication
                   personHibernateService.deletePersonByAuthenticationId(authId);
@@ -163,8 +165,14 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                errorMessages.put(ACEGI_SECURITY_DEFAULT, "adding of authenticationId in database failed");
             }
          } else {
-            errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
-         }
+            if (!isExistingUserAllowed()) {
+               errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
+            } else {
+               authId = authenticationId;
+               response.setRenderParameter("active", "subscribed");
+               request.getPortletSession().setAttribute("active", "subscribed");
+            }
+      }
       }
 
       if (errorMessages.size() > 0) {
@@ -275,5 +283,12 @@ public class RegisterPortlet extends AbstractLoginPortlet {
        throw new IllegalArgumentException("Unknown key: " + key);
    }
    
+   /* 
+    * For newsletter registration it is okay to have an existing user
+    * for ordinary registration it is not okay.
+    */
+   protected boolean isExistingUserAllowed() {
+       return false;
+   }
    
 }
