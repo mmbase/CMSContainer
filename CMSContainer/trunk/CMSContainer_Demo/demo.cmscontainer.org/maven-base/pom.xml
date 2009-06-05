@@ -29,6 +29,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.cmscontainer.portlets</groupId>
+			<artifactId>cmsc-portlets-gallery2</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.cmscontainer.portlets</groupId>
 			<artifactId>cmsc-portlets-dynamicforms</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
