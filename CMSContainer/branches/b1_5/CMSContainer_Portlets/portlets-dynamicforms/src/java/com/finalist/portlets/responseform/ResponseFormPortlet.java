@@ -53,7 +53,6 @@ public class ResponseFormPortlet extends ContentPortlet {
    protected static final String RADIO_EMPTY = "[niets gekozen]";
    protected static final String TEXTBOX_EMPTY = "[niet ingevuld]";
    protected static final String REGEX = " ";
-   protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
 
    @Override
@@ -111,7 +110,7 @@ public class ResponseFormPortlet extends ContentPortlet {
                }
                
                if ((type == TYPE_TEXTBOX) && sendEmail) {   //If data is used as email address, then it should be valid
-                   if (!isEmailAddress(userEmailAddress)) {
+                   if (!EmailSender.isEmailAddress(userEmailAddress)) {
                      errorMessages.put(fieldIdentifier, "view.formfield.invalid");
                   }
                }
@@ -256,8 +255,8 @@ public class ResponseFormPortlet extends ContentPortlet {
 
       if (StringUtils.isNotBlank(userEmailText.toString())
             && StringUtils.isNotBlank(userEmailSenderName)
-            && isEmailAddress(userEmailAddress)
-            && isEmailAddress(userEmailSenderAddress)) {
+            && EmailSender.isEmailAddress(userEmailAddress)
+            && EmailSender.isEmailAddress(userEmailSenderAddress)) {
          try {
             EmailSender.sendEmail(userEmailSenderAddress, userEmailSenderName, userEmailAddress,
                   userEmailSubject, userEmailText.toString());
@@ -300,7 +299,7 @@ public class ResponseFormPortlet extends ContentPortlet {
       if (StringUtils.isNotBlank(userEmailAddress)) {
          senderName = userEmailAddress + " [CMS]";
       }
-      if (!isEmailAddress(senderEmailAddress)) {
+      if (!EmailSender.isEmailAddress(senderEmailAddress)) {
          return false; //Last check email address
       }
 
@@ -319,7 +318,7 @@ public class ResponseFormPortlet extends ContentPortlet {
 
       List<String> emailList = splitEmailAddresses(emailAddressesValue);
 
-      if (!isEmailAddress(emailList)) {
+      if (!EmailSender.isEmailAddress(emailList)) {
          getLogger().error("error sending email. Some of the following emailaddresses are incorrect: " + emailList.toString());
          return false; //Could not sent email because of false email address
       }
@@ -472,39 +471,6 @@ public class ResponseFormPortlet extends ContentPortlet {
 
    }
 
-   public boolean isEmailAddress(String emailAddress) {
-      if (emailAddress == null) {
-         return false;
-      }
-      if (StringUtils.isBlank(emailAddress)) {
-         return false;
-      }
-
-      String emailRegex = getEmailRegex();
-      return emailAddress.trim().matches(emailRegex);
-   }
-
-   public boolean isEmailAddress(List<String> emailList) {
-      if (emailList == null) {
-         return false;
-      }
-      if (emailList.isEmpty()) {
-         return false;
-      }
-
-      String emailRegex = getEmailRegex();
-      for (String email : emailList) {
-      	if (email == null || StringUtils.isBlank(email)) {
-            return false;
-         }
-         if (!email.matches(emailRegex)) {
-            return false;
-         }
-      }
-
-      return true;
-   }
-
    private long getMaxAttachmentSize() {
       long maxFileSize = DEFAULT_MAXFILESIZE;
       String maxFileSizeValue = PropertiesUtil.getProperty("email.maxattachmentsize");
@@ -519,14 +485,6 @@ public class ResponseFormPortlet extends ContentPortlet {
          }
       }
       return maxFileSize * MEGABYTE;
-   }
-
-   protected String getEmailRegex() {
-      String emailRegex = PropertiesUtil.getProperty("email.regex");
-      if (StringUtils.isNotBlank(emailRegex)) {
-         return emailRegex;
-      }
-      return DEFAULT_EMAILREGEX;
    }
 
 }
