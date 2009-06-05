@@ -6,13 +6,11 @@
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 
    <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
-      <html:html xhtml="true">
          <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
          <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Asset.do?type=asset&parentchannel=<mm:write
          referid="parentchannel"/>&direction=up</mm:import>
          <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
-         <cmscedit:head title="images.title">
             <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
             <script type="text/javascript">
                function showEditItems(id){
@@ -48,7 +46,6 @@
                }
             </script>
             <script src="../repository/asset.js" language="JavaScript" type="text/javascript"></script>
-         </cmscedit:head>
 
          <div class="editor">
             <div class="body">
@@ -275,7 +272,5 @@
          </div>
       </mm:node>
    </div>
-
-      </html:html>
    </mm:cloud>
 </mm:content>
