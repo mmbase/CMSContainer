@@ -25,7 +25,6 @@ import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.Relation;
 import org.mmbase.bridge.util.SearchUtil;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
@@ -45,7 +44,6 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
    protected static final String REGISTRATIONPAGE = "registrationpage";
    protected static final String REGISTRATIONPAGEPATH = "registrationpagepath";
    protected static final String PAGE = "page";
-   public static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
    private static final Log log = LogFactory.getLog(AbstractLoginPortlet.class);
 
@@ -196,23 +194,4 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
       return DEFAULT_EMAIL_CONFIRM_TEMPLATE;
    }
    
-   protected boolean isEmailAddress(String emailAddress) {
-      if (emailAddress == null) {
-         return false;
-      }
-      if (StringUtils.isBlank(emailAddress)) {
-         return false;
-      }
-
-      String emailRegex = getEmailRegex();
-      return emailAddress.trim().matches(emailRegex);
-   }
-
-   protected String getEmailRegex() {
-      String emailRegex = PropertiesUtil.getProperty("email.regex");
-      if (StringUtils.isNotBlank(emailRegex)) {
-         return emailRegex;
-      }
-      return DEFAULT_EMAILREGEX;
-   }
 }

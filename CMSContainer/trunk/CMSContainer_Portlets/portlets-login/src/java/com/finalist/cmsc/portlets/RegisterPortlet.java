@@ -100,7 +100,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
 
       if (StringUtils.isBlank(emailTo)) {
          errorMessages.put(ACEGI_SECURITY_FORM_EMAIL_KEY, "register.email.empty");
-      } else if (!isEmailAddress(emailTo)) {
+      } else if (!EmailSender.isEmailAddress(emailTo)) {
          errorMessages.put(ACEGI_SECURITY_FORM_EMAIL_KEY, "register.email.match");
       }
 
@@ -140,7 +140,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
    
                emailText = getEmailBody(emailText, request, authentication, person);
                try {
-                  if (!isEmailAddress(emailFrom)) {
+                  if (!EmailSender.isEmailAddress(emailFrom)) {
                      errorMessages.put(ACEGI_SECURITY_DEFAULT, "Email address '" + emailFrom + "' set in the edit_defaults properties is not available or working!");
                   } else {
                      EmailSender.sendEmail(emailFrom, nameFrom, emailTo, emailSubject, emailText, emailTo, "text/plain;charset=utf-8");

@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.finalist.cmsc.portlets.CmscPortlet;
 import com.finalist.cmsc.services.community.domain.PreferenceVO;
+import com.finalist.cmsc.util.EmailSender;
 import com.finalist.preferences.domain.UserProfile;
 import com.finalist.preferences.util.ProfileUtil;
 
@@ -92,7 +93,7 @@ public class ProfilePortlet extends CmscPortlet {
             if (StringUtils.isBlank(profile.getEmail())) {
                bf.append("community.profile.email.empty,");
             }
-            else if(!ProfileUtil.isEmail(profile.getEmail())) {
+            else if(!EmailSender.isEmailAddress(profile.getEmail())) {
                bf.append("community.profile.email.incorrect,");
             }
             if (StringUtils.isNotBlank(profile.getPasswordText()) && StringUtils.isNotBlank(profile.getPasswordConfirmation())) {
