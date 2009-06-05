@@ -21,9 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portalImpl.PortalConstants;
-import com.finalist.cmsc.repository.forms.SearchAction;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.PersonService;
@@ -36,7 +34,6 @@ import com.finalist.cmsc.util.EmailSender;
 
 public class RegisterPortlet extends AbstractLoginPortlet {
 
-    private static final boolean DEBUG = true; 
    public static final String ACEGI_SECURITY_FORM_EMAIL_KEY = "email";
    public static final String ACEGI_SECURITY_FORM_FIRSTNAME_KEY = "firstName";
    public static final String ACEGI_SECURITY_FORM_INFIX_KEY = "infix";
@@ -146,12 +143,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                   if (!isEmailAddress(emailFrom)) {
                      errorMessages.put(ACEGI_SECURITY_DEFAULT, "Email address '" + emailFrom + "' set in the edit_defaults properties is not available or working!");
                   } else {
-                      Boolean debugMode = Boolean.valueOf(PropertiesUtil.getProperty("register.debug"));
-                      if (debugMode) {
-                          log.warn("DEBUG MODE: sendEmail from: " + emailFrom + " to: " + emailTo);
-                      } else {
                      EmailSender.sendEmail(emailFrom, nameFrom, emailTo, emailSubject, emailText, emailTo, "text/plain;charset=utf-8");
-                      }
                   }
                } catch (AddressException e) {
                   log.error("Email address failed", e);
