@@ -57,6 +57,12 @@
          <version>${cmscportlets.version}</version>
          <type>mmbase-module</type>
       </dependency>
+      <dependency>
+         <groupId>finalist</groupId>
+         <artifactId>cmsc-portlets-gallery2</artifactId>
+         <version>${cmscportlets.version}</version>
+         <type>mmbase-module</type>
+      </dependency>
 		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-modules-directreaction</artifactId>
