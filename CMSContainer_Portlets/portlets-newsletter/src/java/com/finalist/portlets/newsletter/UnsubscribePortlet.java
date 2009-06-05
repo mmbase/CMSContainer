@@ -41,7 +41,7 @@ public class UnsubscribePortlet extends AbstractLoginPortlet {
       Map<String, String> errorMessages = new HashMap<String, String>();
       if (StringUtils.isBlank(email)) {
          errorMessages.put(EMAIL_UNSUBSCRIBE, REGISTER_EMAIL_EMPTY);
-      } else if (!isEmailAddress(email)) {
+      } else if (!EmailSender.isEmailAddress(email)) {
          errorMessages.put(EMAIL_UNSUBSCRIBE, REGISTER_EMAIL_MATCH);
       } else {
          NewsletterSubscriptionServices newsletterSubscriptionServices = (NewsletterSubscriptionServices) ApplicationContextFactory
@@ -61,7 +61,7 @@ public class UnsubscribePortlet extends AbstractLoginPortlet {
                template = getConfirmationTemplate();
             }
             String emailText = formatEmailText(template, email);
-            if (!isEmailAddress(emailFrom)) {
+            if (!EmailSender.isEmailAddress(emailFrom)) {
                errorMessages.put(ACEGI_SECURITY_DEFAULT, "Email address '" + emailFrom
                      + "' set in the edit_defaults properties is not available or working!");
             } else {

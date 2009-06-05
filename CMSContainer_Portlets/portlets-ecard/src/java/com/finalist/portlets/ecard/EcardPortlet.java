@@ -23,6 +23,7 @@ import com.finalist.cmsc.mmbase.*;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portlets.ContentChannelPortlet;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
+import com.finalist.cmsc.util.EmailSender;
 import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
@@ -48,7 +49,6 @@ public class EcardPortlet extends ContentChannelPortlet {
    protected static final String TEXT_BODY = "textBody";
    protected static final String SELGALLERY = "selgallery";
    protected static final int TEXTAREA_MAXLENGTH = 1024;
-   protected static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
 
    @Override
@@ -78,13 +78,13 @@ public class EcardPortlet extends ContentChannelPortlet {
       if (StringUtils.isBlank(fromEmail)) {
          errorMessages.put(FROM_EMAIL, "view.ecard.fromEmail.empty");
       }
-      else if (!fromEmail.matches(getEmailRegex())) {
+      else if (!EmailSender.isEmailAddress(fromEmail)) {
          errorMessages.put(FROM_EMAIL, VIEW_ECARD_INVALID);
       }
       if (StringUtils.isBlank(toEmail)) {
          errorMessages.put(TO_EMAIL, "view.ecard.toEmail.empty");
       }
-      else if (!toEmail.matches(getEmailRegex())) {
+      else if (!EmailSender.isEmailAddress(toEmail)) {
          errorMessages.put(TO_EMAIL, VIEW_ECARD_INVALID);
       }
       if (StringUtils.isBlank(fromName)) {
@@ -256,17 +256,6 @@ public class EcardPortlet extends ContentChannelPortlet {
          Cloud cloud = getCloud();
          Node element = cloud.getNode(deleteNumber);
          element.delete(true);
-      }
-   }
-
-
-   private String getEmailRegex() {
-      String emailRegex = PropertiesUtil.getProperty("email.regex");
-      if (StringUtils.isNotBlank(emailRegex)) {
-         return emailRegex;
-      }
-      else {
-         return DEFAULT_EMAILREGEX;
       }
    }
 

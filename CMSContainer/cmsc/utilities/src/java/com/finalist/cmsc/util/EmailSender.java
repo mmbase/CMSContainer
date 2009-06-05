@@ -22,6 +22,8 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
  */
 public final class EmailSender {
 
+   public static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
+   
    /**
     * Constructor. Creates a new instance.
     */
@@ -36,7 +38,7 @@ public final class EmailSender {
     * @param emailTo The email address of the receiver 
     * @param subject The subject of the email 
     * @param body The body of the email
-    * @throws MessagingException message send faiked
+    * @throws MessagingException message send failed
     * @throws UnsupportedEncodingException The Character Encoding is not supported
     */
    public static void sendEmail(String emailFrom, String nameFrom, String emailTo, String subject, String body)
@@ -53,7 +55,7 @@ public final class EmailSender {
     * @param subject The subject of the email 
     * @param body The body of the email
     * @param replyTo Address as reply-to header in the message
-    * @throws MessagingException message send faiked
+    * @throws MessagingException message send failed
     * @throws UnsupportedEncodingException The Character Encoding is not supported
     */
    public static void sendEmail(String emailFrom, String nameFrom, String emailTo, String subject,
@@ -69,9 +71,10 @@ public final class EmailSender {
     * @param nameFrom The name of the sender 
     * @param toAddresses The list of email addresses of the receivers 
     * @param subject The subject of the email 
-    * @param body The body of the email @param fileName The name of the attachment
+    * @param body The body of the email 
+    * @param fileName The name of the attachment
     * @param attachment Binary part to add to the email message
-    * @throws MessagingException message send faiked
+    * @throws MessagingException message send failed
     * @throws UnsupportedEncodingException The Character Encoding is not supported
     */
    public static void sendEmail(String emailFrom, String nameFrom, List<String> toAddresses, String subject, String body,
@@ -86,10 +89,11 @@ public final class EmailSender {
     * @param nameFrom The name of the sender 
     * @param toAddresses The list of email addresses of the receivers 
     * @param subject The subject of the email 
-    * @param body The body of the email @param fileName The name of the attachment
+    * @param body The body of the email 
+    * @param fileName The name of the attachment
     * @param attachment Binary part to add to the message
     * @param replyTo Address as reply-to header in the message
-    * @throws MessagingException message send faiked
+    * @throws MessagingException message send failed
     * @throws UnsupportedEncodingException The Character Encoding is not supported
     */
    public static void sendEmail(String emailFrom, String nameFrom, List<String> toAddresses,
@@ -173,10 +177,51 @@ public final class EmailSender {
       Transport.send(message);
    }
    
-   @SuppressWarnings("static-access")
    private static Session getMailSession() {
       Session session = ((SendMail) MMBase.getModule("sendmail")).getSession();
       return session;
+   }
+   
+   public static boolean isEmailAddress(String emailAddress) {
+      if (emailAddress == null) {
+         return false;
+      }
+      if (StringUtils.isBlank(emailAddress)) {
+         return false;
+      }
+
+      String emailRegex = getEmailRegex();
+      return emailAddress.trim().matches(emailRegex);
+   }
+   
+
+   public static boolean isEmailAddress(List<String> emailList) {
+      if (emailList == null) {
+         return false;
+      }
+      if (emailList.isEmpty()) {
+         return false;
+      }
+
+      String emailRegex = getEmailRegex();
+      for (String email : emailList) {
+         if (email == null || StringUtils.isBlank(email)) {
+            return false;
+         }
+         if (!email.matches(emailRegex)) {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   public static String getEmailRegex() {
+      String emailRegex = PropertiesUtil.getProperty("email.regex");
+      if (StringUtils.isNotBlank(emailRegex)) {
+         return emailRegex;
+      }
+      return DEFAULT_EMAILREGEX;
    }
 
 }

@@ -144,7 +144,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
                  String emailFrom = preferences.getValue(EMAIL_FROMEMAIL, null);
                  String nameFrom = preferences.getValue(EMAIL_FROMNAME, null);
                  emailText = getEmailBody(emailText,request, authentication, person);
-                 if (StringUtils.isNotBlank(emailFrom) && !isEmailAddress(emailFrom)) {
+                 if (StringUtils.isNotBlank(emailFrom) && !EmailSender.isEmailAddress(emailFrom)) {
                     throw new AddressException("Email address '" + emailFrom + "' is not available");
                  }
                  EmailSender.sendEmail(emailFrom, nameFrom, email, emailSubject, emailText,
