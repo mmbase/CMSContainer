@@ -23,6 +23,7 @@
 		<dependency>
 			<groupId>org.mmbase</groupId>
 			<artifactId>mmbase</artifactId>
+			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>org.mmbase</groupId>
