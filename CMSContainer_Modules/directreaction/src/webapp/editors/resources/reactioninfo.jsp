@@ -1,9 +1,9 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%@taglib uri="http://finalist.com/cmsc-directreaction" prefix="cmsc-dr"%>
-
-<%@include file="globals.jsp" %>
-<fmt:setBundle basename="cmsc-reactions" scope="request" />
+<%@page language="java" contentType="text/html;charset=UTF-8"
+%><%@taglib uri="http://finalist.com/cmsc-directreaction" prefix="cmsc-dr"
+%><%@include file="globals.jsp" 
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <mm:content type="text/html" encoding="UTF-8" expires="0">
+<fmt:setBundle basename="cmsc-reactions" scope="request" />
 <html:html xhtml="true">
 <cmscedit:head title="reactioninfo.title" />
 
@@ -41,7 +41,7 @@
          </tr>            
          <tr>
             <td><fmt:message key="reactioninfo.emailfield" />:</td>
-            <td>${reactionObject.email}</td>
+            <td><a href="mailto:${reactionObject.email}">${reactionObject.email}</a></td>
          </tr>         
       </table>
       <table class="listcontent">
