@@ -6,17 +6,17 @@
 	<title xml:lang="zh">图片</title>
 	
 	<item displaytype="image">
-	    <field name="title" ftype="data" dtrequired="true">
+	    <field name="title" dtrequired="true">
 			<prompt xml:lang="en">Title</prompt>
 			<prompt xml:lang="nl">Titel</prompt>
 			<prompt xml:lang="zh">标题</prompt>
 		</field>
-	    <field name="description" ftype="data" rows="4">
+	    <field name="description" ftype="text" rows="4">
 			<prompt xml:lang="en">Description</prompt>
 			<prompt xml:lang="nl">Omschrijving</prompt>
 			<prompt xml:lang="zh">描述</prompt>
 		</field>
-	    <field name="handle" ftype="imagedata">
+	    <field name="handle" ftype="image">
 			<prompt xml:lang="en">Image</prompt>
 			<prompt xml:lang="nl">Afbeelding</prompt>
 			<prompt xml:lang="zh">图片</prompt>
@@ -46,9 +46,19 @@
 			<prompt xml:lang="nl">Afsnijden</prompt>
 			<prompt xml:lang="zh">裁切</prompt>
 		</field>
+		<field fdatapath="field[@name=&apos;width&apos;]">
+			<prompt xml:lang="en">Width</prompt>
+			<prompt xml:lang="nl">Breedte</prompt>
+			<prompt xml:lang="zh">宽</prompt>
+		</field>
+		<field fdatapath="field[@name=&apos;height&apos;]">
+			<prompt xml:lang="en">Height</prompt>
+			<prompt xml:lang="nl">Hoogte</prompt>
+			<prompt xml:lang="zh">高</prompt>
+		</field>
 	</item>
 	
-	<command name="assetsselector" nodepath="images" age="-1" fields="title,description">
+	<command name="search" nodepath="images" age="-1" fields="title,description">
 		<prompt xml:lang="en">Search image</prompt>
 		<prompt xml:lang="nl">Zoek afbeelding</prompt>
 		<prompt xml:lang="zh">查找图片</prompt>
@@ -72,15 +82,16 @@
 		</search-filter>
 	</command>
 	
-   <command name="startwizard" inline="true" wizardname="config/images/images" objectnumber="new">
-      <prompt xml:lang="en">New</prompt>
-      <prompt xml:lang="nl">Nieuw</prompt>
-      <prompt xml:lang="zh">新建</prompt>
-   </command>
+	<command name="insert" objectnumber="new">
+		<prompt xml:lang="en">New</prompt>
+		<prompt xml:lang="nl">Nieuw</prompt>
+		<prompt xml:lang="zh">新建</prompt>
+	</command>
 
 	<action type="create">
 		<relation role="imagerel">
 			<field name="order">{sum(//relation[@role=&apos;imagerel&apos; and @lastitem=&apos;true&apos;]/object[@type='images']/../field[@name=&apos;order&apos;])+{$pos}}</field>
+			<object type="images" />
 		</relation>
 	</action>
 </list>

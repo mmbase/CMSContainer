@@ -9,7 +9,6 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.struts;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.TreeUtil;
 import com.finalist.cmsc.util.HttpUtil;
@@ -30,9 +27,6 @@ import com.finalist.tree.TreeInfo;
 import com.finalist.tree.ajax.AjaxTree;
 
 public abstract class TreeAction extends MMBaseAction {
-
-   /** MMbase logging system */
-   private static final Logger log = Logging.getLoggerInstance(TreeAction.class);
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -102,19 +96,6 @@ public abstract class TreeAction extends MMBaseAction {
 
       ActionForward ret = mapping.findForward(SUCCESS);
       return ret;
-   }
-
-   @Override
-   protected ActionForward redirectLogin(HttpServletRequest req, HttpServletResponse resp) {
-      try {
-         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-      
-         return null;
-      } catch (IOException e) {
-         log.error("Failed to handle redirecting to the login page", e);
-      }
-      
-      return super.redirectLogin(req, resp);
    }
 
 

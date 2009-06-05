@@ -18,7 +18,8 @@ See http://www.MMBase.org/license
 			<version>${mmbase.version}</version>
 			<type>jar</type>
 		</dependency>
-   		<dependency>
+
+		<dependency>
 			<groupId>mmbase</groupId>
 			<artifactId>mmbase-email</artifactId>
 			<version>${mmbase.version}</version>
@@ -27,7 +28,7 @@ See http://www.MMBase.org/license
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
+			<version>3.0</version>
 			<type>jar</type>
 		</dependency>
 	</dependencies>
