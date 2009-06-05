@@ -37,7 +37,7 @@ import com.finalist.cmsc.util.HttpUtil;
 
 public abstract class AbstractLoginPortlet extends CmscPortlet{
    
-   protected String DEFAULT_EMAIL_CONFIRM_TEMPLATE = "../templates/view/login/confirmation.txt";
+   protected String DEFAULT_EMAIL_CONFIRM_TEMPLATE = "/WEB-INF/templates/view/login/confirmation.txt";
    protected static final String EMAIL_SUBJECT = "emailSubject";
    protected static final String EMAIL_TEXT = "emailText";
    protected static final String EMAIL_FROMEMAIL = "emailFromEmail";
@@ -47,8 +47,8 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
    protected static final String PAGE = "page";
    public static final String DEFAULT_EMAILREGEX = "^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$";
 
-   
    private static final Log log = LogFactory.getLog(AbstractLoginPortlet.class);
+
    
    protected void doEditDefaults(RenderRequest req, RenderResponse res) throws IOException,
    PortletException {
@@ -132,7 +132,7 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
       Node regiesterPortletDefination = portletDefinations.getNode(0);
       if (portletDefinations.size() > 1) {
          log.error("found " + portletDefinations.size()
-               + " regiesterPortlet nodes; first one will be used");
+               + " registerPortlet nodes; first one will be used");
       }
       NodeList portlets = regiesterPortletDefination.getRelatedNodes("portlet",
             "definitionrel", SearchUtil.SOURCE);
@@ -166,12 +166,11 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
    }
    
    protected String getConfirmationTemplate() {
-      InputStream is = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream(getEmailConfirmTemplate());
+      InputStream is = getPortletContext().getResourceAsStream(getEmailConfirmTemplate());
 
       if (is == null) {
-         throw new NullPointerException(
-               "The confirmation template file confirmation.txt in directory 'templates/view/login' does't exist.");
+         log.warn("The confirmation template file '" + getEmailConfirmTemplate() + "' does not exist while loading EditDefaults. Using the default empty String for now.");
+         return ""; 
       }
       
       BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -184,12 +183,15 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
          }
          is.close();
       } catch (IOException e) {
-         log.error("error happened when reading email template", e);
+         log.error("error happened when reading email template file", e);
       }
 
       return sb.toString();
    }
    
+   /**
+    * @return path and filename, starting in context root. E.g. /WEB-INF/templates/hello.txt
+    */
    protected String getEmailConfirmTemplate() {
       return DEFAULT_EMAIL_CONFIRM_TEMPLATE;
    }
