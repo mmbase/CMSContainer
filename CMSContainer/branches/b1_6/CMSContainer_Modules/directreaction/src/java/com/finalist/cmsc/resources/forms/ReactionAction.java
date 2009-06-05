@@ -14,6 +14,7 @@ import org.mmbase.storage.search.Step;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.directreaction.util.ReactionUtil;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.util.ServerUtil;
 
@@ -36,10 +37,9 @@ public class ReactionAction extends SearchAction {
       super.execute(mapping, form, request, response, cloud);
       Map<Integer, String> titles = new HashMap<Integer, String>();
       // get the reactions from the request
-      NodeList results = (NodeList) request.getAttribute("results");
+      List<Node> results = (NodeList) request.getAttribute("results");
       // for every reaction search for the contentelement it belongs to
-      for (Iterator<Node> iter = results.iterator(); iter.hasNext();) {
-         Node node = iter.next();
+      for (Node node : results) {
          String title = getArticleTitles(cloud, node);
          // store the title in a map
          titles.put(node.getNumber(), title);
@@ -54,18 +54,11 @@ public class ReactionAction extends SearchAction {
 
    @Override
    public Cloud getCloud() {
-      /* The DirectReactions should use the staging cloud if we are
-       *  running in single-war-file mode.
+      /* It should use the staging cloud if it runs in single-war mode.
+       * At live, the local cloud can be used.
        */
-      return getCloudForAnonymousUpdate(ServerUtil.isLive());
-   }
 
-   public Cloud getCloudForAnonymousUpdate(boolean isRemote) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      if (isRemote) {
-         return Publish.getRemoteCloud(cloud);
-      }
-      return cloud;
+      return ReactionUtil.getRemoteCloud();
    }
 
    @Override
