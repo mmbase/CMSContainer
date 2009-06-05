@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.mmbase.EmailUtil;
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
+import com.finalist.cmsc.util.EmailSender;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public class MailFriendPortlet extends ContentPortlet {
@@ -45,14 +45,13 @@ public class MailFriendPortlet extends ContentPortlet {
             if (StringUtils.isBlank(articleNumber)) {
                errorMessages.put("article", "view.error.noarticle");
             }
-            String emailRegex = PropertiesUtil.getProperty("email.regex");
             if (StringUtils.isBlank(fromname)) {
                errorMessages.put("fromname", "view.fromname.empty");
             }
             if (StringUtils.isBlank(fromemail)) {
                errorMessages.put("fromemail", "view.fromemail.empty");
             }
-            else if (!fromemail.matches(emailRegex)) {
+            else if (!EmailSender.isEmailAddress(fromemail)) {
                errorMessages.put("fromemail", "view.fromemail.invalid");
             }
             if (StringUtils.isBlank(toname)) {
@@ -61,7 +60,7 @@ public class MailFriendPortlet extends ContentPortlet {
             if (StringUtils.isBlank(toemail)) {
                errorMessages.put("toemail", "view.toemail.empty");
             }
-            else if (!toemail.matches(emailRegex)) {
+            else if (!EmailSender.isEmailAddress(toemail)) {
                errorMessages.put("toemail", "view.toemail.invalid");
             }
 

@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.mmbase.EmailUtil;
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
+import com.finalist.cmsc.util.EmailSender;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 public class ReactFormPortlet extends ContentPortlet {
@@ -45,14 +45,13 @@ public class ReactFormPortlet extends ContentPortlet {
             if (StringUtils.isBlank(articleNumber)) {
                errorMessages.put("subject", "view.error.nosubject");
             }
-            String emailRegex = PropertiesUtil.getProperty("email.regex");
             if (StringUtils.isBlank(name)) {
                errorMessages.put("name", "view.name.empty");
             }
             if (StringUtils.isBlank(useremail)) {
                errorMessages.put("useremail", "view.useremail.empty");
             }
-            else if (!useremail.matches(emailRegex)) {
+            else if (!EmailSender.isEmailAddress(useremail)) {
                errorMessages.put("useremail", "view.useremail.invalid");
             }
             if (StringUtils.isBlank(message)) {
