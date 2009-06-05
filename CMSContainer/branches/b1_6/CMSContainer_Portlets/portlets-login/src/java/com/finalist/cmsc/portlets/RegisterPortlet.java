@@ -197,7 +197,6 @@ public class RegisterPortlet extends AbstractLoginPortlet {
       
       Map<String, String> errorMessages = (HashMap<String, String>) portletSession.getAttribute(ERRORMESSAGES);
       
-      
       String email = request.getParameter("email");
       String active = request.getParameter("active");
       
@@ -237,6 +236,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
        String lastName = request.getParameter(ACEGI_SECURITY_FORM_LASTNAME_KEY);
        String passwordText = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
        String passwordConfirmation = request.getParameter(ACEGI_SECURITY_FORM_PASSWORDCONF_KEY);
+
       if (StringUtils.isBlank(firstName)) {
          errorMessages.put(ACEGI_SECURITY_FORM_FIRSTNAME_KEY, "register.firstname.empty");
       }
