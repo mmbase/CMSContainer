@@ -15,6 +15,7 @@ import org.mmbase.storage.search.Constraint;
 
 import com.finalist.cmsc.mmbase.*;
 import com.finalist.cmsc.portlets.ContentPortlet;
+import com.finalist.cmsc.util.EmailSender;
 import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
@@ -43,11 +44,10 @@ public class EmailAlertPortlet extends ContentPortlet {
          if (contentElement != null) {
             String emailAddress = request.getParameter(EMAILADDRESS);
             String subscribePage = request.getParameter(SUBSCRIBEPAGE);
-            String emailRegex = PropertiesUtil.getProperty("email.regex");
             if (StringUtils.isBlank(emailAddress)) {
                errorMessages.put(EMAILADDRESS, "view.emailaddress.empty");
             }
-            else if (!emailAddress.matches(emailRegex)) {
+            else if (!EmailSender.isEmailAddress(emailAddress)) {
                errorMessages.put(EMAILADDRESS, "view.emailaddress.invalid");
             }
             if (StringUtils.isBlank(subscribePage)) {
@@ -56,7 +56,7 @@ public class EmailAlertPortlet extends ContentPortlet {
             if (errorMessages.size() == 0) {
                Cloud cloud = getCloudForAnonymousUpdate();
                Node emailAlert = cloud.getNode(contentElement);
-               // check if the emailaddress already exists, otherwise create it
+               // check if the email address already exists, otherwise create it
                Node subscriberNode = SearchUtil.findNode(cloud, SUBSCRIBER, EMAILADDRESS, emailAddress);
                if (subscriberNode == null) {
                   NodeManager subscriberNodeManager = cloud.getNodeManager(SUBSCRIBER);

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
@@ -180,10 +178,4 @@ public class ProfileUtil {
       return (PreferenceService) ApplicationContextFactory.getBean("preferenceService");
    }
 
-   public static boolean isEmail(String s) {
-      String regex = "[a-zA-Z][\\w_]+.?[\\w_]+@\\w+(\\.\\w+)+";
-      Pattern p = Pattern.compile(regex);
-      Matcher m = p.matcher(s);
-      return m.matches();
-   }
 }
