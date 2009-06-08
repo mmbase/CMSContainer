@@ -1,12 +1,6 @@
 package com.finalist.cmsc.rssfeed.beans.om;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.mmbase.bridge.NodeList;
+import java.util.*;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
 
@@ -22,8 +16,7 @@ public class RssFeed extends NavigationItem {
     private String email_webmaster;
 
     private List<String> contenttypes = new ArrayList<String>();
-    private NodeList contentChannels = CloudProviderFactory.getCloudProvider().getCloud().createNodeList();
-    private NodeList collectionChannels = CloudProviderFactory.getCloudProvider().getCloud().createNodeList();
+    private int contentChannel = -1;
     
     public int getMaximum() {
         return maximum;
@@ -83,26 +76,18 @@ public class RssFeed extends NavigationItem {
     
     public List<String> getContenttypes() {
         return Collections.unmodifiableList(contenttypes);
-    }
+     }
 
-    public void addContenttype(String contenttypes) {
+     public void addContenttype(String contenttypes) {
         this.contenttypes.add(contenttypes);
+     }
+
+    public int getContentChannel() {
+        return contentChannel;
     }
-
-	public NodeList getContentChannels() {
-		return contentChannels;
-	}
-
-    public void setContentChannels(NodeList contentChannels) {
-		this.contentChannels = contentChannels;
-	}
-
-	public NodeList getCollectionChannels() {
-		return collectionChannels;
-	}
-
-	public void setCollectionChannels(NodeList collectionChannels) {
-		this.collectionChannels = collectionChannels;
-	}
+    
+    public void setContentChannel(int contentChannel) {
+        this.contentChannel = contentChannel;
+    }
 
 }

@@ -2,12 +2,7 @@ package com.finalist.cmsc.rssfeed;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +12,7 @@ import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeIterator;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,11 +23,8 @@ import com.finalist.cmsc.navigation.NavigationItemRenderer;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
-import com.finalist.cmsc.rssfeed.util.RssFeedUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
-import com.finalist.cmsc.util.HttpUtil;
-import com.finalist.cmsc.util.ServerUtil;
-import com.finalist.cmsc.util.XmlUtil;
+import com.finalist.cmsc.util.*;
 
 public class RssFeedNavigationRenderer implements NavigationItemRenderer {
 
@@ -74,15 +62,7 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
          XmlUtil.createChildText(channel, "docs", "http://www.rssboard.org/rss-specification");
 
          List<String> contentTypesList = rssFeed.getContenttypes();
-         List<Node> contentChannels = rssFeed.getContentChannels();
-         List<Node> collectionChannels = rssFeed.getCollectionChannels();
-         Set<Node> contentChannelSet = new HashSet<Node>();
-         contentChannelSet.addAll(contentChannels);
-         for(Node collectionChannel : collectionChannels){
-        	 contentChannelSet.addAll(RssFeedUtil.getChildrenChannels(collectionChannel));
-         }
-         
-         Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
+         int contentChannelNumber = rssFeed.getContentChannel();
 
          int maxAgeInDays = rssFeed.getMax_age_in_days();
          
@@ -95,9 +75,64 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
          Date lastChange = null;
          boolean first = true;
 
-         for(Node node : contentChannelSet){
-         	 lastChange = buildItemsPerChannel(request, node, channel, contentTypesList,
-     				maxAgeInDays, useLifecycle, maxNumber, lastChange, first);
+         if (contentChannelNumber > 0) {
+            Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
+            Node contentChannel = cloud.getNode(contentChannelNumber);
+
+            NodeQuery query = RepositoryUtil.createLinkedContentQuery(contentChannel, contentTypesList,
+                  ContentElementUtil.PUBLISHDATE_FIELD, "down", useLifecycle, null, 0, maxNumber, -1, -1, -1);
+            //Add constraint: max age in days
+            if (maxAgeInDays > 0) {
+               SearchUtil.addDayConstraint(query, cloud.getNodeManager(RepositoryUtil.CONTENTELEMENT), ContentElementUtil.PUBLISHDATE_FIELD, "-" + maxAgeInDays);
+            }
+            NodeList results = query.getNodeManager().getList(query);
+            for (NodeIterator ni = results.nodeIterator(); ni.hasNext();) {
+               Node resultNode = ni.nextNode();
+               Element itemE = XmlUtil.createChild(channel, "item");
+               XmlUtil.createChildText(itemE, "title", resultNode.getStringValue("title"));
+
+               String uniqueUrl = makeAbsolute(getContentUrl(resultNode), request);
+               XmlUtil.createChildText(itemE, "link", uniqueUrl);
+
+               String description = null;
+               if (resultNode.getNodeManager().hasField("intro")) {
+                  description = resultNode.getStringValue("intro");
+               }
+               if ((description == null || description.length() == 0) && resultNode.getNodeManager().hasField("body")) {
+                  description = resultNode.getStringValue("body");
+                  if (description.indexOf("<br/>") != -1) {
+                     description = description.substring(0, description.indexOf("<br/>"));
+                  }
+               }
+               if (description != null) {
+                  description = description.replaceAll("<.*?>", "");
+               }
+               XmlUtil.createChildText(itemE, "description", description);
+               XmlUtil.createChildText(itemE, "pubDate", formatRFC822Date.format(resultNode.getDateValue("publishdate")));
+               XmlUtil.createChildText(itemE, "guid", uniqueUrl);
+
+               if (first) {
+                   NodeList images = resultNode.getRelatedNodes("images", "imagerel", null);
+                   if (images.size() > 0) {
+                      Node image = images.getNode(0);
+                      List<String> arguments = new ArrayList<String>();
+                      arguments.add("160x100");
+                      int iCacheNodeNumber = image.getFunctionValue("cache", arguments).toInt();
+                      String imageUrl = image.getFunctionValue("servletpath", null).toString() + iCacheNodeNumber;
+
+                      Element imageE = XmlUtil.createChild(channel, "image");
+                      XmlUtil.createChildText(imageE, "url", imageUrl);
+                      XmlUtil.createChild(imageE, "title");
+                      XmlUtil.createChildText(imageE, "link", uniqueUrl);
+                   }
+               }
+               first = false;
+
+               Date change = resultNode.getDateValue("lastmodifieddate");
+               if (lastChange == null || change.getTime() > lastChange.getTime()) {
+                  lastChange = change;
+               }
+            }
          }
 
          if (lastChange != null) {
@@ -116,72 +151,6 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
                "Got a wrong type in the RssFeedNavigationRenderer (only wants RssFeed), was" + item.getClass());
       }
    }
-
-
-private Date buildItemsPerChannel(HttpServletRequest request, Node node, Element channel,
-		List<String> contentTypesList, int maxAgeInDays, boolean useLifecycle,
-		int maxNumber, Date lastChange, boolean first) {
-	if (node.getNumber() > 0) {
-	    Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-	    Node contentChannel = cloud.getNode(node.getNumber());
-
-	    NodeQuery query = RepositoryUtil.createLinkedContentQuery(contentChannel, contentTypesList,
-	          ContentElementUtil.PUBLISHDATE_FIELD, "down", useLifecycle, null, 0, maxNumber, -1, -1, -1);
-	    //Add constraint: max age in days
-	    if (maxAgeInDays > 0) {
-	       SearchUtil.addDayConstraint(query, cloud.getNodeManager(RepositoryUtil.CONTENTELEMENT), ContentElementUtil.PUBLISHDATE_FIELD, "-" + maxAgeInDays);
-	    }
-	    NodeList results = query.getNodeManager().getList(query);
-	    for (NodeIterator ni = results.nodeIterator(); ni.hasNext();) {
-	       Node resultNode = ni.nextNode();
-	       Element itemE = XmlUtil.createChild(channel, "item");
-	       XmlUtil.createChildText(itemE, "title", resultNode.getStringValue("title"));
-
-	       String uniqueUrl = makeAbsolute(getContentUrl(resultNode), request);
-	       XmlUtil.createChildText(itemE, "link", uniqueUrl);
-
-	       String description = null;
-	       if (resultNode.getNodeManager().hasField("intro")) {
-	          description = resultNode.getStringValue("intro");
-	       }
-	       if ((description == null || description.length() == 0) && resultNode.getNodeManager().hasField("body")) {
-	          description = resultNode.getStringValue("body");
-	          if (description.indexOf("<br/>") != -1) {
-	             description = description.substring(0, description.indexOf("<br/>"));
-	          }
-	       }
-	       if (description != null) {
-	          description = description.replaceAll("<.*?>", "");
-	       }
-	       XmlUtil.createChildText(itemE, "description", description);
-	       XmlUtil.createChildText(itemE, "pubDate", formatRFC822Date.format(resultNode.getDateValue("publishdate")));
-	       XmlUtil.createChildText(itemE, "guid", uniqueUrl);
-
-	       if (first) {
-	           NodeList images = resultNode.getRelatedNodes("images", "imagerel", null);
-	           if (images.size() > 0) {
-	              Node image = images.getNode(0);
-	              List<String> arguments = new ArrayList<String>();
-	              arguments.add("160x100");
-	              int iCacheNodeNumber = image.getFunctionValue("cache", arguments).toInt();
-	              String imageUrl = image.getFunctionValue("servletpath", null).toString() + iCacheNodeNumber;
-
-	              Element imageE = XmlUtil.createChild(channel, "image");
-	              XmlUtil.createChildText(imageE, "url", imageUrl);
-	              XmlUtil.createChild(imageE, "title");
-	              XmlUtil.createChildText(imageE, "link", uniqueUrl);
-	           }
-	       }
-	       first = false;
-
-	       Date change = resultNode.getDateValue("lastmodifieddate");
-	       if (lastChange == null || change.getTime() > lastChange.getTime()) {
-	          lastChange = change;
-	       }
-	    }
-	 }
-	return lastChange;
-}
 
    private String getSiteUrl(HttpServletRequest request, RssFeed rss) {
        if (ServerUtil.useServerName()) {
