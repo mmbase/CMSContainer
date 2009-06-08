@@ -1,8 +1,6 @@
 package com.finalist.cmsc.rssfeed.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -35,16 +33,8 @@ public class RssFeedUtil {
        return types;
     }
 
-    public static NodeList getContentChannels(Node node) {
-       return SearchUtil.findRelatedNodeList(node, RepositoryUtil.CONTENTCHANNEL, "related");
+    public static Node getContentChannel(Node node) {
+        return SearchUtil.findRelatedNode(node, RepositoryUtil.CONTENTCHANNEL, "related");
     }
-    
-    public static NodeList getCollectionChannels(Node node) {
-       return SearchUtil.findRelatedNodeList(node, RepositoryUtil.COLLECTIONCHANNEL, "related");
-    }
-    
-    public static NodeList getChildrenChannels(Node node) {
-       return SearchUtil.findRelatedNodeList(node, RepositoryUtil.CONTENTCHANNEL, "collectionrel");
-    }
-    
+
 }

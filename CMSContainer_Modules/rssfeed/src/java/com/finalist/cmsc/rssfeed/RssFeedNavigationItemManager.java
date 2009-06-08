@@ -4,15 +4,12 @@ import java.util.List;
 
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.navigation.NavigationItemManager;
-import com.finalist.cmsc.navigation.NavigationItemRenderer;
-import com.finalist.cmsc.navigation.NavigationTreeItemRenderer;
+import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
 import com.finalist.cmsc.rssfeed.publish.RssFeedPublisher;
 import com.finalist.cmsc.rssfeed.tree.RssFeedTreeItemRenderer;
@@ -70,14 +67,9 @@ public class RssFeedNavigationItemManager implements NavigationItemManager {
          rssFeed.addContenttype(type);
       }
 
-      NodeList contentChannels = RssFeedUtil.getContentChannels(node);
-      if (contentChannels != null) {
-         rssFeed.setContentChannels(contentChannels);
-      }
-      
-      NodeList collectionChannels = RssFeedUtil.getCollectionChannels(node);
-      if (collectionChannels != null) {
-         rssFeed.setCollectionChannels(collectionChannels);
+      Node contentChannel = RssFeedUtil.getContentChannel(node);
+      if (contentChannel != null) {
+         rssFeed.setContentChannel(contentChannel.getNumber());
       }
 
       return rssFeed;

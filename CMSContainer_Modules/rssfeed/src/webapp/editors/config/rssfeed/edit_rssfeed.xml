@@ -65,6 +65,5 @@
       <optionlist select="boolean" />
    </field>
    <list include="config/contentchannel/search_rssfeed_related_contentchannel.xml" />
-   <list include="config/collectionchannel/search_rssfeed_related_collectionchannel.xml" />
    <list include="config/typedef/search_site_allowrel_typedef.xml" />
 </form-schema>
