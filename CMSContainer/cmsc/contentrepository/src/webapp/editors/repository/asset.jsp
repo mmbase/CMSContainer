@@ -5,12 +5,10 @@
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 
    <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
-      <html:html xhtml="true">
          <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
          <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Asset.do?type=asset&parentchannel=<mm:write
          referid="parentchannel"/>&direction=up</mm:import>
 
-         <cmscedit:head title="images.title">
             <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
             <script type="text/javascript">
                function showEditItems(id){
@@ -46,7 +44,6 @@
                }
             </script>
             <script src="../repository/asset.js" language="JavaScript" type="text/javascript"></script>
-         </cmscedit:head>
 
          <div class="editor">
             <div class="body">
@@ -125,7 +122,7 @@
                      <c:if test="${fn:length(elements) >1}">
                         <input type="button" class="button" value="<fmt:message key="asset.delete.massdelete" />"
                               onclick="massDelete('<fmt:message key="asset.delete.massdeleteconfirm" />', 'assetForm')"/>
-                        <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
+                        <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />"
                               onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                      </c:if>
                   <% } %>
@@ -210,7 +207,7 @@
                   <% if (role != null && SecurityUtil.isWriter(role)) { %>
                   <c:if test="${fn:length(elements) >1}">
                      <input type="submit" class="button" value="<fmt:message key="asset.delete.massdelete" />"/>
-                     <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
+                     <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />"
                            onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                   </c:if>
                   <% } %>
@@ -238,13 +235,13 @@
                                  <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
                                  <c:if test="${typedef eq 'images'}">
                                     <img src="<mm:image template="s(120x100)"/>" alt=""/>
-                                 </c:if> 
+                                 </c:if>
                                  <c:if test="${typedef eq 'attachments'}">
                                     <c:set var="filename"><mm:field name="filename"/></c:set>
                                     <c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
                                     <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
                                        <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-                                    </mm:haspage> 
+                                    </mm:haspage>
                                     <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
                                        <img src="../gfx/otherAttach.gif" alt=""/>
                                     </mm:haspage>
@@ -275,6 +272,5 @@
       </mm:node>
    </div>
 
-      </html:html>
    </mm:cloud>
 </mm:content>
