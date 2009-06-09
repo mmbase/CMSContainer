@@ -122,7 +122,7 @@
                      <c:if test="${fn:length(elements) >1}">
                         <input type="button" class="button" value="<fmt:message key="asset.delete.massdelete" />"
                               onclick="massDelete('<fmt:message key="asset.delete.massdeleteconfirm" />', 'assetForm')"/>
-                        <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />"
+                        <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
                               onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                      </c:if>
                   <% } %>
@@ -183,7 +183,7 @@
                            <td style="white-space: nowrap;"><mm:field name="lastmodifieddate"><cmsc:dateformat
                               displaytime="true"/></mm:field></td>
                            <td><mm:field name="number"/></td>
-                           </td>
+
                            <c:if test="${hasWorkflow}">
                               <td width="10" onMouseDown="objClick(this);">
                                  <c:set var="status" value="waiting"/>
@@ -207,7 +207,7 @@
                   <% if (role != null && SecurityUtil.isWriter(role)) { %>
                   <c:if test="${fn:length(elements) >1}">
                      <input type="submit" class="button" value="<fmt:message key="asset.delete.massdelete" />"/>
-                     <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />"
+                     <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
                            onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                   </c:if>
                   <% } %>
@@ -235,13 +235,13 @@
                                  <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
                                  <c:if test="${typedef eq 'images'}">
                                     <img src="<mm:image template="s(120x100)"/>" alt=""/>
-                                 </c:if>
+                                 </c:if> 
                                  <c:if test="${typedef eq 'attachments'}">
                                     <c:set var="filename"><mm:field name="filename"/></c:set>
                                     <c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
                                     <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
                                        <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-                                    </mm:haspage>
+                                    </mm:haspage> 
                                     <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
                                        <img src="../gfx/otherAttach.gif" alt=""/>
                                     </mm:haspage>
