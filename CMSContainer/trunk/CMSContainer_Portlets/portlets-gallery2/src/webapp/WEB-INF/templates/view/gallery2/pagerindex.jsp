@@ -1,5 +1,3 @@
-<%-- todo: paging of the portlet-gallery can be copied, used and changed --%>
-
 <%-- 
   JSP fragment displaying a page index, 
   the containing JSP should include it inside a <pg:pager> tag
