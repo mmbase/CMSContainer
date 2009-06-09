@@ -1,4 +1,4 @@
-// Table Operations Plugin for HTMLArea-3.0
+// Table Operations Plugin for Xinha-3.0
 // Implementation by Mihai Bazon.  Sponsored by http://www.bloki.com
 //
 // htmlArea v3.0 - Copyright (c) 2002 interactivetools.com, inc.
@@ -12,7 +12,7 @@
 //
 
 // Object that will encapsulate all the table operations provided by
-// HTMLArea-3.0 (except "insert table" which is included in the main file)
+// Xinha-3.0 (except "insert table" which is included in the main file)
 function TableOperations(editor) {
 	this.editor = editor;
 
@@ -23,9 +23,9 @@ function TableOperations(editor) {
 	// register the toolbar buttons provided by this plugin
 
   // Remove existing inserttable and toggleborders, we will replace it in our group  
-  cfg.removeToolbarElement(' inserttable toggleborders '); 
+  cfg.removeToolbarElement(' toggleborders '); 
   
-	var toolbar = ["linebreak", "inserttable", "toggleborders"];
+	var toolbar = ["linebreak", "toggleborders"];
     
 	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
@@ -33,7 +33,7 @@ function TableOperations(editor) {
 			toolbar.push("separator");
 		} else {
 			var id = "TO-" + btn[0];
-			cfg.registerButton(id, HTMLArea._lc(btn[2], "TableOperations"), editor.imgURL(btn[0] + ".gif", "TableOperations"), false,
+			cfg.registerButton(id, Xinha._lc(btn[2], "TableOperations"), editor.imgURL(btn[0] + ".gif", "TableOperations"), false,
 					   function(editor, id) {
 						   // dispatch button press event
 						   self.buttonPress(editor, id);
@@ -44,6 +44,14 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
+   if ( typeof PopupWin == 'undefined' )
+   {
+     Xinha._loadback(_editor_url + 'modules/Dialogs/popupwin.js');
+   }
+   if ( typeof Xinha.InlineStyler == 'undefined' )
+   {
+     Xinha._loadback(_editor_url + 'modules/InlineStyler/InlineStyler.js');
+   }
 }
 
 TableOperations._pluginInfo = {
@@ -58,7 +66,7 @@ TableOperations._pluginInfo = {
 };
 
 TableOperations.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'TableOperations');
+    return Xinha._lc(string, 'TableOperations');
 };
 
 /************************
@@ -89,7 +97,7 @@ TableOperations.prototype.dialogTableProperties = function() {
 	// this.editor.selectNodeContents(table);
 	// this.editor.updateToolbar();
 
-	var dialog = new PopupWin(this.editor, HTMLArea._lc("Table Properties", "TableOperations"), function(dialog, params) {
+	var dialog = new PopupWin(this.editor, Xinha._lc("Table Properties", "TableOperations"), function(dialog, params) {
 		TableOperations.processStyle(params, table);
 		for (var i in params) {
       if(typeof params[i] == 'function') continue;
@@ -177,18 +185,18 @@ TableOperations.prototype.dialogTableProperties = function() {
 		dialog.content.style.height = "310px";
 		dialog.content.innerHTML = " \
 <div class='title'\
- style='background: url(" + dialog.baseURL + dialog.editor.imgURL("table-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + HTMLArea._lc("Table Properties", "TableOperations") + "\
+ style='background: url(" + dialog.baseURL + dialog.editor.imgURL("table-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + Xinha._lc("Table Properties", "TableOperations") + "\
 </div> \
 <table style='width:100%'> \
   <tr> \
     <td> \
-      <fieldset><legend>" + HTMLArea._lc("Description", "TableOperations") + "</legend> \
+      <fieldset><legend>" + Xinha._lc("Description", "TableOperations") + "</legend> \
        <table style='width:100%'> \
         <tr> \
-          <td class='label'>" + HTMLArea._lc("Caption", "TableOperations") + ":</td> \
+          <td class='label'>" + Xinha._lc("Caption", "TableOperations") + ":</td> \
           <td class='value'><input type='text' name='f_caption' value='" + f_caption + "'/></td> \
         </tr><tr> \
-          <td class='label'>" + HTMLArea._lc("Summary", "TableOperations") + ":</td> \
+          <td class='label'>" + Xinha._lc("Summary", "TableOperations") + ":</td> \
           <td class='value'><input type='text' name='f_summary' value='" + f_summary + "'/></td> \
         </tr> \
        </table> \
@@ -198,26 +206,26 @@ TableOperations.prototype.dialogTableProperties = function() {
   <tr><td id='--HA-layout'></td></tr> \
   <tr> \
     <td> \
-      <fieldset><legend>" + HTMLArea._lc("Spacing and padding", "TableOperations") + "</legend> \
+      <fieldset><legend>" + Xinha._lc("Spacing and padding", "TableOperations") + "</legend> \
        <table style='width:100%'> \
         <tr> \
-           <td class='label'>" + HTMLArea._lc("Width", "TableOperations") + ":</td> \
+           <td class='label'>" + Xinha._lc("Width", "TableOperations") + ":</td> \
            <td><input type='text' name='f_width' value='" + f_width + "' size='5' /> \
              <select name='f_unit'> \
-               <option value='%'" + selected(f_unit == "percent") + ">" + HTMLArea._lc("percent", "TableOperations") + "</option> \
-               <option value='px'" + selected(f_unit == "pixels") + ">" + HTMLArea._lc("pixels", "TableOperations") + "</option> \
-             </select> &nbsp;&nbsp;" + HTMLArea._lc("Align", "TableOperations") + ": \
+               <option value='%'" + selected(f_unit == "percent") + ">" + Xinha._lc("percent", "TableOperations") + "</option> \
+               <option value='px'" + selected(f_unit == "pixels") + ">" + Xinha._lc("pixels", "TableOperations") + "</option> \
+             </select> &nbsp;&nbsp;" + Xinha._lc("Align", "TableOperations") + ": \
              <select name='f_align'> \
-               <option value='left'" + selected(f_align == "left") + ">" + HTMLArea._lc("Left", "TableOperations") + "</option> \
-               <option value='center'" + selected(f_align == "center") + ">" + HTMLArea._lc("Center", "TableOperations") + "</option> \
-               <option value='right'" + selected(f_align == "right") + ">" + HTMLArea._lc("Right", "TableOperations") + "</option> \
+               <option value='left'" + selected(f_align == "left") + ">" + Xinha._lc("Left", "TableOperations") + "</option> \
+               <option value='center'" + selected(f_align == "center") + ">" + Xinha._lc("Center", "TableOperations") + "</option> \
+               <option value='right'" + selected(f_align == "right") + ">" + Xinha._lc("Right", "TableOperations") + "</option> \
              </select> \
            </td> \
          </tr> \
         <tr> \
-          <td class='label'>" + HTMLArea._lc("Spacing", "TableOperations") + ":</td> \
-          <td><input type='text' name='f_spacing' size='5' value='" + f_spacing + "' /> &nbsp;" + HTMLArea._lc("Padding", "TableOperations") + ":\
-            <input type='text' name='f_padding' size='5' value='" + f_padding + "' /> &nbsp;&nbsp;" + HTMLArea._lc("pixels", "TableOperations") + "\
+          <td class='label'>" + Xinha._lc("Spacing", "TableOperations") + ":</td> \
+          <td><input type='text' name='f_spacing' size='5' value='" + f_spacing + "' /> &nbsp;" + Xinha._lc("Padding", "TableOperations") + ":\
+            <input type='text' name='f_padding' size='5' value='" + f_padding + "' /> &nbsp;&nbsp;" + Xinha._lc("pixels", "TableOperations") + "\
           </td> \
         </tr> \
        </table> \
@@ -226,35 +234,35 @@ TableOperations.prototype.dialogTableProperties = function() {
   </tr> \
   <tr> \
     <td> \
-      <fieldset><legend>" + HTMLArea._lc("Frame and borders", "TableOperations") + "</legend> \
+      <fieldset><legend>" + Xinha._lc("Frame and borders", "TableOperations") + "</legend> \
         <table width='100%'> \
           <tr> \
-            <td class='label'>" + HTMLArea._lc("Borders", "TableOperations") + ":</td> \
-            <td><input name='f_borders' type='text' size='5' value='" + f_borders + "' /> &nbsp;&nbsp;" + HTMLArea._lc("pixels", "TableOperations") + "</td> \
+            <td class='label'>" + Xinha._lc("Borders", "TableOperations") + ":</td> \
+            <td><input name='f_borders' type='text' size='5' value='" + f_borders + "' /> &nbsp;&nbsp;" + Xinha._lc("pixels", "TableOperations") + "</td> \
           </tr> \
           <tr> \
-            <td class='label'>" + HTMLArea._lc("Frames", "TableOperations") + ":</td> \
+            <td class='label'>" + Xinha._lc("Frames", "TableOperations") + ":</td> \
             <td> \
               <select name='f_frames'> \
-                <option value='void'" + selected(f_frames == "void") + ">" + HTMLArea._lc("No sides", "TableOperations") + "</option> \
-                <option value='above'" + selected(f_frames == "above") + ">" + HTMLArea._lc("The top side only", "TableOperations") + "</option> \
-                <option value='below'" + selected(f_frames == "below") + ">" + HTMLArea._lc("The bottom side only", "TableOperations") + "</option> \
-                <option value='hsides'" + selected(f_frames == "hsides") + ">" + HTMLArea._lc("The top and bottom sides only", "TableOperations") + "</option> \
-                <option value='vsides'" + selected(f_frames == "vsides") + ">" + HTMLArea._lc("The right and left sides only", "TableOperations") + "</option> \
-                <option value='lhs'" + selected(f_frames == "lhs") + ">" + HTMLArea._lc("The left-hand side only", "TableOperations") + "</option> \
-                <option value='rhs'" + selected(f_frames == "rhs") + ">" + HTMLArea._lc("The right-hand side only", "TableOperations") + "</option> \
-                <option value='box'" + selected(f_frames == "box" || !f_frames || f_frames == "") + ">" + HTMLArea._lc("All four sides", "TableOperations") + "</option> \
+                <option value='void'" + selected(f_frames == "void") + ">" + Xinha._lc("No sides", "TableOperations") + "</option> \
+                <option value='above'" + selected(f_frames == "above") + ">" + Xinha._lc("The top side only", "TableOperations") + "</option> \
+                <option value='below'" + selected(f_frames == "below") + ">" + Xinha._lc("The bottom side only", "TableOperations") + "</option> \
+                <option value='hsides'" + selected(f_frames == "hsides") + ">" + Xinha._lc("The top and bottom sides only", "TableOperations") + "</option> \
+                <option value='vsides'" + selected(f_frames == "vsides") + ">" + Xinha._lc("The right and left sides only", "TableOperations") + "</option> \
+                <option value='lhs'" + selected(f_frames == "lhs") + ">" + Xinha._lc("The left-hand side only", "TableOperations") + "</option> \
+                <option value='rhs'" + selected(f_frames == "rhs") + ">" + Xinha._lc("The right-hand side only", "TableOperations") + "</option> \
+                <option value='box'" + selected(f_frames == "box" || !f_frames || f_frames == "") + ">" + Xinha._lc("All four sides", "TableOperations") + "</option> \
               </select> \
             </td> \
           </tr> \
           <tr> \
-            <td class='label'>" + HTMLArea._lc("Rules", "TableOperations") + ":</td> \
+            <td class='label'>" + Xinha._lc("Rules", "TableOperations") + ":</td> \
             <td> \
               <select name='f_rules'> \
-                <option value='none'" + selected(f_rules == "none") + ">" + HTMLArea._lc("No rules", "TableOperations") + "</option> \
-                <option value='rows'" + selected(f_rules == "rows") + ">" + HTMLArea._lc("Rules will appear between rows only", "TableOperations") + "</option> \
-                <option value='cols'" + selected(f_rules == "cols") + ">" + HTMLArea._lc("Rules will appear between columns only", "TableOperations") + "</option> \
-                <option value='all'" + selected(f_rules == "all" || !f_rules || f_rules == "") + ">" + HTMLArea._lc("Rules will appear between all rows and columns", "TableOperations") + "</option> \
+                <option value='none'" + selected(f_rules == "none") + ">" + Xinha._lc("No rules", "TableOperations") + "</option> \
+                <option value='rows'" + selected(f_rules == "rows") + ">" + Xinha._lc("Rules will appear between rows only", "TableOperations") + "</option> \
+                <option value='cols'" + selected(f_rules == "cols") + ">" + Xinha._lc("Rules will appear between columns only", "TableOperations") + "</option> \
+                <option value='all'" + selected(f_rules == "all" || !f_rules || f_rules == "") + ">" + Xinha._lc("Rules will appear between all rows and columns", "TableOperations") + "</option> \
               </select> \
             </td> \
           </tr> \
@@ -278,7 +286,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 	// this.editor.selectNodeContents(element);
 	// this.editor.updateToolbar();
 
-	var dialog = new PopupWin(this.editor, cell ? HTMLArea._lc("Cell Properties", "TableOperations") : HTMLArea._lc("Row Properties", "TableOperations"), function(dialog, params) {
+	var dialog = new PopupWin(this.editor, cell ? Xinha._lc("Cell Properties", "TableOperations") : Xinha._lc("Row Properties", "TableOperations"), function(dialog, params) {
 		TableOperations.processStyle(params, element);
 		for (var i in params) {
       if(typeof params[i] == 'function') continue;
@@ -322,32 +330,32 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 		dialog.content.style.height = "125px";
 		dialog.content.innerHTML = " \
 <div class='title'\
- style='background: url(" + dialog.baseURL + dialog.editor.imgURL(cell ? "cell-prop.gif" : "row-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + HTMLArea._lc(cell ? "Cell Properties" : "Row Properties", "TableOperations") + "</div> \
+ style='background: url(" + dialog.baseURL + dialog.editor.imgURL(cell ? "cell-prop.gif" : "row-prop.gif", "TableOperations") + ") #fff 98% 50% no-repeat'>" + Xinha._lc(cell ? "Cell Properties" : "Row Properties", "TableOperations") + "</div> \
 <table style='width:100%'> \
   <tr> \
     <td id='--HA-layout'> \
-"+//      <fieldset><legend>" + HTMLArea._lc("Layout", "TableOperations") + "</legend> \
+"+//      <fieldset><legend>" + Xinha._lc("Layout", "TableOperations") + "</legend> \
 //        <table style='width:100%'> \
 //         <tr> \
-//           <td class='label'>" + HTMLArea._lc("Align", "TableOperations") + ":</td> \
+//           <td class='label'>" + Xinha._lc("Align", "TableOperations") + ":</td> \
 //           <td> \
 //             <select name='f_align'> \
-//               <option value='left'" + selected(f_align == "left") + ">" + HTMLArea._lc("Left", "TableOperations") + "</option> \
-//               <option value='center'" + selected(f_align == "center") + ">" + HTMLArea._lc("Center", "TableOperations") + "</option> \
-//               <option value='right'" + selected(f_align == "right") + ">" + HTMLArea._lc("Right", "TableOperations") + "</option> \
-//               <option value='char'" + selected(f_align == "char") + ">" + HTMLArea._lc("Char", "TableOperations") + "</option> \
+//               <option value='left'" + selected(f_align == "left") + ">" + Xinha._lc("Left", "TableOperations") + "</option> \
+//               <option value='center'" + selected(f_align == "center") + ">" + Xinha._lc("Center", "TableOperations") + "</option> \
+//               <option value='right'" + selected(f_align == "right") + ">" + Xinha._lc("Right", "TableOperations") + "</option> \
+//               <option value='char'" + selected(f_align == "char") + ">" + Xinha._lc("Char", "TableOperations") + "</option> \
 //             </select> \
-//             &nbsp;&nbsp;" + HTMLArea._lc("Char", "TableOperations") + ": \
+//             &nbsp;&nbsp;" + Xinha._lc("Char", "TableOperations") + ": \
 //             <input type='text' style='font-family: monospace; text-align: center' name='f_char' size='1' value='" + f_char + "' /> \
 //           </td> \
 //         </tr><tr> \
-//           <td class='label'>" + HTMLArea._lc("Vertical align", "TableOperations") + ":</td> \
+//           <td class='label'>" + Xinha._lc("Vertical align", "TableOperations") + ":</td> \
 //           <td> \
 //             <select name='f_valign'> \
-//               <option value='top'" + selected(f_valign == "top") + ">" + HTMLArea._lc("Top", "TableOperations") + "</option> \
-//               <option value='middle'" + selected(f_valign == "middle") + ">" + HTMLArea._lc("Middle", "TableOperations") + "</option> \
-//               <option value='bottom'" + selected(f_valign == "bottom") + ">" + HTMLArea._lc("Bottom", "TableOperations") + "</option> \
-//               <option value='baseline'" + selected(f_valign == "baseline") + ">" + HTMLArea._lc("Baseline", "TableOperations") + "</option> \
+//               <option value='top'" + selected(f_valign == "top") + ">" + Xinha._lc("Top", "TableOperations") + "</option> \
+//               <option value='middle'" + selected(f_valign == "middle") + ">" + Xinha._lc("Middle", "TableOperations") + "</option> \
+//               <option value='bottom'" + selected(f_valign == "bottom") + ">" + Xinha._lc("Bottom", "TableOperations") + "</option> \
+//               <option value='baseline'" + selected(f_valign == "baseline") + ">" + Xinha._lc("Baseline", "TableOperations") + "</option> \
 //             </select> \
 //           </td> \
 //         </tr> \
@@ -370,7 +378,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 // was pressed.
 TableOperations.prototype.buttonPress = function(editor, button_id) {
 	this.editor = editor;
-	var mozbr = HTMLArea.is_gecko ? "<br />" : "";
+	var mozbr = Xinha.is_gecko ? "<br />" : "";
 
 	// helper function that clears the content in a table row
 	function clearRow(tr) {
@@ -465,7 +473,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		}
 		var par = tr.parentNode;
 		if (par.rows.length == 1) {
-			alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last row in table.", "TableOperations"));
+			alert(Xinha._lc("Xinha cowardly refuses to delete the last row in table.", "TableOperations"));
 			break;
 		}
 		// set the caret first to a position that doesn't
@@ -499,7 +507,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 			var tr = rows[i];			
 			var otd = editor._doc.createElement("td");
 			otd.innerHTML = mozbr;
-      if (lastColumn && HTMLArea.is_ie) 
+      if (lastColumn && Xinha.is_ie) 
       {
         tr.insertBefore(otd);
       } 
@@ -525,7 +533,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		}
 		var index = td.cellIndex;
 		if (td.parentNode.cells.length == 1) {
-			alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last column in table.", "TableOperations"));
+			alert(Xinha._lc("Xinha cowardly refuses to delete the last column in table.", "TableOperations"));
 			break;
 		}
 		// set the caret first to a position that doesn't disappear
@@ -568,7 +576,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 			break;
 		}
 		if (td.parentNode.cells.length == 1) {
-			alert(HTMLArea._lc("HTMLArea cowardly refuses to delete the last cell in row.", "TableOperations"));
+			alert(Xinha._lc("Xinha cowardly refuses to delete the last cell in row.", "TableOperations"));
 			break;
 		}
 		// set the caret first to a position that doesn't disappear
@@ -584,7 +592,7 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 		var rows = [];
 		var row = null;
 		var cells = null;
-		if (!HTMLArea.is_ie) {
+		if (!Xinha.is_ie) {
 			try {
 				while (range = sel.getRangeAt(i++)) {
 					var td = range.startContainer.childNodes[range.startOffset];
@@ -601,16 +609,16 @@ TableOperations.prototype.buttonPress = function(editor, button_id) {
 			// Internet Explorer "browser"
 			var td = this.getClosest("td");
 			if (!td) {
-				alert(HTMLArea._lc("Please click into some cell", "TableOperations"));
+				alert(Xinha._lc("Please click into some cell", "TableOperations"));
 				break;
 			}
 			var tr = td.parentElement;
-			var no_cols = prompt(HTMLArea._lc("How many columns would you like to merge?", "TableOperations"), 2);
+			var no_cols = prompt(Xinha._lc("How many columns would you like to merge?", "TableOperations"), 2);
 			if (!no_cols) {
 				// cancelled
 				break;
 			}
-			var no_rows = prompt(HTMLArea._lc("How many rows would you like to merge?", "TableOperations"), 2);
+			var no_rows = prompt(Xinha._lc("How many rows would you like to merge?", "TableOperations"), 2);
 			if (!no_rows) {
 				// cancelled
 				break;
@@ -800,7 +808,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	var fieldset = doc.createElement("fieldset");
 	var legend = doc.createElement("legend");
 	fieldset.appendChild(legend);
-	legend.innerHTML = HTMLArea._lc("Layout", "TableOperations");
+	legend.innerHTML = Xinha._lc("Layout", "TableOperations");
 	var table = doc.createElement("table");
 	fieldset.appendChild(table);
 	table.style.width = "100%";
@@ -816,7 +824,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	td.className = "label";
 	tr.appendChild(td);
 	
-	td.appendChild(doc.createTextNode(HTMLArea._lc("Text align", "TableOperations") + ":"));
+	td.appendChild(doc.createTextNode(Xinha._lc("Text align", "TableOperations") + ":"));
 	select = doc.createElement("select");
 	select.style.marginLeft = select.style.marginRight = "0.5em";
 	td.appendChild(select);
@@ -835,7 +843,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 		var val = Val.toLowerCase();
 		option = doc.createElement("option");
 		option.value = val;
-		option.innerHTML = HTMLArea._lc(Val, "TableOperations");
+		option.innerHTML = Xinha._lc(Val, "TableOperations");
 		option.selected = ((el.align.toLowerCase() == val) || (el.align == "" && Val == "-"));
 		select.appendChild(option);
 	}
@@ -850,7 +858,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	setCharVisibility(select.value == "char");
 
 	select.style.marginRight = "0.5em";
-	td.appendChild(doc.createTextNode(HTMLArea._lc("Vertical align", "TableOperations") + ":"));
+	td.appendChild(doc.createTextNode(Xinha._lc("Vertical align", "TableOperations") + ":"));
 	select = doc.createElement("select");
 	select.name = "f_st_verticalAlign";
 	select.style.marginLeft = "0.5em";
@@ -861,7 +869,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 		var val = Val.toLowerCase();
 		option = doc.createElement("option");
 		option.value = val;
-		option.innerHTML = HTMLArea._lc(Val, "TableOperations");
+		option.innerHTML = Xinha._lc(Val, "TableOperations");
 		option.selected = ((el.vAlign && el.vAlign.toLowerCase() == val) || (el.vAlign == "" && Val == "-"));
 		select.appendChild(option);
 	}

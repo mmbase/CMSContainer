@@ -33,18 +33,24 @@ createDefaultConfig = function() {
   xinha_config.registerButton({
     id        : "insertimage",
     tooltip   : Xinha._lc("Insert Image"),
-    image     : _editor_url + xinha_config.imgURL + "ed_image.gif",
+    image     : _editor_url + xinha_config.imgURL + "tango/16x16/mimetypes/image-x-generic.png",
     textMode  : false,
     action    : function(e) {e._insertImage();}
   });
   xinha_config.registerButton({
     id        : "inlinelink",
     tooltip   : Xinha._lc("Insert/Modify Link"),
-    image     : _editor_url + xinha_config.imgURL +  "ed_link.gif",
+    image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-link.png",
     textMode  : false,
     action    : function(e) {e._insertInlineLink();}
   });
-
+    xinha_config.registerButton({
+    id        : "createtable",
+    tooltip   : Xinha._lc("Insert Table"),
+    image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-table.png",
+    textMode  : false,
+    action    : function(e) {e._inserttable();}
+  });
   xinha_config.toolbar = [
     ["popupeditor"],
     ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
@@ -52,10 +58,10 @@ createDefaultConfig = function() {
     ["separator","subscript","superscript"],
     ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
     ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
-    ["separator","inserthorizontalrule","inlinelink","insertimage","inserttable"],
+    ["separator","inserthorizontalrule","inlinelink","insertimage"],
     ["linebreak","separator","undo","redo","selectall"], 
     ["separator","lefttoright", "righttoleft"],
-    ["separator","htmlmode","showhelp","my-validatesave"]
+    ["separator","htmlmode","showhelp","my-validatesave","createtable"]
   ];
 
    xinha_config.formatblock = ({
@@ -73,7 +79,9 @@ createDefaultConfig = function() {
   xinha_config.pageStyle+="h3 {font-weight: normal; color:#0000AA;	font-size: 100%; }";
   xinha_config.pageStyle+="h4 {font-weight: normal;	color:#000055;	font-size: 100%;}";
   xinha_config.pageStyle+="a {color: #0000FF; }";
-
+  
+  
+  xinha_config.URIs['insert_table'] =  _editor_url + 'popups/insert_table.html';
   return xinha_config;
 }
 
@@ -391,11 +399,12 @@ Xinha.prototype._insertImage = function(image) {
 };
 
 // Called when the user clicks the Insert Table button
-Xinha.prototype._insertTable = function()
+Xinha.prototype._inserttable = function()
 {
-  var sel = this._getSelection();
-  var range = this._createRange(sel);
+
   var editor = this;	// for nested functions
+    var sel = editor._getSelection();
+  var range = this._createRange(sel);
   this._popupDialog(
     editor.config.URIs.insert_table,
     function(param)
@@ -442,11 +451,11 @@ Xinha.prototype._insertTable = function()
         cellwidth = Math.floor(100 / parseInt(param.f_cols, 10));
       }
       var tbody = doc.createElement("tbody");
-      table.appendChild(tbody);
+      table.appendChild(tbody);   
       for ( var i = 0; i < param.f_rows; ++i )
       {
         var tr = doc.createElement("tr");
-        tbody.appendChild(tr);
+       tbody.appendChild(tr);
         for ( var j = 0; j < param.f_cols; ++j )
         {
           var td = doc.createElement("td");
@@ -460,15 +469,7 @@ Xinha.prototype._insertTable = function()
           td.appendChild(doc.createTextNode('\u00a0'));
         }
       }
-      if ( Xinha.is_ie )
-      {
-        range.pasteHTML(table.outerHTML);
-      }
-      else
-      {
-        // insert the table
-        editor.insertNodeAtSelection(table);
-      }
+      editor.insertNodeAtSelection(table);
       return true;
     },
     null

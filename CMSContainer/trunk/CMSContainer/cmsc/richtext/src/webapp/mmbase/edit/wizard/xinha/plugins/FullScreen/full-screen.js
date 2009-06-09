@@ -39,7 +39,7 @@ FullScreen._pluginInfo =
 };
 
 FullScreen.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'FullScreen');
+    return Xinha._lc(string, 'FullScreen');
 };
 
 /** fullScreen makes an editor take up the full window space (and resizes when the browser is resized)
@@ -48,7 +48,7 @@ FullScreen.prototype._lc = function(string) {
  *  and much faster to switch between
  */
 
-HTMLArea.prototype._fullScreen = function()
+Xinha.prototype._fullScreen = function()
 {
   var e = this;
   function sizeItUp()
@@ -108,13 +108,13 @@ HTMLArea.prototype._fullScreen = function()
     this._isFullScreen = false;
     if(e.target != e._iframe)
     {
-      HTMLArea._addEvent(window, 'resize', sizeItUp);
+      Xinha._addEvent(window, 'resize', sizeItUp);
     }
   }
 
   // Gecko has a bug where if you change position/display on a
   // designMode iframe that designMode dies.
-  if(HTMLArea.is_gecko)
+  if(Xinha.is_gecko)
   {
     this.deactivateEditor();
   }
@@ -125,7 +125,7 @@ HTMLArea.prototype._fullScreen = function()
     this._htmlArea.style.position = '';
     try
     {
-      if(HTMLArea.is_ie)
+      if(Xinha.is_ie)
       {
         var bod = document.getElementsByTagName('html');
 
@@ -191,7 +191,7 @@ HTMLArea.prototype._fullScreen = function()
 
     try
     {
-      if(HTMLArea.is_ie)
+      if(Xinha.is_ie)
       {
         var bod = document.getElementsByTagName('html');
 
@@ -216,7 +216,7 @@ HTMLArea.prototype._fullScreen = function()
     sizeItUp();
   }
 
-  if(HTMLArea.is_gecko)
+  if(Xinha.is_gecko)
   {
     this.activateEditor();
   }
