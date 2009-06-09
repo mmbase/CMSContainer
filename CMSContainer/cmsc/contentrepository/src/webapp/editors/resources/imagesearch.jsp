@@ -94,7 +94,7 @@
                                  <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="imagesearch.icon.edit" />" title="<fmt:message key="imagesearch.icon.edit" />" /></a>
                        <a href="javascript:showInfo(<mm:field name="number" />)">
                               <img src="../gfx/icons/info.png" alt="<fmt:message key="imagesearch.icon.info" />" title="<fmt:message key="imagesearch.icon.info" />" /></a>
-                       <mm:hasrank minvalue="administrator">
+                       <mm:hasrank minvalue="siteadmin">
                          <a href="<mm:url page="DeleteSecondaryContentAction.do" >
                                                         <mm:param name="object_type" value="images"/>
                                                         <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
