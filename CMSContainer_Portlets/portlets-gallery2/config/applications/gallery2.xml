@@ -16,7 +16,8 @@
    </allowedrelationlist>
    
    <datasourcelist>
-      <datasource builder="view" path="gallery/view.xml" />
+      <datasource builder="portletdefinition" path="gallery2/portletdefinition.xml" />
+      <datasource builder="view" path="gallery2/view.xml" />
    </datasourcelist>
    
    <relationsourcelist>
