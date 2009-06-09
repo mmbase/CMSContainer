@@ -184,7 +184,6 @@
                            <td style="white-space: nowrap;"><mm:field name="lastmodifieddate"><cmsc:dateformat
                               displaytime="true"/></mm:field></td>
                            <td><mm:field name="number"/></td>
-                           </td>
                            <c:if test="${hasWorkflow}">
                               <td width="10" onMouseDown="objClick(this);">
                                  <c:set var="status" value="waiting"/>
