@@ -79,7 +79,7 @@ public class Gallery2Portlet extends AbstractContentPortlet  {
    /**
     * Configuration default constants.
     */
-   public static final String WIDTH_ATTR_DEFAULT = "110px";
+   public static final String WIDTH_ATTR_DEFAULT = "110";
 
 
    @Override
