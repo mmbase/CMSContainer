@@ -17,14 +17,15 @@
 			function showAssetInfo(assetType, objectnumber) {
 			     var infoURL;
 			     infoURL = '../resources/';
-			     infoURL += assetType.toLowerCase();
+			     infoURL += assetType;
 			     infoURL += 'info.jsp?objectnumber=';
 			     infoURL += objectnumber;
 			     openPopupWindow(assetType.toLowerCase()+'info', '900', '500', infoURL);
 			  }
 			function showInfo(elementType, objectNumber) {
-			     if(elementType == 'Attachment' || elementType == 'Image' || elementType == 'Url'){
-			         showAssetInfo(elementType, objectNumber);
+				  var assetType = elementType.toLowerCase();
+			     if(assetType == 'attachment' || assetType == 'image' || assetType == 'url'){
+			         showAssetInfo(assetType, objectNumber);
 			     }
 			     else{
 			         openPopupWindow("info", 500, 500, "../repository/showitem.jsp?objectnumber=" + objectNumber);
