@@ -4,7 +4,6 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.tabClass"%>
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ include file="globals.jsp"%>
-<%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" %>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
@@ -14,7 +13,7 @@
 		<link href="../css/workflow.css" rel="stylesheet" type="text/css" />
       <c:url value="/editors/workflow/WorkflowTreeStatusAction.do" var="treeStatusAction"/>
 		<script type="text/javascript">
-			function showAssetInfo(assetType, objectnumber) {
+      function showAssetInfo(assetType, objectnumber) {
 			     var infoURL;
 			     infoURL = '../resources/';
 			     infoURL += assetType;
@@ -32,7 +31,7 @@
 			     }
 			  }
       var treeHandler = {
-          toggle: function (oItem) { 
+          toggle: function (oItem) {
 		      var parentTableId = oItem.id.replace('-plus', '');
 		      var originImgSrc = oItem.src;
 		      if(originImgSrc.toLowerCase().indexOf('plus.png')>=0){
@@ -52,7 +51,7 @@
 		           );
 		      }
       };
-      
+
    </script>
 	</cmscedit:head>
 
@@ -313,31 +312,46 @@
 			</div>
 			<div class="body">
 			<p><fmt:message key="workflow.publish.failed" /></p>
+			<table>
+				<thead>
+					<tr>
+						<th><fmt:message key="workflow.content.type" /></th>
+						<th><fmt:message key="workflow.title" /></th>
+						<th><fmt:message key="workflow.lastmodifier" /></th>
+						<th><fmt:message key="workflow.lastmodifieddate" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<mm:listnodes referid="errors">
+						<tr>
+							<td><mm:nodeinfo type="guitype" /></td>
+							<td><mm:hasfield name="title">
+								<mm:field name="title" />
+							</mm:hasfield> <mm:hasfield name="name">
+								<mm:field name="name" />
+							</mm:hasfield></td>
+							<td><mm:hasfield name="lastmodifier">
+								<mm:field name="lastmodifier" />
+							</mm:hasfield></td>
+							<td><mm:hasfield name="lastmodifieddate">
+								<mm:field name="lastmodifieddate">
+									<cmsc:dateformat displaytime="true" />
+								</mm:field>
+							</mm:hasfield></td>
+						</tr>
+					</mm:listnodes>
+				</tbody>
+			</table>
 			</div>
 			<div class="bottom">
 			<div></div>
 			</div>
 			</div>
 			</div>
-         <div class="body" style="background-color:#CC0000;">
-         <form name="errorWorkflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
-            <input type="hidden" name="orderby" value="${orderby}" /> 
-            <input type="hidden" name="status" value="${status}" />
-            <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
-            <c:if test="${fn:length(errors) > 0}">
-            <%@ include file="error_workflow_list_table_fragment.jsp"%>
-            </c:if>
-            &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll" onclick="checkAllElement(this, 'errorWorkflowForm', '')" /> <fmt:message key="workflow.select_all" />
-            <input type="hidden" name="actionvalue" value="publish" /><br />
-            <input type="submit" name="action" value="<fmt:message key="workflow.action.publish" />" style="background-color:#CC0000;"/>
-         </form>
-         </div>
 		</c:if>
-      <c:if test="${not empty param.errMessage}">
-         <fmt:message key="${param.errMessage}" />
-		</c:if>
+
 		<div class="ruler_green">
-			<div> 
+			<div>
 		       <c:if test="${not empty workflowType and empty workflowNodetype}">
 		         <fmt:message key="workflow.title.${workflowType}" />
 		      </c:if>
@@ -351,24 +365,24 @@
 			key="workflow.wait" /></div>
 		<div class="body" id="workflow-canvas"><c:set var="orderby"
 			value="${param.orderby}" />
-		<form name="workflowForm" action='?' method="post" onsubmit="return submitValid(this, false);">
-         <input type="hidden" name="orderby" value="${orderby}" /> 
+		<form action='?' method="post" onsubmit="return submitValid(false);">
+         <input type="hidden" name="orderby" value="${orderby}" />
          <input type="hidden" name="status" value="${status}" />
          <input type="hidden" name="laststatus" />
          <input type="hidden" name="workflowNodetype" value="${workflowNodetype}"/>
       <c:set var="lastvalue" value='<%=request.getAttribute("laststatus")%>' />
+      <c:set var="resultsPerPage" value="50" />
       <c:set var="offset" value="${param.offset}" />
       <c:set var="listSize">${fn:length(nodeList)}</c:set>
-      <c:set var="extraparams" value="&orderby=${orderby}&status=${status}&workflowNodetype=${workflowNodetype}"/>
 
 		<c:if test="${fn:length(results) > 0}">
-			<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+			<%@ include file="../pages.jsp"%>
 			<%@ include file="workflow_list_table_fragment.jsp"%>
-			<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+			<%@ include file="../pages.jsp"%>
 		</c:if> <c:set var="remark">
 			<fmt:message key="workflow.action.reject.remark" />
 		</c:set> &nbsp;&nbsp;&nbsp; <input type="checkbox" name="checkAll"
-			onclick="checkAllElement(this, 'workflowForm', '')" /> <fmt:message
+			onclick="checkAllElement(this, '')" /> <fmt:message
 			key="workflow.select_all" /> <input type="hidden" name="actionvalue"
 			value="" /> <input type='hidden' id="remark" name="remark"
 			value="[unchanged-item]" /> <br />
