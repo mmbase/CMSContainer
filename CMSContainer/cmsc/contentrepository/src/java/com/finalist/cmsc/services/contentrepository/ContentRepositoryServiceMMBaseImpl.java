@@ -24,6 +24,7 @@ import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.NodetypeBean;
+import com.finalist.cmsc.beans.om.AssetElement;
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.repository.ContentElementUtil;
@@ -262,6 +263,22 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     }
 
 
+    @Override
+    public AssetElement getAssetElement(String elementId) {
+        Cloud cloud = getUserCloud();
+        try {
+           Node node = cloud.getNode(elementId);
+           if (node != null) {
+              return MMBaseNodeMapper.copyNode(node, AssetElement.class);
+           }
+        } catch(NotFoundException e){
+           log.debug("Node not found using element:" + elementId);
+        }
+        
+        return null;
+    }
+
+
     private Cloud getUserCloud() {
         Cloud cloud = CloudUtil.getCloudFromThread();
         if (cloud == null) {
@@ -288,6 +305,25 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
             for (int i = 0; i < l.size(); i++) {
                Node currentNode = l.getNode(i);
                ContentElement e = MMBaseNodeMapper.copyNode(currentNode, ContentElement.class);
+               result.add(e);
+            }
+         }
+      }
+      return result;
+   }
+
+   @Override
+   public List<AssetElement> getAssetElements(String channel, List<String> assettypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,int maxDays) {
+      Cloud cloud = getCloud();
+      List<AssetElement> result = new ArrayList<AssetElement>();
+      if (channel != null) {
+         Node chan = cloud.getNode(channel);
+      
+         if (chan != null) {
+            NodeList l = RepositoryUtil.getCreatedAssets(chan, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
+            for (int i = 0; i < l.size(); i++) {
+               Node currentNode = l.getNode(i);
+               AssetElement e = MMBaseNodeMapper.copyNode(currentNode, AssetElement.class);
                result.add(e);
             }
          }
