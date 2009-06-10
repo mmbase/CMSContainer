@@ -5,6 +5,9 @@
    <form name="<portlet:namespace />form" method="post" target="_parent" action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
       <table class="editcontent">
       
+         <%-- Save button --%>
+         <c:import url="sections/savebutton.jsp" />
+      
          <%-- Portletdefinition display --%>
          <c:import url="sections/definitiondisplay.jsp" />
       
@@ -45,12 +48,10 @@
          <tr>
             <td colspan="2"><fmt:message key="edit_defaults.width" />:</td>
             <td>
-               <cmsc:select var="width">
-                  <cmsc:option value="50px" />
-                  <cmsc:option value="100px" />
-                  <cmsc:option value="110px" />
-                  <cmsc:option value="150px" />
-                  <cmsc:option value="200px" />
+               <cmsc:select var="width" default="110">
+                  <cmsc:option value="50" message="edit_defaults.width.small"/>
+                  <cmsc:option value="110" message="edit_defaults.width.default"/>
+                  <cmsc:option value="150" message="edit_defaults.width.large"/>
                </cmsc:select>
             </td>
          </tr>
