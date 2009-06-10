@@ -119,9 +119,9 @@
                      </mm:compare> 
             <table>
                <tr>
-                  <td style="width:105px"><fmt:message key="searchform.title" /></td>
-                  <td style="width:300px"><html:text property="title" style="width:200px" value="${title}"/></td>
-               <mm:compare referid="mode" value= "basic">
+               <mm:compare referid="mode" value="basic">
+                  <td style="width:105px"><fmt:message key="searchform.searchfortitle" /></td>
+                  <td style="width:230px"><html:text property="title" style="width:200px" value="${title}"/></td>
                   <td style="width:105px"><fmt:message key="searchform.contenttype" /></td>
                   <td>
                      <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
@@ -130,11 +130,15 @@
                      </html:select>                     
                   </td>
                </mm:compare>
+               <mm:compare referid="mode" value="advanced">
+                  <td style="width:105px"><fmt:message key="searchform.title" /></td>
+                  <td style="width:230px"><html:text property="title" style="width:200px" value="${title}"/></td>
+               </mm:compare>
                </tr>
-             <mm:compare referid="mode" value= "advanced">
+             <mm:compare referid="mode" value="advanced">
                <tr>
                   <td><fmt:message key="searchform.keywords" /></td>
-                  <td style="width:300px"><html:text property="keywords" style="width:200px"/></td>
+                  <td style="width:230px"><html:text property="keywords" style="width:200px"/></td>
                   <td style="width:105px"><fmt:message key="searchform.contenttype" /></td>
                   <td>
                      <c:if test="${fn:length(typesList) == 1}" >

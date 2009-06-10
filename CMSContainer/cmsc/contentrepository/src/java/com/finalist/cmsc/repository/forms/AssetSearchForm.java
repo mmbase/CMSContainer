@@ -74,7 +74,11 @@ public class AssetSearchForm extends PagerForm {
    }
 
    public void setTitle(String title) {
-      this.title = title;
+      if (this.title != null) {
+         this.title = title.trim();
+      } else {
+         this.title = title;
+      }
    }
 
    public String getObjectid() {
@@ -82,7 +86,11 @@ public class AssetSearchForm extends PagerForm {
    }
 
    public void setObjectid(String objectid) {
-      this.objectid = objectid;
+      if (this.objectid != null) {
+         this.objectid = objectid.trim();
+      } else {
+	      this.objectid = objectid;
+      }
    }
 
    public String getPersonal() {
