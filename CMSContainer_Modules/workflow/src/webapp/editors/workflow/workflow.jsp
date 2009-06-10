@@ -14,23 +14,23 @@
 		<link href="../css/workflow.css" rel="stylesheet" type="text/css" />
       <c:url value="/editors/workflow/WorkflowTreeStatusAction.do" var="treeStatusAction"/>
 		<script type="text/javascript">
-			function showAssetInfo(assetType, objectnumber) {
-			     var infoURL;
-			     infoURL = '../resources/';
-			     infoURL += assetType;
-			     infoURL += 'info.jsp?objectnumber=';
-			     infoURL += objectnumber;
-			     openPopupWindow(assetType.toLowerCase()+'info', '900', '500', infoURL);
-			  }
-			function showInfo(elementType, objectNumber) {
-				  var assetType = elementType.toLowerCase();
-			     if(assetType == 'attachment' || assetType == 'image' || assetType == 'url'){
-			         showAssetInfo(assetType, objectNumber);
-			     }
-			     else{
-			         openPopupWindow("info", 500, 500, "../repository/showitem.jsp?objectnumber=" + objectNumber);
-			     }
-			  }
+		function showAssetInfo(assetType, objectnumber) {
+            var infoURL;
+            infoURL = '../resources/';
+            infoURL += assetType.substring(0,assetType.length-1);
+            infoURL += 'info.jsp?objectnumber=';
+            infoURL += objectnumber;
+            openPopupWindow(assetType.toLowerCase()+'info', '900', '500', infoURL);
+         }
+       function showInfo(elementType, objectNumber) {
+            var assetType = elementType.toLowerCase();
+            if(assetType == 'attachments' || assetType == 'images' || assetType == 'urls'){
+                showAssetInfo(assetType, objectNumber);
+            }
+            else{
+                openPopupWindow("info", 500, 500, "../repository/showitem.jsp?objectnumber=" + objectNumber);
+            }
+         }
       var treeHandler = {
           toggle: function (oItem) { 
 		      var parentTableId = oItem.id.replace('-plus', '');
