@@ -57,6 +57,13 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
         return -1;
     }
 
+    private int countAssetElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
+        if (channel != null) {
+            return RepositoryUtil.countCreatedAsset(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
+        }
+        return -1;
+    }
+
 	private List<ContentElement> getContentElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
 		List<ContentElement> result = new ArrayList<ContentElement>();
 		if (channel != null) {
@@ -105,6 +112,16 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     }
 
     @Override
+   public int countAssetElements(String channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
+       Cloud cloud = getCloud();
+       if (channel != null) {
+           Node chan = cloud.getNode(channel);
+           return countAssetElements(chan, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
+       }
+       return -1;
+   }
+
+    @Override
     public int countContentElements(String channel, List<String> contenttypes, String orderby, String direction,
           boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
        Cloud cloud = getCloud();
@@ -114,10 +131,30 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
        }
        return -1;
     }
+
+    @Override
+   public int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
+          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+       Cloud cloud = getCloud();
+       if (channel != null) {
+           Node chan = cloud.getNode(channel);
+           return countAssetElements(chan, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
+       }
+       return -1;
+    }
+
    private int countContentElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
       if (channel != null) {
          return RepositoryUtil.countLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
+     }
+     return -1;
+   }
+
+   private int countAssetElements(Node channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      if (channel != null) {
+         return RepositoryUtil.countCreatedAsset(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
      }
      return -1;
    }
