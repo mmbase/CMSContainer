@@ -42,7 +42,7 @@ createDefaultConfig = function() {
     tooltip   : Xinha._lc("Insert/Modify Link"),
     image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-link.png",
     textMode  : false,
-    action    : function(e) {e._insertInlineLink();}
+    action    : function(e) {e._createLink();}
   });
     xinha_config.registerButton({
     id        : "createtable",
@@ -219,7 +219,7 @@ function setDimensionForImages(editor) {
 	}
 }
 
-Xinha.prototype._insertInlineLink = function(link) {
+Xinha.prototype._createLink = function(link) {
 	var editor = this;
 	var outparam = null;
 	if (typeof link == "undefined") {
@@ -345,17 +345,17 @@ Xinha.prototype._insertImage = function(image) {
                 }
                 var img = image;
                 if (!img) {
-                  if ( Xinha.is_ie ) {
-                    var sel = editor._getSelection();
-                    var range = editor._createRange(sel);
-                    editor._doc.execCommand("insertimage", false, param.f_url);
-                    img = range.parentElement();
+                 // if ( Xinha.is_ie ) {
+                  //  var sel = editor._getSelection();
+                 //   var range = editor._createRange(sel);
+                  //  editor._doc.execCommand("insertimage", false, param.f_url);
+                  //  img = range.parentElement();
                     // wonder if this works...
-                    if ( img.tagName.toLowerCase() != "img" ) {
-                      img = img.previousSibling;
-                    }
-                  }
-                  else {
+                 //   if ( img.tagName.toLowerCase() != "img" ) {
+                 //     img = img.previousSibling;
+                 //   }
+                 //  }
+                 //  else {
                     img = document.createElement('img');
                     img.src = param.f_url;
                     editor.insertNodeAtSelection(img);
@@ -363,7 +363,7 @@ Xinha.prototype._insertImage = function(image) {
                       // if the cursor is at the beginning of the document
                       img = range.startContainer.firstChild;
                     }
-                  }
+                //  }
                 } else {
                   img.src = param.f_url;
                 }
