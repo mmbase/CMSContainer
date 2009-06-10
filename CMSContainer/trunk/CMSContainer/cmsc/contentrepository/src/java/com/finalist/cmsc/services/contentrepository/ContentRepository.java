@@ -46,6 +46,18 @@ public class ContentRepository {
    }
 
 
+   public static int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day, int maxDays) {
+      return cService.countAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumbers, year, month, day, maxDays);
+   }
+   public static int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day) {
+      return cService.countAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumbers, year, month, day);
+   }
+
+
    public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day) {
