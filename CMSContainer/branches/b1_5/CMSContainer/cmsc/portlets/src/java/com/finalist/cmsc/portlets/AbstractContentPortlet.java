@@ -236,8 +236,15 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
    protected void setMetaData(RenderRequest req, String elementId) {
       try {
          ContentElement element = ContentRepository.getContentElement(elementId);
-         if (element != null) { //When element not found, skip it.
+         if (element != null && isDetailView(req)) { //When element not found, skip it.
             PortletFragment portletFragment = getPortletFragment(req);
+            portletFragment.addHeaderResource(new MetaHeaderResource(false, "keywords", element.getKeywords()));
+            String description = element.getDescription();
+            if (StringUtils.isBlank(description)) {
+               description = element.getTitle();
+            }
+            portletFragment.addHeaderResource(new MetaHeaderResource(false, "description", description));
+            
             portletFragment.addHeaderResource(new MetaHeaderResource(true, "title", element.getTitle()));
             portletFragment.addHeaderResource(new MetaHeaderResource(true, "subject", element.getKeywords()));
             portletFragment.addHeaderResource(new MetaHeaderResource(true, "date", formatDate(element.getCreationdate())));

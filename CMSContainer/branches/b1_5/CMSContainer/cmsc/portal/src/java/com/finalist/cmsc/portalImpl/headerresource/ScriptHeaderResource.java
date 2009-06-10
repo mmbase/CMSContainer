@@ -1,6 +1,6 @@
 package com.finalist.cmsc.portalImpl.headerresource;
 
-public class ScriptHeaderResource extends HeaderResource {
+public class ScriptHeaderResource implements HeaderResource {
 
    public static final String JAVASCRIPT = "text/javascript";
 
@@ -10,7 +10,6 @@ public class ScriptHeaderResource extends HeaderResource {
 
 
    public ScriptHeaderResource(String type, String src, String script) {
-      super(false);
       this.type = type;
       this.src = src;
       this.script = script;
