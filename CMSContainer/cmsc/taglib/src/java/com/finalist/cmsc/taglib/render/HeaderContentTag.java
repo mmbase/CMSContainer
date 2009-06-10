@@ -10,26 +10,25 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.taglib.render;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 import javax.servlet.jsp.PageContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.finalist.cmsc.beans.om.*;
-import com.finalist.cmsc.portalImpl.headerresource.HeaderResource;
-import com.finalist.cmsc.portalImpl.headerresource.LinkHeaderResource;
-import com.finalist.cmsc.portalImpl.headerresource.MetaHeaderResource;
+import com.finalist.cmsc.portalImpl.headerresource.*;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.taglib.CmscTag;
 import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
 
 /**
- * meta types which stil can be added: "generator" content="" /> "rating"
- * http-equiv="rating" content="general" /> "distribution"
- * http-equiv="distribution" content="global" /> "robots" http-equiv="robots"
- * content="all" /> "revisit-after" http-equiv="revisit-after" content="1 week" />
+ * meta types which stil can be added: 
+ * "generator" http-equiv="generator" content="" /> 
+ * "rating" http-equiv="rating" content="general" /> 
+ * "distribution" http-equiv="distribution" content="global" /> 
+ * "robots" http-equiv="robots" content="all" /> 
+ * "revisit-after" http-equiv="revisit-after" content="1 week" />
  * "country" http-equiv="country" content="netherlands" />
  * 
  * @author freek
@@ -54,69 +53,134 @@ public class HeaderContentTag extends CmscTag {
       if (site != null) {
          String siteLanguage = site.getLanguage();
 
-         ArrayList<HeaderResource> headerResources = new ArrayList<HeaderResource>();
+         List<MetaHeaderResource> metaResources = new ArrayList<MetaHeaderResource>();
+         Set<LinkHeaderResource> linkResources = new HashSet<LinkHeaderResource>();
+         Set<ScriptHeaderResource> scriptResources = new HashSet<ScriptHeaderResource>();
 
          if (item != null) {
-             headerResources.add(new MetaHeaderResource(false, "description", item.getDescription(), siteLanguage, null));
-         }
-         headerResources.add(new MetaHeaderResource(false, "author", site.getCreator(), siteLanguage, null));
-         headerResources.add(new MetaHeaderResource(false, "copyright", site.getRights(), siteLanguage, null));
-         headerResources.add(new MetaHeaderResource(false, "language", siteLanguage, null, "language"));
-         headerResources.add(new MetaHeaderResource(false, "generator", "CMS Container", null, null));
-
-         if (dublin) {
-            headerResources
-                  .add(new LinkHeaderResource(true, "schema.DC", "http://dublincore.org/documents/dces/", null));
-         }
-
-         ScreenTag container = (ScreenTag) findAncestorWithClass(this, ScreenTag.class);
-         if (container != null) {
-            Iterator<PortletFragment> portlets = container.getAllPortlets().iterator();
-            while (portlets.hasNext()) {
-               PortletFragment pf = portlets.next();
-               Collection<HeaderResource> portletResources = pf.getHeaderResources();
-               if (portletResources != null) {
-                  headerResources.addAll(portletResources);
-               }
+            String description = item.getDescription();
+            if (StringUtils.isBlank(description)) {
+               description = item.getTitle();
             }
+            addMeta(metaResources, false, "description", description, siteLanguage, null);
          }
+         addMeta(metaResources, false, "author", site.getCreator(), siteLanguage, null);
+         addMeta(metaResources, false, "copyright", site.getRights(), siteLanguage, null);
+         addMeta(metaResources, false, "language", siteLanguage, null, "language");
+         addMeta(metaResources, false, "generator", "CMS Container", null, null);
+
 
          if (dublin) {
-            headerResources.add(new MetaHeaderResource(true, "format", "text/html"));
-            headerResources.add(new MetaHeaderResource(true, "type", "Collection"));
-            headerResources.add(new MetaHeaderResource(true, "language", siteLanguage));
+            addMeta(metaResources, true, "format", "text/html");
+            addMeta(metaResources, true, "type", "Collection");
+            addMeta(metaResources, true, "language", siteLanguage);
             if (item != null) {
-                headerResources.add(new MetaHeaderResource(true, "title", item.getTitle()));
-                headerResources.add(new MetaHeaderResource(true, "description", item.getDescription()));
+                addMeta(metaResources, true, "title", item.getTitle());
+                addMeta(metaResources, true, "description", item.getDescription());
             }
-            headerResources.add(new MetaHeaderResource(true, "creator", site.getCreator()));
-            headerResources.add(new MetaHeaderResource(true, "publisher", site.getPublisher()));
-            headerResources.add(new MetaHeaderResource(true, "rights", site.getRights()));
-            headerResources.add(new MetaHeaderResource(true, "source", site.getSource()));
+            addMeta(metaResources, true, "creator", site.getCreator());
+            addMeta(metaResources, true, "publisher", site.getPublisher());
+            addMeta(metaResources, true, "rights", site.getRights());
+            addMeta(metaResources, true, "source", site.getSource());
          }
-
-         String header = buildResponseHeader(dublin, headerResources);
+         
+         if (!site.equals(item)) {
+            addPortletHeaders(metaResources, linkResources, scriptResources);
+         }
+         
+         String header = buildResponseHeader(metaResources, linkResources, scriptResources);
          ctx.getOut().print(header);
       }
    }
 
+   private void addMeta(List<MetaHeaderResource> metaResources, boolean dublin, String name, String content, String lang, String httpEquiv){
+      if (StringUtils.isNotBlank(content)) {
+         metaResources.add(new MetaHeaderResource(dublin, name, content, lang, httpEquiv));
+      }
+   }
+   
+   private void addMeta(List<MetaHeaderResource> metaResources, boolean dublin, String name, String content){
+      if (StringUtils.isNotBlank(content)) {
+         metaResources.add(new MetaHeaderResource(dublin, name, content));
+      }
+   }
 
-   private String buildResponseHeader(boolean dublin, Collection<HeaderResource> headerResources) {
+   private void addPortletHeaders(List<MetaHeaderResource> metaResources,
+         Set<LinkHeaderResource> linkResources, Set<ScriptHeaderResource> scriptResources) {
+
+      ScreenTag container = (ScreenTag) findAncestorWithClass(this, ScreenTag.class);
+      if (container != null) {
+         Iterator<PortletFragment> portlets = container.getAllPortlets().iterator();
+         while (portlets.hasNext()) {
+            PortletFragment pf = portlets.next();
+            Collection<HeaderResource> portletResources = pf.getHeaderResources();
+            if (portletResources != null) {
+               for (HeaderResource resource : portletResources) {
+                  if (resource instanceof MetaHeaderResource) {
+                     MetaHeaderResource m = (MetaHeaderResource) resource;
+                     if (m.isDublin()) {
+                        if (dublin) {
+                           mergeMeta(metaResources, m);
+                        }
+                     }
+                     else {
+                        mergeMeta(metaResources, m);
+                     }
+                  }
+                  if (resource instanceof LinkHeaderResource) {
+                     linkResources.add((LinkHeaderResource) resource);
+                  }
+                  if (resource instanceof ScriptHeaderResource) {
+                     scriptResources.add((ScriptHeaderResource) resource);
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   private void mergeMeta(List<MetaHeaderResource> metaResources, MetaHeaderResource m) {
+      int index = metaResources.indexOf(m);
+      if (index >= 0) {
+         metaResources.set(index, m);
+      }
+      else {
+         metaResources.add(m);
+      }
+   }
+
+   private String buildResponseHeader(List<MetaHeaderResource> metaResources,
+         Set<LinkHeaderResource> linkResources, Set<ScriptHeaderResource> scriptResources) {
       StringBuffer header = new StringBuffer();
 
-      HashSet<String> alreadyAdded = new HashSet<String>();
-      for (HeaderResource resource : headerResources) {
-         if (dublin || !resource.isDublin()) {
-            String id = resource.toString();
-
-            if (!alreadyAdded.contains(id)) {
+      for (MetaHeaderResource resource : metaResources) {
+         if (!resource.isDublin()) {
+            resource.render(header);
+            header.append("\n");
+         }
+      }
+      
+      if (dublin) {
+         LinkHeaderResource dublinSchema = new LinkHeaderResource("schema.DC", "http://dublincore.org/documents/dces/", null);
+         dublinSchema.render(header);
+         for (MetaHeaderResource resource : metaResources) {
+            if (resource.isDublin()) {
                resource.render(header);
                header.append("\n");
-               alreadyAdded.add(id);
             }
          }
       }
 
+      for (LinkHeaderResource resource : linkResources) {
+         resource.render(header);
+         header.append("\n");
+      }
+      
+      for (ScriptHeaderResource resource : scriptResources) {
+         resource.render(header);
+         header.append("\n");
+      }
+      
       return header.toString();
    }
 }
