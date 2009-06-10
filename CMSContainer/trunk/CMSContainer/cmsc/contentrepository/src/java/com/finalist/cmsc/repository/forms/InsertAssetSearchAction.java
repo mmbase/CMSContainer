@@ -2,13 +2,9 @@ package com.finalist.cmsc.repository.forms;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.mmapps.modules.cloudprovider.CloudProvider;
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
@@ -19,7 +15,6 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.FieldIterator;
 import org.mmbase.bridge.FieldList;
-import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
@@ -34,27 +29,13 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.resources.forms.QueryStringComposer;
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.services.workflow.Workflow;
-import com.finalist.cmsc.struts.PagerAction;
 
-public class InsertAssetSearchAction extends PagerAction {
+public class InsertAssetSearchAction extends AbstractAssetSearch {
 
-   public static final String GETURL = "geturl";
-
-   public static final String PERSONAL = "personal";
-   public static final String MODE = "mode";
-   public static final String STRICT = "strict";
-   public static final String AUTHOR = "author";
-   public static final String OBJECTID = "objectid";
-   public static final String PARENTCHANNEL = "parentchannel";
-   public static final String ASSETTYPES = "assettypes";
    private static final String SESSION_CREATION = "creation";
 
-   public static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
-
    /**
-    * MMbase logging system
+    * MMBase logging system
     */
    private static final Logger log = Logging.getLoggerInstance(InsertAssetSearchAction.class.getName());
 
@@ -82,9 +63,9 @@ public class InsertAssetSearchAction extends PagerAction {
       }
       if (StringUtils.isNotEmpty(deleteAssetRequest)) {
          if (deleteAssetRequest.startsWith("massDelete:")) {
-            massDeleteAsset(deleteAssetRequest.substring(11));
+            massDeleteAsset(deleteAssetRequest.substring(11), cloud);
          } else {
-            deleteAsset(deleteAssetRequest);
+            deleteAsset(deleteAssetRequest,cloud);
          }
 
          // add a flag to let search result page refresh the channels frame,
@@ -272,64 +253,6 @@ public class InsertAssetSearchAction extends PagerAction {
          request.setAttribute("parentchannel", parentchannel);
       }
       return super.execute(mapping, form, request, response, cloud);
-   }
-
-   private void massDeleteAsset(String deleteAsset) {
-      if (StringUtils.isNotBlank(deleteAsset)) {
-         String[] deleteAssets = deleteAsset.split(",");
-         for (String asset : deleteAssets) {
-            deleteAsset(asset);
-         }
-      }
-   }
-
-   private void deleteAsset(String deleteAssetRequest) {
-      StringTokenizer commandAndNumber = new StringTokenizer(deleteAssetRequest, ":");
-      String command = commandAndNumber.nextToken();
-      String nunmber = commandAndNumber.nextToken();
-
-      if ("moveToRecyclebin".equals(command)) {
-         moveAssetToRecyclebin(nunmber);
-      }
-
-      if ("permanentDelete".equals(command)) {
-         deleteAssetPermanent(nunmber);
-      }
-
-   }
-
-   private void deleteAssetPermanent(String objectnumber) {
-      CloudProvider provider = CloudProviderFactory.getCloudProvider();
-      Cloud cloud = provider.getCloud();
-
-      Node objectNode = cloud.getNode(objectnumber);
-      if (Workflow.hasWorkflow(objectNode)) {
-         // at this time complete is the same as remove
-         Workflow.complete(objectNode);
-      }
-      objectNode.delete(true);
-
-   }
-
-   private void moveAssetToRecyclebin(String nunmber) {
-      CloudProvider provider = CloudProviderFactory.getCloudProvider();
-      Cloud cloud = provider.getCloud();
-
-      Node objectNode = cloud.getNode(nunmber);
-
-      // NodeList channels = RepositoryUtil.getDeletionChannels(objectNode);
-      Node channelNode = RepositoryUtil.getCreationChannel(objectNode);
-      if (channelNode != null) {
-         RepositoryUtil.addAssetDeletionRelation(objectNode, channelNode);
-         RepositoryUtil.removeCreationRelForAsset(objectNode);
-      }
-
-      RepositoryUtil.addAssetToChannel(objectNode, RepositoryUtil.getTrash(cloud));
-
-      // unpublish and remove from workflow
-      Publish.remove(objectNode);
-      Workflow.remove(objectNode);
-      Publish.unpublish(objectNode);
    }
 
 }

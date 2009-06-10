@@ -9,9 +9,6 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProvider;
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -85,9 +82,9 @@ public class ContentSearchAction extends PagerAction {
       request.getSession().setAttribute("title", searchForm.getTitle());
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
          if (deleteContentRequest.startsWith("massDelete:")) {
-            massDeleteContent(deleteContentRequest.substring(11));
+            massDeleteContent(deleteContentRequest.substring(11), cloud);
          } else {
-            deleteContent(deleteContentRequest);
+            deleteContent(deleteContentRequest, cloud);
          }
 
          // add a flag to let search result page refresh the channels frame,
@@ -182,21 +179,15 @@ public class ContentSearchAction extends PagerAction {
 
       // Set some date constraints.
       queryStringComposer.addParameter(ContentElementUtil.CREATIONDATE_FIELD, "" + searchForm.getCreationdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm
-            .getCreationdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm.getCreationdate());
       queryStringComposer.addParameter(ContentElementUtil.PUBLISHDATE_FIELD, "" + searchForm.getPublishdate());
-      SearchUtil
-            .addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
       queryStringComposer.addParameter(ContentElementUtil.EXPIREDATE_FIELD, "" + searchForm.getExpiredate());
       SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.EXPIREDATE_FIELD, searchForm.getExpiredate());
-      queryStringComposer
-            .addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
-            .getLastmodifieddate());
+      queryStringComposer.addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
 
-      // Perhaps we have some more constraints if the nodetype was specified (=>
-      // not
-      // contentelement).
+      // Perhaps we have some more constraints if the nodetype was specified (=> not contentelement).
       if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
          FieldList fields = nodeManager.getFields();
          FieldIterator fieldIterator = fields.fieldIterator();
@@ -223,16 +214,20 @@ public class ContentSearchAction extends PagerAction {
       // Add the title constraint:
       if (StringUtils.isNotEmpty(searchForm.getTitle())) {
 
-         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle().trim());
+         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle());
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
-         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle().trim());
+         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
          SearchUtil.addConstraint(query, titleConstraint);
       }
 
-      searchKey(request, searchForm, nodeManager, queryStringComposer, query);
+      //if in simple search mode, add input to the keyword search too
+      //And add ordinary keywords
+      List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
+      addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
+      
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
-         String stringObjectId = searchForm.getObjectid().trim();
+         String stringObjectId = searchForm.getObjectid();
          Integer objectId = null;
          if (stringObjectId.matches("^\\d+$")) {
             objectId = Integer.valueOf(stringObjectId);
@@ -311,10 +306,8 @@ public class ContentSearchAction extends PagerAction {
       return super.execute(mapping, form, request, response, cloud);
    }
 
-   private void searchKey(HttpServletRequest request, SearchForm searchForm, NodeManager nodeManager,
-         QueryStringComposer queryStringComposer, NodeQuery query) {
+   private List<String> searchKeywords(String mode, SearchForm searchForm) {
       List<String> keywords = null;
-      String mode = request.getParameter(MODE);
       if (StringUtils.isNotEmpty(mode) && ("basic").equals(mode) && StringUtils.isNotEmpty(searchForm.getTitle())) {
          keywords = KeywordUtil.getKeywords(searchForm.getTitle());
       }
@@ -322,13 +315,12 @@ public class ContentSearchAction extends PagerAction {
       if (StringUtils.isNotEmpty(searchForm.getKeywords())) {
          keywords = KeywordUtil.getKeywords(searchForm.getKeywords());
       }
-      if (null != keywords) {
-         addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
-      }
+      return keywords;
    }
 
-   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager,
-         QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
+   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
+      if (keywords == null) return;
+
       queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords());
       Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
       for (String keyword : keywords) {
@@ -337,34 +329,31 @@ public class ContentSearchAction extends PagerAction {
       }
    }
 
-   private void massDeleteContent(String deleteContent) {
+   private void massDeleteContent(String deleteContent, Cloud cloud) {
       if (StringUtils.isNotBlank(deleteContent)) {
          String[] deleteContents = deleteContent.split(",");
          for (String content : deleteContents) {
-            deleteContent(content);
+            deleteContent(content, cloud);
          }
       }
    }
 
-   private void deleteContent(String deleteContentRequest) {
+   private void deleteContent(String deleteContentRequest, Cloud cloud) {
       StringTokenizer commandAndNumber = new StringTokenizer(deleteContentRequest, ":");
       String command = commandAndNumber.nextToken();
-      String nunmber = commandAndNumber.nextToken();
+      String number = commandAndNumber.nextToken();
 
       if ("moveToRecyclebin".equals(command)) {
-         moveContentToRecyclebin(nunmber);
+         moveContentToRecyclebin(number, cloud);
       }
 
       if ("permanentDelete".equals(command)) {
-         deleteContentPermanent(nunmber);
+         deleteContentPermanent(number, cloud);
       }
 
    }
 
-   private void deleteContentPermanent(String objectnumber) {
-      CloudProvider provider = CloudProviderFactory.getCloudProvider();
-      Cloud cloud = provider.getCloud();
-
+   private void deleteContentPermanent(String objectnumber, Cloud cloud) {
       Node objectNode = cloud.getNode(objectnumber);
       if (Workflow.hasWorkflow(objectNode)) {
          // at this time complete is the same as remove
@@ -374,11 +363,8 @@ public class ContentSearchAction extends PagerAction {
 
    }
 
-   private void moveContentToRecyclebin(String nunmber) {
-      CloudProvider provider = CloudProviderFactory.getCloudProvider();
-      Cloud cloud = provider.getCloud();
-
-      Node objectNode = cloud.getNode(nunmber);
+   private void moveContentToRecyclebin(String number, Cloud cloud) {
+      Node objectNode = cloud.getNode(number);
       RepositoryUtil.removeCreationRelForContent(objectNode);
       RepositoryUtil.removeContentFromAllChannels(objectNode);
       RepositoryUtil.addContentToChannel(objectNode, RepositoryUtil.getTrash(cloud));
