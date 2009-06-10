@@ -384,8 +384,7 @@ public final class RepositoryUtil {
     * @return node with channel path
     */
    public static Node getChannelFromPath(Cloud cloud, String path, Node root, boolean useCache) {
-      Node node = TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
-      return node;
+      return TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
    }
 
    /**
@@ -785,9 +784,8 @@ public final class RepositoryUtil {
    }
 
    public static int countCreatedAsset(Node channelNode) {
-      int contentCount = channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
+      return channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
             CREATIONREL, SOURCE);
-      return contentCount;
    }
 
    public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
@@ -816,28 +814,24 @@ public final class RepositoryUtil {
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
+      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
-      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, -1);
-      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, maxDays, null);
-      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, -1, null);
-      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
@@ -957,30 +951,26 @@ public final class RepositoryUtil {
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
+      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
-      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, -1);
-      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, maxDays, null);
-      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
             maxNumber, year, month, day, -1, extraParameters);
-      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
