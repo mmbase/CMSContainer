@@ -60,7 +60,6 @@
             <td colspan="2"><fmt:message key="edit_defaults.orderby" />:</td>
             <td>
                <cmsc:select var="orderby">
-                  <cmsc:option value="" message="edit_defaults.orderby.channelposition" />
                   <cmsc:option value="filename" message="edit_defaults.orderby.filename" />
                   <cmsc:option value="creationdate" message="edit_defaults.orderby.creationdate" />
                </cmsc:select>
