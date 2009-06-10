@@ -12,6 +12,7 @@ package com.finalist.cmsc.services.contentrepository;
 import java.util.List;
 
 import com.finalist.cmsc.beans.NodetypeBean;
+import com.finalist.cmsc.beans.om.AssetElement;
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.services.ServiceManager;
@@ -95,6 +96,17 @@ public class ContentRepository {
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day , int maxDays) {
       return cService.getContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumbers, year, month, day, maxDays);
+   }
+
+   public static AssetElement getAssetElement(String elementId) {
+      return cService.getAssetElement(elementId);
+   }
+
+   public static List<AssetElement> getAssetElements(String channel, List<String> assettypes, String orderby,
+         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
+         int day , int maxDays) {
+      return cService.getAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
             maxNumbers, year, month, day, maxDays);
    }
 }
