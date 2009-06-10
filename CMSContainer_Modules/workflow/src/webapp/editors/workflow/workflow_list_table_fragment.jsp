@@ -114,7 +114,7 @@
          <a href="<cmsc:contenturl number="${number}"/>" target="_blank">
             <img src="../gfx/icons/preview.png" alt="<fmt:message key="workflow.preview.title"/>"
                  title="<fmt:message key="workflow.preview.title"/>"/></a>
-         <a href="javascript:info('${number}')">
+         <a href="javascript:showInfo('<mm:node number="${number}"><mm:nodeinfo type="guitype"/></mm:node>','${number}')">
             <img src="../gfx/icons/info.png" title="<fmt:message key="workflow.info" />"
                  alt="<fmt:message key="workflow.info"/>"/></a>
          <mm:haspage page="/editors/versioning">
