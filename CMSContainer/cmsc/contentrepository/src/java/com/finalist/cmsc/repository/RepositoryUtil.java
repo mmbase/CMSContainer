@@ -807,7 +807,10 @@ public final class RepositoryUtil {
    public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
       NodeQuery query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, maxDays);
+            maxNumber, year, month, day);
+      if(maxDays > 0){
+         SearchUtil.addDayConstraint(query, query.getNodeManager(), AssetElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+      }
       return Queries.count(query);
    }
 
@@ -977,12 +980,6 @@ public final class RepositoryUtil {
          String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
       return createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber,
             year, month, day, null);
-   }
-
-   public static NodeQuery createCreatedAssetQuery(Node channel, List<String> assettypes, String orderby, String direction, 
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      return createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber,
-            year, month, day, maxDays);
    }
 
    public static NodeQuery createCreatedAssetQuery(Node channel, List<String> assettypes, String orderby,
