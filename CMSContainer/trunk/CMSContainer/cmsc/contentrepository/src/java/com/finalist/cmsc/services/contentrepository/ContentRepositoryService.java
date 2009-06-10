@@ -35,6 +35,11 @@ public abstract class ContentRepositoryService extends Service {
          int day);
 
 
+   abstract public int countAssetElements(String channel, List<String> assettypes, String orderby,
+         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
+         int day);
+
+
    abstract public List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day);
@@ -55,6 +60,10 @@ public abstract class ContentRepositoryService extends Service {
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day, int maxDays);
 
+
+   abstract public int countAssetElements(String channel, List<String> assettypes, String orderby,
+         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
+         int day, int maxDays);
 
    abstract List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month,
