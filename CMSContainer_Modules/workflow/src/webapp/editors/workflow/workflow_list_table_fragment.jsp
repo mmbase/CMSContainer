@@ -1,5 +1,9 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.*" %>
+<%@ page import="static com.finalist.cmsc.mmbase.PropertiesUtil.getProperty" %>
 <%@ include file="globals.jsp" %>
+<c:if test="${empty elementsPerPage}">
+   <c:set var="elementsPerPage"><%=getProperty("repository.search.results.per.page")%></c:set>
+</c:if>
 <table>
 <thead>
    <tr>
@@ -42,7 +46,7 @@
 </thead>
 
 <tbody class="hover">
-<mm:list referid="results" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
+<mm:list referid="results" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
 
    <c:if test="${workflowType == 'allcontent' }">
       <mm:field name="workflowitem.type" id="itemType" write="false"/>
@@ -110,7 +114,7 @@
          <a href="<cmsc:contenturl number="${number}"/>" target="_blank">
             <img src="../gfx/icons/preview.png" alt="<fmt:message key="workflow.preview.title"/>"
                  title="<fmt:message key="workflow.preview.title"/>"/></a>
-         <a href="javascript:info('${number}')">
+         <a href="javascript:showInfo('<mm:node number="${number}"><mm:nodeinfo type="guitype"/></mm:node>','${number}')">
             <img src="../gfx/icons/info.png" title="<fmt:message key="workflow.info" />"
                  alt="<fmt:message key="workflow.info"/>"/></a>
          <mm:haspage page="/editors/versioning">
@@ -122,6 +126,15 @@
                     title="<fmt:message key="workflow.icon.versioning.title" />"
                     alt="<fmt:message key="workflow.icon.versioning.title"/>"/></a>
          </mm:haspage>
+         <c:if test="${status != 'published'}">
+           <mm:url page="WorkflowItemDelete.do" id="deleteAction" write="false">
+             <mm:param name="number" value="${number}"/>
+             <mm:param name="returnurl" value="/editors/workflow/${returnAction}?status=${param.status}&workflowNodetype=${param.workflowNodetype}"/>
+           </mm:url>
+           <a href="${deleteAction}" ">
+             <img src="../gfx/icons/delete.png" title="<fmt:message key="workflow.item.delete" />"
+              alt="<fmt:message key="workflow.item.delete"/>"/></a>
+        </c:if>
       </c:if>
    </td>
    <td style="white-space: nowrap;">
