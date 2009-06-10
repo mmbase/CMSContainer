@@ -824,12 +824,24 @@ public final class RepositoryUtil {
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
       NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, null);
+            maxNumber, year, month, day, -1);
+      return elements;
+   }
+
+   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, maxDays, null);
+      return elements;
+   }
+
+   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, -1, null);
       return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays,
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
@@ -837,6 +849,9 @@ public final class RepositoryUtil {
       if(orderby != null && "otype".equals(orderby)){
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
+         if(maxDays > 0){
+            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
@@ -848,6 +863,9 @@ public final class RepositoryUtil {
       }else {
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
+         if(maxDays > 0){
+            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -947,12 +965,26 @@ public final class RepositoryUtil {
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
       NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, null);
+            maxNumber, year, month, day, -1);
       return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, maxDays, null);
+      return elements;
+   }
+
+   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, -1, extraParameters);
+      return elements;
+   }
+
+   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays, 
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
@@ -960,6 +992,9 @@ public final class RepositoryUtil {
       if(orderby != null && "otype".equals(orderby)){
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
+         if(maxDays > 0){
+            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
@@ -971,6 +1006,9 @@ public final class RepositoryUtil {
       }else {
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
+         if(maxDays > 0){
+            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -1460,14 +1498,6 @@ public final class RepositoryUtil {
          SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
       }
       return Queries.count(query);
-   }
-   
-   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
-      if(maxDays > 0){
-         SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-      }
-      return query.getNodeManager().getList(query);
    }
    
    /**
