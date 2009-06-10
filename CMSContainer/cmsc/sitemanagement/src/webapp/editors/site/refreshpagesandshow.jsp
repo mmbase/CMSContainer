@@ -11,8 +11,37 @@
 <html:html xhtml="true">
 	<cmscedit:head title="pagerefresh.title">
 		<script type="text/javascript">
+			function existFrameName(name, win, parentcall) {
+				if (!win) {
+					if (!refreshFrame(name, window)) {
+						return false;
+					}
+					else {
+						return true;
+					}
+				}
+				if (win.name == name) {
+					return true;
+				} else {
+					for (var i = 0; i < win.frames.length; i++) {
+						if(refreshFrame(name, win.frames[i], true)) {
+							return true;
+						}
+					}
+					if (win.parent && win != parent && !parentcall) {
+						return refreshFrame(name, win.parent);
+					}
+					if (win.opener) {
+						return refreshFrame(name, win.opener);
+					}
+					return false;
+				}
+			}
+			
 			function refreshPages() {
-				refreshFrame('pages');
+				if(existFrameName('pages')){
+					refreshFrame('pages');
+				}
 				if (window.opener) {
 					window.close();
 				}
