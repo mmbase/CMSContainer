@@ -102,7 +102,11 @@ public class Gallery2Portlet extends AbstractContentPortlet  {
       setPortletParameter(portletId,MAX_DAYS,request.getParameter(MAX_DAYS));
       setPortletParameter(portletId, CONTENTELEMENT, request.getParameter(CONTENTELEMENT));
       setPortletParameter(portletId, WIDTH, request.getParameter(WIDTH));
-      setPortletParameter(portletId, COLUMN, request.getParameter(COLUMN));
+      String column = request.getParameter(COLUMN);
+      if(column != null){
+         column = column.trim();
+      }
+      setPortletParameter(portletId, COLUMN, column);
 
       super.saveParameters(request, portletId);
    }
