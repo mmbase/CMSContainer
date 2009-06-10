@@ -97,7 +97,7 @@
       </div>
    </c:if>
    
-   <div class="editor" style="height:555px">
+   <div class="editor" style="height:500px">
       <c:choose>
          <c:when test="${action eq 'search'}">
             <mm:import id="formAction">/editors/resources/AttachmentAction</mm:import>

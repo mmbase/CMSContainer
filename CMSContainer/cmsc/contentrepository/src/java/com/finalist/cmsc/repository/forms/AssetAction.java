@@ -92,7 +92,7 @@ public class AssetAction extends MMBaseAction {
       }
 
       // Set the maximum result size.
-      String resultsPerPage = PropertiesUtil.getProperty(AssetSearchAction.REPOSITORY_SEARCH_RESULTS_PER_PAGE);
+      String resultsPerPage = PropertiesUtil.getProperty(AbstractAssetSearch.REPOSITORY_SEARCH_RESULTS_PER_PAGE);
       int maxNumber = 25;
       if (resultsPerPage != null && resultsPerPage.matches("\\d+")) {
          maxNumber = Integer.parseInt(resultsPerPage);
