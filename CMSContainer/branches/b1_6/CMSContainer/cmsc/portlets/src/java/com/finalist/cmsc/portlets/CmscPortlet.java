@@ -515,6 +515,18 @@ public class CmscPortlet extends GenericPortlet {
       }
    }
 
+   protected boolean isDetailView(RenderRequest req) {
+      PortletPreferences preferences = req.getPreferences();
+      String viewId = preferences.getValue(PortalConstants.CMSC_OM_VIEW_ID, null);
+      if (StringUtils.isNotEmpty(viewId)) {
+         View view = SiteManagement.getView(Integer.valueOf(viewId));
+         if (view != null) {
+            return view.isDetailsupport();
+         }
+      }
+      return false;
+   }
+   
    protected void doPreview(RenderRequest req, RenderResponse res) throws IOException,
          PortletException {
       doInclude("preview", null, req, res);
