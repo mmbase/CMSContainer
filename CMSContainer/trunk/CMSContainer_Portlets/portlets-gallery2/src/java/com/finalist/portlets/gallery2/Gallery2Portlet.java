@@ -10,6 +10,7 @@
 package com.finalist.portlets.gallery2;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -24,6 +25,7 @@ import javax.portlet.RenderResponse;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.portlets.ContentChannelPortlet;
+import com.finalist.cmsc.services.contentrepository.ContentRepository;
 
 
 /**
@@ -64,7 +66,7 @@ public class Gallery2Portlet extends ContentChannelPortlet {
 
    @Override
    protected void doView(RenderRequest req, RenderResponse res) throws PortletException, IOException {
-      addExtraSettings(req);
+      addExtraAttributes(req);
       super.doView(req, res);
    }
 
@@ -76,11 +78,22 @@ public class Gallery2Portlet extends ContentChannelPortlet {
    }
 
 
-   protected void addExtraSettings(RenderRequest req) {
+   protected void addExtraAttributes(RenderRequest req) {
       PortletPreferences preferences = req.getPreferences();
       req.setAttribute(CONTENTELEMENT, preferences.getValue(CONTENTELEMENT, null));
       req.setAttribute(WIDTH, preferences.getValue(WIDTH, WIDTH_ATTR_DEFAULT));
       req.setAttribute(COLUMN, preferences.getValue(COLUMN, null));
+   }
+
+
+
+   @Override
+   protected int countContentElements(RenderRequest req, List<String> assettypes, String channel, int offset,
+         String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,
+         boolean useLifecycleBool, int maxDays) {
+      int totalItems = ContentRepository.countAssetElements(channel, assettypes, orderby, direction,
+            useLifecycleBool, archive, offset, elementsPerPage, year, month, day, maxDays);
+      return totalItems;
    }
 
 }
