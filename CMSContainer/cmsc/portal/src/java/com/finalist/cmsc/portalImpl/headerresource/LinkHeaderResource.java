@@ -5,15 +5,14 @@ package com.finalist.cmsc.portalImpl.headerresource;
  * 
  * @author freek
  */
-public class LinkHeaderResource extends HeaderResource {
+public class LinkHeaderResource implements HeaderResource {
 
    private String rel;
    private String href;
    private String type;
 
 
-   public LinkHeaderResource(boolean dublin, String rel, String href, String type) {
-      super(dublin);
+   public LinkHeaderResource(String rel, String href, String type) {
       this.rel = rel;
       this.href = href;
       this.type = type;
