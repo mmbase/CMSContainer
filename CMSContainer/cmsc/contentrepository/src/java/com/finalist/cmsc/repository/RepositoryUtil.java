@@ -804,6 +804,13 @@ public final class RepositoryUtil {
       return Queries.count(query);
    }
 
+   public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      NodeQuery query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, maxDays);
+      return Queries.count(query);
+   }
+
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
       NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
@@ -970,6 +977,12 @@ public final class RepositoryUtil {
          String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
       return createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber,
             year, month, day, null);
+   }
+
+   public static NodeQuery createCreatedAssetQuery(Node channel, List<String> assettypes, String orderby, String direction, 
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      return createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber,
+            year, month, day, maxDays);
    }
 
    public static NodeQuery createCreatedAssetQuery(Node channel, List<String> assettypes, String orderby,
