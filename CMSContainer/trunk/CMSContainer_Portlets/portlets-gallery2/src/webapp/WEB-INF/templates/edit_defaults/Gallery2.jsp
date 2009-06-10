@@ -4,9 +4,27 @@
 <div class="portlet-config-canvas">
    <form name="<portlet:namespace />form" method="post" target="_parent" action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
       <table class="editcontent">
-      
+      <script type="text/javascript">
+         function validateColumn(){
+            var column = document.forms[0].column.value;
+            if(!/^\s*[1-9]\d*\s*$/.test(column)){
+               alert("Column value must an integer greater than 0.");
+               document.forms[0].column.focus();
+               return false;
+            } else {
+               document.forms[0].column.value = column;
+               return true;
+            }
+         }
+      </script>
          <%-- Save button --%>
-         <c:import url="sections/savebutton.jsp" />
+         <tr>
+            <td colspan="3">
+               <a href="javascript:document.forms['<portlet:namespace />form'].submit()" class="button" onclick="return validateColumn();">
+                  <img src="<cmsc:staticurl page='/editors/gfx/icons/save.png'/>" alt=""/> <fmt:message key="edit_defaults.save" />
+               </a>
+            </td>
+         </tr>
       
          <%-- Portletdefinition display --%>
          <c:import url="sections/definitiondisplay.jsp" />
@@ -86,7 +104,13 @@
          </tr>
       
          <%-- Save button --%>
-         <c:import url="sections/savebutton.jsp" />
+         <tr>
+            <td colspan="3">
+               <a href="javascript:document.forms['<portlet:namespace />form'].submit()" class="button" onclick="return validateColumn();">
+                  <img src="<cmsc:staticurl page='/editors/gfx/icons/save.png'/>" alt=""/> <fmt:message key="edit_defaults.save" />
+               </a>
+            </td>
+         </tr>
          
       </table>
    </form>
