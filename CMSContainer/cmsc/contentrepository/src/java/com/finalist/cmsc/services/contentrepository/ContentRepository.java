@@ -98,11 +98,7 @@ public class ContentRepository {
       return cService.getContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumbers, year, month, day, maxDays);
    }
-
-   public static AssetElement getAssetElement(String elementId) {
-      return cService.getAssetElement(elementId);
-   }
-
+   
    public static List<AssetElement> getAssetElements(String channel, List<String> assettypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day , int maxDays) {
