@@ -316,7 +316,9 @@ Xinha.prototype._createLink = function(link) {
                         a.removeAttribute("relationID");
                   }
             }
-		editor.selectNodeContents(a);
+		   if(!Xinha.is_ie){
+            editor.selectNodeContents(a);
+         }
 		editor.updateToolbar();
 	},
 	outparam);
