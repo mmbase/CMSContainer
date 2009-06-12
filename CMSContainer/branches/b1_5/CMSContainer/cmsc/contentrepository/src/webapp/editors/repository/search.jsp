@@ -355,7 +355,7 @@
                   <th><a href="javascript:orderBy('otype')" class="headerlink" ><fmt:message key="locate.typecolumn" /></a></th>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
                   <th><fmt:message key="locate.creationchannelcolumn" /></th>
-                  <th><a href="javascript:orderBy('creator')" class="headerlink" ><fmt:message key="locate.authorcolumn" /></th>
+                  <th><a href="javascript:orderBy('lastmodifier')" class="headerlink" ><fmt:message key="locate.editorcolumn" /></th>
                   <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifiedcolumn" /></th>
                   <th><a href="javascript:orderBy('number')" class="headerlink" ><fmt:message key="locate.numbercolumn" /></th>
                   <th></th>
@@ -387,8 +387,6 @@
                </mm:compare>
             </mm:relatednodes>
 
-
-
             <tr <mm:even inverse="true">class="swap"</mm:even>>
                <td style="white-space: nowrap;">
                <cmsc:rights nodeNumber="${creationRelNumber}" var="rights"/>
@@ -405,14 +403,14 @@
                </mm:compare>    
               
                 
-                 <%-- also show the edit icon when we return from an edit wizard! --%>
-                  <mm:write referid="action" jspvar="action" write="false"/>
-                  <c:if test="${action == 'search' || action == 'save' || action == 'cancel'}">
-                      <a href="<mm:url page="../WizardInitAction.do">
-                          <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
-                          <mm:param name="returnurl" value="/editors/repository/SearchAction.do${geturl}" />
-                      </mm:url>">
-                         <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
+              <%-- also show the edit icon when we return from an edit wizard! --%>
+               <mm:write referid="action" jspvar="action" write="false"/>
+               <c:if test="${action == 'search' || action == 'save' || action == 'cancel'}">
+                   <a href="<mm:url page="../WizardInitAction.do">
+                       <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
+                       <mm:param name="returnurl" value="/editors/repository/SearchAction.do${geturl}" />
+                   </mm:url>">
+                      <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
                </c:if>
                 
                <mm:compare referid="action" value="select">
