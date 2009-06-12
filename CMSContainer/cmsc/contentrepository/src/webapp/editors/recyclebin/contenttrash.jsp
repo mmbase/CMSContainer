@@ -88,7 +88,7 @@
                                              <th style="width: 56px;"></th>
                                              <th style="width: 68px;"><a href="contenttrash.jsp?sortBy=otype&direction=${direction}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
                                              <th><a href="contenttrash.jsp?sortBy=title&direction=${direction}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
-                                             <th style="width: 50px;"><a href="contenttrash.jsp?sortBy=creator&direction=${direction}" class="headerlink"><fmt:message key="locate.authorcolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifier&direction=${direction}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
                                              <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifieddate&direction=${direction}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
                                              <th style="width: 60px;"><a href="contenttrash.jsp?sortBy=number&direction=${direction}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
                                           </tr>
@@ -109,7 +109,12 @@
                                        <mm:field name="title"/>
                                     </td>
                                     <td>
-                                       <mm:field name="lastmodifier" />
+                                       <mm:field name="lastmodifier" jspvar="lastmodifier" write="false"/>
+                                       <mm:listnodes type="user" constraints="username = '${lastmodifier}'">
+                                          <c:set var="lastmodifierFull"><mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /></c:set>
+                                          <c:if test="${lastmodifierFull != ''}"><c:set var="lastmodifier" value="${lastmodifierFull}"/></c:if>
+                                       </mm:listnodes>
+                                       ${lastmodifier}
                                     </td>
                                     <td nowrap>
                                        <mm:field name="lastmodifieddate"><cmsc:dateformat displaytime="true" /></mm:field>
