@@ -89,7 +89,7 @@
                                              <th style="width: 56px;"></th>
                                              <th style="width: 68px;"><a href="assettrash.jsp?sortBy=otype&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
                                              <th><a href="assettrash.jsp?sortBy=title&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
-                                             <th style="width: 50px;"><a href="assettrash.jsp?sortBy=creator&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.authorcolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="assettrash.jsp?sortBy=lastmodifier&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
                                              <th style="width: 120px;"><a href="assettrash.jsp?sortBy=lastmodifieddate&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
                                              <th style="width: 60px;"><a href="assettrash.jsp?sortBy=number&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
                                           </tr>
@@ -106,16 +106,21 @@
                                     <td>
                                       <mm:nodeinfo type="guitype"/>
                                     </td>
-            <td style="white-space: nowrap;" onMouseDown="objClick(this);">
-               <c:set var="assettype" ><mm:nodeinfo type="guitype"/></c:set>
-               <mm:field id="title" write="false" name="title"/>
-               <c:if test="${fn:length(title) > 50}">
-                  <c:set var="title">${fn:substring(title,0,49)}...</c:set>
-               </c:if>
-               ${title}
-            </td>
+                                    <td style="white-space: nowrap;" onMouseDown="objClick(this);">
+                                       <c:set var="assettype" ><mm:nodeinfo type="guitype"/></c:set>
+                                       <mm:field id="title" write="false" name="title"/>
+                                       <c:if test="${fn:length(title) > 50}">
+                                          <c:set var="title">${fn:substring(title,0,49)}...</c:set>
+                                       </c:if>
+                                       ${title}
+                                    </td>
                                     <td>
-                                       <mm:field name="lastmodifier" />
+                                       <mm:field name="lastmodifier" jspvar="lastmodifier" write="false"/>
+                                       <mm:listnodes type="user" constraints="username = '${lastmodifier}'">
+                                          <c:set var="lastmodifierFull"><mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /></c:set>
+                                          <c:if test="${lastmodifierFull != ''}"><c:set var="lastmodifier" value="${lastmodifierFull}"/></c:if>
+                                       </mm:listnodes>
+                                       ${lastmodifier}
                                     </td>
                                     <td nowrap>
                                        <mm:field name="lastmodifieddate"><cmsc:dateformat displaytime="true" /></mm:field>
