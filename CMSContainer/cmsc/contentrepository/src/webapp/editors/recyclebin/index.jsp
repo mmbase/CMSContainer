@@ -73,7 +73,7 @@
                                              <th style="width: 56px;"></th>
                                              <th style="width: 68px;"><a href="index.jsp?sortBy=otype&direction=${direction}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
                                              <th><a href="index.jsp?sortBy=title&direction=${direction}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
-                                             <th style="width: 50px;"><a href="index.jsp?sortBy=creator&direction=${direction}" class="headerlink"><fmt:message key="locate.authorcolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="index.jsp?sortBy=lastmodifier&direction=${direction}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
                                              <th style="width: 120px;"><a href="index.jsp?sortBy=lastmodifieddate&direction=${direction}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
                                              <th style="width: 60px;"><a href="index.jsp?sortBy=number&direction=${direction}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
                                           </tr>
@@ -84,7 +84,7 @@
                                  <tr <mm:even inverse="true">class="swap"</mm:even>>
                                     <td nowrap>
                                     <a href="javascript:info('<mm:field name="number" />')"><img src="../gfx/icons/info.png" width="16" height="16" alt="<fmt:message key="recyclebin.info" />" title="<fmt:message key="recyclebin.info" />"/></a>
-                                    <a href="javascript:permanentDelete('<mm:field name="number" />', '<fmt:message key="recyclebin.removeconfirm" />', '${offset}');"><img src="../gfx/icons/delete.png" width="16" height="16" alt="<fmt:message key="recyclebin.remove" />" title="<fmt:message key="recyclebin.remove" />"/></a>
+                                    <a href="javascript:permanentDelete('<mm:field name="number" />','<fmt:message key="recyclebin.removeconfirm" />','${offset}');"><img src="../gfx/icons/delete.png" width="16" height="16" alt="<fmt:message key="recyclebin.remove" />" title="<fmt:message key="recyclebin.remove" />"/></a>
                                    <% if (RepositoryUtil.hasDeletionChannels(node)) { %>
                                        <a href="javascript:restore('<mm:field name="number" />', '${offset}');"><img src="../gfx/icons/restore.png" width="16" height="16" alt="<fmt:message key="recyclebin.restore" />" title="<fmt:message key="recyclebin.restore" />"/></a>
                                      <% } %>
@@ -93,7 +93,14 @@
                                          <mm:nodeinfo type="guitype"/>
                                        </td>
                                        <td><mm:field name="title"/></td>
-                                       <td><mm:field name="lastmodifier" /></td>
+                                       <td>
+                                       <mm:field name="lastmodifier" jspvar="lastmodifier" write="false"/>
+                                       <mm:listnodes type="user" constraints="username = '${lastmodifier}'">
+                                          <c:set var="lastmodifierFull"><mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /></c:set>
+                                          <c:if test="${lastmodifierFull != ''}"><c:set var="lastmodifier" value="${lastmodifierFull}"/></c:if>
+                                       </mm:listnodes>
+                                       ${lastmodifier}
+                                       </td>
                                     <td nowrap><mm:field name="lastmodifieddate"><cmsc:dateformat displaytime="true" /></mm:field></td>
                                     <td><mm:field name="number"/></td>
                                  </tr>
