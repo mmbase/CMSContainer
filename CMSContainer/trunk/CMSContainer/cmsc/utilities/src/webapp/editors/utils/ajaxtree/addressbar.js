@@ -29,7 +29,7 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
   onComplete: function(request) {
   	try {
 		this.options.array = new Array(0);
-		if (request.responseXML) {
+		if (request.responseXML && request.responseXML.documentElement) {
 			var optionsXml = request.responseXML.getElementsByTagName("options")[0];
 			var options = optionsXml.childNodes;
 			for (var i = 0 ; i < options.length ; i++) {
@@ -42,7 +42,7 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
     	}
 	}
 	catch(e) {
-		alert("ERROR: AddressBar.onComplete ("+request.responseText+")");
+		alert("ERROR: AddressBar.onComplete ("+request.responseXML+")");
 	}
   },
   setOptions: function(options) {
