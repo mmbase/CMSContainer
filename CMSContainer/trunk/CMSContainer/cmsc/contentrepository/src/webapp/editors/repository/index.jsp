@@ -4,6 +4,7 @@
 <%@page import="com.finalist.cmsc.repository.RepositoryUtil"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <mm:import externid="channel" from="parameters" />
+<mm:import externid="itemtype" from="parameters" />
 <mm:import externid="contentnumber" from="parameters" />
 
 <mm:cloud loginpage="../login.jsp">
@@ -16,9 +17,16 @@
       <mm:node referid="channel">
          <mm:nodeinfo type="type" jspvar="nodetype" write="false"/>
          <c:if test="${nodetype == 'contentchannel'}">
-            <mm:url page="/editors/repository/Content.do" id="contenturl" write="false" >
-               <mm:param name="parentchannel" value="${channel}"/>
-            </mm:url>
+            <c:if test="${itemtype == 'content'}">
+               <mm:url page="/editors/repository/Content.do?type=content" id="contenturl" write="false" >
+                  <mm:param name="parentchannel" value="${channel}"/>
+               </mm:url>
+            </c:if>
+            <c:if test="${itemtype == 'asset'}">
+               <mm:url page="/editors/repository/Asset.do?type=asset" id="contenturl" write="false" >
+                  <mm:param name="parentchannel" value="${channel}"/>
+               </mm:url>
+            </c:if>
          </c:if>
          <c:if test="${nodetype == 'collectionchannel'}">
             <mm:url page="/editors/repository/ChannelEdit.do" id="contenturl" write="false" >
