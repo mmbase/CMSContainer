@@ -99,10 +99,8 @@ html>.portlet-config-canvas
 }
 
 .portlet-mode-canvas {
-   z-index: 2000;
    background-color: #ffffff;
    border: 1px solid black;
-   position: relative;
    padding: 1px;
    text-align: left;
    font-size: 7pt;
@@ -112,6 +110,7 @@ html>.portlet-config-canvas
 }
 
 .portlet-header-canvas {
+	z-index: 2000;
    position: absolute;
    text-align: left;
    width: auto;
