@@ -140,10 +140,10 @@ function writeDocument(doc, div, parentdocument) {
 
 function showInfo(id) {
    document.getElementById('portlet-info-'+id).style.display = 'block';
-   document.getElementById('portlet-mode-'+id).style.zIndex = 2001;
+   document.getElementById('portlet-header-'+id).style.zIndex = 2001;
 }
 
 function hideInfo(id) {
    document.getElementById('portlet-info-'+id).style.display = 'none';
-   document.getElementById('portlet-mode-'+id).style.zIndex = 2000;
+   document.getElementById('portlet-header-'+id).style.zIndex = 2000;
 }
