@@ -124,8 +124,8 @@ function writeDocument(doc, div, parentdocument) {
     html = "<html>\n";
     html += "<head>\n";
     html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
-   html += "<script type='text/javascript' src='" + javascriptWindow + "'></script>"
-   html += "<link rel='stylesheet' type='text/css' href='" + cssPortaledit + "' />";
+    html += "<script type='text/javascript' src='" + javascriptWindow + "'></script>"
+    html += "<link rel='stylesheet' type='text/css' href='" + cssPortaledit + "' />";
     html += "</head>\n";
     html += "<body>\n";
     html +=   div.innerHTML;
@@ -157,10 +157,10 @@ function getHeadElement(doc) {
 
 function showInfo(id) {
    document.getElementById('portlet-info-'+id).style.display = 'block';
-   document.getElementById('portlet-mode-'+id).style.zIndex = 2001;
+   document.getElementById('portlet-header-'+id).style.zIndex = 2001;
 }
 
 function hideInfo(id) {
    document.getElementById('portlet-info-'+id).style.display = 'none';
-   document.getElementById('portlet-mode-'+id).style.zIndex = 2000;
+   document.getElementById('portlet-header-'+id).style.zIndex = 2000;
 }
