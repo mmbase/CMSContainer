@@ -1,4 +1,5 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.*" %>
+<%@ page import="static com.finalist.cmsc.repository.RepositoryUtil.getPathToRootString" %>
 <%@ include file="globals.jsp" %>
 <table>
 <thead>
@@ -143,8 +144,17 @@
       </td>
    </c:if>
    <c:if test="${workflowType == 'content' || workflowType == 'asset' || workflowType == 'allcontent'}">
+      <c:set var="itemtype">
+	     <c:if test="${workflowType == 'allcontent'}" >content</c:if> 
+	     <c:if test="${workflowType == 'content'}" >content</c:if> 
+	     <c:if test="${workflowType == 'asset'}" >asset</c:if> 		 
+	  </c:set>
       <td style="white-space: nowrap;">
-         <mm:field name="contentchannel.name"/>
+	     <c:set var="channelId" ><mm:field name="contentchannel.number"/></c:set>
+	     <a href='../repository/index.jsp?channel=${channelId}&itemtype=${itemtype}' 
+	        title='<%=getPathToRootString(cloud.getNode((String)pageContext.getAttribute("channelId")))%>' >
+             <mm:field name="contentchannel.name"/>
+	     </a>
       </td>
    </c:if>
    <td>
