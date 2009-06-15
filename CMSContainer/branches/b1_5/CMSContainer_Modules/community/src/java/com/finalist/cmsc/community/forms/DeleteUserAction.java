@@ -8,6 +8,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.finalist.cmsc.community.CommunityManager;
+
 /**
  * Delete a Community user
  * 
@@ -49,6 +51,7 @@ public class DeleteUserAction extends AbstractCommunityAction {
          Long authId = Long.valueOf(authenticationId);
          getPersonService().deletePersonByAuthenticationId(authId);
          getAuthenticationService().deleteAuthentication(authId);
+         CommunityManager.notify(authId);
       }
    }
 }
