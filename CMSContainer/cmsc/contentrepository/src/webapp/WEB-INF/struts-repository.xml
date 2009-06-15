@@ -141,6 +141,9 @@
 
       <!-- ==== Resources ==== -->
 
+	  <action path="/editors/repository/forms/ChannelRetrieve" type="com.finalist.cmsc.repository.forms.ChannelRetrieve"
+          scope="request" unknown="false" validate="false">
+      </action>
       <action path="/editors/resources/ImageInitAction" type="com.finalist.cmsc.resources.forms.ImageInitAction"
          name="ImageForm" scope="request" unknown="false" validate="false">
          <forward name="searchoptions" path="/editors/resources/imagesearch.jsp" redirect="false" />

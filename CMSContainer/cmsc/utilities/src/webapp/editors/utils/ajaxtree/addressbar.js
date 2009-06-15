@@ -11,15 +11,15 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
 
   getUpdatedChoices: function() {
       if (this.getToken().indexOf('/') < 0 || this.getToken().substring(this.getToken().length - '/'.length) == '/') {
-	    entry = encodeURIComponent(this.options.paramName) + '=' + 
+	    entry = encodeURIComponent(this.options.paramName) + '=' +
 	      encodeURIComponent(this.getToken());
 
 	    this.options.parameters = this.options.callback ?
 	      this.options.callback(this.element, entry) : entry;
-	
-	    if(this.options.defaultParams) 
+
+	    if(this.options.defaultParams)
 	      this.options.parameters += '&' + this.options.defaultParams;
-	
+
 	    new Ajax.Request(this.url, this.options);
 	}
 	else {
@@ -29,7 +29,7 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
   onComplete: function(request) {
   	try {
 		this.options.array = new Array(0);
-		if (request.responseXML) {
+		if (request.responseXML && request.responseXML.documentElement) {
 			var optionsXml = request.responseXML.getElementsByTagName("options")[0];
 			var options = optionsXml.childNodes;
 			for (var i = 0 ; i < options.length ; i++) {
@@ -58,20 +58,20 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
         var entry     = instance.getToken();
         var count     = 0;
 
-        for (var i = 0; i < instance.options.array.length &&  
-          ret.length < instance.options.choices ; i++) { 
+        for (var i = 0; i < instance.options.array.length &&
+          ret.length < instance.options.choices ; i++) {
 
           var elem = instance.options.array[i];
-          var foundPos = instance.options.ignoreCase ? 
-            elem.toLowerCase().indexOf(entry.toLowerCase()) : 
+          var foundPos = instance.options.ignoreCase ?
+            elem.toLowerCase().indexOf(entry.toLowerCase()) :
             elem.indexOf(entry);
 
           while (foundPos != -1) {
-            if (foundPos == 0 && elem.length != entry.length) { 
-              ret.push("<li><strong>" + elem.substr(0, entry.length) + "</strong>" + 
+            if (foundPos == 0 && elem.length != entry.length) {
+              ret.push("<li><strong>" + elem.substr(0, entry.length) + "</strong>" +
                 elem.substr(entry.length) + "</li>");
               break;
-            } else if (entry.length >= instance.options.partialChars && 
+            } else if (entry.length >= instance.options.partialChars &&
               instance.options.partialSearch && foundPos != -1) {
               if (instance.options.fullSearch || /\s/.test(elem.substr(foundPos-1,1))) {
                 partial.push("<li>" + elem.substr(0, foundPos) + "<strong>" +
@@ -81,8 +81,8 @@ Object.extend(Object.extend(AddressBar.prototype, Autocompleter.Base.prototype),
               }
             }
 
-            foundPos = instance.options.ignoreCase ? 
-              elem.toLowerCase().indexOf(entry.toLowerCase(), foundPos + 1) : 
+            foundPos = instance.options.ignoreCase ?
+              elem.toLowerCase().indexOf(entry.toLowerCase(), foundPos + 1) :
               elem.indexOf(entry, foundPos + 1);
 
           }
