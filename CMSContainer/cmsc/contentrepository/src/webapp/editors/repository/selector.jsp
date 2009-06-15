@@ -14,9 +14,10 @@
       <link href="<cmsc:staticurl page='/editors/newsletter/styles/newsletter.css'/>" type="text/css" rel="stylesheet" />
    </mm:haspage>
 
+   <c:url value="/editors/repository/forms/ChannelRetrieve.do" var="channelRetrieve"/>
    <script type="text/javascript" src="../utils/ajaxtree/ajaxtree.js"></script>
    <script type="text/javascript" src="../utils/ajaxtree/addressbar.js"></script>
-
+   <script type="text/javascript" src="../../js/prototype.js"></script>
    <script type="text/javascript">
       ajaxTreeConfig.resources = '../utils/ajaxtree/images/';
       ajaxTreeConfig.url = '<mm:url page="Navigator.do" />';
@@ -52,6 +53,28 @@
       function doSearch() {
          clearDefaultSearchText('<fmt:message key="selector.search.term" />');
          document.forms['searchForm'].submit();
+      }
+
+      function validatePath(){
+    	   var path = document.getElementById('addressbar').value;
+    	   new Ajax.Request(
+                   "${channelRetrieve}",
+                   {
+                	    method:'put',
+                      parameters: 'quicksearch=' + path,
+                      onComplete: setHref,
+                      asynchronous : false
+                   }
+                );
+      }
+      function setHref(response){
+    	    var targetChannel = response.responseText;
+          if(targetChannel != null && targetChannel != '' && targetChannel != "notfound"){
+             document.getElementById('validatePath').href = "Content.do?parentchannel="+targetChannel+"&direction=down";
+          }
+          else{
+            document.getElementById('validatePath').href = "SearchInitAction.do?index=yes";
+          }
       }
    </script>
 
@@ -114,12 +137,10 @@
                   <mm:field name="path" jspvar="channelPath" write="false" />
                </mm:node>
             </c:if>
-            <html:form action="/editors/repository/QuickSearchAction" target="bottompane" styleId="addressBarForm">
                <html:text property="path" value="${channelPath}" styleId="addressbar"/>
-            </html:form>
          </div>
          <div class="search_form_options">
-            <a href="#" class="button" onclick="getElementById('addressBarForm').submit()"> <fmt:message key="selector.search" /> </a>
+            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"> <fmt:message key="selector.search" /> </a>
          </div>
 
          <div id="addressbar_choices" class="addressbar"></div>

@@ -76,12 +76,6 @@
          <forward name="success" path="/editors/repository/selector.jsp" redirect="false" />
       </action>
 
-      <action path="/editors/repository/QuickSearchAction" type="com.finalist.cmsc.repository.forms.QuickSearchAction" 
-         name="QuickSearchForm" scope="request" input="/editors/repository/Navigator.do" 
-         unknown="false" validate="false">
-         <forward name="success" path="/editors/repository/index.jsp" redirect="true" />
-      </action>
-
       <action path="/editors/repository/PasteAction" type="com.finalist.cmsc.repository.forms.PasteAction" 
          name="RepositoryPasteForm" scope="session" input="/editors/repository/Navigator.do" 
          unknown="false" validate="true">
@@ -141,6 +135,9 @@
 
       <!-- ==== Resources ==== -->
 
+      <action path="/editors/repository/forms/ChannelRetrieve" type="com.finalist.cmsc.repository.forms.ChannelRetrieve"
+          scope="request" unknown="false" validate="false">
+      </action>
       <action path="/editors/resources/ImageInitAction" type="com.finalist.cmsc.resources.forms.ImageInitAction"
          name="ImageForm" scope="request" unknown="false" validate="false">
          <forward name="searchoptions" path="/editors/resources/imagesearch.jsp" redirect="false" />
