@@ -237,17 +237,10 @@
                                     <img src="<mm:image template="s(120x100)"/>" alt=""/>
                                  </c:if> 
                                  <c:if test="${typedef eq 'attachments'}">
-                                    <c:set var="filename"><mm:field name="filename"/></c:set>
-                                    <c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
-                                    <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
-                                       <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-                                    </mm:haspage> 
-                                    <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
-                                       <img src="../gfx/otherAttach.gif" alt=""/>
-                                    </mm:haspage>
+                                    <%@include file="../resources/attachmentthumbnail.jsp" %>
                                  </c:if>
                                  <c:if test="${typedef eq 'urls'}">
-                                    <img src="../gfx/url.gif" alt=""/>
+                                    <img src="../gfx/url.gif" alt="" width="120px" height="100px"/>
                                  </c:if>
                               </a>
                            </div>
