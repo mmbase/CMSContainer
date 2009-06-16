@@ -180,14 +180,7 @@
                         <div class="thumbnail" onclick="initParentHref(this.parentNode)">
 	                         <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
 	                         <c:if test="${typedef eq 'attachments'}">
-	                            <c:set var="filename"><mm:field name="filename"/></c:set>
-	                            <c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
-	                            <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
-	                               <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-	                            </mm:haspage> 
-	                            <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
-	                               <img src="../gfx/otherAttach.gif" alt=""/>
-	                            </mm:haspage>
+	                            <%@include file="attachmentthumbnail.jsp" %>
 	                         </c:if>
 						</div>
                         <div class="assetInfo" onclick="initParentHref(this.parentNode)">
@@ -253,14 +246,7 @@
 								<td  onMouseDown="initParentHref(this.parentNode)">
 									 <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
 									 <c:if test="${typedef eq 'attachments'}">
-										<c:set var="filename"><mm:field name="filename"/></c:set>
-										<c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
-										<mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
-										   <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-										</mm:haspage> 
-										<mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
-										   <img src="../gfx/otherAttach.gif" alt=""/>
-										</mm:haspage>
+										<%@include file="attachmentthumbnail.jsp" %>
 									 </c:if>
 								</td>
 							</tr>
