@@ -138,14 +138,7 @@
                <td onMouseDown="objClick(this);"><mm:field name="mimetype"/></td>
                <td onMouseDown="objClick(this);">
 					 <c:if test="${assettype eq 'attachments'}">
-						<c:set var="filename"><mm:field name="filename"/></c:set>
-						<c:set var="subfix">${fn:substringAfter(filename, '.')}</c:set>
-						<mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
-						   <img src="../gfx/${subfix}${'.gif'}" alt=""/>
-						</mm:haspage> 
-						<mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="true">
-						   <img src="../gfx/otherAttach.gif" alt=""/>
-						</mm:haspage>
+						<%@include file="attachmentthumbnail.jsp" %>
 					 </c:if>
 			   </td>
             </tr>
