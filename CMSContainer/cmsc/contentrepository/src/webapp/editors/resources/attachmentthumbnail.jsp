@@ -18,11 +18,11 @@
          <img src="../gfx/ppt.gif" alt="" width="120px" height="100px"/>
       </c:when>
       <c:when test="${subfix=='mpeg'||subfix=='mpg'||subfix=='dat'||subfix=='avi'||subfix=='ra'||
-         subfix=='rm'||subfix=='ram'||subfix=='mov'||subfix=='asf'||subfix=='wmv'}">
+         subfix=='rm'||subfix=='ram'||subfix=='mov'||subfix=='asf'||subfix=='wmv'||subfix=='divx'}">
          <img src="../gfx/video.gif" alt="" width="120px" height="100px"/>
       </c:when>
-      <c:when test="${subfix=='mpeg'||subfix=='wav'||subfix=='mp3'||subfix=='wma'||subfix=='wav'||
-         subfix=='ogg'||subfix=='ape'||subfix=='aac'}">
+      <c:when test="${subfix=='wav'||subfix=='mp3'||subfix=='wma'||subfix=='wav'||subfix=='ogg'||
+         subfix=='ape'||subfix=='aac'}">
          <img src="../gfx/audio.gif" alt="" width="120px" height="100px"/>
       </c:when>
       <c:otherwise>
