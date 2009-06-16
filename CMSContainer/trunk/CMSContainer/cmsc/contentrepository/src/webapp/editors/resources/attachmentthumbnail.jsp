@@ -1,8 +1,7 @@
 <c:set var="filename"><mm:field name="filename"/></c:set>
 <c:forTokens var="type" items="${filename}" delims=".">
-   <c:set var="subfix" value="${type}" />
+   <c:set var="subfix" value="${fn:toLowerCase(type)}" />
 </c:forTokens>
-<c:set var="subfix">${fn:toLowerCase(fn:substringAfter(filename, '.'))}</c:set>
 <mm:haspage page="../gfx/${subfix}${'.gif'}" inverse="false">
    <img src="../gfx/${subfix}${'.gif'}" alt="" width="120px" height="100px"/>
 </mm:haspage> 
