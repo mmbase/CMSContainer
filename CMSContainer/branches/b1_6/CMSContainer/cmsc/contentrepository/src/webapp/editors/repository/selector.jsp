@@ -76,6 +76,7 @@
           else{
             document.getElementById('validatePath').href = "SearchInitAction.do?index=yes";
           }
+      }
    </script>
 
    <style type="text/css">
