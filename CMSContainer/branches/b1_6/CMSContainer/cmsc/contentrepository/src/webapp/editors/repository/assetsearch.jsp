@@ -19,8 +19,9 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
+      <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
       <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
-      <script src="../repository/asset.js" language="JavaScript" type="text/javascript"></script>
+      <script src="../repository/asset.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
             <script type="text/javascript">
                function showEditItems(id){
@@ -307,8 +308,7 @@
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
 
-   <div class="body">
-   <div style="padding-left:11px">
+   <div class="show_mode_selector">
       <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
          <c:if test="${empty searchShow || searchShow eq 'list'}">
             <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
@@ -329,9 +329,12 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
+   <div style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
+   </div>
    </mm:isempty>
 
+   <div class="body">
    <%-- Now print the results --%>
    <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
       <mm:field id="trashnumber" name="number" write="false"/>
@@ -344,7 +347,7 @@
             <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
                <div align="left">
-                  <input type="submit" class="button" name="massdelete" 
+                  <input type="submit" class="button" name="massdelete"
                         onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
                         value="<fmt:message key="asset.delete.massdelete" />"/>
                </div>
@@ -447,7 +450,7 @@
    <mm:hasrank minvalue="siteadmin">
       <c:if test="${fn:length(results) >1}">
       <div align="left">
-         <input type="submit" class="button" name="massdelete" 
+         <input type="submit" class="button" name="massdelete"
                onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
                value="<fmt:message key="asset.delete.massdelete" />"/>
       </div>
@@ -484,7 +487,7 @@
                      <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
                      <c:if test="${typedef eq 'images'}">
                         <img src="<mm:image template="s(120x100)"/>" alt=""/>
-                     </c:if> 
+                     </c:if>
                      <c:if test="${typedef eq 'attachments'}">
                         <%@include file="../resources/attachmentthumbnail.jsp" %>
                      </c:if>

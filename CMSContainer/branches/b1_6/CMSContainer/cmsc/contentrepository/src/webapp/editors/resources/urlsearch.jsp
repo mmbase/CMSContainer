@@ -30,7 +30,7 @@
 		openPopupWindow('urlinfo', '900', '500',
 				'../resources/urlinfo.jsp?objectnumber=' + objectnumber);
 	}
-	 	
+
 	function initParentHref(elem) {
 		if(elem.id=='selected'){
 			elem.parentNode.setAttribute('href', '');
@@ -57,7 +57,7 @@
       }
       document.location=href;
    }
-   
+
    function doCancleIt(){
       window.top.close();
    }
@@ -138,10 +138,11 @@
             </c:if>
          </html:form>
       </div>
-   
+
    <div class="ruler_green">
          <div><c:out value="${channelMsg}" /></div>
    </div>
+   <div class="show_mode_selector">
    <select name="urlMode" id="urlMode" onchange="javascript:setShowMode()">
       <c:if test="${assetShow eq 'list'}">
          <option id="a_list" selected="selected"><fmt:message key="asset.url.list"/></option>
@@ -152,8 +153,9 @@
          <option id="a_thumbnail" selected="selected"><fmt:message key="asset.url.thumbnail"/></option>
       </c:if>
    </select>
-   <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
-   <mm:import externid="results" jspvar="nodeList" vartype="List" /> 
+   </div>
+   <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden;padding:10px 0px 0px 11px">
+   <mm:import externid="results" jspvar="nodeList" vartype="List" />
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
          <c:if test="${resultCount > 0}">
@@ -291,7 +293,7 @@
                  <a class="bottombutton" title="Select the url." href="javascript:doSelectIt();"><fmt:message key="urlselect.ok" /></a>
              </div>
          </div>
-        
+
          <div class="button">
              <div class="button_body">
                  <a class="bottombutton" href="javascript:doCancleIt();" title="Cancel this task, url will NOT be selected."><fmt:message key="urlselect.cancel" /></a>
