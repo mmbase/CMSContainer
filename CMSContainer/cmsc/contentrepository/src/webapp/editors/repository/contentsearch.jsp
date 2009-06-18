@@ -353,7 +353,6 @@
       </div>
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
-   <div class="body">
 
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
@@ -363,9 +362,12 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
+   <div style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
+   </div>
    </mm:isempty>
 
+   <div class="body">
    <%-- Now print the results --%>
    <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
       <mm:field id="trashnumber" name="number" write="false"/>
@@ -374,7 +376,6 @@
       <mm:first>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
 
-         <form action="LinkToChannelAction.do" name="linkForm">
          <mm:compare referid="action" value="link" inverse="true">
              <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
@@ -388,6 +389,7 @@
           <mm:compare referid="action" value="link" >
              <input type="submit" class="button" value="<fmt:message key="searchform.link.submit" />"/>
           </mm:compare>
+         <form action="LinkToChannelAction.do" name="linkForm">
           <table>
             <thead>
                <tr>

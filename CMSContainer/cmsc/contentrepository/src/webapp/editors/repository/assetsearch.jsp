@@ -21,9 +21,10 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
-      <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
+      <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
+      <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css"/>
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
-      <script src="../repository/asset.js" language="JavaScript" type="text/javascript"></script>
+      <script src="../repository/asset.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
             <script type="text/javascript">
                function showEditItems(id){
@@ -334,18 +335,17 @@
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
 
-   <div class="body">
-   <div style="padding-left:11px">
-      <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
-         <c:if test="${empty searchShow || searchShow eq 'list'}">
-            <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
-            <option id = "a_thumbnail" ><fmt:message key="asset.image.thumbnail"/></option>
-         </c:if>
-         <c:if test="${searchShow eq 'thumbnail'}">
-            <option id="a_list"><fmt:message key="asset.image.list"/></option>
-            <option id = "a_thumbnail" selected="selected" ><fmt:message key="asset.image.thumbnail"/></option>
-         </c:if>
-      </select>
+   <div class="show_mode_selector">
+   <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
+      <c:if test="${empty searchShow || searchShow eq 'list'}">
+         <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
+         <option id = "a_thumbnail" ><fmt:message key="asset.image.thumbnail"/></option>
+      </c:if>
+      <c:if test="${searchShow eq 'thumbnail'}">
+         <option id="a_list"><fmt:message key="asset.image.list"/></option>
+         <option id = "a_thumbnail" selected="selected" ><fmt:message key="asset.image.thumbnail"/></option>
+      </c:if>
+   </select>
    </div>
 
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
@@ -356,9 +356,12 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
+   <div style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
+   </div>
    </mm:isempty>
 
+   <div class="body">
    <%-- Now print the results --%>
    <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
       <mm:field id="trashnumber" name="number" write="false"/>
