@@ -69,3 +69,7 @@ div.page_buttons div.button div.button_body a {
    display: block;
    text-decoration:none;
 }
+
+div.show_mode_selector{
+   padding: 10px 0px 0px 15px;
+}

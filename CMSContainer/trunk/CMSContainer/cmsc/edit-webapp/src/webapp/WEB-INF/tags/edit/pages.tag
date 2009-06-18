@@ -54,7 +54,7 @@
 
 <table border="0" width="100%">
    <tr>
-      <td style="width:30%;">
+      <td style="width:30%;padding:10px 0px 0px 11px">
             ${searchresult}
       </td>
       <c:if test="${pagesSize>1}">

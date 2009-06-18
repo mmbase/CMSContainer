@@ -145,6 +145,7 @@
       <div class="ruler_green">
          <div><c:out value="${channelMsg}" /></div>
    `  </div>
+      <div class="show_mode_selector">
       <select name="imageMode" id="imageMode" onchange="javascript:setShowMode()">
          <c:if test="${assetShow eq 'list'}">
             <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
@@ -155,7 +156,8 @@
             <option id="a_thumbnail" selected="selected"><fmt:message key="asset.image.thumbnail"/></option>
          </c:if>
       </select>
-      <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden"> 
+      </div>
+      <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden;padding:10px 0px 0px 11px"> 
          <mm:import externid="results" jspvar="nodeList" vartype="List"/>
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
