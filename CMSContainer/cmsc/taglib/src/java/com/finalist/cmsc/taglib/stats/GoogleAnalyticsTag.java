@@ -34,8 +34,7 @@ import com.finalist.cmsc.util.ServerUtil;
 
 public class GoogleAnalyticsTag extends CmscTag {
    /** MMbase logging system */
-   private static Logger log = Logging
-         .getLoggerInstance(GoogleAnalyticsTag.class.getName());
+   private static Logger log = Logging.getLoggerInstance(GoogleAnalyticsTag.class.getName());
 
    private final static String TYPE_BASIC = "basic"; // init and page counter code (default)
    private final static String TYPE_SCRIPT = "script"; // init script
@@ -163,14 +162,16 @@ public class GoogleAnalyticsTag extends CmscTag {
    }
 
    private String getActionFromNodeNumber(String nodeNumber) {
-        Cloud cloud = CloudProviderFactory.getCloudProvider().getAnonymousCloud();
-        Node node = cloud.getNode(nodeNumber);
+      Cloud cloud = CloudProviderFactory.getCloudProvider().getAnonymousCloud();
+      Node node = cloud.getNode(nodeNumber);
       Node creationchannel = RepositoryUtil.getCreationChannel(node);
 
       String prefix = node.getNodeManager().getName();
-
-      String fullpath = creationchannel.getStringValue("path");
-      String path = StringUtils.removeStart(fullpath, "Repository/");
+      String path = "Unknown_Path";
+      if (creationchannel != null) {
+         String fullpath = creationchannel.getStringValue("path");
+         path = StringUtils.removeStart(fullpath, "Repository/");
+      }
       String title = EncodingUtil.convertNonAscii(node.getStringValue("title"));
       title = filterTitle(title);
 
