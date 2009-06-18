@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp" 
+%><%@include file="globals.jsp"
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -30,7 +30,7 @@
 		openPopupWindow('attachmentinfo', '900', '500',
 				'../resources/attachmentinfo.jsp?objectnumber=' + objectnumber);
 	}
-	
+
 	function initParentHref(elem) {
 		if(elem.id=='selected'){
 			elem.parentNode.setAttribute('href', '');
@@ -57,11 +57,11 @@
       }
       document.location=href;
    }
-   
+
    function doCancleIt(){
       window.top.close();
    }
-   
+
 	function selectElement(element, title, src, width, height, description) {
 		if (window.top.opener != undefined) {
 			window.top.opener.selectElement(element, title, src, width, height,
@@ -96,7 +96,7 @@
       </div>
       </div>
    </c:if>
-   
+
    <div class="editor" style="height:500px">
       <c:choose>
          <c:when test="${action eq 'search'}">
@@ -140,7 +140,8 @@
       </div>
       <div class="ruler_green">
          <div><c:out value="${channelMsg}" /></div>
-   `  </div>
+      </div>
+      <div class="show_mode_selector">
 		<select name="attachmentMode" id="attachmentMode" onchange="javascript:setShowMode()">
 			<c:if test="${assetShow eq 'list'}">
 				<option id="a_list" selected="selected"><fmt:message key="asset.attachment.list"/></option>
@@ -151,7 +152,8 @@
 				<option id="a_thumbnail" selected="selected"><fmt:message key="asset.attachment.thumbnail"/></option>
 			</c:if>
 		</select>
-      <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden"> 
+      </div>
+      <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden;padding:10px 0px 0px 11px">
          <mm:import externid="results" jspvar="nodeList" vartype="List"/>
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
@@ -290,7 +292,7 @@
                         <a class="bottombutton" title="Select the attachment." href="javascript:doSelectIt();"><fmt:message key="attachmentselect.ok" /></a>
                     </div>
                 </div>
-               
+
                 <div class="button">
                     <div class="button_body">
                         <a class="bottombutton" href="javascript:doCancleIt();" title="Cancel this task, attachment will NOT be selected."><fmt:message key="attachmentselect.cancel" /></a>

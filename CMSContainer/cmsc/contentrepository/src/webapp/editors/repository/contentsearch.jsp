@@ -1,10 +1,10 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp" 
+%><%@include file="globals.jsp"
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
-%><%@ page import="com.finalist.cmsc.security.UserRole" 
-%><%@ page import="com.finalist.cmsc.security.SecurityUtil" 
+%><%@ page import="com.finalist.cmsc.security.UserRole"
+%><%@ page import="com.finalist.cmsc.security.SecurityUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -98,7 +98,7 @@
                      </mm:compare>
                 <mm:compare referid="mode" value="basic" >
                         <a href="#" onclick="selectTab('advanced');"><input type="button" class="button" value="<fmt:message key="search.advanced.search" />"/></a>
-                     </mm:compare> 
+                     </mm:compare>
             <table>
                <tr>
                <mm:compare referid="mode" value="basic">
@@ -109,7 +109,7 @@
                      <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
                         <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
                         <html:optionsCollection name="typesList" value="value" label="label"/>
-                     </html:select>                     
+                     </html:select>
                   </td>
                </mm:compare>
                <mm:compare referid="mode" value="advanced">
@@ -126,9 +126,9 @@
                      <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
                         <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
                         <html:optionsCollection name="typesList" value="value" label="label"/>
-                     </html:select>                     
+                     </html:select>
                   </td>
-               </tr>              
+               </tr>
                   <tr>
                      <td></td>
                      <td><b><fmt:message key="searchform.dates" /></b></td>
@@ -305,7 +305,7 @@
                         </mm:present>
                      </td>
                   </tr>
-                  
+
                </mm:compare>
 			   <tr>
                      <td></td>
@@ -328,7 +328,9 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
+   <div style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
+   </div>
    </mm:isempty>
 
    <%-- Now print the results --%>
@@ -339,17 +341,17 @@
       <mm:first>
          <%@include file="searchpages.jsp" %>
 
-         <form action="LinkToChannelAction.do" name="linkForm">
          <mm:compare referid="action" value="link" inverse="true">
              <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
                <div align="left"> <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/></div>
                </c:if>
-              </mm:hasrank> 
+              </mm:hasrank>
          </mm:compare>
           <mm:compare referid="action" value="link" >
              <input type="submit" class="button" value="<fmt:message key="searchform.link.submit" />"/>
           </mm:compare>
+         <form action="LinkToChannelAction.do" name="linkForm">
           <table>
             <thead>
                <tr>
@@ -357,7 +359,7 @@
                      <mm:compare referid="action" value="link" >
                         <input type="hidden" name="channelnumber" value="<mm:write referid="linktochannel"/>" />
                         <input type="hidden" name="channel" value="<mm:write referid="linktochannel"/>" />
-                        <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>  
+                        <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
                          <input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" />
                      </mm:compare>
                      <mm:compare referid="action" value="link" inverse="true">
@@ -412,9 +414,9 @@
                   <c:if test="${(rights == 'writer' || rights == 'chiefeditor' || rights == 'editor' || rights == 'webmaster') && fn:length(results) >1}">
                     <input type="checkbox" value="moveToRecyclebin:<mm:field name="number" />" class="checkbox" name="chk_<mm:field name="number" />" onClick="document.forms['linkForm'].elements.selectall.checked=false;"/>
                   </c:if>
-               </mm:compare>    
-              
-                
+               </mm:compare>
+
+
                  <%-- also show the edit icon when we return from an edit wizard! --%>
                   <mm:write referid="action" jspvar="action" write="false"/>
                   <c:if test="${action == 'search' || action == 'save' || action == 'cancel'}">
@@ -424,7 +426,7 @@
                       </mm:url>">
                          <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
                </c:if>
-                
+
                <mm:compare referid="action" value="select">
                      <script>
                         function link<mm:field name="number"/>() {

@@ -1,7 +1,7 @@
 <%@ page import="org.apache.commons.lang.RandomStringUtils"
- %><%@ page import="com.finalist.cmsc.paging.PagingUtils" 
- %><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" 
- %><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" 
+ %><%@ page import="com.finalist.cmsc.paging.PagingUtils"
+ %><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
+ %><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"
  %><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" %>
 <!--todo : get default page size from system properties.-->
 <c:set var="currentPage" value="${empty param.offset ? 1 : param.offset +1 }"/>
@@ -40,7 +40,7 @@
 
 <table border="0" width="100%">
    <tr>
-      <td style="width:50%;">
+      <td style="width:50%;padding:10px 0px 0px 11px">
             ${searchresult}
       </td>
       <c:if test="${pagessize>1}">
