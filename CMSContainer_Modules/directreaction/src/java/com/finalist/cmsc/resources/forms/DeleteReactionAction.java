@@ -25,13 +25,15 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
       DeleteSecondaryContentForm deleteForm = (DeleteSecondaryContentForm) form;
 
       String number = deleteForm.getObjectnumber();
-      if (MMBaseAction.ADMINISTRATOR.equals(cloud.getUser().getRank().toString())) {
+      if (MMBaseAction.SITEADMIN.equals(cloud.getUser().getRank().toString()) ||
+          MMBaseAction.ADMINISTRATOR.equals(cloud.getUser().getRank().toString())) {
+         
          log.debug("deleting secondary content: " + number);
          Cloud remoteCloud = getRemoteCloud(cloud);
          remoteCloud.getNode(number).delete(true);
       }
       else {
-         log.warn("did not delete secondary content because user was not administrator: " + number + " ("
+         log.warn("Could not delete direct reaction, because user was not siteadmin or admin: " + number + " ("
                + cloud.getUser() + ":" + cloud.getUser().getRank() + ")");
       }
 
@@ -48,7 +50,7 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
 
 
    public String getRequiredRankStr() {
-      return ADMINISTRATOR;
+      return SITEADMIN;
    }
 
 }
