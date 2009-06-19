@@ -19,12 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SearchInitAction extends MMBaseAction {
 
+   private static final String POSITION = "position";
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
 
       SearchForm searchForm = (SearchForm) form;
 
+      String position = request.getParameter(POSITION);
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -56,6 +58,7 @@ public class SearchInitAction extends MMBaseAction {
          }
       }
       addToRequest(request, "typesList", typesList);
+      addToRequest(request, POSITION, position);
 
       return mapping.findForward("searchoptions");
    }
