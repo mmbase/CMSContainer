@@ -20,6 +20,7 @@
 <body>
 <mm:import id="searchinit"><c:url value='/editors/repository/SearchInitAction.do'/></mm:import>
 <mm:import externid="action">search</mm:import><%-- either: search, link, of select --%>
+<mm:import externid="position" from="parameters" />
 <mm:import externid="mode" id="mode">basic</mm:import>
 <mm:import externid="returnurl"/>
 <mm:import externid="linktochannel"/>
@@ -84,6 +85,7 @@
 
          <html:form action="/editors/repository/ContentSearchAction" method="post">
             <html:hidden property="action" value="${action}"/>
+			<html:hidden property="position" value="${position}"/>
             <html:hidden property="mode"/>
             <html:hidden property="search" value="true"/>
             <html:hidden property="linktochannel"/>
@@ -432,7 +434,7 @@
                         function link<mm:field name="number"/>() {
                            selectElement('<mm:field name="number" />',
                                     '<mm:field name="title" escape="js-single-quotes"/>',
-                                    '<cmsc:staticurl page="/content/" /><mm:field name="number"/>')
+                                    '<cmsc:staticurl page="/content/" /><mm:field name="number"/>',null,null,null,'${position}')
                         }
                      </script>
 
