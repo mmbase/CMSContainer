@@ -218,8 +218,7 @@
                            <mm:field name="filename"/>
                         </td>
 								<td onMouseDown="initParentHref(this.parentNode)"><mm:field name="itype" /></td>
-								<td  onMouseDown="initParentHref(this.parentNode)"><img
-									src="<mm:image template="s(128x128)" crop="middle"/>" alt="" /></td>
+								<td></td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
 						</mm:listnodes>

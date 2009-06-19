@@ -111,6 +111,7 @@
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
             <mm:import id="contenttypes" jspvar="contenttypes">attachments</mm:import>
+            <%@include file="attachmentform.jsp" %>
          </html:form>
       </div>
       <div class="ruler_green">
@@ -180,7 +181,6 @@
 
 			<c:if test="${assetShow eq 'list'}">
 				<table>
-            <c:if test="${action == 'search'}">
 					<tr class="listheader">
 						<th width="55"></th>
 						<th nowrap="true"><a href="javascript:orderBy('title')"
@@ -193,7 +193,6 @@
 							key="attachmentsearch.mimetypecolumn" /></a></th>
 						<th></th>
 					</tr>
-            </c:if>
 					<tbody id="assetList" class="hover"  href="">
 						<c:set var="useSwapStyle">true</c:set>
 						<mm:listnodes referid="results">
@@ -226,11 +225,7 @@
                            <mm:field name="filename"/>
                         </td>
 								<td onMouseDown="initParentHref(this.parentNode)"></td>
-								<td  onMouseDown="initParentHref(this.parentNode)">
-									 <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
-									 <c:if test="${typedef eq 'attachments'}">
-										<%@include file="attachmentthumbnail.jsp" %>
-									 </c:if>
+								<td>
 								</td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
