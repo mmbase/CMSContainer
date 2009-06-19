@@ -70,15 +70,13 @@
 		}
 	}
 
-	function selectChannel(channelid, path) {
-		var attachmentMode = document.getElementsByTagName("option");
-	       for(i = 0; i < attachmentMode.length; i++){
-	          if(attachmentMode[i].selected & attachmentMode[i].id=="a_list"){
-	              document.location.href = '../../repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assetShow=list&assettypes=attachments&strict=${strict}';
-	          }else if(attachmentMode[i].selected & attachmentMode[i].id=="a_thumbnail"){
-	              document.location.href = '../../repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assetShow=thumbnail&assettypes=attachments&strict=${strict}';
-	          }
-	       }
+	function erase(field) {
+		document.forms[0][field].value = '';
+	}
+
+	function selectChannel(channel, path) {
+		document.forms[0].contentChannel.value = channel;
+		document.forms[0].contentChannelPath.value = path;
 	}
 </script>
    <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
@@ -87,55 +85,27 @@
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
-   <c:if test="${action eq 'search'}">
-      <div class="tabs"><!-- actieve TAB -->
-      <div class="tab_active">
+ <div class="tabs"><!-- actieve TAB -->
+   <div class="tab_active">
       <div class="body">
-      <div><a><fmt:message key="attachments.title" /></a></div>
+         <div><a><fmt:message key="attachments.title" /></a></div>
       </div>
-      </div>
-      </div>
-   </c:if>
+   </div>
+</div>
 
    <div class="editor" style="height:500px">
-      <c:choose>
-         <c:when test="${action eq 'search'}">
-            <mm:import id="formAction">/editors/resources/AttachmentAction</mm:import>
-            <mm:import id="channelMsg"><fmt:message key="attachments.results" /></mm:import>
-         </c:when>
-         <c:otherwise>
-            <mm:import id="formAction">/editors/repository/HighFrequencyAsset</mm:import>
-            <c:if test="${param.channelid eq 'all' || param.channelid eq 'siteassets'}">
-                <mm:import id="channelMsg"><fmt:message key="attachments.channel.title"><fmt:param>ALL CHANNELS</fmt:param></fmt:message></mm:import>
-            </c:if>
-            <c:if test="${param.channelid ne 'all' && param.channelid ne 'siteassets'}">
-               <mm:node number="${channelid}">
-                  <mm:field name="path" id="path" write="false" />
-                  <mm:import id="channelMsg">
-                     <fmt:message key="attachments.channel.title">
-                        <fmt:param value="${path}" />
-                     </fmt:message>
-                  </mm:import>
-               </mm:node>
-            </c:if>
-         </c:otherwise>
-      </c:choose>
-      <div class="body" <c:if test="${action == 'often'}">style="display:none"</c:if> >
+      <mm:import id="formAction">/editors/resources/AttachmentAction</mm:import>
+      <mm:import id="channelMsg"><fmt:message key="attachments.results" /></mm:import>
+      <div class="body">
          <html:form action="${formAction}" method="post">
             <html:hidden property="action" value="${action}"/>
             <html:hidden property="assetShow" value="${assetShow}"/>
             <html:hidden property="strict" value="${strict}"/>
             <html:hidden property="offset"/>
-            <c:if test="${action eq 'often'}">
-            <html:hidden property="assettypes" value="attachments"/>
-            <html:hidden property="channelid" value="${channelid}"/>
-            </c:if>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
-            <c:if test="${action eq 'search'}">
             <mm:import id="contenttypes" jspvar="contenttypes">attachments</mm:import>
                <%@include file="attachmentform.jsp" %>
-            </c:if>
          </html:form>
       </div>
       <div class="ruler_green">
@@ -153,10 +123,16 @@
 			</c:if>
 		</select>
       </div>
-      <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden;padding:10px 0px 0px 11px">
+
          <mm:import externid="results" jspvar="nodeList" vartype="List"/>
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+          <c:if test="${resultCount == 0 && param.title != null}">
+           <pre>
+  <fmt:message key="attachmentsearch.noresult" />
+          </pre>
+         </c:if>
+     <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
          <c:if test="${resultCount > 0}">
             <%@include file="../repository/searchpages.jsp" %>
 
@@ -259,29 +235,12 @@
 			</c:if>
 
 		</c:if>
-	      <c:if test="${resultCount == 0 && (param.action == 'often' || param.title != null)}">
-	         <fmt:message key="attachmentsearch.noresult" />
-	      </c:if>
          <div style="clear:both" ></div>
 	      <c:if test="${resultCount > 0}">
 	         <%@include file="../repository/searchpages.jsp" %>
 	      </c:if>
       </div>
-      <c:if test="${action == 'often'}">
-      <div class="body">
-      <mm:url page="/editors/repository/select/SelectorChannel.do" id="select_channel_url" write="false" />
-      <mm:url page="/editors/resources/AttachmentInitAction.do?action=search&strict=${strict}" id="search_attachment_url" write="false" />
-      <mm:url page="/editors/resources/attachmentupload.jsp?uploadedNodes=0&channelid=${channelid}&strict=${strict}" id="new_attachment_url" write="false" />
-      <mm:url page="/editors/repository/HighFrequencyAsset.do?action=often&assetShow=${assetShow}&offset=0&channelid=all&assettypes=attachments&strict=${strict}" id="often_show_attachments" write="false"/>
-		<ul class="shortcuts">
-			<li><a href="${often_show_attachments}"><fmt:message key="attachmentselect.link.allchannel" /></a></li>
-			<li><a onclick="openPopupWindow('selectchannel', 340, 400);" target="selectchannel" href="${select_channel_url}"><fmt:message key="attachmentselect.link.channel" /></a></li>
-			<li><a href="${search_attachment_url}"><fmt:message key="attachmentselect.link.search" /></a></li>
-			<li><a href="${new_attachment_url}"><fmt:message key="attachmentselect.link.new" /></a></li>
-		</ul>
-		</div>
-      </c:if>
-</div>
+   </div>
        <div id="commandbuttonbar" class="buttonscontent" style="clear:both">
             <div class="page_buttons_seperator">
                <div></div>

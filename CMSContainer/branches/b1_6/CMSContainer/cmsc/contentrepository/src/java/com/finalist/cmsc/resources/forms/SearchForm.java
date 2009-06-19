@@ -10,6 +10,8 @@ public class SearchForm extends PagerForm {
    private String show = "list";
    protected String strict;
    
+   private String contentChannel;
+   
 
    public String getShow() {
       return show;
@@ -64,6 +66,16 @@ public class SearchForm extends PagerForm {
    
    public void setStrict(String strict) {
       this.strict = strict;
+   }
+
+
+   public String getContentChannel() {
+      return contentChannel;
+   }
+
+
+   public void setContentChannel(String contentChannel) {
+      this.contentChannel = contentChannel;
    }
 
 }

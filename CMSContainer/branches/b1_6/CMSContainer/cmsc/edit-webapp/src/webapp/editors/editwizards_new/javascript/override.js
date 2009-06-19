@@ -397,7 +397,16 @@ function getAssets(type, channelid){
                 xposition = (screen.width-iWidth ) / 2;
                 yposition = (screen.height-iHeight - 25) / 2;
             }
-	var url='../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assettypes='+type+'&strict='+type;
-	window.open(url, 
+	var url='../../../../editors/resources/';
+   if(type.toLowerCase() == 'attachments') {
+      url += 'AttachmentInitAction.do?strict=attachments';
+   }
+   else if (type.toLowerCase() == 'images') {
+      url += 'ImageInitAction.do?strict=images';
+   }
+   else if (type.toLowerCase() == 'urls') {
+      url += 'UrlInitAction.do?strict=urls';
+   }
+   window.open(url, 
 	'contentselector', 'width=730,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,left='+xposition+',top='+yposition+',menubar=no');
 }
