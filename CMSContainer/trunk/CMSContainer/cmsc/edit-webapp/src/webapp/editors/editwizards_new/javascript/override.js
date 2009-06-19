@@ -391,8 +391,17 @@ function getAssets(type, channelid){
 	//alert(Data[type]);
 	var width=730; 
 	var height=550;
-	var url='../../../../editors/repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assettypes='+type+'&strict='+type;
-	var windowName='contentselector';
+	var url='../../../../editors/resources/';
+   if(type.toLowerCase() == 'attachments') {
+      url += 'AttachmentInitAction.do?strict=attachments';
+   }
+   else if (type.toLowerCase() == 'images') {
+      url += 'ImageInitAction.do?strict=images';
+   }
+   else if (type.toLowerCase() == 'urls') {
+      url += 'UrlInitAction.do?strict=urls';
+   }
+   var windowName='contentselector';
 	var options = getPopupPositionProps(width, height) + ',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no';
 	window.open(url, windowName, options);
 }
