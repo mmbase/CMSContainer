@@ -153,7 +153,7 @@
                         </div>
                         <div class="thumbnail" onclick="initParentHref(this.parentNode)">
                            <c:set var="thumbnail_alt"><mm:field name="url" /></c:set>
-                           <img src="../gfx/url.gif" title="${thumbnail_alt}" alt="${thumbnail_alt}" width="120" height="100"/>
+                           <img src="../gfx/url.gif" title="${thumbnail_alt}" alt="${thumbnail_alt}"/>
                         </div>
                         <div class="assetInfo" onclick="initParentHref(this.parentNode)">
                               <mm:field name="title" jspvar="title" write="false"/>
