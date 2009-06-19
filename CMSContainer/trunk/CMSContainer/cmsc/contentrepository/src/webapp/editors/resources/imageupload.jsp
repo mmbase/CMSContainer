@@ -135,7 +135,7 @@
                </td>
                <td onMouseDown="objClick(this);">${title}</td>
                <td onMouseDown="objClick(this);"><mm:field name="itype"/></td>
-               <td onMouseDown="objClick(this);"><img src="<mm:image template="s(100x100)"/>" alt="" /></td>
+               <td onMouseDown="objClick(this);"><img src="<mm:image template="s(128x128)"/>" alt="" /></td>
             </tr>
             <c:set var="useSwapStyle">${!useSwapStyle}</c:set>
          </mm:listnodes>
