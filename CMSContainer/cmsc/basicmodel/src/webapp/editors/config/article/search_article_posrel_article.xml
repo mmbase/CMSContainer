@@ -23,7 +23,7 @@
 		</field>
 	</item>
 	
-	<command name="search" nodepath="article" age="-1"
+	<command name="articlesearch" nodepath="article" age="-1"
 			fields="title" pagelength="20">
 		<prompt xml:lang="en">Search article</prompt>
 		<prompt xml:lang="nl">Zoek artikel</prompt>
