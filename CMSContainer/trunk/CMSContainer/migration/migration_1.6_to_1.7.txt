@@ -52,6 +52,7 @@ mmbase.version=1.8.7-20090603
 *
 *
 
+
 Name: Migration from page/rssfeed/pagealias to navigationitem table
 Goal:  Migrate all page/rssfeed/pagealias to new navigationitem table ,CMSC-1036 Introduce supertype NavigationItem
 Type:  sql-script
@@ -66,3 +67,16 @@ INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastm
 INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_rssfeed;
 INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_pagealias;
 --- End script ---
+
+
+Name: Upgrade mail.jar to latest 1.4.2 version in Tomcat/lib
+Goal: 
+Type: do it yourself at all servers
+--- Start script ---
+Download the latest mail.jar from http://java.sun.com/products/javamail/downloads/index.html or
+grab your version from our maven-repo.
+If you are using JDK 6.0 or higher, you don't need activation.jar anymore.
+--- End script ---
+*
+*
+*
