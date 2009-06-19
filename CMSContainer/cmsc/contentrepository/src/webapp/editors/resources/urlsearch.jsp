@@ -69,15 +69,13 @@
 	      }
 	   }
 
-	function selectChannel(channelid, path) {
-		var urlMode = document.getElementsByTagName("option");
-	       for(i = 0; i < urlMode.length; i++){
-	          if(urlMode[i].selected & urlMode[i].id=="a_list"){
-	              document.location.href = '../../repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assetShow=list&assettypes=urls&strict=${strict}';
-	          }else if(urlMode[i].selected & urlMode[i].id=="a_thumbnail"){
-	              document.location.href = '../../repository/HighFrequencyAsset.do?action=often&offset=0&channelid='+channelid+'&assetShow=thumbnail&assettypes=urls&strict=${strict}';
-	          }
-	       }
+	function erase(field) {
+		document.forms[0][field].value = '';
+	}
+
+	function selectChannel(channel, path) {
+		document.forms[0].contentChannel.value = channel;
+		document.forms[0].contentChannelPath.value = path;
 	}
 	</script>
 	   <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
@@ -87,55 +85,27 @@
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
 
-   <c:if test="${action eq 'search'}">
-      <div class="tabs"><!-- actieve TAB -->
-      <div class="tab_active">
+<div class="tabs"><!-- actieve TAB -->
+   <div class="tab_active">
       <div class="body">
-      <div><a><fmt:message key="urls.title" /></a></div>
+         <div><a><fmt:message key="urls.title" /></a></div>
       </div>
-      </div>
-      </div>
-   </c:if>
+   </div>
+</div>
 
    <div class="editor" style="height:500px">
-      <c:choose>
-         <c:when test="${action eq 'search'}">
-            <mm:import id="formAction">/editors/resources/UrlAction</mm:import>
-            <mm:import id="channelMsg"><fmt:message key="urls.results" /></mm:import>
-         </c:when>
-         <c:otherwise>
-            <mm:import id="formAction">/editors/repository/HighFrequencyAsset</mm:import>
-            <c:if test="${param.channelid eq 'all' || param.channelid eq 'siteassets'}">
-                <mm:import id="channelMsg"><fmt:message key="urls.channel.title"><fmt:param>ALL CHANNELS</fmt:param></fmt:message></mm:import>
-            </c:if>
-            <c:if test="${param.channelid ne 'all' && param.channelid ne 'siteassets'}">
-               <mm:node number="${channelid}">
-                  <mm:field name="path" id="path" write="false" />
-                  <mm:import id="channelMsg">
-                     <fmt:message key="urls.channel.title">
-                        <fmt:param value="${path}" />
-                     </fmt:message>
-                  </mm:import>
-               </mm:node>
-            </c:if>
-         </c:otherwise>
-      </c:choose>
-      <div class="body" <c:if test="${action == 'often'}">style="display:none"</c:if> >
+      <mm:import id="formAction">/editors/resources/UrlAction</mm:import>
+      <mm:import id="channelMsg"><fmt:message key="urls.results" /></mm:import>
+      <div class="body">
          <html:form action="${formAction}" method="post">
             <html:hidden property="action" value="${action}"/>
             <html:hidden property="assetShow" value="${assetShow}"/>
             <html:hidden property="strict" value="${strict}"/>
             <html:hidden property="offset"/>
-            <c:if test="${action eq 'often'}">
-            <html:hidden property="assettypes" value="urls"/>
-            <html:hidden property="channelid" value="${channelid}"/>
-            </c:if>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
-            <c:if test="${action eq 'search'}">
             <mm:import id="contenttypes" jspvar="contenttypes">urls</mm:import>
                <%@include file="urlform.jsp" %>
-            </c:if>
          </html:form>
       </div>
 
@@ -154,10 +124,16 @@
       </c:if>
    </select>
    </div>
-   <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden;padding:10px 0px 0px 11px">
+
    <mm:import externid="results" jspvar="nodeList" vartype="List" />
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
+         <c:if test="${resultCount == 0 && param.title != null}">
+           <pre>
+  <fmt:message key="urlsearch.noresult" />
+          </pre>
+         </c:if>
+            <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
          <c:if test="${resultCount > 0}">
             <%@include file="../repository/searchpages.jsp" %>
 
@@ -206,7 +182,6 @@
 
          <c:if test="${assetShow eq 'list'}">
             <table>
-               <c:if test="${action == 'search'}">
                   <tr class="listheader">
                      <th width="55"></th>
                      <th nowrap="true"><a href="javascript:orderBy('title')" class="headerlink"><fmt:message
@@ -217,7 +192,6 @@
                         class="headerlink"><fmt:message
                         key="urlsearch.validcolumn" /></a></th>
                   </tr>
-               </c:if>
                <tbody id="assetList" class="hover"  href="">
                <c:set var="useSwapStyle">true</c:set>
                <mm:listnodes referid="results">
@@ -260,28 +234,10 @@
          </table>
    </c:if>
 </c:if>
-
-<c:if test="${resultCount == 0 && param.name != null}">
-<fmt:message key="urlsearch.noresult" />
-</c:if>
 <c:if test="${resultCount > 0}">
 <%@include file="../repository/searchpages.jsp" %>
 </c:if>
 </div>
-<c:if test="${action == 'often'}">
-<div class="body">
-<mm:url page="/editors/repository/select/SelectorChannel.do" id="select_channel_url" write="false" />
-<mm:url page="/editors/resources/UrlInitAction.do?action=search&strict=${strict}" id="search_url_url" write="false" />
-<mm:url page="/editors/resources/urlcreate.jsp?createdNode=0&channelid=${channelid}&strict=${strict}" id="new_url_url" write="false" />
-<mm:url page="/editors/repository/HighFrequencyAsset.do?action=often&assetShow=${assetShow}&offset=0&channelid=all&assettypes=urls&strict=${strict}" id="often_show_urls" write="false"/>
-<ul class="shortcuts">
-   <li><a href="${often_show_urls}"><fmt:message key="urlselect.link.allchannel" /></a></li>
-   <li><a onclick="openPopupWindow('selectchannel', 340, 400);" target="selectchannel" href="${select_channel_url}"><fmt:message key="urlselect.link.channel" /></a></li>
-   <li><a href="${search_url_url}"><fmt:message key="urlselect.link.search" /></a></li>
-   <li><a href="${new_url_url}"><fmt:message key="urlselect.link.new" /></a></li>
-</ul>
-</div>
-</c:if>
 </div>
 <div id="commandbuttonbar" class="buttonscontent" style="clear:both">
      <div class="page_buttons_seperator">
