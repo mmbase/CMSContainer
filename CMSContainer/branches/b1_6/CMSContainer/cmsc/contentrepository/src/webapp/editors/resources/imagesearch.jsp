@@ -155,7 +155,7 @@
                             <a href="javascript:showInfo(<mm:field name="number" />)">
                               <img src="../gfx/icons/info.png" alt="<fmt:message key="imagesearch.icon.info" />" title="<fmt:message key="imagesearch.icon.info" />"/></a>
                         </div>
-                        <div class="thumbnail" onclick="initParentHref(this.parentNode)"><mm:image mode="img" template="s(120x100)"/></div>
+                        <div class="thumbnail" onclick="initParentHref(this.parentNode)"><mm:image mode="img" template="s(128x128)"/></div>
                         <div class="assetInfo" onclick="initParentHref(this.parentNode)">
                               <mm:field id="title" write="false" name="title"/>
                               <c:if test="${fn:length(title) > 15}">
