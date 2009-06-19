@@ -15,6 +15,11 @@
 		<prompt xml:lang="nl">Omschrijving</prompt>
 		<prompt xml:lang="zh">描述</prompt>
 	</field>
+	<field name="filename">
+      <prompt xml:lang="en">Filename</prompt>
+      <prompt xml:lang="nl">Bestandsnaam</prompt>
+      <prompt xml:lang="zh">文件名</prompt>
+   </field>
 	<field name="width" ftype="data">
 		<prompt xml:lang="en">Width</prompt>
 		<prompt xml:lang="nl">Breedte</prompt>
