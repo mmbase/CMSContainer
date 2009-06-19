@@ -101,9 +101,10 @@
     <script type="text/javascript" src="{$ew_context}/js/window.js"><xsl:comment>help fix popup position </xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/override.js"><xsl:comment>help IE</xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/my-validator.js"><xsl:comment>help IE</xsl:comment></script>
-   <script type="text/javascript">
+    <script type="text/javascript">
       var isWebmaster = "<xsl:value-of select="$WEBMASTER"/>";
     </script>
+    <script type="text/javascript" src="{$ew_context}/editors/repository/search.js"></script>
     <xsl:call-template name="extrajavascript-custom"/>
   </xsl:template>
 
@@ -475,6 +476,44 @@
           </tr>
         </table>
       </xsl:for-each>
+      <xsl:for-each select="command[@name=&apos;articlesearch&apos;]">
+        <table class="searchcontent">
+          <tr>
+            <xsl:if test="prompt">
+              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
+            </xsl:if>
+            <td>
+              <xsl:call-template name="listsearch-age"/>
+            </td>
+            <td>
+              <xsl:call-template name="listsearch-fields"/>
+            </td>
+            <td>
+              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="var s = form[&apos;searchfields_{../command[@name=&apos;add-item&apos;]/@cmd}&apos;]; s[s.selectedIndex].setAttribute(&apos;default&apos;, this.value);"/>
+              <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
+            </td>
+            <td>
+              <a href="#" title="{$tooltip_search}" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+                <xsl:for-each select="@*">
+                  <xsl:copy/>
+                </xsl:for-each>
+                <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
+                <xsl:choose>
+                  <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
+                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
+                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@createdir" /></xsl:attribute>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@role" /></xsl:attribute>
+                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@createdir" /></xsl:attribute>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="prompt_search"/>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </xsl:for-each>
       <xsl:for-each select="command[@name=&apos;layoutsearch&apos;]">
         <script type="text/javascript">
 		<xsl:variable name="i18n_prompt">
@@ -789,6 +828,10 @@
      <!-- Search is handled by the listsearch template -->
   </xsl:template>
   
+  <xsl:template match="command[@name=&apos;articlesearch&apos;]" mode="listnewbuttons">
+     <!-- Search is handled by the listsearch template -->
+  </xsl:template>
+  
   <xsl:template match="command[@name=&apos;contenttypeselector&apos;]" mode="listnewbuttons">
      <!-- Search is handled by the listsearch template -->
   </xsl:template>
@@ -859,7 +902,7 @@
 
   <xsl:template match="command[@name=&apos;contentselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/SearchInitAction.do?action=selectforwizard', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>

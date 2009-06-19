@@ -21,6 +21,7 @@ public class SearchInitAction extends MMBaseAction {
    private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
+   private static final String POSITION = "position";
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -29,6 +30,7 @@ public class SearchInitAction extends MMBaseAction {
       SearchForm searchForm = (SearchForm) form;
 
       String portletId = request.getParameter(PORTLET_ID);
+      String position = request.getParameter(POSITION);
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -69,6 +71,7 @@ public class SearchInitAction extends MMBaseAction {
       }
       addToRequest(request, TYPES_LIST, typesList);
       addToRequest(request, PORTLET_ID, portletId);
+      addToRequest(request, POSITION, position);
 
       return mapping.findForward(SEARCHOPTIONS);
    }
