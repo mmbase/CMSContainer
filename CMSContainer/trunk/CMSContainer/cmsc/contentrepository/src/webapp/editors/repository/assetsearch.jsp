@@ -515,13 +515,13 @@
                    <a href="javascript:showInfo('<mm:nodeinfo type="type"/>', '<mm:field name="number" />')">
                      <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
                      <c:if test="${typedef eq 'images'}">
-                        <img src="<mm:image template="s(120x100)"/>" alt=""/>
+                        <img src="<mm:image template="s(128x128)"/>" alt=""/>
                      </c:if> 
                      <c:if test="${typedef eq 'attachments'}">
                         <%@include file="../resources/attachmentthumbnail.jsp" %>
                      </c:if>
                      <c:if test="${typedef eq 'urls'}">
-                        <img src="../gfx/url.gif" alt="" width="120px" height="100px"/>
+                        <img src="../gfx/url.gif" alt=""/>
                      </c:if>
                   </a>
                </div>
