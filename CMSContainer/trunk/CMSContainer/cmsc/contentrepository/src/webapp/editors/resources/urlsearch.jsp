@@ -83,7 +83,7 @@
                      <c:if test="${ empty strict}">
                        <c:set var="url">javascript:selectElement('<mm:field name="number" />', '<mm:field name="title" escape="js-single-quotes"/>','<mm:field name="url" />');</c:set>
                      </c:if>
-                     <div class="grid" href="${url}"/>" onMouseOut="javascript:hideIcons(<mm:field name='number'/>)" onMouseOver="showIcons(<mm:field name='number'/>)">
+                     <div class="grid" href="${url}" onMouseOut="javascript:hideIcons(<mm:field name='number'/>)" onMouseOver="showIcons(<mm:field name='number'/>)">
                         <div id="thumbnail-icons-<mm:field name='number'/>" class="thumbnail-icons">
                             <a href="javascript:showInfo(<mm:field name="number" />)">
                               <img src="../gfx/icons/info.png" alt="<fmt:message key="urlsearch.icon.info" />" title="<fmt:message key="urlsearch.icon.info" />"/></a>
