@@ -236,17 +236,12 @@
                         <td onMouseDown="initParentHref(this.parentNode)">
                            <mm:field name="filename"/>
                         </td>
-								<td>
+								<td  onMouseDown="initParentHref(this.parentNode)">
                            <mm:field name="mimetype"/>
                         </td>
-								<td>           
+								<td  onMouseDown="initParentHref(this.parentNode)">           
                         <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
-                        <mm:compare referid="action" value="search">
-                           <span title="${contentChannelPath}">${channelName}</span>
-                        </mm:compare>
-                        <mm:compare referid="action" value="search" inverse="true">
-                           ${channelName}
-                        </mm:compare>
+                        <span title="${contentChannelPath}">${channelName}</span>
 								</td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
