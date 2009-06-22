@@ -22,6 +22,7 @@
 		<module>portlets-ecard</module>
 		<module>portlets-emailalert</module>
 		<module>portlets-gallery</module>
+		<module>portlets-gallery2</module>
 		<module>portlets-googlemap</module>
 		<module>portlets-guestbook</module>
 		<module>portlets-jforum</module>
