@@ -35,7 +35,6 @@ See http://www.MMBase.org/license
 		<dependency>
 			<groupId>org.mmbase</groupId>
 			<artifactId>mmbase</artifactId>
-			<classifier>classes</classifier>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

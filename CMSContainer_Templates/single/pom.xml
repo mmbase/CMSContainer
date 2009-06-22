@@ -22,7 +22,7 @@
 <!-- MMBase -->	
 		<dependency>
 			<groupId>org.mmbase</groupId>
-			<artifactId>mmbase</artifactId>
+			<artifactId>base-webapp</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
@@ -54,11 +54,13 @@
 			<artifactId>mmbase-resources</artifactId>
 			<type>war</type>
 		</dependency>
+		<!--  included in org.mmbase.base-webapp
 		<dependency>
 			<groupId>org.mmbase</groupId>
 			<artifactId>mmbase-taglib</artifactId>
 			<classifier>classes</classifier>
 		</dependency>
+ 		-->
 
 <!-- MMApps.sourceforge.net -->	
 		<dependency>
@@ -108,6 +110,7 @@
 			<artifactId>jsp-api</artifactId>
 		</dependency>
 		<!-- jsp taglibs, jstl -->
+		<!--  included in org.mmbase.base-webapp
   		<dependency>
   			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -116,6 +119,7 @@
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 		</dependency>
+		-->
 		
 <!-- Pager taglib -->
 		<dependency>
@@ -144,10 +148,12 @@
 			<groupId>commons-digester</groupId>
 			<artifactId>commons-digester</artifactId>
 		</dependency>
+		<!--  included in org.mmbase.base-webapp
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -160,10 +166,12 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
+	<!--  included in org.mmbase.base-webapp
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
@@ -185,13 +193,45 @@
 			<artifactId>ehcache</artifactId>
 		</dependency>
 
-<!-- JSON -->		
+<!-- JSON -->
    		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20070829</version>
 		</dependency>
 
+<!-- Xinha html editor -->
+		<dependency>
+			<groupId>org.xinha</groupId>
+			<artifactId>xinha</artifactId>
+			<version>0.96beta2</version>
+			<type>zip</type>
+		</dependency>
 
 	</dependencies>
+	
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <overlays>
+            <overlay>
+              <groupId>org.xinha</groupId>
+              <artifactId>xinha</artifactId>
+              <type>zip</type>
+              <targetPath>mmbase/edit/wizard/xinha</targetPath>
+              <excludes>
+                <exclude>plugins/InsertSmiley/**/*</exclude>
+                <exclude>plugins/ExtendedFileManager/**/*</exclude>
+                <exclude>plugins/ImageManager/**/*</exclude>
+              </excludes>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+    
 </project>

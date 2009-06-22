@@ -82,6 +82,8 @@ createDefaultConfig = function() {
   
   
   xinha_config.URIs['insert_table'] =  _editor_url + 'popups/insert_table.html';
+  xinha_config.width = ['98%'];
+
   return xinha_config;
 }
 
