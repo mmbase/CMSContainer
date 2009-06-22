@@ -221,11 +221,7 @@
                            <mm:field name="filename"/>
                         </td>
 								<td onMouseDown="initParentHref(this.parentNode)"></td>
-								<td  onMouseDown="initParentHref(this.parentNode)">
-									 <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
-									 <c:if test="${typedef eq 'attachments'}">
-										<%@include file="attachmentthumbnail.jsp" %>
-									 </c:if>
+								<td>
 								</td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>

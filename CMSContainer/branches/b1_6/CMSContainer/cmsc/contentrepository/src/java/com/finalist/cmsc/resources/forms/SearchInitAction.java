@@ -58,7 +58,7 @@ public class SearchInitAction extends MMBaseAction {
       SearchUtil.addConstraint(query, channelConstraint);
       query.setNodeStep(theStep);
       // Order the result by:
-      String order = "";
+      String order = searchForm.getOrder();
       // set default order field
       if (StringUtils.isEmpty(order)) {
          if (nodeManager.hasField("title")) {
