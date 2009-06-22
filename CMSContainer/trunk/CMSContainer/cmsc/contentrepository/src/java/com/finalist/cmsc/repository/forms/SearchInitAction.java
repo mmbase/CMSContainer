@@ -18,6 +18,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class SearchInitAction extends MMBaseAction {
 
+   private static final String TITLE = "title";
    private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
@@ -44,7 +45,7 @@ public class SearchInitAction extends MMBaseAction {
       }
 
       if (StringUtils.isEmpty(searchForm.getOrder())) {
-         searchForm.setOrder("title");
+         searchForm.setOrder(TITLE);
       }
 
       if (searchForm.getDirection() != SortOrder.ORDER_DESCENDING) {
@@ -72,6 +73,7 @@ public class SearchInitAction extends MMBaseAction {
       addToRequest(request, TYPES_LIST, typesList);
       addToRequest(request, PORTLET_ID, portletId);
       addToRequest(request, POSITION, position);
+      addToRequest(request, TITLE, searchForm.getTitle());
 
       return mapping.findForward(SEARCHOPTIONS);
    }

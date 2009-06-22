@@ -7,6 +7,7 @@
 <mm:import externid="action" from="parameters" />
 <mm:import externid="portletId" from="parameters" />
 <mm:import externid="position" from="parameters" />
+<mm:import externid="initsearchtext" from="parameters" />
 
 <mm:cloud loginpage="../../login.jsp">
 
@@ -40,7 +41,8 @@
 <mm:present referid="action">
 	<mm:url page="/editors/repository/SearchInitAction.do" id="contenturl" write="false" >
 		<mm:param name="action" value="${action}" />
-		<mm:param name="position" value="${position}" />		
+		<mm:param name="position" value="${position}" />
+		<mm:param name="title" value="${initsearchtext}" />
 	</mm:url>
 </mm:present>
 
