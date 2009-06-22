@@ -11,7 +11,8 @@ div.editor div.body ul.shortcuts li a {
    padding-right: 15px;
 }
 
-div.editor div.body #assetList div.grid {
+div.editor div.body #assetList div.grid,
+div.editor div.body #assetList div.selected {
    width: 138px;
    height: 198px;
    float: left;
@@ -19,13 +20,14 @@ div.editor div.body #assetList div.grid {
 }
 
 div.editor div.body #assetList div.grid div.thumbnail:hover,
-div.editor div.body #assetList #selected div.thumbnail,
-div.editor div.body #assetList #selected td
+div.editor div.body #assetList div.selected div.thumbnail,
+div.editor div.body #assetList tr.selected td
    {
    background-color: #f1f400;
 }
 
-div.editor div.body #assetList div.grid div.thumbnail-icons {
+div.editor div.body #assetList div.grid div.thumbnail-icons,
+div.editor div.body #assetList div.selected div.thumbnail-icons {
    visibility :hidden; 
    border:1px solid #eaedff; 
    position:relative; 
@@ -36,7 +38,8 @@ div.editor div.body #assetList div.grid div.thumbnail-icons {
    background-color: white;
 }
 
-div.editor div.body #assetList div.grid div.thumbnail {
+div.editor div.body #assetList div.grid div.thumbnail,
+div.editor div.body #assetList div.selected div.thumbnail {
    width: 100%;
    height:128px;
    text-align: center;
@@ -44,7 +47,8 @@ div.editor div.body #assetList div.grid div.thumbnail {
    padding: 0;
 }
 
-div.editor div.body #assetList div.grid div.assetInfo {
+div.editor div.body #assetList div.grid div.assetInfo,
+div.editor div.body #assetList div.selected div.assetInfo {
    width: 100%;
    height: 30px;
    text-align: center;
