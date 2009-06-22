@@ -133,7 +133,7 @@
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
          <c:if test="${resultCount == 0 && param.title != null}">
-         <div style="padding:10px 0px 0px 11px">
+         <div class="no_results">
             <fmt:message key="imagesearch.noresult" />
          </div>
          </c:if>
