@@ -77,7 +77,7 @@ public class ContentSearchAction extends PagerAction {
          index = "no";
       }
       request.setAttribute("index", index);
-      request.getSession().setAttribute("title", searchForm.getTitle());
+      request.setAttribute("title", searchForm.getTitle());
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
          if (deleteContentRequest.startsWith("massDelete:")) {
             massDeleteContent(deleteContentRequest.substring(11), cloud);

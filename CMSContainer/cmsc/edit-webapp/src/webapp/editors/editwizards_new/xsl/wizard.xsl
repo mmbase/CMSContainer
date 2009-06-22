@@ -476,23 +476,23 @@
         </table>
       </xsl:for-each>
       <xsl:for-each select="command[@name=&apos;articlesearch&apos;]">
+        <script type="text/javascript">
+		function articlesearch(){
+			var searchtext = document.getElementById('searchterm_<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />').value;
+			window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard&amp;initsearchtext=' + searchtext, 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');
+		}
+        </script>
         <table class="searchcontent">
           <tr>
             <xsl:if test="prompt">
               <td class="searchprompt"><xsl:call-template name="prompt"/></td>
             </xsl:if>
             <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <xsl:call-template name="listsearch-fields"/>
-            </td>
-            <td>
-              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="var s = form[&apos;searchfields_{../command[@name=&apos;add-item&apos;]/@cmd}&apos;]; s[s.selectedIndex].setAttribute(&apos;default&apos;, this.value);"/>
+              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" id="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="var s = form[&apos;searchfields_{../command[@name=&apos;add-item&apos;]/@cmd}&apos;]; s[s.selectedIndex].setAttribute(&apos;default&apos;, this.value);"/>
               <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
             </td>
             <td>
-              <a href="#" title="{$tooltip_search}" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard', 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+              <a href="#" title="{$tooltip_search}" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';javascript:articlesearch();" class="button">
                 <xsl:for-each select="@*">
                   <xsl:copy/>
                 </xsl:for-each>
