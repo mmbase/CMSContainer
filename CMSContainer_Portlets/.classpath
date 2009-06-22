@@ -19,6 +19,7 @@
 	<classpathentry kind="src" path="portlets-search/src/java"/>
 	<classpathentry kind="src" path="portlets-newsletter/src/java"/>
 	<classpathentry kind="src" path="portlets-preferences/src/java"/>
+	<classpathentry kind="src" path="portlets-gallery2/src/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer_Modules-1_7"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_7"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.7.0.jar">
