@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
-%><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil"
+%><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil,com.finalist.cmsc.repository.RepositoryUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -185,11 +185,26 @@
                   <th nowrap="true"><a href="javascript:orderBy('itype')"
                      class="headerlink"><fmt:message
                      key="imagesearch.mimetypecolumn" /></a></th>
-                  <th></th>
+                  <th><fmt:message
+							key="search.creationchannelcolumn" /></th>
                </tr>
 					<tbody id="assetList" class="hover"  href="">
 						<c:set var="useSwapStyle">true</c:set>
+                 <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
+                     <mm:field id="trashnumber" name="number" write="false"/>
+                  </mm:node>
 						<mm:listnodes referid="results">
+                      <mm:relatednodes role="creationrel" type="contentchannel">
+                        <c:set var="creationRelNumber"><mm:field name="number" id="creationnumber"/></c:set>
+                        <mm:field name="number" jspvar="channelNumber" write="false"/>
+                        <cmsc:rights nodeNumber="${channelNumber}" var="rights"/>
+                        <mm:compare referid="trashnumber" referid2="creationnumber" inverse="true">
+                            <mm:field name="name" jspvar="channelName" write="false"/>
+                            <c:set var="channelIcon" value="/editors/gfx/icons/type/contentchannel_${rights}.png"/>
+                            <c:set var="channelIconMessage"><fmt:bundle basename="cmsc-security"><fmt:message key="role.${rights}" /></fmt:bundle></c:set>
+                            <mm:field name="path" id="contentChannelPath" write="false" />
+                        </mm:compare>
+                     </mm:relatednodes>
                      <mm:field name="description" escape="js-single-quotes" jspvar="description">
                         <%
                            description = ((String) description).replaceAll("[\\n\\r\\t]+", " ");
@@ -218,7 +233,10 @@
                            <mm:field name="filename"/>
                         </td>
 								<td onMouseDown="initParentHref(this.parentNode)"><mm:field name="itype" /></td>
-								<td></td>
+								<td onMouseDown="initParentHref(this.parentNode)">
+                         <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
+                         <span title="${contentChannelPath}">${channelName}</span>
+                        </td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
 						</mm:listnodes>

@@ -420,6 +420,7 @@
                 <c:set var="channelIcon" value="/editors/gfx/icons/type/contentchannel_${rights}.png"/>
                 <c:set var="channelIconMessage"><fmt:bundle basename="cmsc-security"><fmt:message key="role.${rights}" /></fmt:bundle></c:set>
                 <c:set var="channelUrl" value="Asset.do?type=asset&parentchannel=${channelNumber}&direction=down"/>
+               <mm:field name="path" id="contentChannelPath" write="false" />
             </mm:compare>
          </mm:relatednodes>
          <tr <mm:even inverse="true">class="swap"</mm:even>>
@@ -443,10 +444,10 @@
             <td style="white-space: nowrap;" onMouseDown="objClick(this);">
                 <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
                   <mm:compare referid="action" value="search">
-                     <a href="${channelUrl}">${channelName}</a>
+                     <a href="${channelUrl}"  title="${contentChannelPath}">${channelName}</a>
                   </mm:compare>
                   <mm:compare referid="action" value="search" inverse="true">
-                     ${channelName}
+                     <span title="${contentChannelPath}">${channelName}</span>
                   </mm:compare>
             </td>
             <td style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="lastmodifier" /></td>
