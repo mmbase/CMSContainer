@@ -205,7 +205,7 @@
                             <mm:field name="name" jspvar="channelName" write="false"/>
                             <c:set var="channelIcon" value="/editors/gfx/icons/type/contentchannel_${rights}.png"/>
                             <c:set var="channelIconMessage"><fmt:bundle basename="cmsc-security"><fmt:message key="role.${rights}" /></fmt:bundle></c:set>
-                            <mm:field name="path" id="contentChannelPath" write="false" />
+                            <mm:field name="path" id="fullChannelPath" write="false" />
                         </mm:compare>
                      </mm:relatednodes>
 							<mm:field name="description" escape="js-single-quotes"
@@ -241,7 +241,7 @@
                         </td>
 								<td  onMouseDown="initParentHref(this.parentNode)">           
                         <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
-                        <span title="${contentChannelPath}">${channelName}</span>
+                        <span title="${fullChannelPath}">${channelName}</span>
 								</td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
