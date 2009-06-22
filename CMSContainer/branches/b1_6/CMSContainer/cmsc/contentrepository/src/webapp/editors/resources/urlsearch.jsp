@@ -129,9 +129,9 @@
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
          <c:if test="${resultCount == 0 && param.title != null}">
-           <pre>
-  <fmt:message key="urlsearch.noresult" />
-          </pre>
+            <div style="padding:10px 0px 0px 11px">
+               <fmt:message key="urlsearch.noresult" />
+            </div>
          </c:if>
             <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
          <c:if test="${resultCount > 0}">
