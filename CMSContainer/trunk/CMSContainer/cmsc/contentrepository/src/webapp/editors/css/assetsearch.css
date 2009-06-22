@@ -18,7 +18,9 @@ div.editor div.body #assetList div.grid {
    text-align: center
 }
 
-div.editor div.body #assetList div.grid div.thumbnail:hover,div.editor div.body #assetList #selected div.thumbnail
+div.editor div.body #assetList div.grid div.thumbnail:hover,
+div.editor div.body #assetList #selected div.thumbnail,
+div.editor div.body #assetList #selected td
    {
    background-color: #f1f400;
 }
