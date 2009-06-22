@@ -329,7 +329,7 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
-   <div style="padding:10px 0px 0px 11px">
+   <div class="no_results">
       <fmt:message key="searchform.searchpages.nonefound" />
    </div>
    </mm:isempty>
