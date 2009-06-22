@@ -150,7 +150,7 @@
                      </mm:compare>
                   </mm:relatednodes>
                <c:if test="${ empty strict}">
-                  <c:set id="url">javascript:selectElement('<mm:field name="number" />', '<mm:field name="title" escape="js-single-quotes"/>','<mm:field name="url" />');</c:set>
+                  <c:set var="url">javascript:selectElement('<mm:field name="number" />', '<mm:field name="title" escape="js-single-quotes"/>','<mm:field name="url" />');</c:set>
                </c:if>
                   <tr <c:if test="${useSwapStyle}">class="swap"</c:if> href="${url}">
                      <td style="white-space:nowrap;">
