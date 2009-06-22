@@ -6,78 +6,12 @@
 <html:html xhtml="true">
 <cmscedit:head title="images.title">
    <script src="../repository/search.js" type="text/javascript"></script>
+   <script src="../resources/assetsearch.js" type="text/javascript"></script>
    <script type="text/javascript">
-   function showIcons(id){
-     document.getElementById('thumbnail-icons-'+id).style.visibility = 'visible';
-   }
-   function hideIcons(id){
-     document.getElementById('thumbnail-icons-'+id).style.visibility = 'hidden';
-   }
-   function setShowMode() {
-      var showMode = document.getElementsByTagName("option");
-      var assetShow;
-       for(i = 0; i < showMode.length; i++){
-          if(showMode[i].selected & showMode[i].id=="a_list"){
-              assetShow="list";
-          }else if(showMode[i].selected & showMode[i].id=="a_thumbnail"){
-           assetShow="thumbnail";
-          }
-       }
-      document.forms[0].assetShow.value = assetShow;
-      document.forms[0].submit();
-   }
    function showInfo(objectnumber) {
       openPopupWindow('imageinfo', '900', '500',
             '../resources/imageinfo.jsp?objectnumber=' + objectnumber);
    }
-
-   function initParentHref(elem) {
-      if(elem.id=='selected'){
-         elem.parentNode.setAttribute('href', '');
-         elem.id ='';
-         return;
-      }
-      elem.parentNode.setAttribute('href', elem.getAttribute('href'));
-      var oldSelected = document.getElementById('selected');
-      if(oldSelected){
-         oldSelected.id="";
-      }
-      elem.id ='selected';
-   }
-
-   function doSelectIt() {
-      var href = document.getElementById('assetList').getAttribute('href')+"";
-      if (href.length<10) {
-          alert("You must select one image");
-          return;
-      }
-      if (href.indexOf('javascript:') == 0) {
-       eval(href.substring('javascript:'.length, href.length));
-       return false;
-      }
-      document.location=href;
-   }
-
-   function doCancleIt(){
-      window.top.close();
-   }
-
-   function selectElement(element, title, src, width, height, description) {
-      if (window.top.opener != undefined) {
-         window.top.opener.selectElement(element, title, src, width, height,
-               description);
-         window.top.close();
-      }
-   }
-
-	function erase(field) {
-		document.forms[0][field].value = '';
-	}
-
-	function selectChannel(channel, path) {
-		document.forms[0].contentChannel.value = channel;
-		document.forms[0].contentChannelPath.value = path;
-	}
 </script>
    <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
    </cmscedit:head>
@@ -143,20 +77,17 @@
                         <%
                            description = ((String) description).replaceAll("[\\n\\r\\t]+", " ");
                         %>
-                        <c:if test="${strict == 'images'}">
-                          <mm:import id="url">javascript:top.opener.selectContent('<mm:field name="number" />', '', ''); top.close();</mm:import>
-                        </c:if>
-                        <c:if test="${ empty strict}">
-                           <mm:import id="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>','<mm:image />','<mm:field name="width"/>','<mm:field name="height"/>', '<%=description%>');</mm:import>
+                        <c:if test="${empty strict}">
+                           <c:set var="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>','<mm:image />','<mm:field name="width"/>','<mm:field name="height"/>', '<%=description%>');</c:set>
                         </c:if>
                      </mm:field>
-                     <div class="grid" href="<mm:write referid="url"/>" onMouseOut="javascript:hideIcons(<mm:field name='number'/>)" onMouseOver="showIcons(<mm:field name='number'/>)">
+                     <div class="grid" href="${url}" onMouseOut="javascript:hideIcons(<mm:field name='number'/>)" onMouseOver="showIcons(<mm:field name='number'/>)">
                         <div id="thumbnail-icons-<mm:field name='number'/>" class="thumbnail-icons">
                             <a href="javascript:showInfo(<mm:field name="number" />)">
                               <img src="../gfx/icons/info.png" alt="<fmt:message key="imagesearch.icon.info" />" title="<fmt:message key="imagesearch.icon.info" />"/></a>
                         </div>
-                        <div class="thumbnail" onclick="initParentHref(this.parentNode)"><mm:image mode="img" template="s(128x128)"/></div>
-                        <div class="assetInfo" onclick="initParentHref(this.parentNode)">
+                        <div class="thumbnail" onclick="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')"><mm:image mode="img" template="s(128x128)"/></div>
+                        <div class="assetInfo">
                               <mm:field id="title" write="false" name="title"/>
                               <c:if test="${fn:length(title) > 15}">
                                  <c:set var="title">${fn:substring(title,0,14)}...</c:set>
@@ -190,7 +121,7 @@
                   </mm:node>
 						<c:set var="useSwapStyle">true</c:set>
 						<mm:listnodes referid="results">
-                     <mm:relatednodes role="creationrel" type="contentchannel">
+                      <mm:relatednodes role="creationrel" type="contentchannel">
                         <c:set var="creationRelNumber"><mm:field name="number" id="creationnumber"/></c:set>
                         <mm:field name="number" jspvar="channelNumber" write="false"/>
                         <cmsc:rights nodeNumber="${channelNumber}" var="rights"/>
@@ -205,27 +136,24 @@
                         <%
                            description = ((String) description).replaceAll("[\\n\\r\\t]+", " ");
                         %>
-                        <c:if test="${strict == 'images'}">
-                           <mm:import id="url">javascript:top.opener.selectContent('<mm:field name="number" />', '', ''); top.close();</mm:import>
-                        </c:if>
                         <c:if test="${ empty strict}">
-                           <mm:import id="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>','<mm:image />','<mm:field name="width"/>','<mm:field name="height"/>', '<%=description%>');</mm:import>
+                           <c:set var="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>','<mm:image />','<mm:field name="width"/>','<mm:field name="height"/>', '<%=description%>');</c:set>
                         </c:if>
                      </mm:field>
 							<tr <c:if test="${useSwapStyle}">class="swap"</c:if>
-								href="<mm:write referid="url"/>">
+								href="${url}">
 								<td style="white-space: nowrap;">
                         <a href="javascript:showInfo(<mm:field name="number" />)">
                               <img src="../gfx/icons/info.png" alt="<fmt:message key="imagesearch.icon.info" />" title="<fmt:message key="imagesearch.icon.info" />" /></a>
                         </td>
-                        <td onMouseDown="initParentHref(this.parentNode)">
+                        <td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
                            <mm:field id="title" write="false" name="title"/>
                            <c:if test="${fn:length(title) > 50}">
                               <c:set var="title">${fn:substring(title,0,49)}...</c:set>
                            </c:if>
                            ${title}
                         </td>
-                        <td onMouseDown="initParentHref(this.parentNode)">
+                        <td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
                            <mm:field name="filename"/>
                         </td>
 								<td onMouseDown="initParentHref(this.parentNode)"><mm:field name="itype" /></td>
@@ -254,7 +182,7 @@
             <div class="page_buttons">
                 <div class="button">
                     <div class="button_body">
-                        <a class="bottombutton" title="Select the image." href="javascript:doSelectIt();"><fmt:message key="imageselect.ok" /></a>
+                        <a class="bottombutton" title="Select the image." href="javascript:doSelectIt('${strict}');"><fmt:message key="imageselect.ok" /></a>
                     </div>
                 </div>
 
