@@ -156,8 +156,8 @@
                         <td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
                            <mm:field name="filename"/>
                         </td>
-								<td onMouseDown="initParentHref(this.parentNode)"><mm:field name="itype" /></td>
-								<td onMouseDown="initParentHref(this.parentNode)">
+								<td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')"><mm:field name="itype" /></td>
+								<td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
                         <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
                            <span title="${fullChannelPath}">${channelName}</span>
                         </td>
