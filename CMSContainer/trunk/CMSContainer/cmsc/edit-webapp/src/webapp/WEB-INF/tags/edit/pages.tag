@@ -52,7 +52,7 @@
    }
 </script>
 
-<table border="0" width="100%">
+<table style="border:0; width:100%; clear:both;">
    <tr>
       <td style="width:30%;padding:10px 0px 0px 11px">
             ${searchresult}
