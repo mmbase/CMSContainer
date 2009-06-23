@@ -126,10 +126,17 @@
                   <td style="width:230px"><html:text property="title" style="width:200px" value="${title}"/></td>
                   <td style="width:105px"><fmt:message key="searchform.contenttype" /></td>
                   <td>
-                     <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
-                        <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
-                        <html:optionsCollection name="typesList" value="value" label="label"/>
-                     </html:select>                     
+				     <c:if test="${not empty onlytype}" >
+						<html:hidden property="contenttypes" />
+						<input type="hidden" value="${onlytype}" name="onlytype" />
+						<input type="text" value="Article" readonly="readonly" style="width:200px" />
+					 </c:if>
+				     <c:if test="${empty onlytype}" >
+                        <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
+                           <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
+                           <html:optionsCollection name="typesList" value="value" label="label"/>
+                        </html:select>
+					 </c:if>
                   </td>
                </mm:compare>
                <mm:compare referid="mode" value="advanced">
@@ -143,14 +150,16 @@
                   <td style="width:230px"><html:text property="keywords" style="width:200px"/></td>
                   <td style="width:105px"><fmt:message key="searchform.contenttype" /></td>
                   <td>
-                     <c:if test="${fn:length(typesList) == 1}" >
-						<input type="text" name="contenttypes" value="${typesList[0].value}" readonly="readonly" />
+				     <c:if test="${not empty onlytype}" >
+						<html:hidden property="contenttypes" />
+						<input type="hidden" value="${onlytype}" name="onlytype" />
+						<input type="text" value="Article" readonly="readonly" style="width:200px" />
 					 </c:if>
-					 <c:if test="${fn:length(typesList) != 1}" >
-						 <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
-							<html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
-							<html:optionsCollection name="typesList" value="value" label="label"/>
-						 </html:select>                     
+				     <c:if test="${empty onlytype}" >
+                        <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
+                           <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
+                           <html:optionsCollection name="typesList" value="value" label="label"/>
+                        </html:select>
 					 </c:if>
                   </td>
                </tr>              
