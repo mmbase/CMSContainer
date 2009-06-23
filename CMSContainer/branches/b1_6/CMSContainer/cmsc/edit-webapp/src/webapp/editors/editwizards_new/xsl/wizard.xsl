@@ -479,7 +479,7 @@
         <script type="text/javascript">
 		function articlesearch(){
 			var searchtext = document.getElementById('searchterm_<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />').value;
-			window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard&amp;initsearchtext=' + searchtext, 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');
+			window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard&amp;initsearchtext=' + searchtext + '&amp;type=article', 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');
 		}
         </script>
         <table class="searchcontent">
