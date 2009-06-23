@@ -27,7 +27,7 @@ function addItem(elem, number, strict) {
             var oldSelected = document.getElementById(selectedItems[0]);
             if (oldSelected) {
                oldSelected.id = '';
-               oldSelected.setAttribute('class', 'grid');
+               oldSelected.className = 'grid';
             }
          }
          selectedItems[0] = number;
@@ -35,13 +35,13 @@ function addItem(elem, number, strict) {
          selectedItems[selectedItems.length] = number;
       }
       elem.id = number;
-      elem.setAttribute('class', 'selected');
+      elem.className = 'selected';
    } else {
       for ( var i = selectedItems.length-1; i >=0; i--) {
          if (selectedItems[i] == number) {
             selectedItems.splice(i,1);
             elem.id = '';
-            elem.setAttribute('class', 'grid');
+            elem.className = 'grid';
             break;
          }
       }
