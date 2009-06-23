@@ -183,26 +183,8 @@
 	      </c:if>
       </div>
    </div>
-       <div id="commandbuttonbar" class="buttonscontent" style="clear:both">
-            <div class="page_buttons_seperator">
-               <div></div>
-            </div>
-            <div class="page_buttons">
-                <div class="button">
-                    <div class="button_body">
-                        <a class="bottombutton" title="Select the attachment." href="javascript:doSelectIt('${strict}');"><fmt:message key="attachmentselect.ok" /></a>
-                    </div>
-                </div>
-
-                <div class="button">
-                    <div class="button_body">
-                        <a class="bottombutton" href="javascript:doCancleIt();" title="Cancel this task, attachment will NOT be selected."><fmt:message key="attachmentselect.cancel" /></a>
-                    </div>
-                </div>
-                <div class="begin">
-                </div>
-            </div>
-        </div>
+<c:set var="content_type"><fmt:message key="asset.search.attachment" /></c:set>
+<%@include file="footbar.jsp" %>
 </mm:cloud>
 </body>
 </html:html>

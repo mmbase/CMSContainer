@@ -419,7 +419,7 @@
                      <a href="${channelUrl}" title="${contentChannelPath}">${channelName}</a>
                   </mm:compare>
                   <mm:compare referid="action" value="search" inverse="true">
-                     ${channelName}
+                     <span title="${contentChannelPath}">${channelName}</span>
                   </mm:compare>
             </td>
             <td style="white-space: nowrap;" onMouseDown="objClick(this);"><mm:field name="lastmodifier" /></td>
