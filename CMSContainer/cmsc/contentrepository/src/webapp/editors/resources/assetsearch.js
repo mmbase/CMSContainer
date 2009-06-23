@@ -37,9 +37,9 @@ function addItem(elem, number, strict) {
       elem.id = number;
       elem.setAttribute('class', 'selected');
    } else {
-      for ( var i = 0; i < selectedItems.length; i++) {
-         if (selectedItems[i] === number) {
-            selectedItems[i] === null;
+      for ( var i = selectedItems.length-1; i >=0; i--) {
+         if (selectedItems[i] == number) {
+            selectedItems.splice(i,1);
             elem.id = '';
             elem.setAttribute('class', 'grid');
             break;
@@ -51,7 +51,6 @@ function addItem(elem, number, strict) {
 function doSelectIt(strict) {
    if (selectedItems.length < 1) {
       alert("You must select one item.");
-      return false;
    } else {
       if (!strict) {
          var href = document.getElementById(selectedItems[0]).getAttribute(
