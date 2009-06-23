@@ -56,6 +56,7 @@ public class ContentSearchAction extends PagerAction {
    public static final String PARENTCHANNEL = "parentchannel";
    public static final String CONTENTTYPES = "contenttypes";
    private static final String POSITION = "position";
+   private static final String ONLYTYPE = "onlytype";
 
    public static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
 
@@ -76,12 +77,15 @@ public class ContentSearchAction extends PagerAction {
       String portletId = request.getParameter("portletId");
       String position = request.getParameter(POSITION);
       String deleteContentRequest = request.getParameter("deleteContentRequest");
+      String onlytype = request.getParameter(ONLYTYPE);
       String index = searchForm.getIndex();
       if (StringUtils.isEmpty(index)) {
          index = "no";
       }
       request.setAttribute("index", index);
       request.setAttribute("title", searchForm.getTitle());
+      request.setAttribute(ONLYTYPE, onlytype);
+      
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
          if (deleteContentRequest.startsWith("massDelete:")) {
             massDeleteContent(deleteContentRequest.substring(11), cloud);

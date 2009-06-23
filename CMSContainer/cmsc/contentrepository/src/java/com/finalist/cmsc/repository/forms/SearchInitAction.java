@@ -23,6 +23,7 @@ public class SearchInitAction extends MMBaseAction {
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
    private static final String POSITION = "position";
+   private static final String ONLYTYPE = "onlytype";
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -32,6 +33,8 @@ public class SearchInitAction extends MMBaseAction {
 
       String portletId = request.getParameter(PORTLET_ID);
       String position = request.getParameter(POSITION);
+      String onlytype = request.getParameter(ONLYTYPE);
+      
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -74,7 +77,8 @@ public class SearchInitAction extends MMBaseAction {
       addToRequest(request, PORTLET_ID, portletId);
       addToRequest(request, POSITION, position);
       addToRequest(request, TITLE, searchForm.getTitle());
-
+      addToRequest(request, ONLYTYPE, onlytype);
+      
       return mapping.findForward(SEARCHOPTIONS);
    }
 

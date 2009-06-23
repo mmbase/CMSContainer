@@ -8,6 +8,7 @@
 <mm:import externid="portletId" from="parameters" />
 <mm:import externid="position" from="parameters" />
 <mm:import externid="initsearchtext" from="parameters" />
+<mm:import externid="type" from="parameters" />
 
 <mm:cloud loginpage="../../login.jsp">
 
@@ -43,6 +44,8 @@
 		<mm:param name="action" value="${action}" />
 		<mm:param name="position" value="${position}" />
 		<mm:param name="title" value="${initsearchtext}" />
+		<mm:param name="contenttypes" value="${type}" />
+		<mm:param name="onlytype" value="${type}" />
 	</mm:url>
 </mm:present>
 
