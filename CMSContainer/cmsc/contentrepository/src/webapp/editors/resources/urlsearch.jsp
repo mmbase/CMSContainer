@@ -196,26 +196,8 @@
 </c:if>
 </div>
 </div>
-<div id="commandbuttonbar" class="buttonscontent" style="clear:both">
-     <div class="page_buttons_seperator">
-        <div></div>
-     </div>
-     <div class="page_buttons">
-         <div class="button">
-             <div class="button_body">
-                 <a class="bottombutton" title="Select the url." href="javascript:doSelectIt('${strict}');"><fmt:message key="urlselect.ok" /></a>
-             </div>
-         </div>
-
-         <div class="button">
-             <div class="button_body">
-                 <a class="bottombutton" href="javascript:doCancleIt();" title="Cancel this task, url will NOT be selected."><fmt:message key="urlselect.cancel" /></a>
-             </div>
-         </div>
-         <div class="begin">
-         </div>
-     </div>
- </div>
+<c:set var="content_type"><fmt:message key="asset.search.url" /></c:set>
+<%@include file="footbar.jsp" %>
 </mm:cloud>
 </body>
 </html:html>
