@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SearchInitAction extends MMBaseAction {
 
+   private static final String TYPES_LIST = "typesList";
+   private static final String TITLE = "title";
+   private static final String ONLYTYPE = "onlytype";
    private static final String POSITION = "position";
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -27,6 +30,8 @@ public class SearchInitAction extends MMBaseAction {
       SearchForm searchForm = (SearchForm) form;
 
       String position = request.getParameter(POSITION);
+      String onlytype = request.getParameter(ONLYTYPE);
+      
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -40,7 +45,7 @@ public class SearchInitAction extends MMBaseAction {
       }
 
       if (StringUtils.isEmpty(searchForm.getOrder())) {
-         searchForm.setOrder("title");
+         searchForm.setOrder(TITLE);
       }
 
       if (searchForm.getDirection() != SortOrder.ORDER_DESCENDING) {
@@ -57,9 +62,10 @@ public class SearchInitAction extends MMBaseAction {
             typesList.add(bean);
          }
       }
-      addToRequest(request, "typesList", typesList);
+      addToRequest(request, TYPES_LIST, typesList);
       addToRequest(request, POSITION, position);
-      addToRequest(request, "title", searchForm.getTitle());
+      addToRequest(request, TITLE, searchForm.getTitle());
+      addToRequest(request, ONLYTYPE, onlytype);
 
       return mapping.findForward("searchoptions");
    }
