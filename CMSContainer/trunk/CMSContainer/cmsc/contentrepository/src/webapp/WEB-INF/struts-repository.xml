@@ -18,7 +18,6 @@
       <form-bean name="SecondaryEditForm" type="com.finalist.cmsc.resources.forms.SecondaryEditForm" />
 
       <form-bean name="RolesForm" type="com.finalist.cmsc.security.forms.RolesForm" />
-      <form-bean name="HighFrequencyAssetForm" type="com.finalist.cmsc.repository.forms.HighFrequencyAssetForm" />
 
       <form-bean name="RepositoryPasteForm" type="com.finalist.cmsc.repository.forms.PasteForm" />
 
@@ -265,13 +264,6 @@
          unknown="false" validate="false">
          <forward name="restore" path="/editors/recyclebin/restore.jsp" redirect="false" />
          <forward name="success" path="/editors/recyclebin/assettrash.jsp" redirect="false" />
-      </action>
-      <action path="/editors/repository/HighFrequencyAsset" type="com.finalist.cmsc.repository.forms.HighFrequencyAssetAction"
-         unknown="false" validate="false" name="HighFrequencyAssetForm">
-         <forward name="imagesearch" path="/editors/resources/imagesearch.jsp"/>
-         <forward name="attachmentsearch" path="/editors/resources/attachmentsearch.jsp"/>
-         <forward name="urlsearch" path="/editors/resources/urlsearch.jsp"/>
-         
       </action>
       <action path="/editors/repository/AssetSearchInitAction" type="com.finalist.cmsc.repository.forms.AssetSearchInitAction"
          name="AssetSearchForm" scope="request" unknown="false" validate="false">
