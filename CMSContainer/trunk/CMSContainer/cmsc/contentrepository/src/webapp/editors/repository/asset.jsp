@@ -221,7 +221,7 @@
                <c:if test="${imageOnly eq 'yes'}">
                   <c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=asset&show=thumbnail&imageOnly=yes"/>
                </c:if>
-               <div width="100%;float:left;">
+               <div style="width:100%;float:left;">
                   <mm:listnodes referid="elements">
                      <div class="thumbnail_show" onMouseOut="javascript:hideEditItems(<mm:field name='number'/>)" onMouseOver="showEditItems(<mm:field name='number'/>)">
                         <div class="thumbnail_operation">
