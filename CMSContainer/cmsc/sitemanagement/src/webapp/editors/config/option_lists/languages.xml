@@ -17,17 +17,17 @@ http://www.loc.gov/standards/iso639-2/php/English_list.php
       <prompt xml:lang="en">Dutch (nl)</prompt>
       <prompt xml:lang="zh">荷兰语 (nl)</prompt>
    </option>
-   <option id="du">
-      <prompt xml:lang="nl">Duits (du)</prompt>
-      <prompt xml:lang="en">German (du)</prompt>
-      <prompt xml:lang="zh">German {du)</prompt>
+   <option id="de">
+      <prompt xml:lang="nl">Duits (de)</prompt>
+      <prompt xml:lang="en">German (de)</prompt>
+      <prompt xml:lang="zh">German (de)</prompt>
    </option>
    <option id="fr">
       <prompt xml:lang="nl">Frans (fr)</prompt>
       <prompt xml:lang="en">French (fr)</prompt>
-      <prompt xml:lang="zh">French {fr)</prompt>
+      <prompt xml:lang="zh">French (fr)</prompt>
    </option>
-   <option id="spa">
+   <option id="es">
       <prompt xml:lang="nl">Spaans (es)</prompt>
       <prompt xml:lang="en">Spanish (es)</prompt>
       <prompt xml:lang="zh">Spanish (es)</prompt>
