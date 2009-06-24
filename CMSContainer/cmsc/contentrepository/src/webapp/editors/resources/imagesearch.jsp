@@ -27,7 +27,7 @@
    </div>
 </div>
 
-   <div class="editor" style="height:555px">
+   <div class="editor">
       <mm:import id="formAction">/editors/resources/ImageAction</mm:import>
       <mm:import id="channelMsg"><fmt:message key="images.results" /></mm:import>
       <div class="body" >
@@ -66,7 +66,7 @@
                <fmt:message key="imagesearch.noresult" />
             </div>
          </c:if>
-   <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
+   <div class="body">
          <c:if test="${resultCount > 0}">
             <%@include file="../repository/searchpages.jsp" %>
 

@@ -28,7 +28,7 @@
    </div>
 </div>
 
-   <div class="editor" style="height:500px">
+   <div class="editor">
       <mm:import id="formAction">/editors/resources/UrlAction</mm:import>
       <mm:import id="channelMsg"><fmt:message key="urls.results" /></mm:import>
       <div class="body">
@@ -68,7 +68,7 @@
                <fmt:message key="urlsearch.noresult" />
             </div>
          </c:if>
-            <div class="body" style="max-height:400px;overflow-y:auto; overflow-x:hidden">
+            <div class="body">
          <c:if test="${resultCount > 0}">
             <%@include file="../repository/searchpages.jsp" %>
 
