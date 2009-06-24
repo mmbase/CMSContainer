@@ -495,6 +495,7 @@
    <mm:list referid="results">
       <mm:first>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+         <div style="width:100%;float:left;">
       </mm:first>
 
    <mm:field name="number" id="number" write="false">
@@ -538,12 +539,18 @@
                </div>
             </div>
             </div>
+
       </mm:node>
    </mm:field>
-   </mm:list>
+
+   <mm:last>
    <div style="clear:both;"></div>
+   </div>
    <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+   </mm:last>
+   </mm:list>
 </c:if>
+
 </div>
    </div>
 </mm:cloud>
