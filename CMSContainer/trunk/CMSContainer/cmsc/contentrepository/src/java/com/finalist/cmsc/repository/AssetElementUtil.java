@@ -25,6 +25,7 @@ import org.mmbase.bridge.NodeManagerList;
 import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.NotFoundException;
 import org.mmbase.bridge.Relation;
+import org.mmbase.bridge.RelationIterator;
 import org.mmbase.bridge.RelationManager;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.CompositeConstraint;
@@ -248,5 +249,17 @@ public final class AssetElementUtil {
       }
       return list;
    }
+   
+   public static List<Node> findAssetRelatedNodes(Node node) {
 
+      List<Node> nodes = new ArrayList<Node>();
+      RelationIterator childs = node.getRelations(null, null, DESTINATION).relationIterator();
+      while (childs.hasNext()) {
+         Relation childNode = childs.nextRelation();
+         if (isAssetElement(childNode.getDestination())) {
+            nodes.add(childNode.getDestination());
+         }
+      }
+      return nodes;
+   }
 }
