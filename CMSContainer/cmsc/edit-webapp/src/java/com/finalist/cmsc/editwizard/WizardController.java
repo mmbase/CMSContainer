@@ -230,7 +230,65 @@ public class WizardController {
             }
             else if (AssetElementUtil.isAssetElement(editNode)) {
                closeAssetElement(session, editNode, objectnr, ewconfig, wizardConfig);
-            }            
+            }  
+            // create createrel for asset elements.and add asset elements to workflow.
+
+            List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+            List<NodeManager> types = AssetElementUtil.getAssetTypes(editNode.getCloud());
+            List<String> hiddenTypes = AssetElementUtil.getHiddenAssetTypes();
+            for (NodeManager manager : types) {
+               String name = manager.getName();
+               if (!hiddenTypes.contains(name)) {
+                  LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
+                  typesList.add(bean);
+               }
+            }
+            for (int i = 0 ; i < typesList.size(); i++) {
+               NodeList assets = editNode.getRelatedNodes(typesList.get(i).getValue());
+               if(assets.size() > 0 ){
+                  for( int j = 0 ; j < assets.size() ;j++) {
+                     Node node = assets.getNode(j);
+                     if (!RepositoryUtil.hasCreationChannel(node)) {
+                        String channelnr = (String) session.getAttribute(SESSION_CREATION);
+                        //if the channel is not exist get root channel .used for adding pages
+                        if (channelnr == null ||"".equals(channelnr) ) {
+                           channelnr = RepositoryUtil.getRoot(node.getCloud());
+                        }
+                        log.debug("Creation " + channelnr);
+
+                        if (StringUtils.isNotEmpty(channelnr)) {
+                           RepositoryUtil.addCreationChannel(node, channelnr);
+                        } 
+                     }
+                     if (ContentElementUtil.getAuthor(node) == null) {
+                        node.commit();
+                     }
+                     addWorkFlowItem(node);
+                     /*
+                     NodeManager ownerManager = cloud.getNodeManager(USER);
+                     int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
+                     if (owners < 1) {  
+                       RelationUtil.createRelation(node, SecurityUtil.getUserNode(cloud), OWNERREL);
+                     }
+                     
+                     if (!Workflow.hasWorkflow(node)) { 
+                        Workflow.create(node, ""); 
+                     } 
+                     else
+                     { 
+                        Workflow.addUserToWorkflow(node);
+                     }
+                     */
+                     //add version for asset element
+                     try {
+                        Versioning.addVersion(node);
+                     } 
+                     catch (VersioningException e) {
+                       log.error("Add version error for node"+node.getNumber(),e);
+                     }
+                  }
+               }
+            }
          }
          log.debug("contenttype " + elementtype);
 
@@ -273,64 +331,7 @@ public class WizardController {
                }
             }
          }
-   // create createrel for asset elements.and add asset elements to workflow.
-
-      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
-      List<NodeManager> types = AssetElementUtil.getAssetTypes(editNode.getCloud());
-      List<String> hiddenTypes = AssetElementUtil.getHiddenAssetTypes();
-      for (NodeManager manager : types) {
-         String name = manager.getName();
-         if (!hiddenTypes.contains(name)) {
-            LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-            typesList.add(bean);
-         }
-      }
-      for (int i = 0 ; i < typesList.size(); i++) {
-         NodeList assets = editNode.getRelatedNodes(typesList.get(i).getValue());
-         if(assets.size() > 0 ){
-            for( int j = 0 ; j < assets.size() ;j++) {
-               Node node = assets.getNode(j);
-               if (!RepositoryUtil.hasCreationChannel(node)) {
-                  String channelnr = (String) session.getAttribute(SESSION_CREATION);
-                  //if the channel is not exist get root channel .used for adding pages
-                  if (channelnr == null ||"".equals(channelnr) ) {
-                     channelnr = RepositoryUtil.getRoot(node.getCloud());
-                  }
-                  log.debug("Creation " + channelnr);
-
-                  if (StringUtils.isNotEmpty(channelnr)) {
-                     RepositoryUtil.addCreationChannel(node, channelnr);
-                  } 
-               }
-               if (ContentElementUtil.getAuthor(node) == null) {
-                  node.commit();
-               }
-               addWorkFlowItem(node);
-               /*
-               NodeManager ownerManager = cloud.getNodeManager(USER);
-               int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
-               if (owners < 1) {  
-                 RelationUtil.createRelation(node, SecurityUtil.getUserNode(cloud), OWNERREL);
-               }
-               
-               if (!Workflow.hasWorkflow(node)) { 
-                  Workflow.create(node, ""); 
-               } 
-               else
-               { 
-                  Workflow.addUserToWorkflow(node);
-               }
-               */
-               //add version for asset element
-               try {
-                  Versioning.addVersion(node);
-               } 
-               catch (VersioningException e) {
-                 log.error("Add version error for node"+node.getNumber(),e);
-               }
-            }
-         }
-      }
+ 
       try {
          if (wizardConfig.wiz.committed()) {
             Versioning.addVersion(editNode);
@@ -389,6 +390,9 @@ public class WizardController {
 
 
    protected void addWorkFlowItem(Node editNode) {
+      if(!Workflow.isWorkflowElement(editNode)) {
+         return;
+      }
       if (!Workflow.hasWorkflow(editNode)) { 
          Workflow.create(editNode, ""); 
       } 

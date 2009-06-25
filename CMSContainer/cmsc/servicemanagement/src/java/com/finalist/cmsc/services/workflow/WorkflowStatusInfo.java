@@ -133,7 +133,7 @@ public class WorkflowStatusInfo {
                }
             }
             if (Workflow.STATUS_PUBLISHED.equals(status)) {
-               assetPublished = count;
+               assetPublished += count;
                setNodetypeStatus(cloud,assetChildTypes, assetChildrenPublished, nodetype, count);
             }
          }
