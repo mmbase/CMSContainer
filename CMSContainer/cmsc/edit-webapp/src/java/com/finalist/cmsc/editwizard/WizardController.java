@@ -13,8 +13,6 @@ import java.util.Stack;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.mmbase.applications.editwizard.Config;
@@ -240,7 +238,6 @@ public class WizardController {
       }
    }
 
-
    private void closeContentElement(HttpSession session, Node editNode, String objectnr, Config ewconfig, Config.WizardConfig wizardConfig) {
       if (NEW_OBJECT.equals(objectnr)) {
             String channelnr = (String) session.getAttribute(SESSION_CREATION);
@@ -340,68 +337,66 @@ public class WizardController {
             }
          }
       }
-         try {
-            if (wizardConfig.wiz.committed()) {
-               Versioning.addVersion(editNode);
-            }
+      try {
+         if (wizardConfig.wiz.committed()) {
+            Versioning.addVersion(editNode);
          }
-         catch (VersioningException e) {
-            log.error("Problem while adding version for node : " + objectnr, e);
-         }
+      }
+      catch (VersioningException e) {
+         log.error("Problem while adding version for node : " + objectnr, e);
+      }
    }
-
 
    private void closeAssetElement(HttpSession session, Node editNode, String objectnr, Config ewconfig, Config.WizardConfig wizardConfig) {
       if (NEW_OBJECT.equals(objectnr)) {
+         String channelnr = (String) session.getAttribute(SESSION_CREATION);
+         log.debug("Creation " + channelnr);
+
+         // this has creation channel check is needed, because with it
+         // will create double creationchannels when first "save" and
+         // then "save and close"
+         if (!RepositoryUtil.hasCreationChannel(editNode)) {
+            if (StringUtils.isNotEmpty(channelnr)) {
+               RepositoryUtil.addCreationChannel(editNode, channelnr);
+               AssetElementUtil.addOwner(editNode);
+               if (isMainWizard(ewconfig, wizardConfig)) {
+                  RepositoryUtil.addAssetToChannel(editNode, channelnr);
+               }
+            }
+            else {
+               log.warn("AssetElement: Creationchannel was not found in session");
+            }
+         }
+      }
+      else {
+         if (!AssetElementUtil.hasOwner(editNode)) {
+            AssetElementUtil.addOwner(editNode);
+         }
+
+         if (!RepositoryUtil.hasCreationChannel(editNode)) {
             String channelnr = (String) session.getAttribute(SESSION_CREATION);
             log.debug("Creation " + channelnr);
 
-            // this has creation channel check is needed, because with it
-            // will create double creationchannels when first "save" and
-            // then "save and close"
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotEmpty(channelnr)) {
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
-                  AssetElementUtil.addOwner(editNode);
-                  if (isMainWizard(ewconfig, wizardConfig)) {
-                     RepositoryUtil.addAssetToChannel(editNode, channelnr);
-                  }
-               }
-               else {
-                  log.warn("AssetElement: Creationchannel was not found in session");
-               }
+            if (StringUtils.isNotEmpty(channelnr)) {
+               RepositoryUtil.addCreationChannel(editNode, channelnr);
             }
          }
-         else {
-            if (!AssetElementUtil.hasOwner(editNode)) {
-               AssetElementUtil.addOwner(editNode);
-            }
-
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               String channelnr = (String) session.getAttribute(SESSION_CREATION);
-               log.debug("Creation " + channelnr);
-
-               if (StringUtils.isNotEmpty(channelnr)) {
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
-               }
-            }
+      }
+      if (!Workflow.hasWorkflow(editNode)) { 
+         Workflow.create(editNode, ""); 
+      } 
+      else { 
+         Workflow.addUserToWorkflow(editNode);
+      }
+      try {
+         if (wizardConfig.wiz.committed()) {
+            Versioning.addVersion(editNode);
          }
-         if (!Workflow.hasWorkflow(editNode)) { 
-            Workflow.create(editNode, ""); 
-         } 
-         else { 
-            Workflow.addUserToWorkflow(editNode);
-         }
-         try {
-            if (wizardConfig.wiz.committed()) {
-               Versioning.addVersion(editNode);
-            }
-         }
-         catch (VersioningException e) {
-            log.error("Problem while adding version for node : " + objectnr, e);
-         }
+      }
+      catch (VersioningException e) {
+         log.error("Problem while adding version for node : " + objectnr, e);
+      }
    }
-
 
    public void closeWizard(HttpServletRequest request, Config ewconfig, WizardConfig wizardConfig, Cloud cloud,
          Node editNode, String contenttype) {
