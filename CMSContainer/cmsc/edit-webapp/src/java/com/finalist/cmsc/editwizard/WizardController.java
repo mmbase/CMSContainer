@@ -305,13 +305,7 @@ public class WizardController {
                if (ContentElementUtil.getAuthor(node) == null) {
                   node.commit();
                }
-               if (!Workflow.hasWorkflow(node)) { 
-                  Workflow.create(node, ""); 
-               } 
-               else
-               { 
-                  Workflow.addUserToWorkflow(node);
-               }
+               addWorkFlowItem(node);
                /*
                NodeManager ownerManager = cloud.getNodeManager(USER);
                int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
@@ -382,12 +376,7 @@ public class WizardController {
             }
          }
       }
-      if (!Workflow.hasWorkflow(editNode)) { 
-         Workflow.create(editNode, ""); 
-      } 
-      else { 
-         Workflow.addUserToWorkflow(editNode);
-      }
+      addWorkFlowItem(editNode);
       try {
          if (wizardConfig.wiz.committed()) {
             Versioning.addVersion(editNode);
@@ -395,6 +384,16 @@ public class WizardController {
       }
       catch (VersioningException e) {
          log.error("Problem while adding version for node : " + objectnr, e);
+      }
+   }
+
+
+   protected void addWorkFlowItem(Node editNode) {
+      if (!Workflow.hasWorkflow(editNode)) { 
+         Workflow.create(editNode, ""); 
+      } 
+      else { 
+         Workflow.addUserToWorkflow(editNode);
       }
    }
 
