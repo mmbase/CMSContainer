@@ -21,6 +21,7 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.navigation.*;
+import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.security.Role;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.publish.Publish;
@@ -133,6 +134,13 @@ public class PageWorkflow extends WorkflowManager {
       else {
          page = getPageNode(node);
       }
+      List<Node> blockNodes = AssetElementUtil.findAssetRelatedNodes(page);
+      for (Node blockNode: blockNodes) {
+         Node wf = getWorkflowNode(blockNode, "asset");
+         if (wf != null) {
+            changeWorkflow(wf, STATUS_PUBLISHED, "");
+         }
+     }
       publish(page, TYPE_PAGE, publishNumbers);
    }
 
