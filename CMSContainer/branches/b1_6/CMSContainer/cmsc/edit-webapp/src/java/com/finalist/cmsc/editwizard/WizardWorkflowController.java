@@ -147,13 +147,7 @@ public class WizardWorkflowController extends WizardController {
             }
             else {
                if (!CANCEL.equals(workflowCommand)) {
-                  if (!Workflow.hasWorkflow(editNode)) {
-                     log.debug("object " + objectnr + " missing workflow. creating one. ");
-                     Workflow.create(editNode, "");
-                  }
-                  else {
-                     Workflow.addUserToWorkflow(editNode);
-                  }
+                  addWorkFlowItem(editNode);
                }
             }
 
