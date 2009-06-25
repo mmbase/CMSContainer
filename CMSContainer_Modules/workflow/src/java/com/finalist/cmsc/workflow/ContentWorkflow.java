@@ -17,6 +17,7 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
+import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.UserRole;
@@ -140,6 +141,13 @@ public class ContentWorkflow extends RepositoryWorkflow {
       else {
          content = getContentNode(node);
       }
+      List<Node> blockNodes = AssetElementUtil.findAssetRelatedNodes(content);
+      for (Node blockNode: blockNodes) {
+         Node wf = getWorkflowNode(blockNode, "asset");
+         if (wf != null) {
+            changeWorkflow(wf, STATUS_PUBLISHED, "");
+         }
+     }
       publish(content, TYPE_CONTENT, publishNumbers);
    }
 
