@@ -387,17 +387,18 @@ var Data = {
 	urls:""
 }
 
-function getAssets(type, channelid){    
-    //alert(Data[type]);
-	var iWidth=800; 
-    var iHeight=200;
-	var xposition = 0;
-            var yposition = 0;
-            if ((parseInt(navigator.appVersion) >= 4)) {
-                xposition = (screen.width-iWidth ) / 2;
-                yposition = (screen.height-iHeight - 25) / 2;
-            }
-	var url='../../../../editors/resources/';
+function getAssets(type, searchfields, searchterm){    
+   var iWidth=800; 
+   var iHeight=200;
+   var xposition = 0;
+   var yposition = 0;
+   if ((parseInt(navigator.appVersion) >= 4)) {
+       xposition = (screen.width-iWidth ) / 2;
+       yposition = (screen.height-iHeight - 25) / 2;
+   }
+   var searchfield = document.getElementsByName(searchfields)[0].value;
+   var term = document.getElementsByName(searchterm)[0].value;
+   var url='../../../../editors/resources/';
    if(type.toLowerCase() == 'attachments') {
       url += 'AttachmentInitAction.do?strict=attachments';
    }
@@ -407,6 +408,7 @@ function getAssets(type, channelid){
    else if (type.toLowerCase() == 'urls') {
       url += 'UrlInitAction.do?strict=urls';
    }
+   url += '&searchfields='+searchfield+"&term="+term;
    window.open(url, 
 	'contentselector', 'width=730,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,left='+xposition+',top='+yposition+',menubar=no');
 }
