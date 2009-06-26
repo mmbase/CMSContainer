@@ -28,15 +28,15 @@
 		<prompt xml:lang="nl">Zoek url</prompt>
 		<prompt xml:lang="zh">查找Url</prompt>
 		<search-filter>
-			<name xml:lang="en">Name / Description</name>
-			<name xml:lang="nl">Naam / Omschrijving</name>
-			<name xml:lang="zh">名称 / 描述</name>
+			<name xml:lang="en">Title / Description</name>
+         <name xml:lang="nl">Titel / Omschrijving</name>
+         <name xml:lang="zh">标题 / 描述</name>
 			<search-fields>[title]|[description]</search-fields>
 		</search-filter>
 		<search-filter>
-			<name xml:lang="en">Name contains</name>
-			<name xml:lang="nl">Naam bevat</name>
-			<name xml:lang="zh">名称包含</name>
+			<name xml:lang="en">Title contains</name>
+         <name xml:lang="nl">Titel bevat</name>
+         <name xml:lang="zh">标题包含</name>
 			<search-fields>[title]</search-fields>
 		</search-filter>
 		<search-filter>
