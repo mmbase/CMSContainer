@@ -9,6 +9,10 @@
    <script src="../repository/search.js" type="text/javascript"></script>
    <script src="../resources/assetsearch.js" type="text/javascript"></script>
    <script type="text/javascript">
+   function setDefaultSearchCondition(){
+       document.forms[0].title.value = "${title}";
+       document.forms[0].description.value = "${description}";
+    }
    function showInfo(objectnumber) {
       openPopupWindow('imageinfo', '900', '500',
             '../resources/imageinfo.jsp?objectnumber=' + objectnumber);
@@ -16,7 +20,7 @@
 </script>
    <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
    </cmscedit:head>
-<body>
+<body onload="setDefaultSearchCondition()">
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
