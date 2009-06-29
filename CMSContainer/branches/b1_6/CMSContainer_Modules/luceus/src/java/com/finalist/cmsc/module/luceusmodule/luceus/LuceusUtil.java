@@ -53,7 +53,7 @@ public class LuceusUtil {
             String prefixedName = sb.toString();
 
             if (managerField.getType() == Field.TYPE_STRING) {
-               String str = contentElement.getStringValue(fieldName).replaceAll("<.+?>", "");
+               String str = contentElement.getStringValue(fieldName).replaceAll("<.+?>", " ");
                doc.add(EnvelopeFieldFactory.getStringField(prefixedName, str));
                str = null;
             }
