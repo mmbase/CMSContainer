@@ -10,8 +10,11 @@
    <script src="../resources/assetsearch.js" type="text/javascript"></script>
    <script type="text/javascript">
    function setDefaultSearchCondition(){
-       document.forms[0].title.value = "${title}";
-       document.forms[0].description.value = "${description}";
+      <c:if test="${not empty title}">
+	      document.forms[0].title.value = "${title}";
+      </c:if><c:if test="${not empty description}">
+	      document.forms[0].description.value = "${description}";
+      </c:if>
     }
    function showInfo(objectnumber) {
       openPopupWindow('imageinfo', '900', '500',
