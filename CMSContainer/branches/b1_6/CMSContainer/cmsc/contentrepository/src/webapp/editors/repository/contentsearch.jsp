@@ -110,8 +110,7 @@
                   <td>
 				     <c:if test="${not empty onlytype}" >
 						<html:hidden property="contenttypes" />
-						<input type="hidden" value="${onlytype}" name="onlytype" />
-						<input type="text" value="Article" readonly="readonly" style="width:200px" />
+						<input type="hidden" value="${onlytype}" name="onlytype" />Article
 					 </c:if>
 				     <c:if test="${empty onlytype}" >
                         <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
@@ -134,8 +133,7 @@
                   <td>
 				     <c:if test="${not empty onlytype}" >
 						<html:hidden property="contenttypes" />
-						<input type="hidden" value="${onlytype}" name="onlytype" />
-						<input type="text" value="Article" readonly="readonly" style="width:200px" />
+						<input type="hidden" value="${onlytype}" name="onlytype" />Article
 					 </c:if>
 				     <c:if test="${empty onlytype}" >
                         <html:select property="contenttypes" onchange="selectContenttype('${searchinit}');" >
