@@ -1,10 +1,11 @@
 div.editor div.body div.thumbnail_show {
    width:168px;
-   height:178px;
+   height:205px;
    float:left;
    text-align:center;
    padding:0;
    margin:0.7em;
+   overflow:hidden;
 }
 div.editor div.body div.thumbnail_show .thumbnail_operation{
    clear:both;
