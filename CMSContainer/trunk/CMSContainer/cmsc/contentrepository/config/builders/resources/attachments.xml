@@ -28,6 +28,24 @@
   </descriptions>
 
   <fieldlist>
+  <!--handle field shoul be put in front of the field filename, otherwise the filename in editzizard does not work well. CMSC-1444-->
+      <field>
+      <descriptions>
+        <description xml:lang="en">The attachment (which you can upload as a file)</description>
+        <description xml:lang="nl">De bijlage, up te loaden als een bestand</description>
+		<description xml:lang="zh">附件(能以文件形式上传的)</description>
+      </descriptions>
+      <gui>
+        <guiname xml:lang="en">File</guiname>
+        <guiname xml:lang="nl">Bestand</guiname>
+        <guiname xml:lang="eo">Dosiero</guiname>
+		<guiname xml:lang="zh">文件</guiname>
+      </gui>
+      <db>
+        <name>handle</name>
+        <type state="persistent" size="16777215" notnull="true" key="false">BYTE</type>
+      </db>
+    </field>
 
     <field>
       <descriptions>
@@ -105,23 +123,6 @@
       </db>
     </field>
 
-    <field>
-      <descriptions>
-        <description xml:lang="en">The attachment (which you can upload as a file)</description>
-        <description xml:lang="nl">De bijlage, up te loaden als een bestand</description>
-		<description xml:lang="zh">附件(能以文件形式上传的)</description>
-      </descriptions>
-      <gui>
-        <guiname xml:lang="en">File</guiname>
-        <guiname xml:lang="nl">Bestand</guiname>
-        <guiname xml:lang="eo">Dosiero</guiname>
-		<guiname xml:lang="zh">文件</guiname>
-      </gui>
-      <db>
-        <name>handle</name>
-        <type state="persistent" size="16777215" notnull="true" key="false">BYTE</type>
-      </db>
-    </field>   
     <!--
         If you use this field, then you ensure that no duplicate images can be uploaded.
     -->
