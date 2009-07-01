@@ -103,7 +103,6 @@
    <script type="text/javascript">
       var isWebmaster = "<xsl:value-of select="$WEBMASTER"/>";
     </script>
-    <script type="text/javascript" src="{$ew_context}/editors/repository/search.js"></script>
     <xsl:call-template name="extrajavascript-custom"/>
   </xsl:template>
 
