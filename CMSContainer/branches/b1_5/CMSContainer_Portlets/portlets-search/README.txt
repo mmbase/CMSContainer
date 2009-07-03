@@ -1,2 +1,2 @@
 DESCRIPTION:
-The search portlet, needs the lucues module.
+The search portlet, needs the Luceus module.
