@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
 	<portlet>
-		<description>a search portlet, using the luceus stuff</description>
+		<description>Search portlet, using the luceus engine</description>
 		<portlet-name>searchportlet</portlet-name>
 		<display-name>Search Portlet</display-name>
 		<portlet-class>com.finalist.cmsc.portlets.SearchPortlet</portlet-class>
