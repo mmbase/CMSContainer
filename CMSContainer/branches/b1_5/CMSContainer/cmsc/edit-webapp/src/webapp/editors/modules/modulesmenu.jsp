@@ -27,9 +27,11 @@
 									</a> </li>
 							</mm:haspage>
 							<mm:haspage page="/editors/resources/reactionsearch.jsp">
-								<li class="reactions"> <a href="<mm:url page="../resources/ReactionInitAction.do"/>" target="rightpane">
-									<fmt:message key="modules.reactions" />
-									</a> </li>
+                        <mm:haspage page="/editors/resources/globals.jsp">
+   								<li class="reactions"> <a href="<mm:url page="../resources/ReactionInitAction.do"/>" target="rightpane">
+   									<fmt:message key="modules.reactions" />
+   									</a> </li>
+                        </mm:haspage>      
 							</mm:haspage>
 							<mm:haspage page="/editors/versioning/modules.jsp">
 								<li class="versioning"> <a href="<mm:url page="../versioning/modules.jsp"/>" target="rightpane">
