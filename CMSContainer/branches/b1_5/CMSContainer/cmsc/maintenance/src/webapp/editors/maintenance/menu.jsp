@@ -29,10 +29,12 @@
            <c:url var="checksumUrl" value="/editors/maintenance/compute-checksums.jsp"/>
            <a href="${checksumUrl}" target="rightpane"><fmt:message key="maintenance.checksum" /></a>
         </li>
+        <% if (ServerUtil.isStaging()) { %>
         <li class="advancedpublish">
            <c:url var="cleanNVPUrl" value="/editors/maintenance/clean-non-visible-portlets.jsp"/>
            <a href="${cleanNVPUrl}" target="rightpane"><fmt:message key="maintenance.cleannonvisportlets"/></a>
         </li>
+        <% } %>
         <li class="advancedpublish">
            <c:url var="cleanICaches" value="/editors/maintenance/clean-duplicate-icaches.jsp"/>
            <a href="${cleanICaches}" target="rightpane"><fmt:message key="maintenance.icaches.cleanduplicates"/></a>
