@@ -62,6 +62,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    protected static final String ARCHIVE_PAGE = "archivepage";
    protected static final String START_INDEX = "startindex";
 
+   private static final String DEFAULT_MAX_ELEMENTS = "100";
 
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
@@ -72,7 +73,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       setPortletParameter(portletId, USE_LIFECYCLE, request.getParameter(USE_LIFECYCLE));
       setPortletParameter(portletId, ARCHIVE, request.getParameter(ARCHIVE));
       setPortletParameter(portletId, ELEMENTS_PER_PAGE, request.getParameter(ELEMENTS_PER_PAGE));
-      setPortletParameter(portletId, MAX_ELEMENTS, request.getParameter(MAX_ELEMENTS));
+      setPortletParameter(portletId, MAX_ELEMENTS, StringUtils.isBlank(request.getParameter(MAX_ELEMENTS))?DEFAULT_MAX_ELEMENTS:request.getParameter(MAX_ELEMENTS));
       setPortletParameter(portletId, SHOW_PAGES, request.getParameter(SHOW_PAGES));
       setPortletParameter(portletId, USE_PAGING, request.getParameter(USE_PAGING));
       setPortletParameter(portletId, PAGES_INDEX, request.getParameter(PAGES_INDEX));
