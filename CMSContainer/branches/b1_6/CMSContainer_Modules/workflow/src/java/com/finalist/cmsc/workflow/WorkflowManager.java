@@ -1,11 +1,6 @@
 package com.finalist.cmsc.workflow;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
@@ -20,21 +15,12 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
-import org.mmbase.storage.search.AggregatedField;
-import org.mmbase.storage.search.CompositeConstraint;
-import org.mmbase.storage.search.Constraint;
-import org.mmbase.storage.search.FieldCompareConstraint;
-import org.mmbase.storage.search.FieldValueConstraint;
-import org.mmbase.storage.search.FieldValueInConstraint;
-import org.mmbase.storage.search.RelationStep;
-import org.mmbase.storage.search.Step;
+import org.mmbase.storage.search.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.security.Role;
-import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.security.*;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.services.workflow.WorkflowException;
@@ -696,9 +682,7 @@ public abstract class WorkflowManager {
 
       clone.addAggregatedField(step3, workflowManager.getField(TYPE_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
       clone.addAggregatedField(step3, workflowManager.getField(NODETYPE_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
-      clone
-            .addAggregatedField(step3, workflowManager.getField(STATUS_FIELD),
-                  AggregatedField.AGGREGATION_TYPE_GROUP_BY);
+      clone.addAggregatedField(step3, workflowManager.getField(STATUS_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
       clone.addAggregatedField(step3, workflowManager.getField(NUMBER_FIELD), AggregatedField.AGGREGATION_TYPE_COUNT);
 
       return clone;
