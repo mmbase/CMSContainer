@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.mmbase.applications.crontab.AbstractCronJob;
-import org.mmbase.applications.crontab.CronJob;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.Node;
@@ -31,7 +30,7 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 
-public class TaskCronJob extends AbstractCronJob implements CronJob {
+public class TaskCronJob extends AbstractCronJob {
    private static final Logger log = Logging.getLoggerInstance(TaskCronJob.class.getName());
 
    private long lastExecutionTime;
@@ -110,7 +109,6 @@ public class TaskCronJob extends AbstractCronJob implements CronJob {
          Node taskNode = taskListIterator.nextNode();
          taskNode.delete(true);
       }
-
    }
 
 }

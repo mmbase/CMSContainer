@@ -38,3 +38,15 @@ To this section:
 *
 *
 *
+
+
+Name: Check for isProduction setting in live and staging context-XMLS
+Goal: Keep the TaskModule working
+Type: do it yourself
+--- Start script ---
+The TaskModule does not send emails anymore when production is not true.
+Check this setting for both staging and live environments at all production servers.
+--- End script ---
+*
+*
+*
