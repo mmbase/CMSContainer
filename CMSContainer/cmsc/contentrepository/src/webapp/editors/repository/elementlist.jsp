@@ -8,8 +8,8 @@
 <cmscedit:head title="content.title">
     <script src="content.js" type="text/javascript"></script>
     <script type="text/javascript">
-    <c:if test="${not empty param.message}">
-    addLoadEvent(alert('${param.message}'));
+    <c:if test="${not empty message}">
+    addLoadEvent(alert('${message}'));
     </c:if>
     <c:if test="${not empty param.refreshchannel}">
     addLoadEvent(refreshChannels);
