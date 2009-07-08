@@ -111,7 +111,7 @@ public abstract class WorkflowAction extends MMBaseFormlessAction {
    protected abstract String getWorkflowType();
 
 
-   protected abstract NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean AorD);
+   protected abstract NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean orderDesc);
 
 
    private void addWorkflowListToRequest(HttpServletRequest request, Cloud cloud, NodeQuery detailQuery,
@@ -140,10 +140,10 @@ public abstract class WorkflowAction extends MMBaseFormlessAction {
    }
 
 
-   protected void addOrderBy(NodeManager manager, NodeQuery query, String fieldname, boolean aord) {
+   protected void addOrderBy(NodeManager manager, NodeQuery query, String fieldname, boolean orderDesc) {
       Step step = query.getStep(manager.getName());
       StepField sf = query.createStepField(step, manager.getField(fieldname));
-      if (aord) {
+      if (orderDesc) {
          /*
           * System.out.println("WorkflowAction : orderby-- " + fieldname + "
           * descending");

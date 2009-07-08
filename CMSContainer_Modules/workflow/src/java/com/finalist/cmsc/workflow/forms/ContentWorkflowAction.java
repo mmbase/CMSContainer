@@ -24,7 +24,7 @@ public class ContentWorkflowAction extends WorkflowAction {
 
 
    @Override
-   protected NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean aord) {
+   protected NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean orderDesc) {
       NodeManager manager = cloud.getNodeManager(ContentElementUtil.CONTENTELEMENT);
       NodeQuery wfQuery = WorkflowManager.createDetailQuery(cloud, manager);
 
@@ -37,25 +37,25 @@ public class ContentWorkflowAction extends WorkflowAction {
       wfQuery.addField(ContentElementUtil.CONTENTELEMENT + "." + ContentElementUtil.LASTMODIFIER_FIELD);
       wfQuery.addField(RepositoryUtil.CONTENTCHANNEL + "." + RepositoryUtil.NAME_FIELD);
       if (orderby.equals(ContentElementUtil.TITLE_FIELD)) {
-         addOrderBy(manager, wfQuery, ContentElementUtil.TITLE_FIELD, aord);
+         addOrderBy(manager, wfQuery, ContentElementUtil.TITLE_FIELD, orderDesc);
       }
       else if (orderby.equals(ContentElementUtil.LASTMODIFIER_FIELD)) {
-         addOrderBy(manager, wfQuery, ContentElementUtil.LASTMODIFIER_FIELD, aord);
+         addOrderBy(manager, wfQuery, ContentElementUtil.LASTMODIFIER_FIELD, orderDesc);
       }
       else if (orderby.equals(ContentElementUtil.LASTMODIFIEDDATE_FIELD)) {
-         addOrderBy(manager, wfQuery, ContentElementUtil.LASTMODIFIEDDATE_FIELD, aord);
+         addOrderBy(manager, wfQuery, ContentElementUtil.LASTMODIFIEDDATE_FIELD, orderDesc);
       }
       else if (orderby.equals(RepositoryUtil.CONTENTCHANNEL)) {
-         addOrderBy(channelManager, wfQuery, RepositoryUtil.NAME_FIELD, aord);
+         addOrderBy(channelManager, wfQuery, RepositoryUtil.NAME_FIELD, orderDesc);
       }
       else if (orderby.equals("number")) {
-         addOrderBy(manager, wfQuery, "number", aord);
+         addOrderBy(manager, wfQuery, "number", orderDesc);
       }
       else if (orderby.equals(WorkflowManager.REMARK_FIELD)) {
-         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.REMARK_FIELD, aord);
+         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.REMARK_FIELD, orderDesc);
       }
       else {
-         addOrderBy(manager, wfQuery, WorkflowManager.LASTMODIFIEDDATE_FIELD, aord);
+         addOrderBy(manager, wfQuery, WorkflowManager.LASTMODIFIEDDATE_FIELD, orderDesc);
       }
       return wfQuery;
    }

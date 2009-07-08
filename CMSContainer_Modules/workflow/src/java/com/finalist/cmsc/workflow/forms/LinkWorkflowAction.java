@@ -24,7 +24,7 @@ public class LinkWorkflowAction extends WorkflowAction {
 
 
    @Override
-   protected NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean aord) {
+   protected NodeQuery createDetailQuery(Cloud cloud, String orderby, boolean orderDesc) {
       NodeManager manager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
       NodeQuery wfQuery = WorkflowManager.createDetailQuery(cloud, manager);
 
@@ -32,16 +32,16 @@ public class LinkWorkflowAction extends WorkflowAction {
       wfQuery.addField(RepositoryUtil.CONTENTCHANNEL + "." + RepositoryUtil.TITLE_FIELD);
 
       if (orderby.equals(RepositoryUtil.TITLE_FIELD)) {
-         addOrderBy(manager, wfQuery, RepositoryUtil.TITLE_FIELD, aord);
+         addOrderBy(manager, wfQuery, RepositoryUtil.TITLE_FIELD, orderDesc);
       }
       else if (orderby.equals("number")) {
-         addOrderBy(manager, wfQuery, "number", aord);
+         addOrderBy(manager, wfQuery, "number", orderDesc);
       }
       else if (orderby.equals(WorkflowManager.REMARK_FIELD)) {
-         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.REMARK_FIELD, aord);
+         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.REMARK_FIELD, orderDesc);
       }
       else {
-         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.LASTMODIFIEDDATE_FIELD, aord);
+         addOrderBy(WorkflowManager.getManager(cloud), wfQuery, WorkflowManager.LASTMODIFIEDDATE_FIELD, orderDesc);
       }
       return wfQuery;
    }
