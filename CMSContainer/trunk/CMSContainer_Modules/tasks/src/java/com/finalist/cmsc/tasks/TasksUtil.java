@@ -12,6 +12,7 @@ import org.mmbase.storage.search.AggregatedField;
 import com.finalist.cmsc.mmbase.EmailUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.cmsc.util.bundles.JstlUtil;
 
 public final class TasksUtil {
@@ -177,7 +178,11 @@ public final class TasksUtil {
          Object[] arguments = { name, nameFrom, numberOfTasks };
          emailMessage = MessageFormat.format(emailMessage, arguments);
 
-         EmailUtil.send(userNode.getCloud(), name, email, nameFrom, emailFrom, subject, emailMessage);
+         //Only send notifications to users from production environments
+         //Otherwise, users get mail from every test server too.
+         if (ServerUtil.isProduction()) {
+            EmailUtil.send(userNode.getCloud(), name, email, nameFrom, emailFrom, subject, emailMessage);
+         }
       }
    }
 
