@@ -90,7 +90,7 @@ public class PortletFragment extends AbstractFragment {
       if (portletDefinition == null) {
          throw new IllegalArgumentException("Missing definition " + definition.getDefinition() + " in portlet.xml");
       }
-      
+
       // for now set CMSC portlet params in the preferences of the portlet
       // entiy
       log.debug("Create - portlet: " + portlet.getId());
@@ -129,7 +129,7 @@ public class PortletFragment extends AbstractFragment {
          ps.add(PortalConstants.CMSC_OM_VIEW_ID, view.getId());
          ps.add(PortalConstants.CMSC_PORTLET_VIEW_TEMPLATE, view.getResource());
       }
-      
+
       String expiractionFromDefinition = portletDefinition.getExpirationCache();
       /* Portlet spec 1.0 PLT.18.1 Expiration Cache
        * For a portlet that has not defined expiration cache in the deployment descriptor,

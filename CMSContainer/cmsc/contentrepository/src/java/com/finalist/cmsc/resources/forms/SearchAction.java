@@ -1,9 +1,11 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
  */
 package com.finalist.cmsc.resources.forms;
 
@@ -11,25 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+
+import org.apache.struts.action.*;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.storage.search.FieldCompareConstraint;
-import org.mmbase.storage.search.FieldValueConstraint;
 import org.mmbase.storage.search.Step;
-import org.mmbase.storage.search.StepField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.struts.PagerAction;
 
 public abstract class SearchAction extends PagerAction {
@@ -37,7 +30,6 @@ public abstract class SearchAction extends PagerAction {
    public static final String NUMBER_FIELD = "number";
 
    private static final String GETURL = "geturl";
-   private static final String STRICT = "strict";
 
    private static final String OBJECTID = "objectid";
    private static final String CONTENTTYPES = "contenttypes";
@@ -48,6 +40,7 @@ public abstract class SearchAction extends PagerAction {
     * MMbase logging system
     */
    private static final Logger log = Logging.getLoggerInstance(SearchAction.class.getName());
+
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -63,26 +56,7 @@ public abstract class SearchAction extends PagerAction {
       queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
       // First add the proper step to the query.
-      // CMSC-1260 Content search also finds elements in Recycle bin
-      NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
-      Step channelStep = query.addStep(channelNodeManager);
-      Step theStep = query.addRelationStep(nodeManager, RepositoryUtil.CREATIONREL, "SOURCE").getNext();
-      query.setNodeStep(theStep);
-
-      if (StringUtils.isNotEmpty(searchForm.getContentChannel())) {
-         Integer ContentChannelNumber = Integer.parseInt(searchForm.getContentChannel());
-         StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.EQUAL,
-               ContentChannelNumber);
-         SearchUtil.addConstraint(query, channelConstraint);            
-      }
-      else {
-         Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
-         StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
-         SearchUtil.addConstraint(query, channelConstraint);
-      }
+      Step theStep = query.addStep(nodeManager);
       query.setNodeStep(theStep);
 
       // Order the result by:
@@ -113,10 +87,12 @@ public abstract class SearchAction extends PagerAction {
          Integer objectId = null;
          if (searchForm.getObjectid().matches("^\\d+$")) {
             objectId = Integer.valueOf(searchForm.getObjectid());
-         } else {
+         }
+         else {
             if (cloud.hasNode(searchForm.getObjectid())) {
                objectId = Integer.valueOf(cloud.getNode(searchForm.getObjectid()).getNumber());
-            } else {
+            }
+            else {
                objectId = Integer.valueOf(-1);
             }
          }
@@ -128,7 +104,8 @@ public abstract class SearchAction extends PagerAction {
       String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
       if (resultsPerPage == null || !resultsPerPage.matches("\\d+")) {
          query.setMaxNumber(25);
-      } else {
+      }
+      else {
          query.setMaxNumber(Integer.parseInt(resultsPerPage));
       }
 
@@ -146,15 +123,11 @@ public abstract class SearchAction extends PagerAction {
       // Set everyting on the request.
       searchForm.setResultCount(resultCount);
       searchForm.setResults(results);
-      String show = searchForm.getShow();
-      if (StringUtils.isEmpty(show)) {
-         show = "list";
-      }
-      request.setAttribute(GETURL, queryStringComposer.getQueryString() + "&show=" + show);
-      request.setAttribute(STRICT, searchForm.getStrict());
+      request.setAttribute(GETURL, queryStringComposer.getQueryString());
 
       return super.execute(mapping, form, request, response, cloud);
    }
+
 
    protected abstract void addConstraints(SearchForm searchForm, NodeManager nodeManager,
          QueryStringComposer queryStringComposer, NodeQuery query);

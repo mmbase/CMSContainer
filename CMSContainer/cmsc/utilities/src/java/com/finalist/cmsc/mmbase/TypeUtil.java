@@ -12,7 +12,6 @@ package com.finalist.cmsc.mmbase;
 import java.util.*;
 
 import org.mmbase.cache.Cache;
-import org.mmbase.cache.CacheManager;
 import org.mmbase.module.core.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.BasicSearchQuery;
@@ -106,7 +105,7 @@ public final class TypeUtil {
    public static  void fillTypeCache(MMObjectBuilder builder) {
       MMBase mmbase = builder.getMMBase();
       try {
-         Cache typeCache = CacheManager.getCache("TypeCache");
+         Cache typeCache = Cache.getCache("TypeCache");
          if (typeCache != null) {
             BasicSearchQuery query = new BasicSearchQuery();
             Step step = query.addStep(builder);

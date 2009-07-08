@@ -1,18 +1,43 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" 
 %><%@ include file="globals.jsp" 
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@ page import="com.finalist.cmsc.repository.RepositoryUtil" 
 %><%@ page import="com.finalist.cmsc.security.*" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html:html xhtml="true">
+<cmscedit:head title="content.title">
+    <script src="content.js" type="text/javascript"></script>
+</cmscedit:head>
+<body>
+<script type="text/javascript">
+    <c:if test="${not empty param.message}">
+    addLoadEvent(alert('${param.message}'));
+    </c:if>
+    <c:if test="${not empty param.refreshchannel}">
+    addLoadEvent(refreshChannels);
+    </c:if>
+    addLoadEvent(alphaImages);
+</script>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
-<mm:import jspvar="returnurl" id="returnurl">/editors/repository/Content.do?type=content&parentchannel=<mm:write
+<mm:import jspvar="returnurl" id="returnurl">/editors/repository/Content.do?parentchannel=<mm:write
         referid="parentchannel"/>&direction=down</mm:import>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
+
+<div class="tabs">
+    <!-- active TAB -->
+    <div class="tab_active">
+        <div class="body">
+            <div>
+                <a name="activetab"><fmt:message key="content.title"/></a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="editor">
 <div class="body">
+
 <!-- check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
 <mm:haspage page="/editors/workflow">
@@ -22,17 +47,21 @@
 
 <mm:node number="$parentchannel" jspvar="parentchannelnode">
 <% UserRole role = RepositoryUtil.getRole(cloud, parentchannelnode, false); %>
+<p>
+    <fmt:message key="content.channel">
+        <fmt:param><mm:field name="path"/></fmt:param>
+    </fmt:message>
+</p>
 <% if (role != null && SecurityUtil.isWriter(role)) { %>
 <ul class="shortcuts">
     <li class="new">
-        <form name="initForm" action="../WizardInitAction.do" method="post">
+        <form action="../WizardInitAction.do" method="post" style="display:inline;text-decoration:none">
             <input type="hidden" name="action" value="create"/>
             <input type="hidden" name="creation" value="<mm:write referid="parentchannel" />"/>
             <input type="hidden" name="returnurl" value="<%= returnurl %>"/>
             <input type="hidden" name="order" value="${orderby}" />
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
-             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
             <fmt:message key="content.new"/>
             <select name="contenttype">
                 <c:forEach var="type" items="${typesList}">
@@ -79,30 +108,27 @@
 </div>
 
 <div class="ruler_green">
-   <div>
-   <fmt:message key="content.content">
-      <fmt:param><mm:field name="path"/></fmt:param>
-   </fmt:message>
-   </div>
+    <div><fmt:message key="content.content"/></div>
 </div>
 <div class="body">
 <mm:import externid="elements" from="request" required="true"/>
 <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+<mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
 
 <c:set var="listSize" value="${elementCount}"/>
 <c:set var="offset" value="${param.offset}"/>
-<c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=content"/>
-<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+<c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}"/>
+<c:set var="orderby" value="${param.orderby}" scope="page" />
+<%@ include file="../pages.jsp" %>
 
 <form action="contentMassDelete.do" name="contentForm">
 <input type="hidden" name="offset" value="${param.offset}"/>
-<input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
 <input type="hidden" name="orderby" value="${orderby}" />
 <input type="hidden" name="direction" value="${direction}"/>
 <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
 <% if (role != null && SecurityUtil.isWriter(role)) { %>
 <c:if test="${fn:length(elements) >1}">
-<input type="button" class="button" value="<fmt:message key="content.delete.massdelete" />" onclick="massDelete('<fmt:message key="content.delete.massdeleteconfirm" />', 'contentForm')"/>
+<input type="submit" class="button" value="<fmt:message key="content.delete.massdelete" />"/>
 <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
 </c:if>
 <% } %>
@@ -111,19 +137,19 @@
     <tr>
         <th><% if (role != null && SecurityUtil.isWriter(role)) { %>
         <c:if test="${fn:length(elements) >1}">
-        <input type="checkbox"  name="selectall" class="checkbox" onclick="selectAll(this.checked, 'contentForm', 'chk_');" value="on"/>
+        <input type="checkbox"  name="selectall"  onclick="selectAll(this.checked, 'contentForm', 'chk_');" value="on"/>
         </c:if>
         <% } %>
         </th>
-        <th><a href="javascript:sortBy('Content','otype','<mm:write referid="parentchannel" />')" class="headerlink">
+        <th><a href="javascript:sortBy('otype','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.typecolumn"/></a></th>
-        <th><a href="javascript:sortBy('Content','title','<mm:write referid="parentchannel" />')" class="headerlink">
+        <th><a href="javascript:sortBy('title','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.titlecolumn"/></a></th>
-        <th><a href="javascript:sortBy('Content','lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifiercolumn"/></a></th>
-        <th><a href="javascript:sortBy('Content','lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifieddatecolumn"/></a></th>
-        <th><a href="javascript:sortBy('Content','number','<mm:write referid="parentchannel" />')" class="headerlink">
+        <th><a href="javascript:sortBy('lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
+        <fmt:message key="content.editorcolumn"/></a></th>
+        <th><a href="javascript:sortBy('lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
+        <fmt:message key="content.lastmodifiedcolumn"/></a></th>
+        <th><a href="javascript:sortBy('number','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.numbercolumn"/></a></th>
         <th><fmt:message key="content.creationchannelcolumn"/></th>
         <th></th>
@@ -142,7 +168,7 @@
     <td style="white-space: nowrap;">
     <% if (role != null && SecurityUtil.isWriter(role)) { %>
       <c:if test="${fn:length(elements) >1}">
-      <input type="checkbox"  name="chk_<mm:field name="number" />" class="checkbox" value="<mm:field name="number" />" onClick="document.forms['contentForm'].elements.selectall.checked=false;"/>
+      <input type="checkbox"  name="chk_<mm:field name="number" />" value="<mm:field name="number" />" onClick="document.forms['contentForm'].elements.selectall.checked=false;"/>
       </c:if>
     <% } %>
      <a href="javascript:callEditWizard('<mm:field name="number" />');"
@@ -155,7 +181,6 @@
     <a href="javascript:info('<mm:field name="number" />')"><img src="../gfx/icons/info.png" width="16" height="16"
                                                                  title="<fmt:message key="content.info" />"
                                                                  alt="<fmt:message key="content.info" />"/></a>
-
     <mm:haspage page="/editors/versioning">
         <c:url value="/editors/versioning/ShowVersions.do" var="showVersions">
             <c:param name="nodenumber"><mm:field name="number"/></c:param>
@@ -277,9 +302,11 @@
 </c:if>
 <% } %>
 </form>
-<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+<%@ include file="../pages.jsp" %>
 </div>
 </div>
 </mm:node>
 </mm:cloud>
+</body>
+</html:html>
 </mm:content>

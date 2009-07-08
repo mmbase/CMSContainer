@@ -17,7 +17,6 @@
 	<body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 	  <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
-	  <mm:import externid="portletId" from="parameters" />
 
 <mm:node number="$parentchannel" jspvar="parentchannelnode">
 
@@ -45,15 +44,9 @@
   <div class="body">
 	 <mm:import id="lastotype"/>
  
-    <mm:node number="$portletId" notfound="skip">
-      <mm:relatednodes type="typedef" id="typedefnodes" >
-      </mm:relatednodes>
-    </mm:node>
+	 
 
 <mm:relatednodescontainer path="contentrel,contentelement" searchdirs="destination" element="contentelement">
-	<c:if test="${not empty typedefnodes}" >
-	   <mm:constraint field="contentelement.otype" operator="IN" referid="typedefnodes" />           
-	</c:if>
 	<mm:sortorder field="contentelement.otype" direction="up" />
 	<mm:sortorder field="contentrel.pos" direction="up" />
 	
