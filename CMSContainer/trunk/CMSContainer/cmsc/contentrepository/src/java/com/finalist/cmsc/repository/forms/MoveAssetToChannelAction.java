@@ -125,7 +125,7 @@ public class MoveAssetToChannelAction extends MMBaseAction {
       if(StringUtils.isNotEmpty(direction)) {
          path += "&direction="+direction;
       }
-      path += "&message=" + URLEncoder.encode(message, "UTF-8");
+      request.getSession().setAttribute("message", message);
       ActionForward actionForward = new ActionForward(path);
       actionForward.setRedirect(true);
       return actionForward;

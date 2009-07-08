@@ -123,7 +123,10 @@ public class AssetAction extends MMBaseAction {
          addToRequest(request, "exist", exist);
          request.getSession().setAttribute("show", show);
          request.getSession().setAttribute("imageOnly", imageOnly);
-
+         if (request.getSession().getAttribute("message") != null) {
+            addToRequest(request, "message", (String) request.getSession().getAttribute("message"));
+            request.getSession().removeAttribute("message");
+         }
          Map<String, Node> createdNumbers = new HashMap<String, Node>();
          for (Iterator<Node> iter = created.iterator(); iter.hasNext();) {
             Node createdElement = iter.next();
