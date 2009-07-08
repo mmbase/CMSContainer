@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.mmbase.applications.crontab.AbstractCronJob;
-import org.mmbase.applications.crontab.CronJob;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.Node;
@@ -30,9 +29,8 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
-import com.finalist.cmsc.util.ServerUtil;
 
-public class TaskCronJob extends AbstractCronJob implements CronJob {
+public class TaskCronJob extends AbstractCronJob {
    private static final Logger log = Logging.getLoggerInstance(TaskCronJob.class.getName());
 
    private long lastExecutionTime;
@@ -85,10 +83,7 @@ public class TaskCronJob extends AbstractCronJob implements CronJob {
             NodeQuery taskQuery = SearchUtil.createRelatedNodeListQuery(user, TasksUtil.TASK, TasksUtil.ASSIGNEDREL,
                   TasksUtil.STATUS, TasksUtil.STATUS_INIT, null, null, SearchUtil.SOURCE);
             int numberOfTasks = Queries.count(taskQuery);
-            
-            if (ServerUtil.isProduction()) {
-               TasksUtil.sendExpireNotification(user, null, numberOfTasks);
-            }
+            TasksUtil.sendExpireNotification(user, null, numberOfTasks);
 
             HugeNodeListIterator taskListIterator = new HugeNodeListIterator(taskQuery);
             while (taskListIterator.hasNext()) {
@@ -114,7 +109,6 @@ public class TaskCronJob extends AbstractCronJob implements CronJob {
          Node taskNode = taskListIterator.nextNode();
          taskNode.delete(true);
       }
-
    }
 
 }
