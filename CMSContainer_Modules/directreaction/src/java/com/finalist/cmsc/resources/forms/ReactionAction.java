@@ -5,8 +5,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.apache.struts.action.*;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.RelationStep;
@@ -15,8 +13,6 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.directreaction.util.ReactionUtil;
-import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
 
 public class ReactionAction extends SearchAction {
 
