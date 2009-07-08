@@ -183,6 +183,13 @@ public class PortalErrorServlet extends PortalServlet {
 
    public void logError(HttpServletRequest request) {
       Integer statusCode = (Integer) request.getAttribute(ERROR_STATUS_CODE);
+      
+      if (statusCode == null) {
+         String path = (String) request.getAttribute(ERROR_REQUEST_URI);
+         log.error("missing error status code, while at path: " + path);
+         return;
+      }
+      
       if (statusCode == 500) {
          String version = VersionUtil.getApplicationVersion(getServletConfig().getServletContext());
          // prepare error ticket
