@@ -585,10 +585,8 @@ public abstract class WorkflowManager {
 
       Query clone = query.aggregatingClone();
 
-      clone.addAggregatedField(step3, workflowManager.getField(TYPE_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
-      clone
-            .addAggregatedField(step3, workflowManager.getField(STATUS_FIELD),
-                  AggregatedField.AGGREGATION_TYPE_GROUP_BY);
+      clone.addAggregatedField(step3, workflowManager.getField(TYPE_FIELD),   AggregatedField.AGGREGATION_TYPE_GROUP_BY);
+      clone.addAggregatedField(step3, workflowManager.getField(STATUS_FIELD), AggregatedField.AGGREGATION_TYPE_GROUP_BY);
       clone.addAggregatedField(step3, workflowManager.getField(NUMBER_FIELD), AggregatedField.AGGREGATION_TYPE_COUNT);
 
       return clone;
