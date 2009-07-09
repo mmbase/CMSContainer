@@ -46,5 +46,8 @@ public abstract class PublishService extends Service {
 
 
    public abstract Cloud getRemoteCloud(Cloud cloud);
+   
+   
+   public abstract boolean inPublishQueue(Node node);
 
 }

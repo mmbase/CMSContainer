@@ -68,4 +68,7 @@ public class Publish {
       return cService.getRemoteCloud(cloud);
    }
 
+   public static boolean inPublishQueue(Node node) {
+      return cService.inPublishQueue(node);
+   }
 }
