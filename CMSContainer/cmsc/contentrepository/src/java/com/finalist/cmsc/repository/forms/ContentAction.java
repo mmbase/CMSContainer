@@ -83,6 +83,11 @@ public class ContentAction extends MMBaseAction {
          addToRequest(request, "elements", elements);
          addToRequest(request, "elementCount", Integer.toString(elementCount));
 
+         if (request.getSession().getAttribute("message") != null) {
+            addToRequest(request, "message", (String) request.getSession().getAttribute("message"));
+            request.getSession().removeAttribute("message");
+         }
+         
          NodeList created = RepositoryUtil.getCreatedElements(channel);
          Map<String, Node> createdNumbers = new HashMap<String, Node>();
          for (Iterator<Node> iter = created.iterator(); iter.hasNext();) {
