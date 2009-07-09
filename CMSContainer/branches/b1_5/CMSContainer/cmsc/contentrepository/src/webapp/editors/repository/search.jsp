@@ -113,7 +113,7 @@
                </tr>
 
                <mm:compare referid="mode" value= "advanced">
-                  <tr height="31">
+                  <tr height="31px">
                      <td></td>
                      <td><b><fmt:message key="searchform.dates" /></b></td>
                      <td></td>
@@ -127,7 +127,7 @@
                         </mm:compare>
                      </td>
                   </tr>
-                  <tr height="31" valign="top">
+                  <tr height="31px" valign="top">
                      <td><fmt:message key="searchform.creationdate" /></td>
                      <td>
                         <html:select property="creationdate" size="1">
@@ -165,7 +165,7 @@
                                  </mm:fieldinfo>
                                  <% if (showField) { %>
                                     <tr rowspan="5">
-                                       <td height="31" nowrap>
+                                       <td height="31px" nowrap>
                                           <mm:fieldinfo type="guiname" jspvar="guiname"/>:
                                           <mm:fieldinfo type="name" jspvar="name" write="false">
                                              <% fields.add(contenttypes + "." + name); %>
@@ -182,7 +182,7 @@
                               <% for (int i = 0; i < fields.size(); i++) {
                                  String field = (String) fields.get(i); %>
                                  <tr>
-                                    <td height="31">
+                                    <td height="31px">
                                        <input type="text" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
                                     </td>
                                  </tr>
@@ -191,7 +191,7 @@
                         </mm:compare>
                      </td>
                   </tr>
-                  <tr height="31">
+                  <tr height="31px">
                      <td><fmt:message key="searchform.lastmodifieddate" /></td>
                      <td>
                         <html:select property="lastmodifieddate" size="1">
@@ -220,7 +220,7 @@
                         </mm:hasrank>
                      </td>
                   </tr>
-                  <tr height="31">
+                  <tr height="31px">
                      <td><fmt:message key="searchform.publishdate" /></td>
                      <td>
                         <html:select property="publishdate" size="1">
@@ -240,7 +240,7 @@
                      <td></td>
                      <td><b><fmt:message key="searchform.other" /></b></td>
                   </tr>
-                  <tr height="31">
+                  <tr height="31px">
                      <td><fmt:message key="searchform.expiredate" /></td>
                      <td>
                         <html:select property="expiredate" size="1">
