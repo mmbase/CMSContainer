@@ -75,5 +75,9 @@ public class DummyPublishService extends PublishService {
    public Cloud getRemoteCloud(Cloud cloud) {
       return null;
    }
-
+   
+   @Override
+   public boolean inPublishQueue(Node node) {
+      return false;
+   }
 }
