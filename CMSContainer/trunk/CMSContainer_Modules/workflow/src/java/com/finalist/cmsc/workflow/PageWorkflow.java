@@ -186,7 +186,7 @@ public class PageWorkflow extends WorkflowManager {
       List<Node> path = NavigationUtil.getPathToRoot(node);
       path.remove(path.size() - 1);
       for (Node pathElement : path) {
-         if (!Publish.isPublished(pathElement)
+         if ((!Publish.isPublished(pathElement) && !Publish.inPublishQueue(pathElement))
                && (publishNumbers == null || !publishNumbers.contains(pathElement.getNumber()))) {
             errors.add(pathElement);
          }
