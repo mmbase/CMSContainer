@@ -15,7 +15,10 @@ import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
+import org.mmbase.storage.search.FieldCompareConstraint;
+import org.mmbase.storage.search.FieldValueConstraint;
 import org.mmbase.storage.search.Step;
+import org.mmbase.storage.search.StepField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -100,18 +103,24 @@ public class SearchAction extends PagerAction {
         queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
         // First add the proper step to the query.
-        Step theStep = null;
-        if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
-            Step step = query.addStep(cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL));
-            query.addNode(step, cloud.getNode(searchForm.getParentchannel()));
-            theStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
-            query.setNodeStep(theStep);
-            queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
-        }
-        else {
-            theStep = query.addStep(nodeManager);
-            query.setNodeStep(theStep);
-        }
+      NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
+      Step channelStep = query.addStep(channelNodeManager);
+      Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
+      if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
+         Step step = query.addStep(cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL));
+         query.addNode(step, cloud.getNode(searchForm.getParentchannel()));
+         contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
+         query.setNodeStep(contentStep);
+         queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
+      } else {
+         // CMSC-1260 Content search also finds elements in Recycle bin
+         Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
+         StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
+         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
+               trashNumber);
+         SearchUtil.addConstraint(query, channelConstraint);
+         query.setNodeStep(contentStep);
+      }
 
         // Order the result by:
         String order = searchForm.getOrder();
