@@ -29,13 +29,16 @@ import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeIterator;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.NotFoundException;
 import org.mmbase.bridge.Relation;
 import org.mmbase.bridge.RelationIterator;
 import org.mmbase.bridge.RelationList;
 import org.mmbase.bridge.RelationManager;
 import org.mmbase.bridge.StringList;
+import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.datatypes.DataType;
+import org.mmbase.remotepublishing.builders.PublishingQueueBuilder;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -1404,4 +1407,11 @@ public final class PublishManager {
         unLinkNode(sourceCloudInfo, localCloudInfo, number);
     }
 
+    public static boolean inPublishQueue(Node node) {
+       NodeManager nodeManager = node.getCloud().getNodeManager("publishqueue");
+       NodeQuery query = nodeManager.createQuery();   
+       SearchUtil.addEqualConstraint(query, nodeManager.getField(PublishingQueueBuilder.FIELD_SOURCENUMBER), node.getNumber());
+       
+       return query.getList().size() > 0;
+    }
 }

@@ -182,4 +182,9 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
    public Cloud getRemoteCloud(Cloud cloud) {
       return CloudManager.getCloudByAlias(cloud, "cloud.remote");
    }
+   
+   @Override
+   public boolean inPublishQueue(Node node) {
+      return PublishManager.inPublishQueue(node);
+   }
 }
