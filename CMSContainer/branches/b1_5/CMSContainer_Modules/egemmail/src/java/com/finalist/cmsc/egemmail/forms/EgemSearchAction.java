@@ -25,7 +25,6 @@ public class EgemSearchAction extends MMBaseAction {
    private static final int MAX_RESULTS = 500;
 
 
-   @SuppressWarnings("unchecked")
    protected ActionForward doSearch(ActionMapping mapping, EgemSearchForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
       NodeManager nodeManager = cloud.getNodeManager(ContentElementUtil.CONTENTELEMENT);
@@ -48,13 +47,21 @@ public class EgemSearchAction extends MMBaseAction {
          }
       }
 
-      if (form.isLimitToLastWeek()) {
+      if (form.isLimitToLastWeekModified()) {
          Field field = nodeManager.getField("lastmodifieddate");
          long theDurationOfAWeek = 7 * 24 * 60 * 60 * 1000; // milliseconds
          long now = System.currentTimeMillis();
          long aWeekAgo = now - theDurationOfAWeek;
 
          SearchUtil.addDatetimeConstraint(query, field, aWeekAgo, now);
+      } 
+      else if (form.isLimitToLastWeekCreated()) {
+            Field field = nodeManager.getField("creationdate");
+            long theDurationOfAWeek = 7 * 24 * 60 * 60 * 1000; // milliseconds
+            long now = System.currentTimeMillis();
+            long aWeekAgo = now - theDurationOfAWeek;
+
+            SearchUtil.addDatetimeConstraint(query, field, aWeekAgo, now);
       }
 
       SearchUtil.addLimitConstraint(query, SearchQuery.DEFAULT_OFFSET, MAX_RESULTS);
@@ -128,7 +135,7 @@ public class EgemSearchAction extends MMBaseAction {
       int found = 0;
       for (NodeIterator ni = results.nodeIterator(); ni.hasNext();) {
          Node next = ni.nextNode();
-         if (found >= MAX_RESULTS || !remoteNumbers.contains(next.getNumber())) {
+         if (found > MAX_RESULTS || !remoteNumbers.contains(next.getNumber())) {
             ni.remove();
          }
          else {

@@ -24,6 +24,17 @@
       }
       return false;
     }
+
+    function toggleValues(id){
+        var check1 = document.getElementById('modified');
+        var check2 = document.getElementById('created');
+        if (check1 != null && check2 != null){
+          if (id == 'modified' && check1.checked && check2.checked)
+          	check2.checked = false;
+          if (id == 'created' && check1.checked && check2.checked)
+              check1.checked = false;
+        }
+    }
   </script>
 </cmscedit:head>
 <body>
@@ -39,12 +50,13 @@
 <mm:cloud>
 	<div class="editor">
 		<div class="body">
-            <html:form action="/editors/egemmail/EgemSearchAction">            
-               
-				<html:checkbox property="limitToLastWeek"><fmt:message key="egemmail.field.lastWeek" /></html:checkbox><br/>
-				<html:checkbox property="selectResults"><fmt:message key="egemmail.field.selectResults" /></html:checkbox><br/>
-				<br/>
-                <table border="0">
+         <html:form action="/editors/egemmail/EgemSearchAction">            
+            
+			<html:checkbox onchange="toggleValues('modified');" property="limitToLastWeekModified" styleId="modified"><fmt:message key="egemmail.field.lastweek.modified" /></html:checkbox><br/>
+         <html:checkbox onchange="toggleValues('created');" property="limitToLastWeekCreated" styleId="created"><fmt:message key="egemmail.field.lastweek.created" /></html:checkbox><br/>
+			<html:checkbox property="selectResults"><fmt:message key="egemmail.field.selectResults" /></html:checkbox><br/>
+			<br/>
+   <table border="0">
    <tr>
       <td style="width: 105px"><fmt:message key="egemmail.field.title" />:</td>
       <td><html:text style="width: 200px" property="title"/></td>
@@ -56,39 +68,37 @@
    <tr>
       <td style="width: 105px"><fmt:message key="egemmail.field.author" />:</td>
       <td>
-     <html:select property="author">
-					<html:option value=""><fmt:message key="egemmail.all_users" /></html:option> 
+      <html:select property="author">
+			<html:option value=""><fmt:message key="egemmail.all_users" /></html:option> 
                     
-                    <mm:listnodes type="user" orderby="username">
-						<c:set var="username"><mm:field name="username"/></c:set>
-					 <c:if test="${username != 'anonymous'}">
-                     <mm:field name="username" id="userFullname" write="false"/>
-                     <html:option value="${userFullname}"> 
-                     <mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /> 
-                     </html:option>
-	 					</c:if>
-					</mm:listnodes>					
-	</html:select>
-        </td>
+         <mm:listnodes type="user" orderby="username">
+   			<c:set var="username"><mm:field name="username"/></c:set>
+   		   <c:if test="${username != 'anonymous'}">
+               <mm:field name="username" id="userFullname" write="false"/>
+               <html:option value="${userFullname}"> 
+               <mm:field name="firstname" /> <mm:field name="prefix" /> <mm:field name="surname" /> 
+               </html:option>
+   			</c:if>
+		   </mm:listnodes>					
+	   </html:select>
+      </td>
    </tr>   
    <tr>
       <td></td>
       <td><html:submit><fmt:message key="egemmail.button.search" /></html:submit></td>
    </tr>
 </table>
-               
-
-
-			</html:form>
+</html:form>
 
             <mm:present referid="results">
             <html:form action="/editors/egemmail/EgemExportAction" styleId="exportForm">
-                <html:hidden property="title" />
-                <html:hidden property="keywords" />
-                <html:hidden property="author" />
-                <html:hidden property="page" />
-                <html:hidden property="forward" />
-                <html:hidden property="limitToLastWeek" />
+            <html:hidden property="title" />
+            <html:hidden property="keywords" />
+            <html:hidden property="author" />
+            <html:hidden property="page" />
+            <html:hidden property="forward" />
+            <html:hidden property="limitToLastWeekModified" />
+            <html:hidden property="limitToLastWeekCreated" />
 				<mm:list referid="results" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
 				    <mm:first>
 				        <egem:paging offset="${offset}" resultsPerPage="${resultsPerPage}" totalNumberOfResults="${totalNumberOfResults}" />

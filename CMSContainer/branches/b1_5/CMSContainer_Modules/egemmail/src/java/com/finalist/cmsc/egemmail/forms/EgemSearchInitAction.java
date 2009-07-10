@@ -24,7 +24,8 @@ public class EgemSearchInitAction extends MMBaseAction {
 
    protected ActionForward execute(ActionMapping mapping, EgemSearchForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
-      form.setLimitToLastWeek(true);
+      form.setLimitToLastWeekModified(true);
+      form.setLimitToLastWeekCreated(false);
       form.setSelectResults(true);
 
       return mapping.findForward(SUCCESS);

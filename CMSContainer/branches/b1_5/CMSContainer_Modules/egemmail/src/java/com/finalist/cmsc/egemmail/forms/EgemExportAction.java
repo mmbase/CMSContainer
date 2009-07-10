@@ -21,7 +21,6 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.util.http.HttpUtil;
 
-@SuppressWarnings("serial")
 public class EgemExportAction extends EgemSearchAction {
 
    private static final String EGEMMAIL_URL = "egemmail.url";
@@ -158,23 +157,18 @@ public class EgemExportAction extends EgemSearchAction {
 
       Map<String, Object> parameters = request.getParameterMap();
       for (String key : parameters.keySet()) {
-         if (key.startsWith("export_")) { // A node selection box that is
-                                          // selected
-            String nodeNumberString = key.substring(7); // The part after
-                                                         // 'export_'
+         if (key.startsWith("export_")) { // A node selection box that is selected
+            String nodeNumberString = key.substring(7); // The part after 'export_'
             int nodeNumber = Integer.parseInt(nodeNumberString);
 
             newlySelectedNodes.add(nodeNumber);
          }
       }
 
-      Set<Integer> nodesToRemove = form.getNodesOnScreen(); // Assume no nodes
-                                                            // are selected
-      nodesToRemove.removeAll(newlySelectedNodes); // Do not remove nodes that
-                                                   // are selected
+      Set<Integer> nodesToRemove = form.getNodesOnScreen(); // Assume no nodes are selected
+      nodesToRemove.removeAll(newlySelectedNodes); // Do not remove nodes that are selected
 
-      for (Integer n : nodesToRemove) { // Mark all nodes to remove as not
-                                          // selected
+      for (Integer n : nodesToRemove) { // Mark all nodes to remove as not selected
          form.getSelectedNodes().put(n, false);
       }
 
