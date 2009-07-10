@@ -15,7 +15,8 @@ public class EgemSearchForm extends ActionForm {
    private String keywords;
    private String page;
    private String title;
-   private boolean limitToLastWeek = true;
+   private boolean limitToLastWeekModified = true;
+   private boolean limitToLastWeekCreated = true;
    private boolean selectResults = true;
    private final Set<Integer> nodesOnScreen = new HashSet<Integer>();
 
@@ -45,8 +46,8 @@ public class EgemSearchForm extends ActionForm {
    }
 
 
-   public boolean isLimitToLastWeek() {
-      return limitToLastWeek;
+   public boolean isLimitToLastWeekModified() {
+      return limitToLastWeekModified;
    }
 
 
@@ -61,8 +62,9 @@ public class EgemSearchForm extends ActionForm {
     */
    @Override
    public void reset(ActionMapping mapping, HttpServletRequest request) {
-      limitToLastWeek = false;
+      limitToLastWeekModified = false;
       selectResults = false;
+      setLimitToLastWeekCreated(false);
 
       super.reset(mapping, request);
    }
@@ -78,8 +80,8 @@ public class EgemSearchForm extends ActionForm {
    }
 
 
-   public void setLimitToLastWeek(boolean lastWeek) {
-      this.limitToLastWeek = lastWeek;
+   public void setLimitToLastWeekModified(boolean lastWeek) {
+      this.limitToLastWeekModified = lastWeek;
    }
 
 
@@ -95,5 +97,15 @@ public class EgemSearchForm extends ActionForm {
 
    public void setTitle(String title) {
       this.title = title;
+   }
+
+
+   public void setLimitToLastWeekCreated(boolean limitToLastWeekCreated) {
+      this.limitToLastWeekCreated = limitToLastWeekCreated;
+   }
+
+
+   public boolean isLimitToLastWeekCreated() {
+      return limitToLastWeekCreated;
    }
 }
