@@ -294,19 +294,21 @@
                      <c:set var="fields"/>
                      <c:set var="fieldtypes"/>
                      <table>
+                        <tr>                           
+                           <td colspan="2" style="height:31px;width:200px" width="200px" height="31px" nowrap>
+                              <mm:compare referid="contenttypes" value="contentelement" inverse="true">
+                                 <div style="padding-right:5px;">
+                                    <fmt:message key="searchform.searchfor">
+                                       <fmt:param><mm:nodeinfo nodetype="${contenttypes}" type="guitype"/></fmt:param>
+                                    </fmt:message>
+                                 </div>
+                              </mm:compare>
+                           </td>
+                        </tr>                                    
                         <tr>
                            <td>
                               <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                                  <table>
-                                    <tr>                           
-                                       <td style="height:31px;width:200px" width="200px" height="31px" nowrap>
-                                          <mm:compare referid="contenttypes" value="contentelement" inverse="true">
-                                             <fmt:message key="searchform.searchfor">
-                                                <fmt:param><mm:nodeinfo nodetype="${contenttypes}" type="guitype"/></fmt:param>
-                                             </fmt:message>
-                                          </mm:compare>
-                                       </td>
-                                    </tr>                                    
                                     <mm:fieldlist nodetype="${contenttypes}">
                                        <%-- check if the field is from contentelement --%>
                                        <c:set var="showField" value="true"/>
@@ -320,7 +322,7 @@
                                            </mm:fieldlist>
                                        </mm:fieldinfo>
                                        <c:if test="${showField}">
-                                          <tr rowspan="5">
+                                          <tr>
                                              <td height="31px" nowrap>
                                                 <mm:fieldinfo type="guiname"/>:
                                                 <mm:fieldinfo type="name" id="fieldname" write="false">
@@ -345,16 +347,11 @@
                            <td>
                               <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                                  <table>
-                                    <tr>                           
-                                       <td style="height:31px;width:200px" width="200px" height="31px" nowrap>
-                                          &nbsp;
-                                       </td>
-                                    </tr>
                                     <c:forTokens items="${fields}" var="field" delims="," varStatus="status">
                                        <c:forTokens items="${fieldtypes}" var="fieldtype" delims="," begin="${status.index}" end="${status.index}">
                                        <tr>
                                           <td height="31px">
-                                             <input type="text" name="${field}" dttype="${fieldtype}" value="${param.field}" />
+                                             <input type="text" name="${field}" style="width:145px" dttype="${fieldtype}" value="${param.field}" />
                                           </td>
                                        </tr>
                                        </c:forTokens>
