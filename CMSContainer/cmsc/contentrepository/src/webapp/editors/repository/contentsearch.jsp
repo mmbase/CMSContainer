@@ -274,19 +274,21 @@
                <div id="rightform">
                   <mm:compare referid="mode" value= "advanced">
                      <table>
+                        <tr>                           
+                           <td colspan="2" style="width:200px" width="200px" height="31px" nowrap>
+                              <mm:compare referid="contenttypes" value="contentelement" inverse="true">
+                                 <div style="padding-right:5px;">
+                                    <fmt:message key="searchform.searchfor">
+                                       <fmt:param><mm:nodeinfo nodetype="${contenttypes}" type="guitype"/></fmt:param>
+                                    </fmt:message>
+                                 </div>
+                              </mm:compare>
+                           </td>
+                        </tr>                                    
                         <tr>
                            <td>
                               <% ArrayList fields = new ArrayList(); %>
                               <table>
-                                 <tr>                           
-                                    <td style="height:31px;width:200px" width="200px" height="31px" nowrap>
-                                       <mm:compare referid="contenttypes" value="contentelement" inverse="true">
-                                          <fmt:message key="searchform.searchfor">
-                                             <fmt:param><mm:nodeinfo nodetype="${contenttypes}" type="guitype"/></fmt:param>
-                                          </fmt:message>
-                                       </mm:compare>
-                                    </td>
-                                 </tr>                                    
                                  <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                                     <mm:fieldlist nodetype="${contenttypes}">
                                        <%-- check if the field is from contentelement --%>
@@ -317,16 +319,11 @@
                            <td>
                               <mm:compare referid="contenttypes" value="contentelement" inverse="true">
                                  <table>
-                                    <tr>                           
-                                       <td style="height:31px;width:200px" width="200px" height="31px" nowrap>
-                                          &nbsp;
-                                       </td>
-                                    </tr>
                                     <% for (int i = 0; i < fields.size(); i++) {
                                        String field = (String) fields.get(i); %>
                                        <tr>
                                           <td height="31px">
-                                             <input type="text" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
+                                             <input type="text" name="<%= field %>" style="width:145px" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
                                           </td>
                                        </tr>
                                     <% } %>

@@ -251,18 +251,20 @@
                      <% ArrayList fields = new ArrayList(); %>
                      <table>
                         <tr>
+                           <td colspan="2" nowrap>
+                              <mm:compare referid="assettypes" value="assetelement" inverse="true">
+                                 <div style="padding-right:5px;">
+                                    <fmt:message key="searchform.searchfor">
+                                       <fmt:param><mm:nodeinfo nodetype="${assettypes}" type="guitype"/></fmt:param>
+                                    </fmt:message>
+                                 </div>
+                              </mm:compare>
+                           </td>
+                        </tr>
+                        <tr>
                            <td>
                               <mm:compare referid="assettypes" value="assetelement" inverse="true">
                                  <table>
-                                    <tr>
-                                       <td nowrap>
-                                          <mm:compare referid="assettypes" value="assetelement" inverse="true">
-                                             <fmt:message key="searchform.searchfor">
-                                                <fmt:param><mm:nodeinfo nodetype="${assettypes}" type="guitype"/></fmt:param>
-                                             </fmt:message>
-                                          </mm:compare>
-                                       </td>
-                                    </tr>
                                     <mm:fieldlist nodetype="${assettypes}">
                                        <%-- check if the field is from assetelement --%>
                                        <% boolean showField = true; %>
@@ -277,7 +279,7 @@
                                        </mm:fieldinfo>
                                        <% if (showField) { %>
                                           <tr>
-                                             <td height="31">
+                                             <td height="31" nowrap>
                                                 <mm:fieldinfo type="guiname" jspvar="guiname"/>:
                                                 <mm:fieldinfo type="name" jspvar="name" write="false">
                                                    <% fields.add(assettypes + "." + name); %>
@@ -291,15 +293,10 @@
                            <td>
                               <mm:compare referid="assettypes" value="assetelement" inverse="true">
                                  <table>
-                                    <tr>
-                                       <td style="height:31px;width:200px" width="200px" height="31px" nowrap>
-                                          &nbsp;
-                                       </td>
-                                    </tr>
                                     <% for (int i = 0; i < fields.size(); i++) {
                                        String field = (String) fields.get(i); %>
                                        <tr>
-                                          <td height="31">
+                                          <td height="31" nowrap>
                                              <input type="text" style="width:145px" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
                                           </td>
                                        </tr>
