@@ -786,6 +786,37 @@ div.tabs div.tab div.body div a
    text-decoration: none;
 }
 
+#formcontent
+{
+clear:both;
+}
+
+#leftform
+{
+width:564px;
+float:left;
+clear:left;
+overflow:hidden;
+}
+
+#rightform
+{
+position:relative;
+top:60px;
+width:350px;
+float:right;
+clear:right;
+margin-bottom:55px;
+overflow:hidden;
+}
+
+#bottomform
+{
+clear:both;
+float:left;
+margin-left:84px;
+}
+
 /* editor zelf */
 div.editor
 {
