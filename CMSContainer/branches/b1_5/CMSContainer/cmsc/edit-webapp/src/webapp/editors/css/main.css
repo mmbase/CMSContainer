@@ -826,7 +826,7 @@ div.editor
 	background-position: top right;	
 	
 	background-color: #ffffff;
-	
+	display: table;
 	float: left;
 	clear: both;
 	width: 100%;
