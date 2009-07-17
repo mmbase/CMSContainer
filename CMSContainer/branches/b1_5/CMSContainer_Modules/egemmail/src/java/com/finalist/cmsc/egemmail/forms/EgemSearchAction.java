@@ -19,10 +19,11 @@ import com.finalist.cmsc.util.KeywordUtil;
 public class EgemSearchAction extends MMBaseAction {
 
    public static final String RESULTS = "results";
-   private static final String OFFSET = "offset";
-   private static final String RESULTS_PER_PAGE = "resultsPerPage";
-   private static final String TOTAL_RESULTS = "totalNumberOfResults";
-   private static final int MAX_RESULTS = 500;
+   protected static final String OFFSET = "offset";
+   protected static final String RESULTS_PER_PAGE = "resultsPerPage";
+   protected static final String TOTAL_RESULTS = "totalNumberOfResults";
+   protected static final int MAX_RESULTS = 500;
+   protected static final int RESULTSPERPAGE = 50;
 
 
    protected ActionForward doSearch(ActionMapping mapping, EgemSearchForm form, HttpServletRequest request,
@@ -72,11 +73,10 @@ public class EgemSearchAction extends MMBaseAction {
       }
 
       int offset = StringUtils.isBlank(form.getPage()) ? 0 : Integer.parseInt(form.getPage());
-      int resultsPerPage = 50;
       int numberOfResults = results.size();
 
-      int from = offset * resultsPerPage;
-      int to = from + resultsPerPage;
+      int from = offset * RESULTSPERPAGE;
+      int to = from + RESULTSPERPAGE;
       if (to > numberOfResults) {
          to = numberOfResults;
       }
@@ -88,10 +88,10 @@ public class EgemSearchAction extends MMBaseAction {
 
       request.setAttribute(OFFSET, offset);
       request.setAttribute(RESULTS, results);
-      request.setAttribute(RESULTS_PER_PAGE, resultsPerPage);
+      request.setAttribute(RESULTS_PER_PAGE, RESULTSPERPAGE);
       request.setAttribute(TOTAL_RESULTS, numberOfResults);
 
-      return mapping.findForward("search");
+      return mapping.findForward(EgemSearchForm.SEARCH);
    }
 
 
