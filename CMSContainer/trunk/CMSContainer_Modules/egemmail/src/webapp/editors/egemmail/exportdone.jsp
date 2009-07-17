@@ -21,9 +21,14 @@
 	<div class="ruler_green"><div><fmt:message key="egemmail.export.done" /></div></div>
 		<div class="body">		            
 			<p>
-				<fmt:message key="egemmail.export.intro" />
+            <c:if test="${good > 0}">
+				  <fmt:message key="egemmail.export.intro" />
+              <br/>
+            </c:if>
 				<br/>
-				<br/>
+            <c:if test="${good == 0}">
+               <fmt:message key="egemmail.export.good"><fmt:param>${good}</fmt:param></fmt:message><br/><br/>
+            </c:if>
 				<c:if test="${good == 1}">
 					<fmt:message key="egemmail.export.good.one"/><br/>
 				</c:if>
@@ -47,7 +52,6 @@
 				
 				<br/>
 			</p>
-			
 		</div>
 		<div class="side_block_end"></div>
 	</div>	
