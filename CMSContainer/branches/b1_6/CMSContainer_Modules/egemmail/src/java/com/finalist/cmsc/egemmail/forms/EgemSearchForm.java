@@ -11,13 +11,14 @@ import org.apache.struts.action.ActionMapping;
 @SuppressWarnings("serial")
 public class EgemSearchForm extends ActionForm {
 
+   public static final String SEARCH = "search";
+   
    private String author;
    private String keywords;
    private String page;
    private String title;
    private boolean limitToLastWeekModified = true;
    private boolean limitToLastWeekCreated = true;
-   private boolean selectResults = true;
    private final Set<Integer> nodesOnScreen = new HashSet<Integer>();
 
 
@@ -51,20 +52,15 @@ public class EgemSearchForm extends ActionForm {
    }
 
 
-   public boolean isSelectResults() {
-      return selectResults;
-   }
-
-
    /*
     * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping,
     *      javax.servlet.http.HttpServletRequest)
     */
    @Override
    public void reset(ActionMapping mapping, HttpServletRequest request) {
-      limitToLastWeekModified = false;
-      selectResults = false;
+      setLimitToLastWeekModified(false);
       setLimitToLastWeekCreated(false);
+      nodesOnScreen.clear();
 
       super.reset(mapping, request);
    }
@@ -89,12 +85,7 @@ public class EgemSearchForm extends ActionForm {
       this.page = page;
    }
 
-
-   public void setSelectResults(boolean selectResults) {
-      this.selectResults = selectResults;
-   }
-
-
+   
    public void setTitle(String title) {
       this.title = title;
    }
