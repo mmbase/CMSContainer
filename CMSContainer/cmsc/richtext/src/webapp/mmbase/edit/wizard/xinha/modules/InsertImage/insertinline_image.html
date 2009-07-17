@@ -116,8 +116,8 @@ function selectElement(element_id, title, url, width, height, description) {
             height = Math.round((IMAGE_WIDTH_RIGHT / width) * height);
             width = IMAGE_WIDTH_RIGHT;
          }
-         document.getElementById("f_width").value = IMAGE_WIDTH_RIGHT;
-         document.getElementById("f_height").value = width;
+         document.getElementById("f_width").value = width;
+         document.getElementById("f_height").value = height;
        }
    }
    if ("" == imagePosition) {
@@ -248,8 +248,6 @@ function openPopupWindow(url, windowName, width, height) {
                  </tr>
               </tbody>
          </table>
-
-         <p />
 
          <fieldset style="float: left; margin-left: 5px;">
             <legend>Layout</legend>
