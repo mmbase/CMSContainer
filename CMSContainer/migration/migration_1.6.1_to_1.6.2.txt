@@ -103,3 +103,16 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+
+Name: if insertinline_image.html is overwritten, merge with CMSc version 
+Goal: Keep the file updated with the latest CMSc changes
+Type: do it yourself
+--- Start script ---
+Compare the file insertinline_image.html with your project version and merge the new difference in your
+project's file, to keep it updated.
+--- End script ---
+*
+*
+*
+
