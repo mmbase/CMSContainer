@@ -1,0 +1,16 @@
+Migration document:
+
+From version: 1.5.8
+To version: 1.5.9
+
+
+Name: if insertinline_image.html is overwritten, merge with CMSc version 
+Goal: Keep the file updated with the latest CMSc changes
+Type: do it yourself
+--- Start script ---
+Compare the file insertinline_image.html with your project version and merge the new difference in your
+project's file, to keep it updated.
+--- End script ---
+*
+*
+*
