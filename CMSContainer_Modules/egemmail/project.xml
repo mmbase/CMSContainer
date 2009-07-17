@@ -10,6 +10,6 @@
     <extend>${basedir}/../maven-base/project.xml</extend>
     <artifactId>cmsc-modules-egemmail</artifactId>
     <name>Egem mail module</name>
-    <shortDescription>Integrates the EGEM mail with the CMSc</shortDescription>
+    <shortDescription>Integrates the EGEM mail with the CMSc: export to Egemmail feature</shortDescription>
 </project>
 

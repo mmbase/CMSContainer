@@ -7,7 +7,6 @@ import java.util.Map;
 public class EgemExportForm extends EgemSearchForm {
 
    public static final String EXPORT = "export";
-   public static final String SEARCH = "search";
 
    private String forward = SEARCH;
    private final Map<Integer, Boolean> selectedNodes = new HashMap<Integer, Boolean>();
@@ -26,4 +25,5 @@ public class EgemExportForm extends EgemSearchForm {
    public void setForward(String action) {
       this.forward = action;
    }
+   
 }

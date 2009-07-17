@@ -13,7 +13,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -93,11 +92,15 @@ public class EgemExportAction extends EgemSearchAction {
                }
             }
             else {
-               log.warn("Cloud not find live node for: node.number");
+               log.warn("Cloud not find live node for: " + entry.getKey());
                notOnLive++;
             }
          }
       }
+      
+      //After the export is executed, the form needs to be cleared
+      //This can not be executed in the form.reset() because that happens to often.
+      form.getSelectedNodes().clear();
 
       request.setAttribute("good", good);
       request.setAttribute("wrong", wrong);
@@ -118,24 +121,8 @@ public class EgemExportAction extends EgemSearchAction {
    }
 
 
-   @SuppressWarnings("unchecked")
    protected ActionForward execute(ActionMapping mapping, EgemExportForm form, HttpServletRequest request,
          HttpServletResponse response, Cloud cloud) throws Exception {
-
-      // If the request has been forwarded from by EgemSearchAction
-      NodeList results = (NodeList) request.getAttribute(RESULTS);
-      if (results != null) {
-         form.setForward(EgemExportForm.SEARCH);
-         form.setPage(null);
-
-         form.getSelectedNodes().clear();
-
-         for (Node node : (Iterable<Node>) results) {
-            form.getSelectedNodes().put(node.getNumber(), form.isSelectResults());
-         }
-
-         return mapping.findForward(EgemExportForm.SEARCH);
-      }
 
       mergeState(form, request);
 
