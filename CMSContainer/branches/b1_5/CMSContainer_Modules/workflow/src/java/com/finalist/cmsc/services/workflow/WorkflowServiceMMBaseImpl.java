@@ -104,7 +104,7 @@ public class WorkflowServiceMMBaseImpl extends WorkflowService {
       if (manager.isWorkflowElement(node, isWorkflowItem)) {
          return manager;
       }
-      throw new IllegalArgumentException("Node was not a workflow element " + node);
+      throw new IllegalArgumentException("Node '" + node.getNumber() + "' with manager '" + node.getNodeManager().getName() + "' was not recognized as a workflow element.");
    }
 
 
