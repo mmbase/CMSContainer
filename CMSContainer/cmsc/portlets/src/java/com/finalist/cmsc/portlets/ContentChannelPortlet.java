@@ -62,7 +62,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    protected static final String ARCHIVE_PAGE = "archivepage";
    protected static final String START_INDEX = "startindex";
 
-   private static final int DEFAULT_MAX_ELEMENTS = 100;
+   protected static final int DEFAULT_MAX_ELEMENTS = 100;
    
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
