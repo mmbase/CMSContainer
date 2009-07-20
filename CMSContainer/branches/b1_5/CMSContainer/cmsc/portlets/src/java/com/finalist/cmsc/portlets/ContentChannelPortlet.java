@@ -61,6 +61,8 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
    protected static final String ARCHIVE_PAGE = "archivepage";
    protected static final String START_INDEX = "startindex";
+   
+   protected static final int DEFAULT_MAX_ELEMENTS = 100;
 
 
    @Override
@@ -165,7 +167,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
          int maxElements = Integer.parseInt(preferences.getValue(MAX_ELEMENTS, "-1"));
          if (maxElements <= 0) {
-            maxElements = Integer.MAX_VALUE;
+            maxElements = DEFAULT_MAX_ELEMENTS;
          }
          int elementsPerPage = Integer.parseInt(preferences.getValue(ELEMENTS_PER_PAGE, "-1"));
          if (elementsPerPage <= 0) {
