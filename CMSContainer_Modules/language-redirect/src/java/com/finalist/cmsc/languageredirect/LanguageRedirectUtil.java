@@ -50,7 +50,7 @@ public class LanguageRedirectUtil {
             // the pages of the found sites to find the page ourselves.
             Field liField = nodeManager.getField("liname");
             NodeList pageList = getCorrespondingPages(pageOrSiteNode, liField, nodeManager);
-            while (pageList == null || pageList.size() == 0){           
+            while (pageList == null || pageList.isEmpty()){           
                /*
                 * If no page was found and the parent is not a site, get the parent
                 * of the current node and find the corresponding page for that
@@ -75,7 +75,7 @@ public class LanguageRedirectUtil {
                }
                
                pageList = getCorrespondingPages(pageOrSiteNode, liField, nodeManager);             
-               }
+            }
             
             /*
              * We now have a list of pages that have the same liname as the page
