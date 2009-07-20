@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mmbase.servlet.BridgeServlet;
@@ -55,14 +56,14 @@ public class LanguageRedirectServlet extends BridgeServlet {
 
    private void doRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // Check if the parameters are filled.
-      if (request.getParameter(PARAMETER_LANGUAGE) == null || request.getParameter(PARAMETER_LANGUAGE).equals("")) {
+      if (StringUtils.isBlank(request.getParameter(PARAMETER_LANGUAGE))) {
          log.error("No language parameter given or empty.");
          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No language parameter given or empty.");
          return;
       }
       String language = request.getParameter(PARAMETER_LANGUAGE);
 
-      if (request.getParameter(PARAMETER_ID) == null || request.getParameter(PARAMETER_ID).equals("")) {
+      if (StringUtils.isBlank(request.getParameter(PARAMETER_ID))) {
          log.error("No id parameter given or empty.");
          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No id parameter given or empty.");
          return;
