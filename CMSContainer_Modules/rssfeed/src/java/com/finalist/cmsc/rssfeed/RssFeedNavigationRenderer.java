@@ -112,13 +112,10 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
                XmlUtil.createChildText(itemE, "guid", uniqueUrl);
 
                if (first) {
-                   NodeList images = resultNode.getRelatedNodes("images", "imagerel", null);
+                   NodeList images = resultNode.getRelatedNodes("images", "imagerel", "destination");
                    if (images.size() > 0) {
-                      Node image = images.getNode(0);
-                      List<String> arguments = new ArrayList<String>();
-                      arguments.add("160x100");
-                      int iCacheNodeNumber = image.getFunctionValue("cache", arguments).toInt();
-                      String imageUrl = image.getFunctionValue("servletpath", null).toString() + iCacheNodeNumber;
+                      Node image = ResourcesUtil.getImageNode(images.getNode(0), 160, 120); //height by width
+                      String imageUrl = image.getFunctionValue("servletpath", null).toString();
 
                       Element imageE = XmlUtil.createChild(channel, "image");
                       XmlUtil.createChildText(imageE, "url", imageUrl);
