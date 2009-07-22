@@ -20,6 +20,7 @@
       <form-bean name="RolesForm" type="com.finalist.cmsc.security.forms.RolesForm" />
 
       <form-bean name="RepositoryPasteForm" type="com.finalist.cmsc.repository.forms.PasteForm" />
+      <form-bean name="UploadForm" type="com.finalist.cmsc.resources.forms.UploadForm" />
    </form-beans>
 
    <!-- ========== Global Exceptions Definitions =================================== -->
@@ -207,6 +208,16 @@
             <set-property property="cancellable" value="true"/>
             <forward name="success" path="/editors/usermanagement/repository/roles.jsp" redirect="false" />
          <forward name="savecancel" path="/editors/usermanagement/userlist.jsp" redirect="false" />
+      </action>
+         
+      <!-- ==== Upload Action ==== -->
+      <action path="/editors/resources/ImageUploadAction" type="com.finalist.cmsc.resources.forms.ImageUploadAction" 
+         name="UploadForm" unknown="false" validate="true">
+         <forward name="success" path="/editors/resources/imageupload.jsp" redirect="true" />
+      </action>
+      <action path="/editors/resources/AttachmentUploadAction" type="com.finalist.cmsc.resources.forms.AttachmentUploadAction" 
+         name="UploadForm" unknown="false" validate="true">
+         <forward name="success" path="/editors/resources/attachmentupload.jsp" redirect="true" />
       </action>
 
    </action-mappings>
