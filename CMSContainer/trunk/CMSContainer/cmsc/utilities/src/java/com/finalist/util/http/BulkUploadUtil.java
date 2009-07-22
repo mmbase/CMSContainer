@@ -49,6 +49,8 @@ public class BulkUploadUtil {
    private static final Log log = LogFactory.getLog(BulkUploadUtil.class);
 
    private static final int MAXSIZE = 256 * 1024 * 1024;
+   
+   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
 
    private static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
 
@@ -106,12 +108,13 @@ public class BulkUploadUtil {
       return nodes;
    }
 
-   public static List<Integer> store(Cloud cloud, NodeManager manager, String parentchannel, FormFile file) {
+   public static List<Integer> store(Cloud cloud, NodeManager manager, String parentchannel, FormFile file
+         ,List<String> notUploadedFiles, List<String> uploadedFiles) {
       List<Integer> nodes;
       if (StringUtils.isEmpty(parentchannel)) {
          throw new NullPointerException("parentchannel is null");
       }
-      nodes = getNodeList(Integer.valueOf(parentchannel), manager, file, cloud);
+      nodes = getNodeList(Integer.valueOf(parentchannel), manager, file, cloud, notUploadedFiles, uploadedFiles);
       return nodes;
    }
 
@@ -162,7 +165,8 @@ public class BulkUploadUtil {
       return node;
    }
 
-   private static List<Integer> getNodeList(Integer parentChannel, NodeManager manager, FormFile file, Cloud cloud) {
+   private static List<Integer> getNodeList(Integer parentChannel, NodeManager manager, FormFile file, Cloud cloud,
+         List<String> notUploadedFiles, List<String> uploadedFiles) {
       List<Integer> nodes = null;
       try {
          if (isZipFile(file.getContentType(), file.getFileName())) {
@@ -183,11 +187,12 @@ public class BulkUploadUtil {
             InputStream is = new BufferedInputStream(bis);
             ZipInputStream zip = new ZipInputStream(is);
 
-            nodes = createNodesInZip(parentChannel, manager, zip, cloud);
+            nodes = createNodesInZip(parentChannel, manager, zip, cloud, notUploadedFiles, uploadedFiles);
          } else {
 
             Node node = createNode(parentChannel, manager, file.getFileName(), file.getInputStream(), file
                   .getFileSize());
+            uploadedFiles.add(file.getFileName());
             if (node != null) {
                nodes = new ArrayList<Integer>();
                nodes.add(node.getNumber());
@@ -246,7 +251,7 @@ public class BulkUploadUtil {
    }
 
    private static ArrayList<Integer> createNodesInZip(Integer parentChannel, NodeManager manager, ZipInputStream zip,
-         Cloud cloud) {
+         Cloud cloud, List<String> notUploadedFiles, List<String> uploadedFiles) {
 
       ZipEntry entry = null;
       int count = 0;
@@ -271,8 +276,7 @@ public class BulkUploadUtil {
             }
             count++;
             long size = entry.getSize();
-
-            if (size < Integer.parseInt(PropertiesUtil.getProperty("uploaded.file.max.size")) * 1024 * 1024) {
+            if (maxFileSizeBiggerThan(size)) {
                ChecksumFactory checksumFactory = new ChecksumFactory();
                ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
                      .createTransformer(checksumFactory.createParameters());
@@ -292,9 +296,14 @@ public class BulkUploadUtil {
                   Node node = createNode(parentChannel, manager, entry.getName(), is, size);
                   if (node != null) {
                      nodes.add(node.getNumber());
+                     uploadedFiles.add(entry.getName());
                   }
                   is.close();
+               } else {
+                  notUploadedFiles.add(entry.getName());
                }
+            } else {
+               notUploadedFiles.add(entry.getName());
             }
             zip.closeEntry();
          }
@@ -370,5 +379,21 @@ public class BulkUploadUtil {
       System.out.println(isZipFile("content","helloworld.zip")); //Should be true
       System.out.println(isZipFile("application/x-zip-compressed","helloworld.zipper")); //Should be true
       System.out.println(isZipFile("content","helloworld.zipper")); //Should be false
+   }
+   public static boolean maxFileSizeBiggerThan(long fileSize) {
+      int maxFileSize = MAXSIZE;
+      if (PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE) != null) {
+         try {
+            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
+            // check invalid value of UPLOADED_FILE_MAX_SIZE
+            if (maxFileSize <= 0) {
+               // PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
+               maxFileSize = MAXSIZE;
+            }
+         } catch (NumberFormatException e) {
+            log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
+         }
+      }
+      return (fileSize <= maxFileSize);
    }
 }

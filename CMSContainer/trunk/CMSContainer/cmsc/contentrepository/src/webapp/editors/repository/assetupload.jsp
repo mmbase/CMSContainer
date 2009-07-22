@@ -1,4 +1,6 @@
-<%@ page import="com.finalist.util.http.BulkUploadUtil"%>
+<%@ page import="com.finalist.util.http.BulkUploadUtil"
+%><%@ page import="java.util.List"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <script type="text/javascript">
        function upload() {
            setTimeout('sayWait();',0);
@@ -11,27 +13,11 @@
 
 <html:form action="/editors/repository/AssetUploadAction.do" enctype="multipart/form-data" method="post">
 <input type="hidden" id="assetType" name="assetType" value="attachments"/>
-<input type="hidden" id="insertAsset" name="insertAsset" value="${param.insertAsset}"/>
 <input type="hidden" id="parentchannel" name="parentchannel" value="${parentchannel}"/>
 <table border="0">
    <tr>
       <td><fmt:message key="asset.upload.explanation" /></td>
    </tr>
-         <c:if test="${param.exist=='1'}">
-            <tr>
-               <td style="color:red;"><fmt:message key="asset.upload.existed" /></td>
-            </tr>
-         </c:if>
-         <c:if test="${param.emptyFile=='yes'}">
-            <tr>
-               <td style="color:red;"><fmt:message key="asset.upload.emptyfile" /></td>
-            </tr>
-         </c:if>
-         <c:if test="${param.exceed == 'yes'}">
-            <tr>
-               <td style="color:red;"><fmt:message key="asset.upload.size.exceed"/></td>
-            </tr>
-         </c:if>
    <tr>
       <td><html:file property="file" /></td>
    </tr>
@@ -39,6 +25,34 @@
       <td><html:submit property="uploadButton" onclick="upload();">
          <fmt:message key='assets.upload.submit' /></html:submit></td>
    </tr>
+   <c:if test="${param.uploadingDone eq 'yes'}">
+   <tr>
+      <td>Failed Attachments and Images: ${param.failed}</td>
+   </tr>
+   <c:if test="${param.failed != 0}" >
+    <tr>
+      <td>
+      <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
+      ${fileName}&nbsp;&nbsp;&nbsp;
+      </c:forEach>
+      <c:remove var="notUploadedFiles" scope="session"/>
+      </td>
+    </tr>
+   </c:if>
+   <tr>
+      <td>Uploaded Attachments and Images: ${param.uploaded}</td>
+   </tr>
+   <c:if test="${param.uploaded != 0}" >
+   <tr>
+     <td>
+     <c:forEach var="fileName" items="${uploadedFiles}" varStatus="fileAmount" >
+        ${fileName}&nbsp;&nbsp;&nbsp;
+     </c:forEach>
+      <c:remove var="notUploadedFiles" scope="session"/>
+     </td>
+   </tr>
+   </c:if>
+   </c:if>
 </table>
 </html:form>
 <div id="busy"><fmt:message key="uploading.message.wait" /><br />
