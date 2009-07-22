@@ -27,7 +27,6 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.transformers.ByteToCharTransformer;
 import org.mmbase.util.transformers.ChecksumFactory;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.versioning.VersioningException;
 import com.finalist.cmsc.services.workflow.Workflow;
@@ -36,7 +35,6 @@ import com.finalist.util.http.BulkUploadUtil;
 
 public abstract class AbstractUploadAction extends MMBaseAction {
 
-   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
    public static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
    protected static Set<String> supportedImages;
 
@@ -113,20 +111,5 @@ public abstract class AbstractUploadAction extends MMBaseAction {
             Versioning.addVersion(cloud.getNode(node));
          }
       }
-   }
-
-   public boolean maxFileSizeBiggerThan(int fileSize) {
-      int maxFileSize = 8 * 1024 * 1024; // Default value of 16MB
-      try {
-         maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
-         // check invalid value of UPLOADED_FILE_MAX_SIZE
-         if (maxFileSize <= 0) {
-         //   PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
-            maxFileSize = 8 * 1024 * 1024; // set default value of 16MB
-         }
-      } catch (NumberFormatException e) {
-         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
-      }
-      return (fileSize <= maxFileSize);
    }
 }
