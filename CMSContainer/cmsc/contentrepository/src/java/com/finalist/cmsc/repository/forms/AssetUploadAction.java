@@ -26,13 +26,26 @@ public class AssetUploadAction extends AbstractUploadAction {
       FormFile file = assetUploadForm.getFile();
 
       String url = "";
+      String emptyFileName = "no";
+      String exceed = "no";
+      String emptyFile = "no";
+      String uploadingDone = "yes";
       int fileSize = file.getFileSize();
       int failed = 0;
       int uploaded = 0;
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if (BulkUploadUtil.maxFileSizeBiggerThan(fileSize) && StringUtils.isNotEmpty(file.getFileName()) && fileSize != 0) {
+      if (!BulkUploadUtil.maxFileSizeBiggerThan(fileSize)) {
+         exceed = "yes";
+         uploadingDone = "no";
+      } else if (fileSize == 0) {
+         emptyFile = "yes";
+         uploadingDone = "no";
+      } else if (StringUtils.isEmpty(file.getFileName())) {
+         emptyFileName = "yes";
+         uploadingDone = "no";
+      } else{
          String assetType = "";
          if (isImage(file.getFileName())) {
             assetType = "images";
@@ -45,7 +58,6 @@ public class AssetUploadAction extends AbstractUploadAction {
          if (isNewFile(file, manager)) {
             List<Integer> nodes = null;
             nodes = BulkUploadUtil.store(cloud, manager, parentchannel, file, notUploadedFiles, uploadedFiles);
-            request.setAttribute("uploadedAssets", nodes);
             // to archive the upload asset
             if (nodes != null) {
                addRelationsForNodes(nodes, cloud);
@@ -54,8 +66,6 @@ public class AssetUploadAction extends AbstractUploadAction {
          } else {
             notUploadedFiles.add(file.getFileName());
          }
-      } else {
-         notUploadedFiles.add(file.getFileName());
       }
       failed = notUploadedFiles.size();
       uploaded = uploadedFiles.size();
@@ -68,7 +78,8 @@ public class AssetUploadAction extends AbstractUploadAction {
       }
 
       url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel=" + parentchannel
-            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=yes";
+            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=" + uploadingDone + "&emptyFileName=" 
+            + emptyFileName + "&exceed=" + exceed + "&emptyFile=" + emptyFile;
 
       return new ActionForward(url, true);
    }

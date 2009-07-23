@@ -276,32 +276,28 @@ public class BulkUploadUtil {
             }
             count++;
             long size = entry.getSize();
-            if (maxFileSizeBiggerThan(size)) {
-               ChecksumFactory checksumFactory = new ChecksumFactory();
-               ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
-                     .createTransformer(checksumFactory.createParameters());
-               ByteArrayOutputStream fileData = new ByteArrayOutputStream();
-               int len = 0;
-               while ((len = zip.read(buffer)) > 0) {
-                  fileData.write(buffer, 0, len);
-               }
-               String checkSum = transformer.transform(fileData.toByteArray());
-               NodeQuery query = manager.createQuery();
-               SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
-               NodeList assets = query.getList();
+            ChecksumFactory checksumFactory = new ChecksumFactory();
+            ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
+                  .createTransformer(checksumFactory.createParameters());
+            ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+            int len = 0;
+            while ((len = zip.read(buffer)) > 0) {
+               fileData.write(buffer, 0, len);
+            }
+            String checkSum = transformer.transform(fileData.toByteArray());
+            NodeQuery query = manager.createQuery();
+            SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
+            NodeList assets = query.getList();
 
-               boolean isNewFile = (assets.size() == 0);
-               InputStream is = new ByteArrayInputStream(fileData.toByteArray());
-               if (isNewFile) {
-                  Node node = createNode(parentChannel, manager, entry.getName(), is, size);
-                  if (node != null) {
-                     nodes.add(node.getNumber());
-                     uploadedFiles.add(entry.getName());
-                  }
-                  is.close();
-               } else {
-                  notUploadedFiles.add(entry.getName());
+            boolean isNewFile = (assets.size() == 0);
+            InputStream is = new ByteArrayInputStream(fileData.toByteArray());
+            if (isNewFile) {
+               Node node = createNode(parentChannel, manager, entry.getName(), is, size);
+               if (node != null) {
+                  nodes.add(node.getNumber());
+                  uploadedFiles.add(entry.getName());
                }
+               is.close();
             } else {
                notUploadedFiles.add(entry.getName());
             }
