@@ -45,7 +45,7 @@ public class AssetUploadAction extends AbstractUploadAction {
       } else if (StringUtils.isEmpty(file.getFileName())) {
          emptyFileName = "yes";
          uploadingDone = "no";
-      } else if(BulkUploadUtil.maxFileSizeBiggerThan(fileSize) && fileSize != 0){
+      } else{
          String assetType = "";
          if (isImage(file.getFileName())) {
             assetType = "images";
