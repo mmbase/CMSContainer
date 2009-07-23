@@ -69,16 +69,16 @@
          </div>
          <div id="notbusy">
             <c:if test="${param.fileTypeInvalid}">
-                <p>&nbsp;&nbsp;Please upload a image or Zip file.</p>
+                <p>&nbsp;&nbsp;<fmt:message key="images.upload.filetypeinvalid"/></p>
             </c:if>
             <c:if test="${param.fileIsEmpty}">
-                <p>&nbsp;&nbsp;Please select a image file or Zip file.</p>
+                <p>&nbsp;&nbsp;<fmt:message key="images.upload.emptyfile"/></p>
             </c:if>
             <c:if test="${param.fileTooBig}">
-                <p>&nbsp;&nbsp;The file is too big.</p>
+                <p>&nbsp;&nbsp;<fmt:message key="images.upload.bigfile"/></p>
             </c:if>
             <c:if test="${param.numberOfFailedFiles >= 0}">
-                <p>&nbsp;&nbsp;Failed Image(s): ${param.numberOfFailedFiles}<br />
+                <p>&nbsp;&nbsp;<fmt:message key="images.upload.failedtip"/> ${param.numberOfFailedFiles}<br />
                     <c:forEach var="failedFile" items="${sessionScope.failedFiles}">
                         <c:out value="${failedFile}" />&nbsp;&nbsp;&nbsp;
                     </c:forEach>
@@ -86,7 +86,7 @@
                 </p>
             </c:if>
             <c:if test="${param.numberOfUploadedNodes >= 0}">
-                <p>&nbsp;&nbsp;Uploaded Image(s): ${param.numberOfUploadedNodes}<br />
+                <p>&nbsp;&nbsp;<fmt:message key="images.upload.uploadedtip"/> ${param.numberOfUploadedNodes}<br />
                     <c:forEach var="uploadedFile" items="${sessionScope.uploadedFiles}">
                         <c:out value="${uploadedFile}" />&nbsp;&nbsp;&nbsp;
                     </c:forEach>
