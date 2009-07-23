@@ -26,13 +26,26 @@ public class AssetUploadAction extends AbstractUploadAction {
       FormFile file = assetUploadForm.getFile();
 
       String url = "";
+      String emptyFileName = "no";
+      String exceed = "no";
+      String emptyFile = "no";
+      String uploadingDone = "yes";
       int fileSize = file.getFileSize();
       int failed = 0;
       int uploaded = 0;
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if (BulkUploadUtil.maxFileSizeBiggerThan(fileSize) && StringUtils.isNotEmpty(file.getFileName()) && fileSize != 0) {
+      if (!BulkUploadUtil.maxFileSizeBiggerThan(fileSize)) {
+         exceed = "yes";
+         uploadingDone = "no";
+      } else if (fileSize == 0) {
+         emptyFile = "yes";
+         uploadingDone = "no";
+      } else if (StringUtils.isEmpty(file.getFileName())) {
+         emptyFileName = "yes";
+         uploadingDone = "no";
+      } else if(BulkUploadUtil.maxFileSizeBiggerThan(fileSize) && fileSize != 0){
          String assetType = "";
          if (isImage(file.getFileName())) {
             assetType = "images";
@@ -53,21 +66,20 @@ public class AssetUploadAction extends AbstractUploadAction {
          } else {
             notUploadedFiles.add(file.getFileName());
          }
-      } else {
-         notUploadedFiles.add(file.getFileName());
       }
       failed = notUploadedFiles.size();
       uploaded = uploadedFiles.size();
-      
+
       if (notUploadedFiles != null) {
          request.getSession().setAttribute("notUploadedFiles", notUploadedFiles);
       }
       if (uploadedFiles != null) {
          request.getSession().setAttribute("uploadedFiles", uploadedFiles);
       }
-      
+
       url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel=" + parentchannel
-            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=yes";
+            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=" + uploadingDone + "&emptyFileName=" 
+            + emptyFileName + "&exceed=" + exceed + "&emptyFile=" + emptyFile;
 
       return new ActionForward(url, true);
    }
