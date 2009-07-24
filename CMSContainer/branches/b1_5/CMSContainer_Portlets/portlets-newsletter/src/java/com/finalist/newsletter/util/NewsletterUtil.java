@@ -19,7 +19,6 @@ import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.RelationList;
 import org.mmbase.bridge.RelationManager;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
@@ -61,22 +60,21 @@ public abstract class NewsletterUtil {
    public static final String RELATED = "related";
 
    public static int countNewsletters() {
-
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeList newsletterList = SearchUtil.findNodeList(cloud, NEWSLETTER);
       if (newsletterList != null) {
-         return (0 + newsletterList.size());
+         return newsletterList.size();
       }
-      return (0);
+      return 0;
    }
 
    public static int countPublications() {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeList publicationList = SearchUtil.findNodeList(cloud, NEWSLETTERPUBLICATION);
       if (publicationList != null) {
-         return (0 + publicationList.size());
+         return publicationList.size();
       }
-      return (0);
+      return 0;
    }
 
    public static int countPublications(int newsletterNumber) {
@@ -85,13 +83,12 @@ public abstract class NewsletterUtil {
       NodeList publicationsList = newsletterNode.getRelatedNodes(NEWSLETTERPUBLICATION);
 
       if (publicationsList != null) {
-         return (publicationsList.size());
+         return publicationsList.size();
       }
-      return (0);
+      return 0;
    }
 
    public static void deleteRelatedElement(int number) {
-
       Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
       Node newsletterNode = cloud.getNode(number);
       deleteSubscriptionByNewsletter(newsletterNode);
@@ -118,7 +115,6 @@ public abstract class NewsletterUtil {
    }
 
    public static void deleteNewsletterLogForNewsletter(int newsletterNumber) {
-
       Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
       NodeManager newsletterLogManager = cloud.getNodeManager("newsletterdailylog");
       NodeQuery query = cloud.createNodeQuery();
@@ -157,7 +153,7 @@ public abstract class NewsletterUtil {
          String type = node.getNodeManager().getName();
          return (type);
       }
-      return (null);
+      return null;
    }
 
    public static List<Integer> getAllNewsletters() {
@@ -171,7 +167,7 @@ public abstract class NewsletterUtil {
             newsletters.add(newsletterNumber);
          }
       }
-      return (newsletters);
+      return newsletters;
    }
 
    public static List<Integer> getAllPublications() {
@@ -185,7 +181,7 @@ public abstract class NewsletterUtil {
             publications.add(publicationNumber);
          }
       }
-      return (publications);
+      return publications;
    }
 
    public static List<Integer> getArticlesForTheme(int themeNumber) {
@@ -202,9 +198,9 @@ public abstract class NewsletterUtil {
                articles.add(article);
             }
          }
-         return (articles);
+         return articles;
       }
-      return (null);
+      return null;
    }
 
    public static List<ContentElement> getArticlesByNewsletter(int itemNumber, String termNumbers, int offset, int elementsPerPage, String orderBy, String direction) {
@@ -215,7 +211,7 @@ public abstract class NewsletterUtil {
          sort.add(new Integer(number));
       }
       if (sort.size() == 0) {
-         return (null);
+         return null;
       }
       return getArticles(itemNumber, offset, elementsPerPage, orderBy, direction, sort);
    }
@@ -224,7 +220,7 @@ public abstract class NewsletterUtil {
       if (newsletterNumber > 0) {
          return getArticles(offset, elementsPerPage, orderBy, direction, newsletterNumber);
       }
-      return (null);
+      return null;
    }
 
    public static List<ContentElement> getArticles(int offset, int elementsPerPage, String orderBy, String direction, int number) {
@@ -252,7 +248,7 @@ public abstract class NewsletterUtil {
             articles.add(element);
          }
       }
-      return (articles);
+      return articles;
 
    }
 
@@ -276,7 +272,7 @@ public abstract class NewsletterUtil {
             articles.add(element);
          }
       }
-      return (articles);
+      return articles;
 
    }
 
@@ -349,7 +345,7 @@ public abstract class NewsletterUtil {
          sort.add(new Integer(number));
       }
       if (sort.size() == 0) {
-         return (0);
+         return 0;
       }
       return countArticles(itemNumber, sort);
    }
@@ -358,7 +354,7 @@ public abstract class NewsletterUtil {
       if (newsletterNumber > 0) {
          return countArticles(newsletterNumber);
       }
-      return (0);
+      return 0;
    }
 
 
@@ -366,7 +362,7 @@ public abstract class NewsletterUtil {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Node newsletterNode = cloud.getNode(newsletterNumber);
       String title = newsletterNode.getStringValue(TITLE);
-      return (title);
+      return title;
    }
 
    public static boolean isNewsletter(int number) {
@@ -377,7 +373,7 @@ public abstract class NewsletterUtil {
             result = true;
          }
       }
-      return (result);
+      return result;
    }
 
    public static boolean isNewsletterOrPublication(int number) {
@@ -387,7 +383,7 @@ public abstract class NewsletterUtil {
             result = true;
          }
       }
-      return (result);
+      return result;
    }
 
    public static boolean isNewsletterPublication(int number) {
@@ -398,7 +394,7 @@ public abstract class NewsletterUtil {
             result = true;
          }
       }
-      return (result);
+      return result;
    }
 
    public static List<Integer> removeDuplicates(List<Integer> primary, List<Integer> secundary) {
@@ -415,7 +411,7 @@ public abstract class NewsletterUtil {
             secundary.remove(removals.get(r));
          }
       }
-      return (secundary);
+      return secundary;
    }
 
    public static boolean isPaused(int number) {
@@ -424,7 +420,7 @@ public abstract class NewsletterUtil {
          Node newsletterNode = cloud.getNode(number);
          return "true".equals(newsletterNode.getStringValue("paused"));
       }
-      return (false);
+      return false;
    }
 
    public static boolean isPaused(Node newsletterNode) {
@@ -433,11 +429,10 @@ public abstract class NewsletterUtil {
          Date now = new Date();
          return (isPaused && now.after(newsletterNode.getDateValue("pausedstartdate")) && now.before(newsletterNode.getDateValue("pausedstopdate")));
       }
-      return (false);
+      return false;
    }
 
    public static void pauseNewsletter(int number) {
-
       if (number > 0) {
          log.debug("Pause newsletter " + number);
          Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
@@ -521,7 +516,6 @@ public abstract class NewsletterUtil {
    }
 
    public static String calibrateRelativeURL(String inputString, String liveURL) {
-
       if (liveURL.charAt(liveURL.length() - 1) == '/') {
          liveURL = liveURL.substring(0, liveURL.lastIndexOf("/"));
       }
@@ -752,12 +746,14 @@ public abstract class NewsletterUtil {
    public static String getScheduleMessageByExpression(String stringValue) {
       return getScheduleMessageByExpression(stringValue,null);
    }
+   
    public static void addNewsletterCreationChannel(int newsletterId ,int editionId) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       RelationManager relManager = cloud.getRelationManager(NEWSLETTER, NEWSLETTERPUBLICATION, RELATED);
       relManager.createRelation(cloud.getNode(newsletterId), cloud.getNode(editionId)).commit();
    }
-   public static void getSchedulesBynewsletterId(Integer valueOf) {
+   
+   public static void getSchedulesByNewsletterId(Integer valueOf) {
       getSchedulesBynewsletterId(valueOf,null);
    }
 }

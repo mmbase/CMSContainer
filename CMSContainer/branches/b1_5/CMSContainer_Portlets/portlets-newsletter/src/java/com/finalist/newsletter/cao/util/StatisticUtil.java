@@ -8,8 +8,12 @@ import org.mmbase.bridge.NodeList;
 import com.finalist.newsletter.domain.StatisticResult;
 
 public class StatisticUtil {
+   
+   //Util class should not be initiated.
+   private StatisticUtil() {
+   }
 
-   public List<StatisticResult> convertFromNodeList (NodeList nodelist){
+   public static List<StatisticResult> convertFromNodeList(NodeList nodelist) {
 
       List<StatisticResult> list = new ArrayList<StatisticResult>();
       for (int i = 0; i < nodelist.size(); i++) {

@@ -31,12 +31,9 @@ public class NewsletterCAOImpl extends AbstractCAO implements NewsletterCAO {
    public NewsletterCAOImpl() {
    }
 
-   public List<Term> getALLTerm() {
-      NodeQuery query = cloud.createNodeQuery();
-      Step step = query.addStep(cloud.getNodeManager("term"));
-      query.setNodeStep(step);
-      NodeList list = query.getList();
-      return MMBaseNodeMapper.convertList(list, Term.class);
+   public List<Term> getAllTerms() {
+      NodeList list = SearchUtil.findNodeList(cloud, "term");
+      return list;
    }
 
    public List<Newsletter> getNewsletterByConstraint(String property, String constraintType, String value,
@@ -72,9 +69,8 @@ public class NewsletterCAOImpl extends AbstractCAO implements NewsletterCAO {
 
       if (nodes.size() > 0) {
          return nodes.getNode(0).getNumber();
-      } else {
-         return -1;
       }
+      return -1;
    }
 
    public Node getNewsletterNodeById(int newsletterId) {

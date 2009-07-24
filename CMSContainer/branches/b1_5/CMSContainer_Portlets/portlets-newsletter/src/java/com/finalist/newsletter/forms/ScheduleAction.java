@@ -118,7 +118,7 @@ public class ScheduleAction  extends DispatchAction{
       HttpServletRequest request, HttpServletResponse response)
          throws Exception {
       String scheduleId = request.getParameter("scheduleid");
-      NewsletterUtil.getSchedulesBynewsletterId(Integer.valueOf(scheduleId));
+      NewsletterUtil.getSchedulesByNewsletterId(Integer.valueOf(scheduleId));
       return null;
    }
 
