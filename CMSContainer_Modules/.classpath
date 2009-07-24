@@ -28,12 +28,12 @@
 	<classpathentry kind="src" path="versioning/src/java"/>
 	<classpathentry kind="src" path="workflow/src/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_6"/>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.7.0.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.8.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/beanutils/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.1.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.2.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs/"/>
 		</attributes>
@@ -58,7 +58,7 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/lang/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.1.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/logging/apidocs/"/>
 		</attributes>
@@ -136,7 +136,7 @@
 			<attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.8/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.15.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
 		</attributes>
