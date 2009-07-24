@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronjobs exportsource="mmbase://127.0.0.1/login" timestamp="20060704104123">
+   <node number="104974" owner="default">
+      <name>Community Unconfirmed User Cleaner CronJob</name>
+      <crontime>* 23 * * *</crontime>
+      <classfile>com.finalist.cmsc.login.RegisterCleanCronJob</classfile>
+      <config></config>
+      <type>2</type>
+   </node>
+</cronjobs>
