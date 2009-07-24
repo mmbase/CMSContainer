@@ -134,17 +134,15 @@ public class StatisticServiceImpl implements StatisticService {
 
    public void logPubliction(int newsletterId, HANDLE handle) {
       int userId = CommunityModuleAdapter.getCurrentUserId();
-      statisticCAO.logPubliction(userId, newsletterId, handle);
+      statisticCAO.logPublication(userId, newsletterId, handle);
    }
 
    public List<StatisticResult> getLogs() {
-
       return statisticCAO.getLogs();
    }
 
-   public int pushSumedLogs(List<StatisticResult> listRecorder) {
-
-      return statisticCAO.insertSumedLogs(listRecorder);
+   public int pushSummedLogs(List<StatisticResult> listRecorder) {
+      return statisticCAO.insertSummedLogs(listRecorder);
    }
    
 }

@@ -51,7 +51,7 @@ public class FakeNewsLetterStatisticCAO implements NewsLetterStatisticCAO{
 
    }
 
-   public int insertSumedLogs(List<StatisticResult> listRecorder) {
+   public int insertSummedLogs(List<StatisticResult> listRecorder) {
       return 0;
    }
 
