@@ -37,17 +37,16 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       this.cloud = cloud;
    }
 
-   public List < StatisticResult > getAllRecords() {
+   public List<StatisticResult> getAllRecords() {
 
       NodeQuery query = cloud.createNodeQuery();
       Step step = query.addStep(cloud.getNodeManager("newsletterdailylog"));
       query.setNodeStep(step);
       NodeList list = query.getList();
-      StatisticUtil util = new StatisticUtil();
-      return util.convertFromNodeList(list);
+      return StatisticUtil.convertFromNodeList(list);
    }
 
-   public List < StatisticResult > getRecordsByNewsletter(int newsletter) {
+   public List<StatisticResult> getRecordsByNewsletter(int newsletter) {
       NodeQuery query = cloud.createNodeQuery();
       NodeManager manager = cloud.getNodeManager("newsletterdailylog");
       Step step1 = query.addStep(manager);
@@ -62,11 +61,10 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setConstraint(constraint);
       query.setNodeStep(step1);
       NodeList list = query.getList();
-      StatisticUtil util = new StatisticUtil();
-      return util.convertFromNodeList(list);
+      return StatisticUtil.convertFromNodeList(list);
    }
 
-   public List < StatisticResult > getAllRecordsByPeriod(Date start, Date end) {
+   public List<StatisticResult> getAllRecordsByPeriod(Date start, Date end) {
       NodeQuery query = cloud.createNodeQuery();
       NodeManager manager = cloud.getNodeManager("newsletterdailylog");
       Step step1 = query.addStep(manager);
@@ -81,50 +79,46 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setConstraint(constraint);
       query.setNodeStep(step1);
       NodeList list = query.getList();
-      StatisticUtil util = new StatisticUtil();
-      return util.convertFromNodeList(list);
+      return StatisticUtil.convertFromNodeList(list);
    }
 
    /**
-    * @return List which sumLogs about StatisticResult 
+    * @return List which sumLogs about StatisticResult
     */
-   public List < StatisticResult > getLogs() {
+   public List<StatisticResult> getLogs() {
       NodeList nodelist = getNodelist();
       synchronized (this) {
-         List < StatisticResult > logsList = new ArrayList < StatisticResult >();
-         List < StatisticResult > resultList = getLogsByNode(nodelist);
-         if (null != resultList) {
+         List<StatisticResult> logsList = new ArrayList<StatisticResult>();
+         List<StatisticResult> resultList = StatisticUtil.convertFromNodeList(nodelist);
+         if (resultList != null) {
             // use newsletterId and userId as key to take the logic
-            Map < String , StatisticResult > sumedMap = new HashMap < String , StatisticResult >();
+            Map<String, StatisticResult> summedMap = new HashMap<String, StatisticResult>();
             for (StatisticResult r : resultList) {
                String uniteKey = r.getNewsletterId() + "H" + r.getUserId();
-               StatisticResult freq = (StatisticResult) sumedMap.get(uniteKey);
+               StatisticResult freq = summedMap.get(uniteKey);
                if (freq == null) {
                   freq = r;
                } else {
                   freq = sumLogs(freq, r);
                }
-               sumedMap.put(uniteKey, freq);
+               summedMap.put(uniteKey, freq);
             }
-            if (null != sumedMap) {
-               deleteOldLogsByNode(nodelist);
+            deleteOldLogsByNode(nodelist);
 
-               for (Iterator iter = sumedMap.keySet().iterator(); iter.hasNext();) {
-                  StatisticResult result = new StatisticResult();
-                  String element = (String) iter.next();
-                  StatisticResult child = (StatisticResult) sumedMap.get(element);
-                  result = sumLogs(result, child);
-                  String[] i = element.split("H");
-                  result.setNewsletterId(Integer.parseInt(i[0]));
-                  result.setUserId(Integer.parseInt(i[1]));
-                  logsList.add(result);
-               }
+            for (Iterator<String> iter = summedMap.keySet().iterator(); iter.hasNext();) {
+               StatisticResult result = new StatisticResult();
+               String element = iter.next();
+               StatisticResult child = summedMap.get(element);
+               result = sumLogs(result, child);
+               String[] i = element.split("H");
+               result.setNewsletterId(Integer.parseInt(i[0]));
+               result.setUserId(Integer.parseInt(i[1]));
+               logsList.add(result);
             }
             return logsList;
 
-         } else {
-            return null;
          }
+         return null;
       }
    }
 
@@ -165,11 +159,6 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       return list;
    }
 
-   private List < StatisticResult > getLogsByNode(NodeList list) {
-      StatisticUtil util = new StatisticUtil();
-      return util.convertFromNodeList(list);
-   }
-
    private boolean deleteOldLogsByNode(NodeList list) {
       boolean flag = false;
       if (null != list) {
@@ -184,7 +173,7 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
 
    }
 
-   public List < StatisticResult > getRecordsByNewsletterAndPeriod(Date start, Date end, int newsletter) {
+   public List<StatisticResult> getRecordsByNewsletterAndPeriod(Date start, Date end, int newsletter) {
       NodeQuery query = cloud.createNodeQuery();
       NodeManager manager = cloud.getNodeManager("newsletterdailylog");
       Step step1 = query.addStep(manager);
@@ -202,12 +191,11 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       constraints.addChild(constraint2);
       query.setConstraint(constraints);
       query.setNodeStep(step1);
-      List < Node > list = query.getList();
-      StatisticUtil util = new StatisticUtil();
-      return util.convertFromNodeList((NodeList) list);
+      List<Node> list = query.getList();
+      return StatisticUtil.convertFromNodeList((NodeList) list);
    }
 
-   public void logPubliction(int userId, int newsletterId, HANDLE handle) {
+   public void logPublication(int userId, int newsletterId, HANDLE handle) {
       if (!mayLog(userId, newsletterId, handle)) {
          return;
       }
@@ -293,8 +281,8 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setMaxNumber(1);
       SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), Integer.valueOf(newsletterId));
       SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), Integer.valueOf(userId));
-      FieldValueConstraint liConstraint = query.createConstraint((query.getStepField(logNodeManager
-            .getField("bounches"))), FieldCompareConstraint.GREATER, Integer.valueOf(0));
+      FieldValueConstraint liConstraint = query.createConstraint((query.getStepField(logNodeManager.getField("bounches"))),
+            FieldCompareConstraint.GREATER, Integer.valueOf(0));
       SearchUtil.addConstraint(query, liConstraint);
       NodeList logs = query.getList();
       if (logs != null && logs.size() > 0) {
@@ -306,10 +294,11 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
    }
 
    /**
-    * @param listRecorder which get from data
-    * @return how many SumedLogs insert
+    * @param listRecorder
+    *           which get from data
+    * @return how many SummedLogs insert
     */
-   public int insertSumedLogs(List < StatisticResult > logsList) {
+   public int insertSummedLogs(List<StatisticResult> logsList) {
       int i = 0;
       NodeManager logManager = cloud.getNodeManager("newsletterdailylog");
       Node logNode;

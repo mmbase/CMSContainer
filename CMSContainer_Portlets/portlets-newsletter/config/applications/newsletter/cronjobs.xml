@@ -16,7 +16,7 @@
    </node>
    <node number="104974" owner="default">
       <name>Newsletter LogRecord CronJob</name>
-      <crontime>* 23 * * *</crontime>
+      <crontime>0 */6 * * *</crontime>
       <classfile>com.finalist.newsletter.NewsletterSumLogsCronJob</classfile>
       <config></config>
       <type>2</type>

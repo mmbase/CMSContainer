@@ -3,7 +3,6 @@ package com.finalist.newsletter;
 import java.util.List;
 
 import org.mmbase.applications.crontab.AbstractCronJob;
-import org.mmbase.applications.crontab.CronJob;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -15,7 +14,7 @@ import com.finalist.newsletter.services.StatisticService;
  * @author nikko
  * 
  */
-public class NewsletterSumLogsCronJob extends AbstractCronJob implements CronJob {
+public class NewsletterSumLogsCronJob extends AbstractCronJob {
 
    private static Logger log = Logging.getLoggerInstance(NewsletterSumLogsCronJob.class.getName());
 
@@ -33,18 +32,10 @@ public class NewsletterSumLogsCronJob extends AbstractCronJob implements CronJob
    @Override
    public void run() {
       StatisticService service = (StatisticService) ApplicationContextFactory.getBean("statisticService");
-      List < StatisticResult > listRecorder = service.getLogs();
-      if (null != listRecorder) {
-         insetStatRecord(service, listRecorder);
+      List <StatisticResult> listRecorder = service.getLogs();
+      if (listRecorder != null && !listRecorder.isEmpty()) {
+         service.pushSummedLogs(listRecorder);
          listRecorder.clear();
-      }
-   }
-
-   private int insetStatRecord(StatisticService service, List < StatisticResult > listRecorder) {
-      if (null != listRecorder) {
-         return service.pushSumedLogs(listRecorder);
-      } else {
-         return 0;
       }
    }
 
