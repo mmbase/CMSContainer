@@ -51,16 +51,14 @@ public class NewsletterCronJob extends AbstractCronJob {
             Object scheduleExpression = newsletter.getValue("schedule");
             Date lastCreatedDateTime = newsletter.getDateValue("lastcreateddate");
             if (scheduleExpression != null) {
-               createPublication(newslettersToPublish, newsletter, scheduleExpression,
-                        lastCreatedDateTime);
+               createPublication(newslettersToPublish, newsletter, scheduleExpression, lastCreatedDateTime);
             }
          }
       }
       return (newslettersToPublish);
    }
 
-   private void createPublication(List<Node> newslettersToPublish, Node newsletter,
-                                  Object scheduleExpression, Date lastCreatedDateTime) {
+   private void createPublication(List<Node> newslettersToPublish, Node newsletter, Object scheduleExpression, Date lastCreatedDateTime) {
       String expression = (String) scheduleExpression;
       String[] expressions = expression.split("\\|");
       if (isPublish(expressions, lastCreatedDateTime)) {
@@ -76,11 +74,10 @@ public class NewsletterCronJob extends AbstractCronJob {
          minDate = df.parse("01-01-1970 00:00");
       } catch (ParseException e) {
          log.debug("--> Parse date Exception");
-         ;
       }
       Date now = new Date();
       Calendar calender = Calendar.getInstance();
-      //expressions[0] value: 1 once
+      // expressions[0] value: 1 once
       if (expressions[0].equals("1")) {
          String startDatetime = expressions[1] + " " + expressions[2] + ":" + expressions[3];
          try {
@@ -88,11 +85,10 @@ public class NewsletterCronJob extends AbstractCronJob {
             if (now.after(startDate) && (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime))) {
                isPublish = true;
             }
-         }
-         catch (ParseException e) {
+         } catch (ParseException e) {
             log.debug("--> Parse date Exception");
          }
-      }//expressions[0] : 2 daily
+      }// expressions[0] : 2 daily
       else if (expressions[0].equals("2")) {
          String startDatetime = expressions[1] + " " + expressions[2] + ":" + expressions[3];
 
@@ -100,19 +96,18 @@ public class NewsletterCronJob extends AbstractCronJob {
             Date startDate = df.parse(startDatetime);
             if (now.after(startDate)) {
                if (expressions[4].equals("0")) {
-                  isPublish = compareDate(lastCreatedDateTime, isPublish,
-                           minDate, now);
+                  isPublish = compareDate(lastCreatedDateTime, isPublish, minDate, now);
                } else if (expressions[4].equals("1")) {
                   if (calender.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && calender.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                     isPublish = compareDate(lastCreatedDateTime, isPublish,
-                              minDate, now);
+                     isPublish = compareDate(lastCreatedDateTime, isPublish, minDate, now);
                   }
                } else if (expressions[4].equals("2")) {
                   int interval = Integer.parseInt(expressions[5]);
                   if (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime)) {
-//                     if (DateUtils.isSameDay(DateUtils.addDays(startDate, interval), now)) {
+                     // if (DateUtils.isSameDay(DateUtils.addDays(startDate,
+                     // interval), now)) {
                      isPublish = true;
-//                     }
+                     // }
                   } else {
                      if (DateUtils.isSameDay(DateUtils.addDays(lastCreatedDateTime, interval), now)) {
                         isPublish = true;
@@ -120,11 +115,10 @@ public class NewsletterCronJob extends AbstractCronJob {
                   }
                }
             }
-         }
-         catch (ParseException e) {
+         } catch (ParseException e) {
             log.debug("--> Parse date Exception");
          }
-      }//expressions[0] : 3 weekly
+      }// expressions[0] : 3 weekly
       else if (expressions[0].equals("3")) {
          Calendar startTime = getStartCalendar(expressions);
          char[] weeks = expressions[4].toCharArray();
@@ -132,28 +126,27 @@ public class NewsletterCronJob extends AbstractCronJob {
          for (char week2 : weeks) {
 
             String week = String.valueOf(week2);
-            if ((calender.get(Calendar.DAY_OF_WEEK) != 1 && calender.get(Calendar.DAY_OF_WEEK) == (Integer.parseInt(week) + 1)) || (calender.get(Calendar.DAY_OF_WEEK) == 1 && Integer.parseInt(week) == 7)) {
+            if ((calender.get(Calendar.DAY_OF_WEEK) != 1 && calender.get(Calendar.DAY_OF_WEEK) == (Integer.parseInt(week) + 1))
+                  || (calender.get(Calendar.DAY_OF_WEEK) == 1 && Integer.parseInt(week) == 7)) {
                if (calender.after(startTime)) {
                   try {
                      if (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime)) {
                         isPublish = true;
                         break;
-                     } else {
-                        int interval = Integer.parseInt(expressions[3]);
-                        Date beCreate = DateUtils.addWeeks(lastCreatedDateTime, interval);
-                        if (DateUtils.isSameDay(new Date(), beCreate)) {
-                           isPublish = true;
-                           break;
-                        }
                      }
-                  }
-                  catch (NumberFormatException e) {
+                     int interval = Integer.parseInt(expressions[3]);
+                     Date beCreate = DateUtils.addWeeks(lastCreatedDateTime, interval);
+                     if (DateUtils.isSameDay(new Date(), beCreate)) {
+                        isPublish = true;
+                        break;
+                     }
+                  } catch (NumberFormatException e) {
                      log.debug("-->NumberFormatException " + e.getMessage());
                   }
                }
             }
          }
-      }//expressions[0] : 4 monthly
+      }// expressions[0] : 4 monthly
       else if (expressions[0].equals("4")) {
          Calendar startTime = getStartCalendar(expressions);
          if (expressions[3].equals("0")) {
@@ -161,17 +154,17 @@ public class NewsletterCronJob extends AbstractCronJob {
             char[] months = expressions[5].toCharArray();
             for (char month2 : months) {
                String month = String.valueOf(month2);
-               if (!month.equals("a") && !month.equals("b") && (Integer.parseInt(month) == calender.get(Calendar.MONTH)) || (month.equals("b") && calender.get(Calendar.MONTH) == 11) || (month.equals("a") && calender.get(Calendar.MONTH) == 10)) {
+               if (!month.equals("a") && !month.equals("b") && (Integer.parseInt(month) == calender.get(Calendar.MONTH))
+                     || (month.equals("b") && calender.get(Calendar.MONTH) == 11) || (month.equals("a") && calender.get(Calendar.MONTH) == 10)) {
                   if (calender.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(dayOfMonth)) {
                      if (calender.after(startTime)) {
                         if (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime)) {
                            isPublish = true;
                            break;
-                        } else {
-                           if (!DateUtils.isSameDay(new Date(), lastCreatedDateTime)) {
-                              isPublish = true;
-                              break;
-                           }
+                        }
+                        if (!DateUtils.isSameDay(new Date(), lastCreatedDateTime)) {
+                           isPublish = true;
+                           break;
                         }
                      }
                   }
@@ -184,18 +177,18 @@ public class NewsletterCronJob extends AbstractCronJob {
             char[] months = expressions[6].toCharArray();
             for (char month2 : months) {
                String month = String.valueOf(month2);
-               if (!month.equals("a") && !month.equals("b") && (Integer.parseInt(month) == calender.get(Calendar.MONTH)) || (month.equals("a") && calender.get(Calendar.MONTH) == 10) || (month.equals("b") && calender.get(Calendar.MONTH) == 11)) {
+               if (!month.equals("a") && !month.equals("b") && (Integer.parseInt(month) == calender.get(Calendar.MONTH))
+                     || (month.equals("a") && calender.get(Calendar.MONTH) == 10) || (month.equals("b") && calender.get(Calendar.MONTH) == 11)) {
                   if (calender.get(Calendar.WEEK_OF_MONTH) == Integer.parseInt(weekOfMonth)) {
                      if (calender.get(Calendar.DAY_OF_WEEK) != 1 && calender.get(Calendar.DAY_OF_WEEK) == (Integer.parseInt(week) + 1)) {
                         if (calender.after(startTime)) {
                            if (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime)) {
                               isPublish = true;
                               break;
-                           } else {
-                              if (!DateUtils.isSameDay(new Date(), lastCreatedDateTime)) {
-                                 isPublish = true;
-                                 break;
-                              }
+                           }
+                           if (!DateUtils.isSameDay(new Date(), lastCreatedDateTime)) {
+                              isPublish = true;
+                              break;
                            }
                         }
                      }
@@ -214,8 +207,7 @@ public class NewsletterCronJob extends AbstractCronJob {
       return startCalendar;
    }
 
-   private boolean compareDate(Date lastCreatedDateTime, boolean isPublish,
-                               Date minDate, Date now) {
+   private boolean compareDate(Date lastCreatedDateTime, boolean isPublish, Date minDate, Date now) {
       if (lastCreatedDateTime == null || DateUtils.isSameDay(minDate, lastCreatedDateTime)) {
          isPublish = true;
       } else {
@@ -238,7 +230,7 @@ public class NewsletterCronJob extends AbstractCronJob {
 
    @Override
    public void run() {
-      if(ServerUtil.isSingle() || ServerUtil.isStaging()) {
+      if (ServerUtil.isSingle() || ServerUtil.isStaging()) {
          List<Node> newslettersToPublish = getNewslettersToPublish();
          for (int newsletterIterator = 0; newsletterIterator < newslettersToPublish.size(); newsletterIterator++) {
             Node newsletterNode = newslettersToPublish.get(newsletterIterator);
@@ -246,15 +238,16 @@ public class NewsletterCronJob extends AbstractCronJob {
             newsletterNode.commit();
             int newsletterNumber = newsletterNode.getNumber();
             log.debug("Running Newsletter CronJob for newsletter " + newsletterNumber);
-            //NewsletterPublicationUtil.createPublication(newsletterNumber, true);
+            // NewsletterPublicationUtil.createPublication(newsletterNumber,
+            // true);
             Node publicationNode = NewsletterPublicationUtil.createPublication(newsletterNumber, true);
-            NewsletterUtil.addNewsletterCreationChannel(newsletterNode.getNumber(),publicationNode.getNumber());
+            NewsletterUtil.addNewsletterCreationChannel(newsletterNode.getNumber(), publicationNode.getNumber());
             try {
                NewsletterPublicationUtil.freezeEdition(publicationNode);
             } catch (MessagingException e) {
                log.error(e);
             }
-            if(ServerUtil.isStaging() && !ServerUtil.isSingle()) {
+            if (ServerUtil.isStaging() && !ServerUtil.isSingle()) {
                Publish.publish(publicationNode);
             }
          }
@@ -265,6 +258,5 @@ public class NewsletterCronJob extends AbstractCronJob {
    public void stop() {
       log.info("Stopping Newsletter CronJob");
    }
-
 
 }

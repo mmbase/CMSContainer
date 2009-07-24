@@ -108,9 +108,9 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
       }
       subscriptionCAO.modifySubscriptionStauts(subscription);
       if (STATUS.ACTIVE.equals(subscription.getStatus())) {
-         statisticCAO.logPubliction(userId, newsletterId, HANDLE.ACTIVE);
+         statisticCAO.logPublication(userId, newsletterId, HANDLE.ACTIVE);
       } else {
-         statisticCAO.logPubliction(userId, newsletterId, HANDLE.INACTIVE);
+         statisticCAO.logPublication(userId, newsletterId, HANDLE.INACTIVE);
       }
    }
 
@@ -210,7 +210,7 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
       subscription.setMimeType("text/html");
       subscription.setStatus(STATUS.ACTIVE);
       subscriptionCAO.addSubscriptionRecord(subscription, userId);
-      statisticCAO.logPubliction(userId, newsletterId, HANDLE.ACTIVE);
+      statisticCAO.logPublication(userId, newsletterId, HANDLE.ACTIVE);
    }
 
    public void resume(String subscriptionId) {
@@ -225,7 +225,7 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
       subscriptionCAO.updateSubscription(subscription);
       int newsletterId = newsletterCAO.getNewsletterIdBySubscription(Integer.parseInt(subscriptionId));
       int userId = CommunityModuleAdapter.getCurrentUserId();
-      statisticCAO.logPubliction(userId, newsletterId, HANDLE.INACTIVE);
+      statisticCAO.logPublication(userId, newsletterId, HANDLE.INACTIVE);
    }
 
    public Subscription getSubscription(String sId) {

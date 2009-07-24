@@ -10,7 +10,7 @@ import com.finalist.newsletter.domain.Term;
 public interface NewsletterCAO {
    public Newsletter getNewsletterById(int id);
 
-   public List<Term> getALLTerm();
+   public List<Term> getAllTerms();
 
    public List<Newsletter> getNewsletterByConstraint(String property, String constraintType, String value, boolean paging);
 
