@@ -56,7 +56,7 @@ public class NewsletterServiceImpl implements NewsletterService {
    }
 
    public int countAllTerms() {
-      return newsletterCAO.getALLTerm().size();
+      return newsletterCAO.getAllTerms().size();
    }
 
    public List<Newsletter> getNewslettersByTitle(String title, boolean paging) {
@@ -105,7 +105,7 @@ public class NewsletterServiceImpl implements NewsletterService {
       if (bouncesCount > maxAllowedBonce) {
          subscriptionCAO.pause(subscriptionNode.getNumber());
       }
-      statisticCAO.logPubliction(uId, newsletterId, StatisticResult.HANDLE.BOUNCE);
+      statisticCAO.logPublication(uId, newsletterId, StatisticResult.HANDLE.BOUNCE);
       subscriptionCAO.updateLastBounce(subscriptionNode.getNumber());
    }
 

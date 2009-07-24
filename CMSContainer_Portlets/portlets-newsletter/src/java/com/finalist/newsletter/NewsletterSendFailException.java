@@ -1,5 +1,6 @@
 package com.finalist.newsletter;
 
+@SuppressWarnings("serial")
 public class NewsletterSendFailException extends RuntimeException {
    public NewsletterSendFailException() {
    }

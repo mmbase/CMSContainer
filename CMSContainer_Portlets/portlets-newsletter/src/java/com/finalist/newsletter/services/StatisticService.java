@@ -11,26 +11,22 @@ public interface StatisticService {
 
    public List<StatisticResult> statisticByNewsletter(int newsletterId);
 
-   public List<StatisticResult> statisticAllByPeriod(String start, String end)
-            throws ServiceException;
+   public List<StatisticResult> statisticAllByPeriod(String start, String end) throws ServiceException;
 
-   public StatisticResult statisticByNewsletterPeriod(int newsletterId,
-                                                      String start, String end) throws ServiceException;
+   public StatisticResult statisticByNewsletterPeriod(int newsletterId, String start, String end) throws ServiceException;
 
    public StatisticResult statisticSummery();
 
-   public StatisticResult statisticSummeryPeriod(String start, String end)
-            throws ServiceException;
+   public StatisticResult statisticSummeryPeriod(String start, String end) throws ServiceException;
 
    public StatisticResult statisticSummaryByNewsletter(int newsletterId);
 
-   public List<StatisticResult> statisticDetailByNewsletterPeriod(
-            int newsletterId, String start, String end) throws ServiceException;
+   public List<StatisticResult> statisticDetailByNewsletterPeriod(int newsletterId, String start, String end) throws ServiceException;
 
    public void logPubliction(int newsletterId, HANDLE handle);
 
-   public int pushSumedLogs(List<StatisticResult> listRecorder);
+   public int pushSummedLogs(List<StatisticResult> listRecorder);
 
    public List<StatisticResult> getLogs();
-   
+
 }
