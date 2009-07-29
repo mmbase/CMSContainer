@@ -371,6 +371,7 @@
       </div>
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
+   <div class="body">
 
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
@@ -385,7 +386,6 @@
    </div>
    </mm:isempty>
 
-   <div class="body">
    <%-- Now print the results --%>
    <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
       <mm:field id="trashnumber" name="number" write="false"/>
