@@ -1,7 +1,7 @@
 Migration document:
 
-From version: 1.5.8
-To version: 1.5.9
+From version: 1.5.9
+To version: 1.5.10
 
 
 Name: if insertinline_image.html is overwritten, merge with CMSc version 
