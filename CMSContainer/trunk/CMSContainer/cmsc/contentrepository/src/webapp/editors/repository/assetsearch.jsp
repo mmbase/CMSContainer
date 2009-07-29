@@ -344,8 +344,9 @@
 
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
+   <div class="body">
 
-   <div class="show_mode_selector">
+   <div style="padding:10px 0px 0px 11px">
    <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
       <c:if test="${empty searchShow || searchShow eq 'list'}">
          <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
@@ -366,12 +367,11 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
-   <div class="no_results">
+   <div style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
    </div>
    </mm:isempty>
 
-   <div class="body">
    <%-- Now print the results --%>
    <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
       <mm:field id="trashnumber" name="number" write="false"/>
