@@ -15,6 +15,7 @@ import com.finalist.cmsc.services.community.person.PersonService;
 import com.finalist.cmsc.services.community.person.RegisterStatus;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
+import com.finalist.cmsc.util.ServerUtil;
 
 public class ConfirmAction extends Action{
 
@@ -29,7 +30,11 @@ public class ConfirmAction extends Action{
       if (StringUtils.isBlank(pageNumber)) {
          throw new NullPointerException("The page number is null");
       }
-      returnUrl = SiteManagement.getPath(Integer.parseInt(pageNumber), true);
+      
+      // Note: Kristian and Nico
+      // Do we also need to replace the HOSTNAME? Is the page always on the same site? See LinkTag.java
+      
+      returnUrl = SiteManagement.getPath(Integer.parseInt(pageNumber), !ServerUtil.useServerName()); 
       returnUrl += "/_rp_".concat(name).concat("_").concat("active").concat("/1_");
       if (authId != null) {
          PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
