@@ -30,6 +30,8 @@ import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,14 +45,17 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.transformers.ByteToCharTransformer;
 import org.mmbase.util.transformers.ChecksumFactory;
 
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.util.UploadUtil;
 
 public class BulkUploadUtil {
 
    private static final Log log = LogFactory.getLog(BulkUploadUtil.class);
 
-   private static final int MAXSIZE = 256 * 1024 * 1024;
+   private static final int MAXSIZE = 16 * 1024 * 1024;
 
+   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
+   
    private static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
 
    private static final String ZIP_MIME_TYPES[] = new String[] { "application/x-zip-compressed", "application/zip",
@@ -111,20 +116,8 @@ public class BulkUploadUtil {
       try {
          if (isZipFile(file.getContentType(), file.getFileName())) {
 
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             InputStream in = file.getInputStream();
-            byte[] temp = new byte[1024];
-            int read;
-
-            while ((read = in.read(temp)) > -1) {
-               buffer.write(temp, 0, read);
-            }
-
-            byte[] fileData = buffer.toByteArray();
-
-            // byte[] fileData = file.getFileData();
-            ByteArrayInputStream bis = new ByteArrayInputStream(fileData);
-            InputStream is = new BufferedInputStream(bis);
+            InputStream is = new BufferedInputStream(in);
             ZipInputStream zip = new ZipInputStream(is);
 
             createNodesInZip(manager, zip, cloud, nodes, uploadedFileList, failedFileList);
@@ -148,6 +141,24 @@ public class BulkUploadUtil {
       }
    }
 
+   public static boolean validFileSize(int fileSize) {
+      int maxFileSize = MAXSIZE;
+      try {
+         if(!StringUtil.isEmpty(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE))){
+            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
+         }         
+         // check invalid value of UPLOADED_FILE_MAX_SIZE
+         if (maxFileSize <= 0) {
+            maxFileSize = MAXSIZE; // set default value of 16MB
+         }
+      }
+      catch (NumberFormatException e) {
+         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE
+               + "' is not set. Please add it (units = MB).");
+      }
+      return (fileSize <= maxFileSize);
+   }
+   
    public static boolean isZipFile(String contentType, String fileName) {
 
       for (String element : ZIP_MIME_TYPES) {
@@ -244,6 +255,10 @@ public class BulkUploadUtil {
             }
             count++;
             long size = entry.getSize();
+            if(!validFileSize((int) size)){
+               failedFileList.add(entry.getName());
+               continue;
+            }
             
             ByteArrayOutputStream fileData = readFromZip(zip);
             boolean isNewFile = isNewFile(manager, fileData);

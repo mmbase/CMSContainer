@@ -22,7 +22,6 @@ import org.apache.struts.upload.FormFile;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.NodeManager;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 import com.finalist.util.http.BulkUploadUtil;
 
@@ -32,14 +31,12 @@ import com.finalist.util.http.BulkUploadUtil;
  */
 public abstract class AbstractUploadAction extends MMBaseAction {
 
-   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
-
    public static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
 
    protected static Set<String> supportedImages;
 
    protected static final Log log = LogFactory.getLog(AbstractUploadAction.class);
-
+   
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form,
          HttpServletRequest request, HttpServletResponse response, Cloud cloud) throws Exception{
@@ -59,7 +56,7 @@ public abstract class AbstractUploadAction extends MMBaseAction {
          fileIsEmpty = true;
          return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileIsEmpty=" + fileIsEmpty, true);
       }
-      if(!maxFileSizeBiggerThan(fileSize)){
+      if(!BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName()) && !validFileSize(fileSize)){
          fileTooBig = true;
          return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileTooBig=" + fileTooBig, true);
       }
@@ -87,6 +84,10 @@ public abstract class AbstractUploadAction extends MMBaseAction {
             + numberOfFailedFiles, true);
    }
    
+   private boolean validFileSize(int fileSize) {
+      return BulkUploadUtil.validFileSize(fileSize);
+   }
+
    protected abstract String getNodeManagerName();
    
    protected abstract boolean validFileType(FormFile file);
@@ -129,23 +130,6 @@ public abstract class AbstractUploadAction extends MMBaseAction {
       return fileName.substring(index);
    }
 
-   public boolean maxFileSizeBiggerThan(int fileSize) {
-      int maxFileSize = 8 * 1024 * 1024; // Default value of 16MB
-      try {
-         if(!StringUtil.isEmpty(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE))){
-            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
-         }         
-         // check invalid value of UPLOADED_FILE_MAX_SIZE
-         if (maxFileSize <= 0) {
-            // PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
-            maxFileSize = 8 * 1024 * 1024; // set default value of 16MB
-         }
-      }
-      catch (NumberFormatException e) {
-         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE
-               + "' is not set. Please add it (units = MB).");
-      }
-      return (fileSize <= maxFileSize);
-   }
+
    
 }
