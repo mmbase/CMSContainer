@@ -48,7 +48,7 @@ public class BulkUploadUtil {
 
    private static final Log log = LogFactory.getLog(BulkUploadUtil.class);
 
-   public static final int MAXSIZE = 256 * 1024 * 1024;
+   public static final int MAXSIZE = 16 * 1024 * 1024;
    
    public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
    
@@ -260,46 +260,48 @@ public class BulkUploadUtil {
       try {
          byte[] buffer = new byte[2048 * 1024];
          while ((entry = zip.getNextEntry()) != null) {
-            if (entry.isDirectory()) {
-               continue;
-            }
-            if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
-               if (log.isDebugEnabled()) {
-                  log.debug("Skipping " + entry.getName() + " because it is not an image");
-               }
-               continue;
-            }
-            if (isImage(entry.getName())) {
-               manager = cloud.getNodeManager("images");
-            } else {
-               manager = cloud.getNodeManager("attachments");
-            }
-            count++;
             long size = entry.getSize();
-            ChecksumFactory checksumFactory = new ChecksumFactory();
-            ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
-                  .createTransformer(checksumFactory.createParameters());
-            ByteArrayOutputStream fileData = new ByteArrayOutputStream();
-            int len = 0;
-            while ((len = zip.read(buffer)) > 0) {
-               fileData.write(buffer, 0, len);
-            }
-            String checkSum = transformer.transform(fileData.toByteArray());
-            NodeQuery query = manager.createQuery();
-            SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
-            NodeList assets = query.getList();
-
-            boolean isNewFile = (assets.size() == 0);
-            InputStream is = new ByteArrayInputStream(fileData.toByteArray());
-            if (isNewFile) {
-               Node node = createNode(parentChannel, manager, entry.getName(), is, size);
-               if (node != null) {
-                  nodes.add(node.getNumber());
-                  uploadedFiles.add(entry.getName());
+            if (maxFileSizeBiggerThan(size)) {
+               if (entry.isDirectory()) {
+                  continue;
                }
-               is.close();
-            } else {
-               notUploadedFiles.add(entry.getName());
+               if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
+                  if (log.isDebugEnabled()) {
+                     log.debug("Skipping " + entry.getName() + " because it is not an image");
+                  }
+                  continue;
+               }
+               if (isImage(entry.getName())) {
+                  manager = cloud.getNodeManager("images");
+               } else {
+                  manager = cloud.getNodeManager("attachments");
+               }
+               count++;
+               ChecksumFactory checksumFactory = new ChecksumFactory();
+               ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
+                     .createTransformer(checksumFactory.createParameters());
+               ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+               int len = 0;
+               while ((len = zip.read(buffer)) > 0) {
+                  fileData.write(buffer, 0, len);
+               }
+               String checkSum = transformer.transform(fileData.toByteArray());
+               NodeQuery query = manager.createQuery();
+               SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
+               NodeList assets = query.getList();
+
+               boolean isNewFile = (assets.size() == 0);
+               InputStream is = new ByteArrayInputStream(fileData.toByteArray());
+               if (isNewFile) {
+                  Node node = createNode(parentChannel, manager, entry.getName(), is, size);
+                  if (node != null) {
+                     nodes.add(node.getNumber());
+                     uploadedFiles.add(entry.getName());
+                  }
+                  is.close();
+               } else {
+                  notUploadedFiles.add(entry.getName());
+               }
             }
             zip.closeEntry();
          }
