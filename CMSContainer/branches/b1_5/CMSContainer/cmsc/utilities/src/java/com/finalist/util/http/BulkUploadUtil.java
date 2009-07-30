@@ -30,8 +30,6 @@ import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -144,7 +142,7 @@ public class BulkUploadUtil {
    public static boolean validFileSize(int fileSize) {
       int maxFileSize = MAXSIZE;
       try {
-         if(!StringUtil.isEmpty(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE))){
+         if(StringUtils.isNotBlank(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE))){
             maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
          }         
          // check invalid value of UPLOADED_FILE_MAX_SIZE
@@ -153,8 +151,7 @@ public class BulkUploadUtil {
          }
       }
       catch (NumberFormatException e) {
-         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE
-               + "' is not set. Please add it (units = MB).");
+         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
       }
       return (fileSize <= maxFileSize);
    }
@@ -175,7 +172,6 @@ public class BulkUploadUtil {
       
       return false;
    }
-
 
    private static Node createNode(NodeManager manager, String fileName, InputStream in, long length) {
       if (length > manager.getField("handle").getMaxLength()) {
@@ -364,22 +360,23 @@ public class BulkUploadUtil {
       return fileName.substring(index);
    }
 
-   private static void copyStream(InputStream ins, OutputStream outs) throws IOException {
-      int bufferSize = 1024;
+   public static long copyStream(final InputStream ins, final OutputStream outs) throws IOException {
+      final int bufferSize = 8 * 1024;
       byte[] writeBuffer = new byte[bufferSize];
-
+      long size = 0;
       BufferedOutputStream bos = new BufferedOutputStream(outs, bufferSize);
       int bufferRead;
-      while ((bufferRead = ins.read(writeBuffer)) != -1)
+      while ((bufferRead = ins.read(writeBuffer)) != -1) {
          bos.write(writeBuffer, 0, bufferRead);
+         size += bufferRead;
+      }
       bos.flush();
       bos.close();
       outs.flush();
-      outs.close();
+      return size;
    }
 
    public static void main(String[] args) {
-
       System.out.println(isImage(getExtension("test.jpg")));
       System.out.println(isImage(getExtension(".jpg")));
       System.out.println(isImage(getExtension("test")));
