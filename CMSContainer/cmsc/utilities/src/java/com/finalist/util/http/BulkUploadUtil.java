@@ -262,46 +262,46 @@ public class BulkUploadUtil {
          while ((entry = zip.getNextEntry()) != null) {
             long size = entry.getSize();
             if (maxFileSizeBiggerThan(size)) {
-               if (entry.isDirectory()) {
-                  continue;
+            if (entry.isDirectory()) {
+               continue;
+            }
+            if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
+               if (log.isDebugEnabled()) {
+                  log.debug("Skipping " + entry.getName() + " because it is not an image");
                }
-               if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
-                  if (log.isDebugEnabled()) {
-                     log.debug("Skipping " + entry.getName() + " because it is not an image");
-                  }
-                  continue;
-               }
-               if (isImage(entry.getName())) {
-                  manager = cloud.getNodeManager("images");
-               } else {
-                  manager = cloud.getNodeManager("attachments");
-               }
-               count++;
-               ChecksumFactory checksumFactory = new ChecksumFactory();
-               ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
-                     .createTransformer(checksumFactory.createParameters());
-               ByteArrayOutputStream fileData = new ByteArrayOutputStream();
-               int len = 0;
-               while ((len = zip.read(buffer)) > 0) {
-                  fileData.write(buffer, 0, len);
-               }
-               String checkSum = transformer.transform(fileData.toByteArray());
-               NodeQuery query = manager.createQuery();
-               SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
-               NodeList assets = query.getList();
+               continue;
+            }
+            if (isImage(entry.getName())) {
+               manager = cloud.getNodeManager("images");
+            } else {
+               manager = cloud.getNodeManager("attachments");
+            }
+            count++;
+            ChecksumFactory checksumFactory = new ChecksumFactory();
+            ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
+                  .createTransformer(checksumFactory.createParameters());
+            ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+            int len = 0;
+            while ((len = zip.read(buffer)) > 0) {
+               fileData.write(buffer, 0, len);
+            }
+            String checkSum = transformer.transform(fileData.toByteArray());
+            NodeQuery query = manager.createQuery();
+            SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
+            NodeList assets = query.getList();
 
-               boolean isNewFile = (assets.size() == 0);
-               InputStream is = new ByteArrayInputStream(fileData.toByteArray());
-               if (isNewFile) {
-                  Node node = createNode(parentChannel, manager, entry.getName(), is, size);
-                  if (node != null) {
-                     nodes.add(node.getNumber());
-                     uploadedFiles.add(entry.getName());
-                  }
-                  is.close();
-               } else {
-                  notUploadedFiles.add(entry.getName());
+            boolean isNewFile = (assets.size() == 0);
+            InputStream is = new ByteArrayInputStream(fileData.toByteArray());
+            if (isNewFile) {
+               Node node = createNode(parentChannel, manager, entry.getName(), is, size);
+               if (node != null) {
+                  nodes.add(node.getNumber());
+                  uploadedFiles.add(entry.getName());
                }
+               is.close();
+            } else {
+               notUploadedFiles.add(entry.getName());
+            }
             }
             zip.closeEntry();
          }
@@ -345,22 +345,40 @@ public class BulkUploadUtil {
       return fileName.substring(index);
    }
 
-   private static void copyStream(InputStream ins, OutputStream outs) throws IOException {
-      int bufferSize = 1024;
+   public static long copyStream(final InputStream ins, final OutputStream outs) throws IOException {
+      final int bufferSize = 8 * 1024;
       byte[] writeBuffer = new byte[bufferSize];
-
+      long size = 0;
       BufferedOutputStream bos = new BufferedOutputStream(outs, bufferSize);
       int bufferRead;
-      while ((bufferRead = ins.read(writeBuffer)) != -1)
+      while ((bufferRead = ins.read(writeBuffer)) != -1) {
          bos.write(writeBuffer, 0, bufferRead);
+         size += bufferRead;
+      }
       bos.flush();
       bos.close();
       outs.flush();
-      outs.close();
+      return size;
    }
 
+   public static boolean maxFileSizeBiggerThan(long fileSize) {
+      int maxFileSize = MAXSIZE;
+      if (PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE) != null) {
+         try {
+            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
+            // check invalid value of UPLOADED_FILE_MAX_SIZE
+            if (maxFileSize <= 0) {
+               // PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
+               maxFileSize = MAXSIZE;
+            }
+         } catch (NumberFormatException e) {
+            log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
+         }
+      }
+      return (fileSize <= maxFileSize);
+   }
+   
    public static void main(String[] args) {
-
       System.out.println(isImage(getExtension("test.jpg")));
       System.out.println(isImage(getExtension(".jpg")));
       System.out.println(isImage(getExtension("test")));
@@ -377,21 +395,5 @@ public class BulkUploadUtil {
       System.out.println(isZipFile("content","helloworld.zip")); //Should be true
       System.out.println(isZipFile("application/x-zip-compressed","helloworld.zipper")); //Should be true
       System.out.println(isZipFile("content","helloworld.zipper")); //Should be false
-   }
-   public static boolean maxFileSizeBiggerThan(long fileSize) {
-      int maxFileSize = MAXSIZE;
-      if (PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE) != null) {
-         try {
-            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
-            // check invalid value of UPLOADED_FILE_MAX_SIZE
-            if (maxFileSize <= 0) {
-               // PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
-               maxFileSize = MAXSIZE;
-            }
-         } catch (NumberFormatException e) {
-            log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
-         }
-      }
-      return (fileSize <= maxFileSize);
    }
 }
