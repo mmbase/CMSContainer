@@ -66,10 +66,10 @@
       </div>
       <div id="notbusy">
          <c:if test="${param.fileIsEmpty}">
-             <p>&nbsp;&nbsp;<fmt:message key="attachments.upload.emptyfile"/></p>
+             <p><span style="color:#CC0000" >&nbsp;&nbsp;<fmt:message key="attachments.upload.emptyfile"/></span></p>
          </c:if>
          <c:if test="${param.fileTooBig}">
-             <p>&nbsp;&nbsp;<fmt:message key="attachments.upload.bigfile"/></p>
+             <p><span style="color:#CC0000" >&nbsp;&nbsp;<fmt:message key="attachments.upload.bigfile"/></span></p>
          </c:if>
          <c:if test="${param.numberOfFailedFiles >= 0}">
              <p>&nbsp;&nbsp;<fmt:message key="attachments.upload.failedtip"/> ${param.numberOfFailedFiles}<br />
