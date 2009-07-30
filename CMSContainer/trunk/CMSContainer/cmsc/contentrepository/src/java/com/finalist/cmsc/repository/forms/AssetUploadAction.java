@@ -36,7 +36,8 @@ public class AssetUploadAction extends AbstractUploadAction {
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if (!BulkUploadUtil.maxFileSizeBiggerThan(fileSize)) {
+      if (!BulkUploadUtil.maxFileSizeBiggerThan(fileSize)
+            &&!BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName())) {
          exceed = "yes";
          uploadingDone = "no";
       } else if (fileSize == 0) {
