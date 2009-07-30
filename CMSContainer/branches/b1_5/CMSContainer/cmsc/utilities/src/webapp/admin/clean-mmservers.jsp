@@ -8,13 +8,12 @@
 		<title><fmt:message key="cleanmmservers.title" /></title>
 	</head>
 	<body>
-<mm:cloud jspvar="cloud" rank="administrator" method="http">
-
-	<mm:listnodes type="mmservers">
-		<mm:deletenode />
-	</mm:listnodes>
-
-</mm:cloud>
+   <mm:cloud jspvar="cloud" rank="administrator" method="http">
+   	<mm:listnodes type="mmservers">
+   		<mm:deletenode />
+   	</mm:listnodes>
+      Done.<br/>
+   </mm:cloud>
 	</body>
 </html:html>
 </mm:content>
