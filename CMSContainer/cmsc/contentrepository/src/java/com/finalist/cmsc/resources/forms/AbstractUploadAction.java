@@ -10,8 +10,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,7 +50,7 @@ public abstract class AbstractUploadAction extends MMBaseAction {
       FormFile file = uploadForm.getFile();
       
       int fileSize = file.getFileSize();
-      if(StringUtil.isEmpty(file.getFileName()) || fileSize == 0 ){
+      if(StringUtils.isBlank(file.getFileName()) || fileSize == 0 ){
          fileIsEmpty = true;
          return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileIsEmpty=" + fileIsEmpty, true);
       }
