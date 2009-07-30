@@ -14,8 +14,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.struts.action.*;
@@ -58,12 +56,11 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
    }
 
    protected String getLinkPattern(HttpServletRequest request) {
-	  String portletId = request.getParameter("portletId");
-	  if(!StringUtil.isEmpty(portletId)){
-	      return super.getLinkPattern() + "&portletId=" + portletId;		  
-	  } else {
-	      return super.getLinkPattern();
-	  }
+      String portletId = request.getParameter("portletId");
+      if (StringUtils.isNotBlank(portletId)) {
+         return super.getLinkPattern() + "&portletId=" + portletId;
+      }
+      return super.getLinkPattern();
    }
 
    @Override
