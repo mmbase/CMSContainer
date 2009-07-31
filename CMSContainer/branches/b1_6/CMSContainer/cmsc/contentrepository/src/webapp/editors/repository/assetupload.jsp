@@ -24,36 +24,29 @@
       <td><html:submit property="uploadButton" onclick="upload();">
          <fmt:message key='assets.upload.submit' /></html:submit></td>
    </tr>
-   <c:if test="${param.uploadingDone eq 'yes'}">
-   <tr>
-      <td><fmt:message key="asset.upload.failed.results"/> ${param.failed}</td>
-   </tr>
-   <c:if test="${param.failed != 0}" >
-    <tr><td style="color:#cc0000"><fmt:message key="assets.upload.error"/></td></tr>
-    <tr>
-      <td>
-      <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
-      ${fileName}&nbsp;&nbsp;&nbsp;
-      </c:forEach>
-      <c:remove var="notUploadedFiles" scope="session"/>
-      </td>
-    </tr>
-   </c:if>
-	<tr>
-	   <td><fmt:message key="asset.upload.uploaded.results"/> ${param.uploaded}</td>
-	</tr>
-   <c:if test="${param.uploaded != 0}" >
-   <tr>
-     <td>
-     <c:forEach var="fileName" items="${uploadedFiles}" varStatus="fileAmount" >
-        ${fileName}&nbsp;&nbsp;&nbsp;
-     </c:forEach>
-      <c:remove var="notUploadedFiles" scope="session"/>
-     </td>
-   </tr>
-   </c:if>
-   </c:if>
 </table>
+<div>
+   <c:if test="${param.uploadingDone eq 'yes'}">
+      <c:if test="${param.failed != 0}" >
+         <span style="color:#cc0000"><fmt:message key="assets.upload.error"/></span>
+         <fmt:message key="asset.upload.failed.results"/> ${param.failed}
+         <br/>
+         <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
+         ${fileName}&nbsp;&nbsp;&nbsp;
+         </c:forEach>
+         <c:remove var="notUploadedFiles" scope="session"/>
+      </c:if>
+      <c:if test="${param.uploaded != 0}" >
+         <br/><br/>
+         <fmt:message key="asset.upload.uploaded.results"/> ${param.uploaded}
+         <br/>
+         <c:forEach var="fileName" items="${uploadedFiles}" varStatus="fileAmount" >
+         ${fileName}&nbsp;&nbsp;&nbsp;
+         </c:forEach>
+         <c:remove var="notUploadedFiles" scope="session"/>
+      </c:if>
+   </c:if>
+</div>
 </html:form>
 <div id="busy"><fmt:message key="uploading.message.wait" /><br />
 </div>
