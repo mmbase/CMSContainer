@@ -28,8 +28,8 @@
           <td align="right" colspan="2">
             <input type="submit" value="<fmt:message key="view.submit" />" />
             <input type="button" value="<fmt:message key="view.send_password" />" onclick="this.form['send_password'].value='send';this.form.submit()"/>
-      	  <c:if test="${not empty registrationpagepath}">
-      		  <a href="<cmsc:link dest='${registrationpagepath}'/>" ><fmt:message key="view.register" /></a>
+      	  <c:if test="${not empty registrationpage}">
+              <a href="<cmsc:link dest='${registrationpage}'/>"><fmt:message key="view.register" /></a>
       	  </c:if>
           </td>
         </tr>
