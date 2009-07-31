@@ -65,11 +65,8 @@
           <fmt:message key="uploading.message.wait"/><br />
       </div>
       <div id="notbusy">
-         <c:if test="${param.fileIsEmpty}">
-             <p><span style="color:#CC0000" >&nbsp;&nbsp;<fmt:message key="attachments.upload.emptyfile"/></span></p>
-         </c:if>
-         <c:if test="${param.fileTooBig}">
-             <p><span style="color:#CC0000" >&nbsp;&nbsp;<fmt:message key="attachments.upload.bigfile"/></span></p>
+         <c:if test="${param.uploadError || param.numberOfFailedFiles > 0}">
+             <p><span style="color:#CC0000" >&nbsp;&nbsp;<fmt:message key="attachments.upload.error"/></span></p>
          </c:if>
          <c:if test="${param.numberOfFailedFiles >= 0}">
              <p>&nbsp;&nbsp;<fmt:message key="attachments.upload.failedtip"/> ${param.numberOfFailedFiles}<br />
