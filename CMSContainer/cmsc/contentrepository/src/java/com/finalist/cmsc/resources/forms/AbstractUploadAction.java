@@ -39,9 +39,7 @@ public abstract class AbstractUploadAction extends MMBaseAction {
    public ActionForward execute(ActionMapping mapping, ActionForm form,
          HttpServletRequest request, HttpServletResponse response, Cloud cloud) throws Exception{
 
-      boolean fileIsEmpty = false;
-      boolean fileTooBig = false;
-      boolean fileTypeInvalid = false;
+      boolean uploadError = false;
       String uploadedNodes = "";
       int numberOfUploadedNodes = -1;
       int numberOfFailedFiles = -1;
@@ -51,12 +49,12 @@ public abstract class AbstractUploadAction extends MMBaseAction {
       
       int fileSize = file.getFileSize();
       if(StringUtils.isBlank(file.getFileName()) || fileSize == 0 ){
-         fileIsEmpty = true;
-         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileIsEmpty=" + fileIsEmpty, true);
+         uploadError = true;
+         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?uploadError=" + uploadError, true);
       }
       if(!BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName()) && !validFileSize(fileSize)){
-         fileTooBig = true;
-         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileTooBig=" + fileTooBig, true);
+         uploadError = true;
+         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?uploadError=" + uploadError, true);
       }
       
       NodeManager manager = cloud.getNodeManager(getNodeManagerName());
@@ -72,8 +70,8 @@ public abstract class AbstractUploadAction extends MMBaseAction {
          request.getSession().setAttribute("uploadedFiles", uploadedFileList);
          request.getSession().setAttribute("failedFiles", failedFileList);
       } else {
-         fileTypeInvalid = true;
-         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?fileTypeInvalid=" + fileTypeInvalid, true);
+         uploadError = true;
+         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?uploadError=" + uploadError, true);
       }
 
       return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?uploadedNodes="
