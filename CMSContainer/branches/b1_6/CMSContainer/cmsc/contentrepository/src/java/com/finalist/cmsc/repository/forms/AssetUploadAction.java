@@ -26,27 +26,16 @@ public class AssetUploadAction extends AbstractUploadAction {
       FormFile file = assetUploadForm.getFile();
 
       String url = "";
-      String emptyFileName = "no";
-      String exceed = "no";
-      String emptyFile = "no";
-      String uploadingDone = "yes";
       int fileSize = file.getFileSize();
       int failed = 0;
       int uploaded = 0;
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if (!BulkUploadUtil.maxFileSizeBiggerThan(fileSize)
-            &&!BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName())) {
-         exceed = "yes";
-         uploadingDone = "no";
-      } else if (fileSize == 0) {
-         emptyFile = "yes";
-         uploadingDone = "no";
-      } else if (StringUtils.isEmpty(file.getFileName())) {
-         emptyFileName = "yes";
-         uploadingDone = "no";
-      } else{
+      if ((BulkUploadUtil.maxFileSizeBiggerThan(fileSize)
+            ||BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName()))
+            && fileSize != 0
+            && StringUtils.isNotEmpty(file.getFileName())) {
          String assetType = "";
          if (isImage(file.getFileName())) {
             assetType = "images";
@@ -79,8 +68,7 @@ public class AssetUploadAction extends AbstractUploadAction {
       }
 
       url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel=" + parentchannel
-            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=" + uploadingDone + "&emptyFileName=" 
-            + emptyFileName + "&exceed=" + exceed + "&emptyFile=" + emptyFile;
+            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=yes";
 
       return new ActionForward(url, true);
    }
