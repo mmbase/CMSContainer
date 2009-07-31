@@ -29,6 +29,7 @@
       <td><fmt:message key="asset.upload.failed.results"/> ${param.failed}</td>
    </tr>
    <c:if test="${param.failed != 0}" >
+    <tr><td style="color:#cc0000"><fmt:message key="assets.upload.error"/></td></tr>
     <tr>
       <td>
       <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
@@ -51,21 +52,6 @@
      </td>
    </tr>
    </c:if>
-   </c:if>
-   <c:if test="${param.exceed eq 'yes' }">
-   <tr>
-      <td><fmt:message key="asset.upload.size.exceed"/></td>
-   </tr>
-   </c:if>
-   <c:if test="${param.emptyFile eq 'yes' }">
-   <tr>
-      <td><fmt:message key="asset.upload.size.zero"/></td>
-   </tr>
-   </c:if>
-   <c:if test="${param.emptyFileName eq 'yes' }">
-   <tr>
-      <td><fmt:message key="asset.upload.emptyfile"/></td>
-   </tr>
    </c:if>
 </table>
 </html:form>
