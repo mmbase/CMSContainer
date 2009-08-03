@@ -35,9 +35,9 @@
          ${fileName}&nbsp;&nbsp;&nbsp;
          </c:forEach>
          <c:remove var="notUploadedFiles" scope="session"/>
+         <br/><br/>
       </c:if>
       <c:if test="${param.uploaded != 0}" >
-         <br/><br/>
          <fmt:message key="asset.upload.uploaded.results"/> ${param.uploaded}
          <br/>
          <c:forEach var="fileName" items="${uploadedFiles}" varStatus="fileAmount" >
