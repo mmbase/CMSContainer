@@ -10,4 +10,14 @@
       <key>newsletter.workflow.allow.skip.approving</key>
       <value>false</value>
    </node>
+
+   <node number="416" owner="admin">
+      <key>bounce.checker</key>
+      <value>off</value>
+   </node>
+
+   <node number="417" owner="admin">
+      <key>bounce.checker.binding.port</key>
+      <value>25</value>
+   </node>
 </properties>

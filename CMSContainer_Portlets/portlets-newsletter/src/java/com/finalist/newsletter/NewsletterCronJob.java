@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.mmbase.applications.crontab.AbstractCronJob;
 import org.mmbase.bridge.Cloud;
@@ -22,6 +23,7 @@ import org.mmbase.bridge.NodeQuery;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.util.ServerUtil;
@@ -32,6 +34,9 @@ import com.finalist.newsletter.util.NewsletterUtil;
 
 public class NewsletterCronJob extends AbstractCronJob {
 
+   private static final String NEWSLETTER_SERVICES = "newsletterServices";
+   private static final String BOUNCE_CHECKER_BINDING_PORT = "bounce.checker.binding.port";
+   private static final String BOUNCE_CHECKER = "bounce.checker";
    private static Logger log = Logging.getLoggerInstance(NewsletterCronJob.class.getName());
 
    private List<Node> getNewslettersToPublish() {
@@ -221,10 +226,22 @@ public class NewsletterCronJob extends AbstractCronJob {
    @Override
    public void init() {
       log.info("Start Newsletter CronJob");
-      NewsletterService newsletterService = (NewsletterService) ApplicationContextFactory.getBean("newsletterServices");
-      BounceChecker checker = new BounceChecker(newsletterService);
-      if (!checker.isRunning() && (ServerUtil.isStaging() || ServerUtil.isSingle())) {
-         checker.start();
+
+      if ("on".equalsIgnoreCase(PropertiesUtil.getProperty(BOUNCE_CHECKER))) {
+         NewsletterService newsletterService = (NewsletterService) ApplicationContextFactory.getBean(NEWSLETTER_SERVICES);
+         BounceChecker checker = new BounceChecker(newsletterService);
+         if(StringUtils.isNotBlank(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT))) {
+            try {
+               checker.setPort(Integer.parseInt(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT)));
+            }
+            catch(NumberFormatException e) {
+               log.info("Set bounce checker port error! set it default value 25");
+               checker.setPort(25);
+            }
+         }
+         if (!checker.isRunning() && (ServerUtil.isStaging() || ServerUtil.isSingle())) {
+            checker.start();
+         }
       }
    }
 
