@@ -14,3 +14,14 @@ project's file, to keep it updated.
 *
 *
 *
+
+Name: Upgrade MMBase in customer project / implementation
+Goal: Upgrade MMBase
+Type: do it yourself
+--- Start script ---
+New:
+mmbase.version=1.8.7-20090803
+--- End script ---
+*
+*
+*
