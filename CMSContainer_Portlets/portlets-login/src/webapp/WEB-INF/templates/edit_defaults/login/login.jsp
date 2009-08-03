@@ -70,9 +70,9 @@
            <td nowrap><fmt:message key="edit_defaults.login.redirect" />:</td>
            <td nowrap> 
                <a href="<c:url value='/editors/site/select/SelectorPage.do?channel=${page}&type=SelectorExtPage&method=selectRedirectPage' />"
-                  target="selectpage" onclick="openPopupWindow('selectpage', 340, 400) title="<fmt:message key="edit_defaults.channelselect" />"> 
+                  target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)" title="<fmt:message key="edit_defaults.channelselect" />"> 
                      <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" />"/></a>
-               <a href="javascript:erase('page');erase('pagepath');eraseList('window') title="<fmt:message key="edit_defaults.erase"/>">
+               <a href="javascript:erase('page');erase('pagepath');eraseList('window')" title="<fmt:message key="edit_defaults.erase"/>">
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
