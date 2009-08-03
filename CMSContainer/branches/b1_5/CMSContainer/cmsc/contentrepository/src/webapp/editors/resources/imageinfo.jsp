@@ -53,7 +53,7 @@
                           <fmt:message key="secondaryinfo.lastmodifieddate" />: <mm:write referid="lastmodifieddate"><mm:time format="dd-MM-yyyy hh:mm"/></mm:write><br/>
                     </mm:present>
                        <br/>
-                     <b><fmt:message key="imageinfo.related" /></b>:<br/>
+                     <b><fmt:message key="imageinfo.related" /></b><br/>
                      <ul>
                      <mm:relatednodes type="contentelement">
                         <li>

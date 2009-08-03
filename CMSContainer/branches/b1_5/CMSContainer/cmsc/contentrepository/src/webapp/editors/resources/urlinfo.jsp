@@ -67,7 +67,7 @@
                                 referid="lastmodifieddate"><mm:time format="dd-MM-yyyy hh:mm"/></mm:write><br/>
                     </mm:present>
                        <br/>
-                     <b><fmt:message key="urlinfo.related" /></b>:<br/>
+                     <b><fmt:message key="urlinfo.related" /></b><br/>
                      <ul>
                         <% HashSet hs = new HashSet(); %>
                         <mm:relatednodes type="contentelement" orderby="contentelement.title">
