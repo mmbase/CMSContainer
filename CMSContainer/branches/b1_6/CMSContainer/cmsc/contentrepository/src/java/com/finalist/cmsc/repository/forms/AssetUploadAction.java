@@ -32,10 +32,9 @@ public class AssetUploadAction extends AbstractUploadAction {
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if ((BulkUploadUtil.maxFileSizeBiggerThan(fileSize)
-            ||BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName()))
-            && fileSize != 0
-            && StringUtils.isNotEmpty(file.getFileName())) {
+      if ((BulkUploadUtil.maxFileSizeBiggerThan(fileSize) || BulkUploadUtil.isZipFile(file.getContentType(), file
+            .getFileName()))
+            && fileSize != 0 && StringUtils.isNotEmpty(file.getFileName())) {
          String assetType = "";
          if (isImage(file.getFileName())) {
             assetType = "images";
@@ -66,9 +65,10 @@ public class AssetUploadAction extends AbstractUploadAction {
       if (uploadedFiles != null) {
          request.getSession().setAttribute("uploadedFiles", uploadedFiles);
       }
+      request.getSession().setAttribute("uploadingDone", "yes");
 
       url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel=" + parentchannel
-            + "&uploaded=" + uploaded + "&failed=" + failed + "&uploadingDone=yes";
+            + "&failed=" + failed + "&uploaded=" + uploaded;
 
       return new ActionForward(url, true);
    }

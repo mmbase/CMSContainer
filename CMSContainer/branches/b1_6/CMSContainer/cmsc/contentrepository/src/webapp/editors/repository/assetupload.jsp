@@ -26,8 +26,8 @@
    </tr>
 </table>
 <div>
-   <c:if test="${param.uploadingDone eq 'yes'}">
-      <c:if test="${param.failed != 0}" >
+   <c:if test="${uploadingDone eq 'yes'}">
+      <c:if test="${param.failed ne '0'}" >
          <span style="color:#cc0000"><fmt:message key="assets.upload.error"/></span>
          <fmt:message key="asset.upload.failed.results"/> ${param.failed}
          <br/>
@@ -37,7 +37,7 @@
          <c:remove var="notUploadedFiles" scope="session"/>
          <br/><br/>
       </c:if>
-      <c:if test="${param.uploaded != 0}" >
+      <c:if test="${param.uploaded ne '0'}" >
          <fmt:message key="asset.upload.uploaded.results"/> ${param.uploaded}
          <br/>
          <c:forEach var="fileName" items="${uploadedFiles}" varStatus="fileAmount" >
@@ -46,6 +46,7 @@
          <c:remove var="notUploadedFiles" scope="session"/>
       </c:if>
    </c:if>
+   <c:remove var="uploadingDone" scope="session"/>
 </div>
 </html:form>
 <div id="busy"><fmt:message key="uploading.message.wait" /><br />
