@@ -101,9 +101,9 @@
       <td><fmt:message key="edit_defaults.register.termspage" />:</td>
       <td align="right">
 		 <a href="<c:url value='/editors/site/select/SelectorPage.do?channel=${termsPage}&type=SelectorExtPage&method=selectTermsPage' />"
-            target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)"> 
+            target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)" title="<fmt:message key="edit_defaults.pageselect" />"> 
                <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.pageselect" />"/></a>
-         <a href="javascript:erase('termsPage');erase('termsPagePath');eraseList('window')">
+         <a href="javascript:erase('termsPage');erase('termsPagePath');eraseList('window')" title="<fmt:message key="edit_defaults.erase"/>">
             <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
       </td>
       <td>
