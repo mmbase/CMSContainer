@@ -56,7 +56,7 @@
       </div>
       <div class="ruler_green">
          <div><c:out value="${channelMsg}" /></div>
-   `  </div>
+      </div>
       <div class="show_mode_selector">
       <select name="imageMode" id="imageMode" onchange="javascript:setShowMode()">
          <c:if test="${assetShow eq 'list'}">
