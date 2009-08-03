@@ -51,9 +51,9 @@
            <td nowrap><fmt:message key="edit_defaults.login.register" />:</td>
            <td nowrap> 
                <a href="<c:url value='/editors/site/select/SelectorPage.do?channel=${registrationpage}&type=SelectorExtPage&method=selectRegisterPage' />"
-                  target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)"> 
+                  target="selectpage" onclick="openPopupWindow('selectpage', 340, 400)" title="<fmt:message key="edit_defaults.channelselect" />"> 
                      <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" />"/></a>
-               <a href="javascript:erase('registrationpage');erase('registrationpagepathuri');eraseList('window')">
+               <a href="javascript:erase('registrationpage');erase('registrationpagepathuri');eraseList('window')" title="<fmt:message key="edit_defaults.erase"/>">
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/></a>
             </td>
             <td>
