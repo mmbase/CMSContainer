@@ -61,8 +61,9 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
    protected static final String ARCHIVE_PAGE = "archivepage";
    protected static final String START_INDEX = "startindex";
-
+   
    protected static final int DEFAULT_MAX_ELEMENTS = 100;
+
 
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
@@ -251,7 +252,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          setMetaData(req, elementId);
       }
    }
-
 
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,

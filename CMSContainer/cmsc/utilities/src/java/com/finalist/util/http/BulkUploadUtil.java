@@ -1,9 +1,11 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
+
+ This software is OSI Certified Open Source Software.
+ OSI Certified is a certification mark of the Open Source Initiative.
+
+ The license (Mozilla version 1.0) can be read at the MMBase site.
+ See http://www.MMBase.org/license
+
  */
 package com.finalist.util.http;
 
@@ -13,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,17 +44,16 @@ import org.mmbase.util.transformers.ByteToCharTransformer;
 import org.mmbase.util.transformers.ChecksumFactory;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.util.UploadUtil;
 
 public class BulkUploadUtil {
 
    private static final Log log = LogFactory.getLog(BulkUploadUtil.class);
 
-   public static final int MAXSIZE = 16 * 1024 * 1024;
-   
-   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
+   private static final int MAXSIZE = 16 * 1024 * 1024;
 
+   public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
+   
    private static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
 
    private static final String ZIP_MIME_TYPES[] = new String[] { "application/x-zip-compressed", "application/zip",
@@ -108,16 +110,52 @@ public class BulkUploadUtil {
       return nodes;
    }
 
-   public static List<Integer> store(Cloud cloud, NodeManager manager, String parentchannel, FormFile file
-         ,List<String> notUploadedFiles, List<String> uploadedFiles) {
-      List<Integer> nodes;
-      if (StringUtils.isEmpty(parentchannel)) {
-         throw new NullPointerException("parentchannel is null");
+   public static void store(Cloud cloud, NodeManager manager, FormFile file, List<Integer> nodes, List<String> uploadedFileList, List<String> failedFileList) {
+      try {
+         if (isZipFile(file.getContentType(), file.getFileName())) {
+
+            InputStream in = file.getInputStream();
+            InputStream is = new BufferedInputStream(in);
+            ZipInputStream zip = new ZipInputStream(is);
+
+            createNodesInZip(manager, zip, cloud, nodes, uploadedFileList, failedFileList);
+         } else {
+            if(isNewFile(manager, file)){
+               Node node = createNode(manager, file.getFileName(), file.getInputStream(), file.getFileSize());
+               if (node != null) {
+                  nodes.add(node.getNumber());
+                  uploadedFileList.add(file.getFileName());
+               } else {
+                  failedFileList.add(file.getFileName());
+               }
+             } else {
+                failedFileList.add(file.getFileName());
+             }
+         }
+      } catch (Exception ex) {
+         log.error("Failed to read uploaded file", ex);
+      } finally {
+         file.destroy();
       }
-      nodes = getNodeList(Integer.valueOf(parentchannel), manager, file, cloud, notUploadedFiles, uploadedFiles);
-      return nodes;
    }
 
+   public static boolean validFileSize(int fileSize) {
+      int maxFileSize = MAXSIZE;
+      try {
+         if(StringUtils.isNotBlank(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE))){
+            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
+         }         
+         // check invalid value of UPLOADED_FILE_MAX_SIZE
+         if (maxFileSize <= 0) {
+            maxFileSize = MAXSIZE; // set default value of 16MB
+         }
+      }
+      catch (NumberFormatException e) {
+         log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
+      }
+      return (fileSize <= maxFileSize);
+   }
+   
    public static boolean isZipFile(String contentType, String fileName) {
 
       for (String element : ZIP_MIME_TYPES) {
@@ -135,7 +173,6 @@ public class BulkUploadUtil {
       return false;
    }
 
-
    private static Node createNode(NodeManager manager, String fileName, InputStream in, long length) {
       if (length > manager.getField("handle").getMaxLength()) {
          return null;
@@ -147,63 +184,6 @@ public class BulkUploadUtil {
       node.commit();
 
       return node;
-   }
-
-   private static Node createNode(Integer parentChannel, NodeManager manager, String fileName, InputStream in,
-         long length) {
-      if (length > manager.getField("handle").getMaxLength()) {
-         return null;
-      }
-      Node node = manager.createNode();
-      node.setValue("title", fileName);
-      node.setValue("filename", fileName);
-      node.setInputStreamValue("handle", in, length);
-      node.commit();
-
-      RelationUtil.createRelation(node, manager.getCloud().getNode(parentChannel), "creationrel");
-
-      return node;
-   }
-
-   private static List<Integer> getNodeList(Integer parentChannel, NodeManager manager, FormFile file, Cloud cloud,
-         List<String> notUploadedFiles, List<String> uploadedFiles) {
-      List<Integer> nodes = null;
-      try {
-         if (isZipFile(file.getContentType(), file.getFileName())) {
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            InputStream in = file.getInputStream();
-            byte[] temp = new byte[1024];
-            int read;
-
-            while ((read = in.read(temp)) > -1) {
-               buffer.write(temp, 0, read);
-            }
-
-            byte[] fileData = buffer.toByteArray();
-
-            // byte[] fileData = file.getFileData();
-            ByteArrayInputStream bis = new ByteArrayInputStream(fileData);
-            InputStream is = new BufferedInputStream(bis);
-            ZipInputStream zip = new ZipInputStream(is);
-
-            nodes = createNodesInZip(parentChannel, manager, zip, cloud, notUploadedFiles, uploadedFiles);
-         } else {
-
-            Node node = createNode(parentChannel, manager, file.getFileName(), file.getInputStream(), file
-                  .getFileSize());
-            uploadedFiles.add(file.getFileName());
-            if (node != null) {
-               nodes = new ArrayList<Integer>();
-               nodes.add(node.getNumber());
-            }
-         }
-      } catch (Exception ex) {
-         log.error("Failed to read uploaded file", ex);
-      } finally {
-         file.destroy();
-      }
-      return nodes;
    }
 
    private static ArrayList<Integer> createNodesInZip(NodeManager manager, ZipInputStream zip) {
@@ -242,69 +222,56 @@ public class BulkUploadUtil {
             tempFile.delete();
          }
 
-      } catch (IOException ex) {
+      } 
+      catch (IOException ex) {
          log.info("Failed to read uploaded zipfile, skipping it" + ex.getMessage());
-      } finally {
+      }
+      finally {
          close(zip);
       }
       return nodes;
    }
 
-   private static ArrayList<Integer> createNodesInZip(Integer parentChannel, NodeManager manager, ZipInputStream zip,
-         Cloud cloud, List<String> notUploadedFiles, List<String> uploadedFiles) {
+   private static void createNodesInZip(NodeManager manager, ZipInputStream zip,
+         Cloud cloud, List<Integer> nodes, List<String> uploadedFileList, List<String> failedFileList) {
 
       ZipEntry entry = null;
       int count = 0;
-      ArrayList<Integer> nodes = new ArrayList<Integer>();
 
       try {
-         byte[] buffer = new byte[2048 * 1024];
          while ((entry = zip.getNextEntry()) != null) {
-            long size = entry.getSize();
-            if (maxFileSizeBiggerThan(size)) {
-               if (entry.isDirectory()) {
-                  continue;
-               }
-               if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
-                  if (log.isDebugEnabled()) {
-                     log.debug("Skipping " + entry.getName() + " because it is not an image");
-                  }
-                  continue;
-               }
-               if (isImage(entry.getName())) {
-                  manager = cloud.getNodeManager("images");
-               } else {
-                  manager = cloud.getNodeManager("attachments");
-               }
-               count++;
-               ChecksumFactory checksumFactory = new ChecksumFactory();
-               ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
-                     .createTransformer(checksumFactory.createParameters());
-               ByteArrayOutputStream fileData = new ByteArrayOutputStream();
-               int len = 0;
-               while ((len = zip.read(buffer)) > 0) {
-                  fileData.write(buffer, 0, len);
-               }
-               String checkSum = transformer.transform(fileData.toByteArray());
-               NodeQuery query = manager.createQuery();
-               SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
-               NodeList assets = query.getList();
-
-               boolean isNewFile = (assets.size() == 0);
-               InputStream is = new ByteArrayInputStream(fileData.toByteArray());
-               if (isNewFile) {
-                  Node node = createNode(parentChannel, manager, entry.getName(), is, size);
-                  if (node != null) {
-                     nodes.add(node.getNumber());
-                     uploadedFiles.add(entry.getName());
-                  }
-                  is.close();
-               } else {
-                  notUploadedFiles.add(entry.getName());
-               }
-            } else {
-               notUploadedFiles.add(entry.getName());
+            if (entry.isDirectory()) {
+               continue;
             }
+            if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
+               if (log.isDebugEnabled()) {
+                  log.debug("Skipping " + entry.getName() + " because it is not an image");
+               }
+               continue;
+            }
+            count++;
+            long size = entry.getSize();
+            if(!validFileSize((int) size)){
+               failedFileList.add(entry.getName());
+               continue;
+            }
+            
+            ByteArrayOutputStream fileData = readFromZip(zip);
+            boolean isNewFile = isNewFile(manager, fileData);
+            
+            InputStream is = new ByteArrayInputStream(fileData.toByteArray());
+            if (isNewFile) {
+               Node node = createNode(manager, entry.getName(), is, size);
+               if (node != null) {
+                  nodes.add(node.getNumber());
+               }
+               is.close();
+               uploadedFileList.add(entry.getName());
+            }
+            else {
+               failedFileList.add(entry.getName());
+            }
+            
             zip.closeEntry();
          }
       } catch (IOException ex) {
@@ -314,9 +281,55 @@ public class BulkUploadUtil {
       } finally {
          close(zip);
       }
-      return nodes;
    }
-
+   
+   private static boolean isNewFile(NodeManager manager, ByteArrayOutputStream fileData){
+      ChecksumFactory checksumFactory = new ChecksumFactory();
+      ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
+            .createTransformer(checksumFactory.createParameters());
+      String checkSum = transformer.transform(fileData.toByteArray());
+      NodeQuery query = manager.createQuery();
+      SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
+      NodeList assets = query.getList();
+      return (assets.size() == 0);
+   }
+   
+   public static boolean isNewFile(NodeManager manager, FormFile file) {
+      ChecksumFactory checksumFactory = new ChecksumFactory();
+      ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory
+            .createTransformer(checksumFactory.createParameters());
+      String checkSum = null;
+      try {
+         checkSum = transformer.transform(file.getFileData());
+      }
+      catch (FileNotFoundException e) {
+         log.warn("Uploading file is not found!");
+         e.printStackTrace();
+      }
+      catch (IOException e) {
+         e.printStackTrace();
+      }
+      NodeQuery query = manager.createQuery();
+      SearchUtil.addEqualConstraint(query, manager.getField("checksum"), checkSum);
+      NodeList assets = query.getList();
+      return (assets.size() == 0);
+   }
+   
+   private static ByteArrayOutputStream readFromZip(ZipInputStream zip){
+      ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+      byte[] buffer = new byte[2048 * 1024];
+      int len = 0;
+      try {
+         while ((len = zip.read(buffer)) > 0) {
+            fileData.write(buffer, 0, len);
+         }
+      }
+      catch (IOException ex) {
+         log.error("IOException--Failed to read uploaded zipfile, skipping it", ex);
+      }
+      return fileData;
+   }
+   
    private static void close(InputStream stream) {
       try {
          stream.close();
@@ -363,23 +376,6 @@ public class BulkUploadUtil {
       return size;
    }
 
-   public static boolean maxFileSizeBiggerThan(long fileSize) {
-      int maxFileSize = MAXSIZE;
-      if (PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE) != null) {
-         try {
-            maxFileSize = Integer.parseInt(PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE)) * 1024 * 1024;
-            // check invalid value of UPLOADED_FILE_MAX_SIZE
-            if (maxFileSize <= 0) {
-               // PropertiesUtil.setProperty(UPLOADED_FILE_MAX_SIZE, "8");
-               maxFileSize = MAXSIZE;
-            }
-         } catch (NumberFormatException e) {
-            log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
-         }
-      }
-      return (fileSize <= maxFileSize);
-   }
-   
    public static void main(String[] args) {
       System.out.println(isImage(getExtension("test.jpg")));
       System.out.println(isImage(getExtension(".jpg")));

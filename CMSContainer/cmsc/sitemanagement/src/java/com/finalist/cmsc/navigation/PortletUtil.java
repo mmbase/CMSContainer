@@ -741,24 +741,5 @@ public final class PortletUtil {
          nodes.add(node);
       }
    }
-   /**
-    * using the click-through links at that page
-    */
-   public static NodeList findLinkedPortlets(Node page) {
-      NodeManager nodeParameterManager = page.getCloud().getNodeManager(NODEPARAMETER);
-      NodeQuery query = nodeParameterManager.createQuery();
-      SearchUtil.addEqualConstraint(query, nodeParameterManager.getField("value"), page.getNumber());
-      NodeList nodeParameterList = query.getList();
-      
-      NodeList linkedPortletList =  page.getCloud().createNodeList();
-      if(nodeParameterList.size() > 0) {
-         for(int i = 0 ; i < nodeParameterList.size() ; i++) {
-            Node nodeParameterNode = nodeParameterList.getNode(i);
-            NodeList portletNodeList = nodeParameterNode.getRelatedNodes(PORTLET);
-            Node portletNode = portletNodeList.getNode(0);
-            linkedPortletList.add(portletNode);
-         }
-      }
-      return linkedPortletList;
-   }
+
 }

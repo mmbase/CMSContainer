@@ -28,11 +28,11 @@
             treeElement.style.height = y - x + 'px';
          }
       }
-	  
+      
       function loadFunction() {
 		resizeTreeDiv();
 		alphaImages();
-		ajaxTreeLoader.initTree('', 'tree_div', '${portletId}');
+		ajaxTreeLoader.initTree('', 'tree_div');
       }
 		
 	</script>
@@ -53,18 +53,16 @@
 	
 <div id="left">
 	<cmscedit:sideblock title="selector.title" titleStyle="width: 241px;">
-		<mm:import externid="channel" from="request" />
-		<mm:import externid="portletId" from="parameters" />
 		<ul class="shortcuts">
-			<li class="search"><a href="../SearchInitAction.do?action=select&portletId=${portletId}" target="selectcontent"><fmt:message key="selector.searchcontent" /></a></li>
+			<li class="search"><a href="../SearchInitAction.do?action=select" target="selectcontent"><fmt:message key="selector.searchcontent" /></a></li>
 		</ul>
+		<mm:import externid="channel" from="request" />
 		<mm:node referid="channel">
 			<mm:field name="path" id="channelPath" write="false" />
 	
 			<form action="SelectorContent.do" id="addressBarForm">
 				   <div class="search_form">
 						<input type="text" name="path" value="${channelPath}" id="addressbar" class="width80" />
-						<html:hidden property="portletId" value="${portletId}"/>
 					</div>
 					<div class="search_form_options">
 					   <a href="#" class="button" onclick="getElementById('addressBarForm').submit()"> <fmt:message key="selector.search" /> </a>

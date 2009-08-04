@@ -83,11 +83,6 @@ public class ContentAction extends MMBaseAction {
          addToRequest(request, "elements", elements);
          addToRequest(request, "elementCount", Integer.toString(elementCount));
 
-         if (request.getSession().getAttribute("message") != null) {
-            addToRequest(request, "message", (String) request.getSession().getAttribute("message"));
-            request.getSession().removeAttribute("message");
-         }
-         
          NodeList created = RepositoryUtil.getCreatedElements(channel);
          Map<String, Node> createdNumbers = new HashMap<String, Node>();
          for (Iterator<Node> iter = created.iterator(); iter.hasNext();) {
@@ -95,17 +90,6 @@ public class ContentAction extends MMBaseAction {
             createdNumbers.put(String.valueOf(createdElement.getNumber()), createdElement);
          }
          addToRequest(request, "createdNumbers", createdNumbers);
-         //cmsc-1205 don't refresh channel tree when not necessary
-         String type = request.getParameter("type");
-         //cmsc-144 make reorder icon show up
-         if(elementCount==2&& type != null){
-        	 request.setAttribute("refresh", true);
-         }
-         //reset the show mode of assets in the session when enter another channel
-         if(type==null){
-            request.getSession().removeAttribute("show");
-            request.getSession().removeAttribute("imageOnly");
-           }
       }
       return mapping.findForward(SUCCESS);
    }

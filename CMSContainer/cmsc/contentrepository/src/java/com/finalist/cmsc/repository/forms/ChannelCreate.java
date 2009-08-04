@@ -38,13 +38,12 @@ public class ChannelCreate extends MMBaseFormlessAction {
          return ret;
       }
       else {
-         String ewnodelastedited = "";
          if ("save".equals(action)) {
-            ewnodelastedited = getParameter(request, "ewnodelastedited");
+            String ewnodelastedited = getParameter(request, "ewnodelastedited");
             RepositoryUtil.appendChild(cloud, parentchannel, ewnodelastedited);
          }
          request.getSession().removeAttribute("parentchannel");
-         ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath()+"?parentchannel="+ewnodelastedited+"&direction=down&refreshchannel=true");
+         ActionForward ret = mapping.findForward(SUCCESS);
          return ret;
       }
    }

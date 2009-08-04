@@ -16,12 +16,12 @@
 	<classpathentry kind="src" path="cmsc/utilities/src/java"/>
 	<classpathentry kind="src" path="thirdparty/pager-taglib/src/java"/>
 	<classpathentry kind="src" path="overview_generator/src/java"/>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.8.0.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-beanutils/jars/commons-beanutils-1.7.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/beanutils/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.2.1.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs/"/>
 		</attributes>
@@ -36,17 +36,17 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/fileupload/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.1.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/httpclient/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-lang/jars/commons-lang-2.4.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-lang/jars/commons-lang-2.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/lang/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.1.1.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/logging/apidocs/"/>
 		</attributes>
@@ -129,7 +129,7 @@
 			<attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.8/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.15.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
 		</attributes>
@@ -139,9 +139,14 @@
 			<attribute name="javadoc_location" value="http://struts.apache.org/1.x/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/net.sf.ehcache/jars/ehcache-1.5.0.jar">
+	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-1.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://ehcache.sourceforge.net/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-constructs-0.6.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://ehcache.sourceforge.net/ehcache-constructs/documentation/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="var" path="MAVEN_REPO/poi/jars/poi-scratchpad-2.5.1-final-20040804.jar"/>
@@ -165,7 +170,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/svnkit/jars/svnkit-1.1.6.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jcvsii/jars/jcvsii-5.3.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/sshtools/jars/j2ssh-core-0.2.2.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/org.json/jars/json-20070829.jar"/>	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
