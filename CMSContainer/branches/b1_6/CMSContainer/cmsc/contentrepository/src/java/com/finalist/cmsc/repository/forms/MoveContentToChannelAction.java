@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.apache.struts.util.MessageResources;
 import org.mmbase.bridge.*;
@@ -48,7 +49,10 @@ public class MoveContentToChannelAction extends MMBaseAction {
 
       String message = null;
       String[] numbers = objectNumber.split(",");
-      Locale locale = request.getLocale();
+      Locale locale = (Locale) request.getSession().getAttribute(Globals.LOCALE_KEY);
+      if (locale == null) {
+         locale = request.getLocale();
+      }
       MessageResources resources = getResources(request, "REPOSITORY");
       boolean isSuccess = true;
 
