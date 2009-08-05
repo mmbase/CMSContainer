@@ -284,6 +284,7 @@
       <action path="/editors/repository/MoveContentFromSearch" type="com.finalist.cmsc.repository.forms.MoveContentFromSearchAction" 
          unknown="false" validate="false">
          <forward name="success" path="/editors/repository/ContentSearchAction.do" redirect="false" />
+         <forward name="simpleeditor" path="/editors/simple/SimpleContentInitAction.do" redirect="false" />
       </action>
       <action path="/editors/repository/MoveAssetFromSearch" type="com.finalist.cmsc.repository.forms.MoveAssetFromSearchAction" 
          unknown="false" validate="false">

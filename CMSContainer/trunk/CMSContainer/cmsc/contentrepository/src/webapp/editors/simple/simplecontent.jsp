@@ -6,12 +6,23 @@
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
       <script src="../../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
+      <script src="../repository/content.js" type="text/javascript"></script>
+      <script type="text/javascript">
+         function selectChannel(channel, path){
+             var newDirection=document.forms[0].direction.value;
+             var type=document.forms[0].order.value;
+             var offset = document.forms[0].offset.value;
+             var pagerDOToffset = '';
+             var path = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
+             path += "editors/repository/MoveContentFromSearch.do?from=simpleeditor&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+             document.location = path;
+         }
+      </script>
 </cmscedit:head>
 <body>
 <mm:import externid="returnurl"/>
 <c:set var="pagerDOToffset"><%=request.getParameter("draftPager.offset")%></c:set>
 <c:set var="pagerDOToffset2"><%=request.getParameter("finishedPager.offset")%></c:set>
-<c:set var="single" value="false"/>
 <c:set var="returnurl" value="${fn:replace(returnurl,'&amp;','&')}"/>
 <mm:cloud jspvar="cloud" loginpage="../../editors/simple/login.jsp">
    <div class="editor">
@@ -54,11 +65,11 @@
       <fmt:message key="searchform.searchpages.nonefound" />
    </div>
    </mm:isempty>
-   <c:if test="${single == 'false'}">
    <div class="body">
    <%-- Now print the results --%>
    <c:set var="swap" value="0"/>
    <mm:list referid="results">
+   				 <c:set var="status" value="waiting"/>
       <mm:first>
          <edit:pages pageId="draftPager" jsMethod="setDraftPagerOffset" search="true" totalElements="${resultCount}" offset="${param.offset}"/>
          <form action="SimpleContentAction.do" name="SimpleContentForm">
@@ -83,7 +94,6 @@
             <tbody class="hover">
       </mm:first>
 
-
       <mm:field name="number" id="number">
          <mm:node number="${number}">
 
@@ -98,8 +108,7 @@
             </mm:relatednodes>
 
 			 <c:if test="${hasWorkflow}">
-				 <c:set var="status" value="waiting"/>
-				 <mm:relatednodes type="workflowitem">
+				 <mm:relatednodes type="workflowitem" constraints="workflowitem.type='content'" >
 					<c:set var="status"><mm:field name="status"/></c:set>
 				 </mm:relatednodes>
 				 <c:if test="${status == 'waiting'}">
@@ -108,8 +117,7 @@
 					</mm:listnodes>
 				 </c:if>
 			 </c:if>
- 
-			<c:if test="${empty status || (status != 'onlive' && status =='draft')}">
+   		<c:if test="${empty status || (status != 'onlive' && status =='draft')}">
             <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if>>
 			   <c:set var="swap">${swap+1}</c:set>
                <td style="white-space: nowrap;">           
@@ -129,7 +137,9 @@
 			   	<c:if test="${hasWorkflow}">
                   <a href="#" onclick="showItem(<mm:field name="number"/>);"><img src="../gfx/icons/status_finished.png" alt="<fmt:message key="searchform.icon.info.title" />" title="<fmt:message key="searchform.icon.info.title" />" /></a>
 			    </c:if>
-				    <a href="#" target="selectchannel" >
+				    <a onclick="moveContent(<mm:field name="number"/>, ${channelNumber} )" target="selectchannel" href="<mm:url page="../repository/select/SelectorChannel.do">
+                          <mm:param name="role">writer</mm:param>
+                      </mm:url>">
         <img src="../gfx/icons/page_move.png" title="<fmt:message key="searchform.icon.move.title" />"/></a>
                </td>
 			   <td onMouseDown="objClick(this);">
@@ -237,7 +247,9 @@
                   <mm:field name="number"  write="false" id="contentnumber">
                      <a href="<cmsc:contenturl number="${contentnumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
 
-					 				    <a href="#" target="selectchannel" >
+					 		<a onclick="moveContent(<mm:field name="number"/>, ${channelNumber} )" target="selectchannel" href="<mm:url page="../repository/select/SelectorChannel.do">
+                          <mm:param name="role">writer</mm:param>
+                      </mm:url>">
         <img src="../gfx/icons/page_move.png" title="<fmt:message key="searchform.icon.move.title" />"/></a>
                   </mm:field>
                </td>
@@ -279,113 +291,6 @@
     </mm:list>
 	   </div>
 	</c:if>
-</c:if>
-
-<c:if test="${single == 'true'}">
- <div class="body">
-   <%-- Now print the results --%>
-   <c:set var="swap" value="0"/>
-   <mm:list referid="results">
-      <mm:first>
-         <edit:pages pageId="draftPager" jsMethod="setDraftPagerOffset" search="true" totalElements="${resultCount}" offset="${param.offset}"/>
-         <form action="SimpleContentAction.do" name="SimpleContentForm">
-				<input type="text" name="title"><input type="button" class="button" value="<fmt:message key="simple.editor.search" />">
-          <table width="100%">
-            <thead>
-               <tr>
-                  <th>
-
-                  </th>
-                  <th><a href="javascript:sortBy('Content')" class="headerlink">
-        <fmt:message key="content.typecolumn"/></a>
-
-                  </th>
-                  <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
-                  
-                  <th><a href="javascript:orderBy('creationdate')" class="headerlink" >date</th>
-				  <th>placed in</th>
-               
-               </tr>
-            </thead>
-            <tbody class="hover">
-      </mm:first>
-
-
-      <mm:field name="number" id="number">
-         <mm:node number="${number}">
-
-            <mm:relatednodes role="creationrel" type="contentchannel">
-			   <mm:field name="number" jspvar="channelNumber" write="false"/>
-			   <cmsc:rights nodeNumber="${channelNumber}" var="rights"/>
-			   <mm:field name="name" jspvar="channelName" write="false"/>
-
-			   <c:set var="channelIcon" value="/editors/gfx/icons/type/contentchannel_${rights}.png"/>
-			   <c:set var="channelIconMessage"><fmt:bundle basename="cmsc-security"><fmt:message key="role.${rights}" /></fmt:bundle></c:set>
-			   <mm:field name="path" id="contentChannelPath" write="false" />
-            </mm:relatednodes>
-
-			 <c:if test="${hasWorkflow}">
-				 <c:set var="status" value="waiting"/>
-				 <mm:relatednodes type="workflowitem">
-					<c:set var="status"><mm:field name="status"/></c:set>
-				 </mm:relatednodes>
-				 <c:if test="${status == 'waiting'}">
-					<mm:listnodes type="remotenodes" constraints="sourcenumber=${number}">
-					   <c:set var="status" value="onlive"/>
-					</mm:listnodes>
-				 </c:if>
-			 </c:if>
- 
-			<c:if test="${empty status || (status != 'onlive' && status =='draft')}">
-            <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if>>
-			   <c:set var="swap">${swap+1}</c:set>
-               <td style="white-space: nowrap;">           
-                
-                 <%-- also show the edit icon when we return from an edit wizard! --%>
-        
-                      <a href="<mm:url page="../WizardInitAction.do">
-                          <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
-                          <mm:param name="returnurl" value="/editors/repository/ContentSearchAction.do${geturl}" />
-                      </mm:url>">
-                         <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
-            
-
-                  <mm:field name="number"  write="false" id="nodenumber">
-                     <a href="<cmsc:contenturl number="${nodenumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
-                  </mm:field>
-				    <a href="#" target="selectchannel" >
-        <img src="../gfx/icons/page_move.png" title="<fmt:message key="searchform.icon.move.title" />"/></a>
-               </td>
-			   <td onMouseDown="objClick(this);">
-    <mm:nodeinfo type="guitype"/>
-</td>
-                 <td>
-                  <mm:field jspvar="title" write="false" name="title" />
-                  <c:if test="${fn:length(title) > 50}">
-                     <c:set var="title">${fn:substring(title,0,49)}...</c:set>
-                  </c:if>
-                  ${title}
-               </td>
-			   <td style="white-space: nowrap;"><mm:field name="creationdate"><cmsc:dateformat displaytime="true" /></mm:field></td>
-
-               <td style="white-space: nowrap;">
-              <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
-                     <span title="${contentChannelPath}">${channelName}</span>
-               </td>
-               
-				 </tr>
-			   </c:if>
-			  </mm:node>
-			  </mm:field>
-			  <mm:last>
-              </tbody>
-            </table>
-          </form>
-         <edit:pages pageId="draftPager" jsMethod="setDraftPagerOffset"  search="true" totalElements="${resultCount}" offset="${param.offset}"/>
-      </mm:last>
-    </mm:list>
-	</div>
-</c:if>
    </div>
 </mm:cloud>
    </body>
