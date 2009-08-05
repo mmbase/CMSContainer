@@ -8,6 +8,8 @@
 <%@ attribute name="search" required="false" rtexprvalue="true"%>
 <%@ attribute name="offset" required="false" rtexprvalue="true"%>
 <%@ attribute name="extraparams" required="false" rtexprvalue="true"%>
+<%@ attribute name="jsMethod" required="false" rtexprvalue="true"%>
+<%@ attribute name="pageId" required="false" rtexprvalue="true"%>
 <c:if test="${empty elementsPerPage}">
    <c:set var="elementsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
 </c:if>
@@ -35,7 +37,12 @@
 
       if (re.test(inputValue) && inputValue <= Math.ceil(${pagesSize})) {
          if (search) {
-             setOffset(inputValue-1, (inputValue-1)*${elementsPerPage});
+	    <c:if test="${not empty jsMethod}">
+		${jsMethod}(inputValue-1, (inputValue-1)*${elementsPerPage});	
+	    </c:if>
+	    <c:if test="${empty jsMethod}">
+		setOffset(inputValue-1, (inputValue-1)*${elementsPerPage});	
+	    </c:if>
          } else {
              var url = "?offset=" + (inputValue - 1) + "${extraparams}" + "&pager.offset=" + (inputValue-1)*${elementsPerPage};
              window.location.href = url;
@@ -60,8 +67,9 @@
       <c:if test="${pagesSize>1}">
          <td style="text-align:right;width:70%;">
             <fmt:message key="searchpages.page"/>:
-            <pg:pager items="${totalElements}" maxPageItems="${elementsPerPage}" maxIndexPages="${showPages}" 
-               index="${pagesIndex}" isOffset="true" export="currentPage=pageNumber">
+                <pg:pager id="${empty pageId?'pager':pageId}" items="${totalElements}" maxPageItems="${elementsPerPage}" maxIndexPages="${showPages}" 
+                 index="${pagesIndex}" isOffset="true" export="currentPage=pageNumber">
+             
                <c:if test="${not search}">
                   <c:url var="previousPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.previousPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
                   <c:url var="nextPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.nextPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
@@ -69,11 +77,19 @@
                   <c:url var="LastPageUrl" value="<%=com.finalist.cmsc.paging.PagingUtils.lastPage((javax.servlet.jsp.PageContext)jspContext)%>"/>
                </c:if>
                <c:if test="${search}">
-                  <c:url var="previousPageUrl" value="javascript:setOffset('${currentPage - 2}', '${(currentPage-2)*elementsPerPage}');"/>
-                  <c:url var="nextPageUrl" value="javascript:setOffset('${currentPage}', '${currentPage*elementsPerPage}');"/>
-                  <c:url var="FirstPageUrl" value="javascript:setOffset('0', '0');"/>
-                  <c:url var="LastPageUrl" value="javascript:setOffset('${pagesSize - 1}', '${(pagesSize-1)*elementsPerPage}');"/>
-               </c:if>
+		 <c:if test="${not empty jsMethod}">
+		   <c:url var="previousPageUrl" value="javascript:${jsMethod}('${currentPage - 2}', '${(currentPage-2)*elementsPerPage}');"/>
+		   <c:url var="nextPageUrl" value="javascript:${jsMethod}('${currentPage}', '${currentPage*elementsPerPage}');"/>
+		   <c:url var="FirstPageUrl" value="javascript:${jsMethod}('0', '0');"/>
+		   <c:url var="LastPageUrl" value="javascript:${jsMethod}('${pagesSize - 1}', '${(pagesSize-1)*elementsPerPage}');"/>
+	         </c:if>
+		 <c:if test="${empty jsMethod}">
+		   <c:url var="previousPageUrl" value="javascript:setOffset('${currentPage - 2}', '${(currentPage-2)*elementsPerPage}');"/>
+		   <c:url var="nextPageUrl" value="javascript:setOffset('${currentPage}', '${currentPage*elementsPerPage}');"/>
+		   <c:url var="FirstPageUrl" value="javascript:setOffset('0', '0');"/>
+		   <c:url var="LastPageUrl" value="javascript:setOffset('${pagesSize - 1}', '${(pagesSize-1)*elementsPerPage}');"/>
+	         </c:if>
+	       </c:if>
                <pg:first unless="indexed">
                   <a href="${FirstPageUrl}" class="page_list_navtrue">&lt;&lt;<fmt:message key="pages.first"/></a>
                </pg:first>
@@ -90,7 +106,12 @@
                            ${count}
                         </c:when>
                         <c:otherwise>
-                           <a href="javascript:setOffset('${count - 1}', '${(count-1)*elementsPerPage}');">${count}</a>
+			  <c:if test="${not empty jsMethod}">
+                            <a href="javascript:${jsMethod}('${count - 1}', '${(count-1)*elementsPerPage}');">${count}</a>
+                          </c:if>
+			  <c:if test="${empty jsMethod}">
+                            <a href="javascript:setOffset('${count - 1}', '${(count-1)*elementsPerPage}');">${count}</a>
+                          </c:if>
                         </c:otherwise>
                      </c:choose>
                   </c:if>
