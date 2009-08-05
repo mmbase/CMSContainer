@@ -67,10 +67,41 @@ function setOffset(offset) {
 
  function setOffset(offset, pagerOffset) {
     document.forms[0].offset.value = offset;
-    document.forms[0]['pager.offset'].value = Math.ceil(pagerOffset);
+    document.forms[0]['pager.offset'].value = Math.ceil(pagerOffset);	
     document.forms[0].submit();
  }
-
+  function setDraftPagerOffset(offset, pagerOffset) {
+	document.forms[0].type.value = '';
+    document.forms[0].offset.value = offset;
+    document.forms[0]['draftPager.offset'].value = Math.ceil(pagerOffset);	
+    document.forms[0].submit();
+ }
+ function setFinishedPagerOffset(offset, pagerOffset) {
+    document.forms[0].offsetFinished.value = offset;
+	document.forms[0].type.value = 'finished';	
+    document.forms[0]['finishedPager.offset'].value = Math.ceil(pagerOffset);
+    document.forms[0].submit();
+ }
+ function seOrderBy(orderColumn) {
+    var oldOrderColumn = document.forms[0].orderFinished.value;
+    
+    if (oldOrderColumn == orderColumn) {
+       // order column is not changed so change direction
+       var oldDirection = document.forms[0].directionFinished.value;
+       if (oldDirection == '1') {
+          document.forms[0].directionFinished.value = '2';
+       }
+       else {
+          document.forms[0].directionFinished.value = '1';
+       }
+    }
+    else {
+       document.forms[0].orderFinished.value = orderColumn;
+       document.forms[0].directionFinished.value = '1';
+    }
+    
+    document.forms[0].submit();
+ }
  function orderBy(orderColumn) {
     var oldOrderColumn = document.forms[0].order.value;
     

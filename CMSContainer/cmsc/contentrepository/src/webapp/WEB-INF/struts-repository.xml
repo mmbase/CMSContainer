@@ -13,7 +13,10 @@
       <form-bean name="AssetSearchForm" type="com.finalist.cmsc.repository.forms.AssetSearchForm" />
       <form-bean name="ImageForm" type="com.finalist.cmsc.resources.forms.ImageForm" />
       <form-bean name="AttachmentForm" type="com.finalist.cmsc.resources.forms.AttachmentForm" />
-      <form-bean name="UrlForm" type="com.finalist.cmsc.resources.forms.UrlForm" />
+	  	  <!--Simple Editor action form-->
+      <form-bean name="SimpleContentForm" type="com.finalist.cmsc.repository.forms.SimpleContentActionForm" />
+
+	  <form-bean name="UrlForm" type="com.finalist.cmsc.resources.forms.UrlForm" />
       <form-bean name="DeleteSecondaryContentForm" type="com.finalist.cmsc.resources.forms.DeleteSecondaryContentForm" />
       <form-bean name="SecondaryEditForm" type="com.finalist.cmsc.resources.forms.SecondaryEditForm" />
 
@@ -285,6 +288,16 @@
       <action path="/editors/repository/MoveAssetFromSearch" type="com.finalist.cmsc.repository.forms.MoveAssetFromSearchAction" 
          unknown="false" validate="false">
          <forward name="success" path="/editors/repository/AssetSearchAction.do" redirect="false" />
+      </action>
+
+	  <!--Simple Editor-->
+      <action path="/editors/simple/SimpleContentAction" type="com.finalist.cmsc.repository.forms.SimpleContentAction" 
+         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">
+         <forward name="success" path="/editors/simple/simplecontent.jsp" redirect="false" />
+      </action>
+      <action path="/editors/simple/SimpleContentInitAction" type="com.finalist.cmsc.repository.forms.SimpleContentInitAction" 
+         unknown="false" validate="false">
+         <forward name="success" path="/editors/simple/simplecontent.jsp" redirect="false" />
       </action>
    </action-mappings>
 
