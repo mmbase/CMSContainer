@@ -50,6 +50,8 @@ public final class ContentElementUtil {
 
    private static final String PROPERTY_HIDDEN_TYPES = "system.contenttypes.hide";
 
+   private static final String SYSTEM_SIMPLEEDITOR_CONTENTTYPES = "system.simpleeditor.contenttypes";
+   
    private ContentElementUtil() {
       // utility
    }
@@ -457,7 +459,24 @@ public final class ContentElementUtil {
     * @return List of hidden types
     */
    public static List<String> getHiddenTypes() {
-      String property = PropertiesUtil.getProperty(PROPERTY_HIDDEN_TYPES);
+      return getProperty(PROPERTY_HIDDEN_TYPES);
+   }
+   
+   /**
+    * Helper method to get all simple editor's types
+    *
+    * @return List of the types
+    */
+   public static List<String> getSimpleEditorTypes() {
+      return getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES);
+   }
+   /**
+    * Helper method to get properties from System Property
+    * @param propertyKey the key of property,
+    * @return List of the value, if the value is separated by comma,return the list
+    */
+   public static List<String> getProperty(String propertyKey) {
+      String property = PropertiesUtil.getProperty(propertyKey);
       if (property == null) {
          return new ArrayList<String>();
       }
@@ -469,5 +488,4 @@ public final class ContentElementUtil {
       }
       return list;
    }
-
 }
