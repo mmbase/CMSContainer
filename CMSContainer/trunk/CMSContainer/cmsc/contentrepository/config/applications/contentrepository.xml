@@ -29,6 +29,7 @@
         <reldef source="deletionrel" target="deletionrel" direction="bidirectional" guisourcename="deletionrel" guitargetname="deletionrel" builder="deletionrel" />
         <reldef source="ownerrel" target="ownerrel" direction="bidirectional" guisourcename="ownerrel" guitargetname="ownerrel" builder="ownerrel" />
         <reldef source="imagerel" target="imagerel" direction="bidirectional" guisourcename="imagerel" guitargetname="imagerel" builder="imagerel" />
+		<reldef source="mmbasegrouprel" target="mmbasegrouprel" direction="bidirectional" guisourcename="mmbasegrouprel" guitargetname="mmbasegrouprel" builder="insrel" />
    </neededreldeflist>
    <allowedrelationlist>
       <relation from="contentchannel" to="contentchannel" type="childrel" />
@@ -39,6 +40,7 @@
       <relation from="contentelement" to="contentchannel" type="deletionrel" />
       <relation from="contentelement" to="user" type="ownerrel" />
       <relation from="mmbasegroups" to="contentchannel" type="rolerel" />
+	  <relation from="mmbasegroups" to="contentchannel" type="mmbasegrouprel" />
       
       <relation from="contentelement" to="contentelement" type="posrel" />
       <relation from="contentelement" to="attachments" type="posrel" />
