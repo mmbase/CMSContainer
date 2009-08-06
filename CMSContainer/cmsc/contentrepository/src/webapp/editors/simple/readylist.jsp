@@ -84,9 +84,6 @@
                   <mm:field name="number"  write="false" id="nodenumber">
                      <a href="<cmsc:contenturl number="${nodenumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
                   </mm:field>
-			   	<c:if test="${hasWorkflow}">
-                  <a href="#" onclick="showItem(<mm:field name="number"/>);"><img src="../gfx/icons/status_finished.png" alt="<fmt:message key="searchform.icon.info.title" />" title="<fmt:message key="searchform.icon.info.title" />" /></a>
-			    </c:if>
 				    <a onclick="moveContent(<mm:field name="number"/>, ${channelNumber} )" target="selectchannel" href="<mm:url page="../simple/SimpleEditorChannelAction.do">
                           <mm:param name="content"><mm:field name="number"/></mm:param>
                       </mm:url>" >

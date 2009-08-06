@@ -310,6 +310,10 @@
          unknown="false" validate="false">
          <forward name="success" path="/editors/simple/channellist.jsp" redirect="false" />
       </action>
+      <action path="/editors/simple/SimpleContentWorkflowAction" type="com.finalist.cmsc.repository.forms.SimpleContentWorkflowAction" 
+         unknown="false" validate="false" >
+         <forward name="success" path="/editors/simple/SimpleContentInitAction.do" redirect="false" />
+      </action>
    </action-mappings>
 
    <message-resources parameter="cmsc-repository" key="REPOSITORY" />
