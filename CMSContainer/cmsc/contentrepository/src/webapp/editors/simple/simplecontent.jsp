@@ -53,19 +53,18 @@
               <fmt:message key="simple.editor.nochannel.error"/><br/>
             </c:if>
             <c:if test="${channelsNumber gt 1}">
-	            <b style="margin-left:5px"><fmt:message key="simple.editor.place.in"/></b>
-	            <select name="creation">
+	            <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.place.in"/></b>
+	            <select name="creation" style="margin-bottom:10px">
 	                <c:forEach var="channel" items="${channelsList}">
 	                    <option value="${channel.value}">${channel.label}</option>
 	                </c:forEach>
 	            </select><br>
             </c:if>
             <c:if test="${channelsNumber eq 1}" >
-               <b style="margin-left:5px"><fmt:message key="simple.editor.place.in"/></b>
+               <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.place.in"/></b>
                   <c:forEach var="channel" items="${channelsList}">
-                       <input type="hidden" name="creation" value="${channel.value}"/><b>${channel.label}</b>
-                  </c:forEach>
-               <br/>
+                       <input type="hidden" name="creation" value="${channel.value}"/><b style="margin-bottom:10px">${channel.label}</b>
+                  </c:forEach><br/>
             </c:if>
 
 				<c:if test="${typesNumber eq 0}">
@@ -78,14 +77,14 @@
 	                    <option value="${type.value}">${type.label}</option>
 	                </c:forEach>
 	            </select><br/>
-	            <input style="margin-left:55px;margin-top:10px" type="submit" class="button" name="submitButton" value="create"/>
+	            <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
             </c:if>
             <c:if test="${typesNumber eq 1}" >
 	            <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
 	               <c:forEach var="type" items="${typesList}">
 	                    <input type="hidden" name="contenttype" value="${type.value}"/><b>${type.label}</b>
-	               </c:forEach>
-	            <input style="margin-left:55px;margin-top:10px" type="submit" class="button" name="submitButton" value="create"/>
+	               </c:forEach><br/>
+	            <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
             </c:if>
         </form>
       </div>
