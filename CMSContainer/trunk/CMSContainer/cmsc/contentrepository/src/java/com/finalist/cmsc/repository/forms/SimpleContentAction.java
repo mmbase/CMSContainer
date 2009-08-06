@@ -1,5 +1,7 @@
 package com.finalist.cmsc.repository.forms;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +11,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
@@ -20,6 +24,7 @@ import org.mmbase.storage.search.Constraint;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.SimpleContentUtil;
 import com.finalist.cmsc.struts.PagerAction;
