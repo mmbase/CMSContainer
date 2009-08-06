@@ -14,4 +14,8 @@
 		<key>uploaded.file.max.size</key>
 		<value>16</value>
 	</node>
+	<node number="303" owner="admin">
+		<key>system.simpleeditor.contenttypes</key>
+		<value>article</value>
+	</node>
 </properties>

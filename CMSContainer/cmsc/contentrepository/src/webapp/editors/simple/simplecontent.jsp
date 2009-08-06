@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp" 
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
+%><%@include file="globals.jsp"
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -39,16 +39,53 @@
             <html:hidden property="directionFinished"/>
 			<html:hidden property="draftPager.offset" value="${pagerDOToffset}"/>
 			<html:hidden property="finishedPager.offset" value="${pagerDOToffset2}"/>
-			<b style="margin-left:5px">Placed in</b> <select name="channel">
-                    <option>Repository</option>
-                    <option>newchannel</option>        
-                </select><br>
-               <b style="margin-left:5px;margin-bottom:10px"> New  </b>  <select style="margin-left:26px;margin-top:15px" name="contenttype">
-                    <option>Article</option>
-                    <option>FAQ</option>        
-                </select><br>
-               <input style="margin-left:55px;margin-top:10px" type="submit" class="button" name="submitButton" value="create"/>
          </html:form>
+         <form name="initForm" action="../WizardInitAction.do" method="post">
+            <input type="hidden" name="action" value="create"/>
+            <input type="hidden" name="returnurl" value="${returnurl}"/>
+            <input type="hidden" name="order" value="${orderby}" />
+            <input type="hidden" name="direction" value="${direction}"/>
+            <input type="hidden" name="offset" value="${param.offset}"/>
+             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
+            <c:if test="${channelsNumber eq 0}">
+              <fmt:message key="simple.editor.nochannel.error"/><br/>
+            </c:if>
+            <c:if test="${channelsNumber gt 1}">
+	            <b style="margin-left:5px"><fmt:message key="simple.editor.place.in"/></b>
+	            <select name="creation">
+	                <c:forEach var="channel" items="${channelsList}">
+	                    <option value="${channel.value}">${channel.label}</option>
+	                </c:forEach>
+	            </select><br>
+            </c:if>
+            <c:if test="${channelsNumber eq 1}" >
+               <b style="margin-left:5px"><fmt:message key="simple.editor.place.in"/></b>
+                  <c:forEach var="channel" items="${channelsList}">
+                       <input type="hidden" name="creation" value="${channel.value}"/><b>${channel.label}</b>
+                  </c:forEach>
+               <br/>
+            </c:if>
+
+				<c:if test="${typesNumber eq 0}">
+				  <fmt:message key="simple.editor.notype.error"/><br/>
+				</c:if>
+            <c:if test="${typesNumber gt 1}">
+	            <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+	            <select name="contenttype">
+	                <c:forEach var="type" items="${typesList}">
+	                    <option value="${type.value}">${type.label}</option>
+	                </c:forEach>
+	            </select><br/>
+	            <input style="margin-left:55px;margin-top:10px" type="submit" class="button" name="submitButton" value="create"/>
+            </c:if>
+            <c:if test="${typesNumber eq 1}" >
+	            <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+	               <c:forEach var="type" items="${typesList}">
+	                    <input type="hidden" name="contenttype" value="${type.value}"/><b>${type.label}</b>
+	               </c:forEach>
+	            <input style="margin-left:55px;margin-top:10px" type="submit" class="button" name="submitButton" value="create"/>
+            </c:if>
+        </form>
       </div>
 
    <div class="ruler_green"><div><fmt:message key="simple.editor.draft" /></div></div>
@@ -85,7 +122,6 @@
 
                   </th>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
-                  
                   <th><a href="javascript:orderBy('creationdate')" class="headerlink" >date</th>
 				  <th>placed in</th>
                   <th></th>
@@ -120,16 +156,13 @@
    		<c:if test="${empty status || (status != 'onlive' && status =='draft')}">
             <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if>>
 			   <c:set var="swap">${swap+1}</c:set>
-               <td style="white-space: nowrap;">           
-                
+               <td style="white-space: nowrap;">
                  <%-- also show the edit icon when we return from an edit wizard! --%>
-        
                       <a href="<mm:url page="../WizardInitAction.do">
                           <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
                           <mm:param name="returnurl" value="/editors/repository/ContentSearchAction.do${geturl}" />
                       </mm:url>">
                          <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
-            
 
                   <mm:field name="number"  write="false" id="nodenumber">
                      <a href="<cmsc:contenturl number="${nodenumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
@@ -165,7 +198,7 @@
 						 </c:if>
 						 <img src="../gfx/icons/status_${status}.png" alt="<fmt:message key="content.status" />: <fmt:message key="content.status.${status}" />" title="<fmt:message key="content.status" />: <fmt:message key="content.status.${status}" />" />
 						</c:if>
-				  </td>               
+				  </td>
 				 </tr>
 			   </c:if>
 			  </mm:node>
@@ -198,7 +231,6 @@
 
                   </th>
                   <th><a href="javascript:seOrderBy('title')" class="headerlink" >title</a></th>
-                  
                   <th><a href="javascript:seOrderBy('creationdate')" class="headerlink" >date
 				  </a>
 				  </th>
@@ -231,18 +263,16 @@
 				   <c:set var="itemStatus" value="onlive"/>
 				</mm:listnodes>
 			 </c:if>
-			
 			<c:if test="${itemStatus != 'draft'}">
             <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if>>
 			 <c:set var="swap">${swap+1}</c:set>
-               <td style="white-space: nowrap;">           
-                
+               <td style="white-space: nowrap;">
                  <%-- also show the edit icon when we return from an edit wizard! --%>
                       <a href="<mm:url page="../WizardInitAction.do">
                           <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
                           <mm:param name="returnurl" value="/editors/repository/ContentSearchAction.do${geturl}" />
                       </mm:url>">
-                         <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>          
+                         <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
 
                   <mm:field name="number"  write="false" id="contentnumber">
                      <a href="<cmsc:contenturl number="${contentnumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
@@ -277,7 +307,7 @@
 							   <c:set var="itemStatus" value="waiting"/>
 						 </c:if>
 						 <img src="../gfx/icons/status_${itemStatus}.png" alt="<fmt:message key="content.status" />: <fmt:message key="content.status.${itemStatus}" />" title="<fmt:message key="content.status" />: <fmt:message key="content.status.${itemStatus}" />" />
-				  </td>               
+				  </td>
 				 </tr>
 				</c:if>
 			  </mm:node>
