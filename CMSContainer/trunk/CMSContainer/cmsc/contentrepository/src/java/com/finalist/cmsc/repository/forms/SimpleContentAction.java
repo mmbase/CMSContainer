@@ -29,6 +29,7 @@ public class SimpleContentAction extends PagerAction {
 
    private static final Logger log = Logging
          .getLoggerInstance(SimpleContentAction.class.getName());
+   private static final String SYSTEM_SIMPLEEDITOR_CONTENTTYPES = "system.simpleeditor.contenttypes";
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -104,7 +105,32 @@ public class SimpleContentAction extends PagerAction {
       int resultCount = Queries.count(draftQuery);
       NodeList results = draftQuery.getNodeManager().getList(draftQuery);
       simpleContentForm.setResultCount(resultCount);
-      simpleContentForm.setResults(results);    
+      simpleContentForm.setResults(results);   
+	  
+	  // cmsc-1479
+      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+      if (PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES) != null) {
+         String[] rawTypes = PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES).split(",");
+         List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+         for (String sType : rawTypes) {
+            if (!hiddenTypes.contains(sType)) {
+               LabelValueBean bean = new LabelValueBean(sType, sType);
+               typesList.add(bean);
+            }
+         }
+      } else {
+         log.warn("System property '" + SYSTEM_SIMPLEEDITOR_CONTENTTYPES + "' is not set. Please add it.");
+      }
+      request.setAttribute("typesList", typesList);
+
+      List<Node> channelNodessList = SimpleContentUtil.getRelatedChannelsByUser(cloud);
+      List<LabelValueBean> channelsList = new ArrayList<LabelValueBean>();
+      for (Node channel : channelNodessList) {
+         LabelValueBean bean = new LabelValueBean(channel.getStringValue("name"), channel.getStringValue("number"));
+         channelsList.add(bean);
+      }
+      request.setAttribute("channelsList", channelsList);
+      // end of cmsc-1479
 
       return super.execute(mapping, form, request, response, cloud);
    }
