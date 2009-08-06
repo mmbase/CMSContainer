@@ -29,6 +29,10 @@ public class SimpleContentUtil {
 
    private static final Logger log = Logging.getLoggerInstance(SimpleContentUtil.class.getName());
    
+   public static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
+   
+   public static final String DEFAULT_SIZE_PER_PAGE = "25";
+   
    private static final String MMBASEGROUPREL = "mmbasegrouprel";
 
    private static final String CONTENTCHANNEL = "contentchannel";
@@ -38,8 +42,6 @@ public class SimpleContentUtil {
    private static final String NAME_FIELD = "name";
 
    private static final String TITLE_FIELD = "title";
-
-   private static final String DEFAULT_SIZE_PER_PAGE = "25";
 
    private static final String NUMBER_FIELD = "number";
 
@@ -51,8 +53,7 @@ public class SimpleContentUtil {
 
    private static final String WORKFLOWITEM_TYPE = "workflowitem";
    
-   private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
-   
+
    public  static SortedSet<Integer>  getDraftWorkFlowItem(Cloud cloud) {
       SortedSet<Integer>  set = new TreeSet<Integer> ();
       NodeManager nodeManager = cloud.getNodeManager(WORKFLOWITEM_TYPE);
