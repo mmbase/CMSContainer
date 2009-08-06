@@ -300,6 +300,12 @@
          unknown="false" validate="false">
          <forward name="success" path="/editors/simple/simplecontent.jsp" redirect="false" />
       </action>
+      <action path="/editors/simple/SimpleContentReadyAction" type="com.finalist.cmsc.repository.forms.SimpleContentReadyAction" 
+         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
+      </action>
+      <action path="/editors/simple/SimpleContentDraftAction" type="com.finalist.cmsc.repository.forms.SimpleContentDraftAction" 
+         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
+      </action>
    </action-mappings>
 
    <message-resources parameter="cmsc-repository" key="REPOSITORY" />
