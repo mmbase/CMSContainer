@@ -23,7 +23,7 @@
 <mm:import externid="returnurl"/>
 <c:set var="pagerDOToffset"><%=request.getParameter("draftPager.offset")%></c:set>
 <c:set var="pagerDOToffset2"><%=request.getParameter("finishedPager.offset")%></c:set>
-<c:set var="returnurl" value="${fn:replace(returnurl,'&amp;','&')}"/>
+<c:set var="returnurl" value="../editors/simple/SimpleContentInitAction.do"/>
 <c:set var="typesNumber"  value="${fn:length(typesList)}" />
 <c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
 <mm:cloud jspvar="cloud" loginpage="../../editors/simple/login.jsp">
