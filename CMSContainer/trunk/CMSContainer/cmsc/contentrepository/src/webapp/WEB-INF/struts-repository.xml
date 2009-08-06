@@ -306,6 +306,10 @@
       <action path="/editors/simple/SimpleContentDraftAction" type="com.finalist.cmsc.repository.forms.SimpleContentDraftAction" 
          unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
       </action>
+      <action path="/editors/simple/SimpleEditorChannelAction" type="com.finalist.cmsc.repository.forms.SimpleEditorChannelAction" 
+         unknown="false" validate="false">
+         <forward name="success" path="/editors/simple/channellist.jsp" redirect="false" />
+      </action>
    </action-mappings>
 
    <message-resources parameter="cmsc-repository" key="REPOSITORY" />

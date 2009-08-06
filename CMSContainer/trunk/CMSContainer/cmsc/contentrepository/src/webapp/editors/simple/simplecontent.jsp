@@ -13,9 +13,9 @@
              var type=document.forms[0].order.value;
              var offset = document.forms[0].offset.value;
              var pagerDOToffset = '';
-             var path = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
-             path += "editors/repository/MoveContentFromSearch.do?from=simpleeditor&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
-             document.location = path;
+             var pagepath = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
+             pagepath += "editors/repository/MoveContentFromSearch.do?from=simpleeditor&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+             document.location = pagepath;
          }
       </script>
 </cmscedit:head>
