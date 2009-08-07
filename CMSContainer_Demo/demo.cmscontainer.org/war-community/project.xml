@@ -38,6 +38,12 @@
       </dependency>
       <dependency>
          <groupId>finalist</groupId>
+         <artifactId>cmsc-modules-subsite</artifactId>
+         <version>${cmscmodules.version}</version>
+         <type>mmbase-module</type>
+      </dependency>       
+      <dependency>
+         <groupId>finalist</groupId>
          <artifactId>cmsc-portlets-preferences</artifactId>
          <version>${cmscportlets.version}</version>
          <type>mmbase-module</type>
