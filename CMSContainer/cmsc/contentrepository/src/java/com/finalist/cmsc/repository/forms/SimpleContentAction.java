@@ -36,7 +36,7 @@ import com.finalist.cmsc.struts.PagerAction;
 public abstract class SimpleContentAction extends PagerAction {
 
    private static final Logger log = Logging.getLoggerInstance(SimpleContentAction.class.getName());
-
+  
    protected static final String SYSTEM_SIMPLEEDITOR_CONTENTTYPES = "system.simpleeditor.contenttypes";
 
    @Override
@@ -54,9 +54,9 @@ public abstract class SimpleContentAction extends PagerAction {
       int resultCount = 0;
       NodeList results = cloud.createNodeList();
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
-      NodeQuery query = SimpleContentUtil.createQuery(cloud, nodeManager);
 
-      doAction(query, form, request, cloud);
+      NodeQuery query = SimpleContentUtil.createQuery(cloud,nodeManager);
+      doAction(query,form,request,cloud);
 
       if (StringUtils.isNotEmpty(simpleContentForm.getTitle())) {
 
@@ -89,23 +89,19 @@ public abstract class SimpleContentAction extends PagerAction {
             reverse = true;
          }
          resultCount = results.size();
-         Collections
-               .sort(results, new NodeGUITypeComparator(query.getCloud().getLocale(), reverse));
-         int toIndex = results.size() < (offset + maxNumber) ? results.size()
-               : (offset + maxNumber);
-         results = results.subNodeList(offset, toIndex);
+         Collections.sort(results, new NodeGUITypeComparator(query.getCloud().getLocale(), reverse));
+         int toIndex = results.size()<(offset*maxNumber+maxNumber)? results.size(): (offset*maxNumber+maxNumber);
+         results = results.subNodeList(offset*maxNumber, toIndex);
+
       }
       else {
-         SimpleContentUtil.setOrder(query, nodeManager, simpleContentForm.getOrder(),
-               simpleContentForm.getDirection());
-         // query.setMaxNumber(maxNumber);
-         SimpleContentUtil.setOffset(query, simpleContentForm.getOffset());
+         SimpleContentUtil.setOrder(query, nodeManager, simpleContentForm.getOrder(), simpleContentForm.getDirection());
+         query.setMaxNumber(maxNumber);
+         SimpleContentUtil.setOffset(query,simpleContentForm.getOffset());
+
          resultCount = Queries.count(query);
          results = query.getNodeManager().getList(query);
       }
-
-      resultCount = Queries.count(query);
-      results = query.getNodeManager().getList(query);
       simpleContentForm.setResultCount(resultCount);
       simpleContentForm.setResults(results);
 
