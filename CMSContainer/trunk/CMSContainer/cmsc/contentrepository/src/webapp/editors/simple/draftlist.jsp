@@ -81,12 +81,11 @@
    <div class="body">
    <%-- Now print the results --%>
    <c:set var="swap" value="0"/>
-   <input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="button" class="button" value="<fmt:message key="simple.editor.search" />">
    <mm:list referid="results">
       <mm:first>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
-         <form action="SimpleContentAction.do" name="SimpleContentForm">
-				
+         <form action="SimpleContentDraftAction.do" name="SimpleContentForm">
+         <input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="button" class="button" value="<fmt:message key="simple.editor.search" />">
           <table>
             <thead>
                <tr>
