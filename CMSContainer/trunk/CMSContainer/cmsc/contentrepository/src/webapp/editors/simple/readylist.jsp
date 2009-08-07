@@ -2,6 +2,8 @@
 %><%@ include file="globals.jsp"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %>
+<c:set var="typesNumber"  value="${fn:length(typesList)}" />
+<c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
    <div class="editor">
 	<div style="margin-left:10px;color:green"><h1><fmt:message key="simple.editor.title" /></h1></div>
 
@@ -43,9 +45,11 @@
                   <th>
 
                   </th>
+                  <c:if test="${typesNumber gt 1}">
                   <th><a href="javascript:orderBy('otype')" class="headerlink">
                       <fmt:message key="content.typecolumn"/></a>
                   </th>
+                  </c:if>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a>
 				  </th>                  
                   <th><a href="javascript:orderBy('creationdate')" class="headerlink" ><fmt:message key="simple.editor.list.date.field" /></th>
@@ -82,14 +86,18 @@
                   <mm:field name="number"  write="false" id="nodenumber">
                      <a href="<cmsc:contenturl number="${nodenumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
                   </mm:field>
+             <c:if test="${channelsNumber gt 1}">
 				    <a onclick="moveContent(<mm:field name="number"/>, ${channelNumber} )" target="selectchannel" href="<mm:url page="../simple/SimpleEditorChannelAction.do">
                           <mm:param name="returnpath">simpleeditorready</mm:param>
                       </mm:url>" >
                   <img src="../gfx/icons/page_move.png" title="<fmt:message key="searchform.icon.move.title" />"/></a>
+             </c:if>
                </td>
-			   <td onMouseDown="objClick(this);">
+               <c:if test="${typesNumber gt 1}">
+               <td onMouseDown="objClick(this);">
                    <mm:nodeinfo type="guitype"/>
                </td>
+               </c:if>
                  <td>
                   <mm:field jspvar="title" write="false" name="title" />
                   <c:if test="${fn:length(title) > 50}">

@@ -28,5 +28,8 @@ public class SimpleContentReadyAction extends SimpleContentAction{
       contentSet.removeAll(set);
       SearchUtil.addInConstraint(query, nodeManager.getField(ContentElementUtil.NUMBER_FIELD), contentSet);
       request.setAttribute("statustype", "ready");
+      
+      bindTypeList(request, cloud);
+      bindChannelList(request, cloud);
    }
 }
