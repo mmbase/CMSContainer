@@ -42,6 +42,7 @@ public class SimpleEditorChannelAction extends MMBaseFormlessAction {
          }
       }
       addToRequest(request, "channelList", channelList);
+      addToRequest(request, "returnpath", request.getParameter("returnpath"));
       
       return mapping.findForward(SUCCESS);
    }

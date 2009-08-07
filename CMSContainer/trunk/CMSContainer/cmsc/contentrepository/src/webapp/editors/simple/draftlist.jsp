@@ -70,8 +70,8 @@
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.draft" /></div></div>
 
-<form action="SimpleContentDraftAction.do" name="SimpleContentForm">
-<input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
+<html:form action="/editors/simple/SimpleContentDraftAction.do" method="post">
+<html:text style="margin-left:10px;margin-top:10px" property="title" /><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
 <mm:haspage page="/editors/workflow">
@@ -140,7 +140,7 @@
                       </mm:url>" ><img src="../gfx/icons/status_finished.png" alt="<fmt:message key="simple.editor.send" />" title="<fmt:message key="simple.editor.send" />" /></a>
 			    </c:if>
 				    <a onclick="moveContent(<mm:field name="number"/>, ${channelNumber} )" target="selectchannel" href="<mm:url page="../simple/SimpleEditorChannelAction.do">
-                          <mm:param name="content"><mm:field name="number"/></mm:param>
+                          <mm:param name="returnpath">simpleeditordraft</mm:param>
                       </mm:url>" >
                   <img src="../gfx/icons/page_move.png" title="<fmt:message key="searchform.icon.move.title" />"/></a>
                </td>
@@ -187,4 +187,4 @@
       </mm:last>
     </mm:list>
 	</div>	
-</form>
+</html:form>
