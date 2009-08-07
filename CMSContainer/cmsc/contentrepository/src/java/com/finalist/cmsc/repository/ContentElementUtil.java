@@ -9,14 +9,33 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeManagerList;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.NotFoundException;
+import org.mmbase.bridge.Relation;
+import org.mmbase.bridge.RelationIterator;
+import org.mmbase.bridge.RelationManager;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.storage.search.*;
+import org.mmbase.storage.search.CompositeConstraint;
+import org.mmbase.storage.search.Constraint;
+import org.mmbase.storage.search.FieldCompareConstraint;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.TypeUtil;
@@ -463,12 +482,29 @@ public final class ContentElementUtil {
    }
    
    /**
-    * Helper method to get all simple editor's types
-    *
+    * Helper method to get all valid simple editor's types
+    * 
+    * @param cloud
+    * 
     * @return List of the types
     */
-   public static List<String> getSimpleEditorTypes() {
-      return getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES);
+   public static List<String> getSimpleEditorTypes(Cloud cloud) {
+      List<String> simpleEditorTypes = new ArrayList<String>();
+      if (PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES) != null) {
+         List<String> rawTypes = getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES);
+         List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
+         List<String> allTypes = new ArrayList<String>();
+         for (NodeManager nodeManager : types) {
+            allTypes.add(nodeManager.getName());
+         }
+         List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+         for (String sType : rawTypes) {
+            if (!hiddenTypes.contains(sType) && allTypes.contains(sType)) {
+               simpleEditorTypes.add(sType);
+            }
+         }
+      }
+      return simpleEditorTypes;
    }
    /**
     * Helper method to get properties from System Property

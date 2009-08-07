@@ -6,7 +6,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -145,26 +144,24 @@ public class SimpleContentUtil {
    }
 
 
-   private static void addTypeConstraint(Cloud cloud, 
-         NodeQuery query, NodeManager nodeManager, Step contentStep) {
-      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
-      
+   private static void addTypeConstraint(Cloud cloud, NodeQuery query, NodeManager nodeManager, Step contentStep) {
       TreeSet<Integer> validTypes = new TreeSet<Integer>();
       List<NodeManager> types = new ArrayList<NodeManager>();
-      List<String> simpleEditorTypes = ContentElementUtil.getSimpleEditorTypes();
-       for (int i = 0 ; i < simpleEditorTypes.size() ; i++) {
-          if (StringUtils.isNotEmpty(simpleEditorTypes.get(i)) && ContentElementUtil.isContentType(simpleEditorTypes.get(i))) {
-             types.add(cloud.getNodeManager(simpleEditorTypes.get(i)));
-          }
-       }
-       List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-       for (NodeManager manager : types) {
-          String name = manager.getName();
-          if (!hiddenTypes.contains(name)) {
-             validTypes.add(manager.getNumber());
-          }
-       }
-       
+      List<String> simpleEditorTypes = ContentElementUtil.getSimpleEditorTypes(cloud);
+      for (int i = 0; i < simpleEditorTypes.size(); i++) {
+         if (StringUtils.isNotEmpty(simpleEditorTypes.get(i))
+               && ContentElementUtil.isContentType(simpleEditorTypes.get(i))) {
+            types.add(cloud.getNodeManager(simpleEditorTypes.get(i)));
+         }
+      }
+      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+      for (NodeManager manager : types) {
+         String name = manager.getName();
+         if (!hiddenTypes.contains(name)) {
+            validTypes.add(manager.getNumber());
+         }
+      }
+
       StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
       FieldValueInConstraint contentConstraint = query.createConstraint(contentStepField, validTypes);
       SearchUtil.addConstraint(query, contentConstraint);
