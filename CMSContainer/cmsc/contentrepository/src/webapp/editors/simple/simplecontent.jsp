@@ -8,13 +8,13 @@
    <script src="../repository/search.js" type="text/javascript"></script>
       <script src="../repository/content.js" type="text/javascript"></script>
       <script type="text/javascript">
-         function selectChannel(channel, path){
+         function selectChannel(channel, returnpath){
              var newDirection=document.forms[0].direction.value;
              var type=document.forms[0].order.value;
              var offset = document.forms[0].offset.value;
              var pagerDOToffset = '';
              var pagepath = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
-             pagepath += "editors/repository/MoveContentFromSearch.do?from=simpleeditor&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+             pagepath += "editors/repository/MoveContentFromSearch.do?returnpath=" + returnpath + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
              document.location = pagepath;
          }
       </script>
@@ -32,7 +32,7 @@
     <div class="${(statustype == 'draft' || statustype == null)?'tab_active':'tab'}">
         <div class="body">
             <div>
-                <a href="SimpleContentDraftAction.do" name="activetab"><fmt:message key="simple.editor.draft" /></a>
+                <a href="../simple/SimpleContentDraftAction.do" name="activetab"><fmt:message key="simple.editor.draft" /></a>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="${statustype == 'ready'?'tab_active':'tab'}">
       <div class="body">
          <div>
-            <a href="SimpleContentReadyAction.do"><fmt:message key="simple.editor.ready" /></a>
+            <a href="../simple/SimpleContentReadyAction.do"><fmt:message key="simple.editor.ready" /></a>
          </div>
       </div>
    </div>

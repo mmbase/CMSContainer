@@ -19,7 +19,7 @@
 <table>
 <c:forEach var="channel" items="${channelList}">
    <mm:node number="${channel.number}" >
-   <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if> onmousedown="javascript:selectItem(<mm:field name="number"/>,'')">
+   <tr <c:if test="${swap % 2 ==0}">class="swap"</c:if> onmousedown="javascript:selectItem(<mm:field name="number"/>,'${returnpath}')">
       <c:set var="swap">${swap+1}</c:set>
       <td style="white-space: nowrap;">
          <mm:field name="name" />

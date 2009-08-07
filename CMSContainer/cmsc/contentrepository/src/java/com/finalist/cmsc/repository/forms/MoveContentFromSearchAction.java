@@ -17,6 +17,8 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,13 +38,12 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class MoveContentFromSearchAction extends MMBaseAction {
 
-   private static final String FROM = "from";
+   private static final String RETURNPATH = "returnpath";
    private static final String PARAMETER_NEW_CHANNEL = "newparentchannel";
    private static final String PARAMETER_NUMBER = "objectnumber";
    private static final String PARAMETER_PAGING_ODERBY = "orderby";
    private static final String PARAMETER_PAGING_OFFSET = "offset";
    private static final String PARAMETER_PAGING_DIRECTION = "direction";
-   private static final String SIMPLEEDITOR = "simpleeditor";   
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -131,8 +132,8 @@ public class MoveContentFromSearchAction extends MMBaseAction {
          }
       }
       String path = null;
-      if(SIMPLEEDITOR.equalsIgnoreCase(request.getParameter(FROM))){
-         path = mapping.findForward(SIMPLEEDITOR).getPath() + "?index=yes";
+      if(!StringUtil.isEmptyOrWhitespace((request.getParameter(RETURNPATH)))){
+         path = mapping.findForward(request.getParameter(RETURNPATH)).getPath() + "?index=yes";
       } else {
          path = mapping.findForward(SUCCESS).getPath() + "?index=yes";
       }
