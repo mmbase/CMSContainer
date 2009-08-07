@@ -133,13 +133,6 @@ public class SimpleContentUtil {
 
       SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.CREATOR_FIELD, cloud.getUser().getIdentifier());
       query.setDistinct(true);
-      // Set the maximum result size.
-      String resultsPerPage = PropertiesUtil
-            .getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
-      if (resultsPerPage == null || !resultsPerPage.matches("\\d+")) {
-         resultsPerPage = DEFAULT_SIZE_PER_PAGE;
-      }
-      query.setMaxNumber(Integer.parseInt(resultsPerPage));
       return query;
    }
 
