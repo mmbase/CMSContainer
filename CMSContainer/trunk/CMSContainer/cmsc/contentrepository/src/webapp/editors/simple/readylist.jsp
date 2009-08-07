@@ -18,6 +18,8 @@
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.ready" /></div></div>
 
+<form action="SimpleContentReadyAction.do" name="SimpleContentForm">
+<input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
 <mm:haspage page="/editors/workflow">
@@ -35,8 +37,6 @@
    <mm:list referid="results">
       <mm:first>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
-         <form action="SimpleContentReadyAction.do" name="SimpleContentForm">
-         <input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="button" class="button" value="<fmt:message key="simple.editor.search" />">
           <table>
             <thead>
                <tr>
@@ -124,9 +124,9 @@
 			  <mm:last>
               </tbody>
             </table>
-          </form>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
       </mm:last>
     </mm:list>
 	</div>
+</form>
 	
