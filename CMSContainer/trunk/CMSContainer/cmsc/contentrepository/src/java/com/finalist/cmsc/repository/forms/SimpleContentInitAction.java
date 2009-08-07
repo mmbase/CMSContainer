@@ -19,7 +19,6 @@ import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.SimpleContentUtil;
 import com.finalist.cmsc.struts.MMBaseFormlessAction;
@@ -56,27 +55,23 @@ public class SimpleContentInitAction extends MMBaseFormlessAction {
       NodeList results = draftContentQuery.getNodeManager().getList(draftContentQuery);
       request.setAttribute("resultCount", resultCount);
       request.setAttribute("results", results);
-
       // cmsc-1479
-      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
-      if (PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES) != null) {
-         String[] rawTypes = PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES).split(",");
-         List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-         for (String sType : rawTypes) {
-            if (!hiddenTypes.contains(sType)) {
-               NodeManager node = cloud.getNodeManager(sType);
-               LabelValueBean bean = new LabelValueBean(node.getGUIName(), sType);
-               typesList.add(bean);
-            }
-         }
-      } else {
+      List<String> simleEditorTypes = ContentElementUtil.getSimpleEditorTypes(cloud);
+      if (simleEditorTypes.isEmpty()) {
          log.warn("System property '" + SYSTEM_SIMPLEEDITOR_CONTENTTYPES + "' is not set. Please add it.");
+      } else {
+         List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+         for (String sType : simleEditorTypes) {
+            NodeManager node = cloud.getNodeManager(sType);
+            LabelValueBean bean = new LabelValueBean(node.getGUIName(), sType);
+            typesList.add(bean);
+         }
+         request.setAttribute("typesList", typesList);
       }
-      request.setAttribute("typesList", typesList);
 
-      List<Node> channelNodessList = SimpleContentUtil.getRelatedChannelsByUser(cloud);
+      List<Node> channelNodesList = SimpleContentUtil.getRelatedChannelsByUser(cloud);
       List<LabelValueBean> channelsList = new ArrayList<LabelValueBean>();
-      for (Node channel : channelNodessList) {
+      for (Node channel : channelNodesList) {
          LabelValueBean bean = new LabelValueBean(channel.getStringValue("name"), channel.getStringValue("number"));
          channelsList.add(bean);
       }
