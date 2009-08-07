@@ -8,7 +8,6 @@
 	<div style="margin-left:10px;color:green"><h1><fmt:message key="simple.editor.title" /></h1></div>
 
 	 <div style="margin-left:10px;font-size:12px"><fmt:message key="simple.editor.introduction.text" /></div>
-	<br/>
       <div class="body">
          <html:form action="/editors/simple/SimpleContentReadyAction" method="post">
             <html:hidden property="offset"/>

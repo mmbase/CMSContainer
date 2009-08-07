@@ -10,14 +10,13 @@
 	<div style="margin-left:10px;color:green"><h1><fmt:message key="simple.editor.title" /></h1></div>
 
 	 <div style="margin-left:10px;font-size:12px"><fmt:message key="simple.editor.introduction.text" /></div>
-	<br/>
       <div class="body">
          <html:form action="/editors/simple/SimpleContentDraftAction" method="post">
             <html:hidden property="offset"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
-			<html:hidden property="title"/>
-			<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
+				<html:hidden property="title"/>
+				<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
          </html:form>
          <form name="initForm" action="../WizardInitAction.do" method="post">
             <input type="hidden" name="action" value="create"/>
@@ -25,45 +24,53 @@
             <input type="hidden" name="order" value="${orderby}" />
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
-             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
-<div style="padding:0px 0px 5px 5px">
+            <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
+<div style="padding:0px">
             <c:if test="${channelsNumber eq 0}">
               <fmt:message key="simple.editor.nochannel.error"/><br/>
             </c:if>
             <c:if test="${channelsNumber gt 1}">
-               <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.place.in"/></b>
-               <select name="creation" style="margin-bottom:10px">
+               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.place.in"/></b></div>
+               <div style="margin-left:70px;padding-top:5px 0px 5px">
+               <select name="creation">
                    <c:forEach var="channel" items="${channelsList}">
                        <option value="${channel.value}">${channel.label}</option>
                    </c:forEach>
-               </select><br>
+               </select>
+               </div>
             </c:if>
             <c:if test="${channelsNumber eq 1}" >
-               <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.place.in"/></b>
+               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.place.in"/></b></div>
+               <div style="margin-left:70px;padding-top:5px 0px 5px;">
                   <c:forEach var="channel" items="${channelsList}">
                        <input type="hidden" name="creation" value="${channel.value}"/>${channel.label}
-                  </c:forEach><br/>
+                  </c:forEach>
+               </div>
             </c:if>
 </div>
-<div style="padding:0px 0px 0px 5px">
+<div style="padding:0px">
             <c:if test="${typesNumber eq 0}">
               <fmt:message key="simple.editor.notype.error"/><br/>
             </c:if>
             <c:if test="${typesNumber gt 1}">
-               <b style="margin-left:5px;margin-bottom:15px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.create.new"/></b></div>
+               <div style="margin-left:70px;padding-top:5px 0px 5px">
                <select name="contenttype">
                    <c:forEach var="type" items="${typesList}">
                        <option value="${type.value}">${type.label}</option>
                    </c:forEach>
-               </select><br/>
-               <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
+               </select>
+               </div>
+               <b style="margin-left:70px"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></b>
             </c:if>
             <c:if test="${typesNumber eq 1}" >
-               <b style="margin-left:5px;margin-bottom:15px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.create.new"/></b></div>
+               <div style="margin-left:70px;padding-top:5px 0px 5px">
                   <c:forEach var="type" items="${typesList}">
                        <input type="hidden" name="contenttype" value="${type.value}"/>${type.label}
-                  </c:forEach><br/>
-               <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
+                  </c:forEach>
+               </div>
+               <b style="margin-left:70px"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></b>
             </c:if>
 </div>
         </form>
