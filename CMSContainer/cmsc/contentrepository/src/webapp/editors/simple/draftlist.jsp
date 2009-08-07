@@ -3,7 +3,7 @@
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %>
 
-<c:set var="returnurl" value="../editors/simple/SimpleContentInitAction.do"/>
+<c:set var="returnurl" value="../editors/simple/SimpleContentDraftAction.do"/>
 <c:set var="typesNumber"  value="${fn:length(typesList)}" />
 <c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
    <div class="editor">
@@ -26,6 +26,7 @@
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
              <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
+<div style="padding:0px 0px 5px 5px">
             <c:if test="${channelsNumber eq 0}">
               <fmt:message key="simple.editor.nochannel.error"/><br/>
             </c:if>
@@ -40,15 +41,16 @@
             <c:if test="${channelsNumber eq 1}" >
                <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.place.in"/></b>
                   <c:forEach var="channel" items="${channelsList}">
-                       <input type="hidden" name="creation" value="${channel.value}"/><b style="margin-bottom:10px">${channel.label}</b>
+                       <input type="hidden" name="creation" value="${channel.value}"/>${channel.label}
                   </c:forEach><br/>
             </c:if>
-
+</div>
+<div style="padding:0px 0px 0px 5px">
             <c:if test="${typesNumber eq 0}">
               <fmt:message key="simple.editor.notype.error"/><br/>
             </c:if>
             <c:if test="${typesNumber gt 1}">
-               <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+               <b style="margin-left:5px;margin-bottom:15px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
                <select name="contenttype">
                    <c:forEach var="type" items="${typesList}">
                        <option value="${type.value}">${type.label}</option>
@@ -57,12 +59,13 @@
                <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
             </c:if>
             <c:if test="${typesNumber eq 1}" >
-               <b style="margin-left:5px;margin-bottom:10px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
+               <b style="margin-left:5px;margin-bottom:15px"><fmt:message key="simple.editor.create.new"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b>
                   <c:forEach var="type" items="${typesList}">
-                       <input type="hidden" name="contenttype" value="${type.value}"/><b>${type.label}</b>
+                       <input type="hidden" name="contenttype" value="${type.value}"/>${type.label}
                   </c:forEach><br/>
                <input style="margin-left:55px" type="submit" class="button" name="submitButton" value="create"/>
             </c:if>
+</div>
         </form>
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.draft" /></div></div>
@@ -123,7 +126,7 @@
                   <%-- also show the edit icon when we return from an edit wizard! --%>        
                       <a href="<mm:url page="../WizardInitAction.do">
                           <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
-                          <mm:param name="returnurl" value="/editors/repository/ContentSearchAction.do${geturl}" />
+                          <mm:param name="returnurl" value="${returnurl}" />
                       </mm:url>">
                          <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
             

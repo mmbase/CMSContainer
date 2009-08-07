@@ -24,10 +24,6 @@
 <mm:import externid="results" from="request" required="true"/>
 <mm:import externid="resultCount" from="request" vartype="Integer">0</mm:import>
 <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
-<c:set var="returnurl" value="../editors/simple/SimpleContentInitAction.do"/>
-<c:set var="typesNumber"  value="${fn:length(typesList)}" />
-<c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
-
 <mm:cloud jspvar="cloud" loginpage="../../editors/simple/login.jsp">
 
 <c:set var="listUrl" value="${statustype == 'ready'?'readylist.jsp':'draftlist.jsp'}"/>

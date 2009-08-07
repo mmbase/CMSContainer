@@ -43,7 +43,8 @@ public class SimpleContentDraftAction extends SimpleContentAction{
          List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
          for (String sType : rawTypes) {
             if (!hiddenTypes.contains(sType)) {
-               LabelValueBean bean = new LabelValueBean(sType, sType);
+               NodeManager node = cloud.getNodeManager(sType);
+               LabelValueBean bean = new LabelValueBean(node.getGUIName(), sType);
                typesList.add(bean);
             }
          }
