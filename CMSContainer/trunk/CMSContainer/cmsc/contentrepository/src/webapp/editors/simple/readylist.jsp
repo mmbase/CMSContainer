@@ -17,7 +17,7 @@
          </html:form>
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.ready" /></div></div>
-
+<c:set var="returnurl" value="../editors/simple/SimpleContentDraftAction.do"/>
 <form action="SimpleContentReadyAction.do" name="SimpleContentForm">
 <input style="margin-left:10px;margin-top:10px" type="text" name="title"><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
@@ -74,7 +74,7 @@
                   <%-- also show the edit icon when we return from an edit wizard! --%>        
                       <a href="<mm:url page="../WizardInitAction.do">
                           <mm:param name="objectnumber"><mm:field name="number" /></mm:param>
-                          <mm:param name="returnurl" value="/editors/repository/ContentSearchAction.do${geturl}" />
+                          <mm:param name="returnurl" value="${returnurl}" />
                       </mm:url>">
                          <img src="../gfx/icons/page_edit.png" alt="<fmt:message key="searchform.icon.edit.title" />" title="<fmt:message key="searchform.icon.edit.title" />" /></a>
             
