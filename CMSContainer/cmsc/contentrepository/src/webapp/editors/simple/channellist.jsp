@@ -1,7 +1,7 @@
-<%@page language="java" contentType="text/html;charset=utf-8"%>
-<%@include file="globals.jsp" %>
-<%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" %>
-<mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=utf-8"
+%><%@include file="globals.jsp" 
+%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
+%><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
