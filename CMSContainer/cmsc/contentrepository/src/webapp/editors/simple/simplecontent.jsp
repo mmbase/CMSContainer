@@ -6,18 +6,21 @@
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
    <script src="../repository/search.js" type="text/javascript"></script>
-      <script src="../repository/content.js" type="text/javascript"></script>
-      <script type="text/javascript">
-         function selectChannel(channel, returnpath){
-             var newDirection=document.forms[0].direction.value;
-             var type=document.forms[0].order.value;
-             var offset = document.forms[0].offset.value;
-             var pagerDOToffset = '';
-             var pagepath = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
-             pagepath += "editors/repository/MoveContentFromSearch.do?returnpath=" + returnpath + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
-             document.location = pagepath;
-         }
-      </script>
+   <script src="../repository/content.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      <c:if test="${not empty param.message}">
+         addLoadEvent(alert('${param.message}'));
+      </c:if>
+      function selectChannel(channel, returnpath){
+         var newDirection=document.forms[0].direction.value;
+         var type=document.forms[0].order.value;
+         var offset = document.forms[0].offset.value;
+         var pagerDOToffset = '';
+         var pagepath = document.location.toString().substr(0, document.location.toString().indexOf("editors"));
+         pagepath += "editors/repository/MoveContentFromSearch.do?returnpath=" + returnpath + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+         document.location = pagepath;
+      }
+   </script>
 </cmscedit:head>
 <body>
 <mm:import externid="returnurl"/>
