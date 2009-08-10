@@ -140,6 +140,7 @@ public class WizardInitAction extends MMBaseFormlessAction {
          log.debug("actionForward: " + actionForward);
          actionForward += "&debug=true";
       }
+      request.getSession().setAttribute("fromSE", request.getParameter("fromSE"));
 
       ActionForward ret = new ActionForward(actionForward);
       ret.setRedirect(true);
