@@ -57,9 +57,6 @@ public class MoveContentToChannelAction extends MMBaseAction {
       String message = "";
       String[] numbers = objectNumber.split(",");
       Locale locale = StrutsUtil.getLocale(request);
-      if (locale == null) {
-         locale = request.getLocale();
-      }
       MessageResources resources = getResources(request, "REPOSITORY");
       int successCount=0;
       int failureCount=0;
