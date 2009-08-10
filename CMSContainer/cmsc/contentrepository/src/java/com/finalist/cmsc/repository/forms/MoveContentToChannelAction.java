@@ -8,21 +8,28 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.repository.forms;
 
-import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.Globals;
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeIterator;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.RelationManager;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.struts.MMBaseAction;
+import com.finalist.cmsc.struts.StrutsUtil;
 
 public class MoveContentToChannelAction extends MMBaseAction {
 
@@ -48,7 +55,7 @@ public class MoveContentToChannelAction extends MMBaseAction {
 
       String message = null;
       String[] numbers = objectNumber.split(",");
-      Locale locale = (Locale) request.getSession().getAttribute(Globals.LOCALE_KEY);
+      Locale locale = StrutsUtil.getLocale(request);
       if (locale == null) {
          locale = request.getLocale();
       }
