@@ -22,6 +22,7 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.security.UserRole;
 
 public class SimpleContentUtil {
    
@@ -219,7 +220,8 @@ public class SimpleContentUtil {
       for (int i = 0; i <groups.size() ; i++) {
          Node group = groups.getNode(i);
          NodeList relatedChannels = group.getRelatedNodes(CONTENTCHANNEL, MMBASEGROUPREL, SearchUtil.DESTINATION);
-         if (relatedChannels.size() > 0 && !channels.contains(relatedChannels.getNode(0))) {
+         UserRole role = RepositoryUtil.getRole(cloud, relatedChannels.getNode(0), false);
+         if (relatedChannels.size() > 0 && !channels.contains(relatedChannels.getNode(0)) && role != null && SecurityUtil.isWriter(role)) {
             channels.add(relatedChannels.getNode(0));
          }
       }
