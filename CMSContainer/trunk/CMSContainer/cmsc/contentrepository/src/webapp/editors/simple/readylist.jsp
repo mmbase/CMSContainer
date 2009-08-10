@@ -118,10 +118,10 @@
 							   <c:set var="itemStatus" value="onlive"/>
 							</mm:listnodes>
 						 </c:if>	
-							 <c:if test="${status != 'onlive'}">
-							   <c:set var="status" value="waiting"/>
+							 <c:if test="${itemStatus != 'onlive'}">
+							   <c:set var="itemStatus" value="waiting"/>
 						 </c:if>
-						 <img src="../gfx/icons/status_${status}.png" alt="<fmt:message key="content.status" />: <fmt:message key="content.status.${status}" />" title="<fmt:message key="content.status" />: <fmt:message key="content.status.${status}" />" />
+						 <img src="../gfx/icons/status_${itemStatus}.png" alt="<fmt:message key="content.status" />: <fmt:message key="content.status.${itemStatus}" />" title="<fmt:message key="content.status" />: <fmt:message key="content.status.${itemStatus}" />" />
 				  </td>               
 				 </tr>
 	      	  </mm:node>
