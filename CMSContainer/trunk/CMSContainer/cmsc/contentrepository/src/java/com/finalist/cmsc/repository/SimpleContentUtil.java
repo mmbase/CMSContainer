@@ -219,7 +219,7 @@ public class SimpleContentUtil {
       for (int i = 0; i <groups.size() ; i++) {
          Node group = groups.getNode(i);
          NodeList relatedChannels = group.getRelatedNodes(CONTENTCHANNEL, MMBASEGROUPREL, SearchUtil.DESTINATION);
-         if (relatedChannels.size() > 0) {
+         if (relatedChannels.size() > 0 && !channels.contains(relatedChannels.getNode(0))) {
             channels.add(relatedChannels.getNode(0));
          }
       }
