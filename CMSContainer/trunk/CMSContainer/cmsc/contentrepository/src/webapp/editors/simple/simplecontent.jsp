@@ -11,6 +11,9 @@
       <c:if test="${not empty param.message}">
          addLoadEvent(alert('${param.message}'));
       </c:if>
+      <c:if test="${not empty param.workflowmessage}">
+         addLoadEvent(alert('${param.workflowmessage}'));
+      </c:if>
       function selectChannel(channel, returnpath){
          var newDirection=document.forms[0].direction.value;
          var type=document.forms[0].order.value;
