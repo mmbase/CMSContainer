@@ -70,6 +70,10 @@ public class WizardWorkflowController extends WizardController {
             && Workflow.isWorkflowType(elementtype)) {
 
          params.put("WORKFLOW", TRUE);
+         if (TRUE.equalsIgnoreCase((String) request.getSession().getAttribute("fromSE"))) {
+            params.put("WORKFLOW", FALSE);
+            request.getSession().removeAttribute("fromSE");
+         }
          params.put("WORKFLOW-ACCEPTED-ENABLED", Boolean.toString(Workflow.isAcceptedStepEnabled()));
 
          String activity = "DRAFT";
