@@ -15,7 +15,7 @@
          </html:form>
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.ready" /></div></div>
-<c:set var="returnurl" value="../editors/simple/SimpleContentDraftAction.do"/>
+<c:set var="returnurl" value="../editors/simple/SimpleContentReadyAction.do"/>
 <html:form action="/editors/simple/SimpleContentReadyAction.do" method="post">
 <html:text style="margin-left:10px;margin-top:10px" property="title" /><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
