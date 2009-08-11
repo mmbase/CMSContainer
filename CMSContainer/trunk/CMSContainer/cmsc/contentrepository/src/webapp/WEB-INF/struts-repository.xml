@@ -293,19 +293,11 @@
       </action>
 
 	  <!--Simple Editor-->
-      <action path="/editors/simple/SimpleContentAction" type="com.finalist.cmsc.repository.forms.SimpleContentAction" 
-         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">
-         <forward name="success" path="/editors/simple/simplecontent.jsp" redirect="false" />
-      </action>
-      <action path="/editors/simple/SimpleContentInitAction" type="com.finalist.cmsc.repository.forms.SimpleContentInitAction" 
-         unknown="false" validate="false">
-         <forward name="success" path="/editors/simple/simplecontent.jsp" redirect="false" />
-      </action>
       <action path="/editors/simple/SimpleContentReadyAction" type="com.finalist.cmsc.repository.forms.SimpleContentReadyAction" 
-         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
+         unknown="false" validate="false" scope="request"  name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
       </action>
       <action path="/editors/simple/SimpleContentDraftAction" type="com.finalist.cmsc.repository.forms.SimpleContentDraftAction" 
-         unknown="false" validate="false" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
+         unknown="false" validate="false" scope="request" name="SimpleContentForm" input="/editors/simple/simplecontent.jsp">       
       </action>
       <action path="/editors/simple/SimpleEditorChannelAction" type="com.finalist.cmsc.repository.forms.SimpleEditorChannelAction" 
          unknown="false" validate="false">
