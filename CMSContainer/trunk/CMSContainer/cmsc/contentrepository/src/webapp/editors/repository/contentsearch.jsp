@@ -393,7 +393,7 @@
    <mm:list referid="results">
       <mm:first>
          <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
-
+         <form action="LinkToChannelAction.do" name="linkForm">
          <mm:compare referid="action" value="link" inverse="true">
              <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
@@ -407,7 +407,6 @@
           <mm:compare referid="action" value="link" >
              <input type="submit" class="button" value="<fmt:message key="searchform.link.submit" />"/>
           </mm:compare>
-         <form action="LinkToChannelAction.do" name="linkForm">
           <table>
             <thead>
                <tr>
