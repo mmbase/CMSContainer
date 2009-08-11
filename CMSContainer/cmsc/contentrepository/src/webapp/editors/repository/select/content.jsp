@@ -9,7 +9,7 @@
 	<script src="content.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		function selectElement(element, title, url) {
-			window.top.opener.selectElement(element, title, url);
+			window.top.opener.selectContent(element, title, url);
 			window.top.close();
 		}
 	</script>
