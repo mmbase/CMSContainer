@@ -25,7 +25,7 @@
 			validate="false">
 			<forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false" />
 			<forward name="returnurl" path="/editors/subsite/SubSiteEdit.do" redirect="false" />
-			<forward name="success" path="/editors/subsite/refreshandshow.jsp" redirect="false" />
+			<forward name="success" path="/editors/subsite/SubSiteAction.do" redirect="false" />
 		</action>
 		<action path="/editors/subsite/SubSiteDelete" type="com.finalist.cmsc.subsite.forms.SubSiteDelete"
 			unknown="false" validate="false">
