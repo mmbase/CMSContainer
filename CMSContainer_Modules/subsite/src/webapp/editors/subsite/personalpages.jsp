@@ -194,7 +194,7 @@
 </mm:list>
 <%-- Now print if no results --%>
 <mm:isempty referid="results">
-   <tr><td style="color:#cc0000;font-size:12px;margin-left:11px"><fmt:message key="site.personal.nonefound" /></td></tr>
+   <tr><td style="color:#cc0000;font-size:12px;padding-left:11px"><fmt:message key="site.personal.nonefound" /></td></tr>
 </mm:isempty>
 </tbody>
 </table>
