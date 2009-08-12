@@ -80,7 +80,7 @@
         <tr>
            <td style="width:105px"><fmt:message key="subsite.name" />:</td>
            <td>
-              <cmsc:select var="subsite" onchange="document.forms[0].submit();">
+              <cmsc:select var="subsite" default="${subsite}" onchange="document.forms[0].submit();">
               <mm:listnodes type="subsite" orderby="title">
                  <mm:field name="number" id="subsitenumber" write="false" vartype="String" />
                  <cmsc:option value="${subsitenumber}" name="${_node.title}" />
@@ -91,7 +91,7 @@
      </c:if>
      <c:if test="${subsiteExists ne true}">
        <tr>
-          <td colspan="2"><b><fmt:message key="subsite.notfound" /></b></td>
+          <td colspan="2"  style="color:#cc0000;font-size:12px;margin-left:11px"><fmt:message key="subsite.notfound" /></td>
        </tr>
 	  </c:if>
     <tr>
@@ -146,7 +146,7 @@
 		   <td style="white-space: nowrap;">
 		   
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}"
+         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&subsite=${subsite}"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
@@ -194,7 +194,7 @@
 </mm:list>
 <%-- Now print if no results --%>
 <mm:isempty referid="results">
-   <tr><td><b><fmt:message key="site.personal.nonefound" /></b></td></tr>
+   <tr><td style="color:#cc0000;font-size:12px;margin-left:11px"><fmt:message key="site.personal.nonefound" /></td></tr>
 </mm:isempty>
 </tbody>
 </table>
