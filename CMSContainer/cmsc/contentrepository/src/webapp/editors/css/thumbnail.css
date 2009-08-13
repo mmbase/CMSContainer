@@ -1,10 +1,10 @@
 div.editor div.body div.thumbnail_show {
    width:168px;
-   height:205px;
+   height:215px;
    float:left;
    text-align:center;
    padding:0;
-   margin:0.7em;
+   margin:0px;
    overflow:hidden;
 }
 div.editor div.body div.thumbnail_show .thumbnail_operation{
@@ -28,14 +28,18 @@ div.editor div.body div.thumbnail_show .thumbnail_body .thumbnail_img{
    float:left;
    padding:0;
    margin:0;
+   width:128px;
    height:128px;
    text-align:center;
+   border:solid;
+   border-width: 1px;
+   border-color: #D8D8D8;
 }
 div.editor div.body div.thumbnail_show .thumbnail_body .thumnail_info{
    width:100%;
    float:right;
    text-align:center;
    margin:0em;
-   padding:0em 0.2em;
+   padding:10px 0.2em;
    overflow-x:hidden;
 }
