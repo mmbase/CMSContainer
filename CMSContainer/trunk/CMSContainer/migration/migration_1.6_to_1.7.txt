@@ -144,3 +144,16 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+Name: Add a publish column and a onlive column in <prefix>_archive table
+Goal: add publish field and onlive field in archive table, related issue CMSC-247,CMSC-638 
+Type:  sql-script
+--- Start script ---
+ALTER TABLE mm_archive ADD publish tinyint(1) NOT NULL default '0';
+ALTER TABLE mm_archive ADD onlive tinyint(1) NOT NULL default '0';
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
