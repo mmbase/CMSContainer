@@ -102,7 +102,13 @@
                         <div class="thumbnail" onclick="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
 	                         <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
 	                         <c:if test="${typedef eq 'attachments'}">
-	                            <%@include file="attachmentthumbnail.jsp" %>
+	                            	<c:set var="filesize"><mm:field name="size"/></c:set>
+									<c:if test="${ filesize gt 0}">
+                                    <%@include file="../resources/attachmentthumbnail.jsp" %>
+									</c:if>
+									<c:if test="${ filesize eq 0}">
+                                    	<img src="../gfx/nullattachment.gif" alt=""/>
+									</c:if>
 	                         </c:if>
 						</div>
                         <div class="assetInfo">
