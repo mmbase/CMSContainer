@@ -94,7 +94,14 @@
                         </div>
                         <div class="thumbnail" onclick="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
                            <c:set var="thumbnail_alt"><mm:field name="url" /></c:set>
-                           <img src="../gfx/url.gif" title="${thumbnail_alt}" alt="${thumbnail_alt}"/>
+						    <c:set var="urltitle"><mm:field name="title"/></c:set>
+							<c:set var="url"><mm:field name="url"/></c:set>
+							<c:if test="${!(empty urltitle || empty url)}">
+                                  	<img src="../gfx/url.gif" alt="${thumbnail_alt}"/>
+							</c:if>
+							<c:if test="${empty urltitle || empty url }">
+                                  	<img src="../gfx/nullurl.gif" alt="${thumbnail_alt}"/>
+							</c:if>
                         </div>
                         <div class="assetInfo">
                               <mm:field name="title" jspvar="title" write="false"/>
