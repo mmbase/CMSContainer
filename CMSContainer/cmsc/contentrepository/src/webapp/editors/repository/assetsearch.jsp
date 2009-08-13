@@ -497,13 +497,32 @@
                    <a href="javascript:showInfo('<mm:nodeinfo type="type"/>', '<mm:field name="number" />')">
                      <c:set var="typedef" ><mm:nodeinfo type="type"/></c:set>
                      <c:if test="${typedef eq 'images'}">
-                        <img src="<mm:image template="s(128x128)"/>" alt=""/>
+						<c:set var="filesize"><mm:field name="filesize"/></c:set>
+						<c:if test="${ filesize gt 0}">
+                                 	<img src="<mm:image template="s(128x128)"/>" alt=""/>
+						</c:if>
+						<c:if test="${ filesize eq 0}">
+                                 	<img src="../gfx/nullimage.gif" alt=""/>
+						</c:if>
                      </c:if>
                      <c:if test="${typedef eq 'attachments'}">
-                        <%@include file="../resources/attachmentthumbnail.jsp" %>
+						<c:set var="filesize"><mm:field name="size"/></c:set>
+						<c:if test="${ filesize gt 0}">
+	                                <%@include file="../resources/attachmentthumbnail.jsp" %>
+						</c:if>
+						<c:if test="${ filesize eq 0}">
+	                                	<img src="../gfx/nullattachment.gif" alt=""/>
+						</c:if>
                      </c:if>
                      <c:if test="${typedef eq 'urls'}">
-                        <img src="../gfx/url.gif" alt=""/>
+						<c:set var="urltitle"><mm:field name="title"/></c:set>
+						<c:set var="url"><mm:field name="url"/></c:set>
+						<c:if test="${!(empty urltitle || empty url)}">
+                                 	<img src="../gfx/url.gif" alt=""/>
+						</c:if>
+						<c:if test="${empty urltitle || empty url }">
+                                 	<img src="../gfx/nullurl.gif" alt=""/>
+						</c:if>
                      </c:if>
                   </a>
                </div>
