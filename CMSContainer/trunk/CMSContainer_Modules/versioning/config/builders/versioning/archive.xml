@@ -114,6 +114,7 @@
          </editor>
          <datatype base="yesno" xmlns="http://www.mmbase.org/xmlns/datatypes">
             <required value="true"/>
+			<default value="0"/>
          </datatype>
       </field>
       <field name="onlive">
@@ -123,9 +124,9 @@
             <description xml:lang="zh"></description>
          </descriptions>
          <gui>
-            <guiname xml:lang="nl">publish</guiname>
-            <guiname xml:lang="en">publish</guiname>
-            <guiname xml:lang="zh">发布</guiname>
+            <guiname xml:lang="nl">onlive</guiname>
+            <guiname xml:lang="en">onlive</guiname>
+            <guiname xml:lang="zh">是否在live端</guiname>
          </gui>
          <editor>
             <positions>
@@ -136,6 +137,7 @@
          </editor>
          <datatype base="yesno" xmlns="http://www.mmbase.org/xmlns/datatypes">
             <required value="true"/>
+			<default value="0"/>
          </datatype>
       </field>
     </fieldlist>
