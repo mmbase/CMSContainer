@@ -7,8 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -45,11 +43,8 @@ public abstract class SimpleContentAction extends PagerAction {
 
       log.debug("Starting the simple editor");
       SimpleContentActionForm simpleContentForm = (SimpleContentActionForm) form;
-      if (StringUtil.isEmptyOrWhitespace(request.getParameter("title"))) {
+      if("true".equalsIgnoreCase(request.getParameter("cleartitle"))){
          simpleContentForm.setTitle("");
-      }
-      else {
-         simpleContentForm.setTitle(request.getParameter("title"));
       }
       int resultCount = 0;
       NodeList results = cloud.createNodeList();
