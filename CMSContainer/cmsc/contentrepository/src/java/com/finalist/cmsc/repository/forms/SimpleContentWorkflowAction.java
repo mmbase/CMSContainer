@@ -42,12 +42,8 @@ public class SimpleContentWorkflowAction extends MMBaseFormlessAction {
       } else {
          workflowmessage = resources.getMessage(locale, "simple.editor.finish.failed");
       }
-      
-      String path = mapping.findForward(SUCCESS).getPath(); 
-      path += "?workflowmessage=" + workflowmessage;
-      ActionForward actionForward = new ActionForward(path);
-      actionForward.setRedirect(false);
-      return actionForward;
+      request.setAttribute("workflowmessage", workflowmessage);
+      return mapping.findForward(SUCCESS);
 
    }
 
