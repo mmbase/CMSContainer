@@ -11,8 +11,8 @@
       <c:if test="${not empty param.message}">
          addLoadEvent(alert('${param.message}'));
       </c:if>
-      <c:if test="${not empty param.workflowmessage}">
-         addLoadEvent(alert('${param.workflowmessage}'));
+      <c:if test="${not empty requestScope.workflowmessage}">
+         addLoadEvent(alert('${requestScope.workflowmessage}'));
       </c:if>
       function selectChannel(channel, returnpath){
          var newDirection=document.forms[0].direction.value;
@@ -38,7 +38,7 @@
     <div class="${(statustype == 'draft' || statustype == null)?'tab_active':'tab'}">
         <div class="body">
             <div>
-                <a href="../simple/SimpleContentDraftAction.do" name="activetab"><fmt:message key="simple.editor.draft" /></a>
+                <a href="../simple/SimpleContentDraftAction.do?cleartitle=true" name="activetab"><fmt:message key="simple.editor.draft" /></a>
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
     <div class="${statustype == 'ready'?'tab_active':'tab'}">
       <div class="body">
          <div>
-            <a href="../simple/SimpleContentReadyAction.do"><fmt:message key="simple.editor.ready" /></a>
+            <a href="../simple/SimpleContentReadyAction.do?cleartitle=true"><fmt:message key="simple.editor.ready" /></a>
          </div>
       </div>
    </div>
