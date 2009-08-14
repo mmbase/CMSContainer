@@ -43,9 +43,6 @@ public abstract class SimpleContentAction extends PagerAction {
 
       log.debug("Starting the simple editor");
       SimpleContentActionForm simpleContentForm = (SimpleContentActionForm) form;
-      if("true".equalsIgnoreCase(request.getParameter("cleartitle"))){
-         simpleContentForm.setTitle("");
-      }
       int resultCount = 0;
       NodeList results = cloud.createNodeList();
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
