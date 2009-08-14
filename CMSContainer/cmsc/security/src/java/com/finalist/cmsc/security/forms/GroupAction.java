@@ -21,8 +21,8 @@ import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.Relation;
 import org.mmbase.bridge.RelationList;
-import org.mmbase.bridge.RelationManager;
 
+import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 
@@ -97,11 +97,7 @@ public class GroupAction extends MMBaseAction {
          }
          if(!StringUtil.isEmpty(groupForm.getContentchannel())){
             Node contentChannelNode = cloud.getNode(groupForm.getContentchannel());
-            RelationManager relationManager = cloud.getRelationManager("mmbasegroups", "contentchannel", "mmbasegrouprel");
-            if (relationManager != null) {
-                Relation relation = groupNode.createRelation(contentChannelNode, relationManager);
-                relation.commit();
-            }
+            RelationUtil.createRelation(groupNode, contentChannelNode, "mmbasegrouprel");
          }
          
          SecurityUtil.setGroupMembers(cloud, groupNode, groupForm.getMembers());
