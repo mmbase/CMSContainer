@@ -6,7 +6,6 @@
 <html:html xhtml="true">
 <cmscedit:head title="topmenu.title">
    <link href="<cmsc:staticurl page='/editors/css/topmenu.css'/>" type="text/css" rel="stylesheet" />
-   <script type="text/javascript" src="topmenu.js"></script>
 </cmscedit:head>
 <body>
       <mm:cloud loginpage="login.jsp" rank="basic user">

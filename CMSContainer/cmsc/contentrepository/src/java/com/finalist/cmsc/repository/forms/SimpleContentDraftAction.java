@@ -25,8 +25,8 @@ public class SimpleContentDraftAction extends SimpleContentAction{
       request.setAttribute("statustype", "draft");
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
       if ( !ServerUtil.isSingle() && ServerUtil.isStaging()) {
-         SortedSet<Integer> set = SimpleContentUtil.getDraftWorkFlowItem(cloud);  
-         SearchUtil.addInConstraint(query, nodeManager.getField(ContentElementUtil.NUMBER_FIELD), set);
+         SortedSet<Integer> draftSet = SimpleContentUtil.getDraftWorkFlowItem(cloud);  
+         SearchUtil.addInConstraint(query, nodeManager.getField(ContentElementUtil.NUMBER_FIELD), draftSet);
          //Judge it is staging/live model
          request.setAttribute("single", "false");
       }

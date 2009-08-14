@@ -37,8 +37,7 @@
       <html:html xhtml="true">
          <head><title><fmt:message key="editors.title" /></title>
             <link rel="icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
-               <link rel="shortcut icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
-            <script type="text/javascript" src="editors.js"></script>
+            <link rel="shortcut icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
          </head>
 
          <mm:url page="${bottomurl}" id="bottompane" write="false"/>

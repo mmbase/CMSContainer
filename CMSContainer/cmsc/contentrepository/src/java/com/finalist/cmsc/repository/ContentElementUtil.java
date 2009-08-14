@@ -497,7 +497,7 @@ public final class ContentElementUtil {
          for (NodeManager nodeManager : types) {
             allTypes.add(nodeManager.getName());
          }
-         List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+         List<String> hiddenTypes = getHiddenTypes();
          for (String sType : rawTypes) {
             if (!hiddenTypes.contains(sType) && allTypes.contains(sType)) {
                simpleEditorTypes.add(sType);

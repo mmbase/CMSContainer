@@ -104,7 +104,10 @@ public abstract class SimpleContentAction extends PagerAction {
       }
       simpleContentForm.setResultCount(resultCount);
       simpleContentForm.setResults(results);
-
+      // cmsc-1479
+      bindTypeList(request, cloud);
+      bindChannelList(request, cloud);
+      // end of cmsc-1479
       return super.execute(mapping, form, request, response, cloud);
    }
 
