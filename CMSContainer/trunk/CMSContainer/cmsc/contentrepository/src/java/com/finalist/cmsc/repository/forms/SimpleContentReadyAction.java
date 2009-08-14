@@ -23,13 +23,11 @@ public class SimpleContentReadyAction extends SimpleContentAction{
    public void doAction(NodeQuery query, ActionForm form, HttpServletRequest request, Cloud cloud) {
       
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
-      SortedSet<Integer> set = SimpleContentUtil.getDraftWorkFlowItem(cloud);  
+      SortedSet<Integer> draftSet = SimpleContentUtil.getDraftWorkFlowItem(cloud);  
       SortedSet<Integer> contentSet = SimpleContentUtil.getAllContent(cloud);
-      contentSet.removeAll(set);
+      contentSet.removeAll(draftSet);
       SearchUtil.addInConstraint(query, nodeManager.getField(ContentElementUtil.NUMBER_FIELD), contentSet);
-      request.setAttribute("statustype", "ready");
-      
-      bindTypeList(request, cloud);
-      bindChannelList(request, cloud);
+      request.setAttribute("statustype", "ready");      
+
    }
 }

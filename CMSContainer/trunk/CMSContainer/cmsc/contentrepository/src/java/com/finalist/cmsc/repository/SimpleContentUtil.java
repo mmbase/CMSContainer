@@ -55,7 +55,7 @@ public class SimpleContentUtil {
    
 
    public  static SortedSet<Integer>  getDraftWorkFlowItem(Cloud cloud) {
-      SortedSet<Integer>  set = new TreeSet<Integer> ();
+      SortedSet<Integer>  draftSet = new TreeSet<Integer> ();
       NodeManager nodeManager = cloud.getNodeManager(WORKFLOWITEM_TYPE);
       
       NodeManager contentManager = cloud.getNodeManager(CONTENT_TYPE);
@@ -75,13 +75,13 @@ public class SimpleContentUtil {
       
       SearchUtil.addConstraint(query, statusConstraint);
       
-      set = SearchUtil.createNodeNumberSet(query.getList());
-      return set;
+      draftSet = SearchUtil.createNodeNumberSet(query.getList());
+      return draftSet;
    }
    
    
    public static SortedSet<Integer> getAllContent(Cloud cloud) {
-      SortedSet<Integer> set = new TreeSet<Integer>();
+      SortedSet<Integer> Contentset = new TreeSet<Integer>();
       NodeManager nodeManager = cloud.getNodeManager(CONTENT_TYPE);
       NodeQuery query = cloud.createNodeQuery();
       // First add the proper step to the query.
@@ -97,8 +97,9 @@ public class SimpleContentUtil {
       
       query.setNodeStep(contentStep);
       SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.CREATOR_FIELD, cloud.getUser().getIdentifier());
-      set = SearchUtil.createNodeNumberSet(query.getList());
-      return set;
+      Contentset = SearchUtil.createNodeNumberSet(query.getList());
+    
+      return Contentset;
    }
 
 
@@ -148,12 +149,9 @@ public class SimpleContentUtil {
             types.add(cloud.getNodeManager(simpleEditorTypes.get(i)));
          }
       }
-      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+
       for (NodeManager manager : types) {
-         String name = manager.getName();
-         if (!hiddenTypes.contains(name)) {
-            validTypes.add(manager.getNumber());
-         }
+         validTypes.add(manager.getNumber());
       }
 
       StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
@@ -220,9 +218,11 @@ public class SimpleContentUtil {
       for (int i = 0; i <groups.size() ; i++) {
          Node group = groups.getNode(i);
          NodeList relatedChannels = group.getRelatedNodes(CONTENTCHANNEL, MMBASEGROUPREL, SearchUtil.DESTINATION);
-         UserRole role = RepositoryUtil.getRole(cloud, relatedChannels.getNode(0), false);
-         if (relatedChannels.size() > 0 && !channels.contains(relatedChannels.getNode(0)) && role != null && SecurityUtil.isWriter(role)) {
-            channels.add(relatedChannels.getNode(0));
+         if (relatedChannels.size() > 0 ) {
+            UserRole role = RepositoryUtil.getRole(cloud, relatedChannels.getNode(0), false);
+            if (!channels.contains(relatedChannels.getNode(0)) && role != null && SecurityUtil.isWriter(role)) {
+               channels.add(relatedChannels.getNode(0));
+            }
          }
       }
       return channels;
