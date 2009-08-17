@@ -23,7 +23,7 @@
 </script>
    <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
 	</cmscedit:head>
-<body onload="setDefaultSearchCondition()">
+<body style="overflow-x:hidden" onload="setDefaultSearchCondition()">
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
