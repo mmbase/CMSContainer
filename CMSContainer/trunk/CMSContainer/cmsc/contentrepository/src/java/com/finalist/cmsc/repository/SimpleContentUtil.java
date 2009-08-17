@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
@@ -75,7 +75,7 @@ public class SimpleContentUtil {
       
       SearchUtil.addConstraint(query, statusConstraint);
       
-      draftSet = SearchUtil.createNodeNumberSet(query.getList());
+      draftSet = createNodeNumberSet(query.getList());
       return draftSet;
    }
    
@@ -97,7 +97,7 @@ public class SimpleContentUtil {
       
       query.setNodeStep(contentStep);
       SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.CREATOR_FIELD, cloud.getUser().getIdentifier());
-      Contentset = SearchUtil.createNodeNumberSet(query.getList());
+      Contentset = createNodeNumberSet(query.getList());
     
       return Contentset;
    }
@@ -226,5 +226,19 @@ public class SimpleContentUtil {
          }
       }
       return channels;
+   }
+
+    /**
+     * Create a set with the node numbers of the list of nodes
+     * @param nodes - list of nodes
+     * @return Set sorted on node number
+     */
+   public static SortedSet createNodeNumberSet(NodeList nodes) {
+	  SortedSet set = new TreeSet();
+	  for (Iterator iter = nodes.iterator(); iter.hasNext();) {
+		 Node node = (Node) iter.next();
+		 set.add(new Integer(node.getNumber()));
+	  }
+	  return set;
    }
 }
