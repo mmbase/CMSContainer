@@ -102,7 +102,7 @@
          </table>
 </c:if>
 <c:if test="${resultCount == 0 && param.title != null}">
-	<p style="color:#cc0000;font-size:12px;padding-left:11px"><fmt:message key="reactionsearch.noresult" /></p>
+	<p style="font-size:12px;padding-left:11px"><fmt:message key="reactionsearch.noresult" /></p>
 </c:if>
 <c:if test="${resultCount > 0}">
 	<%@include file="../repository/searchpages.jsp" %>
