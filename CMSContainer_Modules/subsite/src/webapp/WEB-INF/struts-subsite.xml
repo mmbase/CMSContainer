@@ -31,20 +31,21 @@
 			unknown="false" validate="false">
 			<forward name="delete" path="/editors/subsite/subsitedelete.jsp" redirect="false" />
 			<forward name="success" path="/editors/site/refreshpages.jsp" redirect="false" />
+			<forward name="modulesuccess" path="/editors/subsite/SubSiteAction.do" redirect="false" />
 		</action>
 
       <action path="/editors/subsite/PersonalPageCreate" type="com.finalist.cmsc.subsite.forms.PersonalPageCreate"
          unknown="false" validate="false">
          <forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false" />
          <forward name="returnurl" path="/editors/subsite/PersonalPageCreate.do" redirect="false" />
-         <forward name="cancel" path="/editors/empty.html" redirect="true" />
-         <forward name="success" path="/editors/subsite/refreshandshow.jsp" redirect="false" />
+         <forward name="cancel" path="/editors/subsite/SubSiteAction.do" redirect="true" />
+         <forward name="success" path="/editors/subsite/SubSiteAction.do" redirect="false" />
       </action>
       <action path="/editors/subsite/PersonalPageEdit" type="com.finalist.cmsc.subsite.forms.PersonalPageEdit" unknown="false"
          validate="false">
          <forward name="openwizard" path="/editors/WizardInitAction.do" redirect="false" />
          <forward name="returnurl" path="/editors/subsite/PersonalPageEdit.do" redirect="false" />
-         <forward name="success" path="/editors/subsite/refreshandshow.jsp" redirect="false" />
+         <forward name="success" path="/editors/subsite/SubSiteAction.do" redirect="false" />
       </action>
 
       <action path="/editors/subsite/SubSiteAction" type="com.finalist.cmsc.subsite.forms.SubSiteAction"
