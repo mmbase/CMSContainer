@@ -165,7 +165,7 @@
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>
          </c:if>
-          <a href="../subsite/SubSiteDelete.do?number=${nodenumber}"
+          <a href="../subsite/SubSiteDelete.do?fromModule=frommodule&number=${nodenumber}"
 		       title="<fmt:message key="pp.content.delete" />"><img src="../gfx/icons/delete.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.delete" />"
 		                                                       alt="<fmt:message key="pp.content.delete" />"/></a>
