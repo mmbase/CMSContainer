@@ -69,14 +69,13 @@ public abstract class SearchAction extends PagerAction {
       Step theStep = query.addRelationStep(nodeManager, RepositoryUtil.CREATIONREL, "SOURCE").getNext();
       query.setNodeStep(theStep);
 
-      if (StringUtils.isNotEmpty(searchForm.getContentChannel())) {
+     if (StringUtils.isNotEmpty(searchForm.getContentChannel())) {
          Integer ContentChannelNumber = Integer.parseInt(searchForm.getContentChannel());
          StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
          FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.EQUAL,
                ContentChannelNumber);
-         SearchUtil.addConstraint(query, channelConstraint);            
-      }
-      else {
+         SearchUtil.addConstraint(query, channelConstraint);
+      } else if (!"reaction".equalsIgnoreCase(searchForm.getContenttypes())) {
          Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
          StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
          FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
