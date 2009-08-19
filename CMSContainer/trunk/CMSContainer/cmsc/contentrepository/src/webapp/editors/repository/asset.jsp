@@ -4,7 +4,7 @@
 %><%@ page import="com.finalist.cmsc.repository.RepositoryUtil"
 %><%@ page import="com.finalist.cmsc.security.*"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
-
+<body style="overflow-x:hidden">
    <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
          <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
          <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Asset.do?type=asset&parentchannel=<mm:write
@@ -284,4 +284,5 @@
       </mm:node>
    </div>
    </mm:cloud>
+</body>
 </mm:content>
