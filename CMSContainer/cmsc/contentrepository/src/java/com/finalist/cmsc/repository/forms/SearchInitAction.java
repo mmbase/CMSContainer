@@ -65,15 +65,7 @@ public class SearchInitAction extends MMBaseAction {
         	     types = ContentElementUtil.getContentTypes(cloud);
           }
       }
-      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-      for (NodeManager manager : types) {
-         String name = manager.getName();
-         if (!hiddenTypes.contains(name)) {
-            LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-            typesList.add(bean);
-         }
-      }
-      addToRequest(request, TYPES_LIST, typesList);
+      addToRequest(request,"typesList", ContentElementUtil.getValidTypesList(cloud, types));
       addToRequest(request, PORTLET_ID, portletId);
       addToRequest(request, POSITION, position);
       addToRequest(request, TITLE, searchForm.getTitle());

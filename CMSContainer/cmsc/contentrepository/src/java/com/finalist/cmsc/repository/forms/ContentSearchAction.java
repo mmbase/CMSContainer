@@ -1,6 +1,5 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.FieldIterator;
@@ -85,7 +83,7 @@ public class ContentSearchAction extends PagerAction {
       request.setAttribute("index", index);
       request.setAttribute("title", searchForm.getTitle());
       request.setAttribute(ONLYTYPE, onlytype);
-      
+
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
          if (deleteContentRequest.startsWith("massDelete:")) {
             massDeleteContent(deleteContentRequest.substring(11), cloud);
@@ -99,28 +97,18 @@ public class ContentSearchAction extends PagerAction {
       }
 
       // First prepare the typeList, we'll need this one anyway:
-      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
-      TreeSet<Integer> validTypes = new TreeSet<Integer>();
 
       List<NodeManager> types;
-      if(StringUtils.isEmpty(portletId)){
-    	  types = ContentElementUtil.getContentTypes(cloud);
+      if (StringUtils.isEmpty(portletId)) {
+         types = ContentElementUtil.getContentTypes(cloud);
       } else {
          types = ContentElementUtil.getAllowedContentTypes(cloud, portletId);
-          if(types.size() == 0){
-        	  types = ContentElementUtil.getContentTypes(cloud);
-          }
-      }
-      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-      for (NodeManager manager : types) {
-         String name = manager.getName();
-         if (!hiddenTypes.contains(name)) {
-            LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-            typesList.add(bean);
-            validTypes.add(manager.getNumber());
+         if (types.size() == 0) {
+            types = ContentElementUtil.getContentTypes(cloud);
          }
       }
-      addToRequest(request, TYPES_LIST, typesList);
+      addToRequest(request, "typesList", ContentElementUtil.getValidTypesList(cloud, types));
+      TreeSet<Integer> validTypes = ContentElementUtil.getValidTypes(cloud, types);
 
       // Switching tab, no searching.
       if ("false".equalsIgnoreCase(searchForm.getSearch())) {
@@ -185,13 +173,17 @@ public class ContentSearchAction extends PagerAction {
 
       // Set some date constraints.
       queryStringComposer.addParameter(ContentElementUtil.CREATIONDATE_FIELD, "" + searchForm.getCreationdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm.getCreationdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm
+            .getCreationdate());
       queryStringComposer.addParameter(ContentElementUtil.PUBLISHDATE_FIELD, "" + searchForm.getPublishdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
+      SearchUtil
+            .addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
       queryStringComposer.addParameter(ContentElementUtil.EXPIREDATE_FIELD, "" + searchForm.getExpiredate());
       SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.EXPIREDATE_FIELD, searchForm.getExpiredate());
-      queryStringComposer.addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
+      queryStringComposer
+            .addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
+            .getLastmodifieddate());
 
       // Perhaps we have some more constraints if the nodetype was specified (=> not contentelement).
       if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
@@ -203,13 +195,13 @@ public class ContentSearchAction extends PagerAction {
             String paramName = nodeManager.getName() + "." + field.getName();
             String paramValue = request.getParameter(paramName);
             if (StringUtils.isNotEmpty(paramValue)) {
-               //CMSC-1116 advanced search for dynamic form save answer gives 500 error
-               //The following if to deal with INTEGER field
-               if(field.getType() == Field.TYPE_INTEGER){
-                  FieldValueConstraint fvc = SearchUtil.createEqualConstraint(query, nodeManager, field.getName(), Integer.parseInt(paramValue));
+               // CMSC-1116 advanced search for dynamic form save answer gives 500 error
+               // The following if to deal with INTEGER field
+               if (field.getType() == Field.TYPE_INTEGER) {
+                  FieldValueConstraint fvc = SearchUtil.createEqualConstraint(query, nodeManager, field.getName(),
+                        Integer.parseInt(paramValue));
                   SearchUtil.addConstraint(query, fvc);
-               }
-               else{
+               } else {
                   SearchUtil.addLikeConstraint(query, field, paramValue.trim());
                   queryStringComposer.addParameter(paramName, paramValue);
                }
@@ -226,11 +218,11 @@ public class ContentSearchAction extends PagerAction {
          SearchUtil.addConstraint(query, titleConstraint);
       }
 
-      //if in simple search mode, add input to the keyword search too
-      //And add ordinary keywords
+      // if in simple search mode, add input to the keyword search too
+      // And add ordinary keywords
       List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
       addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
-      
+
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
          String stringObjectId = searchForm.getObjectid();
@@ -325,7 +317,8 @@ public class ContentSearchAction extends PagerAction {
       return keywords;
    }
 
-   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
+   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager,
+         QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
       if (keywords == null) return;
 
       queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords());
@@ -376,7 +369,7 @@ public class ContentSearchAction extends PagerAction {
       RepositoryUtil.removeContentFromAllChannels(objectNode);
       RepositoryUtil.addContentToChannel(objectNode, RepositoryUtil.getTrash(cloud));
 
-      // unpublish and remove from workflow
+      // Unpublish and remove from workflow
       Publish.remove(objectNode);
       Workflow.remove(objectNode);
       Publish.unpublish(objectNode);
