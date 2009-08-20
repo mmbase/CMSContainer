@@ -34,8 +34,11 @@ public class SubSiteEdit extends MMBaseFormlessAction {
       } else {
          String ewnodelastedited = getParameter(request, "ewnodelastedited");
          addToRequest(request, "showsubsite", ewnodelastedited);
-         ActionForward ret = mapping.findForward(SUCCESS);
-         return ret;
+         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
+            return mapping.findForward("modulesuccess");
+         } else {
+            return mapping.findForward(SUCCESS);
+         }
       }
    }
 
