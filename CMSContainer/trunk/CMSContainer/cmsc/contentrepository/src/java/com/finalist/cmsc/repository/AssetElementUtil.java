@@ -282,7 +282,7 @@ public final class AssetElementUtil {
       return nodes;
    }
 
-   protected static void initSupportedImages() {
+   public static void initSupportedImages() {
       supportedImages = new HashSet<String>();
       Properties properties = new Properties();
       String images = ".bmp,.jpg,.jpeg,.gif,.png,.svg,.tiff,.tif";
@@ -303,7 +303,7 @@ public final class AssetElementUtil {
     * @param fileName
     * @return
     */
-   protected static boolean isImage(String fileName) {
+   public static boolean isImage(String fileName) {
       if (StringUtils.isBlank(fileName)) {
          return false;
       }
@@ -318,7 +318,7 @@ public final class AssetElementUtil {
     * @param fileName
     * @return
     */
-   protected static String getFilenameExtension(String fileName) {
+   public static String getFilenameExtension(String fileName) {
       if (StringUtils.isBlank(fileName)) {
          return null;
       }

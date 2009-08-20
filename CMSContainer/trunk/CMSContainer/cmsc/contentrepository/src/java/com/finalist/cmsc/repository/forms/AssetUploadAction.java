@@ -62,13 +62,9 @@ public class AssetUploadAction extends MMBaseAction {
             && file.getFileSize() != 0 && StringUtils.isNotEmpty(file.getFileName());
    }
 
-   public static void addToSession(HttpServletRequest request, String name, List<String> value) {
+   private void addToSession(HttpServletRequest request, String name, Object value) {
       if (value != null) {
          request.getSession().setAttribute(name, value);
       }
-   }
-
-   public static void addToSession(HttpServletRequest request, String name, String value) {
-      request.getSession().setAttribute(name, value);
    }
 }
