@@ -83,7 +83,7 @@ public class ContentSearchAction extends PagerAction {
       request.setAttribute(INDEX, index);
       request.setAttribute(TITLE, searchForm.getTitle());
       request.setAttribute(ONLYTYPE, onlytype);
-      
+
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
          if (deleteContentRequest.startsWith("massDelete:")) {
             massDeleteContent(deleteContentRequest.substring(11), cloud);
@@ -100,15 +100,7 @@ public class ContentSearchAction extends PagerAction {
       List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
       List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-      for (NodeManager manager : types) {
-         String name = manager.getName();
-         if (!hiddenTypes.contains(name)) {
-            LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-            typesList.add(bean);
-         }
-      }
-      addToRequest(request, "typesList", typesList);
+      addToRequest(request, "typesList", ContentElementUtil.getValidTypesList(cloud, types));
 
       // Switching tab, no searching.
       if ("false".equalsIgnoreCase(searchForm.getSearch())) {
@@ -167,13 +159,17 @@ public class ContentSearchAction extends PagerAction {
 
       // Set some date constraints.
       queryStringComposer.addParameter(ContentElementUtil.CREATIONDATE_FIELD, "" + searchForm.getCreationdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm.getCreationdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm
+            .getCreationdate());
       queryStringComposer.addParameter(ContentElementUtil.PUBLISHDATE_FIELD, "" + searchForm.getPublishdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
+      SearchUtil
+            .addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
       queryStringComposer.addParameter(ContentElementUtil.EXPIREDATE_FIELD, "" + searchForm.getExpiredate());
       SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.EXPIREDATE_FIELD, searchForm.getExpiredate());
-      queryStringComposer.addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
+      queryStringComposer
+            .addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
+            .getLastmodifieddate());
 
       // Perhaps we have some more constraints if the nodetype was specified (=> not contentelement).
       if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
@@ -200,11 +196,11 @@ public class ContentSearchAction extends PagerAction {
          SearchUtil.addConstraint(query, titleConstraint);
       }
 
-      //if in simple search mode, add input to the keyword search too
-      //And add ordinary keywords
+      // if in simple search mode, add input to the keyword search too
+      // And add ordinary keywords
       List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
       addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
-      
+
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
          String stringObjectId = searchForm.getObjectid();
@@ -299,7 +295,8 @@ public class ContentSearchAction extends PagerAction {
       return keywords;
    }
 
-   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager, QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
+   private void addKeyConstraint(SearchForm searchForm, NodeManager nodeManager,
+         QueryStringComposer queryStringComposer, NodeQuery query, List<String> keywords) {
       if (keywords == null) return;
 
       queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords());
