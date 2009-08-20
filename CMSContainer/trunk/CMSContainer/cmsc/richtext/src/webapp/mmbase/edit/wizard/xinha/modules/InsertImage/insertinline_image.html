@@ -232,22 +232,22 @@ function openPopupWindow(url, windowName, width, height) {
 <body  class="dialog" onload="Init()">
    <div class="title">Insert Image</div>
       <form name="inlineImageForm" action="" method="get">
-            <input type="hidden" name="destination" id="f_destination" />
-         <table border="0" style="padding: 0px; margin: 0px">
-              <tbody>
-                 <tr>
-                   <td style="width: 7em; text-align: right">Image URL:</td>
-                   <td>
-                        <input type="text" name="url" id="f_url" style="width:75%" readonly  />
-                        <button name="select" onclick="return onSelect();" title="Search for an image">Search</button>
-                   </td>
-                 </tr>
-                 <tr>
-                   <td style="width: 7em; text-align: right">Alternate text:</td>
-                   <td><input type="text" name="alt" id="f_alt" style="width:100%" title="For browsers that don't support images" /></td>
-                 </tr>
-              </tbody>
-         </table>
+		 <input type="hidden" name="destination" id="f_destination" />
+		 <table border="0" style="padding: 0px;margin: 0px;width:70%">
+			  <tbody>
+				 <tr>
+				   <td style="width: 7em; text-align: right">Image URL:</td>
+				   <td nowrap>
+						<input type="text" name="url" id="f_url" style="width:55%" readonly  />
+						<button name="select" onclick="return onSelect();" title="Search for an image">Search</button>
+				   </td>
+				 </tr>
+				 <tr>
+				   <td style="width: 7em; text-align: right">Alternate text:</td>
+				   <td><input type="text" name="alt" id="f_alt" style="width:80%" title="For browsers that don't support images" /></td>
+				 </tr>
+			 </tbody>
+		 </table>
 
          <fieldset style="float: left; margin-left: 5px;">
             <legend>Layout</legend>
