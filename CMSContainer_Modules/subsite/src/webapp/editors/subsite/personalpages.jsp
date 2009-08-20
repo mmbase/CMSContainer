@@ -146,7 +146,7 @@
 		   <td style="white-space: nowrap;">
 		   
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&subsite=${subsite}"
+         <a href="../subsite/SubSiteEdit.do?fromModule=frommodule&number=${nodenumber}&subsite=${subsite}"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
