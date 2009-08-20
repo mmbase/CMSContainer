@@ -36,16 +36,16 @@
     </div>
 	<div class="editor">
 		<div class="body">
-		
+<!--  	
 	<p>
 		<fmt:message key="content.channel" >
 		 	<fmt:param ><mm:field name="name"/></fmt:param>
 		 </fmt:message>	
 	</p>
-
+-->
 	<div style="clear:both; height:10px;"></div>
 	</div>	
-  <div class="ruler_green"><div><fmt:message key="content.content" /></div></div>
+  <div class="ruler_green"><div><fmt:message key="content.content" ><fmt:param ><mm:field name="path"/></fmt:param></fmt:message></div></div>
   <div class="body">
 	 <mm:import id="lastotype"/>
  
