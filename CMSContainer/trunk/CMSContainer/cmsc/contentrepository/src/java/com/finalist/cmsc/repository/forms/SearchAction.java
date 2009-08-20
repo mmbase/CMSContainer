@@ -74,15 +74,7 @@ public class SearchAction extends PagerAction {
         List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
         List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-        List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
-        for (NodeManager manager : types) {
-            String name = manager.getName();
-            if (!hiddenTypes.contains(name)) {
-                LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-                typesList.add(bean);
-            }
-        }
-        addToRequest(request, "typesList", typesList);
+        addToRequest(request,"typesList", ContentElementUtil.getValidTypesList(cloud, types));
 
         // Switching tab, no searching.
         if ("false".equalsIgnoreCase(searchForm.getSearch())) {
