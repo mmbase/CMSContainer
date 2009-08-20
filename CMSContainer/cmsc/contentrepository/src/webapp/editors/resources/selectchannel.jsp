@@ -14,7 +14,7 @@
 		</mm:cloud>
       <html:hidden property="contentChannel"/>
 		<input type="text" name="contentChannelPath" value="${contentChannelPath}" disabled="true" style="width: 200px"/>   
-       <a style="margin-left:5px" href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${searchForm.contentChannel}' />" target="selectchannel"    onclick="openPopupWindow('selectchannel', 340, 400)"> 
+       <a style="margin-left:5px" href="#" onclick="openPopupWindow('selectchannel', 340, 400,'<c:url value='/editors/repository/select/SelectorChannel.do?channel=${searchForm.contentChannel}' />')"> 
 			<fmt:message key="asset.search.selectchannel" />
 		</a> 
       <img src="<cmsc:staticurl page='/editors/gfx/button_side_block.gif'/>" alt=""/>
