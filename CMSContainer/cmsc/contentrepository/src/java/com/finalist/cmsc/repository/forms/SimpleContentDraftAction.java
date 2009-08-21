@@ -21,7 +21,7 @@ public class SimpleContentDraftAction extends SimpleContentAction{
    static final Logger log = Logging.getLoggerInstance(SimpleContentDraftAction.class.getName());
    
    @Override
-   public void doAction(NodeQuery query, ActionForm form, HttpServletRequest request, Cloud cloud) {
+   public void addConstraints(NodeQuery query, ActionForm form, HttpServletRequest request, Cloud cloud) {
       request.setAttribute("statustype", "draft");
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
       if ( !ServerUtil.isSingle() && ServerUtil.isStaging()) {
