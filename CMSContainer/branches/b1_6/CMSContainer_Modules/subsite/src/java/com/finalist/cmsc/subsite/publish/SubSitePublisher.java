@@ -8,8 +8,10 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeIterator;
 import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
 
 import com.finalist.cmsc.publish.PagePublisher;
+import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.subsite.util.SubSiteUtil;
 
@@ -51,6 +53,14 @@ public class SubSitePublisher extends PagePublisher {
             }
          }
       }
+   }
+   
+   @Override
+   protected void findPageNodes(Node node, Map<Node, Date> nodes, Date publishDate) {
+       NodeManager nodeManager = node.getNodeManager();
+       if ( !ContentElementUtil.isContentType(nodeManager.getName())) {
+           super.findPageNodes(node, nodes, publishDate);    
+       }       
    }
 
    @Override
