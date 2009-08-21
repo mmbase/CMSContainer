@@ -523,7 +523,7 @@ public final class ContentElementUtil {
     */
    public static TreeSet<Integer> getValidTypes(Cloud cloud, List<NodeManager> types) {
       List<String> hiddenTypes = getHiddenTypes();
-      TreeSet<Integer> validTypes = null;
+      TreeSet<Integer> validTypes = new TreeSet<Integer>();
       for (NodeManager manager : types) {
          String name = manager.getName();
          if (!hiddenTypes.contains(name)) {
