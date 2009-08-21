@@ -20,7 +20,7 @@ public class SimpleContentReadyAction extends SimpleContentAction{
    private static final Logger log = Logging.getLoggerInstance(SimpleContentReadyAction.class.getName());
    
    @Override
-   public void doAction(NodeQuery query, ActionForm form, HttpServletRequest request, Cloud cloud) {
+   public void addConstraints(NodeQuery query, ActionForm form, HttpServletRequest request, Cloud cloud) {
       
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
       SortedSet<Integer> draftSet = SimpleContentUtil.getDraftWorkFlowItem(cloud);  

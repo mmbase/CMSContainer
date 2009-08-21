@@ -48,7 +48,7 @@ public abstract class SimpleContentAction extends PagerAction {
       NodeManager nodeManager = cloud.getNodeManager(SimpleContentUtil.CONTENT_TYPE);
 
       NodeQuery query = SimpleContentUtil.createQuery(cloud,nodeManager);
-      doAction(query,form,request,cloud);
+      addConstraints(query,form,request,cloud);
 
       if (StringUtils.isNotEmpty(simpleContentForm.getTitle())) {
 
@@ -103,7 +103,7 @@ public abstract class SimpleContentAction extends PagerAction {
       return super.execute(mapping, form, request, response, cloud);
    }
 
-   protected abstract void doAction(NodeQuery query, ActionForm form, HttpServletRequest request,
+   protected abstract void addConstraints(NodeQuery query, ActionForm form, HttpServletRequest request,
          Cloud cloud);
 
    protected void bindChannelList(HttpServletRequest request, Cloud cloud) {
