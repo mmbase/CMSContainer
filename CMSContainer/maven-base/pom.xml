@@ -692,6 +692,25 @@ See http://www.MMBase.org/license
 
   </repositories>
 
+  <pluginRepositories>
+      <pluginRepository>
+         <id>mmbase</id>
+         <name>MMBase Maven2 repository</name>
+         <url>http://www.mmbase.org/maven2</url>
+      </pluginRepository>
+
+      <pluginRepository>
+         <id>mmbase-snapshots</id>
+         <name>MMBase Maven2 snapshots repository</name>
+         <url>http://www.mmbase.org/snapshots</url>
+         <snapshots>
+            <updatePolicy>daily</updatePolicy>
+         </snapshots>
+
+      </pluginRepository>
+  </pluginRepositories>
+
+
   <profiles>
     <profile>
       <id>fastinstall</id>
