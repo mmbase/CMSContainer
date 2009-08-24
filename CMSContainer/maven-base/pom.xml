@@ -622,7 +622,7 @@ See http://www.MMBase.org/license
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
+			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -648,49 +648,54 @@ See http://www.MMBase.org/license
 
   <dependencies>
 
-    <dependency>
+   <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
+   </dependency>
+   <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jsp-api</artifactId>
       <scope>provided</scope>
-    </dependency>
+   </dependency>
 
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-      </dependency>
+   <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+   </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>mmbase</id>
-      <name>MMBase Maven2 repository</name>
-      <url>http://www.mmbase.org/maven2</url>
-    </repository>
-    <repository>
-      <id>mmbase-snapshots</id>
-      <name>MMBase Maven2 snapshots repository</name>
-      <url>http://www.mmbase.org/snapshots</url>
-    </repository>
-    
-    <repository>
-      <id>cmsc</id>
-      <name>CMS Container repository</name>
-      <url>http://www.cmscontainer.org/files/maven/</url>
-      <layout>legacy</layout>
-    </repository>
-    
-<!--    <repository>-->
-<!--      <id>jboss</id>-->
-<!--      <name>JBoss maven 2 repository</name>-->
-<!--      <url>http://repository.jboss.com/maven2</url>-->
-<!--    </repository>-->
+   <repositories>
+      <repository>
+         <id>mmbase</id>
+         <name>MMBase Maven2 repository</name>
+         <url>http://www.mmbase.org/maven2</url>
+      </repository>
+      <repository>
+         <id>mmbase-snapshots</id>
+         <name>MMBase Maven2 snapshots repository</name>
+         <url>http://www.mmbase.org/snapshots</url>
+      </repository>
+      <repository>
+         <id>cmsc</id>
+         <name>CMS Container repository</name>
+         <url>http://www.cmscontainer.org/files/maven/</url>
+         <layout>legacy</layout>
+      </repository>
+      <repository>
+         <id>maven2-repository.dev.java.net</id>
+         <name>Java.net Repository for Maven</name>
+         <url>http://download.java.net/maven/2/</url>
+         <layout>default</layout>
+      </repository>
 
-  </repositories>
+      <!--    <repository>-->
+      <!--      <id>jboss</id>-->
+      <!--      <name>JBoss maven 2 repository</name>-->
+      <!--      <url>http://repository.jboss.com/maven2</url>-->
+      <!--    </repository>-->
+
+   </repositories>
 
   <pluginRepositories>
       <pluginRepository>
