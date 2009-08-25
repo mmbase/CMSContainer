@@ -26,6 +26,7 @@ import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.paging.PagingStatusHolder;
 import com.finalist.cmsc.paging.PagingUtils;
+import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.cao.NewsletterPublicationCAO;
 import com.finalist.newsletter.domain.Publication;
 import com.finalist.newsletter.domain.Term;
@@ -119,7 +120,7 @@ public class NewsletterPublicationCAOImpl implements NewsletterPublicationCAO {
    }
 
    protected String getNewsletterPath(Node newsletterPublicationNode) {
-      return NavigationUtil.getPathToRootString(newsletterPublicationNode, true);
+      return NavigationUtil.getPathToRootString(newsletterPublicationNode, !ServerUtil.useServerName());
    }
 
    public Set<Term> getTermsByPublication(int publicationId) {
