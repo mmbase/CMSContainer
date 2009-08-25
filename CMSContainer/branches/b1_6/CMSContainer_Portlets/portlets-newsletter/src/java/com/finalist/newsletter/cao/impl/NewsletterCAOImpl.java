@@ -33,7 +33,7 @@ public class NewsletterCAOImpl extends AbstractCAO implements NewsletterCAO {
 
    public List<Term> getAllTerms() {
       NodeList list = SearchUtil.findNodeList(cloud, "term");
-      return list;
+      return MMBaseNodeMapper.convertList(list, Term.class);
    }
 
    public List<Newsletter> getNewsletterByConstraint(String property, String constraintType, String value, boolean paging) {
