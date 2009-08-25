@@ -2,12 +2,11 @@
 %><%@ include file="globals.jsp"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %>
-
 <c:set var="returnurl" value="../editors/simple/SimpleContentDraftAction.do"/>
 <c:set var="typesNumber"  value="${fn:length(typesList)}" />
 <c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
    <div class="editor">
-	<div style="margin-left:10px;color:green"><h1><fmt:message key="simple.editor.title" /></h1></div>
+	<div style="margin:10px 0 10px 10px;color:green;Font-family: Verdana;Font-size: 18px "><fmt:message key="simple.editor.title" /></div>
 
 	 <div style="margin-left:10px;font-size:12px"><fmt:message key="simple.editor.introduction.text" /></div>
       <div class="body">
@@ -15,8 +14,8 @@
             <html:hidden property="offset"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
-				<html:hidden property="title"/>
-				<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
+			<html:hidden property="title"/>
+			<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
          </html:form>
          <form name="initForm" action="../WizardInitAction.do" method="post">
             <input type="hidden" name="action" value="create"/>
