@@ -4,5 +4,6 @@
    <object type="responseform">
       <field name="name">N/A</field>
       <field name="includedata">0</field>
+      <field name="saveanswer">0</field>
    </object>
 </action>
