@@ -29,12 +29,12 @@
       <prompt xml:lang="nl">Inleiding</prompt>
       <prompt xml:lang="zh">摘要</prompt>
    </field>
-   <field name="from_mail" dtmaxlength="40">
+   <field name="from_mail" dtmaxlength="40" dtpattern="(\w+)@(\w+\.)(\w+)(\.\w+)*" dtrequired="true">
       <prompt xml:lang="en">E-mail of sender</prompt>
       <prompt xml:lang="nl">E-mail afzender</prompt>
       <prompt xml:lang="zh">发件人邮箱</prompt>
    </field>
-   <field name="from_name" dtmaxlength="40">
+   <field name="from_name" dtmaxlength="40" dtrequired="true">
       <prompt xml:lang="en">Name of sender</prompt>
       <prompt xml:lang="nl">Naam afzender</prompt>
       <prompt xml:lang="zh">发件人</prompt>
@@ -44,7 +44,7 @@
       <prompt xml:lang="nl">E-mail antwoord</prompt>
       <prompt xml:lang="zh">收件人邮箱</prompt>
    </field>
-   <field name="replyto_name" dtmaxlength="40">
+   <field name="replyto_name" dtmaxlength="40" dtrequired="true">
       <prompt xml:lang="en">Name of reply</prompt>
       <prompt xml:lang="nl">Naam antwoord</prompt>
       <prompt xml:lang="zh">收件人</prompt>
