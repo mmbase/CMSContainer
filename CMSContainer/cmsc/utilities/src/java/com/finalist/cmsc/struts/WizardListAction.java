@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.*;
+import org.mmbase.bridge.util.SearchUtil;
 
 /**
  * @author Nico Klasens
@@ -32,20 +33,17 @@ public class WizardListAction extends MMBaseFormlessAction {
       // We want to be able to pass constraints:
       String constraints = request.getParameter("constraints");
 
-      NodeManager manager = cloud.getNodeManager("editwizards");
-      NodeList list = null;
-
+      Node wizard = null;
       if (wizardname != null) {
-         list = manager.getList("name = '" + wizardname + "'", null, null);
+         wizard = SearchUtil.findNode(cloud, "editwizards", "name", wizardname);
       }
       else {
-         list = manager.getList("nodepath = '" + nodetype + "'", null, null);
+         wizard = SearchUtil.findNode(cloud, "editwizards", "nodepath", nodetype);
 
       }
-      if (list == null || list.isEmpty()) {
+      if (wizard == null) {
          throw new IllegalArgumentException("Unable to find a wizard for nodetype " + nodetype + " or wizardname " + wizardname);
       }
-      Node wizard = list.getNode(0);
 
       StringBuffer forward = new StringBuffer();
       forward.append(mapping.findForward("list").getPath() + "?language=" + cloud.getLocale().getLanguage());
