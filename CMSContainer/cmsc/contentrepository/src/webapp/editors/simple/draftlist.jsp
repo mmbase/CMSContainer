@@ -6,9 +6,9 @@
 <c:set var="typesNumber"  value="${fn:length(typesList)}" />
 <c:set var="channelsNumber"  value="${fn:length(channelsList)}" />
    <div class="editor">
-	<div style="margin:10px 0 10px 10px;color:green;Font-family: Verdana;Font-size: 18px "><fmt:message key="simple.editor.title" /></div>
+	<div class="title"><fmt:message key="simple.editor.title" /></div>
 
-	 <div style="margin-left:10px;font-size:12px"><fmt:message key="simple.editor.introduction.text" /></div>
+	 <div class="introduction"><fmt:message key="simple.editor.introduction.text" /></div>
       <div class="body">
          <html:form action="/editors/simple/SimpleContentDraftAction" method="post">
             <html:hidden property="offset"/>
@@ -24,21 +24,21 @@
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
-            <c:if test="${channelsNumber eq 0}">
-					<div style="color:#cc0000;font-size:12px">
-	               <fmt:message key="simple.editor.nochannel.error"/><br/>
-	            </div>
-            </c:if>
-            <c:if test="${typesNumber eq 0}">
-               <div style="color:#cc0000;font-size:12px">
-                  <fmt:message key="simple.editor.notype.error"/><br/>
-               </div>
-            </c:if>
+				<c:if test="${channelsNumber eq 0}">
+				<div class="nomessage">
+					<fmt:message key="simple.editor.nochannel.error"/><br/>
+				</div>
+				</c:if>
+				<c:if test="${typesNumber eq 0}">
+				<div class="nomessage">
+					<fmt:message key="simple.editor.notype.error"/><br/>
+				</div>
+				</c:if>
+
             <c:if test="${channelsNumber ne 0 && typesNumber ne 0}">
-	            <div style="padding:0px">
 		            <c:if test="${channelsNumber gt 1}">
-		               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.place.in"/></b></div>
-		               <div style="margin-left:70px;padding-top:5px 0px 5px">
+		               <div class="fieldtitle"><fmt:message key="simple.editor.place.in"/></div>
+		               <div class="select">
 		               <select name="creation">
 		                   <c:forEach var="channel" items="${channelsList}">
 		                       <option value="${channel.value}">${channel.label}</option>
@@ -47,43 +47,40 @@
 		               </div>
 		            </c:if>
 		            <c:if test="${channelsNumber eq 1}" >
-		               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.place.in"/></b></div>
-		               <div style="margin-left:70px;padding-top:5px 0px 5px;">
+		               <div class="fieldtitle"><fmt:message key="simple.editor.place.in"/></div>
+		               <div class="select">
 		                  <c:forEach var="channel" items="${channelsList}">
 		                       <input type="hidden" name="creation" value="${channel.value}"/>${channel.label}
 		                  </c:forEach>
 		               </div>
 		            </c:if>
-					</div>
-					<div style="padding:0px">
 		            <c:if test="${typesNumber gt 1}">
-		               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.create.new"/></b></div>
-		               <div style="margin-left:70px;padding-top:5px 0px 5px">
+		               <div  class="fieldtitle"><fmt:message key="simple.editor.create.new"/></div>
+		               <div class="select">
 		               <select name="contenttype">
 		                   <c:forEach var="type" items="${typesList}">
 		                       <option value="${type.value}">${type.label}</option>
 		                   </c:forEach>
 		               </select>
 		               </div>
-		               <b style="margin-left:70px"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></b>
+		               <div class="button"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></div>
 		            </c:if>
 		            <c:if test="${typesNumber eq 1}" >
-		               <div style="float:left;display:inline"><b><fmt:message key="simple.editor.create.new"/></b></div>
-		               <div style="margin-left:70px;padding-top:5px 0px 5px">
+		               <div class="fieldtitle"><fmt:message key="simple.editor.create.new"/></div>
+		               <div class="select">
 		                  <c:forEach var="type" items="${typesList}">
 		                       <input type="hidden" name="contenttype" value="${type.value}"/>${type.label}
 		                  </c:forEach>
 		               </div>
-		               <b style="margin-left:70px"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></b>
+		               <div class="button"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></div>
 		            </c:if>
-					</div>
             </c:if>
         </form>
       </div>
    <div class="ruler_green"><div><fmt:message key="simple.editor.draft" /></div></div>
 
 <html:form action="/editors/simple/SimpleContentDraftAction.do" method="post">
-<html:text style="margin-left:10px;margin-top:10px" property="title" /><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
+<html:text style="margin:10px 5px 2px 10px" property="title" /><input type="submit" class="button" value="<fmt:message key="simple.editor.search" />">
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
 <c:set var="hasWorkflow" value="false"/>
 <mm:haspage page="/editors/workflow">
