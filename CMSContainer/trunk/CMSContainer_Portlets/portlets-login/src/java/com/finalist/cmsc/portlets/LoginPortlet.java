@@ -200,12 +200,10 @@ public class LoginPortlet extends AbstractLoginPortlet {
       }
       doInclude("view", template, request, response);
    }
-   
+    @Override
    protected String getEmailBody(String emailText, ActionRequest request, Authentication authentication, Person person) {
       super.DEFAULT_EMAIL_CONFIRM_TEMPLATE = EMAIL_TEMPLATE_DIR;
-      return String.format(emailText == null?getConfirmationTemplate():emailText, authentication
-            .getUserId(), authentication.getPassword(), person.getFirstName(),
-            person.getInfix(), person.getLastName());
+      return formatConfirmationText(emailText,authentication,person,null);
    }
 
 }

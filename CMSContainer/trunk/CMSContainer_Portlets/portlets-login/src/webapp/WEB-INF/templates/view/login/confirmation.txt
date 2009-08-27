@@ -2,21 +2,21 @@ Please keep this email for your records. Your account information is as follows:
 
 ----------------------------
 
-Email: %s 
+Email: %EMAIL 
 
-Password: %s
+Password: %PASSWORD
 
-Firstname: %s
+Firstname: %FIRSTNAME
 
-Infix: %s
+Infix: %INFIX
 
-Lastname: %s
+Lastname: %LASTNAME
 
 ----------------------------
 
 Your account is currently inactive. You cannot use it until you visit the following link: 
 
-%s 
+%URL 
 
 If you did not register for membership on our site, no further action is required. 
 
