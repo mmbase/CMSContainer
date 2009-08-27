@@ -7,7 +7,7 @@
       <title>List Dynamic Form relation: saved forms</title>
    </head>
    <body>
-<mm:cloud jspvar="cloud" rank="administrator" method="http">
+<mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 
    <mm:import externid="action">view</mm:import>
    <b>List Dynamic Form relations: saved forms</b><br/>
@@ -18,7 +18,7 @@
    
    <mm:listnodes type="responseform">
       <mm:countrelations type="savedform" role="posrel" searchdir="destination"/> - saved forms -
-      node:<mm:field name="number"/> with title: <b>'<mm:field name="title"/>'</b><br/> 
+      node:<mm:field name="number"/>, with title: <b>'<mm:field name="title"/>'</b><br/> 
    </mm:listnodes>
 </mm:cloud>
 <br/>
