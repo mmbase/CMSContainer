@@ -15,9 +15,11 @@
                <c:set var="logotext"><fmt:message key="logo.title" /> <cmsc:version type="cmsc"/></c:set>
                <img src="../gfx/logo_editors.png" alt='${logotext}' title='${logotext}'/>
             </div>
-            <div class="title">
-               <fmt:message key="editors.title" />
-            </div>
+			<a href="<mm:url page="index.jsp"/>" target="_top">
+				<div class="title">
+				   <fmt:message key="editors.title" />
+				</div>
+			</a>
             <mm:cloudinfo type="user" id="cloudusername" write="false" />
             <mm:listcontainer path="user">
                <mm:constraint field="user.username" operator="EQUAL" referid="cloudusername" />
