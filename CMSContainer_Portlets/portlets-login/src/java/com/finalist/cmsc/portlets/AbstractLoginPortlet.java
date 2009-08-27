@@ -98,9 +98,14 @@ public abstract class AbstractLoginPortlet extends CmscPortlet{
    }
 
    protected String formatConfirmationText(String emailText, Authentication authentication, Person person, String confirmUrl) {
-      return String.format(emailText == null?getConfirmationTemplate():emailText, authentication
-            .getUserId(), authentication.getPassword(), person.getFirstName(),
-            person.getInfix(), person.getLastName(), confirmUrl);
+      String text = emailText == null?getConfirmationTemplate():emailText;
+      text = text.replaceAll("%EMAIL", authentication.getUserId() ==null?"":authentication.getUserId());
+      text = text.replaceAll("%PASSWORD", authentication.getPassword()==null?"":authentication.getPassword());
+      text = text.replaceAll("%FIRSTNAME", person.getFirstName()==null?"":person.getFirstName());
+      text = text.replaceAll("%INFIX", person.getInfix()==null?"":person.getInfix());
+      text = text.replaceAll("%LASTNAME", person.getLastName()==null?"":person.getLastName());
+      text = text.replaceAll("%URL", confirmUrl==null?"":confirmUrl);
+      return text;
    }
 
    protected Cloud getCloudForAnonymousUpdate(boolean isRemote) {
