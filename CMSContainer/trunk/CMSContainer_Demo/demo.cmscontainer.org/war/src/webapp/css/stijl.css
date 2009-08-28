@@ -73,11 +73,6 @@ a
   text-decoration: none;
 }
 
-a:hover 
-{
-  text-decoration: underline;
-}
-
 a img 
 {
   border: 0 none;
