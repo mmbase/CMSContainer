@@ -131,7 +131,7 @@ public abstract class NewsletterPublicationUtil {
       return (themes);
    }
 
-   public static Publication getPublication(Cloud cloud,int number) {
+   public static Publication getPublication(Cloud cloud, int number) {
       Node newsletterPublicationNode = cloud.getNode(number);
 
       List<Node> relatedNewsletters = newsletterPublicationNode.getRelatedNodes("newsletter");
@@ -155,9 +155,7 @@ public abstract class NewsletterPublicationUtil {
    
    public static String getPublicationURL(Cloud cloud, int publicationId) {
       Node publicationNode = cloud.getNode(publicationId);
-      String hostUrl = NewsletterUtil.getServerURL();
-      String newsletterPath = getNewsletterPath(publicationNode);
-      return "".concat(hostUrl).concat(newsletterPath);
+      return Publish.getRemoteUrl(publicationNode);
    }
    
    public static String getNewsletterPath(Node newsletterPublicationNode) {
@@ -165,19 +163,11 @@ public abstract class NewsletterPublicationUtil {
    }
    
    public static STATUS getStatus(Cloud cloud, int publicationId) {
-      return getPublication(cloud,publicationId).getStatus();
+      Node newsletterPublicationNode = cloud.getNode(publicationId);
+      return Publication.STATUS.valueOf(newsletterPublicationNode.getStringValue("status"));
    }
    
-   public static void publish(Node node) {
-      if(ServerUtil.isStaging() && !ServerUtil.isSingle()) {
-         Publish.publish(node);
-      }
-   }
-   public static void publish(Cloud cloud, int number) {
-      Node node = cloud.getNode(number);
-      publish(node);
-   }
-   
+  
    /**
     * Freeze a edition
     * @throws MessagingException 
@@ -258,7 +248,7 @@ public abstract class NewsletterPublicationUtil {
       return edition.getStringValue("process_status");
    }
 
-   public static String getStaticHtml(int publicationId) throws MessagingException {
+   public static String getStaticHtml(int publicationId) {
 
       NewsletterPublicationCAOImpl publicationCAO = new NewsletterPublicationCAOImpl();
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
@@ -267,16 +257,15 @@ public abstract class NewsletterPublicationUtil {
       Subscription subscription = new Subscription();
       subscription.setTerms(new HashSet<Term>());
       subscription.setMimeType(MIMEType.HTML.type());
-      return getBody(publication, subscription);
+      return getBody(cloud, publication, subscription);
    }
    
-   private static String getBody(Publication publication, Subscription subscription)
-            throws MessagingException {     
+   private static String getBody(Cloud cloud, Publication publication, Subscription subscription) {     
       String url = NewsletterUtil.getTermURL(publication.getUrl(), subscription
                .getTerms(), publication.getId());
       String content = " ";
       if ((subscription.getTerms() == null) || (subscription.getTerms().size() == 0)) {
-         content = NewsletterGenerator.generate(url, subscription.getMimeType());
+         content = NewsletterGenerator.generate(cloud, publication, url, subscription.getMimeType());
       } 
       return content + "\n";
    }

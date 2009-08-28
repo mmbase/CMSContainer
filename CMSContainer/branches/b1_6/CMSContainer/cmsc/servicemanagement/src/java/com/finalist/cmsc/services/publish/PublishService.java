@@ -41,10 +41,16 @@ public abstract class PublishService extends Service {
 
    public abstract String getRemoteContentUrl(Node node);
 
-
-   public abstract String getRemoteUrl(String appPath);
-
+   
+   public abstract String getRemoteUrl(Node node);
+   
 
    public abstract Cloud getRemoteCloud(Cloud cloud);
+
+
+   public abstract String getRemoteResourceUrl(String serverName, String path);
+
+
+   public abstract String getRemoteNavigationUrl(String serverName, String appPath);
 
 }
