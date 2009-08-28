@@ -25,6 +25,7 @@ public final class SiteUtil {
 
    public static final String TITLE_FIELD = "title";
    public static final String FRAGMENT_FIELD = ServerUtil.isLive() ? LIVE_FRAGMENT : STAGING_FRAGMENT;
+   public static final String REMOTE_FIELD = ServerUtil.isLive() ? STAGING_FRAGMENT : LIVE_FRAGMENT;
    public static final String DESCRIPTION_FIELD = "description";
 
    public static String[] treeManagers = new String[] { SITE };
