@@ -71,7 +71,7 @@ public class EgemExportAction extends EgemSearchAction {
             Map<String, Object> postParams = new HashMap<String, Object>();
 
             Node node = cloud.getNode(entry.getKey());
-            String liveUrl = Publish.getRemoteContentUrl(node);
+            String liveUrl = Publish.getRemoteUrl(node);
             if (liveUrl != null) {
                postParams.put("url", liveUrl);
 

@@ -66,13 +66,25 @@ public class DummyPublishService extends PublishService {
    }
 
    @Override
-   public String getRemoteUrl(String appPath) {
+   public Cloud getRemoteCloud(Cloud cloud) {
       return null;
    }
 
 
    @Override
-   public Cloud getRemoteCloud(Cloud cloud) {
+   public String getRemoteUrl(Node node) {
+      return null;
+   }
+
+
+   @Override
+   public String getRemoteResourceUrl(String serverName, String path) {
+      return null;
+   }
+
+
+   @Override
+   public String getRemoteNavigationUrl(String serverName, String appPath) {
       return null;
    }
    

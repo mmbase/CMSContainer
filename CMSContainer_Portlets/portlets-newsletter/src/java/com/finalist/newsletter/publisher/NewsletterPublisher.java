@@ -68,7 +68,7 @@ public class NewsletterPublisher {
          if (newsletterEditionNode.getValueWithoutProcess("static_html") != null)
             static_html = (String)newsletterEditionNode.getValueWithoutProcess("static_html");
          if (StringUtils.isEmpty(static_html)) {
-            originalBody = getBody(publication, subscription);
+            originalBody = getBody(cloud, publication, subscription);
          }
          else {
             if("text/plain".equals(subscription.getMimeType())){
@@ -80,7 +80,6 @@ public class NewsletterPublisher {
             }
 
          }
-         
 
          // Newsletter newsletter = service.getNewsletterBySubscription(subscription.getId());
          Newsletter newsletter = publication.getNewsletter();
@@ -198,7 +197,7 @@ public class NewsletterPublisher {
       }
    }
 
-   private String getBody(Publication publication, Subscription subscription) {
+   private String getBody(Cloud cloud, Publication publication, Subscription subscription) {
 
       String url = NewsletterUtil.getTermURL(publication.getUrl(), subscription.getTerms(), publication.getId());
       ICache cache = null;
@@ -215,7 +214,7 @@ public class NewsletterPublisher {
             log.debug("the content sent is Personalized:" + content);
          }else {
             log.debug("url---->" + url);
-            content = NewsletterGenerator.generate(url, subscription.getMimeType());
+            content = NewsletterGenerator.generate(cloud, publication, url, subscription.getMimeType());
          }
          cache.add(url, content);
       } else {
