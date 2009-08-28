@@ -10,9 +10,14 @@ import java.net.URL;
 import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.HtmlPage;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
+import com.finalist.cmsc.navigation.NavigationUtil;
+import com.finalist.cmsc.navigation.SiteUtil;
+import com.finalist.newsletter.domain.Publication;
 import com.finalist.newsletter.util.NewsletterUtil;
 
 public class NewsletterGenerator {
@@ -20,7 +25,7 @@ public class NewsletterGenerator {
    private static Logger log = Logging.getLoggerInstance(NewsletterGenerator.class.getName());
 
 
-   public static String generate(String urlPath, String mimeType) {
+   public static String generate(Cloud cloud, Publication publication, String urlPath, String mimeType) {
 
       log.debug("generate newsletter from url:" + urlPath);
 
@@ -55,9 +60,12 @@ public class NewsletterGenerator {
 
          if ("text/plain".equalsIgnoreCase(mimeType)) {
             inputString = getContentFromPage(inputString);
-         }
-         inputString = NewsletterUtil.calibrateRelativeURL(inputString);
-         return (inputString);
+         } 
+         Node newsletter = cloud.getNode(publication.getNewsletter().getId());
+         Node site = NavigationUtil.getPathToRoot(newsletter).get(0);
+         String serverName = site.getStringValue(SiteUtil.REMOTE_FIELD);
+         inputString = NewsletterUtil.calibrateRelativeURL(inputString, serverName);
+         return inputString;
          
       } catch (FileNotFoundException e) {
          log.error("Error when try to get content from:" + urlPath+errorInfo, e);

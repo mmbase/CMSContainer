@@ -17,6 +17,9 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.TypeUtil;
 import com.finalist.cmsc.navigation.NavigationItemManager;
 import com.finalist.cmsc.navigation.NavigationManager;
+import com.finalist.cmsc.navigation.NavigationUtil;
+import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.navigation.SiteUtil;
 import com.finalist.cmsc.publish.*;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.services.search.Search;
@@ -153,21 +156,94 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
 
    @Override
    public String getRemoteContentUrl(Node node) {
-      if (Publish.isPublished(node) && Search.hasContentPages(node)) {
-         if (ContentElementUtil.isContentElement(node) && !Search.hasContentPages(node)) {
-    	    return null;
-    	 }
-	     int remoteNumber = Publish.getRemoteNumber(node);
-         String appPath = "/content/" + remoteNumber;
-         return getRemoteUrl(appPath);
-      }
-      return null;
+      return getRemoteUrl(node);
    }
 
    @Override
-   public String getRemoteUrl(String appPath) {
-        String livePath = PropertiesUtil.getProperty(SYSTEM_LIVEPATH);
-        return livePath + appPath;
+   public String getRemoteUrl(Node node) {
+      if (node == null) return null;
+      
+      if (PagesUtil.isPageType(node) || SiteUtil.isSite(node)) {
+
+         //Retrieve the site to create its server name
+         Node site = NavigationUtil.getPathToRoot(node).get(0); //Get the site of the node.
+         String path = NavigationUtil.getPathToRootString(node, false);
+         String serverName = site.getStringValue(SiteUtil.REMOTE_FIELD);
+         
+         return getRemoteNavigationUrl(serverName, path);
+      }
+      
+      if (ContentElementUtil.isContentElement(node)) {
+         if (Publish.isPublished(node) && Search.hasContentPages(node)) {
+            if (ContentElementUtil.isContentElement(node) && !Search.hasContentPages(node)) {
+               return null;
+            }
+            
+            Cloud cloud = node.getCloud();
+            int pageNumber = Search.findDetailPageForContent(node).getPageNumber();
+            Node pageNode = cloud.getNode(pageNumber);
+            
+            Node site = NavigationUtil.getPathToRoot(pageNode).get(0);
+            String serverName = site.getStringValue(SiteUtil.REMOTE_FIELD);
+            
+            int remoteNumber = Publish.getRemoteNumber(node);
+            String appPath = "/content/" + remoteNumber;
+            return getRemoteResourceUrl(serverName, appPath);
+            
+         }
+         return null;
+      }
+      
+      throw new IllegalArgumentException("Node is not a page or a content element; can not proceed.");
+   }
+   
+   /**
+    * @See com.finalist.cmsc.services.publish.Publish#getRemoteResourceUrl
+    */
+   @Override
+   public String getRemoteResourceUrl(String serverName, String appPath) {
+      String livePath = PropertiesUtil.getProperty(SYSTEM_LIVEPATH);
+      if (appPath == null) {
+         appPath = "";
+      }
+      
+      if (!appPath.startsWith("/")) {
+         appPath = "/" + appPath;  
+      }
+
+      //Two situations possible:
+      //livePath = "http://$servername/application-live/" / "http://www.china.nl/application-live/";
+      if (livePath.contains("$")) {
+         livePath = livePath.replaceAll("\\$servername", serverName); 
+      }
+      
+      return livePath + appPath;
+   }
+
+   /**
+    * @See {@link com.finalist.cmsc.services.publish.Publish#getRemoteNavigationUrl(String, String)}
+    */
+   @Override
+   public String getRemoteNavigationUrl(String serverName, String appPath) {
+//      String livePath = "http://${servername}/nico/";
+//      String livePath = "http://www.4en5mei.nl/nico/";
+      String livePath = PropertiesUtil.getProperty(SYSTEM_LIVEPATH);
+      if (appPath == null) {
+         appPath = "";
+      }
+      
+      if (!appPath.startsWith("/")) {
+         appPath = "/" + appPath;  
+      }
+      
+      String result;
+      if (livePath.contains("$")) {
+         result = livePath.replaceAll("\\$servername", serverName) + appPath;
+      }
+      else {
+         result = livePath + serverName + appPath;
+      }
+      return result;
    }
 
    @Override

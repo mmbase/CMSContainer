@@ -148,16 +148,9 @@
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
 		  
-<%
-	   int remoteNumber = Publish.getRemoteNumber(ppNode);
-      String appPath = "/content/" + remoteNumber;
-      if (remoteNumber == -1) { 
-    	  appPath = ""; 
-    	}
-      request.setAttribute("appPath", appPath);
-%>
-         <c:if test="${not empty appPath}">
-            <a href="<%=Publish.getRemoteUrl(appPath)%>" 
+        <c:set var="remoteUrl"><%=Publish.getRemoteUrl(ppNode)%></c:set>
+         <c:if test="${not empty remoteUrl}">
+            <a href="${remoteUrl}" 
                title="<fmt:message key="pp.content.preview" />" target="_blank"><img src="../gfx/icons/preview.png" width="16" height="16"
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>

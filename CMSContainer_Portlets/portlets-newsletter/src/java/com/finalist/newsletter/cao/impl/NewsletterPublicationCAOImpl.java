@@ -78,10 +78,6 @@ public class NewsletterPublicationCAOImpl implements NewsletterPublicationCAO {
       return cloud.getNode(number);
    }
 
-   public String getPublicationURL(int publicationId) {
-      return NewsletterPublicationUtil.getPublicationURL(cloud,publicationId);
-   }
-
    public int getNewsletterId(int publicationId) {
       Node newsletterPublicationNode = cloud.getNode(publicationId);
       NodeList relatedNewsletters = newsletterPublicationNode.getRelatedNodes("newsletter");
