@@ -1,6 +1,7 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.NodeManager;
 import org.mmbase.storage.search.SortOrder;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
@@ -24,6 +26,7 @@ public class SearchInitAction extends MMBaseAction {
    private static final String PORTLET_ID = "portletId";
    private static final String POSITION = "position";
    private static final String ONLYTYPE = "onlytype";
+   private static final String RELATIONORIGINNODE = "relationOriginNode"; 
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -71,6 +74,9 @@ public class SearchInitAction extends MMBaseAction {
       addToRequest(request, TITLE, searchForm.getTitle());
       addToRequest(request, ONLYTYPE, onlytype);
       
+      String originNodeId = request.getParameter(RELATIONORIGINNODE);
+      request.getSession().setAttribute(RELATIONORIGINNODE, originNodeId);
+
       return mapping.findForward(SEARCHOPTIONS);
    }
 

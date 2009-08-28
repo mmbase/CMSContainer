@@ -491,9 +491,12 @@
                                     '<cmsc:staticurl page="/content/" /><mm:field name="number"/>',null,null,null,'${position}')
                         }
                      </script>
-
-                     <a href="#" onClick="link<mm:field name="number" />();">
-                         <img src="../gfx/icons/link.png" title="<fmt:message key="searchform.icon.select.title" />" /></a>
+                     <mm:field jspvar="elementId" name="number">
+                     <c:if test='${sessionScope.relationOriginNode != elementId}'>
+                        <a href="#" onClick="link<mm:field name="number" />();">
+                           <img src="../gfx/icons/link.png" title="<fmt:message key="searchform.icon.select.title" />" /></a>
+                     </c:if>
+                     </mm:field>
                   </mm:compare>
                   <mm:compare referid="action" value="selectforwizard">
                      <a href="#" onClick="top.opener.selectContent('<mm:field name="number" />', '', ''); top.close();">

@@ -94,7 +94,11 @@
 		<td nowrap>
         	<a href="javascript:info('<mm:field name="number" />')"><img src="../../gfx/icons/info.png" width="16" height="16" alt="<fmt:message key="content.info" />"/></a>
 			<mm:import id="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>', '<cmsc:staticurl page="/content/" /><mm:field name="number"/>');</mm:import>
-        	<a href="<mm:write referid="url"/>"><img src="../../gfx/icons/link.png" width="16" height="16" alt="<fmt:message key="content.link" />"/></a>
+         <mm:field jspvar="elementId" name="number">
+         <c:if test='${sessionScope.relationOriginNode != elementId}'>
+           	<a href="<mm:write referid="url"/>"><img src="../../gfx/icons/link.png" width="16" height="16" alt="<fmt:message key="content.link" />"/></a>
+         </c:if>
+         </mm:field>
 		</td>
 		<td width="100%">
 		   <mm:field name="title"/>
