@@ -143,6 +143,16 @@ public final class NavigationUtil {
     public static String getPathToRootString(Node node, boolean includeRoot) {
         return TreeUtil.getPathToRootString(node, treeManagers, NAVREL, includeRoot);
     }
+    
+    /**
+     * Returns the root node of a navigation item. For a page, this will be the site node.
+     * @param node - Should be of type Navigation item
+     * @return rootNode
+     */
+    public static Node getRootForNavigationItem(Node node) {
+       Node rootNode = getPathToRoot(node).get(0);
+       return rootNode;
+    }
 
     /**
      * Creates a string that represents the root path.
