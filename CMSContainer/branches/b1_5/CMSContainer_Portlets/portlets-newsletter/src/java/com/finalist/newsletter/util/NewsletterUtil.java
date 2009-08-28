@@ -29,9 +29,8 @@ import org.mmbase.storage.search.StepField;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.ContentElement;
-import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.newsletter.NewsletterSendFailException;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.newsletter.cao.impl.NewsLetterStatisticCAOImpl;
 import com.finalist.newsletter.domain.Schedule;
 import com.finalist.newsletter.domain.Term;
@@ -484,23 +483,6 @@ public abstract class NewsletterUtil {
    }
 
 
-
-   public static String getServerURL() {
-      String hostUrl = PropertiesUtil.getProperty(SYSTEM_LIVEPATH);
-
-      if (StringUtils.isEmpty(hostUrl)) {
-         throw new NewsletterSendFailException("get property <system.livepath> from system property and get nothing");
-      }
-
-      log.debug("get property <system.livepath> from system property and get:" + hostUrl);
-
-      if (!hostUrl.endsWith("/")) {
-         hostUrl += "/";
-      }
-      return hostUrl;
-   }
-
-
    public static void logPubliction(int newsletterId, HANDLE handle) {
       StatisticServiceImpl service = new StatisticServiceImpl();
       NewsLetterStatisticCAOImpl statisticCAO = new NewsLetterStatisticCAOImpl();
@@ -511,23 +493,24 @@ public abstract class NewsletterUtil {
    }
 
 
-   public static String calibrateRelativeURL(String inputString) {
-      return calibrateRelativeURL(inputString, NewsletterUtil.getServerURL());
-   }
-
-   public static String calibrateRelativeURL(String inputString, String liveURL) {
-      if (liveURL.charAt(liveURL.length() - 1) == '/') {
-         liveURL = liveURL.substring(0, liveURL.lastIndexOf("/"));
+   public static String calibrateRelativeURL(String inputString, String serverName) {
+      serverName = Publish.getRemoteResourceUrl(serverName, null); 
+      
+      int protocolIndex = serverName.indexOf("://");
+      
+      if (protocolIndex == -1) 
+         throw new IllegalArgumentException("System property: system.livepath is not configured properly. It should contain the HTTP protocol.");
+         
+      //http://www.almere.finalist.com/po-live/www.almere.finalist.comfinalist_newsletter_test/3016588
+      
+      int secondSlash = serverName.indexOf("/", protocolIndex + "://".length());
+      if (secondSlash != -1) {
+         serverName = serverName.substring(0, secondSlash); //Get the first part, without context-name. 
+         //Also adds / because it was removed before.
       }
-
-      if (StringUtils.split(liveURL, "/").length > 2) {
-         liveURL = liveURL.substring(0, liveURL.lastIndexOf("/"));
-      }
-
-      liveURL += "/";
-
-      inputString = StringUtils.replace(inputString, "href=\"/", "href=\"" + liveURL);
-      inputString = StringUtils.replace(inputString, "src=\"/", "src=\"" + liveURL);
+      
+      inputString = StringUtils.replace(inputString, "href=\"/", "href=\"" + serverName + "/");
+      inputString = StringUtils.replace(inputString, "src=\"/", "src=\"" + serverName + "/");
       return inputString;
    }
 
