@@ -58,11 +58,11 @@ createDefaultConfig = function() {
   ];
 
    xinha_config.formatblock = ({
-                "Heading 1": "h1",
-                "Heading 2": "h2",
-                "Heading 3": "h3",
-                "Heading 4": "h4",
-                "Normal": "p"
+		"Normal": "p",
+		"Heading 1": "h1",
+        "Heading 2": "h2",
+        "Heading 3": "h3",
+        "Heading 4": "h4"
    });
 
   xinha_config.pageStyle="body, td {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;color: #0000;font-size: 90%;}";
