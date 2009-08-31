@@ -74,7 +74,6 @@ public class ListFilesAction extends PagerAction {
 	 *            the form (normally a subclass of {@link PagerForm}).
 	 * @return a list of nodes based on the information in the form.
 	 */
-	@SuppressWarnings("unchecked")
 	protected List<Node> getPagedResults(Cloud cloud, ActionForm actionForm) {
 		ListFilesForm form = (ListFilesForm) actionForm;
 

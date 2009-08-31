@@ -28,8 +28,7 @@ public class EditFileAction extends MMBaseFormlessAction {
 					+ objectnumber + "&returnurl=" + mapping.findForward("returnurl").getPath());
 			ret.setRedirect(true);
 			return ret;
-		} else {
-			return mapping.findForward(SUCCESS);
 		}
+      return mapping.findForward(SUCCESS);
 	}
 }
