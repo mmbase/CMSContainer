@@ -28,8 +28,7 @@ public class Utils {
    public static String tabClass(PageContext pageContext, String status) {
       if (status.equals(pageContext.findAttribute("status"))) {
          return "tab_active";
-      } else {
-         return "tab";
       }
+      return "tab";
    }
 }
