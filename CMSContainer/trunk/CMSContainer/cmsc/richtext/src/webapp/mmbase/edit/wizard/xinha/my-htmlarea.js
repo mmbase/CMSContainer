@@ -53,14 +53,12 @@ createDefaultConfig = function() {
   });
   xinha_config.toolbar = [
     ["popupeditor"],
-    ["separator","formatblock","fontname","fontsize","bold","italic","underline","strikethrough"],
-    ["separator","forecolor","hilitecolor"],
+    ["separator","formatblock","bold","italic","underline","strikethrough"],
     ["separator","subscript","superscript"],
-    ["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
-    ["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
-    ["separator","inserthorizontalrule","inlinelink","insertimage"],
-    ["linebreak","separator","undo","redo","selectall"], 
-    ["separator","lefttoright", "righttoleft"],
+    ["linebreak","separator"],
+    ["separator","insertorderedlist","insertunorderedlist"],
+    ["separator","inlinelink","insertimage"],
+    ["separator", "undo","redo","selectall"],(Xinha.is_gecko ? [] : ["cut","copy","paste"]),
     ["separator","htmlmode","showhelp","my-validatesave","createtable"]
   ];
 
