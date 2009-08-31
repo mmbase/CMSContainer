@@ -75,7 +75,7 @@
 
       if (hasSelection) {
          document.forms['operationform'].attributes['action'].value = 'SubscriptionImportExportAction.do';
-         document.forms['operationform'].elements('action').value = 'export';
+         document.forms['operationform'].elements['action'].value = 'export';
          document.forms['operationform'].submit();
       }
       else {
