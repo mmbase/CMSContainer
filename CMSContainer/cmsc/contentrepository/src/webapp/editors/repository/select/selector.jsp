@@ -56,7 +56,7 @@
 		<mm:import externid="channel" from="request" />
 		<mm:import externid="portletId" from="parameters" />
 		<ul class="shortcuts">
-			<li class="search"><a href="../SearchInitAction.do?action=select&portletId=${portletId}" target="selectcontent"><fmt:message key="selector.searchcontent" /></a></li>
+			<li class="search"><a href="../SearchInitAction.do?action=select&portletId=${portletId}&relationOriginNode=${sessionScope.relationOriginNode}" target="selectcontent"><fmt:message key="selector.searchcontent" /></a></li>
 		</ul>
 		<mm:node referid="channel">
 			<mm:field name="path" id="channelPath" write="false" />
