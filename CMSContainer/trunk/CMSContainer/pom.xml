@@ -25,10 +25,11 @@ See http://www.MMBase.org/license
 	<modules>
 		<module>maven-base</module>
 		<module>cmsc</module>
-		<module>../CMSContainer_Modules</module>
+<!--		<module>../CMSContainer_Modules</module>
 		<module>../CMSContainer_Portlets</module>
 		<module>../CMSContainer_Templates</module>
 		<module>../CMSContainer_Demo/demo.cmscontainer.org</module>
+-->      
 	</modules>
 
 	<dependencies>
