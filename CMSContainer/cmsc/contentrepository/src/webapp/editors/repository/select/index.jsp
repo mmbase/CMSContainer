@@ -9,6 +9,7 @@
 <mm:import externid="position" from="parameters" />
 <mm:import externid="initsearchtext" from="parameters" />
 <mm:import externid="type" from="parameters" />
+<mm:import externid="relationOriginNode" from="parameters" />
 
 <mm:cloud loginpage="../../login.jsp">
 
@@ -46,6 +47,7 @@
 		<mm:param name="title" value="${initsearchtext}" />
 		<mm:param name="contenttypes" value="${type}" />
 		<mm:param name="onlytype" value="${type}" />
+		<mm:param name="relationOriginNode" value="${relationOriginNode}" />
 	</mm:url>
 </mm:present>
 
