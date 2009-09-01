@@ -13,6 +13,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -62,7 +63,7 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
       List<Subscription> subscriptionList = services.getSubscriptionList(newsletters, userId);
       request.setAttribute(SUBSCRIPTION_LIST, subscriptionList);
       doInclude(VIEW, NEWSLETTER_SUBSCRIPTION_SUBSCRIBE_JSP, request, response);
-
+      
    }
 
    @Override
@@ -80,6 +81,8 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
    @Override
    public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       PortletPreferences preferences = request.getPreferences();
+      //a flag shows if the subscriptions status updated
+      String isChanged = "false";
       String[] allNewsletters = preferences.getValues(ALLOWED_NEWSLETTERS, null);
       String[] newsletters = request.getParameterValues(SUBSCRIPTIONS);
       NewsletterSubscriptionServices services = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
@@ -90,12 +93,16 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
          for (Subscription subscription : allSubscribtions) {
             services.terminateUserSubscription(Integer.toString(subscription.getId()));
          }
+         if (allSubscribtions.size() > 0) {
+            isChanged = "true";
+         }
       }
       else {
          if(allSubscribtions.size() == 0) {
             for (String newsletterId : newsletters) {
                services.addNewRecord(subscriberId, Integer.valueOf(newsletterId));
             }
+            isChanged = "true";
          }
          else {
             List<String> newsletterList = Arrays.asList(newsletters);
@@ -104,19 +111,25 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
                if (newsletterList.contains(String.valueOf(subscription.getNewsletter().getId()))) {
                   if(!STATUS.ACTIVE.equals(subscription.getStatus())){
                      services.resume(Integer.toString(subscription.getId()));
+                     isChanged = "true";
                   }
                }
                else {
-                  services.terminateUserSubscription(Integer.toString(subscription.getId()));
+                  if (STATUS.ACTIVE.equals(subscription.getStatus())) {
+                     services.terminateUserSubscription(Integer.toString(subscription.getId()));
+                     isChanged = "true";
+                  }
                }
                subscribtions.add(subscription.getNewsletter().getId());
             }
             for (String newsletterId : newsletters) {
                if( !subscribtions.contains(Integer.valueOf(newsletterId))) {
                   services.addNewRecord(subscriberId, Integer.valueOf(newsletterId));
+                  isChanged = "true";
                }
             }
          }
       }
+      response.setRenderParameter("isChanged", isChanged);
    }
 }
