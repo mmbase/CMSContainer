@@ -4,6 +4,7 @@
 <div class="newsletter_subscription">
 <form method="post" name="<portlet:namespace />form_subscribe" action="<cmsc:actionURL/>">
    <h3><fmt:message key="subscription.subscribe.title"/></h3>
+   <p><c:if test="${param.isChanged == 'true'}"><fmt:message key="subscription.status.update"/></c:if></p>
    <c:choose>
       <c:when test="${fn:length(subscriptionList) > 0}">
          <table>
