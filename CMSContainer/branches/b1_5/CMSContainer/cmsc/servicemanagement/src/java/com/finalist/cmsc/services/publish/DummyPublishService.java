@@ -59,6 +59,11 @@ public class DummyPublishService extends PublishService {
    public Node getRemoteNode(Node node) {
        return null;
    }
+   
+   public String getRemoteUrl(Node node) {
+      //TODO Implement this function outside this servicemanagement for single war situations.
+      return null;
+   }
 
 
    @Override

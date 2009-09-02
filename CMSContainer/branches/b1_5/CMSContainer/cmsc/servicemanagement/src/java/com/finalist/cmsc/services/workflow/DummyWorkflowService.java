@@ -19,7 +19,6 @@ import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.security.UserRole;
 
-@SuppressWarnings("unused")
 public class DummyWorkflowService extends WorkflowService {
 
    @Override
