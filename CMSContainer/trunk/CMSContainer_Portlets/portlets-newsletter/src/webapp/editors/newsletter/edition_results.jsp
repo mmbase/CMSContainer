@@ -33,9 +33,16 @@
          </c:when>
       </c:choose>  
       <p style="margin-left:10px">
-          <fmt:message key="newsletter.edition.success" >
-             <fmt:param value="${action}"/>
-          </fmt:message>
+	    <c:choose>
+			 <c:when test="${not empty publisherror}">
+				<c:out value="${publisherror}"/>
+			 </c:when>
+			 <c:otherwise>
+				<fmt:message key="newsletter.edition.success" >
+                   <fmt:param value="${action}"/>
+                </fmt:message>
+			 </c:otherwise>
+        </c:choose>
       </p>
 </cmscedit:sideblock>
 </body>
