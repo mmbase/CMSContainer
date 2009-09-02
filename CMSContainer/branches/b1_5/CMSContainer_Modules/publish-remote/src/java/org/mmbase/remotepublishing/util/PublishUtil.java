@@ -151,8 +151,7 @@ public class PublishUtil {
 
     public static void publishOrUpdateNode(Node node, Node cloudNode) {
         if (node == null) { throw new IllegalArgumentException("Node = null"); }
-        if (cloudNode == null) { throw new IllegalArgumentException("CloudNode = null "
-                + (node == null ? -1 : node.getNumber())); }
+        if (cloudNode == null) { throw new IllegalArgumentException("CloudNode = null " + node.getNumber()); }
         publishOrUpdateNode(node.getCloud(), node.getNumber(), cloudNode.getNumber());
     }
 
