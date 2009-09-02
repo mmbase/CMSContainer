@@ -49,16 +49,17 @@
 
    <div class="editor">
       <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
-      <c:if test="${not empty errors}">
-	  <div style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.errors'><fmt:param value="${errors}"/> </fmt:message>&nbsp;</div>
+      <c:if test="${not empty publisherror}">
+	  <div style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.errors'><fmt:param value="${publisherror}"/> </fmt:message>&nbsp;</div>
+	  <c:remove var="publisherror"/>
 	  </c:if>
-	  <c:remove var="errors"/>
+
 	  <c:if test="${not empty needajax}">
 	  <script language="JavaScript">workfor("<cmsc:staticurl page='/editors/newsletter/NewsletterEditionFreezeAjax.do?'/>","${needajax}");</script>
 	  <div id="needajax" style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;<img src="<cmsc:staticurl page='/images/loading.gif'/>" alt=""/>&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.auto'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
 	  <div id="working" style="display:none;color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.fail'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
-	  </c:if>
 	  <c:remove var="needajax"/>
+	  </c:if>
       <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>
