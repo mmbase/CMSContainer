@@ -81,6 +81,7 @@ public class Publish {
    }
 
    public static String getRemoteNavigationUrl(String serverName, String appPath) {
+   
       return cService.getRemoteNavigationUrl(serverName, appPath);
    }
 }
