@@ -5,7 +5,7 @@ package com.finalist.newsletter.forms;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
