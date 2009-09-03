@@ -208,7 +208,7 @@ public class Gallery2Portlet extends AbstractContentPortlet  {
                archive, elementsPerPage, year, month, day, useLifecycleBool, maxDays);
 
          setAttribute(req, ELEMENTS, elements);
-         if (assettypes != null && !assettypes.isEmpty()) {
+         if (!assettypes.isEmpty()) {
             setAttribute(req, TYPES, assettypes);
          }
          setAttribute(req, TOTAL_ELEMENTS, Math.min(maxElements, totalItems));
