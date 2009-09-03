@@ -17,6 +17,7 @@
 	<modules>
 		<module>war-live</module>
 		<module>war-staging</module>
+		<module>war-community</module>
 	</modules>
 
 	<dependencies>
