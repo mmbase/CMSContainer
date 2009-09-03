@@ -8,7 +8,7 @@
          function validateColumn(){
             var column = document.forms[0].column.value;
             if(!/^\s*[1-9]\d*\s*$/.test(column)){
-               alert("Column value must an integer greater than 0.");
+               alert("Column value must an integer greater than 0!");
                document.forms[0].column.focus();
                return false;
             } else {
@@ -70,6 +70,7 @@
                   <cmsc:option value="50" message="edit_defaults.width.small"/>
                   <cmsc:option value="110" message="edit_defaults.width.default"/>
                   <cmsc:option value="150" message="edit_defaults.width.large"/>
+                  <cmsc:option value="200" message="edit_defaults.width.xlarge"/>
                </cmsc:select>
             </td>
          </tr>
