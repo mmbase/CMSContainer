@@ -27,7 +27,7 @@
 
    <action type="create">
       <relation destinationtype="typedef" role="allowrel">
-         <field name="allow">1</field>      
+         <field name="allow">1</field>
       </relation>
    </action>
 </list>

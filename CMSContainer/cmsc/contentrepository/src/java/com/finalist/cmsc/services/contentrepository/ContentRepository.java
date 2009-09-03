@@ -12,7 +12,6 @@ package com.finalist.cmsc.services.contentrepository;
 import java.util.List;
 
 import com.finalist.cmsc.beans.NodetypeBean;
-import com.finalist.cmsc.beans.om.AssetElement;
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.services.ServiceManager;
@@ -45,19 +44,6 @@ public class ContentRepository {
       return cService.countContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumbers, year, month, day);
    }
-
-
-   public static int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day, int maxDays) {
-      return cService.countAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumbers, year, month, day, maxDays);
-   }
-   public static int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month, int day) {
-      return cService.countAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumbers, year, month, day);
-   }
-
 
    public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
@@ -92,17 +78,14 @@ public class ContentRepository {
       return cService.getContentElement(elementId);
    }
 
+
    public static List<ContentElement> getContentElements(String channel, List<String> contenttypes, String orderby,
          String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
          int day , int maxDays) {
       return cService.getContentElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
             maxNumbers, year, month, day, maxDays);
    }
-   
-   public static List<AssetElement> getAssetElements(String channel, List<String> assettypes, String orderby,
-         String direction, boolean useLifecycle, String archive, int offset, int maxNumbers, int year, int month,
-         int day , int maxDays) {
-      return cService.getAssetElements(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumbers, year, month, day, maxDays);
-   }
+
+
+
 }

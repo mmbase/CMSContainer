@@ -81,10 +81,7 @@ public class Publish {
    }
 
    public static String getRemoteNavigationUrl(String serverName, String appPath) {
-      return cService.getRemoteNavigationUrl(serverName, appPath);
-   }
    
-   public static boolean inPublishQueue(Node node) {
-      return cService.inPublishQueue(node);
+      return cService.getRemoteNavigationUrl(serverName, appPath);
    }
 }

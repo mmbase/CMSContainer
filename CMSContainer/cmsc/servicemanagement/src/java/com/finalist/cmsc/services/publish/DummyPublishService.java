@@ -59,20 +59,16 @@ public class DummyPublishService extends PublishService {
    public Node getRemoteNode(Node node) {
        return null;
    }
-
-
-   @Override
-   public Cloud getRemoteCloud(Cloud cloud) {
-      return null;
-   }
    
    public String getRemoteUrl(Node node) {
       //TODO Implement this function outside this servicemanagement for single war situations.
       return null;
    }
 
+
    @Override
-   public boolean inPublishQueue(Node node) {
-      return false;
+   public Cloud getRemoteCloud(Cloud cloud) {
+      return null;
    }
+
 }

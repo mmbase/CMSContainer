@@ -19,54 +19,51 @@ import com.finalist.cmsc.struts.MMBaseForm;
 public class GroupForm extends MMBaseForm {
 
    private String name;
-
    private String description;
 
-   private String contentchannel;
-
    private String[] members = new String[] {};
-
    private String[] users = new String[] {};
+
 
    public String getDescription() {
       return description;
    }
 
+
    public void setDescription(String description) {
       this.description = description;
    }
+
 
    public String getName() {
       return name;
    }
 
+
    public void setName(String name) {
       this.name = name;
    }
+
 
    public String[] getMembers() {
       return members;
    }
 
+
    public void setMembers(String[] members) {
       this.members = members;
    }
+
 
    public String[] getUsers() {
       return users;
    }
 
+
    public void setUsers(String[] users) {
       this.users = users;
    }
 
-   public String getContentchannel() {
-      return contentchannel;
-   }
-
-   public void setContentchannel(String contentchannel) {
-      this.contentchannel = contentchannel;
-   }
 
    @Override
    public void reset(ActionMapping mapping, HttpServletRequest request) {

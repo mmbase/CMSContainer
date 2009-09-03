@@ -23,7 +23,6 @@ public class WizardCloseAction extends Action {
 
       session.removeAttribute("contenttype");
       session.removeAttribute("creation");
-      request.getSession().removeAttribute("fromSE");
 
       String returnurl = request.getParameter("returnurl");
       if (StringUtils.isEmpty(returnurl)) {

@@ -1,30 +1,18 @@
 package com.finalist.cmsc.security.forms;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.mmapps.commons.util.StringUtil;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.struts.MMBaseAction;
+import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationList;
 
-import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.struts.MMBaseAction;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * GroupAction
@@ -88,18 +76,6 @@ public class GroupAction extends MMBaseAction {
 
          groupNode.setStringValue("description", groupForm.getDescription());
          groupNode.commit();
-         
-         NodeManager nodeManager = cloud.getNodeManager("contentchannel");
-         RelationList relationList = groupNode.getRelations("mmbasegrouprel", nodeManager, "destination");
-         if(relationList != null && relationList.size() > 0){
-            Relation relation = (Relation) relationList.getRelation(0);
-            relation.delete();
-         }
-         if(!StringUtil.isEmpty(groupForm.getContentchannel())){
-            Node contentChannelNode = cloud.getNode(groupForm.getContentchannel());
-            RelationUtil.createRelation(groupNode, contentChannelNode, "mmbasegrouprel");
-         }
-         
          SecurityUtil.setGroupMembers(cloud, groupNode, groupForm.getMembers());
       }
       removeFromSession(request, form);

@@ -357,7 +357,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                else {
                   if (link.hasAttribute(RichText.HREF_ATTR)) {
                      String href = link.getAttribute(RichText.HREF_ATTR);
-                     String name = link.getAttribute("name");
+                     String name = link.getAttribute("title");
                      String owner = mmObj.getStringValue("owner");
                      MMObjectNode urlNode = createUrl(owner, href, name);
 
@@ -689,10 +689,10 @@ public class RichTextBuilder extends MMObjectBuilder {
    protected MMObjectNode createUrl(String owner, String href, String name) {
       MMObjectNode urlNode = mmb.getMMObject("urls").getNewNode(owner);
       if (StringUtils.isNotEmpty(name)) {
-         urlNode.setValue("title", name);
+         urlNode.setValue("name", name);
       }
       else {
-         urlNode.setValue("title", href);
+         urlNode.setValue("name", href);
       }
       urlNode.setValue("url", href);
       urlNode.insert(owner);

@@ -14,10 +14,9 @@
       <link href="<cmsc:staticurl page='/editors/newsletter/styles/newsletter.css'/>" type="text/css" rel="stylesheet" />
    </mm:haspage>
 
-   <c:url value="/editors/repository/forms/ChannelRetrieve.do" var="channelRetrieve"/>
    <script type="text/javascript" src="../utils/ajaxtree/ajaxtree.js"></script>
    <script type="text/javascript" src="../utils/ajaxtree/addressbar.js"></script>
-   <script type="text/javascript" src="../../js/prototype.js"></script>
+
    <script type="text/javascript">
       ajaxTreeConfig.resources = '../utils/ajaxtree/images/';
       ajaxTreeConfig.url = '<mm:url page="Navigator.do" />';
@@ -54,32 +53,9 @@
          clearDefaultSearchText('<fmt:message key="selector.search.term" />');
          document.forms['searchForm'].submit();
       }
-
-      function validatePath(){
-    	   var path = document.getElementById('addressbar').value;
-    	   new Ajax.Request(
-                   "${channelRetrieve}",
-                   {
-                	    method:'put',
-                      parameters: 'quicksearch=' + path,
-                      onComplete: setHref,
-                      asynchronous : false
-                   }
-                );
-      }
-      function setHref(response){
-    	    var targetChannel = response.responseText;
-          if(targetChannel != null && targetChannel != '' && targetChannel != "notfound"){
-             document.getElementById('validatePath').href = "Content.do?parentchannel="+targetChannel+"&direction=down";
-          }
-          else{
-            document.getElementById('validatePath').href = "SearchInitAction.do?index=yes";
-          }
-      }
    </script>
 
    <style type="text/css">
-      body { overflow: hidden; }
       .tooltip {
          position: absolute;
          display: none;
@@ -92,13 +68,13 @@
       }
    </style>
 </cmscedit:head>
-<body onload="loadFunction();">
+<body style="overflow: auto" onload="loadFunction();">
    <mm:cloud jspvar="cloud" loginpage="../login.jsp">
 
    <div id="left">
       <cmscedit:sideblock title="selector.search.header" titleStyle="width: 241px;" bodyClass="body_table">
          <div class="search_form">
-               <form action="ContentSearchAction.do?index=yes" name="searchForm" method="post" target="content">
+               <form action="SearchAction.do" name="searchForm" method="post" target="content">
             <input type="text" name="title" value="<fmt:message key="selector.search.term" />" onfocus="clearDefaultSearchText('<fmt:message key="selector.search.term" />');"/>
             </form>
          </div>
@@ -115,11 +91,9 @@
                   <cmsc:rights nodeNumber="<%=trashNumber.intValue()%>" var="rolename"/>
                   <c:if test="${rolename eq 'webmaster'}">
                      <li class="trashbin">
-                        <mm:countrelations id="contentNum"type="contentelement" searchdir="destination" role="contentrel"><mm:write write="false" /></mm:countrelations>
-                        <mm:countrelations id="assetNum" type="assetelement" searchdir="source" role="creationrel"><mm:write write="false" /></mm:countrelations>
-                        <a href="<mm:url page="../recyclebin/contenttrash.jsp"/>" target="content" >
+                        <a href="<mm:url page="../recyclebin/index.jsp"/>" target="content">
                            <fmt:message key="selector.recyclebin" />
-                           (<c:out value="${contentNum+assetNum}" />)
+                           (<mm:countrelations type="contentelement" searchdir="destination" role="contentrel"/>)
                         </a>
                      </li>
                   </c:if>
@@ -127,6 +101,10 @@
                </mm:field>
             </mm:node>
          
+              <li class="images"><a href="<mm:url page="../resources/ImageInitAction.do"/>" target="content"><fmt:message key="selector.images" /></a></li>
+            <li class="attachements"><a href="<mm:url page="../resources/AttachmentInitAction.do"/>" target="content"><fmt:message key="selector.attachments" /></a></li>
+            <li class="urls"><a href="<mm:url page="../resources/UrlInitAction.do"/>" target="content"><fmt:message key="selector.urls" /></a></li>
+            
          </ul>
       </cmscedit:sideblock>
       <cmscedit:sideblock title="selector.title" titleClass="side_block_gray" bodyClass="body_table"
@@ -137,10 +115,12 @@
                   <mm:field name="path" jspvar="channelPath" write="false" />
                </mm:node>
             </c:if>
+            <html:form action="/editors/repository/QuickSearchAction" target="bottompane" styleId="addressBarForm">
                <html:text property="path" value="${channelPath}" styleId="addressbar"/>
+            </html:form>
          </div>
          <div class="search_form_options">
-            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"> <fmt:message key="selector.search" /> </a>
+            <a href="#" class="button" onclick="getElementById('addressBarForm').submit()"> <fmt:message key="selector.search" /> </a>
          </div>
 
          <div id="addressbar_choices" class="addressbar"></div>

@@ -7,19 +7,14 @@
 	<script>
 		function save() {
 			var form = document.forms["SecondaryEditForm"];
-         var re = new RegExp("\://|javascript\:|mailto\:");
-         if (form["title"].value.replace(/(^\s*)|(\s*$)/g,"") == "") {
-             alert("<fmt:message key="secondaryedit.error.title" />");
-             form["title"].focus();
-             return false;
-         } else if (form["url"] && !form["url"].value.replace(/(^\s*)|(\s*$)/g,"").match(re)) {
-             alert("<fmt:message key="secondaryedit.error.url" />");
-             form["url"].focus();
-             return false;
-       } else {
-           form["action"].value = "save";
-           return true;
-       }
+			if(form["title"].value.length > 0) {
+				form["action"].value = "save";
+				return true;
+			}
+			else {
+				alert("<fmt:message key="secondaryedit.error.title" />");
+				return false;
+			}
 		}
 
 		function cancel() {
@@ -45,36 +40,30 @@
 		  	<html:hidden property="number"/>
 		  	<html:hidden property="returnUrl"/>
 			<table border="0">
-            <mm:cloud>
-               <mm:node number="${SecondaryEditForm.number}">
-                  <mm:nodeinfo type="type" jspvar="nodetype" write="false"/>
-					   <tr>
-					      <td style="width: 150px"><fmt:message key="secondaryedit.titlefield" /></td>
-					      <td><html:text property="title" style="width: 350px"/></td>
-					   </tr>		  	
-                  <c:if test="${nodetype == 'urls'}">
-                  <tr>
-                     <td style="width: 150px"><fmt:message key="secondaryedit.urlfield" /></td>
-                     <td><html:text property="url" style="width: 350px"/></td>
-                  </tr>
-                  </c:if>
-					   <tr>
-					      <td style="width: 150px"><fmt:message key="secondaryedit.description" /></td>
-					      <td><html:textarea property="description" style="width: 350px; height:75px"/></td>
-					   </tr>		  	
-				  		<tr>
-				  			<td colspan="2">
-							  	<html:submit onclick="return save();"><fmt:message key="secondaryedit.save" /></html:submit>
-							  	<html:submit onclick="cancel();"><fmt:message key="secondaryedit.cancel" /></html:submit>
-							</td>
-						</tr>
-						<c:if test="${nodetype == 'images'}">
-						<tr>
-							<td colspan="2">
-								<img src="<mm:image template="s(600x300)"/>" alt="<mm:field name="description" />"/>
-							</td>
-						</tr>
-						</c:if>
+			   <tr>
+			      <td style="width: 150px"><fmt:message key="secondaryedit.titlefield" /></td>
+			      <td><html:text property="title" style="width: 350px"/></td>
+			   </tr>		  	
+			   <tr>
+			      <td style="width: 150px"><fmt:message key="secondaryedit.description" /></td>
+			      <td><html:textarea property="description" style="width: 350px; height:75px"/></td>
+			   </tr>		  	
+		  		<tr>
+		  			<td colspan="2">
+					  	<html:submit onclick="return save();"><fmt:message key="secondaryedit.save" /></html:submit>
+					  	<html:submit onclick="cancel();"><fmt:message key="secondaryedit.cancel" /></html:submit>
+					</td>
+				</tr>
+			  	<mm:cloud>
+				  	<mm:node number="${SecondaryEditForm.number}">
+					  	<mm:nodeinfo type="type" jspvar="nodetype" write="false"/>
+					  	<c:if test="${nodetype == 'images'}">
+					  		<tr>
+					  			<td colspan="2">
+							  		<img src="<mm:image template="s(600x300)"/>" alt="<mm:field name="description" />"/>
+							  	</td>
+							</tr>
+					  	</c:if>
 					</mm:node>
 				</mm:cloud>
 			</table>

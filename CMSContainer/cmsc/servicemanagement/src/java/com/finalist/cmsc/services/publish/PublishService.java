@@ -15,7 +15,7 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.services.Service;
 
 public abstract class PublishService extends Service {
-
+   
    private static final String SYSTEM_LIVEPATH = "system.livepath";
 
    public abstract boolean isPublished(Node node);
@@ -50,7 +50,7 @@ public abstract class PublishService extends Service {
    }
 
    public abstract String getRemoteUrl(Node node);
-   
+            
    /**
     * @See com.finalist.cmsc.services.publish.Publish#getRemoteResourceUrl
     */
@@ -97,8 +97,4 @@ public abstract class PublishService extends Service {
       }
       return result;
    }
-
-
-   public abstract boolean inPublishQueue(Node node);
-   
 }
