@@ -1,5 +1,6 @@
 package com.finalist.cmsc.services.community;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -35,11 +36,14 @@ public abstract class CommunityService extends Service {
    public abstract void removePreferences(String module, String userId, String key);
 
    public abstract Map<String, Map<String, String>> getUserProperty(String userName);
-
+  
+   public abstract Principal getUserPrincipal();
    /**
     * Do not use.
     *
     * @see Community#sendPassword(String, String, String, String, String)
     */
    abstract boolean sendPassword(String username, String senderName, String senderEmail, String emailSubject, String emailBody);
+   
+   
 }

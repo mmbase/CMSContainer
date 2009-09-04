@@ -1,5 +1,6 @@
 package com.finalist.cmsc.services.community;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +25,5 @@ public class DummyCommunityService extends CommunityService {
 	@Override public void removePreferences(String module, String userId, String key) {}
 	@Override public Map<String, Map<String, String>> getUserProperty(String userName) { return null; }
    @Override boolean sendPassword(String email, String senderName, String senderEmail, String emailSubject, String emailBody) { return true; }
+   @Override public Principal getUserPrincipal() { return null; }
 }
