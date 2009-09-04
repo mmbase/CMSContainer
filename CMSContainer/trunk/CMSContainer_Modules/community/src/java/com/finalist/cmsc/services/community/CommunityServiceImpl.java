@@ -8,6 +8,7 @@
  */
 package com.finalist.cmsc.services.community;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -250,5 +251,12 @@ public class CommunityServiceImpl extends CommunityService {
    @Required
    public void setAuthenticationService(AuthenticationService authenticationService) {
       this.authenticationService = authenticationService;
+   }
+   
+   @Override
+   public Principal getUserPrincipal() {
+      SecurityContext context = SecurityContextHolder.getContext();
+      org.acegisecurity.Authentication authentication = context.getAuthentication();
+      return authentication;
    }
 }

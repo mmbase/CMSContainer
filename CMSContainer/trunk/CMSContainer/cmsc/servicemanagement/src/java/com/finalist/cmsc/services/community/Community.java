@@ -1,5 +1,6 @@
 package com.finalist.cmsc.services.community;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +93,10 @@ public class Community {
     */
    public static boolean sendPassword(String username, String senderName, String senderEmail, String emailSubject, String emailBody) {
       return communityService.sendPassword(username, senderName, senderEmail, emailSubject, emailBody);
+   }
+   
+   public static Principal getPrincipal() {
+      return communityService.getUserPrincipal();
    }
 
 }
