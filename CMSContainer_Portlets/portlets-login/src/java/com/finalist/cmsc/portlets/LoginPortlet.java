@@ -70,38 +70,36 @@ public class LoginPortlet extends AbstractLoginPortlet {
    public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       String action = request.getParameter(ACTION_PARAMETER);
       PortletPreferences preferences = request.getPreferences();
-      
+      String username = request.getParameter(ACEGI_SECURITY_FORM_USERNAME_KEY);
+      String password = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
+      String remoteUser =  request.getRemoteUser();
       if ("login".equals(action)) {
-         String userName = request.getParameter(ACEGI_SECURITY_FORM_USERNAME_KEY);
-         String password = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
+
          String send_password =  request.getParameter(SEND_PASSWORD);
          
-         if (StringUtils.isEmpty(send_password)) {
-            if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
-               Community.login(userName, password);
-            } else {
-               if (StringUtils.isBlank(userName)) {
+         if (StringUtils.isEmpty(send_password)) { 
+
+            if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+               if (StringUtils.isBlank(username)) {
                   response.setRenderParameter(ERRORMESSAGE, "register.email.empty");
-               } else {
+               } 
+               else {
                   response.setRenderParameter(ERRORMESSAGE, "register.password.empty");
                }
-
-               return; //Because one of the required fields are empty, there is nothing to check anymore
+               return;
             }
-            
-            if (Community.isAuthenticated()) {
-               request.getPortletSession().setAttribute("username", userName, PortletSession.APPLICATION_SCOPE);
+
+            if (StringUtils.isNotEmpty(remoteUser)) {
+               request.getPortletSession().setAttribute("username", remoteUser, PortletSession.APPLICATION_SCOPE);
                String pageid = preferences.getValue(PAGE, null);
                if (StringUtils.isNotEmpty(pageid)) {
                   Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
                   String redirectUrl = NavigationUtil.getNavigationItemUrl((HttpServletRequest)request, (HttpServletResponse)response, cloud.getNode(Integer.valueOf(pageid)));
                   response.sendRedirect(redirectUrl);
                }
-               log.info(String.format("Login successful for user %s", userName));
             } else {
-               
                PersonService personHibernateService = (PersonService) ApplicationContextFactory.getBean("personService");
-               Person person = personHibernateService.getPersonByUserId(userName);
+               Person person = personHibernateService.getPersonByUserId(username);
                
                if (person != null && RegisterStatus.UNCONFIRMED.getName().equalsIgnoreCase(person.getActive())) {
                   response.setRenderParameter(ERRORMESSAGE, "view.account.unconfirmed");
@@ -109,7 +107,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
                else if (person != null && RegisterStatus.BLOCKED.getName().equalsIgnoreCase(person.getActive())) {
                   response.setRenderParameter(ERRORMESSAGE, "view.account.blocked");
                } else {
-                  log.info(String.format("Login failed for user %s", userName));
+                  log.info(String.format("Login failed for user %s", username));
                   response.setRenderParameter(ERRORMESSAGE, "login.failed");
                }
             }
@@ -188,8 +186,8 @@ public class LoginPortlet extends AbstractLoginPortlet {
 
       if (StringUtils.isNotBlank(error)) {
          request.setAttribute(ERRORMESSAGE, error);
-      }
-      if (Community.isAuthenticated()) {
+      }//Community.isAuthenticated()
+      if (StringUtils.isNotEmpty(request.getRemoteUser())) {
          template = "login/logout.jsp";
       } else {
          template = "login/login.jsp";
