@@ -11,7 +11,7 @@
 :: 
 :: Required ENV vars:
 :: JAVA_HOME - location of a JDK home dir
-:: MAVEN_HOME - location of maven's installed home dir
+:: M2_HOME - location of maven's installed home dir
 :: CATALINA_HOME - location of a Tomcat home dir
 :: 
 :: Optional ENV vars
@@ -44,13 +44,13 @@ GOTO exit
 	GOTO exit
 
 :okJavaHome
-	IF NOT "%MAVEN_HOME%" == "" GOTO gotMavenHome
-	echo The MAVEN_HOME environment variable is not defined
+	IF NOT "%M2_HOME%" == "" GOTO gotMavenHome
+	echo The M2_HOME environment variable is not defined
 	echo This environment variable is needed to run this program
 	GOTO exit
 
 :gotMavenHome
-	IF NOT exist "%MAVEN_HOME%\bin\maven.bat" GOTO noMavenHome
+	IF NOT exist "%M2_HOME%\bin\mvn.bat" GOTO noMavenHome
 	GOTO okMavenHome
 
 :noMavenHome
@@ -78,7 +78,7 @@ GOTO exit
 
 :: ----- Execute The Requested Command ---------------------------------------
 echo Using JAVA_HOME:       %JAVA_HOME%
-echo Using MAVEN_HOME:      %MAVEN_HOME%
+echo Using M2_HOME:         %M2_HOME%
 echo Using BUILD_OPTS:      %BUILD_OPTS%
 echo Using CATALINA_HOME:   %CATALINA_HOME%
 IF ""%1"" == """" GOTO usage
@@ -105,7 +105,7 @@ GOTO processCopy
 
 	:copyApp
 		pushd "%APPLICATION%"
-		call maven %BUILD_OPTS% clean jar:install
+		call mvn %BUILD_OPTS% clean install
 		popd
 		echo APPLICATION "%APPLICATION%" TO "%WEBAPP%"
 		xcopy /D /S /Y "%APPLICATION%\target\*.jar" "%CATALINA_HOME%\webapps\%WEBAPP%\WEB-INF\lib"
