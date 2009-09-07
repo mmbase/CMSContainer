@@ -11,7 +11,7 @@
 :: 
 :: Required ENV vars:
 :: JAVA_HOME - location of a JDK home dir
-:: MAVEN_HOME - location of maven's installed home dir
+:: M2_HOME - location of maven's installed home dir
 :: 
 :: Optional ENV vars
 :: BUILD_OPTS - parameters passed to Maven
@@ -43,17 +43,17 @@ GOTO exit
 	GOTO exit
 
 :okJavaHome
-	IF NOT "%MAVEN_HOME%" == "" GOTO gotMavenHome
-	echo The MAVEN_HOME environment variable is not defined
+	IF NOT "%M2_HOME%" == "" GOTO gotMavenHome
+	echo The M2_HOME environment variable is not defined
 	echo This environment variable is needed to run this program
 	GOTO exit
 
 :gotMavenHome
-	IF NOT exist "%MAVEN_HOME%\bin\maven.bat" GOTO noMavenHome
+	IF NOT exist "%M2_HOME%\bin\mvn.bat" GOTO noMavenHome
 	GOTO okMavenHome
 
 :noMavenHome
-	echo The MAVEN_HOME environment variable is not defined correctly
+	echo The M2_HOME environment variable is not defined correctly
 	echo This environment variable is needed to run this program
 	GOTO exit
 
@@ -61,7 +61,7 @@ GOTO exit
 
 :: ----- Execute The Requested Command ---------------------------------------
 
-echo Using MAVEN_HOME:      %MAVEN_HOME%
+echo Using M2_HOME:         %M2_HOME%
 echo Using JAVA_HOME:       %JAVA_HOME%
 echo Using BUILD_OPTS:      %BUILD_OPTS%
 
@@ -109,17 +109,17 @@ IF ""%1"" == ""deploy-tomcat"" GOTO processApplications
 
 :doBuild
 	cd %APPLICATION%
-	call maven %BUILD_OPTS% multiproject:install
+	call mvn %BUILD_OPTS% install
 	GOTO :EOF
 
 :doClean
 	cd %APPLICATION%
-	call maven %BUILD_OPTS% multiproject:clean
+	call mvn %BUILD_OPTS% clean
 	GOTO :EOF
 
 :doCleanBuild
 	cd %APPLICATION%
-	call maven %BUILD_OPTS% multiproject:clean multiproject:install
+	call mvn %BUILD_OPTS% clean install
 	GOTO :EOF
 
 :doDeployTomcat
@@ -149,12 +149,19 @@ IF ""%1"" == ""deploy-tomcat"" GOTO processApplications
 
 :removeDir
 	:: Do not remove tomcat webapps
+	
+	IF "%CATALINA_HOME%\webapps\ROOT" == "%~1" GOTO :EOF
+	:: Tomcat 5.x
 	IF "%CATALINA_HOME%\webapps\balancer" == "%~1" GOTO :EOF
 	IF "%CATALINA_HOME%\webapps\jsp-examples" == "%~1" GOTO :EOF
-	IF "%CATALINA_HOME%\webapps\ROOT" == "%~1" GOTO :EOF
 	IF "%CATALINA_HOME%\webapps\servlets-examples" == "%~1" GOTO :EOF
 	IF "%CATALINA_HOME%\webapps\tomcat-docs" == "%~1" GOTO :EOF
 	IF "%CATALINA_HOME%\webapps\webdav" == "%~1" GOTO :EOF
+	:: Tomcat 6.x
+	IF "%CATALINA_HOME%\webapps\docs" == "%~1" GOTO :EOF
+	IF "%CATALINA_HOME%\webapps\examples" == "%~1" GOTO :EOF
+	IF "%CATALINA_HOME%\webapps\host-manager" == "%~1" GOTO :EOF
+	IF "%CATALINA_HOME%\webapps\manager" == "%~1" GOTO :EOF
 	
 	echo Removing directory %~1
 	rmdir /S /Q %~1
