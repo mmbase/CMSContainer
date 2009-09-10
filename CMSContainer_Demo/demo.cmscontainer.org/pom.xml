@@ -20,5 +20,6 @@
         <module>war-single</module>
         <module>war-staging</module>
         <module>war-live</module>
+        <module>war-community</module>
     </modules>
 </project>
