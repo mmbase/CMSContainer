@@ -18,7 +18,7 @@
           var editor_names = [ name ];
           var xinha_plugins = createDefaultPlugins;
           var xinha_config = createDefaultConfig();
-		  var editor = HTMLArea.makeEditors(editor_names , xinha_config, xinha_plugins);
+          var editor = HTMLArea.makeEditors(editor_names , xinha_config, xinha_plugins);
           HTMLArea.startEditors(editor);
 		}
 	</script>
@@ -26,5 +26,5 @@
 	<script type="text/javascript" src="<cmsc:staticurl page='/editors/utils/localeditor.js'/>"></script>
 
 	<link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/editors/site/portaledit.css'/>" />
-	<link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/mmbase/edit/wizard/xinha/htmlarea.css'/>" />
+	<link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/mmbase/edit/wizard/xinha/Xinha.css'/>" />
 </cmsc:protected>
