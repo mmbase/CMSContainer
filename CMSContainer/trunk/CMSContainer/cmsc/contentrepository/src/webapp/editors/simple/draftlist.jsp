@@ -36,42 +36,45 @@
 				</c:if>
 
             <c:if test="${channelsNumber ne 0 && typesNumber ne 0}">
+				<table><tr>
+					
 		            <c:if test="${channelsNumber gt 1}">
-		               <div class="fieldtitle"><fmt:message key="simple.editor.place.in"/></div>
-		               <div class="select">
+		               <td class="fieldtitle"><fmt:message key="simple.editor.place.in"/></td>
+		                <td>
 		               <select name="creation">
 		                   <c:forEach var="channel" items="${channelsList}">
 		                       <option value="${channel.value}">${channel.label}</option>
 		                   </c:forEach>
 		               </select>
-		               </div>
+		              </td>
 		            </c:if>
 		            <c:if test="${channelsNumber eq 1}" >
-		               <div class="fieldtitle"><fmt:message key="simple.editor.place.in"/></div>
-		               <div class="select">
+		                <td  class="fieldtitle"><fmt:message key="simple.editor.place.in"/></td>
+		               <td>
 		                  <c:forEach var="channel" items="${channelsList}">
 		                       <input type="hidden" name="creation" value="${channel.value}"/>${channel.label}
 		                  </c:forEach>
-		               </div>
+		               </td>
 		            </c:if>
+					</tr>
+					<tr>
 		            <c:if test="${typesNumber gt 1}">
-		               <div  class="fieldtitle"><fmt:message key="simple.editor.create.new"/></div>
-		               <div class="select">
-		               <select name="contenttype">
+		              <td class="fieldtitle"><fmt:message key="simple.editor.create.new"/></td>		              
+		               <td><select name="contenttype">
 		                   <c:forEach var="type" items="${typesList}">
 		                       <option value="${type.value}">${type.label}</option>
 		                   </c:forEach>
 		               </select>
-		               </div>
+		              </td><tr></table>
 		               <div class="button"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></div>
 		            </c:if>
 		            <c:if test="${typesNumber eq 1}" >
-		               <div class="fieldtitle"><fmt:message key="simple.editor.create.new"/></div>
-		               <div class="select">
+		               <td class="fieldtitle"><fmt:message key="simple.editor.create.new"/></td>
+		               <td>
 		                  <c:forEach var="type" items="${typesList}">
 		                       <input type="hidden" name="contenttype" value="${type.value}"/>${type.label}
 		                  </c:forEach>
-		               </div>
+		               </td><tr></table>
 		               <div class="button"><input type="submit" class="button" name="submitButton" value="<fmt:message key="content.create" />"/></div>
 		            </c:if>
             </c:if>

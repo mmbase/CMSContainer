@@ -15,15 +15,10 @@ div.editor div.body div.nomessage{
    font-size:12px;
 }
 
-div.editor div.body div.fieldtitle{
-   float:left;
-   display:inline;
+div.editor div.body .fieldtitle{
    font-weight:bold ; 
-}
-
-div.editor div.body div.select{
-   margin-left:70px;
-   padding-top:5px 0px 5px;
+   width:70px;
+ 
 }
 
 div.editor div.body div.button{
