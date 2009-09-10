@@ -91,16 +91,7 @@
     <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-	<!--JavaEE authentication for Community Module-->
-   <filter>
-     <filter-name>PortalFilter</filter-name>
-     <filter-class>com.finalist.cmsc.login.filter.PortalFilter</filter-class>   
-   </filter>
-   <filter-mapping>
-     <filter-name>PortalFilter</filter-name>
-     <url-pattern>/*</url-pattern>    
-   </filter-mapping>  
-	<!-- -->
+
     <filter>
       <filter-name>SecurityFilterChainProxy</filter-name>
       <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
@@ -138,7 +129,12 @@
          <param-value>UTF-8</param-value>
       </init-param>
     </filter>
-
+	<!--JavaEE authentication for Community Module-->
+   <filter>
+     <filter-name>PortalFilter</filter-name>
+     <filter-class>com.finalist.cmsc.login.filter.PortalFilter</filter-class>   
+   </filter> 
+	<!-- -->
    <!-- navigation controller -->
    <filter>
       <description>Filter catch all requests.</description>
@@ -176,7 +172,12 @@
       <filter-name>CharacterEncoding</filter-name>
       <url-pattern>/*</url-pattern>
    </filter-mapping>
-
+	<!--JavaEE authentication for Community Module-->
+   <filter-mapping>
+     <filter-name>PortalFilter</filter-name>
+     <url-pattern>/*</url-pattern>    
+   </filter-mapping> 
+	<!-- -->
    <filter-mapping>
       <filter-name>ControllerFilter</filter-name>
       <url-pattern>/*</url-pattern>
