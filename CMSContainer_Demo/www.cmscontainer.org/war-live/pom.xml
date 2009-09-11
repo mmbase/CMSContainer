@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.cmscontainer.www</groupId>
+        <artifactId>cmsc-container-base</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>cmsc-www-live</artifactId>
+    <packaging>war</packaging>
+    <name>CMS Container.org live application</name>
+
+	<dependencies>
+	    <dependency>
+			<groupId>org.cmscontainer.modules</groupId>
+			<artifactId>cmsc-modules-publish-cleaner</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.cmscontainer.www</groupId>
+			<artifactId>cmsc-www-webapp</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.cmscontainer.templates</groupId>
+			<artifactId>cmsc-live-webapp</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+
+
+		<dependency>
+			<groupId>net.htmlparser</groupId>
+			<artifactId>jericho-html</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>0.7.3-dev-20051205</version>
+		</dependency>
+		<dependency>
+			<groupId>fontbox</groupId>
+			<artifactId>fontbox</artifactId>
+			<version>0.1.0-dev-20051205</version>
+		</dependency>
+		<dependency>
+			<groupId>org.textmining</groupId>
+			<artifactId>tm-extractors</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>2.5.1-final-20040804</version>
+		</dependency>
+	</dependencies>
+</project>
