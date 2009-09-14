@@ -53,7 +53,7 @@
 			</c:if>
 		</c:if>
          <c:remove var="notUploadedFiles" scope="session"/>
-         <br/><br/>
+         <br/>
       </c:if>
       <c:if test="${param.uploaded ne '0'}" >
          <fmt:message key="asset.upload.uploaded.results"/> ${param.uploaded}
