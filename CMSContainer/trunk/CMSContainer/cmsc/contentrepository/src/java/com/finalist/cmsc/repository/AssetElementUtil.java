@@ -337,7 +337,7 @@ public final class AssetElementUtil {
     * @return
     */
    public static boolean isNewFile(FormFile file, NodeManager manager) {
-      NodeList assets = getAssetNode(file, manager);
+      NodeList assets = getExistingAssetNode(file, manager);
       return (assets.size() == 0);
    }
 
@@ -346,7 +346,7 @@ public final class AssetElementUtil {
     * @param manager
     * @return
     */
-   private static NodeList getAssetNode(FormFile file, NodeManager manager) {
+   private static NodeList getExistingAssetNode(FormFile file, NodeManager manager) {
       ChecksumFactory checksumFactory = new ChecksumFactory();
       ByteToCharTransformer transformer = (ByteToCharTransformer) checksumFactory.createTransformer(checksumFactory
             .createParameters());
@@ -365,16 +365,16 @@ public final class AssetElementUtil {
       return assets;
    }
 
-   public static String getPathForAsset(FormFile file, NodeManager manager) {
-      NodeList assets = getAssetNode(file, manager);
+   public static String getPathForExistingAsset(FormFile file, NodeManager manager) {
+      NodeList assets = getExistingAssetNode(file, manager);
       Node assetNode = assets.get(0);
       NodeList channelNodes = assetNode.getRelatedNodes("contentchannel", "creationrel", "destination");
       Node channelNode = channelNodes.get(0);
       return RepositoryUtil.getPathToRootString(channelNode);
    }
    
-   public static String getTitleFromExsitAsset(FormFile file, NodeManager manager){
-      NodeList assets = getAssetNode(file, manager);
+   public static String getTitleFromExistingAsset(FormFile file, NodeManager manager){
+      NodeList assets = getExistingAssetNode(file, manager);
       Node assetNode = assets.get(0);
       return assetNode.getStringValue("title");
    }
