@@ -27,7 +27,9 @@
 </mm:field>
 <c:if test="${edit || istitle}">
    </${container}>
+<c:if test="${edit}">
    <script type="text/javascript">
    new InPlaceEditor.Local('content_${elementId}_${name}', {${options}});
    </script>
+</c:if>
 </c:if>

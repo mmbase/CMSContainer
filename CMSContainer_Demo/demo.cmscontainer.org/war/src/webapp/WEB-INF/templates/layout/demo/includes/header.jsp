@@ -3,6 +3,13 @@
   <cmsc:headercontent dublin="true" />
   <link rel="icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
   <link rel="shortcut icon" href="<cmsc:staticurl page='/favicon.ico' />" type="image/x-icon" />
+  
+  <cmsc:protected inverse="true">
+    <script src="<cmsc:staticurl page='/js/prototype.js" type="text/javascript'/>"></script>
+    <script src="<cmsc:staticurl page='/js/scriptaculous/scriptaculous.js?load=effects,builder'/>" type="text/javascript"></script>
+  </cmsc:protected>
+  <%@include file="/WEB-INF/templates/layout/cmsc/richtext/lightbox.jsp" %>
+  
   <cmsc:insert-stylesheet var="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl.css'/>" media="screen,projection,print" />
   <c:forEach var="style" items="${stylesheet}">
