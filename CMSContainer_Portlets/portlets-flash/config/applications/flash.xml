@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE application PUBLIC "-//MMBase/DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
+<application name="flash" maintainer="finalist.com" version="2" auto-deploy="true">
+	<requirements>
+		<requires name="basecontentelements" maintainer="finalist.com" version="1" type="application" />
+		<requires name="contentrepository" maintainer="finalist.com" version="2" type="application" />
+	</requirements>
+	<neededbuilderlist>
+		<builder maintainer="finalist.com" version="1">flashmovie</builder>
+	</neededbuilderlist>
+
+	<neededreldeflist></neededreldeflist>
+
+	<allowedrelationlist>
+		<relation from="flashmovie" to="images" type="imagerel" />
+		<relation from="flashmovie" to="attachments" type="related" />
+	</allowedrelationlist>
+
+	<datasourcelist>
+		<datasource builder="portletdefinition" path="flash/portletdefinition.xml" />
+		<datasource builder="view" path="flash/view.xml" />
+		<datasource builder="editwizards" path="flash/editwizards.xml" />
+	</datasourcelist>
+
+	<relationsourcelist></relationsourcelist>
+
+	<contextsourcelist></contextsourcelist>
+</application>

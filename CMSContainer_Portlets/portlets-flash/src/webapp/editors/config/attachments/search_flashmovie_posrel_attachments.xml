@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+<list role="posrel" destination="attachments" minoccurs="0" maxoccurs="1" orderby="field[@name='pos']" ordertype="number">
+
+	<title xml:lang="nl">SWF (flash) bestand</title>
+	<title xml:lang="en">SWF (flash) file</title>
+
+	<item>
+		<field name="title" dtrequired="true">
+			<prompt xml:lang="en">Title</prompt>
+			<prompt xml:lang="nl">Titel</prompt>
+		</field>
+		<field name="handle" ftype="file" dtmaxsize="16000000">
+			<prompt xml:lang="en">Attachment</prompt>
+			<prompt xml:lang="nl">Bijlage</prompt>
+		</field>
+	</item>
+
+	<command name="search" nodepath="attachments" age="-1" fields="title,description" constraints="mimetype = 'application/x-shockwave-flash'">
+		<prompt xml:lang="en">Search SWF files</prompt>
+		<prompt xml:lang="nl">Zoek SWF bestand</prompt>
+		<search-filter>
+			<name xml:lang="en">Title contains</name>
+			<name xml:lang="nl">Titel bevat</name>
+			<search-fields>[title]</search-fields>
+		</search-filter>
+	</command>
+
+	<command name="insert" objectnumber="new">
+		<prompt xml:lang="en">New</prompt>
+		<prompt xml:lang="nl">Nieuw</prompt>
+	</command>
+
+	<action type="create">
+		<relation role="posrel">
+			<field name="pos">{sum(//relation[@role='posrel' and @lastitem='true']/object[@type='attachments']/../field[@name='pos'])+{$pos}}</field>
+			<object type="attachments" />
+		</relation>
+	</action>
+</list>
