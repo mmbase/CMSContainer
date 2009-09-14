@@ -15,6 +15,7 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.NodeManager;
 
 import com.finalist.cmsc.repository.AssetElementUtil;
+import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 import com.finalist.util.http.BulkUploadUtil;
 
@@ -28,14 +29,20 @@ public class AssetUploadAction extends MMBaseAction {
       String parentchannel = assetUploadForm.getParentchannel();
       FormFile file = assetUploadForm.getFile();
 
+      String big = "";
+      String exsit = "";
+      String exsitChannel = "";
+      String exsitChannelId = "";
+      String exsitAssetTitle = "";
+      String isZip = "";
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
 
-      if (isValidFile(file)) {
+      if (notEmptyFile(file)) {
          String assetType = AssetElementUtil.judgeAssetType(file.getFileName());
          NodeManager manager = cloud.getNodeManager(assetType);
-
-         if (AssetElementUtil.isNewFile(file, manager)) {
+         if (BulkUploadUtil.isZipFile(file.getContentType(), file.getFileName())) {
+            isZip = "isZip";
             List<Integer> nodes = BulkUploadUtil.store(cloud, manager, parentchannel, file, notUploadedFiles,
                   uploadedFiles);
             // to archive the upload asset
@@ -43,7 +50,25 @@ public class AssetUploadAction extends MMBaseAction {
                AssetElementUtil.addRelationsForNodes(nodes, cloud);
             }
          } else {
-            notUploadedFiles.add(file.getFileName());
+            if (BulkUploadUtil.maxFileSizeBiggerThan(file.getFileSize())) {
+               if (AssetElementUtil.isNewFile(file, manager)) {
+                  List<Integer> nodes = BulkUploadUtil.store(cloud, manager, parentchannel, file, notUploadedFiles,
+                        uploadedFiles);
+                  // to archive the upload asset
+                  if (nodes != null) {
+                     AssetElementUtil.addRelationsForNodes(nodes, cloud);
+                  }
+               } else {
+                  exsit = "exsit";
+                  exsitChannel = AssetElementUtil.getPathForAsset(file, manager);
+                  exsitChannelId = RepositoryUtil.getChannelFromPath(cloud, exsitChannel).getStringValue("number");
+                  exsitAssetTitle = AssetElementUtil.getTitleFromExsitAsset(file, manager);
+                  notUploadedFiles.add(file.getFileName());
+               }
+            } else {
+               big = "big";
+               notUploadedFiles.add(file.getFileName());
+            }
          }
       }
       addToSession(request, "notUploadedFiles", notUploadedFiles);
@@ -51,15 +76,15 @@ public class AssetUploadAction extends MMBaseAction {
       addToSession(request, "uploadingDone", "yes");
 
       String url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel="
-            + parentchannel + "&failed=" + notUploadedFiles.size() + "&uploaded=" + uploadedFiles.size();
+            + parentchannel + "&failed=" + notUploadedFiles.size() + "&uploaded=" + uploadedFiles.size() + "&isZip="
+            + isZip + "&big=" + big + "&exsit=" + exsit + "&exsitChannel=" + exsitChannel + "&exsitChannelId="
+            + exsitChannelId + "&exsitAssetTitle=" + exsitAssetTitle + "&maxAllowFileSize=" + BulkUploadUtil.getMaxAllowFileSize()/(1024*1024);
 
       return new ActionForward(url, true);
    }
 
-   private boolean isValidFile(FormFile file) {
-      return (BulkUploadUtil.maxFileSizeBiggerThan(file.getFileSize()) || BulkUploadUtil.isZipFile(file
-            .getContentType(), file.getFileName()))
-            && file.getFileSize() != 0 && StringUtils.isNotEmpty(file.getFileName());
+   private boolean notEmptyFile(FormFile file) {
+      return (file.getFileSize() != 0 && StringUtils.isNotEmpty(file.getFileName()));
    }
 
    private void addToSession(HttpServletRequest request, String name, Object value) {
