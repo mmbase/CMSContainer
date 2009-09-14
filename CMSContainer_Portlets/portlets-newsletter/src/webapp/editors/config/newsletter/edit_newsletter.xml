@@ -49,6 +49,12 @@
       <prompt xml:lang="nl">Naam antwoord</prompt>
       <prompt xml:lang="zh">收件人</prompt>
    </field>
+   <field name="inmenu" ftype="enum">
+      <prompt xml:lang="en">In menu</prompt>
+      <prompt xml:lang="nl">In menu</prompt>
+      <prompt xml:lang="zh">在菜单中</prompt>
+      <optionlist select="boolean" />
+   </field>
    <field name="paused" ftype="enum">
       <prompt xml:lang="en">Paused</prompt>
       <prompt xml:lang="nl">Pauze</prompt>
