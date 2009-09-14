@@ -68,10 +68,15 @@
         <!--
           // Store htmlarea names.
           var xinha_editors = new Array();
+          var xinha_editors_lightbox = new Array();
         ]]></xsl:text>
       <xsl:for-each select="//wizard/form[@id=//wizard/curform]/descendant::*[@ftype=&apos;html&apos; and @maywrite!=&apos;false&apos;]">
         xinha_editors[xinha_editors.length] = '<xsl:value-of select="@fieldname"/>';
       </xsl:for-each>
+      <xsl:for-each select="//wizard/form[@id=//wizard/curform]/descendant::*[@ftype=&apos;htmllightbox&apos; and @maywrite!=&apos;false&apos;]">
+        xinha_editors_lightbox[xinha_editors_lightbox.length] = '<xsl:value-of select="@fieldname"/>';
+      </xsl:for-each>
+
       <xsl:text disable-output-escaping="yes">
         <![CDATA[
         //  -->
@@ -304,6 +309,9 @@
         <xsl:call-template name="ftype-text"/>
       </xsl:when>
       <xsl:when test="@ftype=&apos;html&apos;">
+        <xsl:call-template name="ftype-html"/>
+      </xsl:when>
+      <xsl:when test="@ftype=&apos;htmllightbox&apos;">
         <xsl:call-template name="ftype-html"/>
       </xsl:when>
       <xsl:when test="@ftype=&apos;relation&apos;">
@@ -1212,6 +1220,7 @@
     <xsl:param name="value">0</xsl:param>
     <xsl:param name="selected"/>
     <xsl:param name="end">0</xsl:param>
+    <xsl:param name="interval">1</xsl:param>
 
     <xsl:call-template name="gen-option">
       <xsl:with-param name="value" select="format-number($value,'00')" />
@@ -1221,7 +1230,7 @@
 
     <xsl:if test="$value &lt; $end">
       <xsl:call-template name="new-loop-options">
-        <xsl:with-param name="value" select="format-number($value + 1,'00')" />
+        <xsl:with-param name="value" select="format-number($value + $interval,'00')" />
         <xsl:with-param name="selected" select="$selected" />
         <xsl:with-param name="end" select="$end" />
       </xsl:call-template>

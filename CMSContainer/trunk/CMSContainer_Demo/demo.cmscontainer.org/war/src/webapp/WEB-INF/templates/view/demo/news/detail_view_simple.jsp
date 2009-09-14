@@ -32,6 +32,33 @@
        
       <div class="divider3"></div>
        
+      <mm:listrelationscontainer type="images" role="imagerel" searchdir="destination">
+        <mm:sortorder field="order" />
+        <mm:constraint field="pos" value="gallery" />
+        
+        <mm:listrelations>
+          <mm:first>
+            <div style="width: 100%;">
+            <h3 style="font-size: 1em;"><fmt:message key="view.article.gallery" /></h3>
+          </mm:first>
+          <mm:node number="${_node.dnumber}">
+            <a href=" <mm:image template="s(600)" />" rel="lightbox[gallery]" title="${_node.description}">
+            <%--
+              thumbnails are rendered by the basic CMSC image tag,
+              popup is set to 'false' since a lightbox-popup effect is used.
+            --%>
+              <cmsc-bm:image width="125" popup="false" />
+            </a>
+          </mm:node>
+
+          <mm:last>
+            </div>
+          </mm:last>
+        </mm:listrelations>
+      </mm:listrelationscontainer>
+       
+      <div class="divider3"></div>
+       
       <%-- related articles --%>
       <mm:relatednodes type="contentelement" role="posrel" orderby="posrel.pos" searchdir="destination">
         <mm:field name="number" id="elementNumber" write="false" />

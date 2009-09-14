@@ -4,12 +4,13 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import net.sf.mmapps.commons.util.StringUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.core.CoreField;
-import org.mmbase.datatypes.DataType;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.storage.search.*;
@@ -43,6 +44,9 @@ public class RichTextBuilder extends MMObjectBuilder {
    protected boolean downloadImages = true;
    protected boolean resolveIds = true;
 
+   private List<String> htmlTypes = new ArrayList<String>();
+   private List<String> lightboxTypes = new ArrayList<String>();
+
 
    /**
     * @see org.mmbase.module.core.MMObjectBuilder#init()
@@ -63,14 +67,24 @@ public class RichTextBuilder extends MMObjectBuilder {
          resolveIds = Boolean.valueOf(resolve);
       }
 
+      String htmltypesParam = map.get("htmltypes");
+      if (StringUtils.isNotEmpty(htmltypesParam)) {
+         StringTokenizer tokenizer = new StringTokenizer(htmltypesParam, ", \t\n\r\f");
+         while(tokenizer.hasMoreTokens()) {
+            htmlTypes.add(tokenizer.nextToken());
+         }
+      }
+      String lightboxtypesParam = map.get("lightboxtypes");
+      if (StringUtils.isNotEmpty(lightboxtypesParam)) {
+         StringTokenizer tokenizer = new StringTokenizer(lightboxtypesParam, ", \t\n\r\f");
+         while(tokenizer.hasMoreTokens()) {
+            lightboxTypes.add(tokenizer.nextToken());
+         }
+      }
+      
       Collection<CoreField> fields = getFields();
       for (CoreField field : fields) {
-         DataType dataType = field.getDataType();
-         while (StringUtils.isEmpty(dataType.getName())) {
-            dataType = dataType.getOrigin();
-         }
-
-         if (isHtmlField(dataType.getName())) {
+         if (isHtmlField(field)) {
             String fieldname = field.getName();
             log.debug("richtext field: " + fieldname.trim());
             htmlFields.add(fieldname);
@@ -79,18 +93,30 @@ public class RichTextBuilder extends MMObjectBuilder {
       return true;
    }
 
-
    /**
     * override this method if you have your own rich text fields!
     *
     * @param name
     * @return
     */
-   public boolean isHtmlField(String name) {
-      return RichText.RICHTEXT_TYPE.equals(name);
+   public final boolean isHtmlField(String name) {
+      return RichText.isHtmlField(name) || htmlTypes.contains(name) || lightboxTypes.contains(name);
+   }
+   
+   public final boolean isLightboxFIeld(String name) {
+      return RichText.isLightboxFIeld(name) || lightboxTypes.contains(name);
    }
 
+   public boolean isHtmlField(Field field) {
+      String dataTypeName = RichText.getDataTypeName(field);
+      return isHtmlField(dataTypeName);
+   }
 
+   public boolean isLightboxFIeld(Field field) {
+      String dataTypeName = RichText.getDataTypeName(field);
+      return isLightboxFIeld(dataTypeName);
+   }
+   
    protected void initInlineBuilders() {
       if (inlinerelBuilder == null) {
          inlinerelBuilder = mmb.getMMObject(RichText.INLINEREL_NM);
@@ -192,7 +218,7 @@ public class RichTextBuilder extends MMObjectBuilder {
    }
 
 
-   protected void resolve(MMObjectNode node, List<String> idsList, List<CoreField> fields, boolean isSnsert) {
+   protected void resolve(MMObjectNode node, List<String> idsList, List<CoreField> fields, boolean isInsert) {
       Iterator<CoreField> iFields = fields.iterator();
       while (iFields.hasNext()) {
          Field field = iFields.next();
@@ -206,7 +232,7 @@ public class RichTextBuilder extends MMObjectBuilder {
 
             if (htmlFields.contains(fieldName)) {
                log.debug("Evaluating " + fieldName);
-               if (isSnsert || node.getChanged().contains(fieldName)) {
+               if (isInsert || node.getChanged().contains(fieldName)) {
                   // Persistent string field.
                   String fieldValue = (String) node.getValues().get(fieldName);
                   if (StringUtils.isNotEmpty(fieldValue)) {
@@ -214,6 +240,10 @@ public class RichTextBuilder extends MMObjectBuilder {
                         if (RichText.hasRichtextItems(fieldValue)) {
                            Document doc = RichText.getRichTextDocument(fieldValue);
 
+                           if (isLightboxFIeld(field)) {
+                              resolveLightboxResources(node, idsList, doc);
+                           }
+                           
                            resolveResources(node, idsList, doc);
 
                            String out = RichText.getRichTextString(doc);
@@ -241,10 +271,19 @@ public class RichTextBuilder extends MMObjectBuilder {
       }
    }
 
-
    protected void resolveResources(MMObjectNode node, List<String> idsList, Document doc) {
+      // resolve links. Links in document are inline links from richtext functionality.
+      // links created for the lightbox are removed above.
       resolveLinks(doc, idsList, node);
+      // resolve images as normal richtext functionality.
       resolveImages(doc, idsList, node);
+   }
+
+   private void resolveLightboxResources(MMObjectNode node, List<String> idsList, Document doc) {
+      // remove all invalid lightbox links (lightbox checkbox turned off)
+      resolveLightBoxLinks(doc, idsList, node);
+      // remove all lightbox links around lightbox images
+      resolveLightBoxImages(doc, idsList, node);
    }
 
 
@@ -520,7 +559,61 @@ public class RichTextBuilder extends MMObjectBuilder {
          }
       }
    }
+   
+   protected void resolveLightBoxLinks(Document doc, List<String> idsList, MMObjectNode mmObj) {
+      if (doc == null) {
+          return;
+      }
+      // collect <A> tags
+      NodeList nl = doc.getElementsByTagName(RichText.LINK_TAGNAME);
 
+      for (int i = nl.getLength() - 1; i >= 0; --i) {
+          Element link = (Element) nl.item(i);
+
+          String ligthboxValue = link.getAttribute(RichText.LIGHTBOX_ATTR);
+          if (!StringUtil.isEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
+              NodeList nlImages = link.getElementsByTagName(RichText.IMG_TAGNAME);
+              
+              for (int j = nlImages.getLength() - 1; j >= 0; --j) {
+                  Element image = (Element) nlImages.item(j);
+                  if (!image.hasAttribute(RichText.LIGHTBOX_ATTR) ){
+                      // Found lightbox link, but image has no lightbox attribute. Remove link
+                      
+                      // replace link node with image node
+                      Node linkParentNode = link.getParentNode();
+                      linkParentNode.replaceChild(image, link);
+                      break; //continue with next link
+                  }
+              }
+          }
+      }
+  }
+  
+  protected void resolveLightBoxImages(Document doc, List<String> idsList, MMObjectNode mmObj) {
+      if (doc == null) {
+          return;
+      }
+
+      NodeList nl = doc.getElementsByTagName(RichText.IMG_TAGNAME);
+      
+      for (int i = nl.getLength() - 1; i >= 0; --i) {
+          Element image = (Element) nl.item(i);
+          if (image.hasAttribute(RichText.LIGHTBOX_ATTR)) {
+              org.w3c.dom.Node parentNode = image.getParentNode();             
+              if (parentNode.getNodeType() == Node.ELEMENT_NODE &&
+                      parentNode.getNodeName().equals(RichText.LINK_TAGNAME)) {
+                  Element link = ((Element) parentNode);
+                  String ligthboxValue = link.getAttribute(RichText.LIGHTBOX_ATTR);
+                  if (!StringUtil.isEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
+                      // Found lightbox link. Never save these links. Remove node from DOM.
+
+                      Node linkParentNode = link.getParentNode();
+                      linkParentNode.replaceChild(image, link);
+                  }
+              }
+          }
+      }
+  }
 
    protected void importImage(Element image, MMObjectNode mmObj, List<String> idsList) {
       String src = image.getAttribute(RichText.SRC_ATTR);

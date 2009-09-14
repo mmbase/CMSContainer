@@ -21,6 +21,21 @@
         </class>
       </getprocessor>
     </specialization>
+    
+    <specialization id="cmsclightbox">
+      <description xml:lang="en">
+      	Html field with inline links to other objects and support for lightbox popup images
+      </description>
+      <setprocessor type="string">
+        <class name="com.finalist.cmsc.richtext.RichTextSetProcessor">
+          <param name="replaceHeaders">false</param>
+          <param name="replaceParagraphs">true</param>
+        </class>
+      </setprocessor>
+      <getprocessor type="string">
+        <class name="com.finalist.cmsc.richtext.LightBoxRichTextGetProcessor" />
+      </getprocessor>
+    </specialization>
   </datatype>
 
 </datatypes>

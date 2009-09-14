@@ -1,4 +1,5 @@
 xinha_editors = null;
+xinha_editors_lightbox = null;
 xinha_init    = null;
 
 
@@ -16,73 +17,108 @@ xinha_init = xinha_init ? xinha_init : function() {
   ];
   // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
   if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
-  xinha_config = createDefaultConfig();
+  var xinha_config = createDefaultConfig();
   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
   Xinha.startEditors(xinha_editors);
+  
+  var xinha_config_lightbox = createLightboxConfig();
+  xinha_editors_lightbox = Xinha.makeEditors(xinha_editors_lightbox, xinha_config_lightbox, xinha_plugins);
+  Xinha.startEditors(xinha_editors_lightbox);
 }
 
 createDefaultConfig = function() {
   var xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
-  xinha_config.registerButton({
-    id        : "my-validatesave",
-    tooltip   : Xinha._lc("Controleer de html"),
-    image     : _editor_url + xinha_config.imgURL +  "ed_validate_save.gif",
-    textMode  : true,
-    action    : myValidateSaveAction
-  });
-  xinha_config.registerButton({
-    id        : "insertimage",
-    tooltip   : Xinha._lc("Insert Image"),
-    image     : _editor_url + xinha_config.imgURL + "tango/16x16/mimetypes/image-x-generic.png",
-    textMode  : false,
-    action    : function(e) {e._insertImage();}
-  });
-  xinha_config.registerButton({
-    id        : "inlinelink",
-    tooltip   : Xinha._lc("Insert/Modify Link"),
-    image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-link.png",
-    textMode  : false,
-    action    : function(e) {e._createLink();}
-  });
-    xinha_config.registerButton({
-    id        : "createtable",
-    tooltip   : Xinha._lc("Insert Table"),
-    image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-table.png",
-    textMode  : false,
-    action    : function(e) {e._inserttable();}
-  });
-  xinha_config.toolbar = [
-    ["popupeditor"],
-    ["separator","formatblock","bold","italic","underline","strikethrough"],
-    ["separator","subscript","superscript"],
-    ["linebreak","separator"],
-    ["separator","insertorderedlist","insertunorderedlist"],
-    ["separator","inlinelink","insertimage"],
-    ["separator", "undo","redo","selectall"],(Xinha.is_gecko ? [] : ["cut","copy","paste"]),
-    ["separator","htmlmode","showhelp","my-validatesave","createtable"]
-  ];
 
-   xinha_config.formatblock = ({
-		"Normal": "p",	   
-	    "Heading 1": "h1",
-	    "Heading 2": "h2",
-	    "Heading 3": "h3",
-	    "Heading 4": "h4"
-   });
+  registerInsertImageConfig(xinha_config);
+  registerInsertLinkConfig(xinha_config);
+	
+  registerTableConfig(xinha_config);
+  setupDefaultConfig(xinha_config);
+  return xinha_config;
+}
 
-  xinha_config.pageStyle="body, td {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;color: #0000;font-size: 90%;}";
-  xinha_config.pageStyle+="p {font-size: 100%;}";
-  xinha_config.pageStyle+="h1 {font-weight: bold;font-size: 100%;}";
-  xinha_config.pageStyle+="h2 {font-weight: bold;	color:#2222CC; font-size: 100%;	}";
-  xinha_config.pageStyle+="h3 {font-weight: normal; color:#0000AA;	font-size: 100%; }";
-  xinha_config.pageStyle+="h4 {font-weight: normal;	color:#000055;	font-size: 100%;}";
-  xinha_config.pageStyle+="a {color: #0000FF; }";
-  
-  
-  xinha_config.URIs['insert_table'] =  _editor_url + 'popups/insert_table.html';
-  xinha_config.width = ['98%'];
+createLightboxConfig = function() {
+  var xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
+
+  registerInsertImageConfig(xinha_config);
+  registerInsertLinkConfig(xinha_config);
+  registerTableConfig(xinha_config);
+  setupDefaultConfig(xinha_config);
+
+  xinha_config.URIs['insert_image'] =  _editor_url + 'modules/InsertImage/insertinline_image_lightbox.html';
 
   return xinha_config;
+}
+
+setupDefaultConfig = function(xinha_config) {
+    xinha_config.registerButton({
+	    id        : "my-validatesave",
+	    tooltip   : Xinha._lc("Controleer de html"),
+	    image     : _editor_url + xinha_config.imgURL +  "ed_validate_save.gif",
+	    textMode  : true,
+	    action    : myValidateSaveAction
+	  });
+
+	xinha_config.toolbar = [
+      ["popupeditor"],
+      ["separator","formatblock","bold","italic","underline","strikethrough"],
+      ["separator","subscript","superscript"],
+      ["linebreak","separator"],
+      ["separator","insertorderedlist","insertunorderedlist"],
+      ["separator","inlinelink","insertimage"],
+      ["separator", "undo","redo","selectall"],(Xinha.is_gecko ? [] : ["cut","copy","paste"]),
+      ["separator","htmlmode","showhelp","my-validatesave","createtable"]
+    ];
+
+     xinha_config.formatblock = ({
+  		"Normal": "p",	   
+  	    "Heading 1": "h1",
+  	    "Heading 2": "h2",
+  	    "Heading 3": "h3",
+  	    "Heading 4": "h4"
+     });
+
+    xinha_config.pageStyle="body, td {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;color: #0000;font-size: 90%;}";
+    xinha_config.pageStyle+="p {font-size: 100%;}";
+    xinha_config.pageStyle+="h1 {font-weight: bold;font-size: 100%;}";
+    xinha_config.pageStyle+="h2 {font-weight: bold;	color:#2222CC; font-size: 100%;	}";
+    xinha_config.pageStyle+="h3 {font-weight: normal; color:#0000AA;	font-size: 100%; }";
+    xinha_config.pageStyle+="h4 {font-weight: normal;	color:#000055;	font-size: 100%;}";
+    xinha_config.pageStyle+="a {color: #0000FF; }";
+}
+
+registerInsertImageConfig = function(xinha_config) {
+	xinha_config.registerButton({
+	  id        : "insertimage",
+	  tooltip   : Xinha._lc("Insert Image"),
+	  image     : _editor_url + xinha_config.imgURL + "tango/16x16/mimetypes/image-x-generic.png",
+	  textMode  : false,
+	  action    : function(e) {e._insertImage();}
+	});
+    xinha_config.URIs['insert_image'] =  _editor_url + 'modules/InsertImage/insertinline_image.html';
+}
+registerInsertLinkConfig = function(xinha_config) {
+	xinha_config.registerButton({
+	  id        : "inlinelink",
+	  tooltip   : Xinha._lc("Insert/Modify Link"),
+	  image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-link.png",
+	  textMode  : false,
+	  action    : function(e) {e._createLink();}
+	});
+	xinha_config.URIs['link'] = _editor_url + "modules/CreateLink/insertinline_link.html"
+}
+
+registerTableConfig = function(xinha_config) {
+    xinha_config.registerButton({
+        id        : "createtable",
+        tooltip   : Xinha._lc("Insert Table"),
+        image     : _editor_url + xinha_config.imgURL +  "tango/16x16/actions/insert-table.png",
+        textMode  : false,
+        action    : function(e) {e._inserttable();}
+      });
+
+    xinha_config.URIs['insert_table'] =  _editor_url + 'popups/insert_table.html';
+    xinha_config.width = ['98%'];
 }
 
 
@@ -104,6 +140,17 @@ function doCheckHtml() {
         validator.validate(editor._textArea);
       }
     }
+    
+    for (var editorname in xinha_editors_lightbox) {
+        editor = xinha_editors_lightbox[editorname];
+        updateValue(editor);
+        // editwizard validation
+        // It is possible to save a wizard when multiple htmlareas are not validated yet.
+        if (requiresValidation(editor._textArea)) {
+          validator.validate(editor._textArea);
+        }
+      }
+
   }
 }
 
@@ -254,7 +301,7 @@ Xinha.prototype._createLink = function(link) {
                	f_usetarget : editor.config.makeLinkShowsTarget
          	};
 	}
-	this._popupDialog( "../modules/CreateLink/insertinline_link.html", function(param) {
+	this._popupDialog( editor.config.URIs.link, function(param) {
       	if (!param) { return false; } //user must have pressed cancel
 		var a = link;
 		if ( !a ){
@@ -284,7 +331,7 @@ Xinha.prototype._createLink = function(link) {
                               }
                         }
 			} catch(ex) {}
-		}
+x		}
 		else
 		{
 			var href = param.f_href.trim();
@@ -339,9 +386,11 @@ Xinha.prototype._insertImage = function(image) {
                 f_align  : image.align,
                 f_width  : image.width,
                 f_height : image.height,
-                f_destination : Xinha.is_ie ? image.destination : image.getAttribute("destination")
+                f_destination : Xinha.is_ie ? image.destination : image.getAttribute("destination"),
+                f_rel : Xinha.is_ie ? image.rel : image.getAttribute("rel"),
+                f_grouprel : Xinha.is_ie ? image.grouprel : image.getAttribute("grouprel")
         };
-        this._popupDialog("../modules/InsertImage/insertinline_image.html", function(param) {
+        this._popupDialog(editor.config.URIs.insert_image, function(param) {
                 if (!param) {// user must have pressed Cancel
                         return false;
                 }
@@ -375,8 +424,10 @@ Xinha.prototype._insertImage = function(image) {
                             case "f_alt"    :  img.alt = value; img.title = value; break;
                             case "f_border" :  Xinha.is_ie ? img.border = parseInt(value || "0") : img.setAttribute("border", parseInt(value || "0")); break;
                             case "f_align"  :  Xinha.is_ie ? img.align = value : img.setAttribute("align", value); break;
+                            case "f_rel"    :  Xinha.is_ie ? img.rel = value : img.setAttribute("rel", value); break;
+                            case "f_grouprel"  :  Xinha.is_ie ? img.grouprel = value : img.setAttribute("grouprel", value); break;
                             case "f_width"  :  Xinha.is_ie ? img.width = parseInt(value || "100") : img.setAttribute("width", parseInt(value || "100")); break;
-                            case "f_height"  :
+                            case "f_height" :
                               if (Xinha.is_ie) {
                                 if (!value) {
                                   img.height = "100";

@@ -17,6 +17,7 @@ package com.finalist.cmsc.richtext;
 
 import java.util.Map;
 
+
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
@@ -58,14 +59,26 @@ public class RichText {
    public static final String WIDTH_ATTR = "width";
    public static final String HEIGHT_ATTR = "height";
 
+   public final static String LIGHTBOX_ATTR = "rel";
+   public final static String LIGHTBOXGROUP_ATTR = "grouprel";
+   public static final String LIGHTBOX_VALUE = "lightbox";
+
    // MMBase stuff
    public final static String RICHTEXT_TYPE = "cmscrichtext";
+   public static final Object LIGHTBOX_RICHTEXT_TYPE = "cmsclightbox";
    public final static String INLINEREL_NM = "inlinerel";
    public final static String IMAGEINLINEREL_NM = "imageinlinerel";
    public static final String REFERID_FIELD = "referid";
    public static final String TITLE_FIELD = "title";
-
-
+   
+   public static boolean isHtmlField(String name) {
+      return RichText.RICHTEXT_TYPE.equals(name) || isLightboxFIeld(name);
+   }
+   
+   public static boolean isLightboxFIeld(String name) {
+      return RichText.LIGHTBOX_RICHTEXT_TYPE.equals(name);
+   }
+   
    public final static boolean hasRichtextItems(String in) {
       return (in.indexOf("<" + RichText.LINK_TAGNAME) > -1 || in.indexOf("<" + RichText.IMG_TAGNAME) > -1);
    }
@@ -101,11 +114,7 @@ public class RichText {
    }
    
    public final static Object stripLinkAndImage(Node sourceNode,Node destinationNode,Field field,Map<Integer, Integer> copiedNodes) {
-      DataType dataType = field.getDataType();
-      while (StringUtils.isEmpty(dataType.getName())) {
-         dataType = dataType.getOrigin();
-      }
-      if ("cmscrichtext".equals(dataType.getName())) {
+      if (isHtmlField(getDataTypeName(field))) {
          String fieldname = field.getName();
          String fieldValue = (String) sourceNode.getValueWithoutProcess(fieldname);
          log.debug("richtext field: " + fieldname.trim());
@@ -115,8 +124,8 @@ public class RichText {
                if (hasRichtextItems(fieldValue)) {
                   Document doc = getRichTextDocument(fieldValue);
 
-                  RichTextGetProcessor richTextGetProcessor = new RichTextGetProcessor();
-                  richTextGetProcessor.resolve(sourceNode,destinationNode,doc,copiedNodes);
+                  RichtTextCloneProcessor richTextCloneProcessor = new RichtTextCloneProcessor();
+                  richTextCloneProcessor.resolve(sourceNode,destinationNode,doc,copiedNodes);
                   String out = getRichTextString(doc);
                   out = WordHtmlCleaner.fixEmptyAnchors(out);
                   return out;
@@ -128,6 +137,16 @@ public class RichText {
          }
       }
       return sourceNode.getValueWithoutProcess(field.getName());
+   }
+   
+   public static String getDataTypeName(Field field) {
+      DataType dataType = field.getDataType();
+      while (StringUtils.isEmpty(dataType.getName())) {
+         dataType = dataType.getOrigin();
+      }
+
+      String dataTypeName = dataType.getName();
+      return dataTypeName;
    }
 
 }
