@@ -28,12 +28,30 @@
 <div>
    <c:if test="${uploadingDone eq 'yes'}">
       <c:if test="${param.failed ne '0'}" >
-         <span style="color:#cc0000"><fmt:message key="assets.upload.error"/></span>
+		<c:if test="${param.isZip eq 'isZip'}">
+         <span style="color:#cc0000"><fmt:message key="assets.upload.error.multiple"/></span>
          <fmt:message key="asset.upload.failed.results"/> ${param.failed}
          <br/>
          <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
          ${fileName}&nbsp;&nbsp;&nbsp;
          </c:forEach>
+		</c:if>
+		<c:if test="${param.isZip ne 'isZip'}">
+		 <fmt:message key="asset.upload.failed.results"/>&nbsp;
+         <c:forEach var="fileName" items="${notUploadedFiles}" varStatus="fileAmount">
+         ${fileName}<br/>
+         </c:forEach>
+			<c:if test="${param.big eq 'big'}">
+				<span style="color:#cc0000"><fmt:message key="assets.upload.error.big"><fmt:param>${param.maxAllowFileSize}</fmt:param></fmt:message></span>
+			</c:if>
+			<c:if test="${param.exsit eq 'exsit'}">
+				<span style="color:#cc0000"><fmt:message key="assets.upload.error.exsit"/></span><br/>
+				<a href="../repository/Asset.do?type=asset&parentchannel=${param.exsitChannelId}&direction=down">
+					${param.exsitChannel}
+				</a>&nbsp;&nbsp;
+				<fmt:message key="assets.upload.error.exsit.filename"><fmt:param>${param.exsitAssetTitle}</fmt:param></fmt:message>
+			</c:if>
+		</c:if>
          <c:remove var="notUploadedFiles" scope="session"/>
          <br/><br/>
       </c:if>
