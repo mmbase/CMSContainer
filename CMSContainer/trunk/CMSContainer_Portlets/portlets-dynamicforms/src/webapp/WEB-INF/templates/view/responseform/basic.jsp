@@ -195,7 +195,7 @@
 					<tr>
 						<td></td>
 						<td>
-							<input type="image" src="<cmsc:staticurl page='/gfx/knop/verstuur.gif'/>" id="knopverstuur" />
+							<input type="image" src="<cmsc:staticurl page='/gfx/dynamicform/submit.gif'/>" id="knopverstuur" />
 						</td>
 					</tr>
 				</table>
