@@ -47,9 +47,11 @@
 			<c:if test="${param.exsit eq 'exsit'}">
 				<span style="color:#cc0000"><fmt:message key="assets.upload.error.exsit"/></span><br/>
 				<a href="../repository/Asset.do?type=asset&parentchannel=${param.exsitChannelId}&direction=down">
-					${param.exsitChannel}
+					${exsitChannel}
 				</a>&nbsp;&nbsp;
-				<fmt:message key="assets.upload.error.exsit.filename"><fmt:param>${param.exsitAssetTitle}</fmt:param></fmt:message>
+				<fmt:message key="assets.upload.error.exsit.filename"><fmt:param>${exsitAssetTitle}</fmt:param></fmt:message>
+		        <c:remove var="exsitChannel" scope="session"/>
+		        <c:remove var="exsitAssetTitle" scope="session"/>
 			</c:if>
 		</c:if>
          <c:remove var="notUploadedFiles" scope="session"/>

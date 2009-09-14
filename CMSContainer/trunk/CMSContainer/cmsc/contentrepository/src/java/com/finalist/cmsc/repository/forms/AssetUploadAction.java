@@ -60,8 +60,9 @@ public class AssetUploadAction extends MMBaseAction {
                   }
                } else {
                   exsit = "exsit";
-                  exsitChannel = AssetElementUtil.getPathForAsset(file, manager);
-                  exsitChannelId = RepositoryUtil.getChannelFromPath(cloud, exsitChannel).getStringValue("number");
+                  String exsitChannelPath = AssetElementUtil.getPathForAsset(file, manager);
+                  exsitChannel = RepositoryUtil.getChannelFromPath(cloud, exsitChannelPath).getStringValue("name");
+                  exsitChannelId = RepositoryUtil.getChannelFromPath(cloud, exsitChannelPath).getStringValue("number");
                   exsitAssetTitle = AssetElementUtil.getTitleFromExsitAsset(file, manager);
                   notUploadedFiles.add(file.getFileName());
                }
@@ -74,11 +75,13 @@ public class AssetUploadAction extends MMBaseAction {
       addToSession(request, "notUploadedFiles", notUploadedFiles);
       addToSession(request, "uploadedFiles", uploadedFiles);
       addToSession(request, "uploadingDone", "yes");
+      addToSession(request, "exsitAssetTitle", exsitAssetTitle);
+      addToSession(request, "exsitChannel", exsitChannel);
 
       String url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel="
             + parentchannel + "&failed=" + notUploadedFiles.size() + "&uploaded=" + uploadedFiles.size() + "&isZip="
-            + isZip + "&big=" + big + "&exsit=" + exsit + "&exsitChannel=" + exsitChannel + "&exsitChannelId="
-            + exsitChannelId + "&exsitAssetTitle=" + exsitAssetTitle + "&maxAllowFileSize=" + BulkUploadUtil.getMaxAllowFileSize()/(1024*1024);
+            + isZip + "&big=" + big + "&exsit=" + exsit + "&exsitChannelId=" + exsitChannelId + "&maxAllowFileSize="
+            + BulkUploadUtil.getMaxAllowFileSize() / (1024 * 1024);
 
       return new ActionForward(url, true);
    }
