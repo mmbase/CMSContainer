@@ -364,6 +364,10 @@ public class BulkUploadUtil {
    }
 
    public static boolean maxFileSizeBiggerThan(long fileSize) {
+      return (fileSize <= getMaxAllowFileSize());
+   }
+
+   public static int getMaxAllowFileSize() {
       int maxFileSize = MAXSIZE;
       if (PropertiesUtil.getProperty(UPLOADED_FILE_MAX_SIZE) != null) {
          try {
@@ -377,7 +381,7 @@ public class BulkUploadUtil {
             log.warn("System property '" + UPLOADED_FILE_MAX_SIZE + "' is not set. Please add it (units = MB).");
          }
       }
-      return (fileSize <= maxFileSize);
+      return maxFileSize;
    }
    
    public static void main(String[] args) {
