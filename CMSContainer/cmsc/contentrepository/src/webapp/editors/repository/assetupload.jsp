@@ -44,14 +44,14 @@
 			<c:if test="${param.big eq 'big'}">
 				<span style="color:#cc0000"><fmt:message key="assets.upload.error.big"><fmt:param>${param.maxAllowFileSize}</fmt:param></fmt:message></span>
 			</c:if>
-			<c:if test="${param.exsit eq 'exsit'}">
-				<span style="color:#cc0000"><fmt:message key="assets.upload.error.exsit"/></span><br/>
-				<a href="../repository/Asset.do?type=asset&parentchannel=${param.exsitChannelId}&direction=down">
-					${exsitChannel}
+			<c:if test="${param.existing eq 'existing'}">
+				<span style="color:#cc0000"><fmt:message key="assets.upload.error.existing"/></span><br/>
+				<a href="../repository/Asset.do?type=asset&parentchannel=${param.existingChannelId}&direction=down">
+					${existingChannel}
 				</a>&nbsp;&nbsp;
-				<fmt:message key="assets.upload.error.exsit.filename"><fmt:param>${exsitAssetTitle}</fmt:param></fmt:message>
-		        <c:remove var="exsitChannel" scope="session"/>
-		        <c:remove var="exsitAssetTitle" scope="session"/>
+				<fmt:message key="assets.upload.error.existing.filename"><fmt:param>${existingAssetTitle}</fmt:param></fmt:message>
+		        <c:remove var="existingChannel" scope="session"/>
+		        <c:remove var="existingAssetTitle" scope="session"/>
 			</c:if>
 		</c:if>
          <c:remove var="notUploadedFiles" scope="session"/>

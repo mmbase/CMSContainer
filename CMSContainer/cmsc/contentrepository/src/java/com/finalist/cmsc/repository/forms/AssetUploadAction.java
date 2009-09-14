@@ -30,10 +30,10 @@ public class AssetUploadAction extends MMBaseAction {
       FormFile file = assetUploadForm.getFile();
 
       String big = "";
-      String exsit = "";
-      String exsitChannel = "";
-      String exsitChannelId = "";
-      String exsitAssetTitle = "";
+      String existing = "";
+      String existingChannel = "";
+      String existingChannelId = "";
+      String existingAssetTitle = "";
       String isZip = "";
       List<String> notUploadedFiles = new ArrayList<String>();
       List<String> uploadedFiles = new ArrayList<String>();
@@ -59,11 +59,11 @@ public class AssetUploadAction extends MMBaseAction {
                      AssetElementUtil.addRelationsForNodes(nodes, cloud);
                   }
                } else {
-                  exsit = "exsit";
-                  String exsitChannelPath = AssetElementUtil.getPathForAsset(file, manager);
-                  exsitChannel = RepositoryUtil.getChannelFromPath(cloud, exsitChannelPath).getStringValue("name");
-                  exsitChannelId = RepositoryUtil.getChannelFromPath(cloud, exsitChannelPath).getStringValue("number");
-                  exsitAssetTitle = AssetElementUtil.getTitleFromExsitAsset(file, manager);
+                  existing = "existing";
+                  String existingChannelPath = AssetElementUtil.getPathForExistingAsset(file, manager);
+                  existingChannel = RepositoryUtil.getChannelFromPath(cloud, existingChannelPath).getStringValue("name");
+                  existingChannelId = RepositoryUtil.getChannelFromPath(cloud, existingChannelPath).getStringValue("number");
+                  existingAssetTitle = AssetElementUtil.getTitleFromExistingAsset(file, manager);
                   notUploadedFiles.add(file.getFileName());
                }
             } else {
@@ -75,12 +75,12 @@ public class AssetUploadAction extends MMBaseAction {
       addToSession(request, "notUploadedFiles", notUploadedFiles);
       addToSession(request, "uploadedFiles", uploadedFiles);
       addToSession(request, "uploadingDone", "yes");
-      addToSession(request, "exsitAssetTitle", exsitAssetTitle);
-      addToSession(request, "exsitChannel", exsitChannel);
+      addToSession(request, "existingAssetTitle", existingAssetTitle);
+      addToSession(request, "existingChannel", existingChannel);
 
       String url = mapping.findForward(SUCCESS).getPath() + "?type=asset&direction=down" + "&parentchannel="
             + parentchannel + "&failed=" + notUploadedFiles.size() + "&uploaded=" + uploadedFiles.size() + "&isZip="
-            + isZip + "&big=" + big + "&exsit=" + exsit + "&exsitChannelId=" + exsitChannelId + "&maxAllowFileSize="
+            + isZip + "&big=" + big + "&existing=" + existing + "&existingChannelId=" + existingChannelId + "&maxAllowFileSize="
             + BulkUploadUtil.getMaxAllowFileSize() / (1024 * 1024);
 
       return new ActionForward(url, true);
