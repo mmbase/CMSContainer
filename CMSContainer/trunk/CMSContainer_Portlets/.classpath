@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="portlets-banner/src/java"/>
+	<classpathentry kind="src" path="portlets-dynamicforms2/src/java"/>
 	<classpathentry kind="src" path="portlets-tagcloud/src/java"/>
 	<classpathentry kind="src" path="portlets-randomcontent/src/java"/>
 	<classpathentry kind="src" path="portlets-jforum/src/java"/>
@@ -86,5 +87,8 @@
 	<classpathentry kind="var" path="M2_REPO/xpp3/xpp3_min/1.1.3.4.O/xpp3_min-1.1.3.4.O.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/thoughtworks/xstream/xstream/1.2/xstream-1.2.jar" sourcepath="M2_REPO/com/thoughtworks/xstream/xstream/1.2/xstream-1.2-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/jaxb/jaxb-api/20060426/jaxb-api-20060426.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jaxb/jaxb-impl/20060426/jaxb-impl-20060426.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jaxb/jsr173_1.0_api/20060426/jsr173_1.0_api-20060426.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
