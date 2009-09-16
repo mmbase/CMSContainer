@@ -3,7 +3,6 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="pagewizard.title">
-	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 	<script>
 	function select(wizard) {
 		document.location.href="ChooseWizardAction.do?parentPage=${parentPage}&wizard="+wizard;

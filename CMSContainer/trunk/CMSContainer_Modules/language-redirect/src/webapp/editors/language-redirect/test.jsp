@@ -7,7 +7,6 @@
 <head>
 	<title><fmt:message key="test.title" /></title>
 	<link href="../css/main.css" type="text/css" rel="stylesheet" />
-	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 	<script type="text/javascript" src="../utils/transparent_png.js" ></script>
 </head>
 

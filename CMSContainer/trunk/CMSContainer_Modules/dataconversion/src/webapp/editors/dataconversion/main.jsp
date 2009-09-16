@@ -6,7 +6,6 @@
 <c:url var="context" value="/"/>
 <head>
 <cmscedit:head title="dataconversion.title">
-<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 <script language="javascript">
    function check() {
       var node = document.getElementById("node");

@@ -5,7 +5,6 @@
 <html:html xhtml="true">
 <c:url var="actionUrl" value="/editors/dataconversion/FetchData.do?id=${uuid}"/>
 <cmscedit:head title="dataconversion.title">
-<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 <script language="javascript">
  	var XMLHttpReq;
    var flag = false;

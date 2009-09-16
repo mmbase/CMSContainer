@@ -18,7 +18,6 @@
 <cmscedit:head title="site.personal.personalpages">
 	<script src="<cmsc:staticurl page='/editors/repository/content.js'/>" type="text/javascript"></script>
 	<script src="<cmsc:staticurl page='/editors/repository/search.js'/>" type="text/javascript"></script>
-	 <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 </cmscedit:head>
 <body>
 <script type="text/javascript">

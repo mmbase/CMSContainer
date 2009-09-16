@@ -7,7 +7,6 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="reactions.title">
-<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script src="../repository/search.js" type="text/javascript"></script>
    <script src="../repository/content.js" type="text/javascript"></script>
 	<script type="text/javascript">

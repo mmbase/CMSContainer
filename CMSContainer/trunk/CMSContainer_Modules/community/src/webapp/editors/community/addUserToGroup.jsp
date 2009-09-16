@@ -5,7 +5,6 @@
    <mm:content type="text/html" encoding="UTF-8" expires="0">
 
       <cmscedit:head title="community.title">
-	  		<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
          <script type="text/javascript">
                function addToGroup(){
                var checkboxs = document.forms[1].getElementsByTagName("input");

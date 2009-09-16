@@ -6,7 +6,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="fileupload.list.title">
-    <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 	<script src="<cmsc:staticurl page='/editors/repository/content.js'/>" type="text/javascript"></script>
 	<script src="<cmsc:staticurl page='/editors/repository/search.js'/>" type="text/javascript"></script>
 	<link href="<cmsc:staticurl page='/editors/fileupload/fileupload.css' />" type="text/css" rel="stylesheet" />
