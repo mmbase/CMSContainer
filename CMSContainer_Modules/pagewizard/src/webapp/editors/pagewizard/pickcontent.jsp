@@ -3,6 +3,7 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="pagewizard.title">
+	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 	<script type="text/javascript">
 	var picking = '';
 	var mode = '';
@@ -84,13 +85,15 @@
 </cmscedit:head>
 <body>
     <div class="tabs">
+	 <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="pagewizard.title" /></a>
+                <div class="title">
+                    <fmt:message key="pagewizard.title" />
                 </div>
             </div>
         </div>
+	  </a>
     </div>
 
 	<div class="editor">

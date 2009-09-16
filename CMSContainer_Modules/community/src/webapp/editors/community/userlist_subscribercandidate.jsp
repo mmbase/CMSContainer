@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <cmscedit:head title="reactions.title">
+  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
    <script type="text/javascript">
       function addToSubscribe(){
          var checkboxs = document.forms[1].getElementsByTagName("input");

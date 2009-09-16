@@ -5,6 +5,7 @@
 <html:html xhtml="true">
 <c:url var="actionUrl" value="/editors/dataconversion/FetchData.do?id=${uuid}"/>
 <cmscedit:head title="dataconversion.title">
+<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 <script language="javascript">
  	var XMLHttpReq;
    var flag = false;
@@ -56,13 +57,15 @@
 <body onload="sendRequest()">
 <mm:cloud jspvar="cloud" >
       <div class="tabs">
-         <div class="tab_active">
-            <div class="body">
-               <div>
-                  <a href="#" ><fmt:message key="dataconversion.title" /></a>
-               </div>
-            </div>
-         </div>
+	    <a href="#" >
+			 <div class="tab_active">
+				<div class="body">
+				   <div class="title">
+					  <fmt:message key="dataconversion.title" />
+				   </div>
+				</div>
+			 </div>
+		 </a>
       </div> 
    <div class="editor" style="height:500px">
    <div style="height:100px"></div>

@@ -18,6 +18,7 @@
 <cmscedit:head title="site.personal.personalpages">
 	<script src="<cmsc:staticurl page='/editors/repository/content.js'/>" type="text/javascript"></script>
 	<script src="<cmsc:staticurl page='/editors/repository/search.js'/>" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 </cmscedit:head>
 <body>
 <script type="text/javascript">
@@ -46,13 +47,15 @@
 
 <div class="content">
    <div class="tabs">
-      <div class="tab_active">
+     <a href="#" onClick="selectTab('basic');">
+       <div class="tab_active">
          <div class="body">
-            <div>
-               <a href="#" onClick="selectTab('basic');"><fmt:message key="site.personal.personalpages" /></a>
+            <div class="title">
+               <fmt:message key="site.personal.personalpages" />
             </div>
          </div>
-      </div>
+       </div>
+	  </a>
    </div>
 </div>
 

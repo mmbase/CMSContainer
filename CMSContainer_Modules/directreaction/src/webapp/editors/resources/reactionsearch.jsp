@@ -7,6 +7,7 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="reactions.title">
+<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script src="../repository/search.js" type="text/javascript"></script>
    <script src="../repository/content.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -28,13 +29,15 @@
 <mm:import externid="action">search</mm:import><%-- either: search of select --%>
 
       <div class="tabs">
+	    <a href="#">
          <div class="tab_active">
             <div class="body">
-               <div>
-                  <a href="#"><fmt:message key="reactions.title" /></a>
+               <div class="title">
+                  <fmt:message key="reactions.title" />
                </div>
             </div>
          </div>
+		 </a>
       </div>
 
      <div class="editor" style="height:500px">

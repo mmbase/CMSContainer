@@ -6,6 +6,7 @@
 <head>
   <title><fmt:message key="download.title" /></title>
   <link href="../../css/main.css" type="text/css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
   <script type="text/javascript">
   		function openError(staticDownload) {
   			openWindow("error", staticDownload);
@@ -23,13 +24,15 @@
 </head>
 <body>
     <div class="tabs">
-        <div class="tab_active">
-            <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="download.title" /></a>
-                </div>
-            </div>
-        </div>
+	   <a href="#">
+			<div class="tab_active">
+				<div class="body">
+					<div class="title">
+					   <fmt:message key="download.title" />
+					</div>
+				</div>
+			</div>
+		</a>
     </div>
 
 <mm:cloud jspvar="cloud" loginpage="../../login.jsp">

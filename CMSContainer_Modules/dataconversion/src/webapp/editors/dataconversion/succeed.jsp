@@ -7,6 +7,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="odtupload.title">
+<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 <script language="javascript">
  	var XMLHttpReq;
  	function createXMLHttpRequest() {
@@ -113,13 +114,15 @@
 	
 
       <div class="tabs">
+	  <a href="#">
          <div class="tab_active">
             <div class="body">
-               <div>
-                  <a href="#"><fmt:message key="odtupload.title" /></a>
+               <div class="title">
+                  <fmt:message key="odtupload.title" />
                </div>
             </div>
          </div>
+		 </a>
       </div>
       
       <div class="editor" style="height:500px">

@@ -5,6 +5,7 @@
 <html:html xhtml="true">
 <fmt:setBundle basename="cmsc-community" scope="request" />
 <cmscedit:head title="community.data.title">
+      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script type="text/javascript">
       function commitToXml(){
          document.getElementById("fileType").value="xml";
@@ -23,13 +24,15 @@
 </cmscedit:head>
 <body>
 <div class="tabs">
+ <a href="#">
    <div class="tab_active">
       <div class="body">
-         <div>
-            <a href="#"><fmt:message key="community.data.title"/></a>
+         <div class="title">
+            <fmt:message key="community.data.title"/>
          </div>
       </div>
    </div>
+   </a>
 </div>
 
 <div class="editor">
