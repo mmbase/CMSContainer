@@ -2,19 +2,23 @@
 %><%@include file="globals.jsp" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="sitedelete.title"/>
+<cmscedit:head title="sitedelete.title">
+	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
+</cmscedit:head>
 <mm:import externid="number" required="true" from="parameters"/>
 <mm:import externid="pageMap" from="request" required="true"/>
 <mm:cloud jspvar="cloud" rank="administrator" loginpage="../login.jsp">
 <body>
 <div class="tabs">
-    <div class="tab_active">
-        <div class="body">
-            <div>
-                <a href="#"><fmt:message key="pagedelete.unlink.title"/></a>
-            </div>
-        </div>
-    </div>
+	<a href="#">
+		<div class="tab_active">
+			<div class="body">
+				<div class="title">
+					<fmt:message key="pagedelete.unlink.title"/>
+				</div>
+			</div>
+		</div>
+  </a>
 </div>
 <div class="editor">
    <div class="body">

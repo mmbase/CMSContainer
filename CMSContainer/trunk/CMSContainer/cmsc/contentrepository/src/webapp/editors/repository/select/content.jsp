@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="content.title">
+    <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 	<script src="content.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		function selectElement(element, title, url) {
@@ -27,13 +28,15 @@
 <mm:node number="$parentchannel" jspvar="parentchannelnode">
 
     <div class="tabs">
-        <div class="tab_active">
-            <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="content.title" /></a>
-                </div>
-            </div>
-        </div>
+		 <a href="#">
+			<div class="tab_active">
+				<div class="body">
+					<div class="title">
+						<fmt:message key="content.title" />
+					</div>
+				</div>
+			</div>
+		</a>
     </div>
 	<div class="editor">
 		<div class="body">

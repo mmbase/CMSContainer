@@ -9,22 +9,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
+      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
       <script src="content.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
-<script type="text/javascript">
-		function selectChannel(channel, path) {
-		    var newDirection=document.forms[0].direction.value;
-		    var type=document.forms[0].order.value;
-		    var offset = document.forms[0].offset.value;
-		    var pagerDOToffset = document.forms[0]['pager.offset'].value;
-		    document.location = "../MoveContentFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
-		}
-		
-		<c:if test="${not empty param.message}">
-		addLoadEvent(alert('${param.message}'));
-		</c:if>
-</script>
+	  <script type="text/javascript">
+			function selectChannel(channel, path) {
+				var newDirection=document.forms[0].direction.value;
+				var type=document.forms[0].order.value;
+				var offset = document.forms[0].offset.value;
+				var pagerDOToffset = document.forms[0]['pager.offset'].value;
+				document.location = "../MoveContentFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+			}
+			
+			<c:if test="${not empty param.message}">
+			addLoadEvent(alert('${param.message}'));
+			</c:if>
+	  </script>
     <c:if test="${not empty requestScope.refreshChannels}">
         <script>
         refreshFrame('channels');
@@ -51,30 +52,36 @@
    <div class="tabs">
 <c:if test="${param.index eq 'yes'}">
     <!-- active TAB -->
-    <div class="tab_active">
-        <div class="body">
-            <div>
-                <a href="SearchInitAction.do?index=yes"><fmt:message key="content.search.title"/></a>
-            </div>
-        </div>
-    </div>
-    <div class="tab">
-      <div class="body">
-         <div>
-            <a href="AssetSearchInitAction.do"><fmt:message key="asset.search.title" /></a>
-         </div>
-      </div>
-   </div>
+	 <a href="SearchInitAction.do?index=yes">
+		<div class="tab_active">
+			<div class="body">
+				<div class="title">
+				   <fmt:message key="content.search.title"/>
+				</div>
+			</div>
+		</div>
+	</a>
+	<a href="AssetSearchInitAction.do">
+		<div class="tab">
+		  <div class="body">
+			 <div class="title">
+				<fmt:message key="asset.search.title" />
+			 </div>
+		  </div>
+	   </div>
+   </a>
 </c:if>
 <c:if test="${empty param.index}">
    <div class="tabs">
+    <a href="SearchInitAction.do">
     <div class="tab_active">
         <div class="body">
-            <div>
-                <a href="SearchInitAction.do"><fmt:message key="content.search.title"/></a>
+            <div class="title">
+               <fmt:message key="content.search.title"/>
             </div>
         </div>
     </div>
+	</a>
 </c:if>
 </div>
    <div class="editor">

@@ -5,18 +5,21 @@
 <html:html xhtml="true">
 <cmscedit:head title="maintenance.icaches.cleanduplicates">
    <link href="style.css" type="text/css" rel="stylesheet"/>
+      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 </cmscedit:head>
    <body>
 <mm:cloud jspvar="cloud" rank="basic user" method="http">
 
 <div class="tabs">
-  <div class="tab_active">
-     <div class="body">
-        <div>
-           <a href="#"><fmt:message key="maintenance.icaches.cleanduplicates" /></a>
-        </div>
-     </div>
-  </div>
+  <a href="#">
+	  <div class="tab_active">
+		 <div class="body">
+			<div class="title">
+			   <fmt:message key="maintenance.icaches.cleanduplicates" />
+			</div>
+		 </div>
+	  </div>
+  </a>
 </div>
 
 <div class="editor">

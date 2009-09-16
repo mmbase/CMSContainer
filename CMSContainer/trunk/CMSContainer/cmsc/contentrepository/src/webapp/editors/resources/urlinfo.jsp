@@ -3,7 +3,10 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="urlinfo.title" />
+<cmscedit:head title="urlinfo.title">
+    <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
+</cmscedit:head>
+
 <script type="text/javascript">
       function modifycontent(str) {
          var openerurl ="../WizardInitAction.do?objectnumber="+str;
@@ -18,13 +21,15 @@
    </script>
 <body>
     <div class="tabs">
+	  <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="urlinfo.title" /></a>
+                <div class="title">
+                    <fmt:message key="urlinfo.title" />
                 </div>
             </div>
         </div>
+	  </a>
     </div>
 
    <div class="editor">

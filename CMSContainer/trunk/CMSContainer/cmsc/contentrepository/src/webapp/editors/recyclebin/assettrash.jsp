@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="recyclebin.title">
+  <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
   <script src="recyclebin.js" type="text/javascript"></script>
   <c:if test="${not empty fresh}">
      <script type="text/javascript">     
@@ -22,20 +23,24 @@
 <body>
 <div class="tabs">
     <!-- active TAB -->
-   <div class="tab">
-      <div class="body">
-         <div>
-            <a href="contenttrash.jsp"><fmt:message key="recyclebin.content.title" /></a>
-         </div>
-      </div>
-   </div>
-   <div class="tab_active">
-      <div class="body">
-         <div>
-                <a href="assettrash.jsp"><fmt:message key="recyclebin.asset.title"/></a>
-         </div>
-      </div>
-   </div>
+	<a href="contenttrash.jsp">
+	   <div class="tab">
+		  <div class="body">
+			 <div class="title">
+				<fmt:message key="recyclebin.content.title" />
+			 </div>
+		  </div>
+	   </div>
+   </a>
+   <a href="assettrash.jsp">
+	   <div class="tab_active">
+		  <div class="body">
+			 <div class="title">
+					<fmt:message key="recyclebin.asset.title"/>
+			 </div>
+		  </div>
+	   </div>
+   </a>
 </div>
 
    <div class="editor">
