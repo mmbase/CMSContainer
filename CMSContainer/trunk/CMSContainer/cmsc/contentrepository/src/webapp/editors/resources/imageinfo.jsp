@@ -4,7 +4,6 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="imageinfo.title">
-    <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 </cmscedit:head>
 <body>
     <div class="tabs">

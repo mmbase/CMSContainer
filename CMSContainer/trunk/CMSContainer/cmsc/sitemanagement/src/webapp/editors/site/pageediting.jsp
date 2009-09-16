@@ -6,7 +6,6 @@
    <html:html xhtml="true">
       <cmscedit:head title="toolbar.title">
          <link href="../css/toolbar.css" rel="stylesheet" type="text/css"/>
-		 <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
          <script language="JavaScript" src="../../js/prototype.js" type="text/javascript"></script>
          <c:url value="/editors/workflow/PageWorkflowPublishAction.do" var="pagePublishAction"/>
          <c:url value="/editors/site/NavigatorPanel.do" var="pageUrl"/>
