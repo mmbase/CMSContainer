@@ -62,14 +62,14 @@ div.tabs div.tab_active div.body
 	clear: both;
 	display: inline;	
 }
-div.tabs div.tab_active a.valid
+div.tabs a.valid div.tab_active  div.title
 {
 	padding-top: 17px;
 	color: #313728;
 	font-size: 14px;
 	float: left;	
 }
-div.tabs div.tab_active a.notvalid
+div.tabs a.notvalid div.tab_active  div.title
 {
 	padding-top: 17px;
 	color: #cc0000;
@@ -100,14 +100,14 @@ div.tabs div.tab div.body
 	clear: both;
 	display: inline;
 }
-div.tabs div.tab div.body a.valid
+div.tabs a.valid div.tab  div.body  div.title
 {
 	padding-top: 14px;
    color: #64676f;
    font-size: 14px;
 	float: left;			
 }
-div.tabs div.tab div.body a.notvalid
+div.tabs a.notvalid div.tab  div.body  div.title
 {
 	padding-top: 17px;
 	color: #cc0000;

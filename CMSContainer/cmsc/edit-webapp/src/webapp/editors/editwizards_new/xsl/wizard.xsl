@@ -158,7 +158,9 @@
   </xsl:template>
   
   <xsl:template name="steptemplate">
-    <div>
+    <a>
+     <xsl:call-template name="stepsattributes"/>
+     <div>
       <xsl:variable name="schemaid" select="@form-schema"/>
       <xsl:attribute name="class">
         <xsl:choose>
@@ -167,18 +169,18 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:call-template name="step"/>
-    </div>
+     </div>
+    </a>
   </xsl:template>
   
   <!-- The appearance of one 'step' button -->
   <xsl:template name="step">
     <div class="body">
-    <a>
-      <xsl:call-template name="stepsattributes"/>
+      <div class="title">
       <xsl:call-template name="i18n">
         <xsl:with-param name="nodes" select="/*/form[@id=current()/@form-schema]/title"/>
       </xsl:call-template>
-    </a>
+      </div>
     </div>
   </xsl:template>
 
