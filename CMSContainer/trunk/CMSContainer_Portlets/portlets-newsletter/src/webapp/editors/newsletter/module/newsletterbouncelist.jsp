@@ -6,19 +6,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="newsletter.bounce.title">
-<c:url var="actionUrl" value="/editors/newsletter/module/NewsletterBounceAction.do"/>
-<script type="text/javascript" src="../newsletter.js"></script>
+  <c:url var="actionUrl" value="/editors/newsletter/module/NewsletterBounceAction.do"/>
+  <script type="text/javascript" src="../newsletter.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 </cmscedit:head>
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 <div class="tabs">
-<div class="tab_active">
-<div class="body">
-   <div>
-      <a href="#"><fmt:message key="newsletter.bounce.title" /></a>
-   </div>
-</div>
-</div>
+<a href="#">
+	<div class="tab_active">
+		<div class="body">
+		   <div class="title">
+			  <fmt:message key="newsletter.bounce.title" />
+		   </div>
+		</div>
+	</div>
+ </a>
 </div>
 <div class="editor" style="height:500px">
 <div class="ruler_green"><div><fmt:message key="newsletter.term.search.result" /></div></div>

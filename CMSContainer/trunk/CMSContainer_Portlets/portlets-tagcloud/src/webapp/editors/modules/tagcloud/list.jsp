@@ -20,6 +20,7 @@
 	
 	<html:html xhtml="true">
 	<cmscedit:head title="tagcloud.title">
+		<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 		<script>
 	       function objClick(el) {
 		      var href = el.parentNode.getAttribute("href")+"";
@@ -68,13 +69,15 @@
 	
 	<div class="tabs">
 	    <!-- active TAB -->
-	    <div class="tab_active">
-	        <div class="body">
-	            <div>
-	                <a name="activetab"><fmt:message key="tagcloud.title"/></a>
-	            </div>
-	        </div>
-	    </div>
+		<a name="activetab">
+			<div class="tab_active">
+				<div class="body">
+					<div class="title">
+						<fmt:message key="tagcloud.title"/>
+					</div>
+				</div>
+			</div>
+		</a>
 	</div>
 	
 	<div class="editor">

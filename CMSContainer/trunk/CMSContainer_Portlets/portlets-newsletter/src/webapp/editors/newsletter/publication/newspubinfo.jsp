@@ -5,16 +5,19 @@
 <html:html xhtml="true">
    <cmscedit:head title="newspubinfo.title">
       <link href="<cmsc:staticurl page='/editors/css/main.css'/>" rel="stylesheet" type="text/css" />
+	  <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
    </cmscedit:head>
    <body>
    <div class="tabs">
-      <div class="tab_active">
-         <div class="body">
-            <div>
-               <a href="#"><fmt:message key="newspubinfo.title" /></a>
-            </div>
-         </div>
-      </div>
+     <a href="#">
+		  <div class="tab_active">
+			 <div class="body">
+				<div class="title">
+				   <fmt:message key="newspubinfo.title" />
+				</div>
+			 </div>
+		  </div>
+	  </a>
    </div>
     
    <div class="editor">

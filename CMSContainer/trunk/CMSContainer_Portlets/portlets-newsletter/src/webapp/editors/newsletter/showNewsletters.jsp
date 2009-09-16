@@ -6,6 +6,7 @@
 %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
    <head>
+   		<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
       <title><fmt:message key="newsletterlog.summary.newsletter"/></title>
       <link rel="icon" href="<c:url value='/favicon.ico'/>" type="image/x-icon" />
       <link rel="shortcut icon" href="<c:url value='/favicon.ico'/>" type="image/x-icon" />
@@ -56,15 +57,15 @@
       </script>
 
       <div class="tabs">
+	    <a name="activetab">
          <div class="tab_active">
             <div class="body">
-               <div>
-                  <a name="activetab">
-                     <fmt:message key="newsletterlog.newsletter.log" /> 
-                  </a>
+               <div class="title">                  
+                 <fmt:message key="newsletterlog.newsletter.log" /> 
                </div>
             </div>
          </div>
+		</a>
       </div>
 
       <div class="editor">
