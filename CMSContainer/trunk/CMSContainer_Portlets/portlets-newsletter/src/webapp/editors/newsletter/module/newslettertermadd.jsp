@@ -16,7 +16,6 @@
 	      document.forms[0].submit();
 	   }
 	</script>
-	<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 </cmscedit:head>
    <body>
       <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">

@@ -4,7 +4,6 @@
 	
 	<html:html xhtml="true">
 	<cmscedit:head title="tagdetail.title">
-		  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 		</cmscedit:head>
 	<body>
 	
