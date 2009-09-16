@@ -6,16 +6,19 @@
 <head>
   <title><fmt:message key="staticdownload.admin.title" /></title>
   <link href="../../css/main.css" type="text/css" rel="stylesheet" />
+  	<link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 </head>
 <body>
     <div class="tabs">
+	   <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="staticdownload.admin.title" /></a>
+                <div class="title">
+                    <fmt:message key="staticdownload.admin.title" />
                 </div>
             </div>
         </div>
+		</a>
     </div>
 
 	<div class="editor">

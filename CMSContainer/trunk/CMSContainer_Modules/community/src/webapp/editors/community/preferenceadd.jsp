@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="community.preference.title">
+      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 	<c:url var="actionUrl" value="/editors/community/PreferenceAction.do"/>
 	<script type="text/javascript">
 		function cancel() {
@@ -19,13 +20,15 @@
       <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
       <mm:import externid="action">search</mm:import><%-- either: search of select --%>
       <div class="tabs">
-         <div class="tab_active">
-            <div class="body">
-               <div>
-                  <a href="#"><fmt:message key="community.preference.title" /></a>
-               </div>
-            </div>
-         </div>
+	   <a href="#">
+			 <div class="tab_active">
+				<div class="body">
+				   <div class="title">
+					 <fmt:message key="community.preference.title" />
+				   </div>
+				</div>
+			 </div>
+		 </a>
       </div>
      <div class="editor" style="height:500px">
       <div class="body">
