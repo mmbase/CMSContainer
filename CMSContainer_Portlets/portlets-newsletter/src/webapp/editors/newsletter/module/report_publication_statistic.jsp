@@ -6,7 +6,6 @@
 <html:html>
    <cmscedit:head title="index.title">
       <script src="../repository/search.js" type="text/javascript"></script>
-	 	<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
    </cmscedit:head>
    <body>
    <edit:ui-tabs>

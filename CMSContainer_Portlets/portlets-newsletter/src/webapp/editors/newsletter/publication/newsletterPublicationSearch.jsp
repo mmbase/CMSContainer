@@ -5,7 +5,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
    <cmscedit:head title="index.title">
-   	  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
       <script src="../repository/search.js" type="text/javascript"></script>
       <script src="../../../js/window.js"></script>
       <script type="text/javascript">

@@ -9,7 +9,6 @@
    	<cmscedit:head title="customer.title">
 	    <script src="../repository/search.js" type="text/javascript"></script>
 	    <script src="../repository/content.js" type="text/javascript"></script>
-		 <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
    	</cmscedit:head>
 <body>
     <mm:import externid="action">search</mm:import>

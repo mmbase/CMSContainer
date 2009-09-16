@@ -6,7 +6,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="newsletter.term.title">
-<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 <c:url var="actionUrl" value="/editors/newsletter/module/NewsletterTermAction.do"/>
 <c:url var="addUrl" value="/editors/newsletter/module/NewsletterTermAction.do?method=addInit"/>
 <c:url var="termUrl" value="/editors/newsletter/NewsletterTermsAddAction.do"/>

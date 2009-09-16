@@ -5,7 +5,6 @@
 <html:html xhtml="true">
    <cmscedit:head title="newspubinfo.title">
       <link href="<cmsc:staticurl page='/editors/css/main.css'/>" rel="stylesheet" type="text/css" />
-	 <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
    </cmscedit:head>
    <body>
    <div class="tabs">

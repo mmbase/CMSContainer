@@ -20,7 +20,6 @@
 	
 	<html:html xhtml="true">
 	<cmscedit:head title="tagcloud.title">
-		<link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 		<script>
 	       function objClick(el) {
 		      var href = el.parentNode.getAttribute("href")+"";
