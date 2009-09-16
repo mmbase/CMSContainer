@@ -21,7 +21,6 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
-      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
       <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
       <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css"/>
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>

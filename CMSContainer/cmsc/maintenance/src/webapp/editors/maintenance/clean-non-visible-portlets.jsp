@@ -5,7 +5,6 @@
 <html:html xhtml="true">
   <cmscedit:head title="Clean Non-Visible Portlets">
     <link href="style.css" type="text/css" rel="stylesheet"/>
-	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
   </cmscedit:head>
 
   <body>

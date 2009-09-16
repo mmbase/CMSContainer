@@ -1423,3 +1423,18 @@ a.channeldelete {
   border:0px;
   margin-bottom:4px;
 }
+/*change the tab's style */
+div.tabs div.tab div.body div.title{
+   color:#4A5040;
+   float:left;
+   font-size:13px;
+   padding-top:14px;
+   text-decoration:none;
+}
+div.tabs div.tab_active div.body div.title{
+   color:black;
+   float:left;
+   font-size:14px;
+   padding-top:17px;
+   text-decoration:none;
+}
