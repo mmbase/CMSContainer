@@ -9,6 +9,7 @@
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
 	<cmscedit:head title="workflow.module.title">
+	  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
       <script src="../../js/prototype.js" type="text/javascript"></script>
 		<script src="workflow.js" type="text/javascript"></script>
 		<link href="../css/workflow.css" rel="stylesheet" type="text/css" />
@@ -272,34 +273,41 @@
 
 		<div class="content">
 		<div class="tabs" id="${status}">
+		<a href="#" onclick="selectTab('draft','${workflowNodetype}');">
 		<div class="<%=tabClass(pageContext,"draft")%>">
 		<div class="body">
-		<div><a href="#" onclick="selectTab('draft','${workflowNodetype}');"><fmt:message
-			key="workflow.tab.draft" /></a></div>
-		</div>
+		<div class="title"><fmt:message
+			key="workflow.tab.draft" /></div>
 		</div>
 
+		</div>
+		</a>
+	   <a href="#" onclick="selectTab('finished','${workflowNodetype}');">
 		<div class="<%=tabClass(pageContext,"finished")%>">
 		<div class="body">
-		<div><a href="#" onclick="selectTab('finished','${workflowNodetype}');"><fmt:message
-			key="workflow.tab.finished" /></a></div>
+		<div class="title"><fmt:message
+			key="workflow.tab.finished" /></div>
 		</div>
 		</div>
-
+		</a>
 		<c:if test="${acceptedEnabled}">
+		<a href="#" onclick="selectTab('approved','${workflowNodetype}');">
 			<div class="<%=tabClass(pageContext,"approved")%>">
 			<div class="body">
-			<div><a href="#" onclick="selectTab('approved','${workflowNodetype}');"><fmt:message
-				key="workflow.tab.approved" /></a></div>
+			<div class="title"><fmt:message
+				key="workflow.tab.approved" /></div>
 			</div>
 			</div>
+			</a>
 		</c:if>
-		<div class="<%=tabClass(pageContext,"published")%>">
-		<div class="body">
-		<div><a href="#" onclick="selectTab('published','${workflowNodetype}');"><fmt:message
-			key="workflow.tab.published" /></a></div>
-		</div>
-		</div>
+		<a href="#" onclick="selectTab('published','${workflowNodetype}');">
+			<div class="<%=tabClass(pageContext,"published")%>">
+			<div class="body">
+			<div class="title"><fmt:message
+				key="workflow.tab.published" /></div>
+			</div>
+			</div>
+		</a>
 		</div>
 		</div>
 
