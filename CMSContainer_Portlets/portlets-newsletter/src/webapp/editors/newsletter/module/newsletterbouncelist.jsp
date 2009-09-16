@@ -8,7 +8,7 @@
 <cmscedit:head title="newsletter.bounce.title">
   <c:url var="actionUrl" value="/editors/newsletter/module/NewsletterBounceAction.do"/>
   <script type="text/javascript" src="../newsletter.js"></script>
-  <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
+  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 </cmscedit:head>
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
