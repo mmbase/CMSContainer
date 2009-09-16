@@ -3,17 +3,21 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="user.title" />
+<cmscedit:head title="user.title">
+<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
+</cmscedit:head>
 <mm:cloud jspvar="cloud" loginpage="../login.jsp">
 <body style="overflow: auto">
     <div class="tabs">
+	 <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div>
-                    <a href="#"><fmt:message key="rights.${mode}.title" /></a>
+                <div class="title">
+                   <fmt:message key="rights.${mode}.title" />
                 </div>
             </div>
         </div>
+		</a>
     </div>
 
 	<div class="editor">

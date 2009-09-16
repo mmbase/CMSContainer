@@ -6,6 +6,7 @@
    <html:html xhtml="true">
       <cmscedit:head title="toolbar.title">
          <link href="../css/toolbar.css" rel="stylesheet" type="text/css"/>
+		 <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
          <script language="JavaScript" src="../../js/prototype.js" type="text/javascript"></script>
          <c:url value="/editors/workflow/PageWorkflowPublishAction.do" var="pagePublishAction"/>
          <c:url value="/editors/site/NavigatorPanel.do" var="pageUrl"/>
@@ -95,24 +96,24 @@
          <tr style="height:37px;">
             <td style="width:60%;">
                <div class="tabs">
+			   <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=edit" id="edit">
                   <div ${'edit' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
                      <div class="body">
-                        <div>
-                           <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=edit" id="edit">
-                              <fmt:message key="toolbar.editpage"/>
-                           </a>
+                        <div class="title">                           
+                           <fmt:message key="toolbar.editpage"/>                          
                         </div>
                      </div>
                   </div>
-                  <div ${'preview' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
+				   </a>
+				    <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=preview" id="preview">
+                   <div ${'preview' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
                      <div class="body">
-                        <div>
-                           <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=preview" id="preview">
-                              <fmt:message key="toolbar.preview"/>
-                           </a>
+                        <div  class="title">                          
+                              <fmt:message key="toolbar.preview"/>   
                         </div>
                      </div>
                   </div>
+				</a>
                </div>
 
             </td>

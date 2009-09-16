@@ -5,17 +5,20 @@
 <html:html xhtml="true">
   <cmscedit:head title="Clean Non-Visible Portlets">
     <link href="style.css" type="text/css" rel="stylesheet"/>
+	<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
   </cmscedit:head>
 
   <body>
     <div class="tabs">
+	 <a href="#">
       <div class="tab_active">
         <div class="body">
-          <div>
-            <a href="#">Clean Non-Visible Portlets</a>
+          <div class="title">
+           Clean Non-Visible Portlets
           </div>
         </div>
       </div>
+	  </a>
       <div class="editor">
         <div class="body">
           <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">

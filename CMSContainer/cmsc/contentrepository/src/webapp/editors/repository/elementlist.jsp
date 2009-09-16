@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="content.title">
+    <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
     <script src="content.js" type="text/javascript"></script>
     <script type="text/javascript">
     <c:if test="${not empty requestScope.message}">
@@ -28,20 +29,24 @@
 <c:set var="listUrl" value="${elementype == 'asset'?'asset.jsp':'content.jsp'}"/>
 <div class="tabs">
     <!-- active TAB -->
-    <div class="${(elementype == 'content' || elementype == null)?'tab_active':'tab'}">
-        <div class="body">
-            <div>
-                <a href="Content.do?type=content&parentchannel=${parentchannel}&direction=${direction}" name="activetab"><fmt:message key="content.title"/></a>
-            </div>
-        </div>
-    </div>
-    <div class="${elementype == 'asset'?'tab_active':'tab'}">
-      <div class="body">
-         <div>
-            <a href="Asset.do?type=asset&parentchannel=${parentchannel}&direction=${direction}"><fmt:message key="asset.title" /></a>
-         </div>
-      </div>
-   </div>
+	<a href="Content.do?type=content&parentchannel=${parentchannel}&direction=${direction}" name="activetab">
+		<div class="${(elementype == 'content' || elementype == null)?'tab_active':'tab'}">
+			<div class="body">
+				<div  class="title">
+					<fmt:message key="content.title"/>
+				</div>
+			</div>
+		</div>
+	</a>
+	 <a href="Asset.do?type=asset&parentchannel=${parentchannel}&direction=${direction}">
+		<div class="${elementype == 'asset'?'tab_active':'tab'}">
+		  <div class="body">
+			 <div class="title">
+			   <fmt:message key="asset.title" />
+			 </div>
+		  </div>
+	   </div>
+   </a>
 </div>
 <jsp:include page="${listUrl}"/>
 </mm:cloud>

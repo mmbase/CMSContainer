@@ -4,6 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="channelreorder.title">
+  <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
   <script type="text/javascript" src="reorder.js"></script>
   <style type="text/css">
     input.button { width : 100; }
@@ -15,13 +16,15 @@
 <mm:node referid="parent" jspvar="node">
 
    <div class="tabs">
-      <div class="tab_active">
-         <div class="body">
-            <div>
-               <a name="activetab"><fmt:message key="channelreorder.title" /></a>
-            </div>
-         </div>
-      </div>
+      <a name="activetab">
+		  <div class="tab_active">
+			 <div class="body">
+				<div class="title">
+				   <fmt:message key="channelreorder.title" />
+				</div>
+			 </div>
+		  </div>
+	  </a>
    </div>
    <div class="editor">
 

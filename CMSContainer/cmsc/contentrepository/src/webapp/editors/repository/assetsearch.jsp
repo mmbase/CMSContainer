@@ -21,6 +21,7 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
+      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
       <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
       <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css"/>
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
@@ -75,20 +76,24 @@
 <c:if test="${empty strict}">
    <div class="tabs">
     <!-- active TAB -->
-      <div class="tab">
-         <div class="body">
-            <div>
-               <a href="SearchInitAction.do?index=yes"><fmt:message key="content.search.title" /></a>
-            </div>
-         </div>
-      </div>
-       <div class="tab_active">
-           <div class="body">
-               <div>
-                   <a href="AssetSearchInitAction.do"><fmt:message key="asset.search.title"/></a>
-               </div>
-           </div>
-       </div>
+	<a href="SearchInitAction.do?index=yes">
+		  <div class="tab">
+			 <div class="body">
+				<div class="title">
+				   <fmt:message key="content.search.title" />
+				</div>
+			 </div>
+		  </div>
+	  </a>
+	  <a href="AssetSearchInitAction.do">
+		   <div class="tab_active">
+			   <div class="body">
+				   <div class="title">
+					   <fmt:message key="asset.search.title"/>
+				   </div>
+			   </div>
+		   </div>
+	   </a>
    </div>
 </c:if>
    <div class="editor">

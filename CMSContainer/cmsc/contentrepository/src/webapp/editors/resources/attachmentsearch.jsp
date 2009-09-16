@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="attachments.title">
+    <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script src="../repository/search.js" type="text/javascript"></script>
    <script src="../resources/assetsearch.js" type="text/javascript"></script>
    <script type="text/javascript">
@@ -30,11 +31,13 @@
 <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
    <c:if test="${action eq 'search'}">
       <div class="tabs"><!-- actieve TAB -->
-      <div class="tab_active">
-      <div class="body">
-      <div><a><fmt:message key="attachments.title" /></a></div>
-      </div>
-      </div>
+	  <a>
+		  <div class="tab_active">
+			  <div class="body">
+				  <div class="title"><fmt:message key="attachments.title" /></div>
+			  </div>
+		  </div>
+		</a>
       </div>
    </c:if>
 

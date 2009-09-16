@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
+   <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <link href="../css/simpleeditor.css" rel="stylesheet" type="text/css"/>
    <script src="../repository/search.js" type="text/javascript"></script>
    <script src="../repository/content.js" type="text/javascript"></script>
@@ -36,21 +37,25 @@
 <c:set var="listUrl" value="${statustype == 'ready'?'readylist.jsp':'draftlist.jsp'}"/>
 <div class="tabs">
     <!-- active TAB -->
+	<a href="../simple/SimpleContentDraftAction.do" name="activetab">
     <div class="${(statustype == 'draft' || statustype == null)?'tab_active':'tab'}">
         <div class="body">
-            <div>
-                <a href="../simple/SimpleContentDraftAction.do" name="activetab"><fmt:message key="simple.editor.draft" /></a>
+            <div class="title">
+                <fmt:message key="simple.editor.draft" />
             </div>
         </div>
     </div>
+   </a>
 	<c:if test="${single =='false' || statustype == 'ready'}">
-    <div class="${statustype == 'ready'?'tab_active':'tab'}">
-      <div class="body">
-         <div>
-            <a href="../simple/SimpleContentReadyAction.do"><fmt:message key="simple.editor.ready" /></a>
-         </div>
-      </div>
-   </div>
+	 <a href="../simple/SimpleContentReadyAction.do">
+		<div class="${statustype == 'ready'?'tab_active':'tab'}">
+		  <div class="body">
+			 <div class="title">
+			   <fmt:message key="simple.editor.ready" />
+			 </div>
+		  </div>
+	   </div>
+   </a>
    </c:if>
 </div>
 <jsp:include page="${listUrl}"/> 

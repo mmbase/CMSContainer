@@ -4,6 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="channeldelete.title">
+   <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script src="content.js" type="text/javascript"></script>
 </cmscedit:head>
 <body>
@@ -11,13 +12,15 @@
       <mm:import externid="number" id="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true" />
 
 <div class="tabs">
-    <div class="tab_active">
-        <div class="body">
-            <div>
-                <a href="#"><fmt:message key="channeldelete.title" /></a>
-            </div>
-        </div>
-    </div>
+    <a href="#">
+		<div class="tab_active">
+			<div class="body">
+				<div class="title">
+					<fmt:message key="channeldelete.title" />
+				</div>
+			</div>
+		</div>
+	</a>
 </div>
 
 <div class="editor">
