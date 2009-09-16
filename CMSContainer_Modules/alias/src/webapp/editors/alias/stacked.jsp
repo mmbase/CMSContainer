@@ -5,7 +5,6 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
 <cmscedit:head title="stacked.title">
-      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script src="content.js" type="text/javascript"></script>
    <script src="search.js" type="text/javascript"></script>
    <c:if test="${not empty requestScope.refreshChannels}">

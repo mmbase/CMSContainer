@@ -5,7 +5,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="tasks.title" >
-<link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 <script src="../taskmanagement/task.js" language="JavaScript" type="text/javascript"></script>
 <script type="text/javascript">
 function showMessage(message){

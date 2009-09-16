@@ -5,7 +5,6 @@
 <html:html xhtml="true">
 <fmt:setBundle basename="cmsc-community" scope="request" />
 <cmscedit:head title="community.data.title">
-      <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
    <script type="text/javascript">
       function commitToXml(){
          document.getElementById("fileType").value="xml";
