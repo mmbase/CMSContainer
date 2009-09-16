@@ -6,7 +6,6 @@
 <head>
   <title><fmt:message key="download.${param.field}.title" /></title>
   <link href="../../css/main.css" type="text/css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 </head>
 
     <div class="tabs">
