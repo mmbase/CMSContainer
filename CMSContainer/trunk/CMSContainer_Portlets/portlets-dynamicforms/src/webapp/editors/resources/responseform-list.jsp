@@ -7,7 +7,7 @@
    <title><fmt:message key="savedform.title.content" /></title>
    <link rel="stylesheet" type="text/css" href="../css/main.css" />
    <script src="../utils/rowhover.js" type="text/javascript"></script>
-   <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
+  	 <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 </head>
 <body>
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
