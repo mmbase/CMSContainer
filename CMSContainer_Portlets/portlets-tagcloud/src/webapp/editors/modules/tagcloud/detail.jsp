@@ -4,18 +4,21 @@
 	
 	<html:html xhtml="true">
 	<cmscedit:head title="tagdetail.title">
+		  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
 		</cmscedit:head>
 	<body>
 	
 	<div class="tabs">
 	    <!-- active TAB -->
+		<a name="activetab">
 	    <div class="tab_active">
 	        <div class="body">
-	            <div>
-	                <a name="activetab"><fmt:message key="tagdetail.title"/></a>
+	            <div class="title">
+	                <fmt:message key="tagdetail.title"/>
 	            </div>
 	        </div>
 	    </div>
+		</a>
 	</div>
 
 

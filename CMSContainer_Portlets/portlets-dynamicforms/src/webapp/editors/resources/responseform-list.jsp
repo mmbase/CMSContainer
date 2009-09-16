@@ -7,6 +7,7 @@
    <title><fmt:message key="savedform.title.content" /></title>
    <link rel="stylesheet" type="text/css" href="../css/main.css" />
    <script src="../utils/rowhover.js" type="text/javascript"></script>
+   <link rel="stylesheet" type="text/css" href="../css/main_extension.css" />
 </head>
 <body>
 <mm:cloud jspvar="cloud" loginpage="login.jsp">
@@ -15,13 +16,15 @@
 
    <div class="content">
       <div class="tabs">
+	    <a href="#">
           <div class="tab_active">
             <div class="body">
-               <div>
-                  <a href="#"><fmt:message key="savedform.title.content" /></a>
+               <div class="title">
+                  <fmt:message key="savedform.title.content" />
                </div>
             </div>
-         </div>
+          </div>
+		 </a>
       </div>
    </div>
    <div class="editor"> 

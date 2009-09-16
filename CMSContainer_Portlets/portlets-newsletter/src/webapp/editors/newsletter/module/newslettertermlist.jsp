@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="newsletter.term.title">
+<link rel="stylesheet" type="text/css" href="../../css/main_extension.css" />
 <c:url var="actionUrl" value="/editors/newsletter/module/NewsletterTermAction.do"/>
 <c:url var="addUrl" value="/editors/newsletter/module/NewsletterTermAction.do?method=addInit"/>
 <c:url var="termUrl" value="/editors/newsletter/NewsletterTermsAddAction.do"/>
@@ -62,13 +63,15 @@ function postUpdate(originalRequest) {
 <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
 <div class="tabs">
-<div class="tab_active">
-<div class="body">
-   <div>
-      <a href="NewsletterTermAction.do?method=list&init=true"><fmt:message key="newsletter.term.title" /></a>
-   </div>
-</div>
-</div>
+<a href="NewsletterTermAction.do?method=list&init=true">
+	<div class="tab_active">
+		<div class="body">
+		   <div class="title">
+			  <fmt:message key="newsletter.term.title" />
+		   </div>
+		</div>
+	</div>
+</a>
 </div>
 <div class="editor" style="height:500px">
 <div class="body">
