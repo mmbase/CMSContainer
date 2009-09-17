@@ -82,10 +82,10 @@ public class WizardController {
       if (objectnr != null && NEW_OBJECT.equals(objectnr)) {
          String contenttype = (String) session.getAttribute(SESSION_CONTENTTYPE);
          String assettype = (String) session.getAttribute(SESSION_ASSETTYPE);
-         if(StringUtils.isBlank(contenttype)){
+         if(StringUtils.isNotBlank(contenttype)){
             elementtype = contenttype;
-         }else if (StringUtils.isBlank(assettype)){
-            elementtype = (String) session.getAttribute(SESSION_ASSETTYPE);
+         }else if (StringUtils.isNotBlank(assettype)){
+            elementtype = assettype;
          }
       }
       else {
