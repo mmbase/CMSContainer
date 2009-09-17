@@ -1438,3 +1438,7 @@ div.tabs div.tab_active div.body div.title{
    padding-top:17px;
    text-decoration:none;
 }
+/*To fix the issue that the hand can't appear in IE,*/
+div.tabs a{
+   cursor:hand;
+}

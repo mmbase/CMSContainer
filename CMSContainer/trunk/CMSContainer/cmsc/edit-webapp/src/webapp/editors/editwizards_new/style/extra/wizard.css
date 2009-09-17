@@ -659,4 +659,8 @@ div.messagebox_red div.box div.body table
 	color: #ffffff;	
 	background-color: #cc0000 !important;		
 }
+/*To fix the issue that the hand can't appear in IE,*/
+div.tabs a{
+   cursor:hand;
+}
 
