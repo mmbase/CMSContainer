@@ -368,7 +368,7 @@
          <mm:compare referid="action" value="link" inverse="true">
              <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
-               <div align="left"> <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/></div>
+               <div align="left"> <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="content.delete.massdeleteconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/></div>
                </c:if>
               </mm:hasrank>
          </mm:compare>
@@ -546,10 +546,12 @@
       <mm:last>
             </tbody>
          </table>
-          <mm:compare referid="action" value="link" inverse="true">
-             <c:if test="${fn:length(results) >1}">
-             <input type="submit" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="recyclebin.removeconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/>
-             </c:if>
+         <mm:compare referid="action" value="link" inverse="true">
+             <mm:hasrank minvalue="siteadmin">
+               <c:if test="${fn:length(results) >1}">
+               <div align="left"> <input type="button" class="button" name="massdelete" onclick="javascript:deleteContent('massdelete','<fmt:message key="content.delete.massdeleteconfirm"/>')" value="<fmt:message key="content.delete.massdelete" />"/></div>
+               </c:if>
+              </mm:hasrank>
          </mm:compare>
             <mm:compare referid="linktochannel" value="" inverse="true">
                      <input type="submit" class="button" value="<fmt:message key="searchform.link.submit" />"/>

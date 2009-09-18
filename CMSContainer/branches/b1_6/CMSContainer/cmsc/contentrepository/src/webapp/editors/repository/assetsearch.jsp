@@ -357,7 +357,7 @@
                <c:if test="${fn:length(results) >1}">
                <div align="left">
                   <input type="submit" class="button" name="massdelete"
-                        onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
+                        onclick="javascript:deleteAsset('massdelete','<fmt:message key="asset.delete.massdeleteconfirm"/>')"
                         value="<fmt:message key="asset.delete.massdelete" />"/>
                </div>
                </c:if>
@@ -461,7 +461,7 @@
       <c:if test="${fn:length(results) >1}">
       <div align="left">
          <input type="submit" class="button" name="massdelete"
-               onclick="javascript:deleteAsset('massdelete','<fmt:message key="recyclebin.massremoveconfirm"/>')"
+               onclick="javascript:deleteAsset('massdelete','<fmt:message key="asset.delete.massdeleteconfirm"/>')"
                value="<fmt:message key="asset.delete.massdelete" />"/>
       </div>
       </c:if>
