@@ -29,15 +29,22 @@
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
 <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
-<div class="tabs"><!-- actieve TAB -->
-	<a>
+	<div class="tabs"><!-- actieve TAB -->
 	   <div class="tab_active">
 		  <div class="body">
 			<div class="title"><fmt:message key="images.title" /></div>
 		  </div>
 	   </div>
-   </a>
-</div>
+	   <a href="imageupload.jsp?uploadAction=${param.action}&uploadedNodes=0&strict=${param.strict}">
+      <div class="tab">
+		 <div class="body">
+		   <div class="title">	     
+			  <fmt:message key="images.upload.title" />
+		   </div>
+		 </div>
+      </div>
+	  </a>
+	</div>
 
    <div class="editor">
       <mm:import id="formAction">/editors/resources/ImageAction</mm:import>
