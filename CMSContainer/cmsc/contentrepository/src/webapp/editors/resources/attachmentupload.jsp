@@ -34,6 +34,27 @@
 </cmscedit:head>
 <body>
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
+      <div class="tabs">
+	  
+         <div class="tab">
+            <div class="body">
+               <div>
+			     <a href="AttachmentInitAction.do">
+                   <fmt:message key="attachments.title" />
+				 </a>
+               </div>
+            </div>
+         </div>
+
+         <div class="tab_active">
+            <div class="body">
+               <div><a>
+                 <fmt:message key="attachments.upload.title" /></a>
+               </div>
+            </div>
+         </div>
+      </div>
+
       <div class="editor" style="height:580px">
           <div class="body">
               <html:form action="/editors/repository/AttachmentUploadAction.do" enctype="multipart/form-data" method="post">

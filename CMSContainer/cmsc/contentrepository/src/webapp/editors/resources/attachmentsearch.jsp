@@ -27,12 +27,23 @@
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
  <div class="tabs"><!-- actieve TAB -->
+
    <div class="tab_active">
       <div class="body">
          <div><a><fmt:message key="attachments.title" /></a></div>
       </div>
    </div>
-</div>
+    
+	  <div class="tab">
+		 <div class="body">
+		   <div>
+		     <a href="attachmentupload.jsp?uploadAction=${action}&uploadedNodes=0&strict=${param.strict}">
+			   <fmt:message key="attachments.upload.title" />
+			  </a>
+		   </div>
+		 </div>
+	  </div>
+   </div>
 
    <div class="editor">
       <mm:import id="formAction">/editors/resources/AttachmentAction</mm:import>
