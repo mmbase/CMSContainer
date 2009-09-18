@@ -37,6 +37,15 @@
 			  </div>
 		  </div>
 		</a>
+		<a href="attachmentupload.jsp?uploadAction=${action}&uploadedNodes=0&strict=${param.strict}">
+		<div class="tab">
+		 <div class="body">
+		   <div class="title">
+			   <fmt:message key="attachments.upload.title" />
+		   </div>
+		 </div>
+	    </div>
+	   </a>
       </div>
    </c:if>
 
