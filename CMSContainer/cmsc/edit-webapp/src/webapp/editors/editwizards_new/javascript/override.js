@@ -122,20 +122,20 @@ function updateButtons(allvalid) {
         if (saveonlybut != null) {
            enableButton(saveonlybut,"titlesave", "Stores all changes.");
         }
-        enableButton(document.getElementById("bottombutton-finish"), "titlefinish", "Store all changes");
-        enableButton(document.getElementById("bottombutton-accept"), "titleaccept", "Store all changes");
-        enableButton(document.getElementById("bottombutton-reject"), "titlereject", "Store all changes");
-        enableButton(document.getElementById("bottombutton-publish"), "titlepublish", "Store all changes");
+        enableButton(document.getElementById("bottombutton-finish"), "titlesave", "Store all changes");
+        enableButton(document.getElementById("bottombutton-accept"), "titlesave", "Store all changes");
+        enableButton(document.getElementById("bottombutton-reject"), "titlesave", "Store all changes");
+        enableButton(document.getElementById("bottombutton-publish"), "titlesave", "Store all changes");
     } else {
         setSaveInactive("true");
         disableButton(savebut,"titlenosave", "You cannot save because one or more forms are invalid.");
         if (saveonlybut != null) {
            disableButton(saveonlybut,"titlenosave", "You cannot save because one or more forms are invalid.");
         }
-        disableButton(document.getElementById("bottombutton-finish"),"titlenofinish", "The changes cannot be saved, since some data is not filled in correctly.");
-        disableButton(document.getElementById("bottombutton-accept"),"titlenoaccept", "The changes cannot be saved, since some data is not filled in correctly.");
-        disableButton(document.getElementById("bottombutton-reject"),"titlenoreject", "The changes cannot be saved, since some data is not filled in correctly.");
-        disableButton(document.getElementById("bottombutton-publish"),"titlenopublish", "The changes cannot be saved, since some data is not filled in correctly.");
+        disableButton(document.getElementById("bottombutton-finish"),"titlenosave", "The changes cannot be saved, since some data is not filled in correctly.");
+        disableButton(document.getElementById("bottombutton-accept"),"titlenosave", "The changes cannot be saved, since some data is not filled in correctly.");
+        disableButton(document.getElementById("bottombutton-reject"),"titlenosave", "The changes cannot be saved, since some data is not filled in correctly.");
+        disableButton(document.getElementById("bottombutton-publish"),"titlenosave", "The changes cannot be saved, since some data is not filled in correctly.");
     }
 }
 
