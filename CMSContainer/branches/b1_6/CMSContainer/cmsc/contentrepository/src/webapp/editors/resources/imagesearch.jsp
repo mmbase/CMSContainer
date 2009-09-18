@@ -32,6 +32,16 @@
          <div><a><fmt:message key="images.title" /></a></div>
       </div>
    </div>
+   
+   <div class="tab">
+	 <div class="body">
+	   <div>
+	     <a href="imageupload.jsp?uploadAction=${param.action}&uploadedNodes=0&strict=${param.strict}">
+		  <fmt:message key="images.upload.title" />
+		 </a>
+	   </div>
+	 </div>
+  </div>
 </div>
 
    <div class="editor">
