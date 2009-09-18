@@ -396,17 +396,17 @@ Xinha.prototype._insertImage = function(image) {
                 }
                 var img = image;
                 if (!img) {
-                 // if ( Xinha.is_ie ) {
-                  //  var sel = editor._getSelection();
-                 //   var range = editor._createRange(sel);
-                  //  editor._doc.execCommand("insertimage", false, param.f_url);
-                  //  img = range.parentElement();
+                  if ( Xinha.is_ie ) {
+                    var sel = editor._getSelection();
+                    var range = editor._createRange(sel);
+                    editor._doc.execCommand("insertimage", false, param.f_url);
+                    img = range.parentElement();
                     // wonder if this works...
-                 //   if ( img.tagName.toLowerCase() != "img" ) {
-                 //     img = img.previousSibling;
-                 //   }
-                 //  }
-                 //  else {
+                    if ( img.tagName.toLowerCase() != "img" ) {
+                      img = img.previousSibling;
+                    }
+                   }
+                   else {
                     img = document.createElement('img');
                     img.src = param.f_url;
                     editor.insertNodeAtSelection(img);
@@ -414,7 +414,7 @@ Xinha.prototype._insertImage = function(image) {
                       // if the cursor is at the beginning of the document
                       img = range.startContainer.firstChild;
                     }
-                //  }
+                  }
                 } else {
                   img.src = param.f_url;
                 }
