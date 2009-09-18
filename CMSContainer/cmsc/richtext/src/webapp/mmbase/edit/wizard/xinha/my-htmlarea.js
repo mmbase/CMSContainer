@@ -11,7 +11,8 @@ xinha_init = xinha_init ? xinha_init : function() {
 //   'FullScreen',
 //   'SpellChecker',
 //   'Stylist',
-//   'SuperClean',
+   'SuperClean',
+   'FindReplace',
    'TableOperations'
 
   ];
