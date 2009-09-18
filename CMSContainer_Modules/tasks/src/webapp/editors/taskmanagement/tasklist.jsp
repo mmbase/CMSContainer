@@ -57,7 +57,6 @@ function showMessage(message){
       <mm:listnodes>
          <mm:relatednodescontainer type="task" role="${tmpRole}" searchdirs="source">
             <mm:present referid="status">
-               <mm:constraint field="status" value="${status}" operator="EQUAL" />
             </mm:present>
             <mm:notpresent referid="status">
                <mm:constraint field="status" value="task.status.done" operator="EQUAL" inverse="true" />
