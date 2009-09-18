@@ -206,7 +206,8 @@
                   </table>
                   <% if (role != null && SecurityUtil.isWriter(role)) { %>
                   <c:if test="${fn:length(elements) >1}">
-                     <input type="submit" class="button" value="<fmt:message key="asset.delete.massdelete" />"/>
+                     <input type="button" class="button" value="<fmt:message key="asset.delete.massdelete" />"
+                              onclick="massDelete('<fmt:message key="asset.delete.massdeleteconfirm" />', 'assetForm')"/>
                      <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" 
                            onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                   </c:if>
