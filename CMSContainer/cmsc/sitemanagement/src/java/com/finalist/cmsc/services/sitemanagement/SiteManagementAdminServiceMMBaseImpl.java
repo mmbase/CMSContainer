@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 
-import net.sf.mmapps.commons.bridge.CloudUtil;
+import org.mmbase.bridge.util.CloudUtil;
 import org.apache.commons.lang.StringUtils;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;

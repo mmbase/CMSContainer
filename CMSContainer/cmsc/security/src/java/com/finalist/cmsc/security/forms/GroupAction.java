@@ -7,8 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -95,7 +94,7 @@ public class GroupAction extends MMBaseAction {
             Relation relation = (Relation) relationList.getRelation(0);
             relation.delete();
          }
-         if(!StringUtil.isEmpty(groupForm.getContentchannel())){
+         if(StringUtils.isNotEmpty(groupForm.getContentchannel())){
             Node contentChannelNode = cloud.getNode(groupForm.getContentchannel());
             RelationUtil.createRelation(groupNode, contentChannelNode, "mmbasegrouprel");
          }

@@ -4,8 +4,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
@@ -571,7 +569,7 @@ public class RichTextBuilder extends MMObjectBuilder {
           Element link = (Element) nl.item(i);
 
           String ligthboxValue = link.getAttribute(RichText.LIGHTBOX_ATTR);
-          if (!StringUtil.isEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
+          if (StringUtils.isNotEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
               NodeList nlImages = link.getElementsByTagName(RichText.IMG_TAGNAME);
               
               for (int j = nlImages.getLength() - 1; j >= 0; --j) {
@@ -604,7 +602,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                       parentNode.getNodeName().equals(RichText.LINK_TAGNAME)) {
                   Element link = ((Element) parentNode);
                   String ligthboxValue = link.getAttribute(RichText.LIGHTBOX_ATTR);
-                  if (!StringUtil.isEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
+                  if (StringUtils.isNotEmpty(ligthboxValue) && ligthboxValue.startsWith(RichText.LIGHTBOX_VALUE)) {
                       // Found lightbox link. Never save these links. Remove node from DOM.
 
                       Node linkParentNode = link.getParentNode();

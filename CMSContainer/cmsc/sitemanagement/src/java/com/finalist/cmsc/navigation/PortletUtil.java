@@ -12,7 +12,7 @@ package com.finalist.cmsc.navigation;
 import java.util.*;
 import java.util.Map.Entry;
 
-import net.sf.mmapps.commons.bridge.CloneUtil;
+import org.mmbase.bridge.util.CloneUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;

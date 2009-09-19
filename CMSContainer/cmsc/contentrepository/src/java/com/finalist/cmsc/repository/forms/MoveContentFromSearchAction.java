@@ -17,8 +17,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -132,7 +130,7 @@ public class MoveContentFromSearchAction extends MMBaseAction {
          }
       }
       String path = null;
-      if(!StringUtil.isEmptyOrWhitespace((request.getParameter(RETURNPATH)))){
+      if(StringUtils.isNotBlank(request.getParameter(RETURNPATH))) {
          path = mapping.findForward(request.getParameter(RETURNPATH)).getPath() + "?index=yes";
       } else {
          path = mapping.findForward(SUCCESS).getPath() + "?index=yes";

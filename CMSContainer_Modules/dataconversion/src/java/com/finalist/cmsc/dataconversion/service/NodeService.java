@@ -3,8 +3,6 @@ package com.finalist.cmsc.dataconversion.service;
 import java.util.*;
 import java.util.Map.Entry;
 
-import net.sf.mmapps.commons.bridge.RelationUtil;
-
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
@@ -12,6 +10,7 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.dataconversion.dataaccess.DataHolder;
 import com.finalist.cmsc.dataconversion.dataaccess.Elements;
+import com.finalist.cmsc.mmbase.RelationUtil;
 
 /**
  *  the class  is a delegate for cmsc application 

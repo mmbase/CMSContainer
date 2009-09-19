@@ -54,7 +54,7 @@ public class PageWorkflow extends WorkflowManager {
    public Node createFor(Node page, String remark) {
       synchronized (page) {
          if (hasWorkflow(page)) {
-            return getWorkflows(page).get(0);
+            return getWorkflows(page).getNode(0);
          }
          
          Node wfItem = createFor(TYPE_PAGE, remark, null);

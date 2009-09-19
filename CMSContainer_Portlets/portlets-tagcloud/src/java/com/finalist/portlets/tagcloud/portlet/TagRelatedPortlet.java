@@ -96,8 +96,7 @@ public class TagRelatedPortlet extends RelatedContentPortlet {
 	}
 
 	/**
-	 * @see net.sf.mmapps.commons.portlets.CmscPortlet#processEditDefaults(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse)
+	 * @see com.finalist.cmsc.portlets.AbstractContentPortlet#processEditDefaults(javax.portlet.ActionRequest, javax.portlet.ActionResponse)
 	 */
 	@Override
 	public void processEditDefaults(ActionRequest request,

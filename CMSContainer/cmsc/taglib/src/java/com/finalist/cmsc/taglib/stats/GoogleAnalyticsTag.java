@@ -11,12 +11,9 @@ package com.finalist.cmsc.taglib.stats;
 
 import java.io.IOException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.naming.*;
 import javax.servlet.jsp.PageContext;
 
-import net.sf.mmapps.commons.util.EncodingUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +27,7 @@ import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.taglib.CmscTag;
+import com.finalist.cmsc.util.EncodingUtil;
 import com.finalist.cmsc.util.ServerUtil;
 
 public class GoogleAnalyticsTag extends CmscTag {
