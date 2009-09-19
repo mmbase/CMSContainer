@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cmscontainer</groupId>
+		<artifactId>cmsc-project</artifactId>
+		<version>1.7-SNAPSHOT</version>
+		<relativePath>CMSContainer/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>cmsc-main</artifactId>
+	<name>CMS Container</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>CMSContainer</module>
+		<module>CMSContainer_Modules</module>
+		<module>CMSContainer_Portlets</module>
+		<module>CMSContainer_Templates</module>
+		<module>CMSContainer_Demo/demo.cmscontainer.org</module>
+	</modules>
+
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<!--  Sonar will run on one level higher in the CI -->
+			<modules>
+				<module>CMSContainer</module>
+				<module>CMSContainer_Modules</module>
+				<module>CMSContainer_Portlets</module>
+			</modules>      
+		</profile>
+	</profiles>
+	
+</project>
