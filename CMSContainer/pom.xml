@@ -22,13 +22,19 @@ See http://www.MMBase.org/license
 	<name>CMS Container Project</name>
 	<packaging>pom</packaging>
 
+	<properties>
+		<cmsc.version>1.7-SNAPSHOT</cmsc.version>
+	</properties>
+
 	<modules>
 		<module>maven-base</module>
 		<module>cmsc</module>
+<!--
 		<module>../CMSContainer_Modules</module>
 		<module>../CMSContainer_Portlets</module>
 		<module>../CMSContainer_Templates</module>
 		<module>../CMSContainer_Demo/demo.cmscontainer.org</module>
+-->      
 	</modules>
 
 	<dependencies>
