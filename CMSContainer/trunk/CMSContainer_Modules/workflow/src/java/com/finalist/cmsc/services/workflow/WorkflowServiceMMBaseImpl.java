@@ -11,7 +11,7 @@ package com.finalist.cmsc.services.workflow;
 
 import java.util.List;
 
-import net.sf.mmapps.commons.bridge.CloudUtil;
+import org.mmbase.bridge.util.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.logging.Log;

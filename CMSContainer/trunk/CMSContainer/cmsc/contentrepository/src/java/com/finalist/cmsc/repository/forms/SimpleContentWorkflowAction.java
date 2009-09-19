@@ -7,8 +7,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.mmapps.commons.util.StringUtil;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
@@ -36,7 +35,7 @@ public class SimpleContentWorkflowAction extends MMBaseFormlessAction {
       Locale locale = StrutsUtil.getLocale(request);
       MessageResources resources = getResources(request, "REPOSITORY");
       String workflowmessage;
-      if(!StringUtil.isEmptyOrWhitespace(content)){
+      if(StringUtils.isNotBlank(content)){
          Workflow.finish(cloud.getNode(content), "");    
          workflowmessage = resources.getMessage(locale, "simple.editor.finish.success");
       } else {

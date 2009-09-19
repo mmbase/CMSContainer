@@ -2,7 +2,7 @@ package com.finalist.cmsc.security.filters;
 
 import com.finalist.cmsc.security.ThreadLocalAuthenticate;
 import jcifs.smb.NtlmPasswordAuthentication;
-import net.sf.mmapps.commons.bridge.CloudUtil;
+import org.mmbase.bridge.util.CloudUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

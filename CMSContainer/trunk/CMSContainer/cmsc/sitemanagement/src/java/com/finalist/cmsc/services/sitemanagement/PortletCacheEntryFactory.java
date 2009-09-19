@@ -126,7 +126,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#getKey(org.mmbase.core.event.NodeEvent)
+    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#getKey(org.mmbase.core.event.NodeEvent)
     */
    @Override
    protected Integer getKey(NodeEvent event) {
@@ -171,7 +171,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#isNodeEvent(org.mmbase.core.event.NodeEvent)
+    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#isNodeEvent(org.mmbase.core.event.NodeEvent)
     */
    @Override
    protected boolean isNodeEvent(NodeEvent event) {
@@ -181,7 +181,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#isRelationEvent(org.mmbase.core.event.RelationEvent)
+    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#isRelationEvent(org.mmbase.core.event.RelationEvent)
     */
    @Override
    protected boolean isRelationEvent(RelationEvent event) {

@@ -9,7 +9,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import net.sf.mmapps.commons.bridge.NodeFieldComparator;
+import org.mmbase.bridge.util.NodeFieldComparator;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;

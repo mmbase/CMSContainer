@@ -88,7 +88,7 @@
       <description>Filter catch all requests.</description>
       <display-name>CloudThread Filter</display-name>
       <filter-name>CloudThreadFilter</filter-name>
-      <filter-class>net.sf.mmapps.commons.web.CloudThreadFilter</filter-class>
+      <filter-class>org.mmbase.servlet.CloudThreadFilter</filter-class>
    </filter>
 
    <filter>

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.mmapps.commons.bridge.CloneUtil;
+import org.mmbase.bridge.util.CloneUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForward;

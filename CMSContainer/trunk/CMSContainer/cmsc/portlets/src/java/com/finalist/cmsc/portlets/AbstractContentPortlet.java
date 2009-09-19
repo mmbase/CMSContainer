@@ -16,7 +16,7 @@ import java.util.*;
 
 import javax.portlet.*;
 
-import net.sf.mmapps.commons.bridge.CloudUtil;
+import org.mmbase.bridge.util.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
