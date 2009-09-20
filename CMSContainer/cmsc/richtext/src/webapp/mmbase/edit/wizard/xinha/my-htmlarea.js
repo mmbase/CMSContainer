@@ -2,7 +2,6 @@ xinha_editors = null;
 xinha_editors_lightbox = null;
 xinha_init    = null;
 
-
 xinha_init = xinha_init ? xinha_init : function() {
   var xinha_plugins = [
    'CharacterMap',
@@ -13,9 +12,10 @@ xinha_init = xinha_init ? xinha_init : function() {
 //   'Stylist',
    'SuperClean',
    'FindReplace',
+   'PasteText',
    'TableOperations'
-
   ];
+  
   // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
   if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
   var xinha_config = createDefaultConfig();
@@ -68,6 +68,7 @@ setupDefaultConfig = function(xinha_config) {
       ["separator","insertorderedlist","insertunorderedlist"],
       ["separator","inlinelink","insertimage"],
       ["separator", "undo","redo","selectall"],(Xinha.is_gecko ? [] : ["cut","copy","paste"]),
+      ["separator","killword","pastetext","clearfonts","removeformat"],
       ["separator","htmlmode","showhelp","my-validatesave","createtable"]
     ];
 
