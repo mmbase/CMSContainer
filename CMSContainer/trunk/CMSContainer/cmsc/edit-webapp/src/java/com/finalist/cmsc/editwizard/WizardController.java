@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.util.LabelValueBean;
 import org.mmbase.applications.editwizard.Config;
 import org.mmbase.applications.editwizard.Config.WizardConfig;
 import org.mmbase.bridge.Cloud;
@@ -233,18 +232,17 @@ public class WizardController {
             } 
          // create createrel for asset elements.and add asset elements to workflow.
 
-            List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+            List<String> typesList = new ArrayList<String>();
             List<NodeManager> types = AssetElementUtil.getAssetTypes(editNode.getCloud());
             List<String> hiddenTypes = AssetElementUtil.getHiddenAssetTypes();
             for (NodeManager manager : types) {
                String name = manager.getName();
                if (!hiddenTypes.contains(name)) {
-                  LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
-                  typesList.add(bean);
+                  typesList.add(name);
                }
             }
             for (int i = 0 ; i < typesList.size(); i++) {
-               NodeList assets = editNode.getRelatedNodes(typesList.get(i).getValue());
+               NodeList assets = editNode.getRelatedNodes(typesList.get(i));
                if(assets.size() > 0 ){
                   for( int j = 0 ; j < assets.size() ;j++) {
                      Node node = assets.getNode(j);
@@ -263,28 +261,15 @@ public class WizardController {
                      if(ContentElementUtil.getAuthor(node) == null){
                         node.commit();
                      }
-                     addWorkFlowItem(node);
-                     /*
-                     NodeManager ownerManager = cloud.getNodeManager(USER);
-                     int owners = node.countRelatedNodes(ownerManager, OWNERREL, DESTINATION);
-                     if (owners < 1) {  
-                       RelationUtil.createRelation(node, SecurityUtil.getUserNode(cloud), OWNERREL);
-                     }
-                     
-                     if (!Workflow.hasWorkflow(node)) { 
-                        Workflow.create(node, ""); 
-                     } 
-                     else
-                     { 
-                        Workflow.addUserToWorkflow(node);
-                     }
-                     */
-                     //add version for asset element
-                     try {
-                        Versioning.addVersion(node);
-                     } 
-                     catch (VersioningException e) {
-                       log.error("Add version error for node"+node.getNumber(),e);
+                     if (wizardConfig.wiz.committed()) {
+                        addWorkFlowItem(node);
+                        //add version for asset element
+                        try {
+                           Versioning.addVersion(node);
+                        }
+                        catch (VersioningException e) {
+                           log.error("Add version error for node"+node.getNumber(),e);
+                        }
                      }
                   }
                }

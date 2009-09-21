@@ -24,7 +24,7 @@ public abstract class PublishService extends Service {
    public abstract void publish(Node node);
 
 
-   public abstract void publish(Node node, NodeList nodes);
+   public abstract void publishRelations(Node node, NodeList nodes);
 
 
    public abstract boolean isPublishable(Node node);
@@ -100,5 +100,8 @@ public abstract class PublishService extends Service {
 
 
    public abstract boolean inPublishQueue(Node node);
+
+
+   public abstract void updateUser(Node userNode, String password);
    
 }

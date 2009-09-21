@@ -1,13 +1,14 @@
 package com.finalist.cmsc.alias.publish;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
 
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.alias.util.AliasUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
-import com.finalist.cmsc.publish.Publisher;
+import com.finalist.cmsc.services.publish.Publisher;
 
 public class AliasPublisher extends Publisher {
 
@@ -21,11 +22,8 @@ public class AliasPublisher extends Publisher {
 	}
 
     @Override
-    public void publish(Node node) {
-        Map<Node, Date> nodes = new LinkedHashMap<Node, Date>();
+    public void addNodesToPublish(Node node, Map<Node, Date> nodes) {
         addAliasNodes(node, nodes);
-        
-        publishNodes(nodes);
     }
     
     private void addAliasNodes(Node node, Map<Node, Date> nodes) {

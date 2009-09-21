@@ -146,7 +146,7 @@ public class LinkWorkflow extends RepositoryWorkflow {
                iterator.remove();
             }
          }
-         Publish.publish(node, nodes);
+         Publish.publishRelations(node, nodes);
       }
    }
 

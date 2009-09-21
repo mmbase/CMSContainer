@@ -7,6 +7,7 @@ import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.navigation.tree.SiteTreeItemExtensionRenderer;
+import com.finalist.cmsc.services.publish.Publisher;
 
 public class SiteCopyNavigationItemManager implements NavigationItemManager {
 
@@ -59,7 +60,7 @@ public class SiteCopyNavigationItemManager implements NavigationItemManager {
       return null;
    }
 
-   public Object getPublisher(Cloud cloud, String type) {
+   public Publisher getPublisher(Cloud cloud, String type) {
       // TODO Auto-generated method stub
       return null;
    }

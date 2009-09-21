@@ -32,7 +32,7 @@ public class DummyPublishService extends PublishService {
 
 
    @Override
-   public void publish(Node node, NodeList nodes) {
+   public void publishRelations(Node node, NodeList nodes) {
       // nothing
    }
 
@@ -74,5 +74,10 @@ public class DummyPublishService extends PublishService {
    @Override
    public boolean inPublishQueue(Node node) {
       return false;
+   }
+
+
+   @Override
+   public void updateUser(Node userNode, String password) {
    }
 }

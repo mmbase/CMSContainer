@@ -72,7 +72,7 @@ public class CloudInfo {
     
     private static CloudInfo getCloudInfo(Node localCloudNode) {
        if (localCloudNode == null) {
-          throw new BridgeException("Local cloud node is null");
+            throw new IllegalArgumentException("Cloud node can not be null");
        }
         if (instanceMap.containsKey(localCloudNode.getNumber())){
             return instanceMap.get(localCloudNode.getNumber());
@@ -87,11 +87,6 @@ public class CloudInfo {
         return cloudInfo;
     }
     
-    /**
-     * 
-     * @param remoteCloudName
-     * @return
-     */
     public static CloudInfo getCloudInfoByName(String remoteCloudName) { 
         // FIXME: Does every cloud node have same name in different clouds?
         Node cloudNode = CloudManager.getCloudNodeByName(getDefaultCloudInfo().getCloud(), remoteCloudName);

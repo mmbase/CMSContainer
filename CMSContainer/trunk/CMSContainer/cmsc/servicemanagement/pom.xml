@@ -16,13 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>org.cmscontainer.core</groupId>
-            <artifactId>cmsc-security</artifactId>
-            <version>${project.version}</version>
-            <classifier>classes</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.cmscontainer.core</groupId>
             <artifactId>cmsc-utilities</artifactId>
             <version>${project.version}</version>
             <classifier>classes</classifier>
