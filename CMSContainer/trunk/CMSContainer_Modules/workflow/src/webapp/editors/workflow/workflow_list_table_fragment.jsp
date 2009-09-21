@@ -88,6 +88,22 @@
       <input type="checkbox" name="check_${workflowNumber}" value="on"/>
    </td>
    <td align="left">
+      <mm:field name="${type}.number" jspvar="number" write="false"/>
+	  <mm:node number="${number}"> <mm:field name="publishdate" write="false" jspvar="publishdate" /> </mm:node>
+	  <%
+		java.util.Calendar c = java.util.Calendar.getInstance();
+		long now = c.getTimeInMillis();
+        c.setTime((Date)pageContext.getAttribute("publishdate"));
+	    long lastly = c.getTimeInMillis();
+	    pageContext.setAttribute("interval",lastly - now);
+	  %>
+    <c:set var="date"><fmt:formatDate value="${publishdate}" pattern="dd-MM-yyyy hh:mm"/></c:set> 
+	<c:set var="clock_title">
+		<fmt:message key="workflow.item.schedule">
+		   <fmt:param value="${date}"/>
+		</fmt:message>
+	</c:set>
+
       <mm:node number="${workflowNumber}">
          <mm:field name="stacktrace" id="stacktrace" write="false"/>
       </mm:node>
@@ -99,11 +115,14 @@
                   <img src="../gfx/icons/error.png" align="left"/>
                </div>
             </c:if>
+			<c:if test="${status == 'published' && interval >= 1800000}">
+				<img src="../gfx/icons/clock.png" align="left" title="${clock_title}" alt="${clock_title}"/>
+			</c:if>
          </mm:hasrank>
       </mm:haspage>
    </td>
    <td align="left" style="white-space: nowrap;">
-      <mm:field name="${type}.number" jspvar="number" write="false"/>
+	  
       <mm:url page="../WizardInitAction.do" id="url" write="false">
          <mm:param name="objectnumber" value="${number}"/>
          <mm:param name="returnurl" value="workflow/${returnAction}?status=${param.status}"/>
@@ -139,9 +158,13 @@
       </c:if>
    </td>
    <td style="white-space: nowrap;">
-      <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
+       <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
    </td>
    <td style="white-space: nowrap;">
+   		<c:if test="${status == 'published'  && interval > 60000}">
+		<fmt:formatNumber type="number" maxFractionDigits="0"
+            value="${interval/60000}" />
+		</c:if>
       <mm:field jspvar="value" write="false" name="${type}.${field}"/>
       <c:if test="${fn:length(value) > 50}">
          <c:set var="value">${fn:substring(value,0,49)}...</c:set>
