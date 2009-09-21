@@ -45,6 +45,10 @@
       </th>
    </tr>
 </thead>
+	  <%
+		java.util.Calendar c = java.util.Calendar.getInstance();
+		long now = c.getTimeInMillis();
+		%>
 
 <tbody class="hover">
 <mm:list referid="results" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
@@ -91,8 +95,6 @@
       <mm:field name="${type}.number" jspvar="number" write="false"/>
 	  <mm:node number="${number}"> <mm:field name="publishdate" write="false" jspvar="publishdate" /> </mm:node>
 	  <%
-		java.util.Calendar c = java.util.Calendar.getInstance();
-		long now = c.getTimeInMillis();
         c.setTime((Date)pageContext.getAttribute("publishdate"));
 	    long lastly = c.getTimeInMillis();
 	    pageContext.setAttribute("interval",lastly - now);
@@ -161,7 +163,7 @@
        <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
    </td>
    <td style="white-space: nowrap;">
-   		<c:if test="${status == 'published'  && interval > 60000}">
+   		<c:if test="${status == 'published'  && interval >= 60000}">
 		<fmt:formatNumber type="number" maxFractionDigits="0"
             value="${interval/60000}" />
 		</c:if>
