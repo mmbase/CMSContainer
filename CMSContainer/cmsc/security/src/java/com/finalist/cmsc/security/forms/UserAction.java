@@ -9,6 +9,7 @@ import org.apache.struts.action.*;
 import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 /**
@@ -24,7 +25,8 @@ public class UserAction extends MMBaseAction {
       boolean changedOwnLanguage = false;
       if (!isCancelled(request)) {
          boolean isNewUser = false;
-
+         boolean passworChanged = false;
+         
          UserForm userForm = (UserForm) form;
          Node userNode = getOrCreateNode(userForm, cloud, SecurityUtil.USER);
          if (userForm.getId() == -1) {
@@ -49,10 +51,9 @@ public class UserAction extends MMBaseAction {
 
          if (StringUtils.isNotEmpty(userForm.getPassword1())) {
             userNode.setStringValue("password", userForm.getPassword1());
-            // TODO: what should we do with an admin password change?
-            // if ("admin".equals(userNode.getStringValue("account"))) {
-            // UsersUtil.updateAdminPassword(userForm.getPassword());
-            // }
+            if (! isNewUser) {
+               passworChanged = true;
+            }
          }
          userNode.setStringValue("note", userForm.getNote());
          if (isNewUser) {
@@ -82,6 +83,7 @@ public class UserAction extends MMBaseAction {
 
          userNode.commit();
 
+         
          if (!"admin".equals(userNode.getStringValue("username"))) {
             String oldRank = "";
             String newRank = userForm.getRank();
@@ -95,6 +97,10 @@ public class UserAction extends MMBaseAction {
                Node newRankNode = cloud.getNode(newRank);
                SecurityUtil.setRank(cloud, userNode, newRankNode);
             }
+         }
+         
+         if (passworChanged) {
+            Publish.updateUser(userNode, userForm.getPassword1());
          }
       }
       removeFromSession(request, form);

@@ -13,32 +13,10 @@
  */
 package org.mmbase.remotepublishing;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeIterator;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.NotFoundException;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationIterator;
-import org.mmbase.bridge.RelationList;
-import org.mmbase.bridge.RelationManager;
-import org.mmbase.bridge.StringList;
-import org.mmbase.bridge.util.SearchUtil;
+import org.mmbase.bridge.*;
 import org.mmbase.datatypes.DataType;
-import org.mmbase.remotepublishing.builders.PublishingQueueBuilder;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -981,7 +959,7 @@ public final class PublishManager {
    }
 
    /**
-    * syncronize all nodes that are published from this one
+    * synchronize all nodes that are published from this one
     *
     * @param localCloudInfo the cloud from which the local node are published
     * @param localNode the source node
@@ -991,9 +969,20 @@ public final class PublishManager {
        updateNodesAndRelations(localCloudInfo, localNode, true, true, null);
    }
 
+   public static void updateNodeOnly(CloudInfo localCloudInfo, Node localNode) throws PublishException {
+       updateNodesAndRelations(localCloudInfo, localNode, true,false);
+   }
+
+   public static void updateNodeAndRelations(CloudInfo localCloudInfo, Node localNode) throws PublishException {
+       updateNodesAndRelations(localCloudInfo, localNode, true, true);
+   }
+
+   public static void updateRelations(CloudInfo localCloudInfo, Node localNode, List<Integer> relatedNodes) throws PublishException {
+       updateNodesAndRelations(localCloudInfo, localNode, false, true, relatedNodes);
+   }
 
    /**
-    * syncronize all nodes that are published from this one
+    * synchronize all nodes that are published from this one
     *
     * @param localCloudInfo the cloud from which the local node are published
     * @param localNode the source node
@@ -1007,7 +996,7 @@ public final class PublishManager {
    }
    
    /**
-    * syncronize all nodes that are published from this one
+    * synchronize all nodes that are published from this one
     *
     * @param localCloudInfo the cloud from which the local node are published
     * @param localNode the source node
@@ -1407,11 +1396,4 @@ public final class PublishManager {
         unLinkNode(sourceCloudInfo, localCloudInfo, number);
     }
 
-    public static boolean inPublishQueue(Node node) {
-       NodeManager nodeManager = node.getCloud().getNodeManager("publishqueue");
-       NodeQuery query = nodeManager.createQuery();   
-       SearchUtil.addEqualConstraint(query, nodeManager.getField(PublishingQueueBuilder.FIELD_SOURCENUMBER), node.getNumber());
-       
-       return query.getList().size() > 0;
-    }
 }

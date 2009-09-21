@@ -12,6 +12,7 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 /**
@@ -40,11 +41,14 @@ public class ChangeProfileAction extends MMBaseAction {
 
          log.debug("ChangePasswordAction - doPerform()");
          if (!isCancelled(request)) {
+            boolean passworChanged = false;
+            
             ChangeProfileForm changeMyprofileForm = (ChangeProfileForm) form;
             Node userNode = SecurityUtil.getUserNode(userCloud);
             userNode.setStringValue("username", changeMyprofileForm.getUsername());
             if (changeMyprofileForm.getNewpassword().trim().length() != 0) {
                userNode.setStringValue("password", changeMyprofileForm.getNewpassword());
+               passworChanged = true;
             }
             userNode.setStringValue("firstname", changeMyprofileForm.getFirstname());
             userNode.setStringValue("prefix", changeMyprofileForm.getPrefix());
@@ -54,6 +58,10 @@ public class ChangeProfileAction extends MMBaseAction {
             userNode.setBooleanValue("emailsignal", changeMyprofileForm.isEmailSignal());
             userNode.setStringValue("emailaddress", changeMyprofileForm.getEmail());
             userNode.commit();
+            
+            if (passworChanged) {
+               Publish.updateUser(userNode, changeMyprofileForm.getNewpassword());
+            }
          }
          ActionForward af = mapping.findForward(SUCCESS);
          af = new ActionForward(af.getPath() + "?succeeded=true");

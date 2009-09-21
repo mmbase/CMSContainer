@@ -14,6 +14,7 @@ import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
 import com.finalist.cmsc.rssfeed.publish.RssFeedPublisher;
 import com.finalist.cmsc.rssfeed.tree.RssFeedTreeItemRenderer;
 import com.finalist.cmsc.rssfeed.util.RssFeedUtil;
+import com.finalist.cmsc.services.publish.Publisher;
 
 public class RssFeedNavigationItemManager implements NavigationItemManager {
 
@@ -78,7 +79,7 @@ public class RssFeedNavigationItemManager implements NavigationItemManager {
    /**
     * @see com.finalist.cmsc.navigation.NavigationItemManager#getPublisher(org.mmbase.bridge.Cloud, java.lang.String)
     */
-   public Object getPublisher(Cloud cloud, String type) {
+   public Publisher getPublisher(Cloud cloud, String type) {
       if (type.equals(getTreeManager())) {
          return new RssFeedPublisher(cloud);
       }

@@ -11,7 +11,9 @@ import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.beans.om.Page;
 import com.finalist.cmsc.navigation.*;
+import com.finalist.cmsc.navigation.publish.PagePublisher;
 import com.finalist.cmsc.navigation.tree.PageTreeItemRenderer;
+import com.finalist.cmsc.services.publish.Publisher;
 
 /**
  * NavigationItemManager implementation for Page types.
@@ -114,8 +116,8 @@ public class PageNavigationItemManager implements NavigationItemManager {
     *
     * @see com.finalist.cmsc.navigation.NavigationItemManager#getPublisher(org.mmbase.bridge.Cloud, java.lang.String)
     */
-   public Object getPublisher(Cloud cloud, String type) {
-      return null;
+   public Publisher getPublisher(Cloud cloud, String type) {
+      return new PagePublisher(cloud);
    }
 
    /**

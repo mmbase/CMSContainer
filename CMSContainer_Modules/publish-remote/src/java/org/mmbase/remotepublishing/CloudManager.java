@@ -13,19 +13,17 @@
  */
 package org.mmbase.remotepublishing;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
-import org.mmbase.bridge.BridgeException;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.CloudContext;
-import org.mmbase.bridge.ContextProvider;
-import org.mmbase.bridge.Node;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.SearchUtil;
-import org.mmbase.module.core.MMBase;
-import org.mmbase.module.core.MMObjectNode;
+import org.mmbase.module.core.*;
+import org.mmbase.storage.search.*;
+import org.mmbase.storage.search.implementation.BasicFieldValueConstraint;
+import org.mmbase.storage.search.implementation.NodeSearchQuery;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
@@ -86,7 +84,7 @@ public final class CloudManager {
 
     public static Node getCloudNode(Cloud nameServerCloud, Cloud cloud) {
         //get the name of the cloud
-        String cloudName = cloud.getNodeByAlias(CLOUD_DEFAULT).getStringValue(FIELD_NAME);
+        String cloudName = getDefaultCloudNode(cloud).getStringValue(FIELD_NAME);
 
         Node cloudNode = SearchUtil.findNode(nameServerCloud, CLOUD, FIELD_NAME, cloudName);
         if (cloudNode == null) {
@@ -94,7 +92,6 @@ public final class CloudManager {
         }
         return cloudNode;
     }
-
     
     /**
      * Get a cloud object based on the node name
@@ -143,7 +140,7 @@ public final class CloudManager {
     }
 
     public static Cloud getCloudWithName(Cloud cloud, String name) {
-        Node defaultCloud = cloud.getNode("cloud.default");
+        Node defaultCloud = cloud.getNode(CLOUD_DEFAULT);
         if (name.equals(defaultCloud.getStringValue(FIELD_NAME))) {
            return cloud;
         }
@@ -211,11 +208,104 @@ public final class CloudManager {
     }
     
     public static String getDefaultCloudName() {
-        MMObjectNode cloudNode = MMBase.getMMBase().getBuilder(CLOUD).getNode(CLOUD_DEFAULT);
+        MMObjectNode cloudNode = getLocalCloudNode();
         if (cloudNode != null) {
             return cloudNode.getStringValue(FIELD_NAME);
         }
         return null;
     }
+
+    public static Node getDefaultCloudNode(Cloud cloud) {
+        Node defaultCloudNode = cloud.getNodeByAlias(CLOUD_DEFAULT);
+        return defaultCloudNode;
+    }
+
+    public static MMObjectNode getLocalCloudNode() {
+        return MMBase.getMMBase().getBuilder(CLOUD).getNode(CLOUD_DEFAULT);
+    }
     
+    /**
+     * Get number of cloud from local system
+     * 
+     * @param name
+     *            the name of the cloud ( in the cloud list)
+     * @return cloud node number
+     * @throws BridgeException
+     *             if the cloud was not found
+     */
+    public static int getLocalCloudNumber(String name) throws BridgeException {
+        MMObjectBuilder builder = MMBase.getMMBase().getBuilder(CLOUD);
+        NodeSearchQuery query = new NodeSearchQuery(builder);
+        StepField nameStepField = query.getField(builder.getField(FIELD_NAME));
+        BasicFieldValueConstraint cName = new BasicFieldValueConstraint(nameStepField, name);
+        cName.setOperator(FieldCompareConstraint.EQUAL);
+        query.setConstraint(cName);
+
+        try {
+            List<MMObjectNode> nodes = builder.getNodes(query);
+            if (nodes.isEmpty()) { throw new BridgeException("can not find cloud with name(" + name
+                    + ") in local cloud"); }
+            return nodes.get(0).getNumber();
+        }
+        catch (SearchQueryException e) {
+            throw new BridgeException("can not find cloud with name(" + name
+                    + ") in nameServerCloud", e);
+        }
+    }
+
+   public static void updateLocalUser(Node userNode, String password) {
+      Cloud localCloud = userNode.getCloud();
+      String username = userNode.getStringValue("username");
+
+      Node localCloudNode = getDefaultCloudNode(localCloud);
+
+      String localUsername = localCloudNode.getStringValue(FIELD_USERNAME);
+      if (username.equals(localUsername)) {
+         localCloudNode.setStringValue(FIELD_PASSWORD, password);
+         localCloudNode.commit();
+      }
+      
+      String nameOfCloud = localCloudNode.getStringValue(FIELD_NAME);
+      NodeList localClouds = localCloud.getNodeManager(CLOUD).createQuery().getList();
+      
+      for (Node cloudNode : localClouds) {
+         if (localCloudNode.getNumber() != cloudNode.getNumber()) {
+            Cloud remoteCloud = getCloudFromNode(cloudNode);
+            Node remoteCLoudNode = getCloudNodeByName(remoteCloud, nameOfCloud);
+            String remoteUsername = remoteCLoudNode.getStringValue(FIELD_USERNAME);
+            if (username.equals(remoteUsername)) {
+               remoteCLoudNode.setStringValue(FIELD_PASSWORD, password);
+               remoteCLoudNode.commit();
+            }
+         }
+      }
+   }
+
+   public static void updateRemoteUser(Node userNode, String password) {
+      Cloud localCloud = userNode.getCloud();
+      String username = userNode.getStringValue("username");
+      
+      Node localCloudNode = getDefaultCloudNode(localCloud);
+      
+      NodeList localClouds = localCloud.getNodeManager(CLOUD).createQuery().getList();
+      for (Node cloudNode : localClouds) {
+         if (localCloudNode.getNumber() != cloudNode.getNumber()) {
+            String localUsername = cloudNode.getStringValue(FIELD_USERNAME);
+            if (username.equals(localUsername)) {
+               cloudNode.setStringValue(FIELD_PASSWORD, password);
+               cloudNode.commit();
+            }
+             
+            Cloud remoteCloud = getCloudFromNode(cloudNode);
+            
+            Node remoteCLoudNode = getDefaultCloudNode(remoteCloud);
+            String remoteUsername = remoteCLoudNode.getStringValue(FIELD_USERNAME);
+            if (username.equals(remoteUsername)) {
+               remoteCLoudNode.setStringValue(FIELD_PASSWORD, password);
+               remoteCLoudNode.commit();
+            }
+         }
+      }
+   }
+
 }

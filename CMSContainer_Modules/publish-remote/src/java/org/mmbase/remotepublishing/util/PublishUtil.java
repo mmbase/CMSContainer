@@ -18,8 +18,9 @@ import java.util.*;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.mmbase.bridge.*;
+import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.module.core.*;
-import org.mmbase.remotepublishing.builders.PublishingQueueBuilder;
+import org.mmbase.remotepublishing.PublishQueueItem;
 import org.mmbase.util.logging.*;
 
 /**
@@ -80,7 +81,7 @@ public class PublishUtil {
      */
     public static void publishOrUpdateNode(Cloud cloud, int number, Date publishDate) {
         log.debug("PublishOrUpdateNode with number = " + number);
-        createQueueNode(cloud, number, -1, PublishingQueueBuilder.ACTION_UPDATE, publishDate, null);
+        createQueueNode(cloud, number, -1, PublishQueueItem.ACTION_UPDATE, publishDate, null);
     }
 
     /**
@@ -114,7 +115,7 @@ public class PublishUtil {
 
     public static void removeNode(Cloud cloud, int number, Date publishDate) {
         log.debug("removeNode with number = " + number);
-        String action = PublishingQueueBuilder.ACTION_REMOVE;
+        String action = PublishQueueItem.ACTION_REMOVE;
         createQueueNode(cloud, number, -1, action, publishDate, null);
     }
 
@@ -170,10 +171,10 @@ public class PublishUtil {
         log.debug("PublishOrUpdateNode with number = " + number);
         String action;
         if (relations) {
-            action = PublishingQueueBuilder.ACTION_UPDATE;
+            action = PublishQueueItem.ACTION_UPDATE;
         }
         else {
-            action = PublishingQueueBuilder.ACTION_UPDATE_NODE;
+            action = PublishQueueItem.ACTION_UPDATE_NODE;
         }
 
         createQueueNode(cloud, number, cloudNumber, action, publishDate, null);
@@ -189,7 +190,7 @@ public class PublishUtil {
 
     public static void publishOrUpdateRelations(Cloud cloud, int number, int cloudNumber,
             List<Integer> relatedNodes) {
-        String action = PublishingQueueBuilder.ACTION_UPDATE_RELATIONS;
+        String action = PublishQueueItem.ACTION_UPDATE_RELATIONS;
         createQueueNode(cloud, number, cloudNumber, action, null, relatedNodes);
     }
 
@@ -201,23 +202,30 @@ public class PublishUtil {
             Date publishDate, List<Integer> relatedNodes) {
         NodeManager nodeManager = cloud.getNodeManager("publishqueue");
         Node node = nodeManager.createNode();
-        node.setIntValue(PublishingQueueBuilder.FIELD_SOURCENUMBER, number);
-        node.setStringValue(PublishingQueueBuilder.FIELD_ACTION, action);
+        node.setIntValue(PublishQueueItem.FIELD_SOURCENUMBER, number);
+        node.setStringValue(PublishQueueItem.FIELD_ACTION, action);
         if (cloudNumber > 0) {
-            node.setIntValue(PublishingQueueBuilder.FIELD_DESTINATIONCLOUD, cloudNumber);
+            node.setIntValue(PublishQueueItem.FIELD_DESTINATIONCLOUD, cloudNumber);
         }
         if (publishDate != null) {
-            node.setDateValue(PublishingQueueBuilder.FIELD_PUBLISHDATE, publishDate);
+            node.setDateValue(PublishQueueItem.FIELD_PUBLISHDATE, publishDate);
         }
         if (relatedNodes != null && relatedNodes.size() > 0) {
             String localNumbers = "";
             for (Integer localNumber : relatedNodes) {
                 localNumbers += (localNumbers.length() > 0) ? "," + localNumber : localNumber;
             }
-            node.setStringValue(PublishingQueueBuilder.FIELD_RELATEDNODES, localNumbers);
+            node.setStringValue(PublishQueueItem.FIELD_RELATEDNODES, localNumbers);
         }
 
         node.commit();
+    }
+
+    public static boolean inPublishQueue(Node node) {
+       NodeManager nodeManager = node.getCloud().getNodeManager("publishqueue");
+       NodeQuery query = nodeManager.createQuery();   
+       SearchUtil.addEqualConstraint(query, nodeManager.getField(PublishQueueItem.FIELD_SOURCENUMBER), node.getNumber());
+       return query.getList().size() > 0;
     }
 
 }

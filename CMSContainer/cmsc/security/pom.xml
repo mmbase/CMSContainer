@@ -23,6 +23,14 @@
         </dependency>
 
         <dependency>
+            <groupId>org.cmscontainer.core</groupId>
+            <artifactId>cmsc-servicemanagement</artifactId>
+            <version>${project.version}</version>
+            <classifier>classes</classifier>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.samba.jcifs</groupId>
             <artifactId>jcifs</artifactId>
             <version>1.2.9</version>

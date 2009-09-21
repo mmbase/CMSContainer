@@ -8,7 +8,6 @@
 %><%@page import="org.mmbase.bridge.Node" 
 %><%@page import="org.mmbase.bridge.NodeList" 
 %><%@page import="org.mmbase.bridge.util.SearchUtil" 
-%><%@page import="org.mmbase.remotepublishing.*" 
 %><%@page import="com.finalist.cmsc.subsite.util.SubSiteUtil" 
 %><%@page import="com.finalist.cmsc.services.publish.Publish"
 %><%@page import="org.mmbase.bridge.BridgeException"

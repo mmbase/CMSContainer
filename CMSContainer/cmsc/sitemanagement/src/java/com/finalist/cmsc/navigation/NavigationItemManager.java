@@ -6,6 +6,7 @@ import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
+import com.finalist.cmsc.services.publish.Publisher;
 
 /**
  * Navigation manager implementations provide the sitemanagement system with information about a
@@ -88,6 +89,6 @@ public interface NavigationItemManager {
     * @param type type for which the publisher is requested
     * @return publisher instance
     */
-   Object getPublisher(Cloud cloud, String type);
+   Publisher getPublisher(Cloud cloud, String type);
 
 }
