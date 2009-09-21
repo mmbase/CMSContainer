@@ -139,7 +139,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
             log.debug("Creating image by relation " + imgidrel);
 
             if (!inlineImages.containsKey(imgidrel)) {
-               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
+               if (isAnonymousVisitor(cloud)) {
                   org.w3c.dom.Node parentNode = image.getParentNode();
                   parentNode.removeChild(image);
                }
@@ -186,7 +186,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                }
             }
 
-            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
+            if (isAnonymousVisitor(cloud)) {
                image.removeAttribute(RichText.RELATIONID_ATTR);
                if (image.hasAttribute(RichText.DESTINATION_ATTR)) {
                   image.removeAttribute(RichText.DESTINATION_ATTR);
@@ -200,7 +200,6 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       }
    }
 
-
    /**
     * Find a tags in the text and replace them with valid links
     */
@@ -213,7 +212,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
             String idrel = aElement.getAttribute(RichText.RELATIONID_ATTR);
 
             if (!inlineLinks.containsKey(String.valueOf(idrel))) {
-               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
+               if (isAnonymousVisitor(cloud)) {
                   org.w3c.dom.Node parentNode = aElement.getParentNode();
                   org.w3c.dom.Node nextSibling = aElement.getNextSibling();
                   while (nextSibling != null && nextSibling.getNodeType() == org.w3c.dom.Node.ATTRIBUTE_NODE) {
@@ -276,7 +275,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                aElement.setAttribute(RichText.TITLE_ATTR, name);
             }
 
-            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
+            if (isAnonymousVisitor(cloud)) {
                aElement.removeAttribute(RichText.RELATIONID_ATTR);
                if (aElement.hasAttribute(RichText.DESTINATION_ATTR)) {
                   aElement.removeAttribute(RichText.DESTINATION_ATTR);
@@ -286,8 +285,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       }
    }
 
-
-   private String getContentUrl(Node node) {
+   protected String getContentUrl(Node node) {
       String title = null;
 
       //Check for the existence of title field of the node
@@ -298,5 +296,10 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       String id = node.getStringValue("number");
       return ResourcesUtil.getServletPathWithAssociation("content", "/content/*", id, title);
    }
+
+   protected boolean isAnonymousVisitor(Cloud cloud) {
+      return cloud.getUser().getRank() == Rank.ANONYMOUS;
+   }
+
 
 }

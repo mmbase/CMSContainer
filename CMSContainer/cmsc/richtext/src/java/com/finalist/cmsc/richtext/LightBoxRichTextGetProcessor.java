@@ -72,7 +72,14 @@ public class LightBoxRichTextGetProcessor extends RichTextGetProcessor {
                   }
     
                   parentNode.replaceChild(link, replaceNode);                        
-                  link.appendChild(image);              
+                  link.appendChild(image);
+                  
+                  if (isAnonymousVisitor(cloud)) {
+                     image.removeAttribute(RichText.LIGHTBOX_ATTR);
+                     if (image.hasAttribute(RichText.LIGHTBOXGROUP_ATTR)) {
+                        image.removeAttribute(RichText.LIGHTBOXGROUP_ATTR);
+                     }
+                  }
                }
            }
        }
