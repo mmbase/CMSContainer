@@ -122,10 +122,10 @@ public class ContentSearchAction extends PagerAction {
       }
       NodeQuery query = cloud.createNodeQuery();
 
-      // First we add the contenttype parameter
+      // First add the contenttype parameter
       queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
-      // First add the proper step to the query.
+      // Second, add the proper step to the query.
       NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
       Step channelStep = query.addStep(channelNodeManager);
       Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
@@ -173,17 +173,13 @@ public class ContentSearchAction extends PagerAction {
 
       // Set some date constraints.
       queryStringComposer.addParameter(ContentElementUtil.CREATIONDATE_FIELD, "" + searchForm.getCreationdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm
-            .getCreationdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm.getCreationdate());
       queryStringComposer.addParameter(ContentElementUtil.PUBLISHDATE_FIELD, "" + searchForm.getPublishdate());
-      SearchUtil
-            .addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
       queryStringComposer.addParameter(ContentElementUtil.EXPIREDATE_FIELD, "" + searchForm.getExpiredate());
       SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.EXPIREDATE_FIELD, searchForm.getExpiredate());
-      queryStringComposer
-            .addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
-            .getLastmodifieddate());
+      queryStringComposer.addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
 
       // Perhaps we have some more constraints if the nodetype was specified (=> not contentelement).
       if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
@@ -212,7 +208,7 @@ public class ContentSearchAction extends PagerAction {
       // Add the title constraint:
       if (StringUtils.isNotEmpty(searchForm.getTitle())) {
 
-         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle());
+         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle().trim());
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
          Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
          SearchUtil.addConstraint(query, titleConstraint);
@@ -325,7 +321,7 @@ public class ContentSearchAction extends PagerAction {
       Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
       for (String keyword : keywords) {
          Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
-         SearchUtil.addORConstraint(query, keywordConstraint);
+         SearchUtil.addConstraint(query, keywordConstraint);
       }
    }
 
