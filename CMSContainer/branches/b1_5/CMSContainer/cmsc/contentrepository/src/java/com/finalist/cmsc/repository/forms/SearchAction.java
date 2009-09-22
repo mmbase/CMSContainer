@@ -98,29 +98,27 @@ public class SearchAction extends PagerAction {
         	queryStringComposer.addParameter(MODE, request.getParameter(MODE));
         }
         NodeQuery query = cloud.createNodeQuery();
-
-        // First we add the contenttype parameter
+   
+        // First add the contenttype parameter
         queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
-
-        // First add the proper step to the query.
-      NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
-      Step channelStep = query.addStep(channelNodeManager);
-      Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
-      if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
-         Step step = query.addStep(cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL));
-         query.addNode(step, cloud.getNode(searchForm.getParentchannel()));
-         contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
-         query.setNodeStep(contentStep);
-         queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
-      } else {
-         // CMSC-1260 Content search also finds elements in Recycle bin
-         Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
-         StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
-         SearchUtil.addConstraint(query, channelConstraint);
-         query.setNodeStep(contentStep);
-      }
+  
+        // Second, add the proper step to the query.
+        NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
+        Step channelStep = query.addStep(channelNodeManager);
+        Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
+        if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
+           query.addNode(channelStep, cloud.getNode(searchForm.getParentchannel()));
+           query.setNodeStep(contentStep);
+           queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
+        } else {
+           // Do not display items located in the trash bin; filter them.
+           Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
+           StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
+  
+           FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL, trashNumber);
+           SearchUtil.addConstraint(query, channelConstraint);
+           query.setNodeStep(contentStep);
+        }
 
         // Order the result by:
         String order = searchForm.getOrder();
@@ -156,9 +154,8 @@ public class SearchAction extends PagerAction {
         SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
                 .getLastmodifieddate());
 
-        // Perhaps we have some more constraints if the nodetype was specified (=>
-        // not
-        // contentelement).
+        // Perhaps we have some more constraints if the nodetype was specified 
+        // (=> not contentelement).
         if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
             FieldList fields = nodeManager.getFields();
             FieldIterator fieldIterator = fields.fieldIterator();
@@ -185,12 +182,12 @@ public class SearchAction extends PagerAction {
 
         // And some keyword searching
         if (StringUtils.isNotEmpty(searchForm.getKeywords())) {
-            queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords());
+            queryStringComposer.addParameter(ContentElementUtil.KEYWORD_FIELD, searchForm.getKeywords().trim());
             Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
             List<String> keywords = KeywordUtil.getKeywords(searchForm.getKeywords());
             for (String keyword : keywords) {
                 Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
-                SearchUtil.addORConstraint(query, keywordConstraint);
+                SearchUtil.addConstraint(query, keywordConstraint);
             }
         }
 
