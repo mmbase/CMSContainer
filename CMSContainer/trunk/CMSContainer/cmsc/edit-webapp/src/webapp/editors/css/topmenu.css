@@ -108,6 +108,7 @@
 	background-repeat: no-repeat;
 	background-position: left center;
 	text-decoration: underline;
+	font-weight: bold;
 }
 
 #menu ul li.active a
