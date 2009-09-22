@@ -31,6 +31,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class ContentAction extends MMBaseAction {
 
+   private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
    private final static String MOVECONTENTTOCHANNEL = "moveContentToChannel";
 
    @Override
@@ -61,7 +62,7 @@ public class ContentAction extends MMBaseAction {
       }
 
       // Set the maximum result size.
-      String resultsPerPage = PropertiesUtil.getProperty(SearchAction.REPOSITORY_SEARCH_RESULTS_PER_PAGE);
+      String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
       int maxNumber = 25;
       if (resultsPerPage != null && resultsPerPage.matches("\\d+")) {
          maxNumber = Integer.parseInt(resultsPerPage);
