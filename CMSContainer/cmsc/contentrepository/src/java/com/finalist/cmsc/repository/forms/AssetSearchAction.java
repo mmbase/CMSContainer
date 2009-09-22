@@ -8,17 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.FieldList;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
@@ -42,7 +34,7 @@ public class AssetSearchAction extends AbstractAssetSearch {
    /**
     * MMBase logging system
     */
-   static final Logger log = Logging.getLoggerInstance(AssetSearchAction.class.getName());
+   private static final Logger log = Logging.getLoggerInstance(AssetSearchAction.class.getName());
    
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, Cloud cloud) throws Exception {
@@ -108,10 +100,10 @@ public class AssetSearchAction extends AbstractAssetSearch {
       }
       NodeQuery query = cloud.createNodeQuery();
    
-      // First we add the assettype parameter
+      // First add the assettype parameter
       queryStringComposer.addParameter(ASSETTYPES, searchForm.getAssettypes());
    
-      // First add the proper step to the query.
+      // Second, add the proper step to the query.
       NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
       Step channelStep = query.addStep(channelNodeManager);
       Step assetStep = query.addRelationStep(nodeManager, RepositoryUtil.CREATIONREL, "SOURCE").getNext();
@@ -120,11 +112,11 @@ public class AssetSearchAction extends AbstractAssetSearch {
          query.setNodeStep(assetStep);
          queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
       } else {
-         // CMSC-1260 Content search also finds elements in Recycle bin
+         // Do not display items located in the trash bin; filter them.
          Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
          StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
+
+         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL, trashNumber);
          SearchUtil.addConstraint(query, channelConstraint);
          query.setNodeStep(assetStep);
       }
@@ -163,8 +155,7 @@ public class AssetSearchAction extends AbstractAssetSearch {
       SearchUtil.addDayConstraint(query, nodeManager, AssetElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
    
       // Perhaps we have some more constraints if the nodetype was specified (=>
-      // not
-      // assetelement).
+      // not assetelement).
       if (!AssetElementUtil.ASSETELEMENT.equalsIgnoreCase(nodeManager.getName())) {
          FieldList fields = nodeManager.getFields();
          FieldIterator fieldIterator = fields.fieldIterator();
@@ -275,6 +266,5 @@ public class AssetSearchAction extends AbstractAssetSearch {
             + ((searchShow == null) ? "" : "&searchShow=" + searchShow));
       return super.execute(mapping, form, request, response, cloud);
    }
-
 
 }
