@@ -15,15 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.apache.struts.action.*;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
@@ -36,13 +29,13 @@ import org.mmbase.util.logging.Logging;
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.repository.forms.ContentSearchAction;
 import com.finalist.cmsc.repository.forms.SearchForm;
 import com.finalist.cmsc.struts.PagerAction;
 import com.finalist.cmsc.subsite.util.SubSiteUtil;
 
 public class SubSiteAction extends PagerAction {
 
-    private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
    /**
      * MMBase logging system
      */
@@ -115,7 +108,7 @@ public class SubSiteAction extends PagerAction {
       }
       
       // Set the maximum result size.
-      String resultsPerPage = PropertiesUtil.getProperty(REPOSITORY_SEARCH_RESULTS_PER_PAGE);
+      String resultsPerPage = PropertiesUtil.getProperty(ContentSearchAction.REPOSITORY_SEARCH_RESULTS_PER_PAGE);
       int maxNumber = 25;
       if (resultsPerPage != null && resultsPerPage.matches("\\d+")) {
     	  maxNumber = Integer.parseInt(resultsPerPage);
