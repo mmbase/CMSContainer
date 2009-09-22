@@ -9,18 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.FieldList;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
@@ -114,10 +105,10 @@ public class ContentSearchAction extends PagerAction {
       }
       NodeQuery query = cloud.createNodeQuery();
 
-      // First we add the contenttype parameter
+      // First add the contenttype parameter
       queryStringComposer.addParameter(CONTENTTYPES, searchForm.getContenttypes());
 
-      // First add the proper step to the query.
+      // Second, add the proper step to the query.
       NodeManager channelNodeManager = cloud.getNodeManager(RepositoryUtil.CONTENTCHANNEL);
       Step channelStep = query.addStep(channelNodeManager);
       Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
@@ -126,14 +117,15 @@ public class ContentSearchAction extends PagerAction {
          query.setNodeStep(contentStep);
          queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
       } else {
-         // CMSC-1260 Content search also finds elements in Recycle bin
+         // Do not display items located in the trash bin; filter them.
          Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
          StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
+
+         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL, trashNumber);
          SearchUtil.addConstraint(query, channelConstraint);
          query.setNodeStep(contentStep);
       }
+      
       // Order the result by:
       String order = searchForm.getOrder();
 
@@ -159,17 +151,13 @@ public class ContentSearchAction extends PagerAction {
 
       // Set some date constraints.
       queryStringComposer.addParameter(ContentElementUtil.CREATIONDATE_FIELD, "" + searchForm.getCreationdate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm
-            .getCreationdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.CREATIONDATE_FIELD, searchForm.getCreationdate());
       queryStringComposer.addParameter(ContentElementUtil.PUBLISHDATE_FIELD, "" + searchForm.getPublishdate());
-      SearchUtil
-            .addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.PUBLISHDATE_FIELD, searchForm.getPublishdate());
       queryStringComposer.addParameter(ContentElementUtil.EXPIREDATE_FIELD, "" + searchForm.getExpiredate());
       SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.EXPIREDATE_FIELD, searchForm.getExpiredate());
-      queryStringComposer
-            .addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
-      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm
-            .getLastmodifieddate());
+      queryStringComposer.addParameter(ContentElementUtil.LASTMODIFIEDDATE_FIELD, "" + searchForm.getLastmodifieddate());
+      SearchUtil.addDayConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIEDDATE_FIELD, searchForm.getLastmodifieddate());
 
       // Perhaps we have some more constraints if the nodetype was specified (=> not contentelement).
       if (!ContentElementUtil.CONTENTELEMENT.equalsIgnoreCase(nodeManager.getName())) {
@@ -190,7 +178,7 @@ public class ContentSearchAction extends PagerAction {
       // Add the title constraint:
       if (StringUtils.isNotEmpty(searchForm.getTitle())) {
 
-         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle());
+         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle().trim());
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
          Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
          SearchUtil.addConstraint(query, titleConstraint);
@@ -303,7 +291,7 @@ public class ContentSearchAction extends PagerAction {
       Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
       for (String keyword : keywords) {
          Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
-         SearchUtil.addORConstraint(query, keywordConstraint);
+         SearchUtil.addConstraint(query, keywordConstraint);
       }
    }
 
