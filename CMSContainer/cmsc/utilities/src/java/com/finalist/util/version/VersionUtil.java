@@ -1,11 +1,11 @@
 package com.finalist.util.version;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.jar.Attributes;
 
 import javax.servlet.ServletContext;
 
@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 public class VersionUtil {
 
    private static final String CMSC_PORTAL_START = "cmsc-portal";
-   // we check against the editwizard jar, because otherwise we will get a
+   // check against the editwizard jar, because otherwise we will get a
    // version starting with email-1. etc
    private static final String MMBASE_START = "mmbase";
 
@@ -25,14 +25,12 @@ public class VersionUtil {
    private static String mmbaseVersion;
    private static Map<String, String> libVersions;
 
-
    protected static Log getLogger() {
       if (log == null) {
          log = LogFactory.getLog(VersionUtil.class);
       }
       return log;
    }
-
 
    public static synchronized String getCmscVersion(ServletContext servletContext) {
       if (cmscVersion == null) {
@@ -44,7 +42,6 @@ public class VersionUtil {
       return cmscVersion;
    }
 
-
    public static synchronized String getMmbaseVersion(ServletContext servletContext) {
       if (mmbaseVersion == null) {
          if (libVersions == null) {
@@ -54,7 +51,6 @@ public class VersionUtil {
       }
       return mmbaseVersion;
    }
-
 
    private static synchronized void initLibVersions(ServletContext servletContext) {
 
@@ -66,18 +62,20 @@ public class VersionUtil {
          int end = path.lastIndexOf("-");
 
          if (start != -1 && end != -1 && end > start) {
-            //Check if the right version part is found
+            // Check if the right version part is found
             if (path.charAt(end - 1) >= '0' && path.charAt(end - 1) <= '9') {
                int newEnd = path.lastIndexOf("-", end - 1);
-               
-               // Only use the newEnd if it is still valid. Otherwise 'c3p-1.23.3.jar' fails
-               if (newEnd > start) { 
+
+               // Only use the newEnd if it is still valid. Otherwise
+               // 'c3p-1.23.3.jar' fails
+               if (newEnd > start) {
                   end = newEnd;
                }
             }
-            
-            //TODO Replace this checking for version number by Pattern matching
-            //A quickly regexp, not tested, should be something as: "[.+- (.\\d .*) \\.jar]"
+
+            // TODO Replace this checking for version number by Pattern matching
+            // A quickly regexp, not tested, should be something as:
+            // "[.+- (.\\d .*) \\.jar]"
 
             String lib = path.substring(start, end);
             String version = path.substring(end + 1, path.lastIndexOf("."));
@@ -88,7 +86,6 @@ public class VersionUtil {
 
    }
 
-
    public static Map<String, String> getLibVersions(ServletContext servletContext) {
       if (libVersions == null) {
          initLibVersions(servletContext);
@@ -96,33 +93,39 @@ public class VersionUtil {
       return libVersions;
    }
 
-
    public static synchronized String getApplicationVersion(ServletContext servletContext) {
       if (applicationVersion == null) {
-         try {
-            java.net.URL manifestURL;
-            manifestURL = servletContext.getResource("/META-INF/MANIFEST.MF");
-
-            java.util.jar.Manifest mf = new java.util.jar.Manifest(manifestURL.openStream());
-            java.util.Map<String, java.util.jar.Attributes> entries = mf.getEntries();
-            applicationVersion = "unknown";
-            for (Attributes attributes : entries.values()) {
-               String implementationVersion = attributes.getValue("Implementation-Version");
-               if (implementationVersion != null) {
-                  applicationVersion = implementationVersion;
+         applicationVersion = "unknown";
+         Set<String> allResources = new HashSet<String>();
+         getAllResourcesFromContextPath(servletContext, allResources, "/META-INF/maven/");
+         for (String resource : allResources) {
+            if (resource.endsWith("pom.properties")) {
+               java.io.InputStream in = servletContext.getResourceAsStream(resource);
+               Properties mProps = new Properties();
+               try {
+                  mProps.load(in);
+               } catch (IOException e) {
+                  getLogger().error("Unable to get application version from resource:" + resource + ".", e);
+                  return "Unable to get application version";
                }
+               applicationVersion = (String) mProps.get("version");
             }
          }
-         catch (MalformedURLException e) {
-            getLogger().error("Unable to get application version.", e);
-            return "Unable to get application version";
-         }
-         catch (IOException e) {
-            getLogger().error("Unable to get application version.", e);
-            return "Unable to get application version";
-         }
+
       }
       return applicationVersion;
+   }
+
+   @SuppressWarnings("unchecked")
+   public static void getAllResourcesFromContextPath(ServletContext servletContext, Set<String> allResources, String startPath) {
+      Set<String> newResources;
+      newResources = servletContext.getResourcePaths(startPath);
+      for (String resource : newResources) {
+         if (resource.endsWith("/")) {
+            getAllResourcesFromContextPath(servletContext, allResources, resource);
+         }
+         allResources.add(resource);
+      }
    }
 
 }
