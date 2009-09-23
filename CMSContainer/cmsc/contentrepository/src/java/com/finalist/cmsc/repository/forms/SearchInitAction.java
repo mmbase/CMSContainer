@@ -21,7 +21,6 @@ import com.finalist.cmsc.struts.MMBaseAction;
 public class SearchInitAction extends MMBaseAction {
 
    private static final String TITLE = "title";
-   private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
    private static final String POSITION = "position";
@@ -77,7 +76,7 @@ public class SearchInitAction extends MMBaseAction {
       String originNodeId = request.getParameter(RELATIONORIGINNODE);
       request.getSession().setAttribute(RELATIONORIGINNODE, originNodeId);
 
-      return mapping.findForward(SEARCHOPTIONS);
+      return mapping.findForward("dosearch");
    }
 
 }
