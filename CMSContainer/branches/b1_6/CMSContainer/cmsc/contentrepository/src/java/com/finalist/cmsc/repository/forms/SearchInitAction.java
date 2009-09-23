@@ -57,7 +57,7 @@ public class SearchInitAction extends MMBaseAction {
       addToRequest(request, TITLE, searchForm.getTitle());
       addToRequest(request, ONLYTYPE, onlytype);
 
-      return mapping.findForward("searchoptions");
+      return mapping.findForward("dosearch");
    }
 
 }
