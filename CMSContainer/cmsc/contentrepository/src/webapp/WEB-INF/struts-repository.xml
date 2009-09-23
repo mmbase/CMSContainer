@@ -101,7 +101,6 @@
 
       <action path="/editors/repository/SearchInitAction" type="com.finalist.cmsc.repository.forms.SearchInitAction"
          name="SearchForm" scope="request" unknown="false" validate="false">
-         <forward name="searchoptions" path="/editors/repository/contentsearch.jsp" redirect="false" />
          <forward name="dosearch" path="/editors/repository/ContentSearchAction.do" redirect="false" />
       </action>
       <action path="/editors/repository/ContentSearchAction" type="com.finalist.cmsc.repository.forms.ContentSearchAction"
