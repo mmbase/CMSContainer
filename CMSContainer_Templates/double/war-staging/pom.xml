@@ -23,12 +23,6 @@
         </dependency>
         <dependency>
             <groupId>org.cmscontainer.core</groupId>
-            <artifactId>cmsc-richtext</artifactId>
-            <version>${project.version}</version>
-			<type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>org.cmscontainer.core</groupId>
             <artifactId>cmsc-security</artifactId>
             <version>${project.version}</version>
 			<type>war</type>

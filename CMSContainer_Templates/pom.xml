@@ -17,5 +17,7 @@
 	<modules>
 		<module>single</module>
 		<module>double</module>
+		<module>community</module>
+		<module>luceus</module>
 	</modules>
 </project>

@@ -3,41 +3,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.cmscontainer.demos</groupId>
-        <artifactId>cmsc-demo-base</artifactId>
+     <parent>
+        <groupId>org.cmscontainer.templates</groupId>
+        <artifactId>cmsc-templates</artifactId>
         <version>1.7-SNAPSHOT</version>
     </parent>
     
+    <groupId>org.cmscontainer.templates</groupId>
     <artifactId>cmsc-community</artifactId>
+    <name>CMS Container community webapp</name>
     <packaging>war</packaging>
-    <name>CMS Container demo community web application</name>
 
-	<dependencies>
+    <dependencies>
+		<dependency>
+			<groupId>org.cmscontainer.modules</groupId>
+			<artifactId>cmsc-modules-community</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
 		<dependency>
 			<groupId>org.cmscontainer.portlets</groupId>
-			<artifactId>cmsc-portlets-newsletter</artifactId>
+			<artifactId>cmsc-portlets-preferences</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>org.cmscontainer.templates</groupId>
-			<artifactId>cmsc-community</artifactId>
+			<groupId>org.cmscontainer.portlets</groupId>
+			<artifactId>cmsc-portlets-login</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
-
-		<dependency>
-			<groupId>org.cmscontainer.demos</groupId>
-			<artifactId>cmsc-demo-webapp</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>org.cmscontainer.templates</groupId>
-			<artifactId>cmsc-single-webapp</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-	</dependencies>
+    </dependencies>
 </project>
