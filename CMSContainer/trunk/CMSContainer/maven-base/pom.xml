@@ -35,9 +35,9 @@ See http://www.MMBase.org/license
   </licenses>
 
   <scm>
-    <connection>scm:cvs:pserver:guest:guest@cvs.mmbase.org:/var/cvs:contributions/CMSContainer</connection>
-    <developerConnection>scm:cvs:ext:cvs.mmbase.org:/var/cvs:contributions/CMSContainer</developerConnection>
-    <url>http://cvs.mmbase.org/viewcvs/contributions/CMSContainer</url>
+    <connection>scm:svn:https://scm.mmbase.org/CMSContainer/</connection>
+    <developerConnection>scm:svn:https://scm.mmbase.org/CMSContainer/</developerConnection>
+    <url>https://scm.mmbase.org/CMSContainer/</url>
   </scm>
 
   <issueManagement>

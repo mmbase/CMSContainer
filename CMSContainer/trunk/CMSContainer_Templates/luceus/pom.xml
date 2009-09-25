@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+     <parent>
+        <groupId>org.cmscontainer.templates</groupId>
+        <artifactId>cmsc-templates</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <groupId>org.cmscontainer.templates</groupId>
+    <artifactId>cmsc-luceus</artifactId>
+    <name>CMS Container luceus webapp</name>
+    <packaging>war</packaging>
+
+   <properties>
+      <luceus.version>0.42</luceus.version>
+      <lucene.version>2.4.1</lucene.version>
+   </properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.cmscontainer.modules</groupId>
+			<artifactId>cmsc-modules-luceus</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.cmscontainer.portlets</groupId>
+			<artifactId>cmsc-portlets-search</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-core</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-tomcat</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-server</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-analysis</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-extraction</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-taglib</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-spider</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-highlighter</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
+		
+      <!-- 
+      <dependency>
+         <groupId>lucene</groupId>
+         <artifactId>lucene-core</artifactId>
+         <version>${lucene.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>lucene</groupId>
+         <artifactId>lucene-misc</artifactId>
+         <version>${lucene.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>lucene</groupId>
+         <artifactId>lucene-highlighter</artifactId>
+         <version>${lucene.version}</version>
+      </dependency
+       -->
+		<dependency>
+			<groupId>net.htmlparser</groupId>
+			<artifactId>jericho-html</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>0.7.3-dev-20051205</version>
+		</dependency>
+		<dependency>
+			<groupId>fontbox</groupId>
+			<artifactId>fontbox</artifactId>
+			<version>0.1.0-dev-20051205</version>
+		</dependency>
+		<dependency>
+			<groupId>org.textmining</groupId>
+			<artifactId>tm-extractors</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>2.5.1-final-20040804</version>
+		</dependency>
+	</dependencies>
+</project>

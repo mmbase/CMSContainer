@@ -17,7 +17,6 @@
 	<modules>
 		<module>war-live</module>
 		<module>war-staging</module>
-		<module>war-community</module>
 	</modules>
 
 	<dependencies>
@@ -61,6 +60,12 @@
             <artifactId>cmsc-portlets</artifactId>
             <version>${project.version}</version>
 			<type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.cmscontainer.core</groupId>
+            <artifactId>cmsc-richtext</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.cmscontainer.core</groupId>
