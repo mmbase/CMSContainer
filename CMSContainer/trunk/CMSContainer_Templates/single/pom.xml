@@ -67,10 +67,6 @@
 			<groupId>mmapps</groupId>
 			<artifactId>cloudprovider</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>mmapps</groupId>
-			<artifactId>mmcommons</artifactId>
-		</dependency>
 
 <!-- Apache portals - pluto -->	
 		<dependency>
