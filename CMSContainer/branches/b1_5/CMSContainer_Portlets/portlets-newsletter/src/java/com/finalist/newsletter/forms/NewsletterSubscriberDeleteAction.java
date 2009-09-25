@@ -10,9 +10,8 @@ import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
-import com.finalist.cmsc.services.community.ApplicationContextFactory;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseFormlessAction;
-import com.finalist.newsletter.services.NewsletterSubscriptionServices;
 
 /**
  * using for deleting newsletter subscriber from newsletter
@@ -22,8 +21,6 @@ import com.finalist.newsletter.services.NewsletterSubscriptionServices;
  */
 public class NewsletterSubscriberDeleteAction extends MMBaseFormlessAction {
 
-   private NewsletterSubscriptionServices service;
-   
    /**
     * @param mapping
     * @param request
@@ -44,8 +41,11 @@ public class NewsletterSubscriberDeleteAction extends MMBaseFormlessAction {
             String subscriberId = subscription.getStringValue("subscriber");
 
             if (subscriberId.equals(authId)) {
-               service = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
-               service.modifyStauts(Integer.parseInt(authId), Integer.parseInt(newsletterId), "INACTIVE");
+               if (Publish.isPublished(subscription)) {
+                  Publish.unpublish(subscription);
+               }
+               subscription.deleteRelations();
+               subscription.delete(true);   
             }
          }
       }
