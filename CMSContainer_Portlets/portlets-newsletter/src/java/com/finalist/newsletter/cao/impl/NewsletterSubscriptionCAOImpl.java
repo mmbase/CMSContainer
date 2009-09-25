@@ -463,7 +463,7 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       SearchUtil.addEqualConstraint(query, recordManager.getField("subscriber"), String.valueOf(anthId));
       List<Node> subscriptions = query.getList();
       for (Node subscription : subscriptions) {         
-         if (ServerUtil.isLive()) {
+         if (Publish.isPublished(subscription)) {
              Publish.unpublish(subscription);
          }
          subscription.delete(true);       
