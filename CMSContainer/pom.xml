@@ -24,11 +24,14 @@ See http://www.MMBase.org/license
 
 	<properties>
 		<cmsc.version>1.7-SNAPSHOT</cmsc.version>
+      <luceus.version>0.42</luceus.version>
+      <lucene.version>2.4.1</lucene.version>
 	</properties>
 
 	<modules>
 		<module>maven-base</module>
 		<module>cmsc</module>
+      <module>project-parent</module>
 	</modules>
 
 	<dependencies>
@@ -140,11 +143,6 @@ See http://www.MMBase.org/license
 		<dependency>
 			<groupId>mmapps</groupId>
 			<artifactId>cloudprovider</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>mmapps</groupId>
-			<artifactId>mmcommons</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

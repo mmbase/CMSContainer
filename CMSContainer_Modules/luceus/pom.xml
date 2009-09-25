@@ -19,11 +19,13 @@
 			<groupId>com.luceus</groupId>
 			<artifactId>luceus-core</artifactId>
 			<version>${luceus.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.luceus</groupId>
 			<artifactId>luceus-server</artifactId>
 			<version>${luceus.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

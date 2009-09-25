@@ -436,11 +436,6 @@ See http://www.MMBase.org/license
             <artifactId>cloudprovider</artifactId>
             <version>1.2</version>            
         </dependency>
-        <dependency>
-            <groupId>mmapps</groupId>
-            <artifactId>mmcommons</artifactId>
-            <version>1.4.3</version>            
-        </dependency>
     
 		<!-- Source code uses org.apache.xpath.XPathAPI -->
 		<dependency>
