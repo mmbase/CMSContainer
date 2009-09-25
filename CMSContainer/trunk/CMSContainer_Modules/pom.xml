@@ -13,10 +13,6 @@
     <artifactId>cmsc-modules</artifactId>
     <name>CMS Container Modules</name>
     <packaging>pom</packaging>
-    
-    <properties>
-        <luceus.version>0.42</luceus.version>
-    </properties>
 
     <modules>
         <module>alias</module>
