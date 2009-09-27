@@ -298,6 +298,8 @@
                                            </mm:fieldlist>
                                        </mm:fieldinfo>
                                        <c:if test="${showField}">
+                                      	<mm:fieldinfo type="type" jspvar="field_type" write="false">
+											<c:if test="${field_type eq 1 || field_type eq 2}" >
                                           <tr>
                                              <td height="31px" nowrap>
                                                 <mm:fieldinfo type="guiname" jspvar="guiname"/>:
@@ -315,6 +317,8 @@
                                                 </mm:fieldinfo>
                                              </td>
                                           </tr>
+											</c:if>
+										</mm:fieldinfo>
                                        </c:if>
                                     </mm:fieldlist>
                                  </table>
