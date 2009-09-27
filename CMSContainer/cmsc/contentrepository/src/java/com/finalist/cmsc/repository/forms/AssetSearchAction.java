@@ -31,6 +31,7 @@ import com.finalist.cmsc.resources.forms.QueryStringComposer;
 
 public class AssetSearchAction extends AbstractAssetSearch {
 
+   private static final String INTEGER_FIELD = "^[1-9]\\d*$";
    /**
     * MMBase logging system
     */
@@ -165,9 +166,14 @@ public class AssetSearchAction extends AbstractAssetSearch {
             String paramName = nodeManager.getName() + "." + field.getName();
             String paramValue = request.getParameter(paramName);
             if (StringUtils.isNotEmpty(paramValue)) {
-               SearchUtil.addLikeConstraint(query, field, paramValue.trim());
+               paramValue = paramValue.trim();
+               if (field.getType() == Field.TYPE_STRING) {
+                  SearchUtil.addLikeConstraint(query, field, paramValue);
+               } else if (field.getType() == Field.TYPE_INTEGER && paramValue.matches(INTEGER_FIELD)) {
+                  SearchUtil.addEqualConstraint(query, field, Integer.parseInt(paramValue));
+               }
+               queryStringComposer.addParameter(paramName, paramValue);
             }
-            queryStringComposer.addParameter(paramName, paramValue);
          }
       }
    
