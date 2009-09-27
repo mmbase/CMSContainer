@@ -278,13 +278,17 @@
                                            </mm:fieldlist>
                                        </mm:fieldinfo>
                                        <% if (showField) { %>
-                                          <tr>
-                                             <td height="31" nowrap>
-                                                <mm:fieldinfo type="guiname" jspvar="guiname"/>:
-                                                <mm:fieldinfo type="name" jspvar="name" write="false">
-                                                   <% fields.add(assettypes + "." + name); %>
-                                                </mm:fieldinfo>
-                                          </tr>
+                                      	<mm:fieldinfo type="type" jspvar="field_type" write="false">
+											<c:if test="${field_type eq 1 || field_type eq 2}" >
+	                                          <tr>
+	                                             <td height="31" nowrap>
+	                                                <mm:fieldinfo type="guiname" jspvar="guiname"/>:
+	                                                <mm:fieldinfo type="name" jspvar="name" write="false">
+	                                                   <% fields.add(assettypes + "." + name); %>
+	                                                </mm:fieldinfo>
+	                                          </tr>
+											</c:if>
+										</mm:fieldinfo>
                                        <% } %>
                                     </mm:fieldlist>
                                  </table>
