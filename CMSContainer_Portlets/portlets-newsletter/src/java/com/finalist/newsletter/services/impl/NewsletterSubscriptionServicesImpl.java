@@ -14,6 +14,7 @@ import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.PersonService;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.util.DateUtil;
 import com.finalist.newsletter.cao.NewsLetterStatisticCAO;
 import com.finalist.newsletter.cao.NewsletterCAO;
@@ -231,12 +232,11 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
    }
 
    public void terminateUserSubscription(String subscriptionId) {
-      Subscription subscription = subscriptionCAO.getSubscriptionById(Integer.parseInt(subscriptionId));
-      subscription.setStatus(STATUS.INACTIVE);
-      subscriptionCAO.updateSubscription(subscription);
-      int newsletterId = newsletterCAO.getNewsletterIdBySubscription(Integer.parseInt(subscriptionId));
-      int userId = CommunityModuleAdapter.getCurrentUserId();
-      statisticCAO.logPublication(userId, newsletterId, HANDLE.INACTIVE);
+      Node subscription = subscriptionCAO.getSubscriptionNodeById(Integer.parseInt(subscriptionId));
+      if (Publish.isPublished(subscription)) {
+          Publish.unpublish(subscription);
+      }
+      subscription.delete(true);       
    }
 
    public Subscription getSubscription(String sId) {
