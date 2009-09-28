@@ -101,14 +101,16 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       String stauts = subscription.getStatus().toString();
 
       Node record = cloud.getNode(subscription.getId());
-      record.setStringValue("status", stauts);
-      record.commit();
-
       if ("INACTIVE".equals(stauts)) {
-         record.deleteRelations("termed");
-         record.commit();
+         if (Publish.isPublished(record)) {
+            Publish.unpublish(record);
+         }
+         record.deleteRelations();
+         record.delete();
+      } else {
+         record.setStringValue("status", stauts);
+         record.commit();         
       }
-
    }
 
    public void pause(int subscriptionId) {
