@@ -30,6 +30,8 @@ public interface NewsletterSubscriptionCAO {
    public Set<Term> getTerms(int id);
 
    public Subscription getSubscriptionById(int id);
+   
+   public Node getSubscriptionNodeById(int id);
 
    public void createSubscription(int userId, int newsletterId);
 
@@ -38,6 +40,7 @@ public interface NewsletterSubscriptionCAO {
    public List<Subscription> getSubscriptionByUserIdAndStatus(int userId, Subscription.STATUS status);
 
    public List<Node> getAllSubscriptions();
+   
    public List<Node>getSubscriptionsByTerms(int newsletterId, String terms);
 
    void updateLastBounce(int subscriptionId);

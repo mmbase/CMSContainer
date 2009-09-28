@@ -1,6 +1,11 @@
 package com.finalist.newsletter.services.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -9,12 +14,18 @@ import org.mmbase.bridge.Node;
 
 import com.finalist.cmsc.services.community.person.Person;
 import com.finalist.cmsc.services.community.person.PersonService;
+import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.util.DateUtil;
-import com.finalist.newsletter.cao.*;
-import com.finalist.newsletter.domain.*;
+import com.finalist.newsletter.cao.NewsLetterStatisticCAO;
+import com.finalist.newsletter.cao.NewsletterCAO;
+import com.finalist.newsletter.cao.NewsletterSubscriptionCAO;
+import com.finalist.newsletter.domain.Newsletter;
+import com.finalist.newsletter.domain.Subscription;
+import com.finalist.newsletter.domain.Term;
 import com.finalist.newsletter.domain.StatisticResult.HANDLE;
 import com.finalist.newsletter.domain.Subscription.STATUS;
-import com.finalist.newsletter.services.*;
+import com.finalist.newsletter.services.NewsletterService;
+import com.finalist.newsletter.services.NewsletterSubscriptionServices;
 import com.finalist.newsletter.util.NewsletterSubscriptionUtil;
 
 public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptionServices {
@@ -220,12 +231,11 @@ public class NewsletterSubscriptionServicesImpl implements NewsletterSubscriptio
    }
 
    public void terminateUserSubscription(String subscriptionId) {
-      Subscription subscription = subscriptionCAO.getSubscriptionById(Integer.parseInt(subscriptionId));
-      subscription.setStatus(STATUS.INACTIVE);
-      subscriptionCAO.updateSubscription(subscription);
-      int newsletterId = newsletterCAO.getNewsletterIdBySubscription(Integer.parseInt(subscriptionId));
-      int userId = CommunityModuleAdapter.getCurrentUserId();
-      statisticCAO.logPublication(userId, newsletterId, HANDLE.INACTIVE);
+      Node subscription = subscriptionCAO.getSubscriptionNodeById(Integer.parseInt(subscriptionId));
+      if (Publish.isPublished(subscription)) {
+          Publish.unpublish(subscription);
+      }
+      subscription.delete(true);       
    }
 
    public Subscription getSubscription(String sId) {

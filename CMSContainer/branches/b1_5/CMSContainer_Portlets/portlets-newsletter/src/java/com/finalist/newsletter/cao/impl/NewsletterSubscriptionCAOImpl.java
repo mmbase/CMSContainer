@@ -389,7 +389,7 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       subscription.commit();
    }
 
-   private Node getSubscriptionNodeById(int subscriptionId) {
+   public Node getSubscriptionNodeById(int subscriptionId) {
       return cloud.getNode(subscriptionId);
    }
 
@@ -473,4 +473,5 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
          subscription.delete(true);       
       }
    }
+
 }
