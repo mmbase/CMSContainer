@@ -31,6 +31,8 @@ public interface NewsletterSubscriptionCAO {
 
    public Subscription getSubscriptionById(int id);
 
+   public Node getSubscriptionNodeById(int id);
+
    public void createSubscription(int userId, int newsletterId);
 
    public void updateSubscription(Subscription subscription);
