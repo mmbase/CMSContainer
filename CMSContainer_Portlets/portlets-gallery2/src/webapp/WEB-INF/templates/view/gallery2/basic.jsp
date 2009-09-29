@@ -27,7 +27,7 @@
             <c:set var="usePaging" value="${empty usePaging? false: usePaging}"/>
             <c:set var="elementsPerPage" value="${elementsPerPage}"/>
             <c:if test="${empty elementsPerPage}">
-            <c:set var="elementsPerPage"><mm:size id="totalitems"/></c:set>
+            <c:set var="elementsPerPage"><mm:size /></c:set>
             </c:if>
             <c:set var="width" value="${empty width? '110': width}"/>
             <c:set var="column" value="${empty column? elementsPerPage: column}"/>
@@ -47,7 +47,7 @@
            <%-- settings for both modes --%>
            <c:set var="orderby" value="${empty orderby? 'filename': orderby}"/>
            <c:set var="direction" value="${empty direction? 'up': direction}"/>
-           <c:set var="totalElements"><mm:size id="totalitems"/></c:set>
+           <c:set var="totalElements"><mm:size /></c:set>
            <c:set var="position" value="${position}"/>
            <c:set var="pagesIndex" value="${pagesIndex}"/>
            <c:set var="showPages" value="${showPages}"/>
