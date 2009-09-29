@@ -392,7 +392,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                   idsList.add(id);
                }
                else {
-                  if (link.hasAttribute(RichText.HREF_ATTR)) {
+                  if (link.hasAttribute(RichText.HREF_ATTR) && !(link.getAttribute(RichText.HREF_ATTR).startsWith("#")) ) {
                      String href = link.getAttribute(RichText.HREF_ATTR);
                      String name = link.getAttribute("name");
                      String owner = mmObj.getStringValue("owner");

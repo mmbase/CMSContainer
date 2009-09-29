@@ -6,6 +6,7 @@ xinha_init = xinha_init ? xinha_init : function() {
   var xinha_plugins = [
    'CharacterMap',
    'ContextMenu',
+   'InsertAnchor',
 //   'ListType',
 //   'FullScreen',
 //   'SpellChecker',
@@ -333,7 +334,7 @@ Xinha.prototype._createLink = function(link) {
                               }
                         }
 			} catch(ex) {}
-x		}
+		}
 		else
 		{
 			var href = param.f_href.trim();

@@ -70,7 +70,7 @@ function Init() {
 
 function onOK() {
       var elhref = document.getElementById("f_href");
-      var re = new RegExp("\://|javascript\:|mailto\:");
+      var re = new RegExp("\://|javascript\:|mailto\:|#");
       var destination = document.getElementById("f_destination");
       if(!elhref.value.match(re) && !destination.value ){
             if (!elhref.value.match(re)) {
