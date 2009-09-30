@@ -5,9 +5,60 @@
 <html:html xhtml="true">
 <cmscedit:head title="versioning.title.content" >
    <script type="text/javascript">
-      function diff(objectNumber,archiveNumber) {
-         openPopupWindow("diff", 500, 500, "../versioning/DiffAction.do?objectnumber=" + objectNumber+"&archivenumber="+archiveNumber);
+      var checkboxes = new Array();
+      var versions = new Array();
+      
+      function diff() {
+         if(versions.length == 2){
+            openPopupWindow("diff", 500, 500, "../versioning/DiffAction.do?objectnumber=" + versions[0]+"&archivenumber="+versions[1]);
+         }
       }
+      
+      function changeVersion(element, versionId){
+         if(element.checked){
+            addVersion(element, versionId);
+         } else {
+            removeVersion(element, versionId);
+         }
+         if(versions.length == 2){
+            document.getElementById("textdiv").style.display="none";
+            document.getElementById("anchordiv").style.display="block";
+         } else {
+            document.getElementById("anchordiv").style.display="none";
+            document.getElementById("textdiv").style.display="block";
+         }
+      }
+      
+      function addVersion(element, versionId){
+         if(versions.length < 2){
+            versions[versions.length] = versionId;
+            checkboxes[checkboxes.length] = element;
+         } else {
+            checkboxes[0].checked = false;
+            versions[0] = versions[1];
+            versions[1] = versionId;
+            checkboxes[0] = checkboxes[1];
+            checkboxes[1] = element;
+         }
+      }
+      
+      function removeVersion(element, versionId){
+         var startMove = false;
+         for(var i = 0, n = 0; i <versions.length; i++){
+            if(versions[i] == versionId) {
+               startMove = true;
+            } else {
+               if(startMove){
+                  versions[n] = versions[i];
+                  checkboxes[n] = checkboxes[i];
+               }
+               n++;
+            }
+         }
+         versions.length -= 1;
+         checkboxes.length -= 1;
+      }
+      
    </script>
 </cmscedit:head>
 <body>
@@ -62,6 +113,7 @@
                <table>
                   <thead>
                      <tr>
+                        <th>&nbsp;</th>
                         <th nowrap="true"><fmt:message key="versioning.date"/></th>
                         <th><fmt:message key="versioning.author"/></th>
                         <th><fmt:message key="versioning.publish"/></th>
@@ -74,6 +126,7 @@
             <mm:even inverse="true"><c:set var="class">class="swap"</c:set></mm:even>
             <mm:even><c:set var="class"></c:set></mm:even>
             <tr ${class}>
+               <td><input type="checkbox" onclick='changeVersion(this, <mm:field name="number"/>)' /></td>
                <td>
                   <mm:field name="date"><cmsc:dateformat displaytime="true" /></mm:field>
                </td>
@@ -110,9 +163,6 @@
                         <a href="${returnurl}" class="button">
                            <fmt:message key="versioning.restore"/>
                         </a>
-                        <a href="#" class="button" onclick="diff('${number}','<mm:field name="number"/>')">
-                            <fmt:message key="versioning.diff"/>
-                        </a>
                      </c:if> 
                      <c:if test="${action == 'workflow' && !isPublished}">
                         <fmt:message key="versioning.restore"/>
@@ -132,6 +182,18 @@
                </td>
             </tr>
             <mm:last>
+            <tr>
+               <td colspan="6" >
+                  <div id="anchordiv" style="display:none" >
+                     <a id="versioncompare" disabled="disabled" class="button" onclick="diff()" >
+                        <fmt:message key="versioning.compare"/>
+                     </a>
+                  </div>
+                  <div id="textdiv" style="font-weight:bold; color:gray;" >
+                     <fmt:message key="versioning.compare"/>
+                  </div>
+               </td>
+            </tr>
                   </tbody>
                </table>
             </mm:last>

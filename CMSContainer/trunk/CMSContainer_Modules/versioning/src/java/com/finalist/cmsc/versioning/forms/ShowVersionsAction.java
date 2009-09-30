@@ -1,26 +1,27 @@
 package com.finalist.cmsc.versioning.forms;
 
-import com.finalist.cmsc.struts.MMBaseAction;
-import com.finalist.cmsc.services.versioning.VersioningService;
-import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.security.UserRole;
-import com.finalist.cmsc.repository.RepositoryUtil;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.util.SearchUtil;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.util.SearchUtil;
 
-import java.util.Locale;
+import com.finalist.cmsc.repository.RepositoryUtil;
+import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.services.versioning.VersioningService;
+import com.finalist.cmsc.struts.MMBaseAction;
+import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * @author Jeoffrey Bakker, Finalist IT Group
@@ -48,6 +49,9 @@ public class ShowVersionsAction extends MMBaseAction {
 
          UserRole role = RepositoryUtil.getRole(cloud, RepositoryUtil.getCreationChannel(node), false);
          request.setAttribute("isAllowed", SecurityUtil.isWriter(role));
+         if(ServerUtil.isStaging()){
+            request.setAttribute("action", "workflow");
+         }
       }
       else {
          String message = getResources(request, "VERSIONING").getMessage(locale, "incorrect.nodenumber", nodeNumber);
