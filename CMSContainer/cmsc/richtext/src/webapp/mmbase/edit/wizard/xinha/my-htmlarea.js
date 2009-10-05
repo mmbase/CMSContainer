@@ -67,10 +67,11 @@ setupDefaultConfig = function(xinha_config) {
       ["separator","subscript","superscript"],
       ["linebreak","separator"],
       ["separator","insertorderedlist","insertunorderedlist"],
-      ["separator","inlinelink","insertimage"],
+      ["separator","inlinelink","insertimage","insert-anchor","insertcharacter"],
       ["separator", "undo","redo","selectall"],(Xinha.is_gecko ? [] : ["cut","copy","paste"]),
       ["separator","killword","pastetext","clearfonts","removeformat"],
-      ["separator","htmlmode","showhelp","my-validatesave","createtable"]
+      ["separator","htmlmode","showhelp","my-validatesave"],
+      ["separator","createtable"]
     ];
 
      xinha_config.formatblock = ({
