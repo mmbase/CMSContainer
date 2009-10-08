@@ -1,6 +1,3 @@
-<c:if test="${empty elementsPerPage}">
-   <c:set var="elementsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
-</c:if>
 <table>
    <thead>
       <tr>
