@@ -45,10 +45,7 @@
       </th>
    </tr>
 </thead>
-	  <%
-		java.util.Calendar c = java.util.Calendar.getInstance();
-		long now = c.getTimeInMillis();
-		%>
+
 
 <tbody class="hover">
 <mm:list referid="results" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
@@ -94,17 +91,17 @@
    <td align="left">
       <mm:field name="${type}.number" jspvar="number" write="false"/>
 	  <mm:node number="${number}"> <mm:field name="publishdate" write="false" jspvar="publishdate" /> </mm:node>
-	  <%
-        c.setTime((Date)pageContext.getAttribute("publishdate"));
-	    long lastly = c.getTimeInMillis();
-	    pageContext.setAttribute("interval",lastly - now);
-	  %>
-    <c:set var="date"><fmt:formatDate value="${publishdate}" pattern="dd-MM-yyyy hh:mm"/></c:set> 
-	<c:set var="clock_title">
-		<fmt:message key="workflow.item.schedule">
-		   <fmt:param value="${date}"/>
-		</fmt:message>
-	</c:set>
+	<c:set var="interval"><%=publishInterval(pageContext, "publishdate")%></c:set> 
+
+	<c:if test="${not empty publishdate}">
+		<c:set var="date"><fmt:formatDate value="${publishdate}" pattern="dd-MM-yyyy hh:mm"/></c:set> 
+		<c:set var="clock_title">
+			<fmt:message key="workflow.item.schedule">
+			   <fmt:param value="${date}"/>
+			</fmt:message>
+		</c:set>
+
+	</c:if>
 
       <mm:node number="${workflowNumber}">
          <mm:field name="stacktrace" id="stacktrace" write="false"/>
