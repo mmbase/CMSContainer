@@ -89,7 +89,7 @@
 		</cmscedit:contentblock>
    </mm:haspage>
 
-   <mm:haspage page="/editors/taskmanagement-TURNED OFF/">
+   <mm:haspage page="/editors/taskmanagement/">
       <c:set var="dashboardTaskSize" value="5" />
       <c:set var="tmpRole" value="assignedrel" />
       <c:set var="dashboardTaskTitle">
@@ -103,16 +103,15 @@
          <mm:listnodes>
             <mm:relatednodescontainer type="task" role="${tmpRole}" searchdirs="source">
                <mm:constraint field="status" value="task.status.done" operator="EQUAL" inverse="true" />
-               <mm:relatednodes comparator="com.finalist.cmsc.tasks.TaskUrgencyComparator" max="${dashboardTaskSize}" id="resultList" />
+               <mm:relatednodes comparator="com.finalist.cmsc.tasks.TaskUrgencyComparator" max="${dashboardTaskSize}" id="resultList" jspvar="resultList"/>
             </mm:relatednodescontainer>
          </mm:listnodes>
       </mm:listnodescontainer>
       <c:if test="${not empty resultList}">
-         <c:if test="${empty elementsPerPage}">
-            <c:set var="elementsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
-         </c:if>
          <cmscedit:contentblock title="${dashboardTaskTitle}" titleMode="plain" titleClass="content_block_pink" bodyClass="body_table">
-            <jsp:include page="/editors/taskmanagement/tasklist_table.jspf" />
+            <jsp:include page="/editors/taskmanagement/tasklist_table.jsp" flush="true">
+				<jsp:param name="results" value="${resultList}"/>
+			</jsp:include>
          </cmscedit:contentblock>
       </c:if>
    </mm:haspage>
