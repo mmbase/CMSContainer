@@ -126,16 +126,20 @@ public class PortalServlet extends HttpServlet {
 
    @Override
    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      log.debug("===>PortalServlet.doGet START!");
-      log.debug("===>REQ spth='" + request.getServletPath() + "'");
-      log.debug("===>REQ qry='" + request.getQueryString() + "'");
+      if (log.isDebugEnabled()){
+         log.debug("===>PortalServlet.doGet START!");
+         log.debug("===>REQ spth='" + request.getServletPath() + "'");
+         log.debug("===>REQ qry='" + request.getQueryString() + "'");
+      }
 
 
       PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
       PortalURL currentURL = env.getRequestedPortalURL();
-      log.debug("===>URL='" + currentURL.toString() + "'");
-      log.debug("===>URL='" + currentURL.getBasePortalURL(request) + "'");
-      log.debug("===>NAV='" + currentURL.getGlobalNavigationAsString() + "'");
+      if (log.isDebugEnabled()){
+         log.debug("===>URL='" + currentURL.toString() + "'");
+         log.debug("===>URL='" + currentURL.getBasePortalURL(request) + "'");
+         log.debug("===>NAV='" + currentURL.getGlobalNavigationAsString() + "'");
+      }
 
       if (shouldRedirect(currentURL)) {
          List<Site> sites = SiteManagement.getSites();
@@ -146,7 +150,9 @@ public class PortalServlet extends HttpServlet {
       }
 
       processRenderPhase(request, response, currentURL);
-      log.debug("===>PortalServlet.doGet EXIT!");
+      if (log.isDebugEnabled()){
+         log.debug("===>PortalServlet.doGet EXIT!");
+      }
    }
 
    /**
