@@ -61,14 +61,14 @@
                        <mm:present referid="creationdate">
                           <fmt:message key="secondaryinfo.creator" />: <mm:field name="creator"/><br/>
                             <fmt:message key="secondaryinfo.creationdate"/>: <mm:write referid="creationdate"><mm:time
-                               format="dd-MM-yyyy hh:mm"/></mm:write><br/>
+                               format=":MEDIUM.MEDIUM"/></mm:write><br/>
                     </mm:present>
 
                        <mm:field name="lastmodifieddate" id="lastmodifieddate" write="false"/>
                        <mm:present referid="lastmodifieddate">
                           <fmt:message key="secondaryinfo.lastmodifier" />: <mm:field name="lastmodifier"/><br/>
                             <fmt:message key="secondaryinfo.lastmodifieddate"/>: <mm:write
-                                referid="lastmodifieddate"><mm:time format="dd-MM-yyyy hh:mm"/></mm:write><br/>
+                                referid="lastmodifieddate"><mm:time format=":MEDIUM.MEDIUM"/></mm:write><br/>
                     </mm:present>
                        <br/>
                      <b><fmt:message key="urlinfo.related" /></b><br/>
