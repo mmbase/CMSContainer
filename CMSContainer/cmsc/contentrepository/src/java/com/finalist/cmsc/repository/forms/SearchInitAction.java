@@ -1,6 +1,5 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.storage.search.SortOrder;
@@ -20,6 +18,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class SearchInitAction extends MMBaseAction {
 
+   private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TITLE = "title";
    private static final String TYPES_LIST = "typesList";
    private static final String PORTLET_ID = "portletId";
@@ -56,7 +55,6 @@ public class SearchInitAction extends MMBaseAction {
       if (searchForm.getDirection() != SortOrder.ORDER_DESCENDING) {
          searchForm.setDirection(SortOrder.ORDER_ASCENDING);
       }
-      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
       List<NodeManager> types;
       if(StringUtils.isEmpty(portletId)){
@@ -67,7 +65,7 @@ public class SearchInitAction extends MMBaseAction {
         	     types = ContentElementUtil.getContentTypes(cloud);
           }
       }
-      addToRequest(request,"typesList", ContentElementUtil.getValidTypesList(cloud, types));
+      addToRequest(request,TYPES_LIST, ContentElementUtil.getValidTypesList(cloud, types));
       addToRequest(request, PORTLET_ID, portletId);
       addToRequest(request, POSITION, position);
       addToRequest(request, TITLE, searchForm.getTitle());
@@ -75,8 +73,7 @@ public class SearchInitAction extends MMBaseAction {
       
       String originNodeId = request.getParameter(RELATIONORIGINNODE);
       request.getSession().setAttribute(RELATIONORIGINNODE, originNodeId);
-
-      return mapping.findForward("dosearch");
-   }
+      return mapping.findForward(SEARCHOPTIONS);
+}
 
 }
