@@ -322,16 +322,7 @@ Xinha.prototype._createLink = function(link) {
                         else{
                               if ( !Xinha.is_ie )
                               {
-                                    a = range.startContainer;
-                                    if ( ! ( /^a$/i.test(a.tagName) ) )
-                                    {
-                                          a = a.nextSibling;
-                                          if ( a === null )
-                                          {
-                                                a = range.startContainer.parentNode;
-                                          }
-                                    }
-                                    a.innerHTML = param.f_title.trim();
+                                    a.href = param.f_href.trim();
                               }
                         }
 			} catch(ex) {}
