@@ -22,7 +22,6 @@ public class DiffAction extends MMBaseFormlessAction {
       String objectNumber = getParameter(request, OBJECTNUMBER);
       String archiveNumber = getParameter(request, ARCHIVENUMBER);
       Diff_Match_Patch diff = new Diff_Match_Patch();
-//      String elementData = Versioning.toXml(cloud.getNode(objectNumber));
       String elementData = cloud.getNode(objectNumber).getStringValue(VersioningService.NODE_DATA);
       String versionData = cloud.getNode(archiveNumber).getStringValue(VersioningService.NODE_DATA);
       request.setAttribute("diffs", diff.diff_prettyHtml(diff.diff_main(elementData, versionData)));

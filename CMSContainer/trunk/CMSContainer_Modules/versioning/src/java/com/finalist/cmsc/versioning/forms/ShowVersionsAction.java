@@ -21,7 +21,6 @@ import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.versioning.VersioningService;
 import com.finalist.cmsc.struts.MMBaseAction;
-import com.finalist.cmsc.util.ServerUtil;
 
 /**
  * @author Jeoffrey Bakker, Finalist IT Group
@@ -49,9 +48,6 @@ public class ShowVersionsAction extends MMBaseAction {
 
          UserRole role = RepositoryUtil.getRole(cloud, RepositoryUtil.getCreationChannel(node), false);
          request.setAttribute("isAllowed", SecurityUtil.isWriter(role));
-         if(ServerUtil.isStaging()){
-            request.setAttribute("action", "workflow");
-         }
       }
       else {
          String message = getResources(request, "VERSIONING").getMessage(locale, "incorrect.nodenumber", nodeNumber);
