@@ -23,13 +23,13 @@ public class DeleteUserAction extends AbstractCommunityAction {
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request,
          HttpServletResponse httpServletResponse) throws Exception {
-      String groupFoeward = request.getParameter(FORWARD_GROUP);
+      String groupForward = request.getParameter(FORWARD_GROUP);
       deleteUser(request);
-      if (null == groupFoeward || ",".equals(groupFoeward)) {
+      if (null == groupForward || ",".equals(groupForward)) {
          return mapping.findForward(SUCCESS);
       } else {
          // deleteUser(request);
-         setGroupParamater(request, groupFoeward);
+         setGroupParamater(request, groupForward);
          return mapping.findForward(FORWARD_GROUP);
       }
       // return mapping.findForward(SUCCESS);
