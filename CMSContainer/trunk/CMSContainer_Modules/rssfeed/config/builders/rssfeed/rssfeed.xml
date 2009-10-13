@@ -80,7 +80,7 @@
                 </positions>
             </editor>
             <datatype base="string" xmlns="http://www.mmbase.org/xmlns/datatypes">
-                <required value="true"/>
+                <required value="false"/>
                 <maxLength value="2048"/>
             </datatype>
         </field>
