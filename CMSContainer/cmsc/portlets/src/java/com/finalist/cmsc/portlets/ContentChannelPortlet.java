@@ -63,7 +63,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    protected static final String START_INDEX = "startindex";
 
    protected static final int DEFAULT_MAX_ELEMENTS = 100;
-
+   
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
       setPortletNodeParameter(portletId, CONTENTCHANNEL, request.getParameter(CONTENTCHANNEL));

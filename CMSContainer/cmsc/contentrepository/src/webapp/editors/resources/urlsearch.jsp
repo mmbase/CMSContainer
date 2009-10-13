@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil,com.finalist.cmsc.repository.RepositoryUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -10,13 +9,13 @@
 <script src="../resources/assetsearch.js" type="text/javascript"></script>
 <script type="text/javascript">
 	function setDefaultSearchCondition(){
-      <c:if test="${not empty title}">
-         document.forms[0].title.value = "${title}";
-      </c:if><c:if test="${not empty description}">
-         document.forms[0].description.value = "${description}";
-      </c:if><c:if test="${not empty url}">
-         document.forms[0].url.value = "${url}";
-      </c:if>
+       <c:if test="${not empty title}">
+	       document.forms[0].title.value = "${title}";
+       </c:if><c:if test="${not empty description}">
+	      document.forms[0].description.value = "${description}";
+       </c:if><c:if test="${not empty url}">
+	    document.forms[0].url.value = "${url}";
+       </c:if>
 	}
 	function showInfo(objectnumber) {
 		openPopupWindow('urlinfo', '900', '500',
@@ -29,30 +28,24 @@
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
 <div class="tabs"><!-- actieve TAB -->
-  <a>
    <div class="tab_active">
       <div class="body">
-        <div class="title"><fmt:message key="urls.title" /></div>
+         <div><a><fmt:message key="urls.title" /></a></div>
       </div>
    </div>
-   </a>
 </div>
-
 
    <div class="editor">
       <mm:import id="formAction">/editors/resources/UrlAction</mm:import>
       <mm:import id="channelMsg"><fmt:message key="urls.results" /></mm:import>
-
-      <div class="body" >
+      <div class="body">
          <html:form action="${formAction}" method="post">
             <html:hidden property="action" value="${action}"/>
             <html:hidden property="assetShow" value="${assetShow}"/>
             <html:hidden property="strict" value="${strict}"/>
             <html:hidden property="offset"/>
-            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
             <mm:import id="contenttypes" jspvar="contenttypes">urls</mm:import>
@@ -80,13 +73,13 @@
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
          <c:if test="${resultCount == 0 && param.title != null}">
-         <div class="no_results">
-            <fmt:message key="urlsearch.noresult" />
-         </div>
+            <div class="no_results">
+               <fmt:message key="urlsearch.noresult" />
+            </div>
          </c:if>
-         <div class="body">
+            <div class="body">
          <c:if test="${resultCount > 0}">
-            <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+            <%@include file="../repository/searchpages.jsp" %>
 
             <c:if test="${assetShow eq 'thumbnail'}">
             <div id="assetList" class="hover" style="width:100%">
@@ -136,6 +129,9 @@
             </c:if>
 
          <c:if test="${assetShow eq 'list'}">
+             <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
+                <mm:field id="trashnumber" name="number" write="false"/>
+            </mm:node>
             <table>
                   <tr class="listheader">
                      <th width="55"></th>
@@ -146,15 +142,12 @@
                      <th nowrap="true"><a href="javascript:orderBy('valid')"
                         class="headerlink"><fmt:message
                         key="urlsearch.validcolumn" /></a></th>
-                    <th><fmt:message
+                     <th><fmt:message
 							key="search.creationchannelcolumn" />
                      </th>
                   </tr>
                <tbody id="assetList" class="hover">
                <c:set var="useSwapStyle">true</c:set>
-               <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
-                <mm:field id="trashnumber" name="number" write="false"/>
-               </mm:node>
                <mm:listnodes referid="results">
                   <mm:relatednodes role="creationrel" type="contentchannel">
                      <c:set var="creationRelNumber"><mm:field name="number" id="creationnumber"/></c:set>
@@ -207,10 +200,8 @@
          </table>
    </c:if>
 </c:if>
-
-
 <c:if test="${resultCount > 0}">
-<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+<%@include file="../repository/searchpages.jsp" %>
 </c:if>
 </div>
 </div>

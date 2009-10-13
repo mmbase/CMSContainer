@@ -9,8 +9,8 @@ package com.finalist.cmsc.repository;
 
 import java.util.*;
 
-import org.mmbase.bridge.util.CloneUtil;
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.CloneUtil;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -384,7 +384,8 @@ public final class RepositoryUtil {
     * @return node with channel path
     */
    public static Node getChannelFromPath(Cloud cloud, String path, Node root, boolean useCache) {
-      return TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
+      Node node = TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
+      return node;
    }
 
    /**
@@ -784,8 +785,9 @@ public final class RepositoryUtil {
    }
 
    public static int countCreatedAsset(Node channelNode) {
-      return channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
+      int contentCount = channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
             CREATIONREL, SOURCE);
+      return contentCount;
    }
 
    public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
@@ -802,40 +804,22 @@ public final class RepositoryUtil {
       return Queries.count(query);
    }
 
-   public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      NodeQuery query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day);
-      if(maxDays > 0){
-         SearchUtil.addDayConstraint(query, query.getNodeManager(), AssetElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-      }
-      return Queries.count(query);
-   }
-
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
+      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1);
-   }
-
-   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, maxDays, null);
-   }
-
-   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1, null);
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, null);
+      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
@@ -843,9 +827,6 @@ public final class RepositoryUtil {
       if(orderby != null && "otype".equals(orderby)){
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
-         if(maxDays > 0){
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
@@ -857,9 +838,6 @@ public final class RepositoryUtil {
       }else {
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
-         if(maxDays > 0){
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -951,30 +929,20 @@ public final class RepositoryUtil {
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
+      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1);
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, null);
+      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, maxDays, null);
-   }
-
-   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1, extraParameters);
-   }
-
-   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays, 
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
@@ -982,9 +950,6 @@ public final class RepositoryUtil {
       if(orderby != null && "otype".equals(orderby)){
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
-         if(maxDays > 0){
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
@@ -996,9 +961,6 @@ public final class RepositoryUtil {
       }else {
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
-         if(maxDays > 0){
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -1270,15 +1232,15 @@ public final class RepositoryUtil {
       public static Node copyContentElements(Node sourceChannel, Node destChannel, List<Integer> channelList,Map<Integer, Integer> copiedNodes ,StringBuilder output) {
       if (!isParent(sourceChannel, destChannel)) {
          Object newChannelNumber = copiedNodes.get(sourceChannel.getNumber());
-         
          if( newChannelNumber != null) {
             Node newChannel = sourceChannel.getCloud().getNode((Integer)newChannelNumber);
-            cloneRelatedNodes(sourceChannel, newChannel,copiedNodes,output,channelList);
+                        cloneRelatedNodes(sourceChannel, newChannel,copiedNodes,output,channelList);
             NodeList children = getOrderedChildren(sourceChannel);
             for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
                Node childChannel = iter.next();
                copyContentElements(childChannel, newChannel,channelList,copiedNodes,output);
             }
+   
          }
       }
       return null;
@@ -1365,8 +1327,8 @@ public final class RepositoryUtil {
       return SecurityUtil.getRole(channel, rightsInherited, channelsWithRole);
    }
 
-   public static void setGroupRights(Cloud cloud, Node group, Map<Integer, UserRole> rights) {
-      SecurityUtil.setGroupRights(cloud, group, rights, TreeUtil.convertToList(treeManagers));
+   public static void setGroupRights(Cloud cloud, Node user, Map<Integer, UserRole> rights) {
+      SecurityUtil.setGroupRights(cloud, user, rights, TreeUtil.convertToList(treeManagers));
    }
 
    public static List<Node> getUsersWithRights(Node channel, Role requiredRole) {
@@ -1490,6 +1452,14 @@ public final class RepositoryUtil {
       return Queries.count(query);
    }
    
+   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
+      if(maxDays > 0){
+         SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+      }
+      return query.getNodeManager().getList(query);
+   }
+   
    /**
     *    Clone nodes related with a node or channel
     * @param sourceNode source channel 
@@ -1507,7 +1477,7 @@ public final class RepositoryUtil {
             continue; //Skip contentchannels and collection channels. 
          }
          if (! rel.isRelation()) {
-            output.append("skipped  " + rel + "; ");
+            output.append("skipped " + rel + "; ");
             continue; //Skip contentchannels and collection channels.  
          }
          RelationManager relManager = rel.getRelationManager();
@@ -1535,7 +1505,7 @@ public final class RepositoryUtil {
             continue; //Skip nodes not in the current channel tree. 
          }
          else 
-         {         
+         {
             //*** Start cloning the node from sourceChild -> destChild
             //If the related node should be cloned, dive into the node and deepcopy it
             Node sourceChild = rel.getDestination();
@@ -1572,9 +1542,8 @@ public final class RepositoryUtil {
                destRel.commit(); 
                output.append("[newRel:" + destNode.getNumber() + "," + relName + "];");
             }
-
-
             
+ 
             //Creation channels are skipped at copying relations, so do it by hand.
             if (hasCreationChannel(sourceChild,sourceNode) && isChannel(destNode)) {
                addCreationChannel(destChild, destNode);

@@ -14,10 +14,10 @@
 		<%=System.getProperty("java.vendor")%>
 		<br/>
 		<%=System.getProperty("java.vm.name")%>
-		<%=System.getProperty("java.version")%>
+		<b><%=System.getProperty("java.version")%></b>
 		<br/>
 		<%=System.getProperty("os.name")%>
-		<%=System.getProperty("os.version")%>
+		<b><%=System.getProperty("os.version")%></b>
 	</mm:hasrank>
 </mm:cloud>
 </body>

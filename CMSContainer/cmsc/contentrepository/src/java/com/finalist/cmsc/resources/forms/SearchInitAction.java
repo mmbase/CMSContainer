@@ -45,14 +45,15 @@ public class SearchInitAction extends MMBaseAction {
     * MMbase logging system
     */
    private static final Logger log = Logging.getLoggerInstance(SearchInitAction.class.getName());
-   
-   private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
-   @Override
-   public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
-         HttpServletRequest request, HttpServletResponse httpServletResponse, Cloud cloud) throws Exception {
-      SearchForm searchForm = (SearchForm) actionForm;
-      // Initialize
 
+   private static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
+
+   @Override
+   public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request,
+         HttpServletResponse httpServletResponse, Cloud cloud) throws Exception {
+      SearchForm searchForm = (SearchForm) actionForm;
+
+      // Initialize
       NodeManager nodeManager = cloud.getNodeManager(searchForm.getContenttypes());
       NodeQuery query = cloud.createNodeQuery();
 
@@ -83,7 +84,7 @@ public class SearchInitAction extends MMBaseAction {
       if (StringUtils.isNotEmpty(order)) {
          query.addSortOrder(query.getStepField(nodeManager.getField(order)), searchForm.getDirection());
       }
-   // CMSC-1436 Relate assets in Edit Wizard neglects input field
+      // CMSC-1436 Relate assets in Edit Wizard neglects input field
       String searchfields = request.getParameter(SEARCHFIELDS);
       String term = request.getParameter(TERM);
       if (StringUtils.isNotEmpty(searchfields) && StringUtils.isNotEmpty(term)) {
@@ -119,8 +120,9 @@ public class SearchInitAction extends MMBaseAction {
 
       int resultCount = Queries.count(query);
       NodeList results = nodeManager.getList(query);
-      request.setAttribute(RESULTS,results);
-      request.setAttribute(RESULT_COUNT,resultCount);
+      request.setAttribute(RESULTS, results);
+      request.setAttribute(RESULT_COUNT, resultCount);
+
       if (StringUtils.isEmpty(searchForm.getOffset())) {
          searchForm.setOffset("0");
       }

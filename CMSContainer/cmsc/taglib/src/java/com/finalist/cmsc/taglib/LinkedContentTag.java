@@ -1,6 +1,6 @@
 package com.finalist.cmsc.taglib;
 
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import org.apache.commons.lang.StringUtils;
 
 import org.mmbase.bridge.*;

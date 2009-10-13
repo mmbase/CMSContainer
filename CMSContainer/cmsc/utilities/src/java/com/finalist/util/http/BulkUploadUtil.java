@@ -51,7 +51,7 @@ public class BulkUploadUtil {
    public static final int MAXSIZE = 16 * 1024 * 1024;
    
    public static final String UPLOADED_FILE_MAX_SIZE = "uploaded.file.max.size";
-
+   
    private static final String CONFIGURATION_RESOURCE_NAME = "/com/finalist/util/http/util.properties";
 
    private static final String ZIP_MIME_TYPES[] = new String[] { "application/x-zip-compressed", "application/zip",
@@ -108,8 +108,8 @@ public class BulkUploadUtil {
       return nodes;
    }
 
-   public static List<Integer> store(Cloud cloud, NodeManager manager, String parentchannel, FormFile file
-         ,List<String> notUploadedFiles, List<String> uploadedFiles) {
+   public static List<Integer> store(Cloud cloud, NodeManager manager, String parentchannel, FormFile file,
+         List<String> notUploadedFiles, List<String> uploadedFiles) {
       List<Integer> nodes;
       if (StringUtils.isEmpty(parentchannel)) {
          throw new NullPointerException("parentchannel is null");

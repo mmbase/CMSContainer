@@ -32,7 +32,7 @@ public class DummyPublishService extends PublishService {
 
 
    @Override
-   public void publishRelations(Node node, NodeList nodes) {
+   public void publish(Node node, NodeList nodes) {
       // nothing
    }
 
@@ -59,25 +59,16 @@ public class DummyPublishService extends PublishService {
    public Node getRemoteNode(Node node) {
        return null;
    }
-
-
-   @Override
-   public Cloud getRemoteCloud(Cloud cloud) {
-      return null;
-   }
    
    public String getRemoteUrl(Node node) {
       //TODO Implement this function outside this servicemanagement for single war situations.
       return null;
    }
 
-   @Override
-   public boolean inPublishQueue(Node node) {
-      return false;
-   }
-
 
    @Override
-   public void updateUser(Node userNode, String password) {
+   public Cloud getRemoteCloud(Cloud cloud) {
+      return null;
    }
+
 }

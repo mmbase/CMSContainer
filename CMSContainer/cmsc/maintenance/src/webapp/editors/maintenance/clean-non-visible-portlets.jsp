@@ -9,15 +9,13 @@
 
   <body>
     <div class="tabs">
-	 <a href="#">
       <div class="tab_active">
         <div class="body">
-          <div class="title">
-           Clean Non-Visible Portlets
+          <div>
+            <a href="#">Clean Non-Visible Portlets</a>
           </div>
         </div>
       </div>
-	  </a>
       <div class="editor">
         <div class="body">
           <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">

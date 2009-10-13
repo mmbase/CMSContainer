@@ -68,15 +68,10 @@
         <!--
           // Store htmlarea names.
           var xinha_editors = new Array();
-          var xinha_editors_lightbox = new Array();
         ]]></xsl:text>
       <xsl:for-each select="//wizard/form[@id=//wizard/curform]/descendant::*[@ftype=&apos;html&apos; and @maywrite!=&apos;false&apos;]">
         xinha_editors[xinha_editors.length] = '<xsl:value-of select="@fieldname"/>';
       </xsl:for-each>
-      <xsl:for-each select="//wizard/form[@id=//wizard/curform]/descendant::*[@ftype=&apos;htmllightbox&apos; and @maywrite!=&apos;false&apos;]">
-        xinha_editors_lightbox[xinha_editors_lightbox.length] = '<xsl:value-of select="@fieldname"/>';
-      </xsl:for-each>
-
       <xsl:text disable-output-escaping="yes">
         <![CDATA[
         //  -->
@@ -103,10 +98,9 @@
 
   <xsl:template name="extrajavascript">
     <script type="text/javascript" src="{$ew_context}/js/prototype.js"><xsl:comment>help IE</xsl:comment></script>
-    <script type="text/javascript" src="{$ew_context}/js/window.js"><xsl:comment>help fix popup position </xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/override.js"><xsl:comment>help IE</xsl:comment></script>
     <script type="text/javascript" src="{$ew_context}{$templatedir}javascript/my-validator.js"><xsl:comment>help IE</xsl:comment></script>
-    <script type="text/javascript">
+   <script type="text/javascript">
       var isWebmaster = "<xsl:value-of select="$WEBMASTER"/>";
     </script>
     <xsl:call-template name="extrajavascript-custom"/>
@@ -158,9 +152,7 @@
   </xsl:template>
   
   <xsl:template name="steptemplate">
-    <a>
-     <xsl:call-template name="stepsattributes"/>
-     <div>
+    <div>
       <xsl:variable name="schemaid" select="@form-schema"/>
       <xsl:attribute name="class">
         <xsl:choose>
@@ -169,18 +161,18 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:call-template name="step"/>
-     </div>
-    </a>
+    </div>
   </xsl:template>
   
   <!-- The appearance of one 'step' button -->
   <xsl:template name="step">
     <div class="body">
-      <div class="title">
+    <a>
+      <xsl:call-template name="stepsattributes"/>
       <xsl:call-template name="i18n">
         <xsl:with-param name="nodes" select="/*/form[@id=current()/@form-schema]/title"/>
       </xsl:call-template>
-      </div>
+    </a>
     </div>
   </xsl:template>
 
@@ -311,9 +303,6 @@
         <xsl:call-template name="ftype-text"/>
       </xsl:when>
       <xsl:when test="@ftype=&apos;html&apos;">
-        <xsl:call-template name="ftype-html"/>
-      </xsl:when>
-      <xsl:when test="@ftype=&apos;htmllightbox&apos;">
         <xsl:call-template name="ftype-html"/>
       </xsl:when>
       <xsl:when test="@ftype=&apos;relation&apos;">
@@ -489,7 +478,7 @@
         <script type="text/javascript">
 		function articlesearch(){
 			var searchtext = document.getElementById('searchterm_<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />').value;
-			window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard&amp;initsearchtext=' + searchtext + '&amp;type=article&amp;relationOriginNode=<xsl:value-of select="../@number" />', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');
+			window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard&amp;initsearchtext=' + searchtext + '&amp;type=article', 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');
 		}
         </script>
         <table class="searchcontent">
@@ -507,114 +496,6 @@
                   <xsl:copy/>
                 </xsl:for-each>
                 <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
-                <xsl:choose>
-                  <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@role" /></xsl:attribute>
-                    <xsl:attribute name="relationCreateDir"><xsl:value-of select="../action[@type=&apos;create&apos;]/relation/@createdir" /></xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="prompt_search"/>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </xsl:for-each>
-      <xsl:for-each select="command[@name=&apos;layoutsearch&apos;]">
-        <script type="text/javascript">
-		<xsl:variable name="i18n_prompt">
-            <xsl:call-template name="i18n">
-              <xsl:with-param name="nodes" select="prompt"/>
-            </xsl:call-template>
-		</xsl:variable>
-		var prompt = '<xsl:value-of select="$i18n_prompt"/>';
-		<![CDATA[
-		function ajaxFunction(){
-			var xmlhttp;
-			if (window.XMLHttpRequest){
-				// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp=new XMLHttpRequest();
-			} else if(window.ActiveXObject){
-				// code for IE6, IE5
-				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-			} else {
-				alert("Your browser does not support XMLHTTP!");
-			}
-			  
-			xmlhttp.onreadystatechange=function() {
-				if(xmlhttp.readyState==4) {
-					var aOptions = eval(xmlhttp.responseText);
-					var htmlOptions = new Array();
-					if(aOptions.length == 1){
-						layoutsearch(aOptions[0].id);
-					} else if(aOptions.length > 1){
-						htmlOptions[0] = new Option(prompt,"");
-						for(var i = 0; i < aOptions.length; i++){
-							htmlOptions[htmlOptions.length] = new Option(aOptions[i].title,aOptions[i].id);
-						}
-						for(var i= 0; i < htmlOptions.length; i++){
-							document.getElementById("layoutselect").options.add(htmlOptions[i]);
-						}					
-					}
-				}
-			}
-			
-			xmlhttp.open("GET","../../../../editors/site/LayoutAction.do",true);
-			xmlhttp.send(null);
-		}
-		]]>
-		ajaxFunction();
-        function layoutsearch(value){
-			if(value != null){
-				doAdd("|" + value, '<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />' );
-			}
-        }
-        </script>
-        <table class="searchcontent">
-          <tr>
-            <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <select id="layoutselect" class="searchpossibilities" onchange="javascript:layoutsearch(this.value);" >
-			  </select>
-            </td>
-          </tr>
-        </table>
-      </xsl:for-each>
-      <xsl:for-each select="command[@name=&apos;contenttypeselector&apos;]">
-        <script type="text/javascript">
-        function searchtypedef(){
-            var options = getPopupPositionProps(401, 401) + ',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no';
-            window.open('../../../../editors/contenttype/ContentTypeAction.do?cmd=<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />&amp;objectnumber=<xsl:value-of select="../@number" />&amp;searchvalue=' + form[&quot;searchvalue&quot;].value, 'pageselector', options);
-        }
-        </script>
-        <table class="searchcontent">
-          <tr>
-            <xsl:if test="prompt">
-              <td class="searchprompt"><xsl:call-template name="prompt"/></td>
-            </xsl:if>
-            <td>
-              <xsl:call-template name="listsearch-age"/>
-            </td>
-            <td>
-              <xsl:call-template name="listsearch-fields"/>
-            </td>
-            <td>
-              <input type="text" name="searchterm_{../command[@name=&apos;add-item&apos;]/@cmd}" value="{search-filter[1]/default}" class="search" onChange="var s = form[&apos;searchfields_{../command[@name=&apos;add-item&apos;]/@cmd}&apos;]; s[s.selectedIndex].setAttribute(&apos;default&apos;, this.value); form[&apos;searchvalue&apos;].value = this.value; " />
-              <!-- on change the current value is copied back to the option's default, because of that, the user's search is stored between different types of search-actions -->
-              <input type="hidden" name="searchvalue" />
-            </td>
-            <td>
-              <a href="#" title="{$tooltip_search}" class="button">
-                <xsl:for-each select="@*">
-                  <xsl:copy/>
-                </xsl:for-each>
-                <xsl:attribute name="relationOriginNode"><xsl:value-of select="../@number" /></xsl:attribute>
-                <xsl:attribute name="onclick">javascript:searchtypedef();</xsl:attribute>
                 <xsl:choose>
                   <xsl:when test="../action[@type=&apos;add&apos;]/relation/@role">
                     <xsl:attribute name="relationRole"><xsl:value-of select="../action[@type=&apos;add&apos;]/relation/@role" /></xsl:attribute>
@@ -841,14 +722,6 @@
      <!-- Search is handled by the listsearch template -->
   </xsl:template>
   
-  <xsl:template match="command[@name=&apos;contenttypeselector&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
-  </xsl:template>
-  
-  <xsl:template match="command[@name=&apos;layoutsearch&apos;]" mode="listnewbuttons">
-     <!-- Search is handled by the listsearch template -->
-  </xsl:template>
-  
   <xsl:template match="command[@name=&apos;assetsselector&apos;]" mode="listnewbuttons">
      <!-- Search is handled by the listsearch template -->
   </xsl:template>
@@ -903,7 +776,7 @@
 
   <xsl:template match="command[@name=&apos;pageselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/site/select/SelectorPage.do', 'pageselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/site/select/SelectorPage.do', 'pageselector', 'width=350,height=500,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -911,7 +784,7 @@
 
   <xsl:template match="command[@name=&apos;contentselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard', 'contentselector', getPopupPositionProps(1000,550)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/index.jsp?action=select&amp;position=wizard', 'contentselector', 'width=1000,height=550,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -919,7 +792,7 @@
 
   <xsl:template match="command[@name=&apos;channelselector&apos;]" mode="listnewbuttons">
     <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', 'width=350,height=500,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
         <xsl:call-template name="prompt_search"/>
       </a>
     </td>
@@ -1041,7 +914,7 @@
    <option value="4"><xsl:value-of select="$prompt_newsletter_monthly" /></option>
       </select> &#x0020;
       <input type="hidden" name="{@fieldname}" value="{value}" title="new-calendar" id="{@fieldname}"/>
-      <a href="#" id="calendarSelect" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', getPopupPositionProps(400,500)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" id="calendarDelete" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
+      <a href="#" id="calendarSelect" class="button" onclick="javascript:window.open ('calendar.jsp?id={@fieldname}&amp;type='+document.getElementById('calendar-type').value, 'calendar', 'height=400, width=500, top='+eval((window.screen.availHeight - 400)/2)+', left='+eval((window.screen.availWidth - 500)/2)+',toolbar=no, menubar=no, scrollbars=no, location=no, status=no')"><xsl:value-of select="$prompt_newsletter_select" />  </a> <a class="button" href="#" id="calendarDelete" onclick="javascript:document.getElementById('calendar-expression').innerHTML='';document.getElementById('{@fieldname}').value=''"><xsl:value-of select="$prompt_newsletter_delete" /></a></nobr>
       <div id="calendar-expression"></div>      
   </xsl:template>
 
@@ -1222,7 +1095,6 @@
     <xsl:param name="value">0</xsl:param>
     <xsl:param name="selected"/>
     <xsl:param name="end">0</xsl:param>
-    <xsl:param name="interval">1</xsl:param>
 
     <xsl:call-template name="gen-option">
       <xsl:with-param name="value" select="format-number($value,'00')" />
@@ -1232,7 +1104,7 @@
 
     <xsl:if test="$value &lt; $end">
       <xsl:call-template name="new-loop-options">
-        <xsl:with-param name="value" select="format-number($value + $interval,'00')" />
+        <xsl:with-param name="value" select="format-number($value + 1,'00')" />
         <xsl:with-param name="selected" select="$selected" />
         <xsl:with-param name="end" select="$end" />
       </xsl:call-template>

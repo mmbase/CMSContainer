@@ -28,24 +28,20 @@
 <c:set var="listUrl" value="${elementype == 'asset'?'asset.jsp':'content.jsp'}"/>
 <div class="tabs">
     <!-- active TAB -->
-	<a href="Content.do?type=content&parentchannel=${parentchannel}&direction=${direction}" name="activetab">
-		<div class="${(elementype == 'content' || elementype == null)?'tab_active':'tab'}">
-			<div class="body">
-				<div  class="title">
-					<fmt:message key="content.title"/>
-				</div>
-			</div>
-		</div>
-	</a>
-	 <a href="Asset.do?type=asset&parentchannel=${parentchannel}&direction=${direction}">
-		<div class="${elementype == 'asset'?'tab_active':'tab'}">
-		  <div class="body">
-			 <div class="title">
-			   <fmt:message key="asset.title" />
-			 </div>
-		  </div>
-	   </div>
-   </a>
+    <div class="${(elementype == 'content' || elementype == null)?'tab_active':'tab'}">
+        <div class="body">
+            <div>
+                <a href="Content.do?type=content&parentchannel=${parentchannel}&direction=${direction}" name="activetab"><fmt:message key="content.title"/></a>
+            </div>
+        </div>
+    </div>
+    <div class="${elementype == 'asset'?'tab_active':'tab'}">
+      <div class="body">
+         <div>
+            <a href="Asset.do?type=asset&parentchannel=${parentchannel}&direction=${direction}"><fmt:message key="asset.title" /></a>
+         </div>
+      </div>
+   </div>
 </div>
 <jsp:include page="${listUrl}"/>
 </mm:cloud>

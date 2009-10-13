@@ -11,15 +11,13 @@
       <mm:import externid="number" id="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true" />
 
 <div class="tabs">
-    <a href="#">
-		<div class="tab_active">
-			<div class="body">
-				<div class="title">
-					<fmt:message key="channeldelete.title" />
-				</div>
-			</div>
-		</div>
-	</a>
+    <div class="tab_active">
+        <div class="body">
+            <div>
+                <a href="#"><fmt:message key="channeldelete.title" /></a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="editor">

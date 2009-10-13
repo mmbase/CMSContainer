@@ -5,16 +5,6 @@
 <html:html xhtml="true">
 <cmscedit:head title="group.title">
 	<script src="../../js/selectbox.js" type="text/javascript"></script>
-   <script type="text/javascript">
-      function selectChannel(channel, path) {
-         document.forms['GroupForm'].contentchannel.value = channel;
-         document.forms['GroupForm'].contentchannelpath.value = path;
-      }
-
-      function erase(field) {
-         document.forms['GroupForm'][field].value = '';
-      }
-   </script>
 	<style>
 		input.select { font-height: 4px;}
 	</style>
@@ -28,8 +18,7 @@
 		<div id="group">
 		<table>
 			<tr>
-				<td class="fieldname" width="120px" nowrap="nowrap"><fmt:message key="group.name" /></td>
-				<td width='60px'></td>
+				<td class="fieldname" width='180'><fmt:message key="group.name" /></td>
 				<td>
 					<logic:equal name="GroupForm" property="id" value="-1">
 						<html:text property="name" size='15' maxlength='15' />
@@ -41,29 +30,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" class="fieldname"><fmt:message key="group.description" /></td>
+				<td class="fieldname"><fmt:message key="group.description" /></td>
 				<td><html:text property="description" size='30' /></td>
 			</tr>
-         <tr>
-            <td><fmt:message key="group.simpleeditorchannel" /></td>
-            <td align="right">
-               <a href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${contentchannel}&portletId=${portletId}' />" target="selectchannel" onclick="openPopupWindow('selectchannel', 340, 400)"> 
-                  <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" />"/>
-               </a>
-               <a href="javascript:erase('contentchannel');erase('contentchannelpath')">
-                  <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/>
-               </a>
-            </td>
-            <td>
-               <mm:cloud>
-                  <mm:node number="${contentchannel}" notfound="skip">
-                     <mm:field name="path" id="contentchannelpath" write="false" />
-                  </mm:node>
-               </mm:cloud>
-               <input type="hidden" name="contentchannel" value="${contentchannel}" />
-               <input type="text" name="contentchannelpath" value="${contentchannelpath}" disabled="true" size='30' />
-            </td>
-         </tr>
 		</table>
 		</div>
 

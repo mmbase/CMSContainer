@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.*" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -18,28 +17,23 @@
 <c:set var="direction">
    <c:out value="${direction =='up'?'down':'up' }"/>
 </c:set>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <body>
 <div class="tabs">
     <!-- active TAB -->
-	<a href="contenttrash.jsp">
-	   <div class="tab_active">
-		  <div class="body">
-			 <div class="title">
-				<fmt:message key="recyclebin.content.title" />
-			 </div>
-		  </div>
-	   </div>
-   </a>
-   <a href="assettrash.jsp">
-	   <div class="tab">
-		  <div class="body">
-			 <div class="title">
-					<fmt:message key="recyclebin.asset.title"/>
-			 </div>
-		  </div>
-	   </div>
-   </a>
+   <div class="tab_active">
+      <div class="body">
+         <div>
+            <a href="contenttrash.jsp"><fmt:message key="recyclebin.content.title" /></a>
+         </div>
+      </div>
+   </div>
+   <div class="tab">
+      <div class="body">
+         <div>
+                <a href="assettrash.jsp"><fmt:message key="recyclebin.asset.title"/></a>
+         </div>
+      </div>
+   </div>
 </div>
 
    <div class="editor">
@@ -81,22 +75,22 @@
                              <mm:sortorder field="contentelement.${sortBy}" direction="${direction}" />
             
                               <c:set var="listSize"><mm:size/></c:set>
+                              <c:set var="resultsPerPage" value="50"/>
                               <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
-                              <c:set var="extraparams" value="&sortBy=${sortBy}&direction=${direction}"/>
-
+                              
                               <mm:listnodes jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
                                  <mm:first>
                                    
-                                 <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+                                 <%@include file="../pages.jsp" %>
                                      <table>
                                        <thead>
                                           <tr>
                                              <th style="width: 56px;"></th>
-                                             <th style="width: 68px;"><a href="contenttrash.jsp?sortBy=otype&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
-                                             <th><a href="contenttrash.jsp?sortBy=title&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
-                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifier&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
-                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifieddate&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
-                                             <th style="width: 60px;"><a href="contenttrash.jsp?sortBy=number&direction=${direction}&offset=${offset}&pager.offset=${pagerDOToffset}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
+                                             <th style="width: 68px;"><a href="contenttrash.jsp?sortBy=otype&direction=${direction}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
+                                             <th><a href="contenttrash.jsp?sortBy=title&direction=${direction}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifier&direction=${direction}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifieddate&direction=${direction}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
+                                             <th style="width: 60px;"><a href="contenttrash.jsp?sortBy=number&direction=${direction}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
                                           </tr>
                                        </thead>
                                        <tbody class="hover">
@@ -105,8 +99,8 @@
                                  <tr <mm:even inverse="true">class="swap"</mm:even>>
                                     <td nowrap>
                                        <a href="javascript:infoContent('<mm:field name="number" />', '<mm:nodeinfo type="type"/>')"><img src="../gfx/icons/info.png" width="16" height="16" alt="<fmt:message key="recyclebin.info" />" title="<fmt:message key="recyclebin.info" />"/></a>
-                                       <a href="javascript:permanentDelete('<mm:field name="number" />', '<fmt:message key="recyclebin.removeconfirm" />', '${offset}', '${pagerDOToffset}', 'content');"><img src="../gfx/icons/delete.png" width="16" height="16" alt="<fmt:message key="recyclebin.remove" />" title="<fmt:message key="recyclebin.remove" />"/></a>
-                                       <a href="javascript:restoreContent('<mm:field name="number" />', '${offset}', '${pagerDOToffset}');"><img src="../gfx/icons/restore.png" width="16" height="16" alt="<fmt:message key="recyclebin.restore" />" title="<fmt:message key="recyclebin.restore" />"/></a>
+                                       <a href="javascript:permanentDelete('<mm:field name="number" />', '<fmt:message key="recyclebin.removeconfirm" />', '${offset}', 'content');"><img src="../gfx/icons/delete.png" width="16" height="16" alt="<fmt:message key="recyclebin.remove" />" title="<fmt:message key="recyclebin.remove" />"/></a>
+                                       <a href="javascript:restoreContent('<mm:field name="number" />', '${offset}');"><img src="../gfx/icons/restore.png" width="16" height="16" alt="<fmt:message key="recyclebin.restore" />" title="<fmt:message key="recyclebin.restore" />"/></a>
                                     </td>
                                     <td>
                                       <mm:nodeinfo type="guitype"/>
@@ -133,7 +127,7 @@
                               <mm:last>
                                     </tbody>
                                  </table>
-                                 <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+                                 <%@include file="../pages.jsp" %>
                               </mm:last>
                           </mm:listnodes>
                         </mm:relatednodescontainer>

@@ -43,7 +43,6 @@ function move(direction, objectNumber, channel) {
    
 function sortBy(action, orderColumn, channel) {
     var offset = document.forms['initForm'].offset.value;
-    var pagerDOToffset = document.forms['initForm']['pager.offset'].value;
     var oldOrderColumn = document.forms['initForm'].order.value;
     
     if (oldOrderColumn == orderColumn) {
@@ -63,7 +62,7 @@ function sortBy(action, orderColumn, channel) {
     }
     newDirection=document.forms['initForm'].direction.value;
     type=document.forms['initForm'].order.value;
-    var url = action + '.do?' + 'type=' + action.toLowerCase() + '&orderby='+type+'&parentchannel=' + channel+'&direction='+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+    var url = action + '.do?' + 'type=' + action.toLowerCase() + '&orderby='+type+'&parentchannel=' + channel+'&direction='+newDirection+'&offset='+offset;
     
     document.location = url;
     
@@ -82,8 +81,7 @@ function selectChannel(channel, path) {
     var newDirection=document.forms[0].direction.value;
     var type=document.forms[0].order.value;
     var offset = document.forms[0].offset.value;
-    var pagerDOToffset = document.forms[0]['pager.offset'].value;
-    document.location = "../Content.do?action=moveContentToChannel&parentchannel=" + moveParentChannel + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
+    document.location = "../Content.do?action=moveContentToChannel&parentchannel=" + moveParentChannel + "&newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset;;
 }
 
 function refreshChannels() {

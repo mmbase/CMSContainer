@@ -20,7 +20,7 @@
 	<field name="body" />
 	<field name="archivedate" />
 
-	<relation destination="article" role="posrel" searchdir="destination"/>
+	<relation destination="article" role="posrel" />
 	<relation destination="attachments" role="posrel" />
 	<relation destination="images" role="imagerel" />
 	<relation destination="urls" role="posrel" />

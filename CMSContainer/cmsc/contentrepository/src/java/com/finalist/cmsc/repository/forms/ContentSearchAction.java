@@ -1,31 +1,22 @@
 package com.finalist.cmsc.repository.forms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
-import org.mmbase.bridge.FieldIterator;
-import org.mmbase.bridge.FieldList;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
+import org.apache.struts.action.*;
+import org.apache.struts.util.LabelValueBean;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
 import org.mmbase.storage.search.FieldCompareConstraint;
 import org.mmbase.storage.search.FieldValueConstraint;
-import org.mmbase.storage.search.FieldValueInConstraint;
 import org.mmbase.storage.search.SortOrder;
 import org.mmbase.storage.search.Step;
 import org.mmbase.storage.search.StepField;
@@ -44,9 +35,8 @@ import com.finalist.cmsc.util.KeywordUtil;
 
 public class ContentSearchAction extends PagerAction {
 
-   private static final String TYPES_LIST = "typesList";
-
    public static final String GETURL = "geturl";
+
    public static final String PERSONAL = "personal";
    public static final String MODE = "mode";
    public static final String AUTHOR = "author";
@@ -54,6 +44,8 @@ public class ContentSearchAction extends PagerAction {
    public static final String PARENTCHANNEL = "parentchannel";
    public static final String CONTENTTYPES = "contenttypes";
    private static final String POSITION = "position";
+   private static final String INDEX = "index";
+   private static final String TITLE = "title";
    private static final String ONLYTYPE = "onlytype";
 
    public static final String REPOSITORY_SEARCH_RESULTS_PER_PAGE = "repository.search.results.per.page";
@@ -72,7 +64,6 @@ public class ContentSearchAction extends PagerAction {
       // Initialize
       SearchForm searchForm = (SearchForm) form;
 
-      String portletId = request.getParameter("portletId");
       String position = request.getParameter(POSITION);
       String deleteContentRequest = request.getParameter("deleteContentRequest");
       String onlytype = request.getParameter(ONLYTYPE);
@@ -80,8 +71,8 @@ public class ContentSearchAction extends PagerAction {
       if (StringUtils.isEmpty(index)) {
          index = "no";
       }
-      request.setAttribute("index", index);
-      request.setAttribute("title", searchForm.getTitle());
+      request.setAttribute(INDEX, index);
+      request.setAttribute(TITLE, searchForm.getTitle());
       request.setAttribute(ONLYTYPE, onlytype);
 
       if (StringUtils.isNotEmpty(deleteContentRequest)) {
@@ -97,18 +88,10 @@ public class ContentSearchAction extends PagerAction {
       }
 
       // First prepare the typeList, we'll need this one anyway:
+      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
-      List<NodeManager> types;
-      if (StringUtils.isEmpty(portletId)) {
-         types = ContentElementUtil.getContentTypes(cloud);
-      } else {
-         types = ContentElementUtil.getAllowedContentTypes(cloud, portletId);
-         if (types.size() == 0) {
-            types = ContentElementUtil.getContentTypes(cloud);
-         }
-      }
+      List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
       addToRequest(request, "typesList", ContentElementUtil.getValidTypesList(cloud, types));
-      TreeSet<Integer> validTypes = ContentElementUtil.getValidTypes(cloud, types);
 
       // Switching tab, no searching.
       if ("false".equalsIgnoreCase(searchForm.getSearch())) {
@@ -131,30 +114,25 @@ public class ContentSearchAction extends PagerAction {
       Step contentStep = query.addRelationStep(nodeManager, RepositoryUtil.CONTENTREL, "DESTINATION").getNext();
       if (StringUtils.isNotEmpty(searchForm.getParentchannel())) {
          query.addNode(channelStep, cloud.getNode(searchForm.getParentchannel()));
-         StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
-         FieldValueInConstraint contentConstraint = query.createConstraint(contentStepField, validTypes);
-         SearchUtil.addConstraint(query, contentConstraint);
          query.setNodeStep(contentStep);
          queryStringComposer.addParameter(PARENTCHANNEL, searchForm.getParentchannel());
       } else {
-         // CMSC-1260 Content search also finds elements in Recycle bin
+         // Do not display items located in the trash bin; filter them.
          Integer trashNumber = Integer.parseInt(RepositoryUtil.getTrash(cloud));
          StepField stepField = query.createStepField(channelStep, channelNodeManager.getField("number"));
-         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL,
-               trashNumber);
+
+         FieldValueConstraint channelConstraint = query.createConstraint(stepField, FieldCompareConstraint.NOT_EQUAL, trashNumber);
          SearchUtil.addConstraint(query, channelConstraint);
-         StepField contentStepField = query.createStepField(contentStep, nodeManager.getField("otype"));
-         FieldValueInConstraint contentConstraint = query.createConstraint(contentStepField, validTypes);
-         SearchUtil.addConstraint(query, contentConstraint);
          query.setNodeStep(contentStep);
       }
+      
       // Order the result by:
       String order = searchForm.getOrder();
 
       // set default order field
       if (StringUtils.isEmpty(order)) {
-         if (nodeManager.hasField("title")) {
-            order = "title";
+         if (nodeManager.hasField(TITLE)) {
+            order = TITLE;
          }
          if (nodeManager.hasField("name")) {
             order = "name";
@@ -191,17 +169,9 @@ public class ContentSearchAction extends PagerAction {
             String paramName = nodeManager.getName() + "." + field.getName();
             String paramValue = request.getParameter(paramName);
             if (StringUtils.isNotEmpty(paramValue)) {
-               // CMSC-1116 advanced search for dynamic form save answer gives 500 error
-               // The following if to deal with INTEGER field
-               if (field.getType() == Field.TYPE_INTEGER) {
-                  FieldValueConstraint fvc = SearchUtil.createEqualConstraint(query, nodeManager, field.getName(),
-                        Integer.parseInt(paramValue));
-                  SearchUtil.addConstraint(query, fvc);
-               } else {
-                  SearchUtil.addLikeConstraint(query, field, paramValue.trim());
-                  queryStringComposer.addParameter(paramName, paramValue);
-               }
+               SearchUtil.addLikeConstraint(query, field, paramValue.trim());
             }
+            queryStringComposer.addParameter(paramName, paramValue);
          }
       }
 
@@ -365,7 +335,7 @@ public class ContentSearchAction extends PagerAction {
       RepositoryUtil.removeContentFromAllChannels(objectNode);
       RepositoryUtil.addContentToChannel(objectNode, RepositoryUtil.getTrash(cloud));
 
-      // Unpublish and remove from workflow
+      // unpublish and remove from workflow
       Publish.remove(objectNode);
       Workflow.remove(objectNode);
       Publish.unpublish(objectNode);

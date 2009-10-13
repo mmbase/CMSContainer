@@ -95,24 +95,24 @@
          <tr style="height:37px;">
             <td style="width:60%;">
                <div class="tabs">
-			   <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=edit" id="edit">
                   <div ${'edit' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
                      <div class="body">
-                        <div class="title">                           
-                           <fmt:message key="toolbar.editpage"/>                          
+                        <div>
+                           <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=edit" id="edit">
+                              <fmt:message key="toolbar.editpage"/>
+                           </a>
                         </div>
                      </div>
                   </div>
-				   </a>
-				    <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=preview" id="preview">
-                   <div ${'preview' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
+                  <div ${'preview' eq sessionScope.pageMode ? 'class="tab_active"' : 'class="tab"'} >
                      <div class="body">
-                        <div  class="title">                          
-                              <fmt:message key="toolbar.preview"/>   
+                        <div>
+                           <a href="${pageUrl}?nodeId=${requestScope.nodeId}&pageMode=preview" id="preview">
+                              <fmt:message key="toolbar.preview"/>
+                           </a>
                         </div>
                      </div>
                   </div>
-				</a>
                </div>
 
             </td>

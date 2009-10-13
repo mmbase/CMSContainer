@@ -41,26 +41,4 @@ public abstract class VersioningService extends Service {
     *           The node where all versions need to be removed.
     */
    public abstract void removeVersions(Node node);
-   
-   /**
-    * set publish mark to the current version.
-    * 
-    * @param node
-    *           
-    */
-   public abstract void setPublishVersion(Node node);
-   
-   /**
-    *  Check the element version is on live
-    * @param node
-    * @return
-    */
-   public abstract boolean isOnLive(Node node);
-   
-   /**
-    * Change a node to XML 
-    * @param node
-    * @return
-    */
-   public abstract String toXml(Node node);
 }
