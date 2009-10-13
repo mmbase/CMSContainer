@@ -18,6 +18,7 @@ import com.finalist.cmsc.struts.MMBaseAction;
 
 public class SearchInitAction extends MMBaseAction {
 
+   private static final String SEARCHOPTIONS = "searchoptions";
    private static final String TYPES_LIST = "typesList";
    private static final String TITLE = "title";
    private static final String ONLYTYPE = "onlytype";
@@ -52,12 +53,12 @@ public class SearchInitAction extends MMBaseAction {
          searchForm.setDirection(SortOrder.ORDER_ASCENDING);
       }
       List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-      addToRequest(request, "typesList", ContentElementUtil.getValidTypesList(cloud, types));
+      addToRequest(request, TYPES_LIST, ContentElementUtil.getValidTypesList(cloud, types));
       addToRequest(request, POSITION, position);
       addToRequest(request, TITLE, searchForm.getTitle());
       addToRequest(request, ONLYTYPE, onlytype);
 
-      return mapping.findForward("dosearch");
+      return mapping.findForward(SEARCHOPTIONS);
    }
 
 }
