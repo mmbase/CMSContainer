@@ -140,7 +140,7 @@
                <html:text property="path" value="${channelPath}" styleId="addressbar"/>
          </div>
          <div class="search_form_options">
-            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"> <fmt:message key="selector.search" /> </a>
+            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"><fmt:message key="selector.search" /></a>
          </div>
 
          <div id="addressbar_choices" class="addressbar"></div>
