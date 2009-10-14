@@ -114,8 +114,8 @@ public class WizardController {
 
             if (PagesUtil.isPageType(node)) {
                creationNode = node;
-               Node repositoryRootNode = RepositoryUtil.getRootNode(node.getCloud());
-               session.setAttribute(SESSION_CREATION, "" + repositoryRootNode.getNumber());
+               //Node repositoryRootNode = RepositoryUtil.getRootNode(node.getCloud());
+               session.setAttribute(SESSION_CREATION, "" + creationNode.getNumber());
             }
             if (ContentElementUtil.isContentType(elementtype) || AssetElementUtil.isAssetType(elementtype)) {
                if (RepositoryUtil.hasCreationChannel(node)) {
@@ -248,6 +248,9 @@ public class WizardController {
                      Node node = assets.getNode(j);
                      if (!RepositoryUtil.hasCreationChannel(node)) {
                         String channelnr = (String) session.getAttribute(SESSION_CREATION);
+                        if (PagesUtil.isPageType(editNode)) {
+                           channelnr = RepositoryUtil.getRoot(node.getCloud());
+                        }
                         //if the channel is not exist get root channel .used for adding pages
                         if (channelnr == null ||"".equals(channelnr) ) {
                            channelnr = RepositoryUtil.getRoot(node.getCloud());
