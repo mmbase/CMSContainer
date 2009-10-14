@@ -61,6 +61,9 @@ div.editor div.body #assetList div.selected div.assetInfo {
 div.buttonscontent {
    text-align: right;
    height: 39px;
+   position: fixed;
+   bottom: 0px;
+   width: 100%;
 }
 
 div.page_buttons div.button div.button_body {
