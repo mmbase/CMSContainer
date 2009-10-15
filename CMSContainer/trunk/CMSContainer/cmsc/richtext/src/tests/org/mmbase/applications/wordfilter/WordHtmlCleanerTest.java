@@ -115,9 +115,19 @@ public class WordHtmlCleanerTest extends TestCase {
     	doTestFilter(code, expected);
     }
 
+    public void testAbbrTag() {
+    	String text = "before<abbr title=\"long version\">lv</abbr>after";
+    	doTestFilter(text, text);
+    }
+
+    public void testSpacingTag() {
+    	String text = "Nu nieuw op televisie : <a href=\"www.nu.nl\">boer</a> <b>zoekt</b> <i>vrouw</i>";
+    	doTestFilter(text, text);
+    }
+
     private void doTestFilter(String input, String expected) {
         String cleanedHtml = WordHtmlCleaner.cleanHtml(input, true, true);
         assertEquals(expected, cleanedHtml);
     }
-    
+
 }

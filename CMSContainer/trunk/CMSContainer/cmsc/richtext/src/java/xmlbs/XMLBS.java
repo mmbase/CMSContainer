@@ -122,7 +122,7 @@ public class XMLBS {
 
       // reconstruct hierarchy
       hierarchy();
-
+ 
       // merge adjoined text tokens
       mergeAdjoinedText();
 
@@ -263,7 +263,13 @@ public class XMLBS {
          if (tok instanceof TextToken) {
             TextToken txt = (TextToken) tok;
             if (txt.isWhiteSpace()) {
-               tokens.remove(i--);
+            	Token previous = tokens.get(i-1);
+            	if(((TagToken)previous).isCloseTag()) {
+                	txt.setData(" ");
+            	}
+            	else {
+                	tokens.remove(i--);
+            	}
             }
             else {
                if (!ds.canContain(top, txt)) {
