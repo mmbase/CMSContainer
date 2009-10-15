@@ -63,7 +63,8 @@ div.buttonscontent {
    height: 39px;
    position: fixed;
    bottom: 0px;
-   width: 100%;
+   right: 4px;
+   left: 7px;
 }
 
 div.page_buttons div.button div.button_body {
