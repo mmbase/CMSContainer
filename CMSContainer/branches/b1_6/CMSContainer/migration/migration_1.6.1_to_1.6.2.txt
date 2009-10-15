@@ -8,8 +8,12 @@ Name: Upgrade MMBase in customer project / implementation
 Goal: Upgrade MMBase
 Type: do it yourself
 --- Start script ---
-New:
+In project.properties
 mmbase.version=1.8.7-20090803
+
+SQL:
+ALTER TABLE mm_email DROP COLUMN bodyurl;
+ALTER TABLE live_email DROP COLUMN bodyurl;
 --- End script ---
 *
 *
