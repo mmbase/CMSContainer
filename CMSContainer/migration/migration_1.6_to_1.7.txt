@@ -5,6 +5,37 @@ From version: 1.6
 To version: 1.7
 
 
+Name: Convert project to Maven2
+Goal: Use maven 2 from 1.7 and up. 
+Type:  manual actions
+--- Start script ---
+- Note: Maven 1 is not used anymore for CMSc 1.7 and up.
+- New pom.xml files need to be created for every build section (war/war-live/war-staging...)
+- As an example, the demo-project has pom.xml files, which can be used. 
+  See /CMSContainer_Demo/demo.cmscontainer.org/pom.xml as the parent pom example for a project.
+- migrate maven-base/project.xml dependencies to the parent pom.xml
+- remove your project's /maven-base/ directory 
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
+
+
+Name: convert builders to new MMBase 1.9 style
+Goal: convert builders to new MMBase 1.9 style, using builder converter
+Type: manual action
+Steps:
+--- Start ---
+Run the main method in BuilderConverter class in CMSc_trunk\CMSContainer\builderConverter project.
+--- End ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
+
+
 Execute the following steps below in the given order:
 
 Name: Add a sendtime column in <prefix>_newsletterpublication table
@@ -20,7 +51,7 @@ ALTER TABLE live_newsletterpublication ADD sendtime datetime;
 
 Name: Add google analytics id
 Goal: Have a google analytics id per site
-ype:  sql-script
+Type:  sql-script
 --- Start script ---
 ALTER TABLE mm_site ADD COLUMN googleanalyticsid VARCHAR(40) NULL;
 ALTER TABLE live_site ADD COLUMN googleanalyticsid VARCHAR(40) NULL;
@@ -31,7 +62,7 @@ ALTER TABLE live_site ADD COLUMN googleanalyticsid VARCHAR(40) NULL;
 
 Name: Add "Click to page" option to the RelatedContentPortlet
 Goal: CMSC-1167 Add "Click to page" option to the RelatedContentPortlet
-ype:  sql-script
+Type:  sql-script
 --- Start script ---
 update mm_portletparameter set m_key="relatedWindow" where m_key="window" and number in (select pararel.dnumber from mm_portlet portlet, mm_parameterrel pararel, mm_portletdefinition def, mm_definitionrel defrel where def.definition="relatedcontentportlet" and def.number=defrel.dnumber and defrel.snumber=portlet.number and portlet.number=pararel.snumber);
 update live_portletparameter set m_key="relatedWindow" where m_key="window" and number in (select pararel.dnumber from live_portlet portlet, live_parameterrel pararel, live_portletdefinition def, live_definitionrel defrel where def.definition="relatedcontentportlet" and def.number=defrel.dnumber and defrel.snumber=portlet.number and portlet.number=pararel.snumber);
@@ -41,13 +72,10 @@ update live_portletparameter set m_key="relatedWindow" where m_key="window" and 
 *
 
 
-Name: Upgrade MMBase in customer project / implementation
-Goal: Upgrade MMBase
+Name: drop an old MMBase column
+Goal: drop an old MMBase column
 Type: do it yourself
 --- Start script ---
-In project.properties
-mmbase.version=1.8.7-20090803
-
 SQL:
 ALTER TABLE mm_email DROP COLUMN bodyurl;
 ALTER TABLE live_email DROP COLUMN bodyurl;
