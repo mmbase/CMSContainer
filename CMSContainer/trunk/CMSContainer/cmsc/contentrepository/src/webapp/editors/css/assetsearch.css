@@ -76,7 +76,7 @@ div.page_buttons div.button div.button_body {
 
 div.page_buttons div.button div.button_body a {
    float: left;
-   padding: 10px;
+   padding: 10px 20px;
    color: #313728;
    font-size: 13px;
    display: block;
