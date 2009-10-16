@@ -340,7 +340,7 @@ Xinha.prototype._createLink = function(link) {
 			else
 			{
       			  a.href = href;
-                  a.innerHTML = param.f_title.trim();
+                  a.name = param.f_title.trim();
 			}
 		}
 		a.target = param.f_target.trim();
