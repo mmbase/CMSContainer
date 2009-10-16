@@ -122,15 +122,7 @@
          <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
       </init-param>
    </filter>
-   
-   <filter>
-      <filter-name>FrameworkFilter</filter-name>
-      <filter-class>org.mmbase.framework.FrameworkFilter</filter-class>
-      <init-param>
-         <param-name>excludes</param-name>
-         <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
-      </init-param>
-   </filter>   
+
    
    <filter-mapping>
       <filter-name>DisableUrlSessionFilter</filter-name>
