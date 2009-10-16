@@ -86,6 +86,10 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
       String[] newsletters = request.getParameterValues(SUBSCRIPTIONS);
       NewsletterSubscriptionServices services = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
       int subscriberId = CommunityModuleAdapter.getCurrentUserId();
+      if(subscriberId == -1) {
+         response.setRenderParameter("isChanged", isChanged);
+         return ;
+      }
       List<Subscription> allSubscribtions = services.getSubscriptions(allNewsletters, subscriberId);
       
       if(newsletters == null) {
