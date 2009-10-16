@@ -61,7 +61,7 @@
 
 				<c:set var="targetUrl" value=""/>
 				<mm:relatednodes type="urls" role="related" searchdir="destination" >
-					<c:set var="targetName"><mm:field name="name"/></c:set>
+					<c:set var="targetName"><mm:field name="title"/></c:set>
 					<c:set var="targetUrl"><mm:field name="url"/></c:set>
 					<c:set var="targetType" value="url"/>
 					<c:set var="targetIcon" value="urls.png"/>
