@@ -90,7 +90,11 @@
    </td>
    <td align="left">
       <mm:field name="${type}.number" jspvar="number" write="false"/>
-	  <mm:node number="${number}"> <mm:field name="publishdate" write="false" jspvar="publishdate" /> </mm:node>
+	  <mm:node number="${number}"> 
+	    <mm:hasfield name="publishdate">
+		 <mm:field name="publishdate" write="false" jspvar="publishdate" />
+		</mm:hasfield>
+	  </mm:node>
 	<c:set var="interval"><%=publishInterval(pageContext, "publishdate")%></c:set> 
 
 	<c:if test="${not empty publishdate}">
