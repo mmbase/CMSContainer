@@ -175,3 +175,16 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+
+Name: Update builder version in application XML, located in webapp/WEB-INF/config/applications/application-name.xml
+Goal: update contentrepository to version 4 
+Type:  manual action
+--- Start script ---
+The contentrepository field should be put to 4, otherwise it does not work with assets!!
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
