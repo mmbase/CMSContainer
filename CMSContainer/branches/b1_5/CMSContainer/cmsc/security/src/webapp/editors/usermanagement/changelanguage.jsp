@@ -42,6 +42,7 @@
 		      		<option value="en" <c:if test="${language == 'en'}">selected</c:if>><fmt:message key="changelanguage.english" /></option>
 		      		<option value="nl" <c:if test="${language == 'nl'}">selected</c:if>><fmt:message key="changelanguage.dutch" /></option>
 		      		<option value="zh" <c:if test="${language == 'zh'}">selected</c:if>><fmt:message key="changelanguage.chinese" /></option>
+                  <option value="fr" <c:if test="${language == 'fr'}">selected</c:if>><fmt:message key="changelanguage.french" /></option>
 		      	</html:select>
 		      </td>
 		   </tr>

@@ -81,6 +81,7 @@
 		      		<html:option value="en"><fmt:message key="changelanguage.english" /></html:option>
 		      		<html:option value="nl"><fmt:message key="changelanguage.dutch" /></html:option>
 		      		<html:option value="zh"><fmt:message key="changelanguage.chinese" /></html:option>
+                  <html:option value="fr"><fmt:message key="changelanguage.french" /></html:option>
 		      	</html:select>
 		      </td>
 		   </tr>
