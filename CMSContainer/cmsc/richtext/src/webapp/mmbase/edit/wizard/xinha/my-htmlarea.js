@@ -208,20 +208,35 @@ HTMLArea.prototype._insertInlineLink = function(link) {
 	var range = this._createRange(sel);
 	if(HTMLArea.is_ie) sel_value = range.text;
 	if (link){
+            var title="";
+            if(/^a$/i.test(link.tagName) && /^img$/i.test(link.firstChild.tagName)) {
+                title = link.firstChild.getAttribute("title"); 
+            }else title = HTMLArea.is_ie ? link.innerText : link.textContent;
          	outparam = {
                	f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
                 f_destination : link.destination ,
-               	f_title   : link.name?link.name: sel_value,
+                f_title   : title,
 				f_tooltip : link.title,
                	f_target : link.target,
                	f_usetarget : editor.config.makeLinkShowsTarget
          	};
 	}
 	else{
+            var html = this.getSelectedHTML();
+            var titleNoLink="";
+            if(HTMLArea.is_ie){
+                re = /title=([\s\S]*?)(\ssrc|\sborder|\swidth|\sheight|\")/i;
+                var matches = re.exec(html);
+                if(matches != null) {
+                    titleNoLink = matches[1];
+                }
+                if(titleNoLink=="") titleNoLink = sel_value;
+            }
+            else titleNoLink = sel_value;
          	outparam = {
                	f_href   : "Click \"New Url\" to enter URL",
                 f_destination : null,
-               	f_title   : sel_value?sel_value:'',
+               	f_title   : titleNoLink,
 				f_tooltip : '',
                	f_target : '',
                	f_usetarget : editor.config.makeLinkShowsTarget
@@ -239,13 +254,33 @@ HTMLArea.prototype._insertInlineLink = function(link) {
                         var range = editor._createRange(sel);
                         if(editor._selectionEmpty(sel))
                         {
-                              editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + "' name='"+param.f_title+"' destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
+                              editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + " 'destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
                         }
                         else{
-                              if ( !HTMLArea.is_ie )
-                              {
-                                    a.href = param.f_href.trim();
-                              }
+                        	if (!HTMLArea.is_ie) {
+                                if (a == null || !(/^a$/i.test(a.tagName))) {
+                                    a = range.startContainer;
+                                    if ( ! ( /^a$/i.test(a.tagName) ) ) {
+                                          a = a.nextSibling;
+                                          if ( a === null ) {
+                                                a = range.startContainer.parentNode; 
+                                          }
+                                    }
+                                }
+                            }
+                            else{//for ie
+                                while (a) {
+                                   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+                                   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
+                                   if (/^img$/i.test(a.tagName)){a = a.parentNode;} //for image node, its parentNode is <a>
+                                }
+                            }
+                        	//deal with link and image node
+                            if(/^a$/i.test(a.tagName)){
+                                if(!(/^img$/i.test(a.firstChild.tagName))){
+                                    a.innerHTML = param.f_title.trim();
+                                }
+                            }
                         }
 			} catch(ex) {}
 		}
@@ -261,10 +296,15 @@ HTMLArea.prototype._insertInlineLink = function(link) {
 			}
 			else
 			{
-      			  a.href = href;
-                  a.name = param.f_title.trim();
+				if(/^a$/i.test(a.tagName)){
+					a.href = href;
+                    if(!(/^img$/i.test(a.firstChild.tagName))){
+                    	a.innerHTML = param.f_title.trim();
+                    }
+				}
 			}
 		}
+        a.href = param.f_href.trim();
 		a.target = param.f_target.trim();
 		a.title = param.f_tooltip.trim();
 
@@ -280,7 +320,9 @@ HTMLArea.prototype._insertInlineLink = function(link) {
                         a.removeAttribute("relationID");
                   }
             }
-		editor.selectNodeContents(a);
+		   if(!HTMLArea.is_ie){
+            editor.selectNodeContents(a);
+         }
 		editor.updateToolbar();
 	},
 	outparam);
