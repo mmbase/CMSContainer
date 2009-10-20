@@ -13,7 +13,6 @@
         <plural xml:lang="nl">publishqueues</plural>
     </names>
     <descriptions>
-        <description xml:lang="us">PublishQueue</description>
         <description xml:lang="en">PublishQueue</description>
         <description xml:lang="nl">PublishQueue</description>
     </descriptions>
@@ -24,7 +23,6 @@
     <fieldlist>
         <field name="timestamp" state="system">
             <gui>
-                <guiname xml:lang="us">TimeStamp</guiname>
                 <guiname xml:lang="en">TimeStamp</guiname>
                 <guiname xml:lang="nl">TijdStempel</guiname>
             </gui>
@@ -39,7 +37,6 @@
         </field>
         <field name="sourcenumber">
             <gui>
-                <guiname xml:lang="us">nodenumber</guiname>
                 <guiname xml:lang="en">nodenumber</guiname>
                 <guiname xml:lang="nl">nodenumber</guiname>
             </gui>
@@ -56,7 +53,6 @@
         </field>
         <field name="action">
             <gui>
-                <guiname xml:lang="us">Action</guiname>
                 <guiname xml:lang="en">Action</guiname>
                 <guiname xml:lang="nl">Action</guiname>
             </gui>
@@ -74,9 +70,8 @@
         </field>
         <field name="destinationcloud">
             <gui>
-                <guiname xml:lang="us">DestinationCloud</guiname>
-                <guiname xml:lang="en">DestinationCloud</guiname>
-                <guiname xml:lang="nl">DestinationCloud</guiname>
+                <guiname xml:lang="en">Destination Cloud</guiname>
+                <guiname xml:lang="nl">Destination Cloud</guiname>
             </gui>
             <editor>
                 <positions>
@@ -91,7 +86,6 @@
         </field>
         <field name="status">
             <gui>
-                <guiname xml:lang="us">status</guiname>
                 <guiname xml:lang="en">status</guiname>
                 <guiname xml:lang="nl">status</guiname>
             </gui>
@@ -103,6 +97,7 @@
                 </positions>
             </editor>
             <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <property name="collator" value=":IDENTICAL" />
                 <default value="init"/>
                 <required value="true"/>
                 <maxLength value="32"/>
@@ -111,7 +106,7 @@
         <field name="publishdate">
             <gui>
                 <guiname xml:lang="nl">Publicatie datum</guiname>
-                <guiname xml:lang="en">Publishdate</guiname>
+                <guiname xml:lang="en">Publish date</guiname>
             </gui>
             <editor>
                 <positions>
@@ -124,7 +119,6 @@
         </field>
         <field name="relatednodes">
             <gui>
-                <guiname xml:lang="us">relatednodes</guiname>
                 <guiname xml:lang="en">relatednodes</guiname>
                 <guiname xml:lang="nl">relatednodes</guiname>
             </gui>
