@@ -7,9 +7,11 @@
         <singular xml:lang="nl">contentelement</singular>
         <singular xml:lang="en">contentelement</singular>
         <singular xml:lang="zh">内容元素</singular>
+        <singular xml:lang="fr">élement conteneur</singular>
         <plural xml:lang="nl">contentelement</plural>
         <plural xml:lang="en">contentelement</plural>
         <plural xml:lang="zh">内容元素</plural>
+        <plural xml:lang="fr">élement conteneur</plural>
     </names>
     <properties>
         <property name="downloadImages">true</property>
@@ -18,8 +20,9 @@
         <field name="creationdate" state="system">
             <gui>
                 <guiname xml:lang="nl">Aangemaakt</guiname>
-                <guiname xml:lang="en">Creationdate</guiname>
+                <guiname xml:lang="en">Creation date</guiname>
                 <guiname xml:lang="zh">创建时间</guiname>
+                <guiname xml:lang="fr">Date création</guiname>
             </gui>
             <editor>
                 <positions>
@@ -31,8 +34,9 @@
         <field name="lastmodifieddate" state="system">
             <gui>
                 <guiname xml:lang="nl">Gewijzigd</guiname>
-                <guiname xml:lang="en">Lastmodifieddate</guiname>
+                <guiname xml:lang="en">Last modified date</guiname>
                 <guiname xml:lang="zh">最后修改时间</guiname>
+                <guiname xml:lang="fr">Date dernière modification</guiname>
             </gui>
             <editor>
                 <positions>
@@ -44,8 +48,9 @@
         <field name="publishdate">
             <gui>
                 <guiname xml:lang="nl">Publicatie datum</guiname>
-                <guiname xml:lang="en">Publishdate</guiname>
+                <guiname xml:lang="en">Publish date</guiname>
                 <guiname xml:lang="zh">发布时间</guiname>
+                <guiname xml:lang="fr">Date Publication</guiname>
             </gui>
             <editor>
                 <positions>
@@ -59,8 +64,9 @@
         <field name="expiredate">
             <gui>
                 <guiname xml:lang="nl">Verloopdatum</guiname>
-                <guiname xml:lang="en">Expiredate</guiname>
+                <guiname xml:lang="en">Expire date</guiname>
                 <guiname xml:lang="zh">过期时间</guiname>
+                <guiname xml:lang="fr">Date Expiration</guiname>
             </gui>
             <editor>
                 <positions>
@@ -74,8 +80,9 @@
         <field name="lastmodifier" state="system">
             <gui>
                 <guiname xml:lang="nl">Gewijzigd door</guiname>
-                <guiname xml:lang="en">Lastmodifier</guiname>
+                <guiname xml:lang="en">Last modifier</guiname>
                 <guiname xml:lang="zh">最后修改人</guiname>
+                <guiname xml:lang="fr">Dernier modificateur</guiname>
             </gui>
             <editor>
                 <positions>
@@ -91,6 +98,7 @@
                 <guiname xml:lang="nl">Aangemaakt door</guiname>
                 <guiname xml:lang="en">Creator</guiname>
                 <guiname xml:lang="zh">创建人</guiname>
+                <guiname xml:lang="fr">Créateur</guiname>
             </gui>
             <editor>
                 <positions>
@@ -104,8 +112,9 @@
         <field name="use_expirydate">
             <gui>
                 <guiname xml:lang="nl">Gebruik verloop datum</guiname>
-                <guiname xml:lang="en">Use expirydate</guiname>
+                <guiname xml:lang="en">Use expiry date</guiname>
                 <guiname xml:lang="zh">使用过期</guiname>
+                <guiname xml:lang="fr">Date expiration</guiname>
             </gui>
             <editor>
                 <positions>
@@ -121,6 +130,7 @@
                 <guiname xml:lang="nl">Titel</guiname>
                 <guiname xml:lang="en">Title</guiname>
                 <guiname xml:lang="zh">标题</guiname>
+                <guiname xml:lang="fr">Titre</guiname>
             </gui>
             <editor>
                 <positions>
@@ -139,6 +149,7 @@
                 <guiname xml:lang="nl">Omschrijving</guiname>
                 <guiname xml:lang="en">Description</guiname>
                 <guiname xml:lang="zh">描述</guiname>
+                <guiname xml:lang="fr">Description</guiname>
             </gui>
             <editor>
                 <positions>
@@ -156,6 +167,7 @@
                 <guiname xml:lang="nl">Bronvermelding</guiname>
                 <guiname xml:lang="en">Source</guiname>
                 <guiname xml:lang="zh">资源</guiname>
+                <guiname xml:lang="fr">Source</guiname>
             </gui>
             <editor>
                 <positions>
@@ -173,6 +185,7 @@
                 <guiname xml:lang="nl">Trefwoorden</guiname>
                 <guiname xml:lang="en">Keywords</guiname>
                 <guiname xml:lang="zh">关键字</guiname>
+                <guiname xml:lang="fr">mots clé</guiname>
             </gui>
             <editor>
                 <positions>
@@ -191,6 +204,7 @@
                 <guiname xml:lang="nl">Notitie</guiname>
                 <guiname xml:lang="en">Note</guiname>
                 <guiname xml:lang="zh">注释</guiname>
+                <guiname xml:lang="fr">Note</guiname>
             </gui>
             <editor>
                 <positions>
@@ -204,8 +218,9 @@
         <field name="notificationdate">
             <gui>
                 <guiname xml:lang="nl">Notificatie datum</guiname>
-                <guiname xml:lang="en">Notificationdate</guiname>
+                <guiname xml:lang="en">Notification date</guiname>
                 <guiname xml:lang="zh">注释时间</guiname>
+                 <guiname xml:lang="fr">Date notification</guiname>
             </gui>
             <editor>
                 <positions>
@@ -225,8 +240,9 @@
         <field name="archivedate">
             <gui>
                 <guiname xml:lang="nl">Archief datum</guiname>
-                <guiname xml:lang="en">Archivedate</guiname>
+                <guiname xml:lang="en">Archive date</guiname>
                 <guiname xml:lang="zh">归档时间</guiname>
+                <guiname xml:lang="fr">Date archive</guiname>
             </gui>
             <editor>
                 <positions>
@@ -248,6 +264,7 @@
                 <guiname xml:lang="nl">Status</guiname>
                 <guiname xml:lang="en">Status</guiname>
                 <guiname xml:lang="zh">状态</guiname>
+                <guiname xml:lang="fr">Statut</guiname>
             </gui>
             <editor>
                 <positions/>
