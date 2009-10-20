@@ -6,9 +6,11 @@
         <singular xml:lang="nl">Artikel</singular>
         <singular xml:lang="en">Article</singular>
         <singular xml:lang="zh">文章</singular>
+        <singular xml:lang="fr">Article</singular>
         <plural xml:lang="nl">Artikelen</plural>
         <plural xml:lang="en">Articles</plural>
         <plural xml:lang="zh">文章</plural>
+        <plural xml:lang="fr">Articles</plural>
     </names>
     <fieldlist>
         <field name="subtitle">
@@ -16,6 +18,7 @@
                 <guiname xml:lang="nl">Ondertitel</guiname>
                 <guiname xml:lang="en">Subtitle</guiname>
                 <guiname xml:lang="zh">副标题</guiname>
+                <guiname xml:lang="fr">Sous-titre</guiname>
             </gui>
             <editor>
                 <positions>
@@ -33,6 +36,7 @@
                 <guiname xml:lang="nl">Introductie</guiname>
                 <guiname xml:lang="en">Intro</guiname>
                 <guiname xml:lang="zh">引言</guiname>
+                <guiname xml:lang="fr">Introduction</guiname>
             </gui>
             <editor>
                 <positions>
@@ -50,6 +54,7 @@
                 <guiname xml:lang="nl">Tekst</guiname>
                 <guiname xml:lang="en">Body</guiname>
                 <guiname xml:lang="zh">正文</guiname>
+                <guiname xml:lang="fr">Corps</guiname>
             </gui>
             <editor>
                 <positions>
