@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.BridgeException;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
@@ -185,7 +186,7 @@ public class CloudInfo {
         CloudInfo localCloudInfo = getDefaultCloudInfo();
         while (iterator.hasNext()) {
             CloudInfo cloudInfo = iterator.next();
-            if (url==null || "".equals(url.trim())) {
+            if (url==null || StringUtils.isBlank(url)) {
                 //url==null means set all remote cloud invalid.
                 if (cloudInfo.getNumber()==localCloudInfo.getNumber()) {
                     //if it is local cloud, ignore
