@@ -62,7 +62,7 @@
 
    <div id="tree">
       <div id="tree-head">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 				<tr>
 				   <td class="indent" />
@@ -80,7 +80,7 @@
 		</table>
 		</div>
 		<div id="tree-allcontent">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 				<tr>
 					<td class="indent"><img id="tree-allcontent-plus"
@@ -103,7 +103,7 @@
 		</div>
 		<div id="tree-allcontent-cont" <c:if test="${treeStatus.allcontent eq 0}">style="display:none"</c:if> >
 		<div id="tree-content">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 <%--            <c:if test="${ statusInfo.contentDraft != 0 || statusInfo.contentFinished != 0 || statusInfo.contentApproved != 0 || statusInfo.contentPublished != 0}">
 --%>
@@ -129,7 +129,7 @@
 		</table>
 		</div>
 		<div id="tree-content-cont" <c:if test="${treeStatus.content eq 0}">style="display:none"</c:if>>
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 				<c:forEach var="contentType" items="${statusInfo.contentChildTypes}" varStatus="itemStatus">
                <c:if test="${ statusInfo.contentChildrenDraft[contentType.value] != 0 || statusInfo.contentChildrenFinished[contentType.value] != 0
@@ -143,7 +143,14 @@
 	                  <c:if test="${itemStatus.last}">
 	                  <td class="indent"><img src="../utils/ajaxtree/images/L.png" /></td>
 	                  </c:if>
-							<td class="leftData">${contentType.label}</td>
+                     <td class="leftData2">
+                        <c:if test="${(fn:indexOf(contentType.label, ' ') > -1) or (fn:length(contentType.label) <= 11)}" >
+                           ${contentType.label}
+                        </c:if>
+                        <c:if test="${ (fn:indexOf(contentType.label, ' ') == -1) and (fn:length(contentType.label) > 11) }" >
+                           ${fn:substring(contentType.label,0,11)}...
+                        </c:if>
+                     </td>
 							<td><a
 								href="ContentWorkflowAction.do?workflowNodetype=${contentType.value}&status=draft">${statusInfo.contentChildrenDraft[contentType.value]}</a></td>
 							<td><a
@@ -161,7 +168,7 @@
 		</table>
 		</div>
 		<div id="tree-asset">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 <%--              <c:if test="${ statusInfo.assetDraft != 0 || statusInfo.assetFinished != 0 || statusInfo.assetApproved != 0 || statusInfo.assetPublished != 0}">
 --%>
@@ -186,21 +193,28 @@
 		</table>
 		</div>
 		<div id="tree-asset-cont" <c:if test="${treeStatus.asset eq 0}">style="display:none"</c:if> >
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
             <c:forEach var="assetType" items="${statusInfo.assetChildTypes}" varStatus="itemStatus">
                <c:if test="${ statusInfo.assetChildrenDraft[assetType.value] != 0 || statusInfo.assetChildrenFinished[assetType.value] != 0
 	                          || statusInfo.assetChildrenApproved[assetType.value]!=0 || statusInfo.assetChildrenPublished[assetType.value] != 0}">
 	               <tr>
 	                  <td class="indent"/>
-	                  <td class="indent" />
+	                  <td class="indent2" />
 	                  <c:if test="${not itemStatus.last}">
 	                  <td class="indent"><img src="../utils/ajaxtree/images/T.png" /></td>
 	                  </c:if>
 	                  <c:if test="${itemStatus.last}">
 	                  <td class="indent"><img src="../utils/ajaxtree/images/L.png" /></td>
 	                  </c:if>
-	                  <td class="leftData">${assetType.label}</td>
+	                  <td class="leftData2">
+                        <c:if test="${(fn:indexOf(assetType.label, ' ') > -1) or (fn:length(assetType.label) <= 11)}" >
+                           ${assetType.label}
+                        </c:if>
+                        <c:if test="${ (fn:indexOf(assetType.label, ' ') == -1) and (fn:length(assetType.label) > 11) }" >
+                           ${fn:substring(assetType.label,0,11)}...
+                        </c:if>
+                     </td>
 	                  <td><a
 	                     href="AssetWorkflowAction.do?workflowNodetype=${assetType.value}&status=draft">${statusInfo.assetChildrenDraft[assetType.value]}</a></td>
 	                  <td><a
@@ -219,7 +233,7 @@
 		</div>
     </div>
 		<div id="tree-page">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 <%--            <c:if test="${statusInfo.pageDraft != 0 || statusInfo.pageFinished != 0 || statusInfo.pageApproved != 0 || statusInfo.pagePublished != 0}">
 --%>
@@ -227,7 +241,7 @@
 						<td class="leftData"><fmt:message key="workflow.status.page" /></td>
 						<td class="indent" />
 						<td class="indent" />
-						<td class="indent" />
+						<td class="indent2" />
 						<td><a href="PageWorkflowAction.do?status=draft">${statusInfo.pageDraft}</a></td>
 						<td><a href="PageWorkflowAction.do?status=finished">${statusInfo.pageFinished}</a></td>
 						<c:if test="${acceptedEnabled}">
@@ -241,7 +255,7 @@
 		</table>
 		</div>
 		<div id="tree-link">
-		<table class="centerData">
+		<table class="centerData" cellspacing="0" cellpadding="0">
 			<tbody>
 <%--            <c:if test="${ statusInfo.linkFinished != 0 || statusInfo.linkApproved != 0 || statusInfo.linkPublished != 0}">
 --%>
@@ -249,7 +263,7 @@
 						<td class="leftData"><fmt:message key="workflow.status.link" /></td>
 						<td class="indent" />
 						<td class="indent" />
-						<td class="indent" />
+						<td class="indent2" />
 						<td></td>
 						<td><a href="LinkWorkflowAction.do?status=finished">${statusInfo.linkFinished}</a></td>
 						<c:if test="${acceptedEnabled}">
