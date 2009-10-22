@@ -24,7 +24,7 @@ See http://www.MMBase.org/license
 
 	<properties>
 		<cmsc.version>1.7-SNAPSHOT</cmsc.version>
-      <luceus.version>0.42</luceus.version>
+      <luceus.version>0.43</luceus.version>
       <lucene.version>2.4.1</lucene.version>
 	</properties>
 
