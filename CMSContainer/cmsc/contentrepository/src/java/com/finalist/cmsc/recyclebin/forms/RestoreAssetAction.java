@@ -32,7 +32,7 @@ public class RestoreAssetAction extends MMBaseFormlessAction {
        
       String objectnumber = getParameter(request, "objectnumber");
       Node objectNode = cloud.getNode(objectnumber);
-
+      String returnurl = getParameter(request, "returnurl");
       NodeList channels = RepositoryUtil.getDeletionChannels(objectNode);
       if (channels.size() > 0) {
          if (channels.size() == 1) {
@@ -50,6 +50,7 @@ public class RestoreAssetAction extends MMBaseFormlessAction {
             else {
                addToRequest(request, "", objectNode);
                addToRequest(request, "channels", channels);
+               addToRequest(request, "returnurl", returnurl);
                return mapping.findForward("restore");
             }
          }
@@ -62,7 +63,9 @@ public class RestoreAssetAction extends MMBaseFormlessAction {
             Workflow.create(objectNode, null);
          }
       }
-      addToRequest(request, "fresh", "true");
-      return mapping.findForward(SUCCESS);
+      ActionForward ret = new ActionForward(returnurl+"&fresh=true");
+      ret.setRedirect(true);
+     // addToRequest(request, "fresh", "true");
+      return ret;
    }
 }

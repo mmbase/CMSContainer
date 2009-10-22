@@ -6,14 +6,15 @@
 <html:html xhtml="true">
 <cmscedit:head title="recyclebin.title">
   <script src="recyclebin.js" type="text/javascript"></script>
-  <c:if test="${not empty fresh && fresh == 'true'}">
+  <c:if test="${not empty param.fresh && param.fresh == 'true'}">
      <script type="text/javascript">     
        refreshChannels();
      </script>
   </c:if>
 </cmscedit:head>
 <mm:import externid="direction" jspvar="direction">up</mm:import>
-<mm:import externid="sortBy" jspvar="sortBy">title</mm:import>
+<mm:import externid="orderby" jspvar="orderby">title</mm:import>
+<c:set var="extraparams" value="&direction=${direction}"/>
 <c:set var="direction">
    <c:out value="${direction =='up'?'down':'up' }"/>
 </c:set>
@@ -72,10 +73,10 @@
                      <div class="body">   
                       <mm:node number="$parentchannel">
                            <mm:relatednodescontainer path="contentrel,contentelement" searchdirs="destination" element="contentelement">
-                             <mm:sortorder field="contentelement.${sortBy}" direction="${direction}" />
+                             <mm:sortorder field="contentelement.${orderby}" direction="${direction}" />
             
                               <c:set var="listSize"><mm:size/></c:set>
-                              <c:set var="resultsPerPage" value="50"/>
+                              <c:set var="resultsPerPage" value="5"/>
                               <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
                               
                               <mm:listnodes jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
@@ -86,11 +87,11 @@
                                        <thead>
                                           <tr>
                                              <th style="width: 56px;"></th>
-                                             <th style="width: 68px;"><a href="contenttrash.jsp?sortBy=otype&direction=${direction}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
-                                             <th><a href="contenttrash.jsp?sortBy=title&direction=${direction}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
-                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifier&direction=${direction}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
-                                             <th style="width: 120px;"><a href="contenttrash.jsp?sortBy=lastmodifieddate&direction=${direction}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
-                                             <th style="width: 60px;"><a href="contenttrash.jsp?sortBy=number&direction=${direction}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
+                                             <th style="width: 68px;"><a href="contenttrash.jsp?orderby=otype&direction=${direction}" class="headerlink"><fmt:message key="locate.typecolumn" /></a></th>
+                                             <th><a href="contenttrash.jsp?orderby=title&direction=${direction}" class="headerlink"><fmt:message key="locate.titlecolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="contenttrash.jsp?orderby=lastmodifier&direction=${direction}" class="headerlink"><fmt:message key="locate.editorcolumn" /></a></th>
+                                             <th style="width: 120px;"><a href="contenttrash.jsp?orderby=lastmodifieddate&direction=${direction}" class="headerlink"><fmt:message key="locate.lastmodifiedcolumn" /></a></th>
+                                             <th style="width: 60px;"><a href="contenttrash.jsp?orderby=number&direction=${direction}" class="headerlink"><fmt:message key="locate.numbercolumn" /></a></th>
                                           </tr>
                                        </thead>
                                        <tbody class="hover">
