@@ -188,3 +188,22 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+Name: Enable simple editors (optional)
+Goal: To enable the simple editors and let a group of users use them
+Type:  manual action
+--- Start script ---
+1) Login as an administrator user
+2) Go to the user admin screen
+3) Create a new group for the users with simple editors
+4) Set the "Simple Editors channel" of this group to the channel this group can write to 
+5) Save
+6) Give the group "Editor" rights on the content channel
+7) Add users to the group
+8) Edit the system property "system.simpleeditor.contenttypes" to hold the contenttypes you want them to edit (may be comma seperated) 
+9) These users can login on [url]/[app]-staging/editors/simple/
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
