@@ -41,7 +41,7 @@ status: <mm:write referid="status" /><br />
    <mm:listnodes>
       <mm:relatednodescontainer type="workflowitem" role="creatorrel">
        <c:if test="${status ne 'all' }">
-         <mm:constraint field="status" operator="EQUAL" value="${status}" />
+         <mm:constraint field="status" operator="EQUAL" value="${status}" casesensitive="true"/>
        </c:if>
          <mm:relatednodes>
          <mm:present referid="action">
