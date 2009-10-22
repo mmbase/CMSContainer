@@ -33,7 +33,7 @@
 
 <mm:listnodescontainer type="publishqueue">
 <mm:constraint field="sourcenumber" operator="EQUAL" referid="nodenumber" />
-<mm:constraint field="status" operator="EQUAL" value="${status}" />
+<mm:constraint field="status" operator="EQUAL" value="${status}" casesensitive="true" />
 nodenumber:	<mm:write referid="nodenumber" /><br />
 status	<mm:write referid="status" /><br />
 size: <mm:size /><br />

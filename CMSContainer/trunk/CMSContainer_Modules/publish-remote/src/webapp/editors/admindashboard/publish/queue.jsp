@@ -7,7 +7,7 @@
 		<mm:hasrank minvalue="administrator">
 	<cmscedit:head title="publish.title">
 			<mm:listnodescontainer type="publishqueue">
-				<mm:constraint field="status" operator="EQUAL" value="init"/>
+				<mm:constraint field="status" operator="EQUAL" value="init" casesensitive="true"/>
 				<c:set var="size"><mm:size/></c:set>
 			</mm:listnodescontainer>
 		
