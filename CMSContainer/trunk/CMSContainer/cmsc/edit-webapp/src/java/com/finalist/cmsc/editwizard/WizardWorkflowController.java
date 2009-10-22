@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.editwizard.Config;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
@@ -116,14 +117,14 @@ public class WizardWorkflowController extends WizardController {
          log.debug("activity " + activity);
          params.put("ACTIVITY", activity);
       }
-      else if (isMainWizard(ewconfig, config) && elementtype != null && !"".equals(elementtype)
+      else if (isMainWizard(ewconfig, config) && StringUtils.isNotBlank(elementtype)
             && !Workflow.isWorkflowType(elementtype)) {
          if(cloud.getUser().getRank() != Rank.ADMIN) {
             params.put("WORKFLOW", OFF);
          }
       }
       else {
-         if (elementtype != null && !"".equals(elementtype) && Workflow.isWorkflowType(elementtype)) {
+         if (StringUtils.isNotBlank(elementtype) && Workflow.isWorkflowType(elementtype)) {
             params.put("WORKFLOW", FALSE);
          }
          else {
