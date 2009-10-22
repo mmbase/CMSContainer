@@ -104,9 +104,9 @@ public class WizardController {
       log.debug("readonly " + readonly);
 
       Node creationNode = null;
-      if (StringUtils.isNotEmpty(elementtype)) {
+      if (StringUtils.isNotBlank(elementtype)) {
          String creation = (String) session.getAttribute(SESSION_CREATION);
-         if (StringUtils.isNotEmpty(creation)) {
+         if (StringUtils.isNotBlank(creation)) {
             creationNode = cloud.getNode(creation);
          }
          if (creationNode == null && objectnr != null && !NEW_OBJECT.equals(objectnr)) {
@@ -227,7 +227,7 @@ public class WizardController {
             elementtype = editNode.getNodeManager().getName();
             if (ContentElementUtil.isContentElement(editNode)) {
                closeContentElement(session, editNode, objectnr, ewconfig, wizardConfig);
-            }else if (AssetElementUtil.isAssetElement(editNode)) {
+            } else if (AssetElementUtil.isAssetElement(editNode)) {
                closeAssetElement(session, editNode, objectnr, ewconfig, wizardConfig);
             } 
          // create createrel for asset elements.and add asset elements to workflow.
@@ -252,7 +252,7 @@ public class WizardController {
                            channelnr = RepositoryUtil.getRoot(node.getCloud());
                         }
                         //if the channel is not exist get root channel .used for adding pages
-                        if (channelnr == null ||"".equals(channelnr) ) {
+                        if (StringUtils.isBlank(channelnr)) {
                            channelnr = RepositoryUtil.getRoot(node.getCloud());
                         }
                         log.debug("Creation " + channelnr);
@@ -271,7 +271,7 @@ public class WizardController {
                            Versioning.addVersion(node);
                         }
                         catch (VersioningException e) {
-                           log.error("Add version error for node"+node.getNumber(),e);
+                           log.error("Add version error for node:" + node.getNumber(), e);
                         }
                      }
                   }
@@ -294,7 +294,7 @@ public class WizardController {
             // will create double creationchannels when first "save" and
             // then "save and close"
             if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotEmpty(channelnr)) {
+               if (StringUtils.isNotBlank(channelnr)) {
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                   ContentElementUtil.addOwner(editNode);
                   if (isMainWizard(ewconfig, wizardConfig)) {
@@ -340,7 +340,7 @@ public class WizardController {
             // will create double creationchannels when first "save" and
             // then "save and close"
             if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotEmpty(channelnr)) {
+               if (StringUtils.isNotBlank(channelnr)) {
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                   AssetElementUtil.addOwner(editNode);
                   if (isMainWizard(ewconfig, wizardConfig)) {
