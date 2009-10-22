@@ -44,6 +44,7 @@
             				<mm:url page="RestoreAction.do" id="url" write="false" >
             				   <mm:param name="channelnumber" value="$channelnumber"/>
             				   <mm:param name="objectnumber" value="$contentnumber"/>
+							   <mm:param name="returnurl" value="$returnurl"/>
             				</mm:url>
             				<li>
             					<a href="<mm:write referid="url"/>">

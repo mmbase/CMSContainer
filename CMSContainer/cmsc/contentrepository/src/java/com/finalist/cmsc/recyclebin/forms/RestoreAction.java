@@ -32,7 +32,7 @@ public class RestoreAction extends MMBaseFormlessAction {
        
       String objectnumber = getParameter(request, "objectnumber");
       Node objectNode = cloud.getNode(objectnumber);
-
+      String returnurl = getParameter(request, "returnurl");
       NodeList contentchannels = RepositoryUtil.getDeletionChannels(objectNode);
       if (contentchannels.size() > 0) {
          if (contentchannels.size() == 1) {
@@ -50,6 +50,7 @@ public class RestoreAction extends MMBaseFormlessAction {
             else {
                addToRequest(request, "content", objectNode);
                addToRequest(request, "contentchannels", contentchannels);
+               addToRequest(request, "returnurl", returnurl);
                return mapping.findForward("restore");
             }
          }
@@ -65,11 +66,14 @@ public class RestoreAction extends MMBaseFormlessAction {
             contentchannels = RepositoryUtil.getAllContentChannels(cloud);
             addToRequest(request, "content", objectNode);
             addToRequest(request, "contentchannels", contentchannels);
+            addToRequest(request, "returnurl", returnurl);
             return mapping.findForward("restore");
          }
 
       }
-      addToRequest(request, "fresh", "true");
-      return mapping.findForward(SUCCESS);
+      ActionForward ret = new ActionForward(returnurl+"&fresh=true");
+      ret.setRedirect(true);
+     // addToRequest(request, "fresh", "true");
+      return ret;
    }
 }
