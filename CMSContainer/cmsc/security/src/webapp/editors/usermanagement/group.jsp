@@ -48,10 +48,10 @@
             <td><fmt:message key="group.simpleeditorchannel" /></td>
             <td align="right">
                <a href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${contentchannel}&portletId=${portletId}' />" target="selectchannel" onclick="openPopupWindow('selectchannel', 340, 400)"> 
-                  <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" />"/>
+                  <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" /> title="<fmt:message key="edit_defaults.channelselect" />"/>
                </a>
                <a href="javascript:erase('contentchannel');erase('contentchannelpath')">
-                  <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/>"/>
+                  <img src="<cmsc:staticurl page='/editors/gfx/icons/erase.png'/>" alt="<fmt:message key="edit_defaults.erase"/> title="<fmt:message key="edit_defaults.erase"/>"/>
                </a>
             </td>
             <td>
