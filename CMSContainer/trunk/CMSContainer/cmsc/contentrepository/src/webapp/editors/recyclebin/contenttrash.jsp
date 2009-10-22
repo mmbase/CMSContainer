@@ -15,6 +15,7 @@
 </cmscedit:head>
 <mm:import externid="direction" jspvar="direction">up</mm:import>
 <mm:import externid="sortBy" jspvar="sortBy">title</mm:import>
+<c:set var="olddirection" value="${direction}"/>
 <c:set var="direction">
    <c:out value="${direction =='up'?'down':'up' }"/>
 </c:set>
@@ -82,11 +83,10 @@
             
                               <c:set var="listSize"><mm:size/></c:set>
                               <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
-                              <c:set var="extraparams" value="&sortBy=${sortBy}&direction=${direction}"/>
-
+                              <c:set var="extraparams" value="&sortBy=${sortBy}&direction=${olddirection}"/>
+							  <c:set var="resultsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
                               <mm:listnodes jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
-                                 <mm:first>
-                                   
+                                 <mm:first>                                   
                                  <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
                                      <table>
                                        <thead>
