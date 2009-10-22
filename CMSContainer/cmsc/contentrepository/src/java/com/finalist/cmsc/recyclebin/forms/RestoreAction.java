@@ -50,10 +50,13 @@ public class RestoreAction extends MMBaseFormlessAction {
             else {
                addToRequest(request, "content", objectNode);
                addToRequest(request, "contentchannels", contentchannels);
+               addToRequest(request, "returnurl", getParameter(request, "returnurl"));
                return mapping.findForward("restore");
             }
          }
       }
-      return mapping.findForward(SUCCESS);
+      ActionForward ret = new ActionForward(getParameter(request, "returnurl"));
+      ret.setRedirect(true);
+      return ret;
    }
 }
