@@ -105,9 +105,9 @@ public class WizardController {
       log.debug("readonly " + readonly);
 
       Node creationNode = null;
-      if (StringUtils.isNotEmpty(elementtype)) {
+      if (StringUtils.isNotBlank(elementtype)) {
          String creation = (String) session.getAttribute(SESSION_CREATION);
-         if (StringUtils.isNotEmpty(creation)) {
+         if (StringUtils.isNotBlank(creation)) {
             creationNode = cloud.getNode(creation);
          }
          if (creationNode == null && objectnr != null && !NEW_OBJECT.equals(objectnr)) {
@@ -251,7 +251,7 @@ public class WizardController {
                      if (!RepositoryUtil.hasCreationChannel(node)) {
                         String channelnr = (String) session.getAttribute(SESSION_CREATION);
                         //if the channel is not exist get root channel .used for adding pages
-                        if (channelnr == null ||"".equals(channelnr) ) {
+                        if (StringUtils.isBlank(channelnr)) {
                            channelnr = RepositoryUtil.getRoot(node.getCloud());
                         }
                         log.debug("Creation " + channelnr);
@@ -305,7 +305,7 @@ public class WizardController {
             // will create double creationchannels when first "save" and
             // then "save and close"
             if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotEmpty(channelnr)) {
+               if (StringUtils.isNotBlank(channelnr)) {
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                   ContentElementUtil.addOwner(editNode);
                   if (isMainWizard(ewconfig, wizardConfig)) {
@@ -351,7 +351,7 @@ public class WizardController {
          // will create double creationchannels when first "save" and
          // then "save and close"
          if (!RepositoryUtil.hasCreationChannel(editNode)) {
-            if (StringUtils.isNotEmpty(channelnr)) {
+            if (StringUtils.isNotBlank(channelnr)) {
                RepositoryUtil.addCreationChannel(editNode, channelnr);
                AssetElementUtil.addOwner(editNode);
                if (isMainWizard(ewconfig, wizardConfig)) {
