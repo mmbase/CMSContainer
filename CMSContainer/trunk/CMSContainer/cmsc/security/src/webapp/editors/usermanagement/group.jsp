@@ -45,7 +45,7 @@
 				<td><html:text property="description" size='30' /></td>
 			</tr>
          <tr>
-            <td><fmt:message key="group.simpleeditorchannel" /></td>
+            <td nowrap="nowrap"><fmt:message key="group.simpleeditorchannel" /></td>
             <td align="right">
                <a href="<c:url value='/editors/repository/select/SelectorChannel.do?channel=${contentchannel}&portletId=${portletId}' />" target="selectchannel" onclick="openPopupWindow('selectchannel', 340, 400)"> 
                   <img src="<cmsc:staticurl page='/editors/gfx/icons/select.png'/>" alt="<fmt:message key="edit_defaults.channelselect" /> title="<fmt:message key="edit_defaults.channelselect" />"/>
