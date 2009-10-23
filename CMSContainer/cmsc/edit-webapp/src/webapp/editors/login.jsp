@@ -1,17 +1,19 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
-%><%@include file="globals.jsp"
-%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=UTF-8"%>
+<%@include file="globals.jsp" %>
 <mm:import from="request" externid="referrer">.</mm:import>
 <mm:import externid="reason">please</mm:import>
-
+<mm:content type="text/html" encoding="UTF-8" expires="0">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <cmscedit:head title="login.title">
    <style type="text/css">
       body {
-         margin: 100px auto 0 auto;
+         margin: 100px;
          text-align: center;
-         width: 285px;
+      }
+      div.side_block, div.side_block table {
+         position: relative;
+         margin: 0px auto;
       }
    </style>
 <script type="text/javascript">

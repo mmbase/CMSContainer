@@ -37,7 +37,6 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
          HttpServletResponse response, Cloud cloud) throws Exception {
 
       String action = request.getParameter("action");
-      String portletId = request.getParameter("portletId");
       if (StringUtils.isEmpty(action)) {
          RepositoryInfo info = new RepositoryInfo(RepositoryUtil.getRepositoryInfo(cloud));
          cloud.setProperty("Selector" + RepositoryInfo.class.getName(), info);
@@ -49,19 +48,11 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
       }
 
       addToRequest(request, "actionname", mapping.getPath());
-      addToRequest(request, "portletId", portletId);
 
       JstlUtil.setResourceBundle(request, "cmsc-repository");
       return super.execute(mapping, form, request, response, cloud);
    }
 
-   protected String getLinkPattern(HttpServletRequest request) {
-      String portletId = request.getParameter("portletId");
-      if (StringUtils.isNotBlank(portletId)) {
-         return super.getLinkPattern() + "&portletId=" + portletId;
-      }
-      return super.getLinkPattern();
-   }
 
    @Override
    protected String getChannelId(HttpServletRequest request, Cloud cloud) {
@@ -102,7 +93,7 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
    protected AjaxTree getTree(HttpServletRequest request, HttpServletResponse response, Cloud cloud, TreeInfo info,
          String persistentid) {
       RepositoryTreeModel model = new RepositoryTreeModel(cloud, contentChannelOnly);
-      SelectAjaxRenderer chr = new SelectRenderer(response, getLinkPattern(request), getTarget());
+      SelectAjaxRenderer chr = new SelectRenderer(response, getLinkPattern(), getTarget());
       AjaxTree t = new AjaxTree(model, chr, info);
       t.setImgBaseUrl("../../gfx/icons/");
       return t;

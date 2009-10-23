@@ -1,22 +1,18 @@
 package com.finalist.cmsc.security.forms;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Nico Klasens
@@ -37,11 +33,6 @@ public class GroupInitAction extends MMBaseAction {
          Node node = cloud.getNode(id);
          groupForm.setName(node.getStringValue("name"));
          groupForm.setDescription(node.getStringValue("description"));
-         NodeList list = node.getRelatedNodes("contentchannel", "mmbasegrouprel", "destination");
-         if(list != null && list.size() > 0){
-            addToRequest(request, "contentchannel", String.valueOf((list.getNode(0)).getNumber()));
-         }
-        
          groupForm.setId(Integer.parseInt(id));
          NodeList members = SecurityUtil.getMembers(node);
          for (Iterator<Node> iter = users.iterator(); iter.hasNext();) {

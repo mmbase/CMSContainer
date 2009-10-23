@@ -11,9 +11,8 @@ package com.finalist.cmsc.navigation;
 
 import java.util.*;
 
-
-import org.mmbase.bridge.util.CloneUtil;
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.CloneUtil;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;

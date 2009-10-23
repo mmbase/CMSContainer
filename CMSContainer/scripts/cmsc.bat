@@ -1,1 +1,1 @@
-build cleanbuild maven-base cmsc ..\..\CMSContainer_Modules ..\..\CMSContainer_Portlets ..\..\CMSContainer_Templates
+build cleanbuild cmsc ..\..\CMSContainer_Modules ..\..\CMSContainer_Portlets

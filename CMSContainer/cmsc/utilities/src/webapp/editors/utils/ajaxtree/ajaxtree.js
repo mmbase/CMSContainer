@@ -210,10 +210,10 @@ var ajaxTreeHandler = {
 };
 
 ajaxTreeLoader = {
-	initTree : function (persistentId, elementId, portletId) {
+	initTree : function (persistentId, elementId) {
 		var treeAction = new AjaxTreeAction();
 		treeAction.elementId = elementId;
-		treeAction.execute('inittree', persistentId, portletId);
+		treeAction.execute('inittree', persistentId);
 	},
 	loadChildren : function (node) {
 		var treeAction = new AjaxTreeAction();
@@ -236,14 +236,11 @@ ajaxTreeLoader = {
 function AjaxTreeAction() {
 }
 
-AjaxTreeAction.prototype.execute = function(action, persistentId, portletId) {
+AjaxTreeAction.prototype.execute = function(action, persistentId) {
     var options  = {asynchronous : true, onFailure: this.errorRequest };
     options.onSuccess = null;
 	options.parameters = 'action=' + action;
 	options.parameters += '&persistentid=' + persistentId;
-	if(portletId != null && portletId != undefined){
-		options.parameters += '&portletId=' + portletId;	
-	}
 	if (action == 'inittree') {
 		options.onSuccess = this.buildTree.bind(this);
 	}
@@ -310,11 +307,7 @@ AjaxTreeAction.prototype.buildChildren = function(request) {
 }
 
 AjaxTreeAction.prototype.errorRequest = function(request) {
-   if (request.status == 401 /* unauthorized */) {
-      window.location = '../login.jsp?reason=failed';
-   } else {
-      alert(request.responseText);
-   }
+	alert(request.responseText);
 }
 
 AjaxTreeAction.prototype.createTree = function(treeXml) {
