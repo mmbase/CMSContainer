@@ -1,14 +1,18 @@
 package com.finalist.cmsc.security.forms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import org.apache.struts.action.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.mmbase.bridge.NodeList;
 
 import com.finalist.cmsc.struts.MMBaseAction;
 import com.finalist.cmsc.struts.MMBaseForm;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Form bean for the UserForm page.
@@ -43,6 +47,7 @@ public class UserForm extends MMBaseForm {
 
    private List<Option> ranks = new ArrayList<Option>();
    private List<Option> contexts = new ArrayList<Option>();
+   private List<Option> statuses = new ArrayList<Option>();
 
 
    @Override
@@ -301,14 +306,17 @@ public class UserForm extends MMBaseForm {
       return contexts;
    }
 
-
-   public List<Option> getStatuses() {
-      List<Option> statusList = new ArrayList<Option>();
-      statusList.add(new Option("Actief", "1"));
-      statusList.add(new Option("Geblokkeerd", "-1"));
-      return statusList;
+   public void addStatus(String number, String name){
+      statuses.add(new Option(name, number));
    }
 
+   public void resetStatuses(){
+      statuses = new ArrayList<Option>();
+   }
+   
+   public List<Option> getStatuses() {
+      return statuses;
+   }
 
    public String getLanguage() {
       return language;
