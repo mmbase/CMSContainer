@@ -20,6 +20,11 @@
       var elem = document.getElementById('exportForm');
       if (elem != null) {
         elem.page.value = newPage;
+
+        document.getElementById('exportTitle2').value = document.getElementById('exportTitle').value; 
+        document.getElementById('exportKeywords2').value = document.getElementById('exportKeywords').value;
+        document.getElementById('exportAuthor2').value = document.getElementById('exportAuthor').value;
+                
         return doForward('search');
       }
       return false;
@@ -58,16 +63,16 @@
    <table border="0">
    <tr>
       <td style="width: 105px"><fmt:message key="egemmail.field.title" />:</td>
-      <td><html:text style="width: 200px" property="title"/></td>
+      <td><html:text style="width: 200px" property="title" styleId="exportTitle"/></td>
    </tr>
    <tr>
-      <td style="width: 105px"><fmt:message key="egemmail.field.keywords" />:</td>
-      <td><html:text style="width: 200px" property="keywords"/></td>
+      <td style="width: 105px"><fmt:message key="egemmail.field.keywords"/>:</td>
+      <td><html:text style="width: 200px" property="keywords" styleId="exportKeywords"/></td>
    </tr>
    <tr>
-      <td style="width: 105px"><fmt:message key="egemmail.field.author" />:</td>
+      <td style="width: 105px"><fmt:message key="egemmail.field.author"/>:</td>
       <td>
-      <html:select property="author">
+      <html:select property="author" styleId="exportAuthor">
 			<html:option value=""><fmt:message key="egemmail.all_users" /></html:option> 
                     
          <mm:listnodes type="user" orderby="username">
@@ -90,11 +95,11 @@
 </html:form>
 
 
-      <mm:present referid="results">
-      <html:form action="/editors/egemmail/EgemExportAction" styleId="exportForm">
-      <html:hidden property="title" />
-      <html:hidden property="keywords" />
-      <html:hidden property="author" />
+   <mm:present referid="results">
+   <html:form action="/editors/egemmail/EgemExportAction" styleId="exportForm">
+      <html:hidden property="title" styleId="exportTitle2"/>
+      <html:hidden property="keywords" styleId="exportKeywords2"/>
+      <html:hidden property="author" styleId="exportAuthor2"/>
       <html:hidden property="page" />
       <html:hidden property="forward" />
       <html:hidden property="limitToLastWeekModified" />
