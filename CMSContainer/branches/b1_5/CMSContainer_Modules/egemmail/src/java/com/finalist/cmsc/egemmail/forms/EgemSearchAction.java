@@ -32,24 +32,24 @@ public class EgemSearchAction extends MMBaseAction {
       NodeQuery query = nodeManager.createQuery();
 
       if (StringUtils.isNotEmpty(form.getTitle())) {
-         Field field = nodeManager.getField("title");
+         Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
          SearchUtil.addLikeConstraint(query, field, form.getTitle());
       }
 
       if (StringUtils.isNotEmpty(form.getAuthor())) {
-         SearchUtil.addEqualConstraint(query, nodeManager, "lastmodifier", form.getAuthor());
+         SearchUtil.addEqualConstraint(query, nodeManager, ContentElementUtil.LASTMODIFIER_FIELD, form.getAuthor());
       }
 
       if (StringUtils.isNotEmpty(form.getKeywords())) {
          List<String> keywords = KeywordUtil.getKeywords(form.getKeywords());
-         Field field = nodeManager.getField("keywords");
+         Field field = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
          for (String string : keywords) {
             SearchUtil.addLikeConstraint(query, field, string);
          }
       }
 
       if (form.isLimitToLastWeekModified()) {
-         Field field = nodeManager.getField("lastmodifieddate");
+         Field field = nodeManager.getField(ContentElementUtil.LASTMODIFIEDDATE_FIELD);
          long theDurationOfAWeek = 7 * 24 * 60 * 60 * 1000; // milliseconds
          long now = System.currentTimeMillis();
          long aWeekAgo = now - theDurationOfAWeek;
@@ -57,7 +57,7 @@ public class EgemSearchAction extends MMBaseAction {
          SearchUtil.addDatetimeConstraint(query, field, aWeekAgo, now);
       } 
       else if (form.isLimitToLastWeekCreated()) {
-            Field field = nodeManager.getField("creationdate");
+            Field field = nodeManager.getField(ContentElementUtil.CREATIONDATE_FIELD);
             long theDurationOfAWeek = 7 * 24 * 60 * 60 * 1000; // milliseconds
             long now = System.currentTimeMillis();
             long aWeekAgo = now - theDurationOfAWeek;
