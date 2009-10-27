@@ -175,12 +175,12 @@ public final class PagesUtil {
    public static Node createPage(Cloud cloud, String name, String pathname,
         String description, Node layout, String managerName) {
       Node page = TreeUtil.getNodeManager(cloud, managerName).createNode();
-      page.setStringValue(TITLE_FIELD, name);
-      if (StringUtils.isNotEmpty(pathname)) {
-         page.setStringValue(FRAGMENT_FIELD, pathname);
+      page.setStringValue(TITLE_FIELD, name.trim());
+      if (StringUtils.isNotBlank(pathname)) {
+         page.setStringValue(FRAGMENT_FIELD, pathname.trim());
       }
-      if (StringUtils.isNotEmpty(description)) {
-         page.setStringValue(DESCRIPTION_FIELD, description);
+      if (StringUtils.isNotBlank(description)) {
+         page.setStringValue(DESCRIPTION_FIELD, description.trim());
       }
       page.commit();
 
