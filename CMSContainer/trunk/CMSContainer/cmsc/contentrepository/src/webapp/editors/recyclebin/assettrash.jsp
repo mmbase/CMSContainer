@@ -82,10 +82,22 @@
                               <mm:sortorder field="assetelement.${sortBy}" direction="${direction}" />
             
                               <c:set var="listSize"><mm:size/></c:set>
-                              <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
+                              <mm:listnodes id="elements"/>
+                        </mm:relatednodescontainer>                   
+                     </mm:node>
+					 	   <%
+							if("otype".equals(request.getParameter("sortBy"))) {
+								 boolean reverse = false;
+								 if ("DOWN".equalsIgnoreCase(direction)) {
+									reverse = true;
+								 }
+								Collections.sort((List)pageContext.getAttribute("elements"), new NodeGUITypeComparator(cloud.getLocale(), reverse));
+							}
+							%>
+							 <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
                               <c:set var="extraparams" value="&sortBy=${sortBy}&direction=${olddirection}"/>
                               <c:set var="resultsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
-                              <mm:listnodes jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
+                              <mm:listnodes referid="elements"  jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
                                  <mm:first>
                                     <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
                                      <table>
@@ -141,9 +153,6 @@
            <edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
                               </mm:last>
                           </mm:listnodes>
-                        </mm:relatednodescontainer>                   
-                     </mm:node>
-
                      </div>
 
                   </c:when>
