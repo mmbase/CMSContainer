@@ -545,10 +545,10 @@ public final class TreeUtil {
 
    public static String convertToFragment(String name) {
 
-      //todo make a common solution for urlgragment  generation.
-      name = replaceChineseCharacter(name);
+      // Todo make a common solution for urlfragment generation.
+      name = replaceChineseCharacters(name);
 
-      String pathFragment = EncodingUtil.convertNonAscii(name);
+      String pathFragment = EncodingUtil.convertNonAscii(name.trim());
       pathFragment = pathFragment.replaceAll("\\s", "_");
       while (pathFragment.length() > 1 && pathFragment.substring(0, 1).matches("[_.-]")) {
          pathFragment = pathFragment.substring(1, pathFragment.length());
@@ -558,7 +558,7 @@ public final class TreeUtil {
       return pathFragment;
    }
 
-   private static String replaceChineseCharacter(String input) {
+   private static String replaceChineseCharacters(String input) {
       Pattern pa = Pattern.compile("[\u4E00-\u9FA0]", Pattern.CANON_EQ);
       Matcher m = pa.matcher(input);
       if (m.find()) {
