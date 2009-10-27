@@ -92,8 +92,6 @@ public abstract class TreeBuilder extends MMObjectBuilder {
       if (objectNode.getChanged().contains(nameFieldname)) {
          String nameValue = objectNode.getStringValue(nameFieldname);
          objectNode.setValue(nameFieldname, nameValue.trim());
-         String managerOfRootNode = getRootManagerName();
-         TreePathCache.updateCache(managerOfRootNode, objectNode.getNumber(), objectNode.getStringValue(nameFieldname));
       }
 
       updateEmptyNameField(objectNode);
