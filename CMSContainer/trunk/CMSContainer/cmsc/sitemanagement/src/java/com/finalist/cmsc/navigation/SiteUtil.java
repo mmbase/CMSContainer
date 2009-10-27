@@ -67,13 +67,13 @@ public final class SiteUtil {
 
    public static Node createSite(Cloud cloud, String name, String pathname, String description, Node layout) {
       Node site = cloud.getNodeManager(SITE).createNode();
-      site.setStringValue(TITLE_FIELD, name);
-      if (StringUtils.isNotEmpty(pathname)) {
-         site.setStringValue(STAGING_FRAGMENT, pathname);
-         site.setStringValue(LIVE_FRAGMENT, pathname);
+      site.setStringValue(TITLE_FIELD, name.trim());
+      if (StringUtils.isNotBlank(pathname)) {
+         site.setStringValue(STAGING_FRAGMENT, pathname.trim());
+         site.setStringValue(LIVE_FRAGMENT, pathname.trim());
       }
-      if (StringUtils.isNotEmpty(description)) {
-         site.setStringValue(DESCRIPTION_FIELD, description);
+      if (StringUtils.isNotBlank(description)) {
+         site.setStringValue(DESCRIPTION_FIELD, description.trim());
       }
       site.commit();
 
