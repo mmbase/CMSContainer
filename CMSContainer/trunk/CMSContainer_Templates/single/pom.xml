@@ -214,6 +214,11 @@
         <configuration>
           <overlays>
             <overlay>
+              <groupId>org.cmscontainer.core</groupId>
+              <artifactId>cmsc-richtext</artifactId>
+              <type>war</type>
+            </overlay>
+            <overlay>
               <groupId>org.xinha</groupId>
               <artifactId>xinha</artifactId>
               <type>zip</type>
