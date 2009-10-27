@@ -9,17 +9,34 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.repository;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import net.sf.mmapps.commons.bridge.CloneUtil;
 import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.*;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Field;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.Relation;
+import org.mmbase.bridge.RelationIterator;
+import org.mmbase.bridge.RelationList;
+import org.mmbase.bridge.RelationManager;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.FieldValueDateConstraint;
+import org.mmbase.storage.search.SearchQuery;
 import org.mmbase.storage.search.StepField;
 import org.mmbase.storage.search.implementation.BasicFieldValueConstraint;
 import org.mmbase.storage.search.implementation.BasicFieldValueDateConstraint;
@@ -28,7 +45,9 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.mmbase.TreeUtil;
-import com.finalist.cmsc.security.*;
+import com.finalist.cmsc.security.Role;
+import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.security.forms.RolesInfo;
 
 public final class RepositoryUtil {
@@ -604,8 +623,25 @@ public final class RepositoryUtil {
        return Queries.count(query);
     }
     public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-        NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, null, offset, maxNumber, year, month, day);
-        return query.getNodeManager().getList(query);
+       NodeQuery query;
+       NodeList elements;
+       //  Sorting on TYPE should on the name of the type
+       if(orderby != null && "otype".equals(orderby)){
+          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, null,
+                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, null);
+          elements = query.getNodeManager().getList(query);
+          boolean reverse = false;
+          if ("DOWN".equalsIgnoreCase(direction)) {
+             reverse = true;
+          }
+          Collections.sort(elements, new NodeGUITypeComparator(query.getCloud().getLocale(), reverse));
+          int toIndex = elements.size()<(offset+maxNumber)? elements.size(): (offset+maxNumber);
+          elements = elements.subNodeList(offset, toIndex);
+       }else {         
+        query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, null, offset, maxNumber, year, month, day);
+        elements = query.getNodeManager().getList(query);
+       }
+        return elements;
     }
 
 
