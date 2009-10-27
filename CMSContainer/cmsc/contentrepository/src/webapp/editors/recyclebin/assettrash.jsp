@@ -88,7 +88,7 @@
 								Collections.sort((List)pageContext.getAttribute("elements"), new NodeGUITypeComparator(cloud.getLocale(), reverse));
 							}
 							%>
-							 <c:set var="resultsPerPage" value="5"/>
+							 <c:set var="resultsPerPage" value="50"/>
                               <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
                               
                               <mm:listnodes  referid="elements" jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
