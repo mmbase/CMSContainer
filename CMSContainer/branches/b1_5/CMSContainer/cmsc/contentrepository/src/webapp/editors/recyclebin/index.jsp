@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
 %><%@page import="com.finalist.cmsc.repository.*" 
+%><%@page import="java.util.Collections,java.util.List" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -63,10 +64,23 @@
                               <mm:sortorder field="contentelement.${orderby}" direction="${direction}" />
             
                               <c:set var="listSize"><mm:size/></c:set>
+
+                              <mm:listnodes id="elements"/>
+ 
+                           </mm:relatednodescontainer>
+                        </mm:node>
+							<%
+							if("otype".equals(request.getParameter("orderby"))) {
+								 boolean reverse = false;
+								 if ("DOWN".equalsIgnoreCase(direction)) {
+									reverse = true;
+								 }
+								Collections.sort((List)pageContext.getAttribute("elements"), new NodeGUITypeComparator(cloud.getLocale(), reverse));
+							}
+							%>
                               <c:set var="resultsPerPage" value="50"/>
                               <c:set var="offset" value="${not empty param.offset ? param.offset : '0'}"/>
-                              
-                              <mm:listnodes jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
+                             <mm:listnodes referid="elements" jspvar="node" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
                                  <mm:first>
                                     <%@include file="../pages.jsp" %>
                                      <table>
@@ -113,9 +127,6 @@
                                     <%@include file="../pages.jsp" %>
                                  </mm:last>
                              </mm:listnodes>
-                           </mm:relatednodescontainer>
-                        </mm:node>
-
                      </div>
 
                   </c:when>
