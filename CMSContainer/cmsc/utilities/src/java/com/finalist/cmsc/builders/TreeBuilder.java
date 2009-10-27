@@ -77,32 +77,41 @@ public abstract class TreeBuilder extends MMObjectBuilder {
       log.debug(objectNode.getChanged());
       String fragmentFieldname = getFragmentFieldnameForBuilder();
       if (objectNode.getChanged().contains(fragmentFieldname)) {
-         
+
          log.debug("getChanged " + objectNode.getStringValue(fragmentFieldname));
          String pathFragment = objectNode.getStringValue(fragmentFieldname);
          if (!pathFragment.equals(pathFragment.trim())) {
             objectNode.setValue(fragmentFieldname, pathFragment.trim());
          }
          String managerOfRootNode = getRootManagerName();
-         TreePathCache.updateCache(managerOfRootNode,  objectNode.getNumber(), objectNode.getStringValue(fragmentFieldname));
+         TreePathCache.updateCache(managerOfRootNode, objectNode.getNumber(), objectNode.getStringValue(fragmentFieldname));
       }
-      
+
+      // Remove the trailing spaces from the title
+      String nameFieldname = getNameFieldname();
+      if (objectNode.getChanged().contains(nameFieldname)) {
+         String nameValue = objectNode.getStringValue(nameFieldname);
+         objectNode.setValue(nameFieldname, nameValue.trim());
+         String managerOfRootNode = getRootManagerName();
+         TreePathCache.updateCache(managerOfRootNode, objectNode.getNumber(), objectNode.getStringValue(nameFieldname));
+      }
+
       updateEmptyNameField(objectNode);
-      
+
       boolean retval = super.commit(objectNode);
       return retval;
    }
 
     private void updateEmptyNameField(MMObjectNode objectNode) {
         String nameFieldname = getNameFieldname();
-        if (StringUtils.isEmpty(objectNode.getStringValue(nameFieldname))) {
+        if (StringUtils.isBlank(objectNode.getStringValue(nameFieldname))) {
             String fragmentFieldname = getFragmentFieldnameForBuilder();
-            String pathFragment = objectNode.getStringValue(fragmentFieldname);
+            String pathFragment = objectNode.getStringValue(fragmentFieldname).trim();
             objectNode.setValue(nameFieldname, pathFragment);
         }
         else {
             String fragmentFieldname = getFragmentFieldnameForBuilder();
-            if (StringUtils.isEmpty(objectNode.getStringValue(fragmentFieldname))) {
+            if (StringUtils.isBlank(objectNode.getStringValue(fragmentFieldname))) {
                 String name = objectNode.getStringValue(nameFieldname);
                 String pathFragment = TreeUtil.convertToFragment(name);
                 objectNode.setValue(fragmentFieldname, pathFragment);
