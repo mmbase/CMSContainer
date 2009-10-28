@@ -18,12 +18,12 @@
 		ajaxTreeConfig.role = '${param.role}';
 
 		function selectItem(channel, path) {
-         opener.selectChannel(channel, path, '${param.fieldName}', '${param.fieldPathName}');
+			opener.selectChannel(channel, path, '${param.fieldName}', '${param.fieldPathName}');
 			close();
 		}
-      function loadFunction() {
+      function loadFunction(show) {
 		alphaImages();
-		ajaxTreeLoader.initTree('', 'tree_div');
+		ajaxTreeLoader.initTree('', 'tree_div', '', show);
       }
 	</script>
 
@@ -40,7 +40,7 @@
 		}
 	</style>
 </cmscedit:head>
-<body style="overflow: auto" onload="loadFunction();">
+<body style="overflow: auto" onload="loadFunction(${onlycollection});">
 	<cmscedit:sideblock title="selector.title">
         <c:if test="${param.message != null}"><h2>${param.message}</h2></c:if>
 		<mm:cloud jspvar="cloud" loginpage="../../login.jsp">

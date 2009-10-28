@@ -918,11 +918,23 @@
   </xsl:template>
 
   <xsl:template match="command[@name=&apos;channelselector&apos;]" mode="listnewbuttons">
-    <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
-        <xsl:call-template name="prompt_search"/>
-      </a>
-    </td>
+   <xsl:if test="not(../../list[@destination=&apos;collectionchannel&apos;]/item)">
+ 		<td class="listnew" >
+		  <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorContentChannel.do', 'channelselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+ 			<xsl:call-template name="prompt_search"/>
+ 		  </a>
+ 		</td>
+   </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="command[@name=&apos;collectionselector&apos;]" mode="listnewbuttons">
+    <xsl:if test="not(../../list[@destination=&apos;contentchannel&apos;]/item)">
+		<td class="listnew" >
+		  <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/repository/select/SelectorChannel.do?onlycollection=true', 'collectionselector', getPopupPositionProps(350,500)+',status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
+			<xsl:call-template name="prompt_search"/>
+		  </a>
+		</td>
+	</xsl:if>
   </xsl:template>
   
   <xsl:template match="command" mode="listnewbuttons">

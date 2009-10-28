@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
-<list role="related" destination="contentchannel" minoccurs="0" maxoccurs="1">
-   <title xml:lang="nl">Rubriek</title>
-   <title xml:lang="en">Content channel</title>
+<list role="related" destination="collectionchannel" minoccurs="0" maxoccurs="1">
+   <title xml:lang="nl">Collection channel</title>
+   <title xml:lang="en">Collection channel</title>
    <title xml:lang="zh">内容频道</title>
 
    <item>
@@ -18,9 +18,9 @@
       </field>
    </item>
 
-   <command name="channelselector" />
+   <command name="collectionselector" />
 
    <action type="create">
-      <relation destinationtype="contentchannel" role="related"></relation>
+      <relation destinationtype="collectionchannel" role="related"></relation>
    </action>
 </list>
