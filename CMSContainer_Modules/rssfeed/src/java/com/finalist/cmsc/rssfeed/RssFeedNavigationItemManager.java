@@ -9,7 +9,9 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.navigation.*;
+import com.finalist.cmsc.navigation.NavigationItemManager;
+import com.finalist.cmsc.navigation.NavigationItemRenderer;
+import com.finalist.cmsc.navigation.NavigationTreeItemRenderer;
 import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
 import com.finalist.cmsc.rssfeed.publish.RssFeedPublisher;
 import com.finalist.cmsc.rssfeed.tree.RssFeedTreeItemRenderer;
@@ -70,7 +72,12 @@ public class RssFeedNavigationItemManager implements NavigationItemManager {
 
       Node contentChannel = RssFeedUtil.getContentChannel(node);
       if (contentChannel != null) {
-         rssFeed.setContentChannel(contentChannel.getNumber());
+         rssFeed.setChannel(contentChannel.getNumber());
+      }
+      
+      Node collectionChannel = RssFeedUtil.getCollectionChannel(node);
+      if (collectionChannel != null) {
+      rssFeed.setChannel(collectionChannel.getNumber());
       }
 
       return rssFeed;

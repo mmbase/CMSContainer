@@ -22,5 +22,6 @@
 	<field name="email_webmaster" />
 	
 	<relation destination="contentchannel" role="related" />
+	<relation destination="collectionchannel" role="related" />
 	<relation destination="typedef" role="allowrel" />
 </action>

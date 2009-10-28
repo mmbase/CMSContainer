@@ -1,6 +1,8 @@
 package com.finalist.cmsc.rssfeed.beans.om;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.finalist.cmsc.beans.om.NavigationItem;
 
@@ -16,7 +18,7 @@ public class RssFeed extends NavigationItem {
     private String email_webmaster;
 
     private List<String> contenttypes = new ArrayList<String>();
-    private int contentChannel = -1;
+    private int channel = -1;
     
     public int getMaximum() {
         return maximum;
@@ -74,20 +76,20 @@ public class RssFeed extends NavigationItem {
         this.email_webmaster = email_webmaster;
     }
     
-    public List<String> getContenttypes() {
-        return Collections.unmodifiableList(contenttypes);
-     }
+   public List<String> getContenttypes() {
+      return Collections.unmodifiableList(contenttypes);
+   }
 
-     public void addContenttype(String contenttypes) {
-        this.contenttypes.add(contenttypes);
-     }
+   public void addContenttype(String contenttypes) {
+      this.contenttypes.add(contenttypes);
+   }
 
-    public int getContentChannel() {
-        return contentChannel;
-    }
-    
-    public void setContentChannel(int contentChannel) {
-        this.contentChannel = contentChannel;
-    }
+   public int getChannel() {
+      return channel;
+   }
+
+   public void setChannel(int channel) {
+      this.channel = channel;
+   }
 
 }
