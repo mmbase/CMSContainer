@@ -51,6 +51,7 @@ public final class ContentElementUtil {
 
    public static final String NUMBER_FIELD = "number";
    public static final String TITLE_FIELD = "title";
+   public static final String DESCRIPTION_FIELD = "description";
    public static final String CREATIONDATE_FIELD = "creationdate";
    public static final String PUBLISHDATE_FIELD = "publishdate";
    public static final String EXPIREDATE_FIELD = "expiredate";

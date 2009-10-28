@@ -172,8 +172,31 @@ public class RichTextBuilder extends MMObjectBuilder {
          Field field = checkFields.next();
          if (field != null) {
             String fieldName = field.getName();
-            if (htmlFields.contains(fieldName) && node.getChanged().contains(fieldName)) {
-               htmlFieldChanged = true;
+            if (node.getChanged().contains(fieldName)) {
+               if (htmlFields.contains(fieldName)) {
+                  htmlFieldChanged = true;
+               }
+
+               if (fieldName.equals("title")) {
+                  String value = node.getStringValue("title");
+                  if (value.length() != value.trim().length()) {
+                     node.setValue("title", value.trim());
+                  }
+               }
+               
+               if (fieldName.equals("subtitle")) {
+                  String value = node.getStringValue("subtitle");
+                  if (value.length() != value.trim().length()) {
+                     node.setValue("subtitle", value.trim());
+                  }
+               }
+               
+               if (fieldName.equals("description")) {
+                  String value = node.getStringValue("description");
+                  if (value.length() != value.trim().length()) {
+                     node.setValue("description", value.trim());
+                  }
+               }
             }
          }
       }
