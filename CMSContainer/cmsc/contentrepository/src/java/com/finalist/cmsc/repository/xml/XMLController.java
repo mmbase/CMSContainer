@@ -230,18 +230,19 @@ public class XMLController {
 
          processedNodes.put(Integer.valueOf(node.getNumber()), node);
 
-         if (addRelations && !nodesSeenButNotProcessed.contains(Integer.valueOf(node.getNumber()))) {
-            RelationManagerList rml = manager.getAllowedRelations((NodeManager) null, null, "DESTINATION");
-            RelationManagerIterator rmi = rml.relationManagerIterator();
-            while (rmi.hasNext()) {
-               RelationManager rm = rmi.nextRelationManager();
-
-               if (isRelationAllowed(rm)) {
-                  toXmlRelations(node, document, nodeElement, rm, addRelations, fieldsAsAttribute, processedNodes,
-                        nodesSeenButNotProcessed);
-               }
-            }
-         }
+// Ignore relations in an article. CMSC-1574
+//         if (addRelations && !nodesSeenButNotProcessed.contains(Integer.valueOf(node.getNumber()))) {
+//            RelationManagerList rml = manager.getAllowedRelations((NodeManager) null, null, "DESTINATION");
+//            RelationManagerIterator rmi = rml.relationManagerIterator();
+//            while (rmi.hasNext()) {
+//               RelationManager rm = rmi.nextRelationManager();
+//
+//               if (isRelationAllowed(rm)) {
+//                  toXmlRelations(node, document, nodeElement, rm, addRelations, fieldsAsAttribute, processedNodes,
+//                        nodesSeenButNotProcessed);
+//               }
+//            }
+//         }
          processedNodes.remove(Integer.valueOf(node.getNumber()));
 
          if (root == null) {
