@@ -207,3 +207,15 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+
+Name: Speed up the publication process when using archive
+Goal: add index on original_node column
+Type:  manual action
+--- Start script ---
+CREATE INDEX original_node_idx ON mm_archive (original_node);
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
