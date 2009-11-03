@@ -145,13 +145,13 @@ See http://www.MMBase.org/license
 			<artifactId>cloudprovider</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+    
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
+			<artifactId>ehcache-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+	
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>

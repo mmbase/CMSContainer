@@ -57,7 +57,9 @@ public class BlockingCacheManager {
        // Create the cache
        synchronized (this) {
            if (manager == null) {
-               blockingCache = new BlockingCache(new CacheManager().getCache(name));
+               //blockingCache = new BlockingCache(new CacheManager().getCache(name));
+              //Create single CacheManager instance
+              blockingCache = new BlockingCache(CacheManager.create().getCache(name));
            } else {
                blockingCache = new BlockingCache(manager.getCache(name));
            }
