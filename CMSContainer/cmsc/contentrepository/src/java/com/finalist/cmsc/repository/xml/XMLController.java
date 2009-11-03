@@ -390,7 +390,7 @@ public class XMLController {
             if (fieldsAsAttribute) {
                nodeElement.setAttribute(fieldName, val);
             }
-            else {
+            else if (Field.TYPE_BINARY != type) {
                Element element = document.createElement(fieldName);
                element.appendChild(document.createTextNode(val));
                nodeElement.appendChild(element);
