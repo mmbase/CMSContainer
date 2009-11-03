@@ -219,7 +219,7 @@ public class PagePublisher extends Publisher {
                                }
                                else {
                                    boolean isNavigationType = NavigationUtil.getTreeManagers().containsKey(childNode.getNodeManager().getName());
-                                   if (!isNavigationType) {
+                                   if (!isNavigationType && !Workflow.isWorkflowElement(childNode)) {
                                       findPageNodes(childNode, nodes, publishDate);
                                    }
                                }
