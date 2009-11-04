@@ -139,16 +139,6 @@
 			<attribute name="javadoc_location" value="http://struts.apache.org/1.x/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-1.1.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://ehcache.sourceforge.net/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-constructs-0.6.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://ehcache.sourceforge.net/ehcache-constructs/documentation/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="var" path="MAVEN_REPO/poi/jars/poi-scratchpad-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/poi/jars/poi-2.5.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar">
@@ -171,5 +161,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/jcvsii/jars/jcvsii-5.3.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/sshtools/jars/j2ssh-core-0.2.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-core-1.7.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

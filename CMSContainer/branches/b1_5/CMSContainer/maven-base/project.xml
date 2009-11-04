@@ -461,17 +461,8 @@
 <!-- EHcache used for cmsc sitemanagement -->		
    		<dependency>
 			<groupId>ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<version>1.1</version>
-			<type>jar</type>
-			<properties>
-				<war.bundle>${war.bundle}</war.bundle>
-			</properties>
-		</dependency>
-   		<dependency>
-			<groupId>ehcache</groupId>
-			<artifactId>ehcache-constructs</artifactId>
-			<version>0.6</version>
+			<artifactId>ehcache-core</artifactId>
+			<version>1.7.0</version>
 			<type>jar</type>
 			<properties>
 				<war.bundle>${war.bundle}</war.bundle>
