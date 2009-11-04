@@ -129,4 +129,11 @@
         overflowToDisk="false"
         diskPersistent="false"
         />
+
+    <cache name="PortletCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
 </ehcache>
