@@ -1,8 +1,15 @@
 package com.finalist.cmsc.services.versioning;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.repository.xml.XMLController;
-import com.finalist.cmsc.security.SecurityUtil;
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang.math.NumberUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
@@ -17,14 +24,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
+import com.finalist.cmsc.mmbase.PropertiesUtil;
+import com.finalist.cmsc.repository.xml.XMLController;
+import com.finalist.cmsc.security.SecurityUtil;
 
 /**
  * Implementation of the VersioningService.
@@ -60,9 +62,7 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       Cloud cloud = node.getCloud();
       NodeManager nodeManager = cloud.getNodeManager(ARCHIVE);
       try {
-         String data = xmlController.toXml(node, false);
-         byte[] bytes = data.getBytes("UTF-8");
-
+         boolean needNewVersion = false;
          NodeManager manager = cloud.getNodeManager(ARCHIVE);
          NodeQuery query = manager.createQuery();
          SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
@@ -72,32 +72,43 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
          String formerArchiveXml = null;
          if (archiveNodeList.size() > 0) {
             Node formerYoungestArchive = archiveNodeList.getNode(archiveNodeList.size() - 1);
-            formerArchiveXml = new String(formerYoungestArchive.getByteValue(NODE_DATA), "UTF-8");
+            long interval = (new Date().getTime() - formerYoungestArchive.getDateValue("date").getTime()) / (60 * 1000);
+            // Only archive a node when it is more than 5 minutes since last archiving.
+            if (interval >= 5) {
+               needNewVersion = true;
+               formerArchiveXml = new String(formerYoungestArchive.getByteValue(NODE_DATA), "UTF-8");
+            } else {
+               log.debug("Not archived, because it is less than 5 minutes from last archiving.");
+            }
+         } else {
+            needNewVersion = true;
          }
-         if (!data.equals(formerArchiveXml)) {
-            Node archive = nodeManager.createNode();
-            archive.setByteValue(NODE_DATA, bytes);
-            archive.setIntValue(ORIGINAL_NODE, node.getNumber());
-            archive.setDateValue(DATE, new Date());
-            archive.setIntValue("author_number", SecurityUtil.getUserNode(cloud).getNumber());
-            archive.commit();
+         if (needNewVersion) {
+            String data = xmlController.toXml(node, false);
+            byte[] bytes = data.getBytes("UTF-8");
 
-            String property = PropertiesUtil.getProperty("max.archivenodes");
-            int maxArchiveNodes = NumberUtils.toInt(property, DEFAULT_MAX_ARCHIVES_NODES);
-            int count = 0;
-            // loop cause we do want to remove all obsolete archivenodes in case
-            // that the maximum is lowered.
-            while (archiveNodeList.size() + 1 - count > maxArchiveNodes) {
-               Node archiveNode = archiveNodeList.getNode(count++);
-               archiveNode.delete();
+            if (!data.equals(formerArchiveXml)) {
+               Node archive = nodeManager.createNode();
+               archive.setByteValue(NODE_DATA, bytes);
+               archive.setIntValue(ORIGINAL_NODE, node.getNumber());
+               archive.setDateValue(DATE, new Date());
+               archive.setIntValue("author_number", SecurityUtil.getUserNode(cloud).getNumber());
+               archive.commit();
+
+               String property = PropertiesUtil.getProperty("max.archivenodes");
+               int maxArchiveNodes = NumberUtils.toInt(property, DEFAULT_MAX_ARCHIVES_NODES);
+               int count = 0;
+               // loop cause we do want to remove all obsolete archivenodes in case
+               // that the maximum is lowered.
+               while (archiveNodeList.size() + 1 - count > maxArchiveNodes) {
+                  Node archiveNode = archiveNodeList.getNode(count++);
+                  archiveNode.delete();
+               }
+            } else {
+               log.debug("Not archived, because data is equals to latest archivenode.");
             }
          }
-         else {
-            log.debug("Not archived, because data is equals to latest archivenode.");
-         }
-
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
          log.error("Exception while adding a version for node " + node.getNumber(), e);
          throw new VersioningException("", e);
       }
