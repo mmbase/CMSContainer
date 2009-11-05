@@ -341,6 +341,9 @@ public class WizardController {
             // then "save and close"
             if (!RepositoryUtil.hasCreationChannel(editNode)) {
                if (StringUtils.isNotBlank(channelnr)) {
+                  if (PagesUtil.isPageType(editNode.getCloud().getNode(channelnr))) {
+                     channelnr = RepositoryUtil.getRoot(editNode.getCloud());
+                  }
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                   AssetElementUtil.addOwner(editNode);
                   if (isMainWizard(ewconfig, wizardConfig)) {
@@ -362,6 +365,9 @@ public class WizardController {
                log.debug("Creation " + channelnr);
 
                if (StringUtils.isNotEmpty(channelnr)) {
+                  if (PagesUtil.isPageType(editNode.getCloud().getNode(channelnr))) {
+                     channelnr = RepositoryUtil.getRoot(editNode.getCloud());
+                  }
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                }
             }
