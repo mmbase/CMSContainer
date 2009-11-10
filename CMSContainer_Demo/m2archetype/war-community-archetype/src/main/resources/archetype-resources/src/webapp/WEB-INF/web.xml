@@ -30,7 +30,7 @@
 	<!-- 
 		Whether the mm:url tag (and other URL producing tags) should produce relative URL's (relative to
 		the page on which the mm:url is called).  You might try to set this to 'true' if you desire only
-		relative urls in your site. This is an experimental option, which is known not to work in
+		relative urls in your site. This is an expirimental option, which is known not to work in
 		certain situations (like redirects).
 	-->
 	<context-param>
@@ -116,7 +116,7 @@
       <description>Filter catch all requests.</description>
       <display-name>CloudThread Filter</display-name>
       <filter-name>CloudThreadFilter</filter-name>
-      <filter-class>org.mmbase.servlet.CloudThreadFilter</filter-class>
+      <filter-class>net.sf.mmapps.commons.web.CloudThreadFilter</filter-class>
    </filter>
 
    <filter>

@@ -1,10 +1,6 @@
 <%@ page import="static com.finalist.cmsc.workflow.forms.Utils.*" %>
 <%@ page import="static com.finalist.cmsc.repository.RepositoryUtil.getPathToRootString" %>
-<%@ page import="static com.finalist.cmsc.mmbase.PropertiesUtil.getProperty" %>
 <%@ include file="globals.jsp" %>
-<c:if test="${empty elementsPerPage}">
-   <c:set var="elementsPerPage"><%=getProperty("repository.search.results.per.page")%></c:set>
-</c:if>
 <table>
 <thead>
    <tr>
@@ -46,9 +42,8 @@
    </tr>
 </thead>
 
-
 <tbody class="hover">
-<mm:list referid="results" max="${elementsPerPage}" offset="${offset*elementsPerPage}">
+<mm:list referid="results" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
 
    <c:if test="${workflowType == 'allcontent' }">
       <mm:field name="workflowitem.type" id="itemType" write="false"/>
@@ -89,24 +84,6 @@
       <input type="checkbox" name="check_${workflowNumber}" value="on"/>
    </td>
    <td align="left">
-      <mm:field name="${type}.number" jspvar="number" write="false"/>
-	  <mm:node number="${number}"> 
-	    <mm:hasfield name="publishdate">
-		 <mm:field name="publishdate" write="false" jspvar="publishdate" />
-		</mm:hasfield>
-	  </mm:node>
-	<c:set var="interval"><%=publishInterval(pageContext, "publishdate")%></c:set> 
-
-	<c:if test="${not empty publishdate}">
-		<c:set var="date"><fmt:formatDate value="${publishdate}" pattern="dd-MM-yyyy hh:mm"/></c:set> 
-		<c:set var="clock_title">
-			<fmt:message key="workflow.item.schedule">
-			   <fmt:param value="${date}"/>
-			</fmt:message>
-		</c:set>
-
-	</c:if>
-
       <mm:node number="${workflowNumber}">
          <mm:field name="stacktrace" id="stacktrace" write="false"/>
       </mm:node>
@@ -118,14 +95,11 @@
                   <img src="../gfx/icons/error.png" align="left"/>
                </div>
             </c:if>
-			<c:if test="${status == 'published' && interval >= 1800000}">
-				<img src="../gfx/icons/clock.png" align="left" title="${clock_title}" alt="${clock_title}"/>
-			</c:if>
          </mm:hasrank>
       </mm:haspage>
    </td>
    <td align="left" style="white-space: nowrap;">
-	  
+      <mm:field name="${type}.number" jspvar="number" write="false"/>
       <mm:url page="../WizardInitAction.do" id="url" write="false">
          <mm:param name="objectnumber" value="${number}"/>
          <mm:param name="returnurl" value="workflow/${returnAction}?status=${param.status}"/>
@@ -149,25 +123,12 @@
                     title="<fmt:message key="workflow.icon.versioning.title" />"
                     alt="<fmt:message key="workflow.icon.versioning.title"/>"/></a>
          </mm:haspage>
-         <c:if test="${status != 'published'}">
-           <mm:url page="WorkflowItemDelete.do" id="deleteAction" write="false">
-             <mm:param name="number" value="${number}"/>
-             <mm:param name="returnurl" value="/editors/workflow/${returnAction}?status=${param.status}&workflowNodetype=${param.workflowNodetype}"/>
-           </mm:url>
-           <a href="${deleteAction}" ">
-             <img src="../gfx/icons/delete.png" title="<fmt:message key="workflow.item.delete" />"
-              alt="<fmt:message key="workflow.item.delete"/>"/></a>
-        </c:if>
       </c:if>
    </td>
    <td style="white-space: nowrap;">
-       <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
+      <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
    </td>
    <td style="white-space: nowrap;">
-   		<c:if test="${status == 'published'  && interval >= 60000}">
-		<fmt:formatNumber type="number" maxFractionDigits="0"
-            value="${interval/60000}" />
-		</c:if>
       <mm:field jspvar="value" write="false" name="${type}.${field}"/>
       <c:if test="${fn:length(value) > 50}">
          <c:set var="value">${fn:substring(value,0,49)}...</c:set>

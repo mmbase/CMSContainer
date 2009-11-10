@@ -13,6 +13,7 @@
 
     function sayWait() {
         document.getElementById("busy").style.visibility="visible";
+        document.getElementById("notbusy").style.visibility="hidden";
     }
 
 
@@ -34,24 +35,24 @@
 <body>
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
       <div class="tabs">	 
-	  <a href="ImageInitAction.do">
          <div class="tab">
             <div class="body">
-               <div class="title">			    
+               <div>
+			    <a href="ImageInitAction.do">
                   <fmt:message key="images.title" />
+				</a>
                </div>
             </div>
           </div>
-		 </a>
+
          <div class="tab_active">
             <div class="body">
-               <div class="title">
-                  <fmt:message key="images.upload.title" />
+               <div><a>
+                  <fmt:message key="images.upload.title" /></a>
                </div>
             </div>
          </div>
       </div>
-
       <div class="editor" style="height:580px">
           <div class="body">
               <html:form action="/editors/repository/ImageUploadAction.do" enctype="multipart/form-data" method="post">

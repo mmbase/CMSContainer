@@ -71,7 +71,7 @@
     <field name="googleanalyticsid">
         <prompt xml:lang="en">Google Analytics ID</prompt>
         <prompt xml:lang="nl">Google Analytics ID</prompt>
-        <prompt xml:lang="zh">Google Analytics ID</prompt>
+        <prompt xml:lang="zh"></prompt>
     </field>   
 
 	<list include="config/layout/search_page_layoutrel_layout.xml" />

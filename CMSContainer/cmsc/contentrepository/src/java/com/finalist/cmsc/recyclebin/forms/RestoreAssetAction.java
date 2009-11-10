@@ -33,7 +33,6 @@ public class RestoreAssetAction extends MMBaseFormlessAction {
       String objectnumber = getParameter(request, "objectnumber");
       Node objectNode = cloud.getNode(objectnumber);
       String returnurl = getParameter(request, "returnurl");
-      
       NodeList channels = RepositoryUtil.getDeletionChannels(objectNode);
       if (channels.size() > 0) {
          if (channels.size() == 1) {

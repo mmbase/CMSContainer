@@ -9,22 +9,12 @@
  */
 package com.finalist.pluto.portalImpl.aggregation;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.io.*;
+import java.util.*;
 
-import javax.portlet.PortletException;
-import javax.portlet.PortletMode;
+import javax.portlet.*;
 import javax.portlet.UnavailableException;
-import javax.portlet.WindowState;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,24 +28,14 @@ import org.apache.pluto.om.portlet.PortletApplicationDefinition;
 import org.apache.pluto.om.portlet.PortletDefinition;
 import org.apache.pluto.om.servlet.ServletDefinition;
 import org.apache.pluto.om.servlet.ServletDefinitionCtrl;
-import org.apache.pluto.om.window.PortletWindow;
-import org.apache.pluto.om.window.PortletWindowCtrl;
-import org.apache.pluto.om.window.PortletWindowList;
-import org.apache.pluto.om.window.PortletWindowListCtrl;
+import org.apache.pluto.om.window.*;
 
-import com.finalist.cmsc.beans.om.NodeParameter;
-import com.finalist.cmsc.beans.om.PortletParameter;
-import com.finalist.cmsc.beans.om.View;
+import com.finalist.cmsc.beans.om.*;
 import com.finalist.cmsc.portalImpl.PortalConstants;
 import com.finalist.cmsc.portalImpl.headerresource.HeaderResource;
 import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.ServerUtil;
-import com.finalist.pluto.portalImpl.aggregation.portletcache.CacheSettings;
-import com.finalist.pluto.portalImpl.aggregation.portletcache.PortletCache;
-import com.finalist.pluto.portalImpl.core.PortalControlParameter;
-import com.finalist.pluto.portalImpl.core.PortalEnvironment;
-import com.finalist.pluto.portalImpl.core.PortalURL;
-import com.finalist.pluto.portalImpl.core.PortletContainerFactory;
+import com.finalist.pluto.portalImpl.core.*;
 import com.finalist.pluto.portalImpl.om.common.impl.PreferenceSetImpl;
 import com.finalist.pluto.portalImpl.om.entity.impl.PortletEntityImpl;
 import com.finalist.pluto.portalImpl.om.servlet.impl.WebApplicationDefinitionImpl;
@@ -88,19 +68,17 @@ public class PortletFragment extends AbstractFragment {
 
    private List<HeaderResource> headerResources;
 
-   private Fragment parent;
 
    public PortletFragment(ServletConfig config, Fragment parent, String layoutId,
          com.finalist.cmsc.beans.om.Portlet portlet, com.finalist.cmsc.beans.om.PortletDefinition definition, View view)
          throws Exception {
       super(layoutId, config, parent);
-      this.parent = parent;
 
       if (portlet == null) {
          throw new IllegalArgumentException("Portlet is null for layoutid " + layoutId);
       }
       if (definition == null) {
-         throw new IllegalArgumentException("Definition is null for layoutid " + layoutId);
+         throw new IllegalArgumentException("Portlet is null for layoutid " + layoutId);
       }
 
       this.portlet = portlet;
@@ -112,7 +90,7 @@ public class PortletFragment extends AbstractFragment {
       if (portletDefinition == null) {
          throw new IllegalArgumentException("Missing definition " + definition.getDefinition() + " in portlet.xml");
       }
-
+      
       // for now set CMSC portlet params in the preferences of the portlet
       // entiy
       log.debug("Create - portlet: " + portlet.getId());
@@ -151,10 +129,8 @@ public class PortletFragment extends AbstractFragment {
          ps.add(PortalConstants.CMSC_OM_VIEW_ID, view.getId());
          ps.add(PortalConstants.CMSC_PORTLET_VIEW_TEMPLATE, view.getResource());
       }
-
       
-      
-      String expirationFromDefinition = portletDefinition.getExpirationCache();
+      String expiractionFromDefinition = portletDefinition.getExpirationCache();
       /* Portlet spec 1.0 PLT.18.1 Expiration Cache
        * For a portlet that has not defined expiration cache in the deployment descriptor,
        * if the expiration cache property is set it must be ignored by the portlet-container.
@@ -162,21 +138,23 @@ public class PortletFragment extends AbstractFragment {
        * Here we are doing something similar for the expiration settings or our Definitions, views and Portlets
        * which are configured through the database
        */
-      
-      if (StringUtils.isNotBlank(expirationFromDefinition)) {
+      if (StringUtils.isNotBlank(expiractionFromDefinition)) {
          try {
-            expirationCache = Integer.valueOf(expirationFromDefinition);
+            expirationCache = Integer.valueOf(expiractionFromDefinition);
          }
          catch(NumberFormatException nfe) {
             log.error("Cache expiration in xml is not a number for " + portletDefinition.getName());
          }
-      }
 
-      if (definition.getExpirationcache() > -1) {
-         expirationCache = definition.getExpirationcache();
-      }
-      if (view != null && view.getExpirationcache() > -1) {
-         expirationCache = Math.min(expirationCache, view.getExpirationcache());
+         if (definition.getExpirationcache() > -1) {
+            expirationCache = definition.getExpirationcache();
+         }
+         if (view != null && view.getExpirationcache() > -1) {
+            expirationCache = Math.min(expirationCache, view.getExpirationcache());
+         }
+         if (portlet.getExpirationcache() > -1) {
+            expirationCache = portlet.getExpirationcache();
+         }
       }
 
       portletWindow = new PortletWindowImpl(getKey());
@@ -215,144 +193,109 @@ public class PortletFragment extends AbstractFragment {
    public void service(HttpServletRequest request, HttpServletResponse response) {
       log.debug("PortletFragment service enters");
       storedWriter = new StringWriter();
+      setupRequest(request);
 
       HttpServletRequest wrappedRequest = ServletObjectAccess.getServletRequest(request, portletWindow);
-
-      CacheSettings settings = PortletCache.getCacheSettings(this, wrappedRequest);
-      
+      // load the Portlet
+      // If there is an error loading, then we will save the error message and
+      // attempt
+      // to render it inside the Portlet, so the Portal has a chance of still
+      // looking
+      // okay
+      String errorMsg = null;
       try {
-    	  if(settings != null) {
-	    	  settings.setCachedVersion(PortletCache.getCachedVersion(settings));
-	      }
-	      
-	      // if we have a cached version, write this one, otherwise render
-	      // cached version is also null when the portlet is not cacheable 
-		  if(settings != null && settings.getCachedVersion() != null) {
-			  if(settings != null) {
-				  ReentrantReadWriteLock lock = settings.getCacheLock();
-				  lock.writeLock().unlock();
-			  }
-			  storedWriter.write(settings.getCachedVersion());
-		  }
-		  else {
-		      setupRequest(request);
-		
-		      // load the Portlet
-		      // If there is an error loading, then we will save the error message and
-		      // attempt to render it inside the Portlet, so the Portal has a chance of 
-		      // still looking okay
-		      String errorMsg = null;
-		      try {
-		          log.debug("|| portletLoad:'" + portletWindow.getId() + "'");
-		
-		         PortletContainerFactory.getPortletContainer().portletLoad(portletWindow, wrappedRequest, response);
-		
-		         PortletDefinition def = portletWindow.getPortletEntity().getPortletDefinition();
-		         if (def == null) {
-		            throw new PortletException("PortletDefinition not found for window " + portletWindow.getId());
-		         }
-		
-		         // store the context path in the webapp.
-		         PortletApplicationDefinition app = def.getPortletApplicationDefinition();
-		         WebApplicationDefinitionImpl wa = (WebApplicationDefinitionImpl) app.getWebApplicationDefinition();
-		         wa.setContextRoot(request.getContextPath());
-		      }
-		      catch (PortletContainerException e) {
-		         log.error("PortletContainerException-Error in Portlet", e);
-		         errorMsg = getErrorMsg(e);
-		      }
-		      catch (Throwable t) {
-		         // If we catch any throwable, we want to try to continue
-		         // so that the rest of the portal renders correctly
-		         log.error("Error in Portlet", t);
-		         if (t instanceof VirtualMachineError) {
-		            // if the Throwable is a VirtualMachineError then
-		            // it is very unlikely (!) that the portal is going
-		            // to render correctly.
-		            throw (Error) t;
-		         }
-		         else {
-		            errorMsg = getErrorMsg(t);
-		         }
-		      }
-		
-		      if (errorMsg != null) {
-		         storedWriter.write(errorMsg);
-		         return;
-		      }
-		
-		      PortalEnvironment env = (PortalEnvironment) request.getAttribute(PortalEnvironment.REQUEST_PORTALENV);
-		      PortalURL thisURL = env.getRequestedPortalURL();
-		
-		      log.debug("|| thisURL='" + thisURL + "'");
-		
-		      PortalControlParameter thisControl = new PortalControlParameter(thisURL);
-		      if (thisControl.isOnePortletWindowMaximized()) {
-		         WindowState currentState = thisControl.getState(portletWindow);
-		         if (!WindowState.MAXIMIZED.equals(currentState)) {
-		            return;
-		         }
-		      }
-		      ServletDefinition servletDefinition = getServletDefinition();
-		
-		      if (servletDefinition != null && !servletDefinition.isUnavailable()) {
-		         PrintWriter writer2 = new PrintWriter(storedWriter);
-		
-		         // create a wrapped response which the Portlet will be rendered to
-		         ServletResponseImpl wrappedResponse = (ServletResponseImpl) ServletObjectAccess.getStoredServletResponse(
-		               response, writer2);
-		
-		         try {
-		            // render the Portlet to the wrapped response, to be output
-		            // later.
-		            PortletContainerFactory.getPortletContainer().renderPortlet(portletWindow, wrappedRequest, wrappedResponse);
-		         }
-		         catch (UnavailableException e) {
-		            writer2.println("the portlet is currently unavailable!");
-		
-		            ServletDefinitionCtrl servletDefinitionCtrl = (ServletDefinitionCtrl) ControllerObjectAccess
-		                  .get(servletDefinition);
-		            if (e.isPermanent()) {
-		               servletDefinitionCtrl.setAvailable(Long.MAX_VALUE);
-		            }
-		            else {
-		               int unavailableSeconds = e.getUnavailableSeconds();
-		               if (unavailableSeconds <= 0) {
-		                  unavailableSeconds = 60; // arbitrary default
-		               }
-		               servletDefinitionCtrl.setAvailable(System.currentTimeMillis() + unavailableSeconds * 1000);
-		            }
-		         }
-		         catch (Exception e) {
-		            writer2.println(getErrorMsg(e));
-		         }
-		
-		      }
-		      else {
-		         log.error("Error no servletDefinition!!!");
-		      }
+          log.debug("|| portletLoad:'" + portletWindow.getId() + "'");
 
-		      if(settings != null) {
-		    	  PortletCache.cacheRenderedPortlet(settings, storedWriter.getBuffer().toString()); 
-		      }
-		  }
+         PortletContainerFactory.getPortletContainer().portletLoad(portletWindow, wrappedRequest, response);
+
+         PortletDefinition def = portletWindow.getPortletEntity().getPortletDefinition();
+         if (def == null) {
+            throw new PortletException("PortletDefinition not found for window " + portletWindow.getId());
+         }
+
+         // store the context path in the webapp.
+         PortletApplicationDefinition app = def.getPortletApplicationDefinition();
+         WebApplicationDefinitionImpl wa = (WebApplicationDefinitionImpl) app.getWebApplicationDefinition();
+         wa.setContextRoot(request.getContextPath());
       }
-      finally {
-		  if(settings != null) {
-			  ReentrantReadWriteLock lock = settings.getCacheLock();
-			  if(lock.isWriteLockedByCurrentThread()) {
-				  lock.writeLock().unlock();
-			  }
-			  lock.readLock().unlock();
-		  }
+      catch (PortletContainerException e) {
+         log.error("PortletContainerException-Error in Portlet", e);
+         errorMsg = getErrorMsg(e);
+      }
+      catch (Throwable t) {
+         // If we catch any throwable, we want to try to continue
+         // so that the rest of the portal renders correctly
+         log.error("Error in Portlet", t);
+         if (t instanceof VirtualMachineError) {
+            // if the Throwable is a VirtualMachineError then
+            // it is very unlikely (!) that the portal is going
+            // to render correctly.
+            throw (Error) t;
+         }
+         else {
+            errorMsg = getErrorMsg(t);
+         }
       }
 
+      if (errorMsg != null) {
+         storedWriter.write(errorMsg);
+         return;
+      }
 
-      
+      PortalEnvironment env = (PortalEnvironment) request.getAttribute(PortalEnvironment.REQUEST_PORTALENV);
+      PortalURL thisURL = env.getRequestedPortalURL();
+
+      log.debug("|| thisURL='" + thisURL + "'");
+
+      PortalControlParameter thisControl = new PortalControlParameter(thisURL);
+      if (thisControl.isOnePortletWindowMaximized()) {
+         WindowState currentState = thisControl.getState(portletWindow);
+         if (!WindowState.MAXIMIZED.equals(currentState)) {
+            return;
+         }
+      }
+
+      ServletDefinition servletDefinition = getServletDefinition();
+
+      if (servletDefinition != null && !servletDefinition.isUnavailable()) {
+         PrintWriter writer2 = new PrintWriter(storedWriter);
+
+         // create a wrapped response which the Portlet will be rendered to
+         ServletResponseImpl wrappedResponse = (ServletResponseImpl) ServletObjectAccess.getStoredServletResponse(
+               response, writer2);
+
+         try {
+            // render the Portlet to the wrapped response, to be output
+            // later.
+            PortletContainerFactory.getPortletContainer().renderPortlet(portletWindow, wrappedRequest, wrappedResponse);
+         }
+         catch (UnavailableException e) {
+            writer2.println("the portlet is currently unavailable!");
+
+            ServletDefinitionCtrl servletDefinitionCtrl = (ServletDefinitionCtrl) ControllerObjectAccess
+                  .get(servletDefinition);
+            if (e.isPermanent()) {
+               servletDefinitionCtrl.setAvailable(Long.MAX_VALUE);
+            }
+            else {
+               int unavailableSeconds = e.getUnavailableSeconds();
+               if (unavailableSeconds <= 0) {
+                  unavailableSeconds = 60; // arbitrary default
+               }
+               servletDefinitionCtrl.setAvailable(System.currentTimeMillis() + unavailableSeconds * 1000);
+            }
+         }
+         catch (Exception e) {
+            writer2.println(getErrorMsg(e));
+         }
+
+      }
+      else {
+         log.error("Error no servletDefinition!!!");
+      }
       cleanRequest(request);
       log.debug("PortletFragment service exits");
    }
-
 
 
    private void setupRequest(HttpServletRequest request) {
@@ -478,8 +421,4 @@ public class PortletFragment extends AbstractFragment {
       return expirationCache;
    }
 
-
-   public Fragment getParent() {
-	  return parent;
-   }
 }

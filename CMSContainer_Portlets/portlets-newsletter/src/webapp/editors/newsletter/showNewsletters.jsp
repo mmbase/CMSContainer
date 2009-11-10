@@ -56,15 +56,15 @@
       </script>
 
       <div class="tabs">
-	    <a name="activetab">
          <div class="tab_active">
             <div class="body">
-               <div class="title">                  
-                 <fmt:message key="newsletterlog.newsletter.log" /> 
+               <div>
+                  <a name="activetab">
+                     <fmt:message key="newsletterlog.newsletter.log" /> 
+                  </a>
                </div>
             </div>
          </div>
-		</a>
       </div>
 
       <div class="editor">

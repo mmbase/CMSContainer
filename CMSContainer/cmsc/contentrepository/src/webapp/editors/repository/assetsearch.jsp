@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.AssetElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
@@ -17,13 +16,11 @@
 <mm:import externid="assettypes" jspvar="assettypes"><%= AssetElementUtil.ASSETELEMENT %></mm:import>
 <mm:import externid="results" jspvar="nodeList" vartype="List" />
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 
 <cmscedit:head title="search.title">
       <link rel="stylesheet" type="text/css" href="../css/assetsearch.css" />
-      <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css"/>
-      <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="<cmsc:staticurl page='../css/thumbnail.css'/>" type="text/css">
       <script src="../repository/asset.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
             <script type="text/javascript">
@@ -50,18 +47,7 @@
                       }
                    }
                 }
-					function selectChannel(channel, path) {
-					    var newDirection=document.forms[0].direction.value;
-					    var type=document.forms[0].order.value;
-					    var offset = document.forms[0].offset.value;
-					    var pagerDOToffset = document.forms[0]['pager.offset'].value;
-					    document.location = "../MoveAssetFromSearch.do?newparentchannel=" + channel + "&objectnumber=" + moveContentNumber+"&orderby="+type+"&direction="+newDirection+'&offset='+offset+'&pager.offset='+pagerDOToffset;
-					}
-					
-				    <c:if test="${not empty param.message}">
-				    addLoadEvent(alert('${param.message}'));
-				    </c:if>
-      </script>
+            </script>
     <c:if test="${not empty requestScope.refreshChannels}">
         <script>
         refreshFrame('channels');
@@ -75,24 +61,20 @@
 <c:if test="${empty strict}">
    <div class="tabs">
     <!-- active TAB -->
-	<a href="SearchInitAction.do?index=yes">
-		  <div class="tab">
-			 <div class="body">
-				<div class="title">
-				   <fmt:message key="content.search.title" />
-				</div>
-			 </div>
-		  </div>
-	  </a>
-	  <a href="AssetSearchInitAction.do">
-		   <div class="tab_active">
-			   <div class="body">
-				   <div class="title">
-					   <fmt:message key="asset.search.title"/>
-				   </div>
-			   </div>
-		   </div>
-	   </a>
+      <div class="tab">
+         <div class="body">
+            <div>
+               <a href="SearchInitAction.do?index=yes"><fmt:message key="content.search.title" /></a>
+            </div>
+         </div>
+      </div>
+       <div class="tab_active">
+           <div class="body">
+               <div>
+                   <a href="AssetSearchInitAction.do"><fmt:message key="asset.search.title"/></a>
+               </div>
+           </div>
+       </div>
    </div>
 </c:if>
    <div class="editor">
@@ -103,22 +85,21 @@
             <html:hidden property="mode"/>
             <html:hidden property="search" value="true"/>
             <html:hidden property="offset"/>
-            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="searchShow" value="${searchShow}"/>
             <html:hidden property="direction"/>
             <input type="hidden" name="deleteAssetRequest"/>
             <c:if test="${not empty strict}">
-			<input type="hidden" name="assettypes" value="${strict}"/>
-			<input type="hidden" name="strict" value="${strict}"/>
-			</c:if>
+               <input type="hidden" name="assettypes" value="${strict}"/>
+               <input type="hidden" name="strict" value="${strict}"/>
+            </c:if>
             <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
-                <mm:compare referid="mode" value="advanced" >
-                   <a href="#" onclick="selectTab('basic');"><input type="button" class="button" value="<fmt:message key="search.simple.search" />"/></a>
-                </mm:compare>
-                <mm:compare referid="mode" value="basic" >
-                        <a href="#" onclick="selectTab('advanced');"><input type="button" class="button" value="<fmt:message key="search.advanced.search" />"/></a>
-                </mm:compare>
+            <mm:compare referid="mode" value="advanced" >
+                <a href="#" onclick="selectTab('basic');"><input type="button" class="button" value="<fmt:message key="search.simple.search" />"/></a>
+            </mm:compare>
+            <mm:compare referid="mode" value="basic" >
+               <a href="#" onclick="selectTab('advanced');"><input type="button" class="button" value="<fmt:message key="search.advanced.search" />"/></a>
+            </mm:compare>
             <div id="formcontent" >
                <div id="leftform">
                   <table>
@@ -267,8 +248,7 @@
                </div>
                <div id="assetrightform">
                   <mm:compare referid="mode" value= "advanced">
-                     <c:set var="fields"/>
-                     <c:set var="fieldtypes"/>
+                     <% ArrayList fields = new ArrayList(); %>
                      <table>
                         <tr>
                            <td colspan="2" nowrap>
@@ -287,39 +267,29 @@
                                  <table>
                                     <mm:fieldlist nodetype="${assettypes}">
                                        <%-- check if the field is from assetelement --%>
-                                       <c:set var="showField" value="true"/>
+                                       <% boolean showField = true; %>
                                        <mm:fieldinfo type="name" id="fname">
                                            <mm:fieldlist nodetype="assetelement">
                                                <mm:fieldinfo type="name" id="cefname">
                                                   <mm:compare referid="fname" referid2="cefname">
-                                                     <c:set var="showField" value="false"/>
+                                                     <% showField=false; %>
                                                   </mm:compare>
                                                </mm:fieldinfo>
                                            </mm:fieldlist>
                                        </mm:fieldinfo>
-                                       <c:if test="${showField}">
+                                       <% if (showField) { %>
                                       	<mm:fieldinfo type="type" jspvar="field_type" write="false">
 											<c:if test="${field_type eq 1 || field_type eq 2}" >
-                                          <tr>
-                                             <td height="31px" nowrap>
-                                                <mm:fieldinfo type="guiname" jspvar="guiname"/>:
-                                                <mm:fieldinfo type="name" jspvar="fieldname" write="false">
-                                                <c:choose>
-                                                   <c:when test="${empty fields}">
-                                                      <c:set var="fields">${assettypes}.${fieldname}</c:set>
-                                                      <c:set var="fieldtypes"><mm:fieldinfo type="typedescription"/></c:set>
-                                                   </c:when>
-                                                   <c:otherwise>
-                                                      <c:set var="fields">${fields},${assettypes}.${fieldname}</c:set>
-                                                      <c:set var="fieldtypes">${fieldtypes},<mm:fieldinfo type="typedescription"/></c:set>
-                                                   </c:otherwise>
-                                                </c:choose>
-                                                </mm:fieldinfo>
-                                             </td>
-                                          </tr>
+	                                          <tr>
+	                                             <td height="31" nowrap>
+	                                                <mm:fieldinfo type="guiname" jspvar="guiname"/>:
+	                                                <mm:fieldinfo type="name" jspvar="name" write="false">
+	                                                   <% fields.add(assettypes + "." + name); %>
+	                                                </mm:fieldinfo>
+	                                          </tr>
 											</c:if>
 										</mm:fieldinfo>
-                                       </c:if>
+                                       <% } %>
                                     </mm:fieldlist>
                                  </table>
                               </mm:compare>
@@ -327,15 +297,14 @@
                            <td>
                               <mm:compare referid="assettypes" value="assetelement" inverse="true">
                                  <table>
-                                    <c:forTokens items="${fields}" var="field" delims="," varStatus="status">
-                                       <c:forTokens items="${fieldtypes}" var="fieldtype" delims="," begin="${status.index}" end="${status.index}">
+                                    <% for (int i = 0; i < fields.size(); i++) {
+                                       String field = (String) fields.get(i); %>
                                        <tr>
-                                          <td height="31px" nowrap>
-                                             <input type="text" name="${field}" style="width:145px" dttype="${fieldtype}" value="${param.field}" />
+                                          <td height="31" nowrap>
+                                             <input type="text" style="width:145px" name="<%= field %>" value="<%= (request.getParameter(field) == null)? "" :request.getParameter(field) %>" />
                                           </td>
                                        </tr>
-                                       </c:forTokens>
-                                    </c:forTokens>
+                                    <% } %>
                                  </table>
                               </mm:compare>
                            </td>
@@ -345,26 +314,25 @@
                </div>
             </div>
             <div id="bottomform">
-               <input type="submit" class="button" name="submitButton" onclick="return validateInputs();" value="<fmt:message key="searchform.submit" />" />
+               <input type="submit" class="button" name="submitButton" onclick="setOffset(0);" value="<fmt:message key="searchform.submit" />"/>
             </div>
          </html:form>
       </div>
-
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
    <div class="body">
 
    <div style="padding:10px 0px 0px 11px">
-   <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
-      <c:if test="${empty searchShow || searchShow eq 'list'}">
-         <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
-         <option id = "a_thumbnail" ><fmt:message key="asset.image.thumbnail"/></option>
-      </c:if>
-      <c:if test="${searchShow eq 'thumbnail'}">
-         <option id="a_list"><fmt:message key="asset.image.list"/></option>
-         <option id = "a_thumbnail" selected="selected" ><fmt:message key="asset.image.thumbnail"/></option>
-      </c:if>
-   </select>
+      <select name="assesMode" onchange="javascript:changeMode(${param.offset})">
+         <c:if test="${empty searchShow || searchShow eq 'list'}">
+            <option id="a_list" selected="selected"><fmt:message key="asset.image.list"/></option>
+            <option id = "a_thumbnail" ><fmt:message key="asset.image.thumbnail"/></option>
+         </c:if>
+         <c:if test="${searchShow eq 'thumbnail'}">
+            <option id="a_list"><fmt:message key="asset.image.list"/></option>
+            <option id = "a_thumbnail" selected="selected" ><fmt:message key="asset.image.thumbnail"/></option>
+         </c:if>
+      </select>
    </div>
 
 <!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
@@ -375,7 +343,7 @@
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">
-   <div style="padding:10px 0px 0px 11px">
+   <div class="no_results" style="padding:10px 0px 0px 11px">
       <fmt:message key="searchform.searchpages.nonefound" />
    </div>
    </mm:isempty>
@@ -388,14 +356,13 @@
 <c:if test="${searchShow eq 'list'}">
    <mm:list referid="results">
       <mm:first>
-         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+         <%@include file="searchpages.jsp" %>
             <mm:hasrank minvalue="siteadmin">
                <c:if test="${fn:length(results) >1}">
                <div align="left">
-				  <input type="submit" class="button" name="massdelete"
+                  <input type="submit" class="button" name="massdelete"
                         onclick="javascript:deleteAsset('massdelete','<fmt:message key="asset.delete.massdeleteconfirm"/>')"
                         value="<fmt:message key="asset.delete.massdelete" />"/>
-                  <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
                </div>
                </c:if>
             </mm:hasrank>
@@ -412,8 +379,8 @@
                   <th><a href="javascript:orderBy('otype')" class="headerlink" ><fmt:message key="locate.typecolumn" /></a></th>
                   <th><a href="javascript:orderBy('title')" class="headerlink" ><fmt:message key="locate.titlecolumn" /></a></th>
                   <th><fmt:message key="locate.creationchannelcolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifier')" class="headerlink" ><fmt:message key="locate.lastmodifiercolumn" /></th>
-                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifieddatecolumn" /></th>
+                  <th><a href="javascript:orderBy('lastmodifier')" class="headerlink" ><fmt:message key="locate.editorcolumn" /></th>
+                  <th><a href="javascript:orderBy('lastmodifieddate')" class="headerlink" ><fmt:message key="locate.lastmodifiedcolumn" /></th>
                   <th><a href="javascript:orderBy('number')" class="headerlink" ><fmt:message key="locate.numbercolumn" /></th>
                </tr>
             </thead>
@@ -438,7 +405,7 @@
                 <c:set var="channelIcon" value="/editors/gfx/icons/type/contentchannel_${rights}.png"/>
                 <c:set var="channelIconMessage"><fmt:bundle basename="cmsc-security"><fmt:message key="role.${rights}" /></fmt:bundle></c:set>
                 <c:set var="channelUrl" value="Asset.do?type=asset&parentchannel=${channelNumber}&direction=down"/>
-               <mm:field name="path" id="contentChannelPath" write="false" />
+                <mm:field name="path" id="contentChannelPath" write="false" />
             </mm:compare>
          </mm:relatednodes>
          <tr <mm:even inverse="true">class="swap"</mm:even>>
@@ -462,7 +429,7 @@
             <td style="white-space: nowrap;" onMouseDown="objClick(this);">
                 <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
                   <mm:compare referid="action" value="search">
-                     <a href="${channelUrl}"  title="${contentChannelPath}">${channelName}</a>
+                     <a href="${channelUrl}" title="${contentChannelPath}">${channelName}</a>
                   </mm:compare>
                   <mm:compare referid="action" value="search" inverse="true">
                      <span title="${contentChannelPath}">${channelName}</span>
@@ -497,14 +464,13 @@
    <mm:hasrank minvalue="siteadmin">
       <c:if test="${fn:length(results) >1}">
       <div align="left">
-		 <input type="submit" class="button" name="massdelete"
-                        onclick="javascript:deleteAsset('massdelete','<fmt:message key="asset.delete.massdeleteconfirm"/>')"
-                        value="<fmt:message key="asset.delete.massdelete" />"/>
-         <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />" onclick="massMoveFromSearch('<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
+         <input type="submit" class="button" name="massdelete"
+               onclick="javascript:deleteAsset('massdelete','<fmt:message key="asset.delete.massdeleteconfirm"/>')"
+               value="<fmt:message key="asset.delete.massdelete" />"/>
       </div>
       </c:if>
    </mm:hasrank>
-   <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+   <%@include file="searchpages.jsp" %>
    </mm:last>
    </mm:list>
 </c:if>
@@ -512,7 +478,7 @@
 <c:if test="${searchShow eq 'thumbnail'}">
    <mm:list referid="results">
       <mm:first>
-         <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+         <%@include file="searchpages.jsp" %>
          <div style="width:100%;float:left;">
       </mm:first>
 
@@ -542,7 +508,7 @@
 						<c:if test="${ filesize eq 0}">
                                  	<img src="../gfx/nullimage.gif" alt=""/>
 						</c:if>
-                     </c:if> 
+                     </c:if>
                      <c:if test="${typedef eq 'attachments'}">
 						<c:set var="filesize"><mm:field name="size"/></c:set>
 						<c:if test="${ filesize gt 0}">
@@ -583,7 +549,7 @@
    <mm:last>
    <div style="clear:both;"></div>
    </div>
-   <edit:pages search="true" totalElements="${resultCount}" offset="${param.offset}"/>
+   <%@include file="searchpages.jsp" %>
    </mm:last>
    </mm:list>
 </c:if>

@@ -16,17 +16,14 @@
 	
 		<div class="content">
 			<div class="tabs">
-			  <a href="#">
 				<div class="tab_active">
 					<div class="body">
 						<div>
-							<fmt:message key="fileupload.error.title" />
+							<a href="#"><fmt:message key="fileupload.error.title" /></a>
 						</div>
 					</div>
 				</div>
-			  </a>
 			</div>
-
 		</div>
 
 		<div class="editor">

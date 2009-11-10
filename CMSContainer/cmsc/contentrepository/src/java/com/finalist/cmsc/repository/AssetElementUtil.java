@@ -367,17 +367,18 @@ public final class AssetElementUtil {
 
    public static String getPathForExistingAsset(FormFile file, NodeManager manager) {
       NodeList assets = getExistingAssetNode(file, manager);
-      Node assetNode = assets.get(0);
+      Node assetNode = assets.getNode(0);
       NodeList channelNodes = assetNode.getRelatedNodes("contentchannel", "creationrel", "destination");
-      Node channelNode = channelNodes.get(0);
+      Node channelNode = channelNodes.getNode(0);
       return RepositoryUtil.getPathToRootString(channelNode);
    }
    
    public static String getTitleFromExistingAsset(FormFile file, NodeManager manager){
       NodeList assets = getExistingAssetNode(file, manager);
-      Node assetNode = assets.get(0);
+      Node assetNode = assets.getNode(0);
       return assetNode.getStringValue("title");
    }
+
    /**
     * 
     * @param nodes

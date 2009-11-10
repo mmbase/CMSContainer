@@ -60,7 +60,6 @@
 	  <div id="working" style="display:none;color:red">&nbsp;&nbsp;&nbsp;&nbsp;<fmt:message key='newsletter.edition.fail'><fmt:param value="${needajax}"/> </fmt:message>&nbsp;</div>
 	  <c:remove var="needajax"/>
 	  </c:if>
-
       <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>

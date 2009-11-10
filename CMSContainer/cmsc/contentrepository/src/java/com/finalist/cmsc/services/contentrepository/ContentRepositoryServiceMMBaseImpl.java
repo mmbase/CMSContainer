@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -24,7 +24,6 @@ import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.NodetypeBean;
-import com.finalist.cmsc.beans.om.AssetElement;
 import com.finalist.cmsc.beans.om.ContentChannel;
 import com.finalist.cmsc.beans.om.ContentElement;
 import com.finalist.cmsc.repository.ContentElementUtil;
@@ -54,13 +53,6 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     private int countContentElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
         if (channel != null) {
             return RepositoryUtil.countLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
-        }
-        return -1;
-    }
-
-    private int countAssetElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-        if (channel != null) {
-            return RepositoryUtil.countCreatedAsset(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
         }
         return -1;
     }
@@ -113,16 +105,6 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     }
 
     @Override
-   public int countAssetElements(String channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-       Cloud cloud = getCloud();
-       if (channel != null) {
-           Node chan = cloud.getNode(channel);
-           return countAssetElements(chan, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
-       }
-       return -1;
-   }
-
-    @Override
     public int countContentElements(String channel, List<String> contenttypes, String orderby, String direction,
           boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
        Cloud cloud = getCloud();
@@ -132,30 +114,10 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
        }
        return -1;
     }
-
-    @Override
-   public int countAssetElements(String channel, List<String> assettypes, String orderby, String direction,
-          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-       Cloud cloud = getCloud();
-       if (channel != null) {
-           Node chan = cloud.getNode(channel);
-           return countAssetElements(chan, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
-       }
-       return -1;
-    }
-
    private int countContentElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
       if (channel != null) {
          return RepositoryUtil.countLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
-     }
-     return -1;
-   }
-
-   private int countAssetElements(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      if (channel != null) {
-         return RepositoryUtil.countCreatedAsset(channel, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
      }
      return -1;
    }
@@ -204,7 +166,9 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     }
 
 	/*
-	 * @see com.finalist.cmsc.services.contentrepository.ContentRepositoryService#getContentTypes()
+	 * (non-Javadoc)
+	 *
+	 * @see net.sf.mmapps.commons.portalImpl.services.contentrepository.ContentRepositoryService#getContentElements()
 	 */
 	@Override
     public List<NodetypeBean> getContentTypes() {
@@ -261,22 +225,6 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
     }
 
 
-    @Override
-    public AssetElement getAssetElement(String elementId) {
-        Cloud cloud = getUserCloud();
-        try {
-           Node node = cloud.getNode(elementId);
-           if (node != null) {
-              return MMBaseNodeMapper.copyNode(node, AssetElement.class);
-           }
-        } catch(NotFoundException e){
-           log.debug("Node not found using element:" + elementId);
-        }
-        
-        return null;
-    }
-
-
     private Cloud getUserCloud() {
         Cloud cloud = CloudUtil.getCloudFromThread();
         if (cloud == null) {
@@ -303,25 +251,6 @@ public class ContentRepositoryServiceMMBaseImpl extends ContentRepositoryService
             for (int i = 0; i < l.size(); i++) {
                Node currentNode = l.getNode(i);
                ContentElement e = MMBaseNodeMapper.copyNode(currentNode, ContentElement.class);
-               result.add(e);
-            }
-         }
-      }
-      return result;
-   }
-
-   @Override
-   public List<AssetElement> getAssetElements(String channel, List<String> assettypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,int maxDays) {
-      Cloud cloud = getCloud();
-      List<AssetElement> result = new ArrayList<AssetElement>();
-      if (channel != null) {
-         Node chan = cloud.getNode(channel);
-      
-         if (chan != null) {
-            NodeList l = RepositoryUtil.getCreatedAssets(chan, assettypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day, maxDays);
-            for (int i = 0; i < l.size(); i++) {
-               Node currentNode = l.getNode(i);
-               AssetElement e = MMBaseNodeMapper.copyNode(currentNode, AssetElement.class);
                result.add(e);
             }
          }

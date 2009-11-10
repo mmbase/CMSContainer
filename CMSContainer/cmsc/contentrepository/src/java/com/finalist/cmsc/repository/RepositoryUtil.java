@@ -9,8 +9,8 @@ package com.finalist.cmsc.repository;
 
 import java.util.*;
 
-import org.mmbase.bridge.util.CloneUtil;
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.CloneUtil;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -384,7 +384,8 @@ public final class RepositoryUtil {
     * @return node with channel path
     */
    public static Node getChannelFromPath(Cloud cloud, String path, Node root, boolean useCache) {
-      return TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
+      Node node = TreeUtil.getTreeItemFromPath(cloud, path, root, treeManagers, CHILDREL, useCache);
+      return node;
    }
 
    /**
@@ -552,7 +553,6 @@ public final class RepositoryUtil {
             .countRelatedNodes(content.getCloud().getNodeManager(CONTENTCHANNEL), CREATIONREL, DESTINATION);
       return count > 0;
    }
-
    /**
     * Check if a contentnode has a creationchannel
     * 
@@ -560,21 +560,20 @@ public final class RepositoryUtil {
     *           - Content Node
     * @return true if the node has a related creation channel
     */
-   public static boolean hasCreationChannel(Node content, Node channel) {
-      if (!isChannel(channel)) {
+   public static boolean hasCreationChannel(Node content,Node channel) {
+      if(!isChannel(channel)) {
          return false;
       }
       NodeList channels = content.getRelatedNodes(content.getCloud().getNodeManager(CONTENTCHANNEL), CREATIONREL, DESTINATION);
-      if (channels == null || channels.size() < 1) {
+      if(channels == null || channels.size()  < 1) {
          return false;
       }
       Node parentChannel = channels.getNode(0);
-      if (parentChannel.getNumber() == channel.getNumber()) {
+      if(parentChannel.getNumber() == channel.getNumber()) {
          return true;
       }
       return false;
    }
-
    /**
     * Get creation channel
     * 
@@ -658,7 +657,7 @@ public final class RepositoryUtil {
             }
          }
 
-         RelationUtil.createCountedRelation(channelNode, content, CONTENTREL, TreeUtil.RELATION_POS_FIELD);
+           RelationUtil.createCountedRelation(channelNode, content, CONTENTREL, TreeUtil.RELATION_POS_FIELD);
 
          if (isOrphan) {
             addCreationChannel(content, channelNode);
@@ -786,8 +785,9 @@ public final class RepositoryUtil {
    }
 
    public static int countCreatedAsset(Node channelNode) {
-      return channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
+      int contentCount = channelNode.countRelatedNodes(channelNode.getCloud().getNodeManager(ASSETELEMENT),
             CREATIONREL, SOURCE);
+      return contentCount;
    }
 
    public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
@@ -804,64 +804,40 @@ public final class RepositoryUtil {
       return Queries.count(query);
    }
 
-   public static int countCreatedAsset(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      NodeQuery query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day);
-      if (maxDays > 0) {
-         SearchUtil.addDayConstraint(query, query.getNodeManager(), AssetElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-      }
-      return Queries.count(query);
-   }
-
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
+      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1);
-   }
-
-   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, maxDays, null);
-   }
-
-   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      return getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1, null);
+      NodeList elements = getLinkedElements(channel, contenttypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, null);
+      return elements;
    }
 
    public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays,
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
       // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-      if (orderby != null && "otype".equals(orderby)) {
+      if(orderby != null && "otype".equals(orderby)){
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
-         if (maxDays > 0) {
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
             reverse = true;
          }
          Collections.sort(elements, new NodeGUITypeComparator(query.getCloud().getLocale(), reverse));
-         int toIndex = elements.size() < (offset + maxNumber) ? elements.size() : (offset + maxNumber);
+         int toIndex = elements.size()<(offset+maxNumber)? elements.size(): (offset+maxNumber);
          elements = elements.subNodeList(offset, toIndex);
-      } else {
+      }else {
          query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
-         if (maxDays > 0) {
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -953,54 +929,38 @@ public final class RepositoryUtil {
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, int offset, int maxNumber, int year, int month, int day) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, null, offset,
             maxNumber, year, month, day);
+      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
          boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1);
+      NodeList elements = getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
+            maxNumber, year, month, day, null);
+      return elements;
    }
 
    public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, maxDays, null);
-   }
-
-   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, HashMap<String, Object> extraParameters) {
-      return getCreatedAssets(channel, assettypes, orderby, direction, useLifecycle, archive, offset,
-            maxNumber, year, month, day, -1, extraParameters);
-   }
-
-   public static NodeList getCreatedAssets(Node channel, List<String> assettypes, String orderby, String direction,
-         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays, 
+         boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,
          HashMap<String, Object> extraParameters) {
       NodeQuery query;
       NodeList elements;
       // CMSC-1313 Sorting on TYPE should not sort of the otype value but the title of the type
-      if (orderby != null && "otype".equals(orderby)) {
+      if(orderby != null && "otype".equals(orderby)){
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
                SearchQuery.DEFAULT_OFFSET, SearchQuery.DEFAULT_MAX_NUMBER, year, month, day, extraParameters);
-         if (maxDays > 0) {
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
          boolean reverse = false;
          if ("DOWN".equalsIgnoreCase(direction)) {
             reverse = true;
          }
          Collections.sort(elements, new NodeGUITypeComparator(query.getCloud().getLocale(), reverse));
-         int toIndex = elements.size() < (offset + maxNumber) ? elements.size() : (offset + maxNumber);
+         int toIndex = elements.size()<(offset+maxNumber)? elements.size(): (offset+maxNumber);
          elements = elements.subNodeList(offset, toIndex);
-      } else {
+      }else {
          query = createCreatedAssetQuery(channel, assettypes, orderby, direction, useLifecycle, archive,
             offset, maxNumber, year, month, day, extraParameters);
-         if (maxDays > 0) {
-            SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
-         }
          elements = query.getNodeManager().getList(query);
       }
       return elements;
@@ -1250,53 +1210,42 @@ public final class RepositoryUtil {
          parentRelation.delete();
       }
    }
-   
-   public static boolean cloneCopyEnabled() {
-      //By default turned on, since v1.7
-      String cloneCopy = PropertiesUtil.getProperty("clonecopy").trim();
-      if (StringUtils.isBlank(cloneCopy) || "true".equalsIgnoreCase(cloneCopy)) {
-         return true;
-      }
-      return false;
-   }
-   
 
-   public static Node copyChannel(Node sourceChannel, Node destChannel) {
+  public static Node copyChannel(Node sourceChannel, Node destChannel) {
       List<Integer> channelList = new ArrayList<Integer>();
-      iterateChannels(sourceChannel, channelList);
+      iterateChannels(sourceChannel,channelList);
       StringBuilder output = new StringBuilder().append(" -Start: ");
       Map<Integer, Integer> copiedNodes = new HashMap<Integer, Integer>();
 
-      Node newNode = copyChannel(sourceChannel, destChannel, channelList, copiedNodes, output);
+      Node newNode = copyChannel(sourceChannel,destChannel,channelList,copiedNodes,output);
       output.append("<br/><br/>copiedNodes has #" + copiedNodes.size() + ":<br/>" + copiedNodes.toString());
-      if (log.isDebugEnabled()) {
-         log.debug("#################:" + output.toString());
+      if(log.isDebugEnabled()) {
+         log.debug("#################:"+output.toString());
       }
-      
-      if (cloneCopyEnabled()) {
-         copyContentElements(sourceChannel, destChannel, channelList, copiedNodes, output);
+       String cloneCopy = PropertiesUtil.getProperty("clonecopy");
+      if("true".equalsIgnoreCase(cloneCopy)) {
+         copyContentElements(sourceChannel,destChannel,channelList,copiedNodes,output);
       }
       return newNode;
    }
 
-   public static Node copyContentElements(Node sourceChannel, Node destChannel, List<Integer> channelList, Map<Integer, Integer> copiedNodes, StringBuilder output) {
+      public static Node copyContentElements(Node sourceChannel, Node destChannel, List<Integer> channelList,Map<Integer, Integer> copiedNodes ,StringBuilder output) {
       if (!isParent(sourceChannel, destChannel)) {
          Object newChannelNumber = copiedNodes.get(sourceChannel.getNumber());
-
-         if (newChannelNumber != null) {
-            Node newChannel = sourceChannel.getCloud().getNode((Integer) newChannelNumber);
-            cloneRelatedNodes(sourceChannel, newChannel, copiedNodes, output, channelList);
+         if( newChannelNumber != null) {
+            Node newChannel = sourceChannel.getCloud().getNode((Integer)newChannelNumber);
+                        cloneRelatedNodes(sourceChannel, newChannel,copiedNodes,output,channelList);
             NodeList children = getOrderedChildren(sourceChannel);
             for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
                Node childChannel = iter.next();
-               copyContentElements(childChannel, newChannel, channelList, copiedNodes, output);
+               copyContentElements(childChannel, newChannel,channelList,copiedNodes,output);
             }
+   
          }
       }
       return null;
    }
-
-   public static Node copyChannel(Node sourceChannel, Node destChannel, List<Integer> channelList, Map<Integer, Integer> copiedNodes, StringBuilder output) {
+   public static Node copyChannel(Node sourceChannel, Node destChannel, List<Integer> channelList,Map<Integer, Integer> copiedNodes ,StringBuilder output) {
       if (!isParent(sourceChannel, destChannel)) {
          Node newChannel = CloneUtil.cloneNode(sourceChannel);
          appendChild(destChannel, newChannel);
@@ -1304,11 +1253,13 @@ public final class RepositoryUtil {
          NodeList children = getOrderedChildren(sourceChannel);
          for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
             Node childChannel = iter.next();
-            copyChannel(childChannel, newChannel, channelList, copiedNodes, output);
+            copyChannel(childChannel, newChannel,channelList,copiedNodes,output);
          }
-         if (cloneCopyEnabled()) {
-            cloneAssetNodes(sourceChannel, newChannel, copiedNodes, output);
-         } else {
+         String cloneCopy = PropertiesUtil.getProperty("clonecopy");
+         if("true".equalsIgnoreCase(cloneCopy)) {
+            cloneAssetNodes(sourceChannel,newChannel,copiedNodes,output);
+         }
+         else {
             CloneUtil.cloneRelations(sourceChannel, newChannel, CONTENTREL, CONTENTELEMENT);
          }
          return newChannel;
@@ -1376,8 +1327,8 @@ public final class RepositoryUtil {
       return SecurityUtil.getRole(channel, rightsInherited, channelsWithRole);
    }
 
-   public static void setGroupRights(Cloud cloud, Node group, Map<Integer, UserRole> rights) {
-      SecurityUtil.setGroupRights(cloud, group, rights, TreeUtil.convertToList(treeManagers));
+   public static void setGroupRights(Cloud cloud, Node user, Map<Integer, UserRole> rights) {
+      SecurityUtil.setGroupRights(cloud, user, rights, TreeUtil.convertToList(treeManagers));
    }
 
    public static List<Node> getUsersWithRights(Node channel, Role requiredRole) {
@@ -1389,13 +1340,13 @@ public final class RepositoryUtil {
       if (info == null) {
          info = new RepositoryInfo();
          cloud.setProperty(RepositoryInfo.class.getName(), info);
-         addChannelsWithRoleToInfo(cloud, info);
-      }
-      return info;
-   }
+            addChannelsWithRoleToInfo(cloud, info);
+        }
+        return info;
+    }
 
    private static void addChannelsWithRoleToInfo(Cloud cloud, RepositoryInfo info) {
-      TreeMap<String, UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
+         TreeMap<String, UserRole> channelsWithRole = SecurityUtil.getLoggedInRoleMap(cloud, treeManagers, CHILDREL);
 
       for (Map.Entry<String, UserRole> entry : channelsWithRole.entrySet()) {
          UserRole role = entry.getValue();
@@ -1410,7 +1361,7 @@ public final class RepositoryUtil {
                   List<Node> pathNodes = getPathToRoot(channel);
                   for (Node pathNode : pathNodes) {
                      info.expand(pathNode.getNumber());
-
+                       
                      String pathToRoot = getPathToRootString(pathNode);
                      UserRole pathRole = channelsWithRole.get(pathToRoot);
                      if (pathRole != null && !Role.NONE.equals(pathRole.getRole())) {
@@ -1428,7 +1379,7 @@ public final class RepositoryUtil {
       TreeMap<String, UserRole> channelsWithRole = SecurityUtil.getRoleMap(treeManagers, CHILDREL, group);
       for (String path : channelsWithRole.keySet()) {
          Node channel = getChannelFromPath(cloud, path);
-         List<Node> pathNodes = getPathToRoot(channel);
+         List <Node> pathNodes = getPathToRoot(channel);
          for (Node node : pathNodes) {
             info.expand(node.getNumber());
          }
@@ -1483,26 +1434,34 @@ public final class RepositoryUtil {
       contentChannels.add(0, getRootNode(cloud));
       return contentChannels;
    }
-
+   
    /**   Remove a asset element from a channel
-    * 
+    *   
     * @param asset
     * @param channelNode
     */
    public static void removeAssetFromChannel(Node asset, Node channelNode) {
       RepositoryUtil.addDeletionRelation(asset, channelNode);
    }
-
+   
    public static int countLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day,int maxDays){
       NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
-      if (maxDays > 0) {
+      if(maxDays > 0){
          SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
       }
       return Queries.count(query);
    }
-
+   
+   public static NodeList getLinkedElements(Node channel, List<String> contenttypes, String orderby, String direction, boolean useLifecycle, String archive, int offset, int maxNumber, int year, int month, int day, int maxDays) {
+      NodeQuery query = createLinkedContentQuery(channel, contenttypes, orderby, direction, useLifecycle, archive, offset, maxNumber, year, month, day);
+      if(maxDays > 0){
+         SearchUtil.addDayConstraint(query, query.getNodeManager(), ContentElementUtil.CREATIONDATE_FIELD, "-" + maxDays);
+      }
+      return query.getNodeManager().getList(query);
+   }
+   
    /**
-    * Clone nodes related with a node or channel
+    *    Clone nodes related with a node or channel
     * @param sourceNode source channel 
     * @param destNode  destination node
     * @param copiedNodes   map used for the mapping number-pair
@@ -1511,15 +1470,15 @@ public final class RepositoryUtil {
     */
    public static void cloneRelatedNodes(Node sourceNode,Node destNode,Map<Integer, Integer> copiedNodes ,StringBuilder output,List<Integer> channels) {
       List<Relation> relations = sourceNode.getRelations(null, null, DESTINATION_LOWER);
-
+     
       for (Relation rel : relations) {
-         if (rel == null) {
+         if(rel == null) {
             output.append("skipped  " + rel + "; ");
-            continue; // Skip contentchannels and collection channels.
+            continue; //Skip contentchannels and collection channels. 
          }
-         if (!rel.isRelation()) {
-            output.append("skipped  " + rel + "; ");
-            continue; // Skip contentchannels and collection channels.
+         if (! rel.isRelation()) {
+            output.append("skipped " + rel + "; ");
+            continue; //Skip contentchannels and collection channels.  
          }
          RelationManager relManager = rel.getRelationManager();
          if (relManager == null) {
@@ -1529,13 +1488,13 @@ public final class RepositoryUtil {
             output.append("strangely not found relManager for " + rel.getNumber() + ", please check destNode(" + sourceNode.getNumber() + "|" + destNode.getNumber() + ") (might need to add a relation in typedef table!);");
             continue;
          }
-
+         
          if (isChannel(rel.getDestination()) || 
                relManager.getName().equalsIgnoreCase("deletionrel")
-         // || relManager.getName().equalsIgnoreCase("creationrel")
-         ) {
+//               || relManager.getName().equalsIgnoreCase("creationrel")
+               ) {
             output.append("skipped  " + relManager.getName() + "; ");
-            continue; // Skip contentchannels and collection channels.
+            continue; //Skip contentchannels and collection channels.
          } 
          else if (rel.getNodeManager().getName().equals(ContentElementUtil.OWNERREL)) {
             CloneUtil.cloneRelations(sourceNode, destNode, ContentElementUtil.OWNERREL, SecurityUtil.USER);
@@ -1543,35 +1502,35 @@ public final class RepositoryUtil {
          }
          else if (!isRelatedWithCurrentChannelTree(rel.getDestination(),channels)) {
             output.append("skipped  " + relManager.getName() + "; ");
-            continue; // Skip nodes not in the current channel tree.
+            continue; //Skip nodes not in the current channel tree. 
          }
          else 
-         {         
-            // *** Start cloning the node from sourceChild -> destChild
+         {
+            //*** Start cloning the node from sourceChild -> destChild
             //If the related node should be cloned, dive into the node and deepcopy it
             Node sourceChild = rel.getDestination();
             boolean cloned = false;
-
-            // Only clone node, when it hasn't been cloned before.
+            
+            //Only clone node, when it hasn't been cloned before.
             Node destChild;
-            if (copiedNodes.get(sourceChild.getNumber()) == null) {
-               destChild = cloneNode(sourceChild, copiedNodes);
-               copiedNodes.put(Integer.valueOf(sourceChild.getNumber()), Integer.valueOf(destChild.getNumber()));
+            if (copiedNodes.get(sourceChild.getNumber()) == null) { 
+               destChild = cloneNode(sourceChild,copiedNodes);
+               copiedNodes.put(Integer.valueOf(sourceChild.getNumber()),Integer.valueOf(destChild.getNumber()));
                cloned = true;
-               // Logging
+               //Logging
                if (destChild.getNodeManager().hasField("name")) {
-                  // output.append(destChild.getFieldValue("name") + " of ");
+                //  output.append(destChild.getFieldValue("name") + " of ");
                }
                output.append(rel.getNodeManager().getName() + " cloned (" + sourceNode.getNumber() + "|" + destChild.getNumber() + ");");
             } else {
-               // Retrieve the already cloned node from the Map
+               //Retrieve the already cloned node from the Map
                destChild = sourceNode.getCloud().getNode(copiedNodes.get(sourceChild.getNumber()));
                output.append(rel.getNodeManager().getName() + " reused clone (" + sourceChild.getNumber() + "|" + destChild.getNumber() + ");");
             }
-            // *** End cloning node
-
-            // Create a new relation between the new node and its parent
-            if (!"imageinlinerel".equalsIgnoreCase(rel.getNodeManager().getName()) && !"inlinerel".equalsIgnoreCase(rel.getNodeManager().getName())) {
+            //*** End cloning node
+        
+            //Create a new relation between the new node and its parent
+            if(!"imageinlinerel".equalsIgnoreCase(rel.getNodeManager().getName()) && !"inlinerel".equalsIgnoreCase(rel.getNodeManager().getName())) {
                Relation destRel = destNode.createRelation(destChild, relManager);
                String relName = destRel.getNodeManager().getName();
                if (relName.equalsIgnoreCase("posrel") || 
@@ -1580,20 +1539,19 @@ public final class RepositoryUtil {
                      relName.equalsIgnoreCase("detailimagerel")) {
                   destRel.setIntValue("pos", rel.getIntValue("pos"));
                }
-               destRel.commit();
+               destRel.commit(); 
                output.append("[newRel:" + destNode.getNumber() + "," + relName + "];");
             }
-
-
             
+ 
             //Creation channels are skipped at copying relations, so do it by hand.
-            if (hasCreationChannel(sourceChild, sourceNode) && isChannel(destNode)) {
+            if (hasCreationChannel(sourceChild,sourceNode) && isChannel(destNode)) {
                addCreationChannel(destChild, destNode);
                output.append("added creationrel to " + destChild.getNumber() + ";");
             }
                         //If no clone was needed, but reused an existing clone, the relations are fine already..continue!
             if (!cloned) continue;
-            // If destChild is an image, also change title
+            //If destChild is an image, also change title
             if (destChild.getNodeManager().getName().equalsIgnoreCase("images")) {
                destChild.setStringValue("title", destChild.getStringValue("title") + "-North");
                destChild.commit();
@@ -1601,47 +1559,46 @@ public final class RepositoryUtil {
 
             
 //            if (destChild.getNodeManager().getName().equalsIgnoreCase("subject")) {
-            // Now go deeper into the tree
-            cloneRelatedNodes(sourceChild, destChild, copiedNodes, output, channels);
-            // }
+               //Now go deeper into the tree
+               cloneRelatedNodes(sourceChild, destChild, copiedNodes, output,channels);
+//            }
          }
       }
    }
-
    /**
-    * Clone a node
+    *    Clone a node 
     * @param localNode
     * @param copiedNodes   number-pairs
     * @param channels
     * @return
     */
-   public static Node cloneNode(Node localNode, Map<Integer, Integer> copiedNodes) {
+   public static Node cloneNode(Node localNode,Map<Integer, Integer> copiedNodes) {
       if (isRelation(localNode)) {
          return CloneUtil.cloneRelation(localNode);
       }
-
-      NodeManager localNodeManager = localNode.getNodeManager();
-      NodeManager nodeManager = localNode.getCloud().getNodeManager(localNodeManager.getName());
-      Node newNode = nodeManager.createNode();
-      newNode.commit();
-      FieldIterator fields = localNodeManager.getFields().fieldIterator();
-      while (fields.hasNext()) {
-         Field field = fields.nextField();
-         String fieldName = field.getName();
-
-         if (field.getState() == Field.STATE_PERSISTENT) {
+      
+     NodeManager localNodeManager = localNode.getNodeManager();
+     NodeManager nodeManager = localNode.getCloud().getNodeManager(localNodeManager.getName());
+     Node newNode = nodeManager.createNode();
+     newNode.commit();
+     FieldIterator fields = localNodeManager.getFields().fieldIterator();
+     while (fields.hasNext()) {
+        Field field = fields.nextField();
+        String fieldName = field.getName();
+        
+        if (field.getState() == Field.STATE_PERSISTENT) {
             if (!(fieldName.equals("owner") || fieldName.equals("number") ||
                   fieldName.equals("otype") ||
                   (fieldName.indexOf("_") == 0))) {
-               cloneNodeField(localNode, newNode, field, copiedNodes);
+               cloneNodeField(localNode, newNode, field,copiedNodes);
             }
-         }
-      }
-      newNode.commit();
+        }
+     }
+     newNode.commit();
 
-      return newNode;
+     return newNode;
    }
-
+   
    /**
     * cloneNodeField copies node fields from one node to an other
     * 
@@ -1652,7 +1609,7 @@ public final class RepositoryUtil {
     * @param field
     *           the field to clone
     */
-   public static void cloneNodeField(Node sourceNode, Node destinationNode, Field field, Map<Integer, Integer> copiedNodes) {
+   public static void cloneNodeField(Node sourceNode, Node destinationNode, Field field,Map<Integer, Integer> copiedNodes) {
       String fieldName = field.getName();
 
       if (destinationNode.getNodeManager().hasField(fieldName) == true) {
@@ -1663,19 +1620,18 @@ public final class RepositoryUtil {
          }
       }
    }
-
+   
    /**
-    * To strip the Node in richtext and that not in the current channel tree
+    *  To strip the Node in richtext and that not in the current channel tree
     * @param sourceNode
     * @param field
     * @param copiedNodes
     * @param channels
     * @return
     */
-   public static Object strip(Node sourceNode, Node destinationNode, Field field, Map<Integer, Integer> copiedNodes) {
-      return RichText.stripLinkAndImage(sourceNode, destinationNode, field, copiedNodes);
+   public static Object strip(Node sourceNode, Node destinationNode,Field field,Map<Integer, Integer> copiedNodes) {
+      return RichText.stripLinkAndImage(sourceNode, destinationNode,field, copiedNodes);
    }
-
    /**
     * quick test to see if node is a relation by testing fieldnames
     * @param node Possible relation
@@ -1700,47 +1656,46 @@ public final class RepositoryUtil {
 
       return false;
    }
-
    public static void iterateChannels(Node sourceChannel, List<Integer> channelList) {
-      NodeList children = RepositoryUtil.getOrderedChildren(sourceChannel);
+      NodeList children = RepositoryUtil.getOrderedChildren(sourceChannel);  
       channelList.add(sourceChannel.getNumber());
       for (Iterator<Node> iter = children.iterator(); iter.hasNext();) {
          Node childChannel = iter.next();
          iterateChannels(childChannel, channelList);
       }
    }
-
+   
    /**
     * check the node if it is in the current channel tree
     * @param sourceNode
     * @param channels
     * @return
     */
-   public static boolean isRelatedWithCurrentChannelTree(Node sourceNode, List<Integer> channels) {
+   public static boolean isRelatedWithCurrentChannelTree(Node sourceNode,List<Integer> channels) {
 
-      Node creationChannel = getCreationChannel(sourceNode);
-      if (creationChannel != null && channels.contains(creationChannel.getNumber())) {
-         return true;
-      }
+         Node creationChannel = getCreationChannel(sourceNode);
+         if(creationChannel != null && channels.contains(creationChannel.getNumber())) {
+            return true;
+         }     
       return false;
    }
-
+   
    /**
-    * Clone related assets according to the channel
+    *  Clone related assets according to the channel
     * @param sourceChannel   source channel 
     * @param newChannel      destination channel
     * @param copiedNodes     Nodes have been copied 
     * @param output
     */
-   public static void cloneAssetNodes(Node sourceChannel, Node newChannel, Map<Integer, Integer> copiedNodes, StringBuilder output) {
-
+   public static void cloneAssetNodes(Node sourceChannel,Node newChannel,Map<Integer, Integer> copiedNodes ,StringBuilder output) {
+      
       List<Relation> relations = sourceChannel.getRelations("creationrel", sourceChannel.getCloud().getNodeManager("assetelement"), SOURCE);
       for (Relation rel : relations) {
          Node sourceChild = rel.getSource();
          Node destChild = CloneUtil.cloneNode(sourceChild);
          copiedNodes.put(sourceChild.getNumber(), destChild.getNumber());
-         addAssetToChannel(destChild, newChannel);
+         addAssetToChannel(destChild,newChannel);
       }
    }
-
+   
 }

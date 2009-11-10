@@ -49,7 +49,7 @@ import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 
 public class CmscPortlet extends GenericPortlet {
 

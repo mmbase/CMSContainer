@@ -209,13 +209,11 @@ var ajaxTreeHandler = {
 	}
 };
 
-var onlyShowCollectionChannel = false;
 ajaxTreeLoader = {
-	initTree : function (persistentId, elementId, portletId, show) {
-		onlyShowCollectionChannel = show;
+	initTree : function (persistentId, elementId) {
 		var treeAction = new AjaxTreeAction();
 		treeAction.elementId = elementId;
-		treeAction.execute('inittree', persistentId, portletId);
+		treeAction.execute('inittree', persistentId);
 	},
 	loadChildren : function (node) {
 		var treeAction = new AjaxTreeAction();
@@ -238,14 +236,11 @@ ajaxTreeLoader = {
 function AjaxTreeAction() {
 }
 
-AjaxTreeAction.prototype.execute = function(action, persistentId, portletId) {
+AjaxTreeAction.prototype.execute = function(action, persistentId) {
     var options  = {asynchronous : true, onFailure: this.errorRequest };
     options.onSuccess = null;
 	options.parameters = 'action=' + action;
 	options.parameters += '&persistentid=' + persistentId;
-	if(portletId != null && portletId != undefined){
-		options.parameters += '&portletId=' + portletId;	
-	}
 	if (action == 'inittree') {
 		options.onSuccess = this.buildTree.bind(this);
 	}
@@ -312,11 +307,7 @@ AjaxTreeAction.prototype.buildChildren = function(request) {
 }
 
 AjaxTreeAction.prototype.errorRequest = function(request) {
-   if (request.status == 401 /* unauthorized */) {
-      window.location = '../login.jsp?reason=failed';
-   } else {
-      alert(request.responseText);
-   }
+	alert(request.responseText);
 }
 
 AjaxTreeAction.prototype.createTree = function(treeXml) {
@@ -525,14 +516,7 @@ AjaxTreeAbstractNode.prototype.doExpand = function() {
 }
 
 AjaxTreeAbstractNode.prototype.openTreeItem = function() {
-	var newOpenIcon;
-	if(__isNeedShowCollectionChannel(this.openIcon)){
-		newOpenIcon = this.openIcon.replace(".png","_gray.gif");
-	} else {
-		newOpenIcon = this.openIcon;
-	}
-
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = newOpenIcon; }	
+	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.openIcon; }
 	if (this.childNodes.length) {  document.getElementById(this.id + '-cont').style.display = 'block'; }
 	this.open = true;
 	try {
@@ -544,13 +528,7 @@ AjaxTreeAbstractNode.prototype.openTreeItem = function() {
 }
 
 AjaxTreeAbstractNode.prototype.closeTreeItem = function() {
-	var newIcon;
-	if(__isNeedShowCollectionChannel(this.icon)){
-		newIcon = this.icon.replace(".png","_gray.gif");
-	} else {
-		newIcon = this.icon;
-	}
-	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = newIcon; }
+	if (ajaxTreeHandler.behavior == 'classic') { document.getElementById(this.id + '-icon').src = this.icon; }
 	if (this.childNodes.length) { document.getElementById(this.id + '-cont').style.display = 'none'; }
 	this.open = false;
 	try {
@@ -691,44 +669,21 @@ AjaxTree.prototype.keydown = function(key) {
 	return true;
 }
 
-function __isNeedShowCollectionChannel(icon) {
-	if(!icon) return false;
-	
-	return (onlyShowCollectionChannel && (icon.indexOf('contentchannel_webmaster.png') > -1 || icon.indexOf('contentchannel_chiefeditor.png') > -1 || icon.indexOf('contentchannel_editor.png') > -1 || icon.indexOf('contentchannel_writer.png') > -1));
-}
-
 AjaxTree.prototype.toString = function() {
 	var sbOption = [];
 	for (var i = 0; i < this.options.length; i++) {
 		sbOption[i] = this.options[i].toString(i,this.options.length);
 	}
 	var str = "<div id=\"" + this.id + "\" ondblclick=\"ajaxTreeHandler.toggle(this);\" class=\"ajax-tree-item\" style.position = 'absolute';" +
-				"onkeydown=\"return ajaxTreeHandler.keydown(this, event)\"  oncontextmenu=\"ajaxTreeHandler.showContextMenu(this,event);return false\">";
-	var newIcon, newOpenIcon;
-	if(__isNeedShowCollectionChannel(this.icon)){
-		newIcon = this.icon.replace(".png","_gray.gif");
-	} else {
-		newIcon = this.icon;
-	}
-	if(__isNeedShowCollectionChannel(this.openIcon)){
-		newOpenIcon = this.openIcon.replace(".png","_gray.gif");
-	} else {
-		newOpenIcon = this.openIcon;
-	}
-	str += "<img id=\"" + this.id + "-icon\" class=\"ajax-tree-icon\" src=\"" +
-		((ajaxTreeHandler.behavior == 'classic' && this.open)?newOpenIcon:newIcon)
-		+ "\" onclick=\"ajaxTreeHandler.select(this);\" />";
+				"onkeydown=\"return ajaxTreeHandler.keydown(this, event)\"  oncontextmenu=\"ajaxTreeHandler.showContextMenu(this,event);return false\">" +
+		"<img id=\"" + this.id + "-icon\" class=\"ajax-tree-icon\" src=\"" +
+			((ajaxTreeHandler.behavior == 'classic' && this.open)?this.openIcon:this.icon)
+			+ "\" onclick=\"ajaxTreeHandler.select(this);\" />";
 
 	if(hasRights(this.icon)) {
-		if(__isNeedShowCollectionChannel(this.icon)){
-			str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" onclick=\"return false\" " +
-				"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
-				 ">" + this.text + "</a>"
-		} else {
-			str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" " +
-				"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
-				 ">" + this.text + "</a>"
-		}
+		str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" " +
+			"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
+			 ">" + this.text + "</a>"
 	}
 	else {
 		str +=	"<font style='color:#777'>"+this.text+"</font>"
@@ -1005,36 +960,15 @@ AjaxTreeItem.prototype.toString = function (nItem, nItemCount) {
 	var str = "<div id=\"" + this.id + "\" ondblclick=\"ajaxTreeHandler.toggle(this);\" class=\"ajax-tree-item\" style.position = 'absolute';" +
 				"onkeydown=\"return ajaxTreeHandler.keydown(this, event)\"  oncontextmenu=\"ajaxTreeHandler.showContextMenu(this,event);return false;\">" +
 		indent +
-		"<img id=\"" + this.id + "-plus\" src=\"" + treeIcon + "\" onclick=\"ajaxTreeHandler.toggle(this);\" />";
-	var newIcon, newOpenIcon;
-	if(__isNeedShowCollectionChannel(this.icon)){
-		newIcon = this.icon.replace(".png","_gray.gif");
-	} else if(onlyShowCollectionChannel && this.icon && this.icon.indexOf('collectionchannel.png') > -1){
-		newIcon = this.openIcon.replace(".png","_available.png")
-	} else {
-		newIcon = this.icon;
-	}
-	if(__isNeedShowCollectionChannel(this.openIcon)){
-		newOpenIcon = this.openIcon.replace(".png","_gray.gif");
-	} else if(onlyShowCollectionChannel && this.openIcon && this.openIcon.indexOf('collectionchannel.png') > -1){
-		newOpenIcon = this.openIcon.replace(".png","_available.png")
-	} else {
-		newOpenIcon = this.openIcon;
-	}
-	str += "<img id=\"" + this.id + "-icon\" class=\"ajax-tree-icon\" src=\"" +
-		((ajaxTreeHandler.behavior == 'classic' && this.open)?newOpenIcon:newIcon) +
-		"\" onclick=\"ajaxTreeHandler.isclick(this);ajaxTreeHandler.select(this);\" onmousedown=\"ajaxTreeHandler.makeDraggable(this);\" />";
+		"<img id=\"" + this.id + "-plus\" src=\"" + treeIcon + "\" onclick=\"ajaxTreeHandler.toggle(this);\" />" +
+		"<img id=\"" + this.id + "-icon\" class=\"ajax-tree-icon\" src=\"" +
+			((ajaxTreeHandler.behavior == 'classic' && this.open)?this.openIcon:this.icon) +
+			"\" onclick=\"ajaxTreeHandler.isclick(this);ajaxTreeHandler.select(this);\" onmousedown=\"ajaxTreeHandler.makeDraggable(this);\" />";
 
 	if(hasRights(this.icon)) {
-		if(__isNeedShowCollectionChannel(this.icon)){
-			str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" onclick=\"return false\" " +
-				"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
-				">" + this.text + "</a>"
-		} else {
-			str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" " +
-				"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
-				">" + this.text + "</a>"
-		}
+		str += "<a href=\"" + this.action + "\" id=\"" + this.id + "-anchor\" onfocus=\"ajaxTreeHandler.focus(this);\" onmouseover=\"ajaxTreeHandler.imouseover(this); return true;\" " +
+			"onblur=\"ajaxTreeHandler.blur(this);\"" + (this.target ? " target=\"" + this.target + "\"" : "") +
+			">" + this.text + "</a>"
 	}
 	else {
 		str +=	"<font style='color:#777'>"+this.text+"</font>"

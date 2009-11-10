@@ -45,7 +45,7 @@ public class CommunityModuleAdapter {
 
    public static int getCurrentUserId() {
       Person person = getCurrentUser();
-      if (null == person || !"active".equalsIgnoreCase(person.getActive())) {
+      if (null == person) {
          return -1;
       }
 

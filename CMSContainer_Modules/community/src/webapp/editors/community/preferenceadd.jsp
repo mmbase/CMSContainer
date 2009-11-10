@@ -19,15 +19,13 @@
       <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
       <mm:import externid="action">search</mm:import><%-- either: search of select --%>
       <div class="tabs">
-	   <a href="#">
-			 <div class="tab_active">
-				<div class="body">
-				   <div class="title">
-					 <fmt:message key="community.preference.title" />
-				   </div>
-				</div>
-			 </div>
-		 </a>
+         <div class="tab_active">
+            <div class="body">
+               <div>
+                  <a href="#"><fmt:message key="community.preference.title" /></a>
+               </div>
+            </div>
+         </div>
       </div>
      <div class="editor" style="height:500px">
       <div class="body">

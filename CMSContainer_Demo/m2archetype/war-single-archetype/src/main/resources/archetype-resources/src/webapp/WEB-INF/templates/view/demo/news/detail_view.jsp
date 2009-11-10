@@ -17,9 +17,16 @@
 	  		  action="<cmsc:actionURL><cmsc:param name="action" value="edit"/></cmsc:actionURL>">
 		<%@include file="/WEB-INF/templates/edit/itemheader.jsp" %>
 	</c:if>
-   <div class="heading">
-    <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
-   </div>
+
+
+    <div class="heading">
+      <h2 id="content_${elementId}_title"><mm:field name="title"/></h2>
+	  <c:if test="${edit}">
+		  <script type="text/javascript">
+			new InPlaceEditor.Local('content_${elementId}_title');
+		  </script>
+	  </c:if>
+    </div>
     <div class="content">
       <div class="eventinfo">
         <mm:field name="publishdate"><mm:time format="dd-MM-yyyy" /></mm:field>
@@ -30,9 +37,32 @@
       <cmsc-bm:linkedimages width="220" position="top-left" style="float: left; padding: 0px 20px 20px 0px;" />
       <cmsc-bm:linkedimages width="220" position="top-right" style="float: right; padding: 0px 0px 20px 20px;" />
 
-   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
+      <mm:field name="intro" escape="none">
+        <mm:isnotempty>
+          <p class="intro" id="content_${elementId}_intro"><mm:write /></p>
+          <c:if test="${edit}">
+          
+  		  	<script type="text/javascript">
+				new InPlaceEditor.Local('content_${elementId}_intro', {minHeight:300, htmlarea:true, formId:'contentportlet'});
+		  	</script>
+		  </c:if>
+        </mm:isnotempty>
+      </mm:field>
 
-   <cmsc:field elementid="${elementId}" name="body" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
+	<c:if test="${edit}">
+		<div id="content_${elementId}_body">
+	</c:if>
+      <mm:field name="body" escape="none">
+        <mm:isnotempty>
+          <p class="body"><mm:write /></p>
+        </mm:isnotempty>
+      </mm:field>
+	<c:if test="${edit}">
+		</div>
+	  	<script type="text/javascript">
+			new InPlaceEditor.Local('content_${elementId}_body', {minHeight:300, htmlarea:true, formId:'contentportlet'});
+	  	</script>
+	</c:if>
        
       <div class="divider3"></div>
        

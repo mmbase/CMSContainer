@@ -68,7 +68,7 @@ public class SubSiteAction extends PagerAction {
           SearchUtil.addSortOrder(subsitesQuery, nm, PagesUtil.TITLE_FIELD, "DOWN");
           NodeList results = subsitesQuery.getList();
           if (results.size() > 0) {
-              subsiteNode = results.get(0);
+              subsiteNode = (Node) results.get(0);
           }
       }
       else {
@@ -100,7 +100,7 @@ public class SubSiteAction extends PagerAction {
           }
       }
       
-      // Set the offset (used for paging).
+   // Set the offset (used for paging).
       int offset = 0;
       if (searchForm.getOffset() != null && searchForm.getOffset().matches("\\d+")) {
     	  offset = Integer.parseInt(searchForm.getOffset());

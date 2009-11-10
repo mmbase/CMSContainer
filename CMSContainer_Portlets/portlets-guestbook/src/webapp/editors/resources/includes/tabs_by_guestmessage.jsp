@@ -1,11 +1,9 @@
       <div class="tabs">
-	    <a href="messages.jsp">
          <div class="tab_active">
             <div class="body">
-               <div class="title">
-                 <fmt:message key="guestbook.search.tab.guestmessages" />
+               <div>
+                  <a href="messages.jsp"><fmt:message key="guestbook.search.tab.guestmessages" /></a>
                </div>
             </div>
-          </div>
-		 </a>
+         </div>
       </div>

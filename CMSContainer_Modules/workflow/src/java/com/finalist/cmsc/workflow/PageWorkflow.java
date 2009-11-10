@@ -54,13 +54,14 @@ public class PageWorkflow extends WorkflowManager {
    public Node createFor(Node page, String remark) {
       synchronized (page) {
          if (hasWorkflow(page)) {
-            return getWorkflows(page).getNode(0);
+            return (Node) getWorkflows(page).get(0);
          }
-         
-         Node wfItem = createFor(TYPE_PAGE, remark, null);
-         RelationUtil.createRelation(wfItem, page, WORKFLOWREL);
-         log.debug("Workflow " + wfItem.getNumber() + " created for page " + page.getNumber());
-         return wfItem;
+         else {
+            Node wfItem = createFor(TYPE_PAGE, remark, null);
+            RelationUtil.createRelation(wfItem, page, WORKFLOWREL);
+            log.debug("Workflow " + wfItem.getNumber() + " created for page " + page.getNumber());
+            return wfItem;
+         }
       }
    }
 
@@ -185,7 +186,7 @@ public class PageWorkflow extends WorkflowManager {
       List<Node> path = NavigationUtil.getPathToRoot(node);
       path.remove(path.size() - 1);
       for (Node pathElement : path) {
-         if ((!Publish.isPublished(pathElement) && !Publish.inPublishQueue(pathElement))
+         if (!Publish.isPublished(pathElement)
                && (publishNumbers == null || !publishNumbers.contains(pathElement.getNumber()))) {
             errors.add(pathElement);
          }

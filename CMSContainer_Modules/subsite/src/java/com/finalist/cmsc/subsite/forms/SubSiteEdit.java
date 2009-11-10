@@ -10,7 +10,6 @@ package com.finalist.cmsc.subsite.forms;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
@@ -25,7 +24,6 @@ public class SubSiteEdit extends MMBaseFormlessAction {
 
       if (StringUtils.isBlank(action)) {
          String objectnumber = getParameter(request, "number", true);
-
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?objectnumber="
                + objectnumber + "&returnurl=" + mapping.findForward("returnurl").getPath() + "?subsite="
                + request.getParameter("subsite"));

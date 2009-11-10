@@ -26,15 +26,13 @@
 </cmscedit:head>
 <body>
     <div class="tabs">
-	  <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div class="title">
-                    <fmt:message key="pagewizard.title" />
+                <div>
+                    <a href="#"><fmt:message key="pagewizard.title" /></a>
                 </div>
             </div>
         </div>
-	   </a>
     </div>
 
 	<div class="editor">

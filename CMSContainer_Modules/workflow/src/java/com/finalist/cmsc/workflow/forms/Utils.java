@@ -1,7 +1,7 @@
 package com.finalist.cmsc.workflow.forms;
 
 import javax.servlet.jsp.PageContext;
-import java.util.*;
+
 import org.apache.commons.lang.StringUtils;
 
 public class Utils {
@@ -28,19 +28,8 @@ public class Utils {
    public static String tabClass(PageContext pageContext, String status) {
       if (status.equals(pageContext.findAttribute("status"))) {
          return "tab_active";
+      } else {
+         return "tab";
       }
-      return "tab";
-   }
-
-   public static long publishInterval(PageContext pageContext,String publishDate) {
-      Calendar c = Calendar.getInstance();
-      long now = c.getTimeInMillis();
-      if (pageContext.getAttribute(publishDate) == null) {
-         return 0;
-      }
-      c.setTime((Date)pageContext.getAttribute(publishDate));
-      long publishTimeInMillis = c.getTimeInMillis();
-      return publishTimeInMillis - now;
-      
    }
 }

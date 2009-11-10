@@ -9,7 +9,9 @@ public class SearchForm extends PagerForm {
    private String objectid;
    private String show = "list";
    protected String strict;
+   
    private String contentChannel;
+   
 
    public String getShow() {
       return show;

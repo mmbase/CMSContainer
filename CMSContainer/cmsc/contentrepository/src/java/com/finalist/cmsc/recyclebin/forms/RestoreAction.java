@@ -69,7 +69,6 @@ public class RestoreAction extends MMBaseFormlessAction {
             addToRequest(request, "returnurl", returnurl);
             return mapping.findForward("restore");
          }
-
       }
       ActionForward ret = new ActionForward(returnurl+"&fresh=true");
       ret.setRedirect(true);

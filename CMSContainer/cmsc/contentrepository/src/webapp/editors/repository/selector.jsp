@@ -18,6 +18,7 @@
    <script type="text/javascript" src="../utils/ajaxtree/ajaxtree.js"></script>
    <script type="text/javascript" src="../utils/ajaxtree/addressbar.js"></script>
    <script type="text/javascript" src="../../js/prototype.js"></script>
+
    <script type="text/javascript">
       ajaxTreeConfig.resources = '../utils/ajaxtree/images/';
       ajaxTreeConfig.url = '<mm:url page="Navigator.do" />';
@@ -34,22 +35,22 @@
             treeElement.style.height = y - x + 'px';
          }
       }
-      
+
       function clearDefaultSearchText(defaultText) {
          var searchField = document.forms["searchForm"]["title"];
          if(searchField.value == defaultText) {
             searchField.value = "";
          }
       }
-      
+
       window.onresize = resizeTreeDiv;
-      
+
       function loadFunction() {
       ajaxTreeLoader.initTree('', 'tree_div');
       resizeTreeDiv();
       alphaImages();
       }
-      
+
       function doSearch() {
          clearDefaultSearchText('<fmt:message key="selector.search.term" />');
          document.forms['searchForm'].submit();
@@ -102,16 +103,16 @@
             <input type="text" name="title" value="<fmt:message key="selector.search.term" />" onfocus="clearDefaultSearchText('<fmt:message key="selector.search.term" />');"/>
             </form>
          </div>
-      
+
          <div class="search_form_options">
             <a href="javascript:doSearch()" class="button"><fmt:message key="selector.search.search" /></a>
          </div>
-            
+
          <ul class="shortcuts">
-            
+
             <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
                <mm:field name="number" jspvar="trashNumber" vartype="Integer">
-               
+
                   <cmsc:rights nodeNumber="<%=trashNumber.intValue()%>" var="rolename"/>
                   <c:if test="${rolename eq 'webmaster'}">
                      <li class="trashbin">
@@ -123,10 +124,10 @@
                         </a>
                      </li>
                   </c:if>
-                  
+
                </mm:field>
             </mm:node>
-         
+
          </ul>
       </cmscedit:sideblock>
       <cmscedit:sideblock title="selector.title" titleClass="side_block_gray" bodyClass="body_table"
@@ -140,20 +141,20 @@
                <html:text property="path" value="${channelPath}" styleId="addressbar"/>
          </div>
          <div class="search_form_options">
-            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"><fmt:message key="selector.search" /></a>
+            <a id="validatePath" href="SearchInitAction.do?index=yes" class="button" onclick="validatePath();" target="content"> <fmt:message key="selector.search" /> </a>
          </div>
 
          <div id="addressbar_choices" class="addressbar"></div>
          <script type="text/javascript">
             new AddressBar("addressbar",
-               "addressbar_choices", 
+               "addressbar_choices",
                ajaxTreeConfig.url + "?action=autocomplete",
                {paramName: "path" });
          </script>
          <br />
          <div id="tree" style="float: left;width: 239px; height: 100px; overflow:auto">
             <div style="float: left" id="tree_div"><fmt:message key="selector.loading" /></div>
-            
+
             <jsp:include page="../usermanagement/role_legend.jsp"/>
          </div>
 

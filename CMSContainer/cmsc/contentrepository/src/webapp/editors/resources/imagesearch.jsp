@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><%@page import="java.util.Iterator,com.finalist.cmsc.mmbase.PropertiesUtil,com.finalist.cmsc.repository.RepositoryUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -15,7 +14,7 @@
       </c:if><c:if test="${not empty description}">
 	      document.forms[0].description.value = "${description}";
       </c:if>
-    }
+   }
    function showInfo(objectnumber) {
       openPopupWindow('imageinfo', '900', '500',
             '../resources/imageinfo.jsp?objectnumber=' + objectnumber);
@@ -27,36 +26,33 @@
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 <mm:import externid="action">search</mm:import><%-- either often or search --%>
 <mm:import externid="assetShow">list</mm:import><%-- either list or thumbnail --%>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
-
-	<div class="tabs"><!-- actieve TAB -->
-	   <div class="tab_active">
-		  <div class="body">
-			<div class="title"><fmt:message key="images.title" /></div>
-		  </div>
-	   </div>
-	   <a href="imageupload.jsp?uploadAction=${param.action}&uploadedNodes=0&strict=${param.strict}">
-      <div class="tab">
-		 <div class="body">
-		   <div class="title">	     
-			  <fmt:message key="images.upload.title" />
-		   </div>
-		 </div>
+<div class="tabs"><!-- actieve TAB -->
+   <div class="tab_active">
+      <div class="body">
+         <div><a><fmt:message key="images.title" /></a></div>
       </div>
-	  </a>
-	</div>
+   </div>
+   
+   <div class="tab">
+	 <div class="body">
+	   <div>
+	     <a href="imageupload.jsp?uploadAction=${param.action}&uploadedNodes=0&strict=${param.strict}">
+		  <fmt:message key="images.upload.title" />
+		 </a>
+	   </div>
+	 </div>
+  </div>
+</div>
 
    <div class="editor">
       <mm:import id="formAction">/editors/resources/ImageAction</mm:import>
       <mm:import id="channelMsg"><fmt:message key="images.results" /></mm:import>
-
-      <div class="body">
+      <div class="body" >
          <html:form action="${formAction}" method="post">
             <html:hidden property="action" value="${action}"/>
             <html:hidden property="assetShow" value="${assetShow}"/>
             <html:hidden property="strict" value="${strict}"/>
             <html:hidden property="offset"/>
-            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
             <mm:import id="contenttypes" jspvar="contenttypes">images</mm:import>
@@ -82,17 +78,17 @@
          <mm:import externid="results" jspvar="nodeList" vartype="List"/>
          <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
          <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
-         <c:if test="${resultCount == 0 && param.title != null}">
-         <div class="no_results">
-            <fmt:message key="imagesearch.noresult" />
-         </div>
+       <c:if test="${resultCount == 0 && param.title != null}">
+            <div class="no_results">
+               <fmt:message key="imagesearch.noresult" />
+            </div>
          </c:if>
-         <div class="body">
+   <div class="body">
          <c:if test="${resultCount > 0}">
-            <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+            <%@include file="../repository/searchpages.jsp" %>
 
             <c:if test="${assetShow eq 'thumbnail'}">
-            <div id="assetList" class="hover" style="width:100%">
+            <div id="assetList" class="hover" style="width:100%" href="">
                   <mm:listnodes referid="results">
                      <mm:field name="description" escape="js-single-quotes" jspvar="description">
                         <%
@@ -141,13 +137,14 @@
                      class="headerlink"><fmt:message
                      key="imagesearch.mimetypecolumn" /></a></th>
                   <th><fmt:message
-							key="search.creationchannelcolumn" /></th>
+							key="search.creationchannelcolumn" />
+                     </th>
                </tr>
-					<tbody id="assetList" class="hover">
-						<c:set var="useSwapStyle">true</c:set>
-                 <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
+					<tbody id="assetList" class="hover"  href="">
+                  <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
                      <mm:field id="trashnumber" name="number" write="false"/>
                   </mm:node>
+						<c:set var="useSwapStyle">true</c:set>
 						<mm:listnodes referid="results">
                       <mm:relatednodes role="creationrel" type="contentchannel">
                         <c:set var="creationRelNumber"><mm:field name="number" id="creationnumber"/></c:set>
@@ -186,8 +183,8 @@
                         </td>
 								<td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')"><mm:field name="itype" /></td>
 								<td onMouseDown="addItem(this.parentNode, '<mm:field name="number"/>', '${strict}')">
-                         <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
-                         <span title="${fullChannelPath}">${channelName}</span>
+                        <img src="<cmsc:staticurl page="${channelIcon}"/>" align="top" alt="${channelIconMessage}" />
+                           <span title="${fullChannelPath}">${channelName}</span>
                         </td>
 							</tr>
 							<c:set var="useSwapStyle">${!useSwapStyle}</c:set>
@@ -199,10 +196,10 @@
       </c:if>
          <div style="clear:both" ></div>
          <c:if test="${resultCount > 0}">
-            <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+            <%@include file="../repository/searchpages.jsp" %>
          </c:if>
       </div>
-   </div>
+</div>
 <c:set var="content_type"><fmt:message key="asset.search.image" /></c:set>
 <%@include file="footbar.jsp" %>
 </mm:cloud>

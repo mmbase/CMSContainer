@@ -1,7 +1,6 @@
 package com.finalist.cmsc.fileupload.actions;
 
 import java.io.*;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,12 +14,12 @@ import org.apache.struts.upload.FormFile;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeManager;
+import org.mmbase.remotepublishing.util.PublishUtil;
 
 import com.finalist.cmsc.fileupload.Configuration;
 import com.finalist.cmsc.fileupload.forms.UploadFileForm;
 import com.finalist.cmsc.fileupload.mmbase.Builder;
 import com.finalist.cmsc.fileupload.mmbase.Field;
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.struts.MMBaseAction;
 
 /**
@@ -69,7 +68,7 @@ public class UploadFileAction extends MMBaseAction {
 		fileNode.setStringValue(Field.FILENAME.getName(), relativeFilename);
 		fileNode.commit();
 
-		Publish.publish(fileNode);
+		PublishUtil.publishOrUpdateNode(fileNode);
 	}
 
 	private String saveFileToDisk(FormFile fileFormFile) throws IOException {

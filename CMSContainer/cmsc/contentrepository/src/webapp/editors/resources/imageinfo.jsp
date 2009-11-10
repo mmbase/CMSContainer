@@ -3,19 +3,16 @@
 %><%@include file="globals.jsp" %>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <html:html xhtml="true">
-<cmscedit:head title="imageinfo.title">
-</cmscedit:head>
+<cmscedit:head title="imageinfo.title" />
 <body>
     <div class="tabs">
-	  <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div class="title">
-                    <fmt:message key="imageinfo.title" />
+                <div>
+                    <a href="#"><fmt:message key="imageinfo.title" /></a>
                 </div>
             </div>
         </div>
-	   </a>
     </div>
 
    <div class="editor">

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" 
 %><%@ include file="globals.jsp" 
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@ page import="com.finalist.cmsc.repository.RepositoryUtil" 
 %><%@ page import="com.finalist.cmsc.security.*" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -9,7 +8,6 @@
 <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
 <mm:import jspvar="returnurl" id="returnurl">/editors/repository/Content.do?type=content&parentchannel=<mm:write
         referid="parentchannel"/>&direction=down</mm:import>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 
 <div class="editor">
 <div class="body">
@@ -32,7 +30,6 @@
             <input type="hidden" name="order" value="${orderby}" />
             <input type="hidden" name="direction" value="${direction}"/>
             <input type="hidden" name="offset" value="${param.offset}"/>
-             <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
             <fmt:message key="content.new"/>
             <select name="contenttype">
                 <c:forEach var="type" items="${typesList}">
@@ -88,15 +85,17 @@
 <div class="body">
 <mm:import externid="elements" from="request" required="true"/>
 <mm:import externid="elementCount" from="request" vartype="Integer">0</mm:import>
+<mm:import externid="resultsPerPage" from="request" vartype="Integer">25</mm:import>
 
 <c:set var="listSize" value="${elementCount}"/>
 <c:set var="offset" value="${param.offset}"/>
-<c:set var="extraparams" value="&orderby=${param.orderby}&direction=${param.direction}&parentchannel=${param.parentchannel}&type=content"/>
-<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+<c:set var="extraparams" value="&direction=${param.direction}&parentchannel=${param.parentchannel}"/>
+<c:set var="orderby" value="${param.orderby}" scope="page" />
+<c:set var="type" value="content" scope="page" />
+<%@ include file="../pages.jsp" %>
 
 <form action="contentMassDelete.do" name="contentForm">
 <input type="hidden" name="offset" value="${param.offset}"/>
-<input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
 <input type="hidden" name="orderby" value="${orderby}" />
 <input type="hidden" name="direction" value="${direction}"/>
 <input type="hidden" name="channelnumber" value="<mm:write referid="parentchannel" />"/>
@@ -120,9 +119,9 @@
         <th><a href="javascript:sortBy('Content','title','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.titlecolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifier','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifiercolumn"/></a></th>
+        <fmt:message key="content.editorcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','lastmodifieddate','<mm:write referid="parentchannel" />')" class="headerlink">
-        <fmt:message key="content.lastmodifieddatecolumn"/></a></th>
+        <fmt:message key="content.lastmodifiedcolumn"/></a></th>
         <th><a href="javascript:sortBy('Content','number','<mm:write referid="parentchannel" />')" class="headerlink">
         <fmt:message key="content.numbercolumn"/></a></th>
         <th><fmt:message key="content.creationchannelcolumn"/></th>
@@ -272,12 +271,12 @@
 </table>
 <% if (role != null && SecurityUtil.isWriter(role)) { %>
 <c:if test="${fn:length(elements) >1}">
-<input type="button" class="button" value="<fmt:message key="content.delete.massdelete" />" onclick="massDelete('<fmt:message key="content.delete.massdeleteconfirm" />', 'contentForm')"/>
+<input type="submit" class="button" value="<fmt:message key="content.delete.massdelete" />" onclick="massDelete('<fmt:message key="content.delete.massdeleteconfirm" />', 'contentForm')"/>
 <input type="button" class="button" value="<fmt:message key="content.delete.massmove" />"  onclick="massMove('${parentchannel}','<c:url value='/editors/repository/select/SelectorChannel.do?role=writer' />')"/>
 </c:if>
 <% } %>
 </form>
-<edit:pages search="false" totalElements="${listSize}" offset="${offset}" extraparams="${extraparams}"/>
+<%@ include file="../pages.jsp" %>
 </div>
 </div>
 </mm:node>

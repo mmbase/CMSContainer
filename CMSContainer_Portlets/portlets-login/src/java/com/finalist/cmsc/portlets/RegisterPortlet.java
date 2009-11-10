@@ -172,7 +172,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
                response.setRenderParameter("active", "subscribed");
                request.getPortletSession().setAttribute("active", "subscribed");
             }
-         }
+      }
       }
 
       if (errorMessages.size() > 0) {

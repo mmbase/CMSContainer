@@ -46,12 +46,8 @@ public final class ContentElementUtil {
    private static final String SOURCE = "SOURCE";
    private static final String DESTINATION = "DESTINATION";
 
-   private static final String ALLOWREL = "allowrel";
-   private static final String TYPEDEF = "typedef";
-
    public static final String NUMBER_FIELD = "number";
    public static final String TITLE_FIELD = "title";
-   public static final String DESCRIPTION_FIELD = "description";
    public static final String CREATIONDATE_FIELD = "creationdate";
    public static final String PUBLISHDATE_FIELD = "publishdate";
    public static final String EXPIREDATE_FIELD = "expiredate";
@@ -69,8 +65,6 @@ public final class ContentElementUtil {
    public static final String OWNERREL = "ownerrel";
 
    private static final String PROPERTY_HIDDEN_TYPES = "system.contenttypes.hide";
-
-   private static final String SYSTEM_SIMPLEEDITOR_CONTENTTYPES = "system.simpleeditor.contenttypes";
 
    private ContentElementUtil() {
       // utility
@@ -90,30 +84,13 @@ public final class ContentElementUtil {
             result.add(nm);
          }
       }
-      sortContentTypes(result);
-      return result;
-   }
-
-   private static void sortContentTypes(List<NodeManager> result) {
       Collections.sort(result, new Comparator<NodeManager>() {
          public int compare(NodeManager o1, NodeManager o2) {
             return o1.getGUIName().compareTo(o2.getGUIName());
          }
       });
-   }
 
-   public static List<NodeManager> getAllowedContentTypes(Cloud cloud, String nodeNumber) {
-      List<NodeManager> types = new ArrayList<NodeManager>();
-
-      NodeList allowedTypes = cloud.getNode(nodeNumber).getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
-      for (Iterator<Node> iterator = allowedTypes.iterator(); iterator.hasNext();) {
-         Node node = iterator.next();
-         if (node.isNodeManager()) {
-            types.add(node.toNodeManager());
-         }
-      }
-      sortContentTypes(types);
-      return types;
+      return result;
    }
 
    public static boolean isContentElementField(Field field) {
@@ -446,44 +423,7 @@ public final class ContentElementUtil {
     * @return List of hidden types
     */
    public static List<String> getHiddenTypes() {
-      return getProperty(PROPERTY_HIDDEN_TYPES);
-   }
-
-   /**
-    * Helper method to get all valid simple editor's types
-    * 
-    * @param cloud
-    * 
-    * @return List of the types
-    */
-   public static List<String> getSimpleEditorTypes(Cloud cloud) {
-      List<String> simpleEditorTypes = new ArrayList<String>();
-      if (PropertiesUtil.getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES) != null) {
-         List<String> rawTypes = getProperty(SYSTEM_SIMPLEEDITOR_CONTENTTYPES);
-         List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
-         List<String> allTypes = new ArrayList<String>();
-         for (NodeManager nodeManager : types) {
-            allTypes.add(nodeManager.getName());
-         }
-         List<String> hiddenTypes = getHiddenTypes();
-         for (String sType : rawTypes) {
-            if (!hiddenTypes.contains(sType) && allTypes.contains(sType)) {
-               simpleEditorTypes.add(sType);
-            }
-         }
-      }
-      return simpleEditorTypes;
-   }
-
-   /**
-    * Helper method to get properties from System Property
-    * 
-    * @param propertyKey
-    *           the key of property,
-    * @return List of the value, if the value is separated by comma,return the list
-    */
-   public static List<String> getProperty(String propertyKey) {
-      String property = PropertiesUtil.getProperty(propertyKey);
+      String property = PropertiesUtil.getProperty(PROPERTY_HIDDEN_TYPES);
       if (property == null) {
          return new ArrayList<String>();
       }
@@ -524,7 +464,7 @@ public final class ContentElementUtil {
     */
    public static TreeSet<Integer> getValidTypes(Cloud cloud, List<NodeManager> types) {
       List<String> hiddenTypes = getHiddenTypes();
-      TreeSet<Integer> validTypes = new TreeSet<Integer>();
+      TreeSet<Integer> validTypes = null;
       for (NodeManager manager : types) {
          String name = manager.getName();
          if (!hiddenTypes.contains(name)) {
@@ -533,4 +473,5 @@ public final class ContentElementUtil {
       }
       return validTypes;
    }
+
 }

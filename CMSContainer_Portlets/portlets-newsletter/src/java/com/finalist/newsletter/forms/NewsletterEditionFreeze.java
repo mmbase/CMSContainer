@@ -5,6 +5,7 @@ package com.finalist.newsletter.forms;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Node;
 import org.mmbase.util.logging.Logger;
@@ -31,7 +32,8 @@ public class NewsletterEditionFreeze extends NewsletterEditionAction{
             } else {
                try {
                   Workflow.publish(edition);
-				  NewsletterPublicationUtil.freezeEdition(edition);
+                  NewsletterPublicationUtil.freezeEdition(edition);
+                  //request.getSession().setAttribute(NEEDAJAX, edition.getNumber());
                }
                catch (WorkflowException wfe) {
                   List<Node> errors = wfe.getErrors();
@@ -41,6 +43,7 @@ public class NewsletterEditionFreeze extends NewsletterEditionAction{
                   else {
                      request.setAttribute(ERRORS, wfe.getMessage()); 
                   }
+
                   for (Node errorNode : errors) {
                      log.error(errorNode.getNodeManager().getName() + " " + errorNode.getNumber() + " ");
                   }        
@@ -51,7 +54,7 @@ public class NewsletterEditionFreeze extends NewsletterEditionAction{
                      Workflow.finish(edition, "");
                   }
                }
-              // request.getSession().setAttribute(NEEDAJAX, edition.getNumber());
+              
             }
          }
          else {

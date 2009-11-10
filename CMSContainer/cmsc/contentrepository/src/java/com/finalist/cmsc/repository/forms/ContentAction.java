@@ -7,6 +7,7 @@
  */
 package com.finalist.cmsc.repository.forms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -42,8 +44,11 @@ public class ContentAction extends MMBaseAction {
       if (StringUtils.isNotEmpty(action) && action.equals(MOVECONTENTTOCHANNEL)) {
          return mapping.findForward(MOVECONTENTTOCHANNEL);
       }
+      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
+
       List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
       addToRequest(request, "typesList", ContentElementUtil.getValidTypesList(cloud, types));
+
       String parentchannel = request.getParameter("parentchannel");
       String orderby = request.getParameter("orderby");
       String direction = request.getParameter("direction");

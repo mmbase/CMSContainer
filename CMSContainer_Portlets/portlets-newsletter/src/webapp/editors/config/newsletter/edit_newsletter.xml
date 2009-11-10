@@ -61,7 +61,7 @@
       <prompt xml:lang="zh">暂停</prompt>
       <optionlist select="boolean" />
    </field>
-     <field name="pausedstartdate">
+   <field name="pausedstartdate">
       <prompt xml:lang="en">Pause Start</prompt>
       <prompt xml:lang="nl">Pauze van</prompt>
       <prompt xml:lang="zh">暂停起始</prompt>

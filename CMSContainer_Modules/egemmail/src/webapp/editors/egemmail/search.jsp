@@ -44,15 +44,13 @@
 </cmscedit:head>
 <body>
     <div class="tabs">
-	  <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div class="title">
-                    <fmt:message key="egemmail.title" />
+                <div>
+                    <a href="#"><fmt:message key="egemmail.title" /></a>
                 </div>
             </div>
         </div>
-		</a>
     </div>
 <mm:cloud>
 	<div class="editor">

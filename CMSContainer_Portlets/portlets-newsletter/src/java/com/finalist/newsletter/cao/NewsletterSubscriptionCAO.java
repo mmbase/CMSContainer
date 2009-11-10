@@ -30,7 +30,7 @@ public interface NewsletterSubscriptionCAO {
    public Set<Term> getTerms(int id);
 
    public Subscription getSubscriptionById(int id);
-   
+
    public Node getSubscriptionNodeById(int id);
 
    public void createSubscription(int userId, int newsletterId);
@@ -59,5 +59,5 @@ public interface NewsletterSubscriptionCAO {
 
    public int countSubscription(int id);
 
-   public void deleteSubscriptionsByAuthId(Long anthId); 
+   public void deleteSubscriptionsByAuthId(Long anthId);
 }

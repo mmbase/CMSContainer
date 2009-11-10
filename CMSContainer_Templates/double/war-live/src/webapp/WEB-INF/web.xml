@@ -88,7 +88,7 @@
       <description>Filter catch all requests.</description>
       <display-name>CloudThread Filter</display-name>
       <filter-name>CloudThreadFilter</filter-name>
-      <filter-class>org.mmbase.servlet.CloudThreadFilter</filter-class>
+      <filter-class>net.sf.mmapps.commons.web.CloudThreadFilter</filter-class>
    </filter>
 
    <filter>
@@ -114,24 +114,6 @@
       </init-param>
    </filter>
    
-   <filter>
-      <filter-name>FrameworkFilter</filter-name>
-      <filter-class>org.mmbase.framework.FrameworkFilter</filter-class>
-      <init-param>
-         <param-name>excludes</param-name>
-         <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
-      </init-param>
-   </filter>
-   
-   <filter>
-      <filter-name>FrameworkFilter</filter-name>
-      <filter-class>org.mmbase.framework.FrameworkFilter</filter-class>
-      <init-param>
-         <param-name>excludes</param-name>
-         <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
-      </init-param>
-   </filter>   
-   
    <filter-mapping>
       <filter-name>DisableUrlSessionFilter</filter-name>
       <url-pattern>/*</url-pattern>
@@ -151,12 +133,6 @@
       <filter-name>ControllerFilter</filter-name>
       <url-pattern>/*</url-pattern>
    </filter-mapping>
-
-   <filter-mapping>
-      <filter-name>FrameworkFilter</filter-name>
-      <url-pattern>/mmbase/*</url-pattern>
-   </filter-mapping>
-
 
     <servlet>
         <display-name>Pluto Driver</display-name>
@@ -394,19 +370,6 @@
 		<env-entry-name>cmsc/richtext/resolveIds</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
 		<env-entry-value>false</env-entry-value>
-	</env-entry>
-
-	<env-entry>
-		<description>MMbase CloudContext Security: allow all read operations on nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/readall</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
-	<env-entry>
-		<description>MMbase CloudContext Security: Disable checks on context of nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/disableContextChecks</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
 	</env-entry>
 
 </web-app>

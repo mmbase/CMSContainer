@@ -29,15 +29,13 @@
 </cmscedit:head>
 <body>
     <div class="tabs">
-	  <a href="#">
-			<div class="tab_active">
-				<div class="body">
-					<div class="title">
-						<fmt:message key="secondaryedit.title" />
-					</div>
-				</div>
-			</div>
-	   </a>
+        <div class="tab_active">
+            <div class="body">
+                <div>
+                    <a href="#"><fmt:message key="secondaryedit.title" /></a>
+                </div>
+            </div>
+        </div>
     </div>
 
 	<div class="editor">

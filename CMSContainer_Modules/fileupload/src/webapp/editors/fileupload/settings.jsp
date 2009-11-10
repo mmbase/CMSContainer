@@ -10,15 +10,13 @@
 </head>
 <body>
 	<div class="tabs">
-	  <a href="#">
 		<div class="tab_active">
 			<div class="body">
-				<div class="title">
-					<fmt:message key="fileupload.admin.title" />
+				<div>
+					<a href="#"><fmt:message key="fileupload.admin.title" /></a>
 				</div>
 			</div>
 		</div>
-	  </a>
 	</div>
 
 <%-- TODO: 

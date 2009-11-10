@@ -9,15 +9,13 @@
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" method='http'>
 <div class="tabs">
-    <a href="#">
-		<div class="tab_active">
-			<div class="body">
-				<div class="title">
-				  <fmt:message key="unlinkcreation.title" />
-				</div>
-			</div>
-		</div>
-	</a>
+    <div class="tab_active">
+        <div class="body">
+            <div>
+                <a href="#"><fmt:message key="unlinkcreation.title" /></a>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="editor">
    <div class="body">

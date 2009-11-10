@@ -24,16 +24,4 @@ public class Versioning {
    public static void removeVersions(Node node) {
       cService.removeVersions(node);
    }
-   
-   public static void setPublishVersion(Node node) {
-      cService.setPublishVersion(node);
-   }
-   
-   public static boolean isOnLive(Node node) {
-      return cService.isOnLive(node);
-   }
-   
-   public static String toXml(Node node) {
-      return cService.toXml(node);
-   }
 }

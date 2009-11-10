@@ -1,5 +1,4 @@
 /*
-
 This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.
 
@@ -54,12 +53,11 @@ public class MoveContentToChannelAction extends MMBaseAction {
       int channel = Integer.parseInt(request.getParameter(PARAMETER_CHANNEL));
       int newChannel = Integer.parseInt(request.getParameter(PARAMETER_NEW_CHANNEL));
 
-      String message = "";
+      String message = null;
       String[] numbers = objectNumber.split(",");
       Locale locale = StrutsUtil.getLocale(request);
       MessageResources resources = getResources(request, "REPOSITORY");
-      int successCount=0;
-      int failureCount=0;
+      boolean isSuccess = true;
 
       Node channelNode = cloud.getNode(channel);
       Node newChannelNode = cloud.getNode(newChannel);
@@ -68,58 +66,47 @@ public class MoveContentToChannelAction extends MMBaseAction {
          int number = Integer.parseInt(number2);
          Node elementNode = cloud.getNode(number);
 
-         RelationManager contentRelationManager = cloud.getRelationManager("contentrel");
-         NodeList newContentList = contentRelationManager.getList("(snumber = " + newChannel + " and dnumber = " + number
-               + ") or (snumber = " + number + " and dnumber = " + newChannel + ")", null, null);
+      RelationManager contentRelationManager = cloud.getRelationManager("contentrel");
+      NodeList newContentList = contentRelationManager.getList("(snumber = " + newChannel + " and dnumber = " + number
+            + ") or (snumber = " + number + " and dnumber = " + newChannel + ")", null, null);
 
 
-         // only if we are not already in the other channel
-         if (newContentList.size() == 0) {
-   
-            RelationUtil.createCountedRelation(elementNode, newChannelNode, "contentrel", "pos");
-            RelationUtil.createRelation(channelNode, elementNode, "deletionrel");
-            NodeList contentList = contentRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
-                  + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
-            for (NodeIterator i = contentList.nodeIterator(); i.hasNext();) {
-               i.nextNode().delete();
-            }
-   
-            RelationManager creationRelationManager = cloud.getRelationManager("creationrel");
-            NodeList creationList = creationRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
-                  + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
-            for (NodeIterator i = creationList.nodeIterator(); i.hasNext();) {
-               i.nextNode().delete();
-               RelationUtil.createRelation(newChannelNode, elementNode, "creationrel");
-            }
-   
-            String remark = resources.getMessage(locale, "content.movetochannel.workflow.message", elementNode
-                  .getStringValue("title"), channelNode.getStringValue("name"), newChannelNode.getStringValue("name"));
-            List<Node> nodes = new ArrayList<Node>();
-            nodes.add(elementNode);
-            Workflow.create(channelNode, remark, nodes);
-            Workflow.create(newChannelNode, remark, nodes);
-            successCount++;
+      // only if we are not already in the other channel
+      if (newContentList.size() == 0) {
+
+         RelationUtil.createCountedRelation(elementNode, newChannelNode, "contentrel", "pos");
+         RelationUtil.createRelation(channelNode, elementNode, "deletionrel");
+         NodeList contentList = contentRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
+               + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
+         for (NodeIterator i = contentList.nodeIterator(); i.hasNext();) {
+            i.nextNode().delete();
+         }
+
+         RelationManager creationRelationManager = cloud.getRelationManager("creationrel");
+         NodeList creationList = creationRelationManager.getList("(snumber = " + channel + " and dnumber = " + number
+               + ") or (snumber = " + number + " and dnumber = " + channel + ")", null, null);
+         for (NodeIterator i = creationList.nodeIterator(); i.hasNext();) {
+            i.nextNode().delete();
+            RelationUtil.createRelation(newChannelNode, elementNode, "creationrel");
+         }
+
+         String remark = resources.getMessage(locale, "content.movetochannel.workflow.message", elementNode
+               .getStringValue("title"), channelNode.getStringValue("name"), newChannelNode.getStringValue("name"));
+         List<Node> nodes = new ArrayList<Node>();
+         nodes.add(elementNode);
+         Workflow.create(channelNode, remark, nodes);
+         Workflow.create(newChannelNode, remark, nodes);
+            isSuccess = true;
          }
          else {
-            failureCount++;
+            isSuccess = false;
          }
       }
-      if(successCount>0) {
-         if(successCount==1){
-            message += resources.getMessage(locale, "content.movetochannel.success", newChannelNode.getStringValue("name"));
-         }else{
-            message += resources.getMessage(locale, "content.massmovetochannel.success", successCount, newChannelNode.getStringValue("name"));
-         }
+      if(isSuccess) {
+         message = resources.getMessage(locale, "content.movetochannel.success", newChannelNode.getStringValue("name"));
       }
-      if(failureCount>0) {
-         if(successCount>0){
-            message += "\\n";
-         }
-         if(failureCount==1){
-            message += resources.getMessage(locale, "content.movetochannel.failed", newChannelNode.getStringValue("name"));
-         }else{
-            message += resources.getMessage(locale, "content.massmovetochannel.failed", failureCount, newChannelNode.getStringValue("name"));
-         }
+      else {
+         message = resources.getMessage(locale, "content.movetochannel.failed", newChannelNode.getStringValue("name"));
       }
       String path = mapping.findForward(SUCCESS).getPath() + "?" + PARAMETER_CHANNEL + "=" + channel;
 
