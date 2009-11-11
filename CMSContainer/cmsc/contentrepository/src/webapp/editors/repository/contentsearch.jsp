@@ -421,11 +421,11 @@
                         <input type="hidden" name="channelnumber" value="<mm:write referid="linktochannel"/>" />
                         <input type="hidden" name="channel" value="<mm:write referid="linktochannel"/>" />
                         <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>  
-                         <input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" />
+                         <span style="font-weight:normal;text-transform:none;"><fmt:message key="locate.selectall" /><input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" /></span>
                      </mm:compare>
                      <mm:compare referid="action" value="link" inverse="true">
                      <c:if test="${fn:length(results) >1}">
-                      <input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" />
+                      <span style="font-weight:normal;text-transform:none;"><fmt:message key="locate.selectall" /><input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" /></span>
                      </c:if>
                      </mm:compare>
                   </th>
