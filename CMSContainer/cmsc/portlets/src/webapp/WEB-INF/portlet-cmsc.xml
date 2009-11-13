@@ -15,7 +15,7 @@
 			<name>template.help</name>
 			<value>ContentChannel.jsp</value>
 		</init-param>
-		<expiration-cache>300</expiration-cache> <!-- 5 minutes -->
+		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
@@ -79,7 +79,7 @@
 			<name>template.help</name>
 			<value>Menu.jsp</value>
 		</init-param>
-		<expiration-cache>300</expiration-cache> <!-- 5 minutes -->
+		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
@@ -111,7 +111,7 @@
 			<name>template.help</name>
 			<value>Content.jsp</value>
 		</init-param>
-		<expiration-cache>300</expiration-cache> <!-- 5 minutes -->
+		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
@@ -143,7 +143,7 @@
 			<name>template.help</name>
 			<value>RelatedContent.jsp</value>
 		</init-param>
-		<expiration-cache>300</expiration-cache> <!-- 5 minutes -->
+		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
@@ -174,7 +174,7 @@
 			<name>template.help</name>
 			<value>Iframe.jsp</value>
 		</init-param>
-		<expiration-cache>300</expiration-cache> <!-- 5 minutes -->
+		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
