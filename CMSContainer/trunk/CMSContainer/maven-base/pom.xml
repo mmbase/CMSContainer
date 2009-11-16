@@ -78,7 +78,7 @@ See http://www.MMBase.org/license
     <junit.version>4.4</junit.version>
 
     <pluto.version>1.0.1</pluto.version>
-    <mmbase.version>1.9-SNAPSHOT</mmbase.version>
+    <mmbase.version>1.9.2-20091104</mmbase.version>
   </properties>
 
 	<developers>
@@ -140,7 +140,7 @@ See http://www.MMBase.org/license
       <plugin>
         <groupId>org.mmbase.maven</groupId>
         <artifactId>maven-mmbase-plugin</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>${mmbase.version}</version>
         <executions>
           <execution>
             <id>create-index-files</id>
