@@ -22,7 +22,6 @@
    <mm:present referid="action">
          <%			
 		    Map<Integer,List> results = new HashMap<Integer,List>();
-
 		    new SqlExecutor().execute(new ShowDatabaseProcessList(results));
 			pageContext.setAttribute("results", results);
 	     %>
@@ -30,16 +29,16 @@
 			<p>Processes List :</p>
 			<table border="1px">
 			<tr><th>Id</th><th>User</th><th>Host</th><th>db</th><th>Command</th><th>Time</th><th>State</th><th>Info</th></tr>
-<c:forEach var="entry" items="${results}">
-<tr >
-<c:forEach var="value" items='${entry.value}'>
-<td>
-${value}
-</td>
-</c:forEach>
-</tr>
-</c:forEach>
-</table>
+			<c:forEach var="entry" items="${results}">
+				<tr >
+				<c:forEach var="value" items='${entry.value}'>
+				<td>
+				${value}
+				</td>
+				</c:forEach>
+				</tr>
+			</c:forEach>
+			</table>
 		</c:if>
 		<c:if test="${fn:length(results) == 0}">
 			No process. 
