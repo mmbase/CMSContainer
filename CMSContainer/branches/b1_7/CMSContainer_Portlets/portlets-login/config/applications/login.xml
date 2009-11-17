@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE application PUBLIC "-//MMBase/DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
+<application name="login" maintainer="finalist.com" version="1" auto-deploy="true">
+   <requirements>
+   </requirements>
+
+   <neededbuilderlist>
+     <!-- These are the application specific builders -->
+   </neededbuilderlist>
+
+   <neededreldeflist>
+   </neededreldeflist>
+
+   <allowedrelationlist>
+   </allowedrelationlist>
+
+   <datasourcelist>
+      <datasource builder="cronjobs" path="login-portlet/cronjobs.xml" />
+   </datasourcelist>
+
+   <relationsourcelist>
+   </relationsourcelist>
+
+   <contextsourcelist>
+   </contextsourcelist>
+
+   <description><![CDATA[Clean unconfirmed users daily]]></description>
+   <install-notice><![CDATA[You have installed the Community Unconfirmed User Cleaner]]></install-notice>
+</application>
