@@ -159,7 +159,7 @@ public abstract class NewsletterPublicationUtil {
    }
    
    public static String getNewsletterPath(Node newsletterPublicationNode) {
-      return NavigationUtil.getPathToRootString(newsletterPublicationNode, true);
+      return NavigationUtil.getPathToRootString(newsletterPublicationNode, !ServerUtil.useServerName());
    }
    
    public static STATUS getStatus(Cloud cloud, int publicationId) {

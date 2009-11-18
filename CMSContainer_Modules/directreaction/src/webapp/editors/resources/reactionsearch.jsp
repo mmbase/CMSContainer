@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp"
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><fmt:setBundle basename="cmsc-reactions" scope="request" 
 /><%@page import="java.util.Iterator, com.finalist.cmsc.mmbase.PropertiesUtil"
 %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -28,26 +27,22 @@
 <mm:import externid="action">search</mm:import><%-- either: search of select --%>
 
       <div class="tabs">
-	    <a href="#">
          <div class="tab_active">
             <div class="body">
-               <div class="title">
-                  <fmt:message key="reactions.title" />
+               <div>
+                  <a href="#"><fmt:message key="reactions.title" /></a>
                </div>
             </div>
          </div>
-		 </a>
       </div>
 
      <div class="editor" style="height:500px">
       <div class="body">
 
          <mm:import id="searchinit"><c:url value='/editors/resources/ReactionInitAction.do'/></mm:import>
-         <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
          <html:form action="/editors/resources/ReactionAction" method="post">
 			<html:hidden property="action" value="${action}"/>
             <html:hidden property="offset"/>
-            <html:hidden property="pager.offset" value="${pagerDOToffset}"/>
             <html:hidden property="order"/>
             <html:hidden property="direction"/>
 
@@ -64,7 +59,7 @@
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
 <c:if test="${resultCount > 0}">
-<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+<%@include file="../repository/searchpages.jsp" %>
 
          <table>
             <tr class="listheader">
@@ -107,10 +102,10 @@
          </table>
 </c:if>
 <c:if test="${resultCount == 0 && param.title != null}">
-	<p style="font-size:12px;padding-left:11px"><fmt:message key="reactionsearch.noresult" /></p>
+	<fmt:message key="reactionsearch.noresult" />
 </c:if>
 <c:if test="${resultCount > 0}">
-	<edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+	<%@include file="../repository/searchpages.jsp" %>
 </c:if>	
 </mm:cloud>
 </div>

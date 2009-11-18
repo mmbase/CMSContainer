@@ -23,4 +23,3 @@ function create() {
    document.forms[0].method.value = "addInit";
    document.forms[0].submit();
 }
-

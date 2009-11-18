@@ -19,6 +19,10 @@ function massDelete(confirmmessage) {
    }   
 }
 
+function setOffset(offset) {
+   document.forms[0].offset.value = offset;
+   document.forms[0].submit();
+}
 function showItem(objectnumber) {
    openPopupWindow("showItem", 500, 500, 'NewsletterBounceAction.do?method=getItem&objectnumber=' + objectnumber);
 }

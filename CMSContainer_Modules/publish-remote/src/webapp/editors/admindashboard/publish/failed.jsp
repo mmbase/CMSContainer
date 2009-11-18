@@ -18,7 +18,7 @@
  			java.util.Calendar calendar = java.util.GregorianCalendar.getInstance();
  			calendar.add(java.util.Calendar.HOUR, -1);
  			%>
-			<mm:constraint field="status" operator="EQUAL" value="fail" casesensitive="true"/>
+			<mm:constraint field="status" operator="EQUAL" value="fail"/>
 			<mm:constraint field="timestamp" operator="GREATER_EQUAL" value='<%=""+calendar.getTimeInMillis()/1000%>'/>
 			<mm:size/>
 		</mm:listnodescontainer>
@@ -30,7 +30,7 @@
  			java.util.Calendar calendar = java.util.GregorianCalendar.getInstance();
  			calendar.add(java.util.Calendar.DAY_OF_MONTH, -1);
  			%>
-			<mm:constraint field="status" operator="EQUAL" value="fail" casesensitive="true"/>
+			<mm:constraint field="status" operator="EQUAL" value="fail"/>
 			<mm:constraint field="timestamp" operator="GREATER_EQUAL" value='<%=""+calendar.getTimeInMillis()/1000%>'/>
 			<mm:size/>
 		</mm:listnodescontainer>
@@ -42,7 +42,7 @@
  			java.util.Calendar calendar = java.util.GregorianCalendar.getInstance();
  			calendar.add(java.util.Calendar.DAY_OF_MONTH, -7);
  			%>
-			<mm:constraint field="status" operator="EQUAL" value="fail" casesensitive="true"/>
+			<mm:constraint field="status" operator="EQUAL" value="fail"/>
 			<mm:constraint field="timestamp" operator="GREATER_EQUAL" value='<%=""+calendar.getTimeInMillis()/1000%>'/>
 			<mm:size/>
 		</mm:listnodescontainer>

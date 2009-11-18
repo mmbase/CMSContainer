@@ -1,4 +1,4 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
+<%@page language="java" contentType="text/html;charset=UTF-8" 
 %><%@page import="com.finalist.cmsc.util.ServerUtil"
 %><%@include file="globals.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -9,15 +9,13 @@
 
   <body>
     <div class="tabs">
-	 <a href="#">
       <div class="tab_active">
         <div class="body">
-          <div class="title">
-           Clean Non-Visible Portlets
+          <div>
+            <a href="#">Clean Non-Visible Portlets</a>
           </div>
         </div>
       </div>
-	  </a>
       <div class="editor">
         <div class="body">
           <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">

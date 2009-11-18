@@ -20,7 +20,6 @@
 	</p>
 	<form action="?">
 		<html:hidden property="number" value="${number}" />
-		<html:hidden property="fromModule" value="${fromModule}" />
 	   	<html:submit property="remove"><fmt:message key="subsitedelete.yes"/></html:submit>&nbsp;
 	   	<html:submit property="cancel"><fmt:message key="subsitedelete.no"/></html:submit>
 	</form>

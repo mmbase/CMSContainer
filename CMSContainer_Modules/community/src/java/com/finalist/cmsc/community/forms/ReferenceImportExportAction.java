@@ -179,7 +179,7 @@ public class ReferenceImportExportAction extends DispatchAction {
       ReferenceImportUploadForm myForm = (ReferenceImportUploadForm) form;
       FormFile myFile = myForm.getFile();
       byte[] fileData = myFile.getFileData();
-    //  String contentType = myFile.getContentType();
+     // String contentType = myFile.getContentType();
       String fileName = myFile.getFileName();
       boolean isXML = "xml".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));
       boolean isCSV = "csv".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));

@@ -16,7 +16,7 @@
 		<div class="editor">
 			<div class="body">
 			<mm:listnodescontainer type="publishqueue">
-				<mm:constraint field="status" operator="EQUAL" value="init" casesensitive="true"/>
+				<mm:constraint field="status" operator="EQUAL" value="init"/>
 				<br/>
 				<b><fmt:message key="admindashboard.publish.viewqueue.size" />:</b> <mm:size/>
 				<br/>

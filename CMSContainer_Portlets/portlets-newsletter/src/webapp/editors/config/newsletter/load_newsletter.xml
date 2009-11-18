@@ -14,9 +14,9 @@
 	<field name="replyto_mail" />
 	<field name="replyto_name" />
 	<field name="inmenu" />
-   <field name="paused" />
+    <field name="paused" />
 	<field name="pausedstartdate" />
-   <field name="pausedstopdate" />
+    <field name="pausedstopdate" />
 	<field name="title" />
 	<field name="subject" />
 	<field name="description" />
@@ -33,5 +33,5 @@
 	<relation destination="layout" role="layoutrel" />
 	<relation destination="page" role="navrel" />
 	<relation destination="portlet" role="portletrel" />
-   <relation destination="stylesheet" role="stylerel" />
+	<relation destination="stylesheet" role="stylerel" />
 </action>

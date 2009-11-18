@@ -1,8 +1,8 @@
 function editRemark(id, oldRemark) {
    var remark = prompt("Opmerking ?",oldRemark);
    if(remark != null) {
-	   var form = document.forms['workflowForm'];
-	   checkAllBoolean(false, 'workflowForm', ''); 
+	   var form = document.forms[0];
+	   checkAllBoolean(false, ''); 
 	   form["check_"+id].checked = true;
 	   form["remark"].value = remark;
 	   form["actionvalue"].value = 'rename';
@@ -10,31 +10,30 @@ function editRemark(id, oldRemark) {
    }
 }
 
-function selectTab(val, workflowNodetype, orderby, laststatus) {
-   document.forms['workflowForm'].orderby.value = orderby;
-   document.forms['workflowForm'].workflowNodetype.value = workflowNodetype;
-   document.forms['workflowForm'].status.value = val;
+function selectTab(val, orderby, laststatus) {
+   document.forms[0].orderby.value = orderby;
+   document.forms[0].status.value = val;
    if(laststatus==null ||laststatus=="")
-		document.forms['workflowForm'].laststatus.vlaue="true";
+		document.forms[0].laststatus.vlaue="true";
    else
-   		document.forms['workflowForm'].laststatus.value=laststatus;
-   document.forms['workflowForm'].submit();
+   		document.forms[0].laststatus.value=laststatus;
+   document.forms[0].submit();
 }
 
 function returnOrderBy() {
-  return document.forms['workflowForm'].orderby.value;
+  return document.forms[0].orderby.value;
 }
 var isAction = false;
 
-function checkAllElement(element, formName, type) {
+function checkAllElement(element, type) {
    var what = element.checked;
-   checkAllBoolean(what, formName, type);
+   checkAllBoolean(what, type);
 }
 
-function checkAllBoolean(what, formName, type) {
+function checkAllBoolean(what, type) {
    var namesub = 6 + type.length;
 
-   var el=document.forms[formName].elements;
+   var el=document.forms[0].elements;
    for (i=0; i<el.length; i++) {
       var e = el[i];
       if (e.name.substr(0,namesub)=="check_" + type) {
@@ -52,9 +51,9 @@ function checkAllBoolean(what, formName, type) {
 
 function setActionValue(value, status, remark) {
    if (submitValid(true)) {
-      document.forms['workflowForm'].actionvalue.value=value;
+      document.forms[0].actionvalue.value=value;
       if(status) {
-        document.forms['workflowForm'].status.value=status;
+        document.forms[0].status.value=status;
       }
       if (value == 'reject') {
          var comment = prompt(remark,"");
@@ -71,9 +70,9 @@ function setActionValue(value, status, remark) {
    return true;
 }
 
-function submitValid(form, silent) {
+function submitValid(silent) {
  if (isAction || silent) {
-      var el=form.elements;
+      var el=document.forms[0].elements;
       for (i=0; i < el.length; i++) {
          var e=el[i];
          if (e.name.substr(0,6) == "check_") {

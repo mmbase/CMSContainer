@@ -9,15 +9,13 @@
 	
 	<div class="tabs">
 	    <!-- active TAB -->
-		<a name="activetab">
 	    <div class="tab_active">
 	        <div class="body">
-	            <div class="title">
-	                <fmt:message key="tagdetail.title"/>
+	            <div>
+	                <a name="activetab"><fmt:message key="tagdetail.title"/></a>
 	            </div>
 	        </div>
 	    </div>
-		</a>
 	</div>
 
 

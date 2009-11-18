@@ -43,21 +43,12 @@ public class SubSiteDelete extends MMBaseFormlessAction {
          if (isEditor) {
             NavigationUtil.deleteItem(subsiteNode);
          }
-         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
-            return mapping.findForward("modulesuccess");
-         } else {
-            return mapping.findForward(SUCCESS);
-         }
+         return mapping.findForward(SUCCESS);
       }
 
       if (isCancelAction(request)) {
-         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
-            return mapping.findForward("modulesuccess");
-         } else {
-            return mapping.findForward(SUCCESS);
-         }
+         return mapping.findForward(SUCCESS);
       }
-      request.setAttribute("fromModule", getParameter(request, "fromModule"));
 
       // neither remove or cancel, show confirmation page
       return mapping.findForward("delete");

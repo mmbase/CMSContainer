@@ -9,21 +9,19 @@
 <c:set var="class" value="${active ? 'tab_active' : 'tab'}"/>
 
 <jsp:doBody var="action"/>
-<a href="${action}">
 <div class="${class}">
    <div class="body">
-      <div class="title">
+      <div>
          <c:choose>
             <c:when test="${empty title}">
-               <fmt:message key="${key}"/>
+               <a href="${action}"><fmt:message key="${key}"/></a>
             </c:when>
             <c:otherwise>
-              ${title}
+               <a href="${action}">${title}</a>
             </c:otherwise>
          </c:choose>
       </div>
    </div>
 </div>
-</a>
 
  

@@ -9,26 +9,15 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+import java.util.*;
 
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.beans.om.Layout;
-import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.beans.om.Page;
-import com.finalist.cmsc.beans.om.Portlet;
-import com.finalist.cmsc.beans.om.PortletDefinition;
-import com.finalist.cmsc.beans.om.Site;
-import com.finalist.cmsc.beans.om.Stylesheet;
-import com.finalist.cmsc.beans.om.View;
+import com.finalist.cmsc.beans.om.*;
+
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
 public class SiteModelManager extends SelfPopulatingCacheManager {
 
@@ -46,12 +35,20 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    /** MMbase logging system */
    private static final Logger log = Logging.getLoggerInstance(SiteModelManager.class.getName());
 
-   private static SiteModelManager siteModelManager = new SiteModelManager();
+   private static SiteModelManager siteModelManager;
+   static {
+      try {
+         siteModelManager = new SiteModelManager();
+      }
+      catch (CacheException e) {
+         throw new ExceptionInInitializerError(e);
+      }
+   }
 
    public static SiteModelManager getInstance() {
       return siteModelManager;
    }
-   
+
    private SiteModelManager() throws CacheException {
       super();
 
@@ -397,7 +394,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearPortlet(String portletId) {
       try {
-         getCache(PORTLET_CACHE).put(new Element(portletId,null));
+         getCache(PORTLET_CACHE).remove(Integer.valueOf(portletId));
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -412,7 +409,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearItem(int itemId) {
       try {
-         getCache(NAVIGATION_CACHE).put(new Element(itemId, null));
+         getCache(NAVIGATION_CACHE).remove(itemId);
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -426,5 +423,6 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
       Layout layout = getLayout(layoutid);
       return layout.getNames();
    }
+
 
 }

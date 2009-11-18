@@ -192,7 +192,7 @@
          <forward name="cancel" path="/editors/site/refreshpagesandshow.jsp" redirect="false" />
          <forward name="publicationedit" path="/editors/newsletter/NewsletterPublicationManagement.do" redirect="false"/>
       </action>
-      <!--ajax for newslwtters-->
+	  <!--ajax for newslwtters-->
 		<action path="/editors/newsletter/NewsletterEditionFreezeAjax" type="com.finalist.newsletter.forms.NewsletterEditionFreezeAjax" unknown="false" validate="false">
 		</action>
       <action path="/editors/newsletter/NewsletterEditionApprove" type="com.finalist.newsletter.forms.NewsletterEditionApprove">

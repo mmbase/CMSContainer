@@ -3,20 +3,17 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="user.title">
-</cmscedit:head>
+<cmscedit:head title="user.title" />
 <mm:cloud jspvar="cloud" loginpage="../login.jsp">
 <body style="overflow: auto">
     <div class="tabs">
-	 <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div class="title">
-                   <fmt:message key="rights.${mode}.title" />
+                <div>
+                    <a href="#"><fmt:message key="rights.${mode}.title" /></a>
                 </div>
             </div>
         </div>
-		</a>
     </div>
 
 	<div class="editor">
@@ -26,11 +23,10 @@
                <br/>
                <b><fmt:message key="rights.groupson">
                	    <fmt:param><mm:nodeinfo type="guitype"/></fmt:param>
-                      <fmt:param>
-			               <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
-			               <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
-                      </fmt:param>
-               </fmt:message></b>
+                  </fmt:message> 
+               <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
+               <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
+               </b>: 
                <br/>
             </p>
             <div style="padding: 5px">
@@ -59,17 +55,16 @@
                   </mm:listnodes>
                </table>
             </div>
-            <p>
-               <br/>
-               <b><fmt:message key="rights.userson" >
-                        <fmt:param><mm:nodeinfo type="guitype"/></fmt:param>
-                        <fmt:param>
-                           <c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
-                           <c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
-                        </fmt:param>
-               </fmt:message></b>
-               <br/>
-            </p>
+				<p>
+					<br/>
+					<b><fmt:message key="rights.userson" >
+        		       		<fmt:param><mm:nodeinfo type="guitype"/></fmt:param>
+						</fmt:message>  
+					<c:if test="${mode == 'page'}"><mm:field name="title"/></c:if>
+					<c:if test="${mode != 'page'}"><mm:field name="name"/></c:if>
+					</b>:	
+					<br/>
+				</p>
 				<div style="padding: 5px">
 					<table class="compact">
 						<mm:listnodes type="mmbaseusers" jspvar="user" orderby="username">

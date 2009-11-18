@@ -1,5 +1,4 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
-%><%@include file="globals.jsp" %>
+<%@include file="globals.jsp" %>
 <html>
 <cmscedit:head title="Footer" titleMode="plain">
 <script type="text/javascript">

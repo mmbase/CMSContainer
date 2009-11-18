@@ -1,13 +1,8 @@
 package com.finalist.cmsc.publish;
 
-import java.util.Date;
-import java.util.Map;
-
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-
-import com.finalist.cmsc.mmbase.TypeUtil;
-import com.finalist.cmsc.services.publish.Publisher;
+import org.mmbase.bridge.NodeList;
 
 /**
  * @author Jeoffrey Bakker, Finalist IT Group
@@ -20,13 +15,12 @@ public class NodePublisher extends Publisher{
 
    @Override
    public boolean isPublishable(Node node) {
-      String name = node.getNodeManager().getName();
-      return !TypeUtil.isMmbaseType(name) && !TypeUtil.isPublishType(name);
+      return true;
    }
 
    @Override
-   public void addNodesToPublish(Node node, Map<Node, Date> nodes) {
-      nodes.put(node, new Date());
+   public void publish(Node node, NodeList contentnodes) {
+       publishNode(node, null);
    }
 
 }

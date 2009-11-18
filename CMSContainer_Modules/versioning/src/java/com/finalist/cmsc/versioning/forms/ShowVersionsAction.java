@@ -1,26 +1,26 @@
 package com.finalist.cmsc.versioning.forms;
 
-import java.util.Locale;
+import com.finalist.cmsc.struts.MMBaseAction;
+import com.finalist.cmsc.services.versioning.VersioningService;
+import com.finalist.cmsc.security.SecurityUtil;
+import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.repository.RepositoryUtil;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionForm;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.NodeQuery;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.util.SearchUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-import org.mmbase.bridge.util.SearchUtil;
 
-import com.finalist.cmsc.repository.RepositoryUtil;
-import com.finalist.cmsc.security.SecurityUtil;
-import com.finalist.cmsc.security.UserRole;
-import com.finalist.cmsc.services.versioning.VersioningService;
-import com.finalist.cmsc.struts.MMBaseAction;
+import java.util.Locale;
 
 /**
  * @author Jeoffrey Bakker, Finalist IT Group

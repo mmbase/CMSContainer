@@ -34,7 +34,7 @@ public class ConfirmAction extends Action{
       // Note: Kristian and Nico
       // Do we also need to replace the HOSTNAME? Is the page always on the same site? See LinkTag.java
       
-      returnUrl = SiteManagement.getPath(Integer.parseInt(pageNumber), !ServerUtil.useServerName());
+      returnUrl = SiteManagement.getPath(Integer.parseInt(pageNumber), !ServerUtil.useServerName()); 
       returnUrl += "/_rp_".concat(name).concat("_").concat("active").concat("/1_");
       if (authId != null) {
          PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");

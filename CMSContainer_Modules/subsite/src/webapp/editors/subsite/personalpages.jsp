@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
 %><%@include file="globals.jsp" 
-%><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
@@ -8,6 +7,7 @@
 %><%@page import="org.mmbase.bridge.Node" 
 %><%@page import="org.mmbase.bridge.NodeList" 
 %><%@page import="org.mmbase.bridge.util.SearchUtil" 
+%><%@page import="org.mmbase.remotepublishing.*" 
 %><%@page import="com.finalist.cmsc.subsite.util.SubSiteUtil" 
 %><%@page import="com.finalist.cmsc.services.publish.Publish"
 %><%@page import="org.mmbase.bridge.BridgeException"
@@ -35,7 +35,6 @@
 <mm:import externid="results" jspvar="nodeList" vartype="List" />
 <mm:import externid="resultCount" jspvar="resultCount" vartype="Integer">0</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
-<c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <mm:import externid="returnurl"/>
 
 <mm:import externid="subsite" from="parameters" />
@@ -45,15 +44,13 @@
 
 <div class="content">
    <div class="tabs">
-     <a href="#" onClick="selectTab('basic');">
-       <div class="tab_active">
+      <div class="tab_active">
          <div class="body">
-            <div class="title">
-               <fmt:message key="site.personal.personalpages" />
+            <div>
+               <a href="#" onClick="selectTab('basic');"><fmt:message key="site.personal.personalpages" /></a>
             </div>
          </div>
-       </div>
-	  </a>
+      </div>
    </div>
 </div>
 
@@ -71,7 +68,6 @@
 	<html:hidden property="action" value="${action}"/>
 	<html:hidden property="search" value="true"/>
 	<html:hidden property="offset"/>
-	<html:hidden property="pager.offset" value="${pagerDOToffset}"/>
 	<html:hidden property="order"/>
 	<html:hidden property="direction"/>
 	<mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
@@ -81,7 +77,7 @@
         <tr>
            <td style="width:105px"><fmt:message key="subsite.name" />:</td>
            <td>
-              <cmsc:select var="subsite" default="${subsite}" onchange="document.forms[0].submit();">
+              <cmsc:select var="subsite" onchange="document.forms[0].submit();">
               <mm:listnodes type="subsite" orderby="title">
                  <mm:field name="number" id="subsitenumber" write="false" vartype="String" />
                  <cmsc:option value="${subsitenumber}" name="${_node.title}" />
@@ -92,7 +88,7 @@
      </c:if>
      <c:if test="${subsiteExists ne true}">
        <tr>
-          <td colspan="2"  style="font-size:12px;margin-left:11px"><fmt:message key="subsite.notfound" /></td>
+          <td colspan="2"><b><fmt:message key="subsite.notfound" /></b></td>
        </tr>
 	  </c:if>
     <tr>
@@ -105,7 +101,7 @@
    <tr>
       <td></td>
    <td>
-     <input type="submit" class="button" name="submitButton" onClick="setOffset(0, 0);" value="<fmt:message key="site.personal.search" />"/>
+     <input type="submit" class="button" name="submitButton" onClick="setOffset(0);" value="<fmt:message key="site.personal.search" />"/>
      </td>
    </tr>
 	</table>
@@ -126,7 +122,7 @@
 <c:set var="extraparams" value="&subsite=${subsite}&title=${SearchForm.title}&order=${SearchForm.order}"/>
 
 <mm:isempty referid="results" inverse="true">
-   <edit:pages search="false" totalElements="${listSize}" elementsPerPage="${resultsPerPage}" offset="${offset}" extraparams="${extraparams}"/>
+   <%@ include file="../pages.jsp" %>
 </mm:isempty>
 
 <table>
@@ -147,7 +143,7 @@
 		   <td style="white-space: nowrap;">
 		   
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?fromModule=frommodule&number=${nodenumber}&subsite=${subsite}"
+         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
@@ -159,7 +155,7 @@
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>
          </c:if>
-          <a href="../subsite/SubSiteDelete.do?fromModule=frommodule&number=${nodenumber}"
+          <a href="../subsite/SubSiteDelete.do?number=${nodenumber}"
 		       title="<fmt:message key="pp.content.delete" />"><img src="../gfx/icons/delete.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.delete" />"
 		                                                       alt="<fmt:message key="pp.content.delete" />"/></a>
@@ -188,13 +184,13 @@
 </mm:list>
 <%-- Now print if no results --%>
 <mm:isempty referid="results">
-   <tr><td style="font-size:12px;padding-left:11px"><fmt:message key="site.personal.nonefound" /></td></tr>
+   <tr><td><b><fmt:message key="site.personal.nonefound" /></b></td></tr>
 </mm:isempty>
 </tbody>
 </table>
 
 <mm:isempty referid="results" inverse="true">
-<edit:pages search="false" totalElements="${listSize}" elementsPerPage="${resultsPerPage}" offset="${offset}" extraparams="${extraparams}"/>
+<%@ include file="../pages.jsp" %>
 </mm:isempty>
    
 <br />

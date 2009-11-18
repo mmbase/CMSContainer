@@ -1650,11 +1650,6 @@
         <name>feeds</name>
         <path>/META-INF/tags/feeds.tag</path>
     </tag-file>
-    <tag-file>
-        <description>Override the mm:field tag and edit the richtext edit stuff when in edit modus.</description>
-        <name>field</name>
-        <path>/META-INF/tags/field.tag</path>
-    </tag-file>
     <function>
         <description>function to ceil a int value</description>
         <name>ceil</name>

@@ -21,15 +21,13 @@
       <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
       <mm:import externid="action">search</mm:import><%-- either: search of select --%>
       <div class="tabs">
-	    <a href="#">
          <div class="tab_active">
             <div class="body">
-               <div class="title">
-                  <fmt:message key="newsletter.term.title" />
+               <div>
+                  <a href="#"><fmt:message key="newsletter.term.title" /></a>
                </div>
             </div>
          </div>
-		 </a>
       </div>
 
      <div class="editor">

@@ -61,7 +61,7 @@
 	  <c:remove var="needajax"/>
 	  </c:if>
 
-      <div class="body">
+	  <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>
              <cmsc:rights nodeNumber="${result.id}" var="rights"/>
