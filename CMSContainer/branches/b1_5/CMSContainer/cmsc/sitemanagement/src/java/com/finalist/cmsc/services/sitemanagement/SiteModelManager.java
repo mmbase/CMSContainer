@@ -18,7 +18,6 @@ import com.finalist.cmsc.beans.om.*;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCacheManager;
 
 public class SiteModelManager extends SelfPopulatingCacheManager {
 
@@ -121,7 +120,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public NavigationItem getNavigationItem(int id) {
       try {
-         return (NavigationItem) getCache(NAVIGATION_CACHE).get(id);
+         return (NavigationItem) getCache(NAVIGATION_CACHE).get(id).getObjectValue();
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -135,7 +134,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
          try {
             Integer itemId = siteCache.getSite(path);
             if (itemId != null) {
-               return (Site) getCache(NAVIGATION_CACHE).get(itemId);
+               return (Site) getCache(NAVIGATION_CACHE).get(itemId).getObjectValue();
             }
             else {
                log.debug("Site not found for path " + path);
@@ -159,7 +158,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
       try {
          List<Integer> siteIds = siteCache.getSites();
          for (Integer siteId : siteIds) {
-            Site site = (Site) getCache(NAVIGATION_CACHE).get(siteId);
+            Site site = (Site) getCache(NAVIGATION_CACHE).get(siteId).getObjectValue();
             if (site != null) {
                sites.add(site);
             }
@@ -178,7 +177,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
          try {
             List<Integer> itemIds = siteCache.getItemsForPath(path);
             for (Integer itemId : itemIds) {
-               NavigationItem item = (NavigationItem) getCache(NAVIGATION_CACHE).get(itemId);
+               NavigationItem item = (NavigationItem) getCache(NAVIGATION_CACHE).get(itemId).getObjectValue();
                if (item != null && clazz.isInstance(item)) {
                   items.add(clazz.cast(item));
                }
@@ -202,7 +201,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
          try {
             List<Integer> itemIds = siteCache.getChildren(parent);
             for (Integer itemId : itemIds) {
-               NavigationItem navigationItem = (NavigationItem) getCache(NAVIGATION_CACHE).get(itemId);
+               NavigationItem navigationItem = (NavigationItem) getCache(NAVIGATION_CACHE).get(itemId).getObjectValue();
                if (navigationItem != null &&  childClazz.isInstance(navigationItem)) {
                   items.add(childClazz.cast(navigationItem));
                }
@@ -219,7 +218,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    public View getView(int id) {
       if (id > 0) {
          try {
-            return (View) getCache(VIEW_CACHE).get(Integer.valueOf(id));
+            return (View) getCache(VIEW_CACHE).get(Integer.valueOf(id)).getObjectValue();
          }
          catch (CacheException e) {
             log.info("" + e.getMessage(), e);
@@ -232,7 +231,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    public Stylesheet getStylesheet(int id) {
       if (id > 0) {
          try {
-            return (Stylesheet) getCache(STYLESHEET_CACHE).get(Integer.valueOf(id));
+            return (Stylesheet) getCache(STYLESHEET_CACHE).get(Integer.valueOf(id)).getObjectValue();
          }
          catch (CacheException e) {
             log.info("" + e.getMessage(), e);
@@ -245,7 +244,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    public Layout getLayout(int id) {
       if (id > 0) {
          try {
-            return (Layout) getCache(LAYOUT_CACHE).get(Integer.valueOf(id));
+            return (Layout) getCache(LAYOUT_CACHE).get(Integer.valueOf(id)).getObjectValue();
          }
          catch (CacheException e) {
             log.info("" + e.getMessage(), e);
@@ -260,7 +259,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
          return selectDefinition;
       }
       try {
-         return (PortletDefinition) getCache(PORTLET_DEFINITION_CACHE).get(Integer.valueOf(id));
+         return (PortletDefinition) getCache(PORTLET_DEFINITION_CACHE).get(Integer.valueOf(id)).getObjectValue();
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -278,7 +277,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
          return empty;
       }
       try {
-         return (Portlet) getCache(PORTLET_CACHE).get(Integer.valueOf(id));
+         return (Portlet) getCache(PORTLET_CACHE).get(Integer.valueOf(id)).getObjectValue();
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -395,7 +394,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearPortlet(String portletId) {
       try {
-         getCache(PORTLET_CACHE).put(Integer.valueOf(portletId), null);
+         getCache(PORTLET_CACHE).remove(Integer.valueOf(portletId));
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -410,7 +409,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearItem(int itemId) {
       try {
-         getCache(NAVIGATION_CACHE).put(itemId, null);
+         getCache(NAVIGATION_CACHE).remove(itemId);
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
