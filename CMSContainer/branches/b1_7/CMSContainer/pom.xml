@@ -162,13 +162,5 @@ See http://www.MMBase.org/license
 		</dependency>
 
 	</dependencies>
-
-   <distributionManagement>
-      <repository>
-         <id>cmscontainer.org</id>
-         <name>CMSc m2 repository</name>
-         <url>scp://intranet/server/sites/cmscontainer.org/public_html/files/maven2</url>
-      </repository>
-   </distributionManagement>
 	
 </project>

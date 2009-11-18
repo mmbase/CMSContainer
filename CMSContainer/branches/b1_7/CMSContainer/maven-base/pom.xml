@@ -35,10 +35,18 @@ See http://www.MMBase.org/license
   </licenses>
 
   <scm>
-    <connection>scm:svn:https://scm.mmbase.org/CMSContainer/</connection>
-    <developerConnection>scm:svn:https://scm.mmbase.org/CMSContainer/</developerConnection>
-    <url>https://scm.mmbase.org/CMSContainer/</url>
+    <connection>https://scm.mmbase.org/CMSContainer/branches/b1_7/</connection>
+    <developerConnection>scm:svn:https://scm.mmbase.org/CMSContainer/branches/b1_7/</developerConnection>
+    <url>https://scm.mmbase.org/CMSContainer/branches/b1_7/</url>
   </scm>
+
+   <distributionManagement>
+      <repository>
+         <id>cmscontainer.org</id>
+         <name>CMSc m2 repository</name>
+         <url>scp://intranet/server/sites/cmscontainer.org/public_html/files/maven2</url>
+      </repository>
+   </distributionManagement>
 
   <issueManagement>
     <system>JIRA</system>
@@ -78,7 +86,7 @@ See http://www.MMBase.org/license
     <junit.version>4.4</junit.version>
 
     <pluto.version>1.0.1</pluto.version>
-    <mmbase.version>1.9.2-20091104</mmbase.version>
+    <mmbase.version>1.9.2-20091118</mmbase.version>
   </properties>
 
 	<developers>
@@ -286,20 +294,20 @@ See http://www.MMBase.org/license
             </check>
           </configuration>
         </plugin>
-<!-- 
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
-            <tagBase>svn://[username[:password]@]cvs.mmbase.org/tags</tagBase>
+            <tagBase>https://scm.mmbase.org/CMSContainer/tags/</tagBase>
             <useReleaseProfile>false</useReleaseProfile>
-            <preparationGoals>clean install</preparationGoals>
-            <goals>deploy</goals>
-            <arguments>-Prelease,deploy</arguments>
+            <remoteTagging>true</remoteTagging>
+            <preparationGoals>clean verify</preparationGoals>
             <autoVersionSubmodules>true</autoVersionSubmodules>
+			<releaseProfiles>release</releaseProfiles>
           </configuration>
         </plugin>
- -->
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
