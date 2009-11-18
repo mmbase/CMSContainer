@@ -605,7 +605,7 @@ See http://www.MMBase.org/license
         <dependency>
          <groupId>net.sf.ehcache</groupId>
          <artifactId>ehcache-core</artifactId>
-         <version>1.7.1-SNAPSHOT</version>
+         <version>1.7.0</version>
         </dependency>
 
 		<dependency>
