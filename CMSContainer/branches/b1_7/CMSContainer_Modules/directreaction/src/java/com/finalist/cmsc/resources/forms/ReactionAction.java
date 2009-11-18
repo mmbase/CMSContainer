@@ -14,7 +14,7 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.directreaction.util.ReactionUtil;
 
-public class ReactionAction extends SearchAction {
+public class ReactionAction extends AbstractSearchAction {
 
    private static final Logger log = Logging.getLoggerInstance(ReactionAction.class.getName());
 
@@ -47,6 +47,14 @@ public class ReactionAction extends SearchAction {
       return mapping.getInputForward();
    }
 
+   @Override
+   protected void addStepsToQuery(Cloud cloud, SearchForm searchForm, NodeManager nodeManager,
+         NodeQuery query) {
+
+      // First add the proper step to the query.
+      Step theStep = query.addStep(nodeManager);
+      query.setNodeStep(theStep);
+   }
 
    @Override
    public Cloud getCloud() {

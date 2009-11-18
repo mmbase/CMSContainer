@@ -7,7 +7,7 @@ import org.mmbase.bridge.NodeQuery;
  * @author Billy
  *
  */
-public class AttachmentAction extends SearchAction {
+public class AttachmentAction extends ResourceSearchAction {
 
    public static final String TITLE_FIELD = "title";
    public static final String DESCRIPTION_FIELD = "description";
