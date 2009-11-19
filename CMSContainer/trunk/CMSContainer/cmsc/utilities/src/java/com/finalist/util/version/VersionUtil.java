@@ -64,13 +64,18 @@ public class VersionUtil {
          if (start != -1 && end != -1 && end > start) {
             // Check if the right version part is found
             if (path.charAt(end - 1) >= '0' && path.charAt(end - 1) <= '9') {
-               int newEnd = path.lastIndexOf("-", end - 1);
+				if (end-2 >= 0 ) {
+					char secondChar = path.charAt(end - 2);
+					if( (secondChar>= '0' && secondChar <= '9') || secondChar =='.' || secondChar == '_') {
+					   int newEnd = path.lastIndexOf("-", end - 1);
 
-               // Only use the newEnd if it is still valid. Otherwise
-               // 'c3p-1.23.3.jar' fails
-               if (newEnd > start) {
-                  end = newEnd;
-               }
+					   // Only use the newEnd if it is still valid. Otherwise
+					   // 'c3p-1.23.3.jar' fails
+					   if (newEnd > start) {
+						  end = newEnd;
+					   }
+					}
+				}
             }
 
             // TODO Replace this checking for version number by Pattern matching
