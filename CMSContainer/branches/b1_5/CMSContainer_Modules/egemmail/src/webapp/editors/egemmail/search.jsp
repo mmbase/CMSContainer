@@ -24,7 +24,19 @@
         document.getElementById('exportTitle2').value = document.getElementById('exportTitle').value; 
         document.getElementById('exportKeywords2').value = document.getElementById('exportKeywords').value;
         document.getElementById('exportAuthor2').value = document.getElementById('exportAuthor').value;
-                
+
+        if (document.getElementById('created').checked) {
+            document.getElementById('created2').value="true";
+        } else {
+            document.getElementById('created2').value="false";
+        }
+
+        if (document.getElementById('modified').checked) {
+            document.getElementById('modified2').value="true";
+        } else {
+        	   document.getElementById('modified2').value="false";
+        }
+    
         return doForward('search');
       }
       return false;
@@ -102,8 +114,8 @@
       <html:hidden property="author" styleId="exportAuthor2"/>
       <html:hidden property="page" />
       <html:hidden property="forward" />
-      <html:hidden property="limitToLastWeekModified" />
-      <html:hidden property="limitToLastWeekCreated" />
+      <html:hidden property="limitToLastWeekModified" styleId="modified2" />
+      <html:hidden property="limitToLastWeekCreated" styleId="created2" />
 		<mm:list referid="results" max="${resultsPerPage}" offset="${offset*resultsPerPage}">
 		    <mm:first>
 		        <egem:paging offset="${offset}" resultsPerPage="${resultsPerPage}" totalNumberOfResults="${totalNumberOfResults}" />
