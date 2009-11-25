@@ -10,7 +10,7 @@
    </parent>
 
    <groupId>org.cmscontainer.demos</groupId>
-   <artifactId>cmsc-demo</artifactId>
+   <artifactId>cmsc-demo-base</artifactId>
    <name>CMS Container Demos</name>
    <packaging>pom</packaging>
 
