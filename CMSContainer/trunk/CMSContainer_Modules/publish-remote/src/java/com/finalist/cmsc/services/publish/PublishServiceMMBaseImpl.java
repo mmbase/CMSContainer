@@ -184,22 +184,36 @@ public class PublishServiceMMBaseImpl extends PublishService implements PublishL
 
    @Override
    public int getRemoteNumber(Node node) {
-       Map<Integer,Integer> numbers = PublishManager.getPublishedNodeNumbers(node);
-       Iterator<Integer> iter = numbers.values().iterator();
-       if (iter.hasNext()) {
-           return iter.next();
-       }
-       return -1;
+      if (PublishManager.isPublished(node)) {
+         Map<Integer,Integer> numbers = PublishManager.getPublishedNodeNumbers(node);
+         Iterator<Integer> iter = numbers.values().iterator();
+         if (iter.hasNext()) {
+             return iter.next();
+         }
+      }
+      else {
+         if (PublishManager.isImported(node)) {
+            return PublishManager.getSourceNodeNumber(node);
+         }
+      }
+      return -1;
    }
 
    @Override
    public Node getRemoteNode(Node node) {
-       Map<Integer,Node> numbers = PublishManager.getPublishedNodes(node);
-       Iterator<Node> iter = numbers.values().iterator();
-       if (iter.hasNext()) {
-           return iter.next();
-       }
-       return null;
+      if (PublishManager.isPublished(node)) {
+         Map<Integer, Node> numbers = PublishManager.getPublishedNodes(node);
+         Iterator<Node> iter = numbers.values().iterator();
+         if (iter.hasNext()) {
+            return iter.next();
+         }
+      }
+      else {
+         if (PublishManager.isImported(node)) {
+            return PublishManager.getSourceNode(node);
+         }
+      }
+      return null;
    }
 
    @Override
