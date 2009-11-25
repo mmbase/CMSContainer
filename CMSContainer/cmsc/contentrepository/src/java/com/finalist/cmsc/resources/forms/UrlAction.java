@@ -3,7 +3,7 @@ package com.finalist.cmsc.resources.forms;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
 
-public class UrlAction extends SearchAction {
+public class UrlAction extends ResourceSearchAction {
 
    public static final String TITLE_FIELD = "title";
    public static final String DESCRIPTION_FIELD = "description";
