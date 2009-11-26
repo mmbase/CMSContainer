@@ -3,7 +3,7 @@
 <application name="subsite" maintainer="finalist.com" version="4" auto-deploy="true">
    <requirements>
       <requires name="contentrepository" maintainer="finalist.com" version="4" type="application"/>
-      <requires name="sitemanagement" maintainer="finalist.com" version="1" type="application"/>
+      <requires name="sitemanagement" maintainer="finalist.com" version="2" type="application"/>
    </requirements>
 
    <neededbuilderlist>
