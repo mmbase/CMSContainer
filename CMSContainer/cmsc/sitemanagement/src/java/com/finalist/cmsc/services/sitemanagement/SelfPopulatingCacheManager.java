@@ -1,14 +1,13 @@
 package com.finalist.cmsc.services.sitemanagement;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
-import net.sf.ehcache.constructs.blocking.UpdatingCacheEntryFactory;
+import net.sf.ehcache.constructs.blocking.*;
 
 public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
 
@@ -47,7 +46,7 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
     * Refreshes all caches.
     */
    public void refreshAll() throws Exception {
-       final List caches = getCaches();
+       final List<BlockingCache> caches = getCaches();
        for (int i = 0; i < caches.size(); i++) {
            final SelfPopulatingCache cache = (SelfPopulatingCache) caches.get(i);
            cache.refresh();
@@ -111,8 +110,8 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
    /**
     * Builds the set of caches. Returns a copy so that the monitor can be released.
     */
-   protected synchronized List getCaches() {
-       final ArrayList caches = new ArrayList();
+   protected synchronized List<BlockingCache> getCaches() {
+       final ArrayList<BlockingCache> caches = new ArrayList<BlockingCache>();
        caches.addAll(this.caches.values());
        return caches;
    }

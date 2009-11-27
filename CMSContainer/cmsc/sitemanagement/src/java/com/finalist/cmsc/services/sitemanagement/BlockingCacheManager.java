@@ -25,14 +25,14 @@ public class BlockingCacheManager {
    /**
     * A map of BlockingCaches, keyed by cache name
     */
-   protected final Map caches;
+   protected final Map<String, BlockingCache> caches;
 
 
    /**
     * Empty Constructor
     */
    public BlockingCacheManager() {
-       caches = new HashMap();
+       caches = new HashMap<String, BlockingCache>();
    }
 
    /**
@@ -41,7 +41,7 @@ public class BlockingCacheManager {
     */
    public BlockingCacheManager(CacheManager mgr) {
        manager = mgr;
-       caches = new HashMap();
+       caches = new HashMap<String, BlockingCache>();
    }
 
    /**
@@ -73,12 +73,12 @@ public class BlockingCacheManager {
     * Drops the contents of all caches.
     */
    public void clearAll() throws CacheException {
-       final List cacheList = getCaches();
+       final List<BlockingCache> cacheList = getCaches();
        if (LOG.isDebugEnabled()) {
            LOG.debug("Removing all blocking caches");
        }
        for (int i = 0; i < cacheList.size(); i++) {
-           final BlockingCache cache = (BlockingCache) cacheList.get(i);
+           final BlockingCache cache = cacheList.get(i);
            cache.removeAll();
        }
    }
@@ -116,8 +116,8 @@ public class BlockingCacheManager {
     * Builds the set of caches.
     * Returns a copy so that the monitor can be released.
     */
-   private synchronized List getCaches() {
-       final ArrayList blockingCaches = new ArrayList();
+   private synchronized List<BlockingCache> getCaches() {
+       final ArrayList<BlockingCache> blockingCaches = new ArrayList<BlockingCache>();
        blockingCaches.addAll(this.caches.values());
        return blockingCaches;
    }
