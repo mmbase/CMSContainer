@@ -56,6 +56,8 @@ public class PortalFilter implements Filter
    {
       if (sRequest instanceof HttpServletRequest) {
          HttpServletRequest request = (HttpServletRequest)sRequest;
+		 log.info("######################## remote user==="+request.getRemoteUser()); 
+		 log.info("######################## UserPrincipal==="+request.getUserPrincipal()); 
          String username = request.getParameter(ACEGI_SECURITY_FORM_USERNAME_KEY);
          String password = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);            
             if (username != null) {   

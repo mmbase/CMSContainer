@@ -4,7 +4,7 @@
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
   <packaging>war</packaging>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.7.1-SNAPSHOT</version>
   <name>Custom CMS Container live web application</name>
   <parent>
         <groupId>${groupId}</groupId>
@@ -31,7 +31,7 @@
     <dependency>
       <groupId>finalist</groupId>
       <artifactId>cmsc-demo-webapp</artifactId>
-      <version>1.8-SNAPSHOT</version>
+      <version>1.7.1-SNAPSHOT</version>
       <type>war</type>
     </dependency>
     <dependency>
@@ -320,7 +320,7 @@
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
-      <version>1.8-SNAPSHOT</version>
+      <version>1.7.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>commons-chain</groupId>
