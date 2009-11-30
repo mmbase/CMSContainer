@@ -111,7 +111,7 @@
     <tr>
         <th><% if (role != null && SecurityUtil.isWriter(role)) { %>
         <c:if test="${fn:length(elements) >1}">
-        <input type="checkbox"  name="selectall" class="checkbox" onclick="selectAll(this.checked, 'contentForm', 'chk_');" value="on" style="position:relative;margin:0px 0px 0px 4px"/><span style="position:absolute;text-transform:none"><fmt:message key="locate.selectall" /></span>
+        <input type="checkbox"  name="selectall" class="checkbox" onclick="selectAll(this.checked, 'contentForm', 'chk_');" value="on" style="margin:0px 0px 0px 4px !important;> margin:0px 0px !important;margin:0px 0px;"/><span style="position:absolute;text-transform:none"><fmt:message key="locate.selectall" /></span>
         </c:if>
         <% } %>
         </th>
