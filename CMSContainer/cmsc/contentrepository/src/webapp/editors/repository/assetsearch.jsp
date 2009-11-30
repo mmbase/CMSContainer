@@ -406,7 +406,7 @@
                   <th>
                      <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
                      <c:if test="${fn:length(results) >1}">
-                        <span style="font-weight:normal;text-transform:none;"><fmt:message key="locate.selectall" /><input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" /></span>
+                       <input type="checkbox" onclick="selectAll(this.checked, 'linkForm', 'chk_');" class="checkbox" value="on" name="selectall" style="position:relative;margin:0px 0px 0px 4px"/><span style="position:absolute;text-transform:none"><fmt:message key="locate.selectall" /></span>
                      </c:if>
                   </th>
                   <th><a href="javascript:orderBy('otype')" class="headerlink" ><fmt:message key="locate.typecolumn" /></a></th>
