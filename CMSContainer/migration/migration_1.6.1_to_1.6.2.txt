@@ -106,3 +106,16 @@ project's file, to keep it updated.
 *
 *
 
+
+Name: Check ContentChannelPortlet settings for large lists 
+Goal: 
+Type: do it yourself
+--- Start script ---
+Check the properties of ContentChannelPortlets that display large lists.
+Portlets that display large lists (more than 100 items) should specify a Max. number of elements
+By default the portlet will display no more than 100 elements.
+--- End script ---
+*
+*
+*
+
