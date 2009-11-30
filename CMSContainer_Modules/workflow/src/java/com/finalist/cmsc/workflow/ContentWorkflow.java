@@ -145,8 +145,8 @@ public class ContentWorkflow extends RepositoryWorkflow {
       for (Node blockNode: blockNodes) {
          Node wf = getWorkflowNode(blockNode, "asset");
          if (wf != null) {
-            changeWorkflow(wf, STATUS_PUBLISHED, "");
-            publishInternal(wf, blockNode);
+            //changeWorkflow(wf, STATUS_PUBLISHED, "");
+            //publishInternal(wf, blockNode);
          }
      }
       publish(content, TYPE_CONTENT, publishNumbers);
