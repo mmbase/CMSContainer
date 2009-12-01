@@ -8,7 +8,7 @@ function EmbedCode(editor) {
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
   id       : "embed-code",
-  tooltip  : this._lc("Embed Code"),
+  tooltip  : this._lc("Insert embed content"),
   image    : editor.imgURL("embed-code.gif", "EmbedCode"),
   textMode : false,
   action   : function(editor)
