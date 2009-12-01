@@ -7,6 +7,7 @@ xinha_init = xinha_init ? xinha_init : function() {
    'CharacterMap',
    'ContextMenu',
    'InsertAnchor',
+   'EmbedCode',
 //   'ListType',
 //   'FullScreen',
 //   'SpellChecker',
