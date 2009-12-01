@@ -1,14 +1,14 @@
 <%@page language="java" contentType="text/html;charset=utf-8"
-%><%@include file="globals.jsp" 
+%><%@include file="globals.jsp"
 %><%@page import="com.finalist.cmsc.repository.ContentElementUtil,
                  com.finalist.cmsc.repository.RepositoryUtil,
                  java.util.ArrayList"
-%><%@page import="org.mmbase.bridge.Cloud" 
-%><%@page import="org.mmbase.bridge.Node" 
-%><%@page import="org.mmbase.bridge.NodeList" 
-%><%@page import="org.mmbase.bridge.util.SearchUtil" 
-%><%@page import="org.mmbase.remotepublishing.*" 
-%><%@page import="com.finalist.cmsc.subsite.util.SubSiteUtil" 
+%><%@page import="org.mmbase.bridge.Cloud"
+%><%@page import="org.mmbase.bridge.Node"
+%><%@page import="org.mmbase.bridge.NodeList"
+%><%@page import="org.mmbase.bridge.util.SearchUtil"
+%><%@page import="org.mmbase.remotepublishing.*"
+%><%@page import="com.finalist.cmsc.subsite.util.SubSiteUtil"
 %><%@page import="com.finalist.cmsc.services.publish.Publish"
 %><%@page import="org.mmbase.bridge.BridgeException"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
@@ -71,7 +71,7 @@
 	<html:hidden property="order"/>
 	<html:hidden property="direction"/>
 	<mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
-	
+
 	<table>
      <c:if test="${subsiteExists eq true}">
         <tr>
@@ -94,7 +94,7 @@
     <tr>
        <td style="width:105px"><fmt:message key="subsitedelete.subtitle" /></td>
        <td colspan="3"><html:text property="title" style="width:200px"/></td>
-       
+
        <td style="width:20px">
        </td>
    </tr>
@@ -141,16 +141,16 @@
 	   <mm:node number="${number}" jspvar="ppNode">
 		   <tr <mm:even inverse="true">class="swap"</mm:even>>
 		   <td style="white-space: nowrap;">
-		   
+
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}"
+         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&fromModule=frommodule"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
-		  
+
         <c:set var="remoteUrl"><%=Publish.getRemoteUrl(ppNode)%></c:set>
          <c:if test="${not empty remoteUrl}">
-            <a href="${remoteUrl}" 
+            <a href="${remoteUrl}"
                title="<fmt:message key="pp.content.preview" />" target="_blank"><img src="../gfx/icons/preview.png" width="16" height="16"
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>
@@ -159,7 +159,7 @@
 		       title="<fmt:message key="pp.content.delete" />"><img src="../gfx/icons/delete.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.delete" />"
 		                                                       alt="<fmt:message key="pp.content.delete" />"/></a>
-		   <% request.removeAttribute("appPath"); %>              
+		   <% request.removeAttribute("appPath"); %>
 		   </mm:field>
 		   </td>
 		   <td>
@@ -170,14 +170,14 @@
 		   <a href="../subsite/PersonalPageElements.do?personalpage=<mm:field name="number" />">Edit Articles</a>
 		   </td>
          --%>
-		   
+
 		   <td>
             <mm:field name="creationdate"><cmsc:dateformat displaytime="true"/></mm:field>
          </td>
          <td>
 		      <mm:field name="publishdate"><cmsc:dateformat displaytime="true"/></mm:field>
 		   </td>
-		   
+
 		   </tr>
 	   </mm:node>
    </mm:field>
@@ -192,7 +192,7 @@
 <mm:isempty referid="results" inverse="true">
 <%@ include file="../pages.jsp" %>
 </mm:isempty>
-   
+
 <br />
 
 </div>
