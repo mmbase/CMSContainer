@@ -42,5 +42,5 @@ public class SubSiteEdit extends MMBaseFormlessAction {
             return mapping.findForward(SUCCESS);
          }
    }
-
+  }
 }
