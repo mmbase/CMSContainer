@@ -23,7 +23,7 @@
                     <input>4</input>
                 </positions>
             </editor>
-            <datatype base="xml" xmlns="http://www.mmbase.org/xmlns/datatypes">
+            <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes">
                 <required value="true"/>
                 <maxLength value="4000"/>
             </datatype>
