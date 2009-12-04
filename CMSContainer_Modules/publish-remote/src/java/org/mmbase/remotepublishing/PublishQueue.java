@@ -75,6 +75,9 @@ public class PublishQueue implements Runnable {
                 log.warn("Failed to take node from queue ", e1);
                 // ignore current node, continue on next one.
             }
+			catch (Throwable e) {
+               log.error("Throwable error : " + e.getMessage());
+           }
         }
     }
     
