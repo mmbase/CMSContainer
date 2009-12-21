@@ -1,4 +1,7 @@
-<ehcache>
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+             updateCheck="true" monitoring="autodetect">
 
     <!-- Sets the path to the directory where cache .data files are created.
 
@@ -96,7 +99,7 @@
         />
 
     <cache name="com.finalist.cmsc.beans.om.Portlet"
-        maxElementsInMemory="3000"
+        maxElementsInMemory="6000"
         eternal="true"
         overflowToDisk="false"
         diskPersistent="false"
@@ -131,7 +134,7 @@
         />
 
     <cache name="PortletCache"
-        maxElementsInMemory="10000"
+        maxElementsInMemory="3000"
         eternal="false"
         overflowToDisk="false"
         diskPersistent="false"

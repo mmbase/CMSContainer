@@ -1,13 +1,9 @@
-package com.finalist.cmsc.services.sitemanagement;
+package com.finalist.cmsc.ehcache;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.constructs.blocking.BlockingCache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
