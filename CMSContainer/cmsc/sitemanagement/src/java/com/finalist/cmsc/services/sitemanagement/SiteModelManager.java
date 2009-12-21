@@ -11,13 +11,15 @@ package com.finalist.cmsc.services.sitemanagement;
 
 import java.util.*;
 
+
+import net.sf.ehcache.CacheException;
+
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.om.*;
-
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+import com.finalist.cmsc.ehcache.SelfPopulatingCache;
+import com.finalist.cmsc.ehcache.SelfPopulatingCacheManager;
 
 public class SiteModelManager extends SelfPopulatingCacheManager {
 

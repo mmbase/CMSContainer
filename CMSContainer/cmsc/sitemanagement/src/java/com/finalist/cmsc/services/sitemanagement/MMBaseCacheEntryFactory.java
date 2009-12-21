@@ -11,9 +11,7 @@ package com.finalist.cmsc.services.sitemanagement;
 
 import java.io.Serializable;
 
-import net.sf.ehcache.Element;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -22,6 +20,8 @@ import org.mmbase.core.event.*;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
+
+import com.finalist.cmsc.ehcache.SelfPopulatingCache;
 
 public abstract class MMBaseCacheEntryFactory implements CacheEntryFactory, NodeEventListener, RelationEventListener {
 
