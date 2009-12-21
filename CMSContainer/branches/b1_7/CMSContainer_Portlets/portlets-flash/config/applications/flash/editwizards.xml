@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<editwizards exportsource="mmbase://127.0.0.1/flashmovie" timestamp="20080523000000">
+
+	<node number="34001" owner="admin">
+		<name>flashmovie</name>
+		<description>Flash movie</description>
+		<wizard>config/flashmovie/flashmovie</wizard>
+		<nodepath>flashmovie</nodepath>
+		<fields>title</fields>
+	</node>
+
+</editwizards>

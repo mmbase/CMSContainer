@@ -1,0 +1,56 @@
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+
+    <portlet>
+        <description>FlashPortlet</description>
+        <portlet-name>flashportlet</portlet-name>
+        <display-name>FlashPortlet</display-name>
+        <portlet-class>com.finalist.portlets.flash.FlashPortlet</portlet-class>
+        <init-param>
+            <name>template.edit_defaults</name>
+            <value>flash.jsp</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>EDIT_DEFAULTS</portlet-mode>
+            <portlet-mode>DELETE</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <resource-bundle>com.finalist.portlets.flash.FlashPortlet</resource-bundle>
+        <portlet-info>
+            <title>FlashPortlet</title>
+            <short-title>FlashPortlet</short-title>
+            <keywords>Content,Flash</keywords>
+        </portlet-info>
+    </portlet>
+    
+    <portlet>
+        <description>FlowplayerPortlet</description>
+        <portlet-name>flowplayerportlet</portlet-name>
+        <display-name>FlowplayerPortlet</display-name>
+        <portlet-class>com.finalist.cmsc.portlets.JspPortlet</portlet-class>
+        <init-param>
+            <name>template.edit_defaults</name>
+            <value>flowplayer.jsp</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>EDIT_DEFAULTS</portlet-mode>
+            <portlet-mode>DELETE</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <resource-bundle>com.finalist.portlets.flash.FlowplayerPortlet</resource-bundle>
+        <portlet-info>
+            <title>FlowplayerPortlet</title>
+            <short-title>FlowplayerPortlet</short-title>
+            <keywords>Content,Flowplayer</keywords>
+        </portlet-info>
+    </portlet>
+
+
+</portlet-app>
