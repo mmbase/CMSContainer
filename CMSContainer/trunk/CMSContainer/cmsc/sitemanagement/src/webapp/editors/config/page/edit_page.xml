@@ -42,4 +42,6 @@
    <list include="config/layout/search_page_layoutrel_layout.xml" />
    <list include="config/stylesheet/search_page_stylerel_stylesheet.xml" />
    <list include="config/images/search_page_namedrel_images.xml" />
+   <!--If using sso
+   <list include="config/pagegroup/search_page_related_pagegroup.xml" />-->
 </form-schema>

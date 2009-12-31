@@ -12,7 +12,6 @@
     <artifactId>cmsc-community</artifactId>
     <packaging>war</packaging>
     <name>CMS Container demo community web application</name>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.cmscontainer.portlets</groupId>
@@ -39,5 +38,22 @@
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
+		<!--
+		<dependency>
+        <groupId>org.jasig.cas</groupId>
+        <artifactId>cas-client-core</artifactId>
+        <version>3.1.9</version>
+		<type>war</type>
+      </dependency>
+	  -->
 	</dependencies>
+	<!--
+	<repositories>
+		<repository>
+			<id>jasig-repository</id>
+			<name>JA-SIG Maven2 Repository</name>
+			<url>http://developer.ja-sig.org/maven2</url>
+		</repository>
+	</repositories>
+	-->
 </project>

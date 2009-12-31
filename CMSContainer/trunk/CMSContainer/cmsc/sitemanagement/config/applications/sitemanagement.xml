@@ -64,6 +64,8 @@
       <relation from="view" to="typedef" type="allowrel" />
       <relation from="contentelement" to="page" type="posrel" />
       <relation from="contentelement" to="page" type="inlinerel" />
+	  <!--secure module
+	  <relation from="page" to="pagegroup" type="related" />-->
    </allowedrelationlist>
 
 
