@@ -273,7 +273,13 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-
+	<servlet>
+		<description>Returns css text</description>
+		<servlet-name>stylesheet</servlet-name>
+		<servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>version</servlet-name>
 		<url-pattern>/version</url-pattern>
@@ -307,6 +313,11 @@
 		<url-pattern>/editors/repository/xml</url-pattern>
 	</servlet-mapping>
 
+	<servlet-mapping>
+		<servlet-name>stylesheet</servlet-name>
+		<url-pattern>*.css</url-pattern>
+	</servlet-mapping>
+	
 	<mime-mapping>
 		<extension>html</extension>
 		<mime-type>text/html</mime-type>

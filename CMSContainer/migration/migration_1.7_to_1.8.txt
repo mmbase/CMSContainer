@@ -1,0 +1,16 @@
+MMigration document:
+
+Part: core
+From version: 1.7
+To version: 1.8
+
+Name: Extended the current stylesheet options in CMSc with dynamic stylesheets, from the database
+Goal: Add a new field "text" to mm_stylesheet
+Type:  manual action
+--- Start script ---
+ALTER TABLE mm_stylesheet ADD text text default '';
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
