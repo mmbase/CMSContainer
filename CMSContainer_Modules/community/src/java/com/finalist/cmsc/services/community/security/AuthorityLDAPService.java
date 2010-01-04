@@ -32,7 +32,7 @@ public class AuthorityLDAPService  extends AbstractLDAPService implements Author
       AndFilter filter = new AndFilter();
       filter.and(new EqualsFilter("objectClass", GROUP_CLASS_NAME));
       // If you remove this second condition you would get all groups
-      filter.and(new EqualsFilter("cn", userId));
+      filter.and(new EqualsFilter("uniqueMember", "cn="+userId+",ou=Relations,ou=idstore,dc=nai,dc=nl"));
       List<Authority> groups= (List<Authority>)getLdapTemplate().search(GROUPS_BASE_DN, filter.encode(), new GroupContextMapper());
       Set<String> groupNames = new HashSet<String>();
       for (Authority authority : groups) {

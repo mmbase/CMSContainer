@@ -43,46 +43,48 @@ public class SingleSignOnFilter implements Filter{
             String userId = request.getRemoteUser();
             
             if (StringUtils.isNotEmpty(userId)) {
-               AuthenticationService authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
+              
                PersonService personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
                AuthenticationService authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
-               PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
+               AuthorityService authorityLDAPService = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
                
-               AuthorityService aus = (AuthorityService) ApplicationContextFactory.getBean("authorityService");
-               AuthorityService ldapAus = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
+               PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
+               AuthorityService authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");               
+               AuthenticationService authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
+
                UsernamePasswordAuthenticationToken authRequest = null;
                Authentication tempAuthentication = authenticationLDAPService.findAuthentication(userId);
                Person person = personService.getPersonByUserId(tempAuthentication.getUserId());
-               Person newPerson= personLDAPService.getPersonByUserId(userId);
+               Person PersonLDAP= personLDAPService.getPersonByUserId(userId);
     
                if (person != null) {
                   //update the information of person
-                  if (!person.equals(newPerson)) {
-                     person.setFirstName(newPerson.getFirstName());
-                     person.setLastName(newPerson.getLastName());
-                     person.setInfix(newPerson.getInfix());                    
+                  if (!person.equals(PersonLDAP)) {
+                     person.setFirstName(PersonLDAP.getFirstName());
+                     person.setLastName(PersonLDAP.getLastName());
+                     person.setInfix(PersonLDAP.getInfix());                    
                   }
-                  if (person.getActive() != newPerson.getActive()) {
-                     person.setActive(newPerson.getActive());
+                  if (person.getActive() != PersonLDAP.getActive()) {
+                     person.setActive(PersonLDAP.getActive());
                   }
                   personService.updatePerson(person);
                }
                else {
                   Authentication newAuthentication = authenticationService.createAuthentication(tempAuthentication);
-                  personService.createPerson(newPerson.getFirstName(), "", newPerson.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
+                  personService.createPerson(PersonLDAP.getFirstName(), "", PersonLDAP.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
                     
                }
-               Set < String > authrityNames = aus.getAuthorityNames();
-               Set < String > authritiesInLdap = ldapAus.getAuthorityNamesForUser(userId);
-               Set < String > authritiesInDB =aus.getAuthorityNamesForUser(userId);
+               Set < String > authrityNames = authorityService.getAuthorityNames();
+               Set < String > authritiesInLdap = authorityLDAPService.getAuthorityNamesForUser(tempAuthentication.getUserId());
+               Set < String > authritiesInDB =authorityService.getAuthorityNamesForUser(tempAuthentication.getUserId());
                for (String authority : authritiesInLdap) {
                   if (!authrityNames.contains(authority)) {
-                     aus.createAuthority(null, authority);
-                     authenticationService.addAuthorityToUser(userId, authority);
+                     authorityService.createAuthority(null, authority);
+                     authenticationService.addAuthorityToUser(tempAuthentication.getUserId(), authority);
                   }
                   else {                        
                      if (!authritiesInDB.contains(authority)) {
-                        authenticationService.addAuthorityToUser(userId, authority);
+                        authenticationService.addAuthorityToUser(tempAuthentication.getUserId(), authority);
                      }
                   }
                }
