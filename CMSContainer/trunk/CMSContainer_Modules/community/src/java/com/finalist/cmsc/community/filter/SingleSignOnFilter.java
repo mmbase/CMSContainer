@@ -13,6 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.commons.lang.StringUtils;
 
@@ -34,11 +35,12 @@ public class SingleSignOnFilter implements Filter{
 
    public void doFilter(ServletRequest sRequest, ServletResponse sResponse,
          FilterChain filterChain) throws IOException, ServletException {
-     // org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+   
       if (sRequest instanceof HttpServletRequest) {
          HttpServletRequest request = (HttpServletRequest)sRequest;
-         org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)request.getSession().getAttribute(SESSION_KEY_SUBJECT);
-      
+        // org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)request.getSession().getAttribute(SESSION_KEY_SUBJECT);
+         org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
          if(authentication == null) {   
             String userId = request.getRemoteUser();
             
@@ -90,14 +92,8 @@ public class SingleSignOnFilter implements Filter{
                }
                
                authRequest = new UsernamePasswordAuthenticationToken(tempAuthentication.getUserId(), tempAuthentication.getPassword());
-  
-                 // authRequest = new UsernamePasswordAuthenticationToken("sander@sanderbos.com", "abcd123");
-               HttpSession session = request.getSession(true);
-               session.setAttribute(SESSION_KEY_SUBJECT, authRequest);
+               SecurityContextHolder.getContext().setAuthentication(authRequest);
             }
-         }
-         else {
-           // SecurityContextHolder.getContext().setAuthentication(authentication);
          }
       }
       filterChain.doFilter(sRequest, sResponse);

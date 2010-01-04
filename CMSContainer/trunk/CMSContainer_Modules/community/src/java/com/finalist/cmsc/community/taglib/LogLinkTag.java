@@ -3,6 +3,8 @@ package com.finalist.cmsc.community.taglib;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 
+import org.acegisecurity.context.SecurityContextHolder;
+
 public class LogLinkTag extends AbstractSSOTag  {
 
    @Override
@@ -15,7 +17,8 @@ public class LogLinkTag extends AbstractSSOTag  {
       if(req.getQueryString() != null) {
          backUrl.append("?"+req.getQueryString());
       }
-      org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)req.getSession().getAttribute("session_key_subject");
+      org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+     // org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)req.getSession().getAttribute("session_key_subject");
       if(authentication == null) {
          link = getParameter("casServerLoginUrl")+"?servie="+backUrl;
       }
