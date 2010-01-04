@@ -11,9 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.acegisecurity.AuthenticationManager;
-import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.commons.lang.StringUtils;
 
@@ -27,29 +26,31 @@ import com.finalist.cmsc.services.community.security.AuthorityService;
 
 public class SingleSignOnFilter implements Filter{
 
+   private static final String SESSION_KEY_SUBJECT = "session_key_subject";
+   
    public void destroy() {
       
    }
 
    public void doFilter(ServletRequest sRequest, ServletResponse sResponse,
          FilterChain filterChain) throws IOException, ServletException {
-      org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      AuthenticationService authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
-      PersonService personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
-      AuthenticationService authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
+     // org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (sRequest instanceof HttpServletRequest) {
+         HttpServletRequest request = (HttpServletRequest)sRequest;
+         org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)request.getSession().getAttribute(SESSION_KEY_SUBJECT);
       
-      PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
-      
-      
-      AuthorityService aus = (AuthorityService) ApplicationContextFactory.getBean("authorityService");
-      AuthorityService ldapAus = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
-      AuthenticationManager authenticationManager = (AuthenticationManager)ApplicationContextFactory.getBean("authenticationManager");
-      UsernamePasswordAuthenticationToken authRequest = null;
-      if(authentication == null) {
-         if (sRequest instanceof HttpServletRequest) {
-            HttpServletRequest request = (HttpServletRequest)sRequest;
+         if(authentication == null) {   
             String userId = request.getRemoteUser();
+            
             if (StringUtils.isNotEmpty(userId)) {
+               AuthenticationService authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
+               PersonService personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
+               AuthenticationService authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
+               PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
+               
+               AuthorityService aus = (AuthorityService) ApplicationContextFactory.getBean("authorityService");
+               AuthorityService ldapAus = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
+               UsernamePasswordAuthenticationToken authRequest = null;
                Authentication tempAuthentication = authenticationLDAPService.findAuthentication(userId);
                Person person = personService.getPersonByUserId(tempAuthentication.getUserId());
                Person newPerson= personLDAPService.getPersonByUserId(userId);
@@ -69,9 +70,9 @@ public class SingleSignOnFilter implements Filter{
                else {
                   Authentication newAuthentication = authenticationService.createAuthentication(tempAuthentication);
                   personService.createPerson(newPerson.getFirstName(), "", newPerson.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
-                 
+                    
                }
-               Set<String> authrityNames = aus.getAuthorityNames();
+               Set < String > authrityNames = aus.getAuthorityNames();
                Set < String > authritiesInLdap = ldapAus.getAuthorityNamesForUser(userId);
                Set < String > authritiesInDB =aus.getAuthorityNamesForUser(userId);
                for (String authority : authritiesInLdap) {
@@ -85,12 +86,16 @@ public class SingleSignOnFilter implements Filter{
                      }
                   }
                }
-               authRequest = new UsernamePasswordAuthenticationToken(tempAuthentication.getUserId(), tempAuthentication.getPassword());
                
-              // authRequest = new UsernamePasswordAuthenticationToken("sander@sanderbos.com", "abcd123");
-               authentication = authenticationManager.authenticate(authRequest);
-               SecurityContextHolder.getContext().setAuthentication(authRequest);
+               authRequest = new UsernamePasswordAuthenticationToken(tempAuthentication.getUserId(), tempAuthentication.getPassword());
+  
+                 // authRequest = new UsernamePasswordAuthenticationToken("sander@sanderbos.com", "abcd123");
+               HttpSession session = request.getSession(true);
+               session.setAttribute(SESSION_KEY_SUBJECT, authRequest);
             }
+         }
+         else {
+           // SecurityContextHolder.getContext().setAuthentication(authentication);
          }
       }
       filterChain.doFilter(sRequest, sResponse);
