@@ -94,7 +94,20 @@
 
 	<listener>
 		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
-	</listener>   
+	</listener>  
+	
+	<filter>
+      <filter-name>SecurityFilterChainProxy</filter-name>
+      <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+      <init-param>
+        <param-name>targetClass</param-name>
+        <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+      </init-param>
+    </filter>
+    <filter-mapping>
+      <filter-name>SecurityFilterChainProxy</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
 <!--
 	 <filter>
 		  <filter-name>CAS Validation Filter</filter-name>
@@ -133,19 +146,7 @@
     	<url-pattern>/*</url-pattern>
     </filter-mapping>
 -->
-    <filter>
-      <filter-name>SecurityFilterChainProxy</filter-name>
-      <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-      <init-param>
-        <param-name>targetClass</param-name>
-        <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
-      </init-param>
-    </filter>
-    <filter-mapping>
-      <filter-name>SecurityFilterChainProxy</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
-  
+ 
    <filter>
       <description>Filter catch all requests.</description>
       <display-name>DisableUrlSession Filter</display-name>
