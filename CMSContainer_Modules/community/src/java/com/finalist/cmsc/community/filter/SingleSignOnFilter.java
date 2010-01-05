@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
@@ -27,71 +26,40 @@ import com.finalist.cmsc.services.community.security.AuthorityService;
 
 public class SingleSignOnFilter implements Filter{
 
-   private static final String SESSION_KEY_SUBJECT = "session_key_subject";
+   private PersonService personLDAPService;
+   private AuthenticationService authenticationLDAPService;
+   private AuthorityService authorityLDAPService;
    
-   public void destroy() {
+   private PersonService personService;
+   private AuthorityService authorityService;               
+   private AuthenticationService authenticationService;
+   
+   public void init(FilterConfig arg0) throws ServletException {
+      personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
+      authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
+      authorityLDAPService = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
       
+      personService = (PersonService)ApplicationContextFactory.getBean("personService");
+      authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");               
+      authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
    }
-
+   
    public void doFilter(ServletRequest sRequest, ServletResponse sResponse,
          FilterChain filterChain) throws IOException, ServletException {
    
       if (sRequest instanceof HttpServletRequest) {
          HttpServletRequest request = (HttpServletRequest)sRequest;
-        // org.acegisecurity.Authentication authentication = (org.acegisecurity.Authentication)request.getSession().getAttribute(SESSION_KEY_SUBJECT);
          org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
          if(authentication == null) {   
-            String userId = request.getRemoteUser();
+            String idStoreId = request.getRemoteUser();
             
-            if (StringUtils.isNotEmpty(userId)) {
-              
-               PersonService personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
-               AuthenticationService authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
-               AuthorityService authorityLDAPService = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
+            if (StringUtils.isNotEmpty(idStoreId)) {
+               Authentication ldapAuthentication = authenticationLDAPService.findAuthentication(idStoreId);
+               addPerson(idStoreId, ldapAuthentication);
+               addAuthority(ldapAuthentication);
                
-               PersonService personService = (PersonService)ApplicationContextFactory.getBean("personService");
-               AuthorityService authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");               
-               AuthenticationService authenticationService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationService");
-
-               UsernamePasswordAuthenticationToken authRequest = null;
-               Authentication tempAuthentication = authenticationLDAPService.findAuthentication(userId);
-               Person person = personService.getPersonByUserId(tempAuthentication.getUserId());
-               Person PersonLDAP= personLDAPService.getPersonByUserId(userId);
-    
-               if (person != null) {
-                  //update the information of person
-                  if (!person.equals(PersonLDAP)) {
-                     person.setFirstName(PersonLDAP.getFirstName());
-                     person.setLastName(PersonLDAP.getLastName());
-                     person.setInfix(PersonLDAP.getInfix());                    
-                  }
-                  if (person.getActive() != PersonLDAP.getActive()) {
-                     person.setActive(PersonLDAP.getActive());
-                  }
-                  personService.updatePerson(person);
-               }
-               else {
-                  Authentication newAuthentication = authenticationService.createAuthentication(tempAuthentication);
-                  personService.createPerson(PersonLDAP.getFirstName(), "", PersonLDAP.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
-                    
-               }
-               Set < String > authrityNames = authorityService.getAuthorityNames();
-               Set < String > authritiesInLdap = authorityLDAPService.getAuthorityNamesForUser(tempAuthentication.getUserId());
-               Set < String > authritiesInDB =authorityService.getAuthorityNamesForUser(tempAuthentication.getUserId());
-               for (String authority : authritiesInLdap) {
-                  if (!authrityNames.contains(authority)) {
-                     authorityService.createAuthority(null, authority);
-                     authenticationService.addAuthorityToUser(tempAuthentication.getUserId(), authority);
-                  }
-                  else {                        
-                     if (!authritiesInDB.contains(authority)) {
-                        authenticationService.addAuthorityToUser(tempAuthentication.getUserId(), authority);
-                     }
-                  }
-               }
-               
-               authRequest = new UsernamePasswordAuthenticationToken(tempAuthentication.getUserId(), tempAuthentication.getPassword());
+               UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(ldapAuthentication.getUserId(), ldapAuthentication.getPassword());
                SecurityContextHolder.getContext().setAuthentication(authRequest);
             }
          }
@@ -99,8 +67,47 @@ public class SingleSignOnFilter implements Filter{
       filterChain.doFilter(sRequest, sResponse);
    }
 
-   public void init(FilterConfig arg0) throws ServletException {
+   public void destroy() {
       
    }
+   
+   private void addPerson(String idStoreId, Authentication ldapAuthentication) {
+      Person person = personService.getPersonByUserId(ldapAuthentication.getUserId());
+      Person personLDAP= personLDAPService.getPersonByUserId(idStoreId);
+   
+      if (person != null) {
+         //update the information of person
+         person.setFirstName(personLDAP.getFirstName());
+         person.setLastName(personLDAP.getLastName());
+         person.setInfix(personLDAP.getInfix());                    
+         person.setActive(personLDAP.getActive());
+         person.setEmail(personLDAP.getEmail());
+         personService.updatePerson(person);
+      }
+      else {
+         Authentication newAuthentication = authenticationService.createAuthentication(ldapAuthentication);
+         Person newPerson = personService.createPerson(personLDAP.getFirstName(), "", personLDAP.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
+         newPerson.setEmail(personLDAP.getEmail());
+         personService.updatePerson(newPerson);
+      }
+   }
+
+   private void addAuthority(Authentication ldapAuthentication) {
+      Set < String > allDBAuthorities = authorityService.getAuthorityNames();
+      Set < String > authoritiesLDAP = authorityLDAPService.getAuthorityNamesForUser(ldapAuthentication.getUserId());
+      Set < String > authoritiesDB =authorityService.getAuthorityNamesForUser(ldapAuthentication.getUserId());
+      for (String authority : authoritiesLDAP) {
+         if (!allDBAuthorities.contains(authority)) {
+            authorityService.createAuthority(null, authority);
+            authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority);
+         }
+         else {                        
+            if (!authoritiesDB.contains(authority)) {
+               authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority);
+            }
+         }
+      }
+   }
+
 
 }
