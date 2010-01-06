@@ -49,6 +49,11 @@ public class ThreadUtil {
       return all;
    }
 
+   public static Map<Thread, StackTraceElement[]> getWaitingThreads() {
+      Map<Thread, StackTraceElement[]> all = Thread.getAllStackTraces();
+      filterWaitingThread(all);
+      return all;
+   }
 
    public static void filterActiveThread(Map<Thread, StackTraceElement[]> all) {
       for (Iterator<StackTraceElement[]> iterator = all.values().iterator(); iterator.hasNext();) {
@@ -59,6 +64,14 @@ public class ThreadUtil {
       }
    }
 
+   public static void filterWaitingThread(Map<Thread, StackTraceElement[]> all) {
+      for (Iterator<StackTraceElement[]> iterator = all.values().iterator(); iterator.hasNext();) {
+         StackTraceElement[] stack = iterator.next();
+         if (!isWaiting(stack)) {
+            iterator.remove();
+         }
+      }
+   }
 
    public static Map<String, Map<Thread, StackTraceElement[]>> getThreadsByApplication() {
       Map<Thread, StackTraceElement[]> all = Thread.getAllStackTraces();
@@ -71,6 +84,10 @@ public class ThreadUtil {
       return sortByApplication(all);
    }
 
+   public static Map<String, Map<Thread, StackTraceElement[]>> getWaitingThreadsByApplication() {
+      Map<Thread, StackTraceElement[]> all = getWaitingThreads();
+      return sortByApplication(all);
+   }
 
    public static Map<String, Map<Thread, StackTraceElement[]>> sortByApplication(Map<Thread, StackTraceElement[]> all) {
       Map<String, Map<Thread, StackTraceElement[]>> applications = new HashMap<String, Map<Thread, StackTraceElement[]>>();

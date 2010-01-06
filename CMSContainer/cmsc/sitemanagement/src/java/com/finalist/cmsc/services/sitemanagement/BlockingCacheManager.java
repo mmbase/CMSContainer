@@ -116,7 +116,7 @@ public class BlockingCacheManager {
     * Builds the set of caches.
     * Returns a copy so that the monitor can be released.
     */
-   private synchronized List<BlockingCache> getCaches() {
+   protected synchronized List<BlockingCache> getCaches() {
        final ArrayList<BlockingCache> blockingCaches = new ArrayList<BlockingCache>();
        blockingCaches.addAll(this.caches.values());
        return blockingCaches;

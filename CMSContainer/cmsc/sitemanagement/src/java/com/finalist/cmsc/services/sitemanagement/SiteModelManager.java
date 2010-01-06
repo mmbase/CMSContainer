@@ -17,6 +17,7 @@ import java.util.Set;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
