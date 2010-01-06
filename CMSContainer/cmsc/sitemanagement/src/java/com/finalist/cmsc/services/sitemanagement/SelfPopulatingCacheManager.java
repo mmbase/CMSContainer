@@ -1,14 +1,9 @@
-package com.finalist.cmsc.ehcache;
-
-import java.util.ArrayList;
+package com.finalist.cmsc.services.sitemanagement;
 
 import java.util.List;
 
-
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-import net.sf.ehcache.constructs.blocking.UpdatingCacheEntryFactory;
+import net.sf.ehcache.*;
+import net.sf.ehcache.constructs.blocking.*;
 
 public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
 
@@ -47,9 +42,9 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
     * Refreshes all caches.
     */
    public void refreshAll() throws Exception {
-       final List<SelfPopulatingCache> caches = getCaches();
+       final List<BlockingCache> caches = getCaches();
        for (int i = 0; i < caches.size(); i++) {
-           final SelfPopulatingCache cache = caches.get(i);
+           final SelfPopulatingCache cache = (SelfPopulatingCache) caches.get(i);
            cache.refresh();
        }
    }
@@ -57,14 +52,24 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
    /**
     * Refreshes a SelfPopulatingCache. The cache will repopulate itself.
     *
-    * @param name the name of the cache
+    * @param name the name of the cace
     * @throws CacheException
     */
    public void refresh(final String name) throws CacheException {
-       final SelfPopulatingCache cache = getSelfPopulatingCache(name);
+       final SelfPopulatingCache cache = (SelfPopulatingCache) getSelfPopulatingCache(name);
        cache.refresh();
    }
 
+   /**
+    * Refreshes a single entry in a SelfPopulatingCache.
+    * The old entry is discarded and then requested, causing it to be populated.
+    * Note: Used by tests only, do not use in production.
+    */
+   public void refreshEntry(final String cacheName, final Element element) throws Exception {
+       final SelfPopulatingCache cache = (SelfPopulatingCache) getSelfPopulatingCache(cacheName);
+       cache.put(element);
+       cache.get(element.getObjectKey());
+   }
 
    /**
     * Creates a self-populating cache.
@@ -76,8 +81,8 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
        }
 
        // Create the cache
-       SelfPopulatingCache cache = null;
-       cache = new SelfPopulatingCache(name, factory);
+       Ehcache backingCache = CacheManager.create().getCache(name);
+       SelfPopulatingCache cache = new SelfPopulatingCache(backingCache, factory);
        caches.put(name, cache);
        return cache;
    }
@@ -92,19 +97,10 @@ public abstract class SelfPopulatingCacheManager extends BlockingCacheManager {
        }
 
        // Create the cache
-       SelfPopulatingCache cache = null;
-       cache = new SelfPopulatingCache(name, factory);
+       Ehcache backingCache = CacheManager.create().getCache(name);
+       SelfPopulatingCache cache = new SelfPopulatingCache(backingCache, factory);
        caches.put(name, cache);
        return cache;
-   }
-
-   /**
-    * Builds the set of caches. Returns a copy so that the monitor can be released.
-    */
-   protected synchronized List<SelfPopulatingCache> getCaches() {
-       final ArrayList<SelfPopulatingCache> caches = new ArrayList<SelfPopulatingCache>();
-       caches.addAll(this.caches.values());
-       return caches;
    }
 
    /**
