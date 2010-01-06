@@ -24,11 +24,11 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
    
    public static final String RELATION_BASE_DN = "ou=Relations,ou=idstore,dc=nai,dc=nl"; 
    public static final String RELATION_CLASS_NAME = "naiIDStorePerson";
-   private AuthorityService authorityService;
+   private AuthorityService authorityLDAPService;
    
    @Required
-   public void setAuthorityService(AuthorityService authorityService) {
-      this.authorityService = authorityService;
+   public void setAuthorityLDAPService(AuthorityService authorityLDAPService) {
+      this.authorityLDAPService = authorityLDAPService;
    }
  
    /** {@inheritDoc} */
@@ -42,14 +42,16 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
       filter.and(new EqualsFilter("objectClass", RELATION_CLASS_NAME));
       filter.and(new EqualsFilter(propertyName, propertyValue));
 
-      Authentication relation = (Authentication) searchObject(RELATION_BASE_DN, filter.encode(), getContextMapper());
-//      if (relation != null) {
-//          // Also retrieve/ set the groups of the relation
-//          for (String groupName: groupService.getRelationGroupsFromLdap(relation.getIdStoreId())) {
-//              relation.getGroups().add(new Group(groupName));
-//          }
-//      }
-      return relation;
+      Authentication authentication = (Authentication) searchObject(RELATION_BASE_DN, filter.encode(), getContextMapper());
+      if (authentication != null) {
+          // Also retrieve/ set the groups of the relation
+          for (String groupName: authorityLDAPService.getAuthorityNamesForUser(authentication.getUserId())) {
+             Authority authority = new Authority();
+             authority.setName(groupName);
+             authentication.addAuthority(authority);
+          }
+      }
+      return authentication;
   }   
   
    protected ContextMapper getContextMapper() {

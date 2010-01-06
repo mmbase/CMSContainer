@@ -1,7 +1,9 @@
 package com.finalist.cmsc.community.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.Filter;
@@ -12,8 +14,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.acegisecurity.userdetails.User;
 import org.apache.commons.lang.StringUtils;
 
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
@@ -22,13 +27,13 @@ import com.finalist.cmsc.services.community.person.PersonService;
 import com.finalist.cmsc.services.community.person.RegisterStatus;
 import com.finalist.cmsc.services.community.security.Authentication;
 import com.finalist.cmsc.services.community.security.AuthenticationService;
+import com.finalist.cmsc.services.community.security.Authority;
 import com.finalist.cmsc.services.community.security.AuthorityService;
 
 public class SingleSignOnFilter implements Filter{
 
    private PersonService personLDAPService;
    private AuthenticationService authenticationLDAPService;
-   private AuthorityService authorityLDAPService;
    
    private PersonService personService;
    private AuthorityService authorityService;               
@@ -37,7 +42,6 @@ public class SingleSignOnFilter implements Filter{
    public void init(FilterConfig arg0) throws ServletException {
       personLDAPService = (PersonService)ApplicationContextFactory.getBean("personLDAPService");
       authenticationLDAPService = (AuthenticationService)ApplicationContextFactory.getBean("authenticationLDAPService");
-      authorityLDAPService = (AuthorityService) ApplicationContextFactory.getBean("authorityLDAPService");
       
       personService = (PersonService)ApplicationContextFactory.getBean("personService");
       authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");               
@@ -59,7 +63,18 @@ public class SingleSignOnFilter implements Filter{
                addPerson(idStoreId, ldapAuthentication);
                addAuthority(ldapAuthentication);
                
-               UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(ldapAuthentication.getUserId(), ldapAuthentication.getPassword());
+               Set < Authority > authorities = ldapAuthentication.getAuthorities();
+               List < GrantedAuthority > grantedAuthorities = new ArrayList < GrantedAuthority >();
+               for (Authority authority : authorities) {
+                  grantedAuthorities.add(new GrantedAuthorityImpl(authority.getName()));
+               }
+               GrantedAuthority[] grantedAuthorityArray = grantedAuthorities.toArray(new GrantedAuthority[grantedAuthorities
+                     .size()]);
+               
+               User user = new User(ldapAuthentication.getUserId(), ldapAuthentication.getPassword(), ldapAuthentication.isEnabled(), true,
+                     true, true, grantedAuthorityArray);
+               UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user, ldapAuthentication.getPassword(),grantedAuthorityArray);
+               authRequest.setDetails(user);
                SecurityContextHolder.getContext().setAuthentication(authRequest);
             }
          }
@@ -94,16 +109,16 @@ public class SingleSignOnFilter implements Filter{
 
    private void addAuthority(Authentication ldapAuthentication) {
       Set < String > allDBAuthorities = authorityService.getAuthorityNames();
-      Set < String > authoritiesLDAP = authorityLDAPService.getAuthorityNamesForUser(ldapAuthentication.getUserId());
       Set < String > authoritiesDB =authorityService.getAuthorityNamesForUser(ldapAuthentication.getUserId());
-      for (String authority : authoritiesLDAP) {
+      
+      for (Authority authority : ldapAuthentication.getAuthorities()) {
          if (!allDBAuthorities.contains(authority)) {
-            authorityService.createAuthority(null, authority);
-            authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority);
+            authorityService.createAuthority(null, authority.getName());
+            authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority.getName());
          }
          else {                        
             if (!authoritiesDB.contains(authority)) {
-               authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority);
+               authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority.getName());
             }
          }
       }
