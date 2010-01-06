@@ -13,13 +13,13 @@ import java.util.*;
 
 
 import net.sf.ehcache.CacheException;
+import net.sf.ehcache.Element;
+import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.om.*;
-import com.finalist.cmsc.ehcache.SelfPopulatingCache;
-import com.finalist.cmsc.ehcache.SelfPopulatingCacheManager;
 
 public class SiteModelManager extends SelfPopulatingCacheManager {
 
@@ -37,15 +37,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    /** MMbase logging system */
    private static final Logger log = Logging.getLoggerInstance(SiteModelManager.class.getName());
 
-   private static SiteModelManager siteModelManager;
-   static {
-      try {
-         siteModelManager = new SiteModelManager();
-      }
-      catch (CacheException e) {
-         throw new ExceptionInInitializerError(e);
-      }
-   }
+   private static SiteModelManager siteModelManager = new SiteModelManager();
 
    public static SiteModelManager getInstance() {
       return siteModelManager;
@@ -396,7 +388,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearPortlet(String portletId) {
       try {
-         getCache(PORTLET_CACHE).remove(Integer.valueOf(portletId));
+         getCache(PORTLET_CACHE).put(new Element(portletId,null));
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
@@ -411,7 +403,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
 
    public void clearItem(int itemId) {
       try {
-         getCache(NAVIGATION_CACHE).remove(itemId);
+         getCache(NAVIGATION_CACHE).put(new Element(itemId, null));
       }
       catch (CacheException e) {
          log.info("" + e.getMessage(), e);
