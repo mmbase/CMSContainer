@@ -141,4 +141,16 @@
          <rtexprvalue>false</rtexprvalue>
       </attribute>
    </tag>
+   <tag>
+      <name>pageReadable</name>
+      <tag-class>com.finalist.cmsc.community.taglib.PageReadableTag</tag-class>
+      <body-content>scriptless</body-content>
+      <description>show whether can read page, return true/false</description>
+      <attribute>
+         <name>pageId</name>
+         <description>page id</description>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+   </tag>
 </taglib>
