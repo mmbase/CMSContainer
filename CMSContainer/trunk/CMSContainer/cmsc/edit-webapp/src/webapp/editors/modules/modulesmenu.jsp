@@ -44,18 +44,21 @@
                            <a href="${newsletterUrl}" target="rightpane"><fmt:message key="modules.newsletter"/></a>
                         </li>
                      </mm:haspage>
-                     <mm:haspage page="/editors/community">
-                        <li class="users">
-                          <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
-                           <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
-                        </li>
-                     </mm:haspage>
-                     <mm:haspage page="/editors/community">
-                        <li class="users">
-                           <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
-                           <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
-                        </li>
-                     </mm:haspage>
+                     <community:useSSO var="sso" />
+                     <c:if test="${!sso}" >
+                        <mm:haspage page="/editors/community">
+                           <li class="users">
+                             <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
+                              <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
+                           </li>
+                        </mm:haspage>
+                        <mm:haspage page="/editors/community">
+                           <li class="users">
+                              <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
+                              <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
+                           </li>
+                        </mm:haspage>
+                     </c:if>
                      <mm:haspage page="/editors/community/preferencesearch.jsp">
                         <li class="community">
                            <c:url var="communityUrl" value="/editors/community/PreferenceAction.do?method=list&reload=true"/>
