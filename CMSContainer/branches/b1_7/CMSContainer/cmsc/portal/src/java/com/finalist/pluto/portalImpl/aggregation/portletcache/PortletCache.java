@@ -4,11 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.concurrent.CacheLockProvider;
-import net.sf.ehcache.concurrent.Sync;
 import net.sf.ehcache.constructs.blocking.BlockingCache;
 
-import com.finalist.cmsc.services.sitemanagement.UniqueKeyReadWriteLockSync;
 import com.finalist.pluto.portalImpl.aggregation.PortletFragment;
 import com.finalist.pluto.portalImpl.aggregation.ScreenFragment;
 
@@ -16,18 +13,11 @@ public class PortletCache extends BlockingCache {
 
 	private static PortletCache cache = new PortletCache();
 
-   private final CacheLockProvider cacheLockProvider;
    
    public PortletCache() throws CacheException {
       super(CacheManager.create().getCache("PortletCache"));
-      this.cacheLockProvider = new UniqueKeyReadWriteLockSync();
    }
    
-   @Override
-   protected Sync getLockForKey(Object key) {
-      return cacheLockProvider.getSyncForKey(key);
-   }
-	
 	/**
 	 * The cache key is: page number, portlet position and parameters
 	 * 
