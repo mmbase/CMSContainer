@@ -32,6 +32,18 @@
       </attribute>
    </tag>
    <tag>
+      <name>listLDAPGroups</name>
+      <tag-class>com.finalist.cmsc.community.taglib.ListLDAPGroupsTag</tag-class>
+      <body-content>scriptless</body-content>
+      <description>List LDAP groups</description>
+      <attribute>
+         <name>var</name>
+         <description>JSP variable name to result List of LDAP Authority names in.</description>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+      </attribute>
+   </tag>   
+   <tag>
       <name>fullname</name>
       <tag-class>com.finalist.cmsc.community.taglib.FullnameTag</tag-class>
       <body-content>scriptless</body-content>
@@ -153,4 +165,17 @@
          <rtexprvalue>true</rtexprvalue>
       </attribute>
    </tag>
+   <tag>
+      <name>addAuthority</name>
+      <tag-class>com.finalist.cmsc.community.taglib.AddAuthorityTag</tag-class>
+      <body-content>scriptless</body-content>
+      <description>add a authority to Hiberante table</description>
+      <attribute>
+         <name>value</name>
+         <description>authority value</description>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+   </tag>
+   
 </taglib>
