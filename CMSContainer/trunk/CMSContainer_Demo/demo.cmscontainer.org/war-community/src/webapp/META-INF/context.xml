@@ -126,8 +126,7 @@
 	<!--Contains value 'true' or 'false' to indicate whether or not the application uses LDAP-->
 	<Environment name="useLDAP" value="true" type="java.lang.String" />
 	<!--LDAP server settings-->
-	<Environment name="ldap.url" value="ldap://192.168.4.67:389" type="java.lang.String" />
-	<Environment name="ldap.base" value="dc=nai,dc=nl" type="java.lang.String" />
+	<Environment name="ldap.url" value="ldap://192.168.4.67" type="java.lang.String" />
 	<Environment name="ldap.userDn" value="cn=Manager,dc=nai,dc=nl" type="java.lang.String" />
 	<Environment name="ldap.password" value="secret" type="java.lang.String" />
 	<Environment name="ldap.type" value="simple" type="java.lang.String" />
