@@ -98,7 +98,6 @@
 			<value>$env{ldap.url}</value>
 			</list>
 		</property>
-		<property name="base" value="$env{ldap.base}" />
 		<property name="userDn"	value="$env{ldap.userDn}" />
 		<property name="password" value="$env{ldap.password}" />
 		<property name="baseEnvironmentProperties">
