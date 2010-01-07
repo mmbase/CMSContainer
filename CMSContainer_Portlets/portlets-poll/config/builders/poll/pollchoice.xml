@@ -55,7 +55,7 @@
                     <input>4</input>
                 </positions>
             </editor>
-            <datatype base="created" xmlns="http://www.mmbase.org/xmlns/datatypes">
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
                 <default value="0"/>
                 <required value="true"/>
             </datatype>
