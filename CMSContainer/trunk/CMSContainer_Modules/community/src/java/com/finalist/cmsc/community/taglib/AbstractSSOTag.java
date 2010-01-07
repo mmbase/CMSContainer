@@ -13,6 +13,10 @@ import javax.servlet.jsp.PageContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.finalist.cmsc.util.ServerUtil;
+import com.finalist.pluto.portalImpl.core.PortalEnvironment;
+import com.finalist.pluto.portalImpl.core.PortalURL;
+
 public abstract class AbstractSSOTag extends CommunityTagSupport{
   
    private static final Log log = LogFactory.getLog(UseSSOTag.class);
@@ -71,6 +75,18 @@ public abstract class AbstractSSOTag extends CommunityTagSupport{
          log.error(e);
       }
       return value;
+   }
+   
+   protected String getPath() {
+      PageContext ctx = (PageContext) getJspContext();
+      HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
+      PortalEnvironment env = PortalEnvironment.getPortalEnvironment(request);
+      PortalURL currentURL = env.getRequestedPortalURL();
+      String path = currentURL.getGlobalNavigationAsString();
+      if (ServerUtil.useServerName()) {
+         path = request.getServerName() + "/" + path;
+      }
+      return path;
    }
    
    /**

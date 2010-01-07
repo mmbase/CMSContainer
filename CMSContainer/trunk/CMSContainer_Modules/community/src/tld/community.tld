@@ -116,6 +116,12 @@
          <required>false</required>
          <rtexprvalue>false</rtexprvalue>
       </attribute>
+      <attribute>
+         <name>referurl</name>
+         <description>JSP variable name to value of backurl.</description>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+      </attribute>
    </tag>
    <tag>
       <name>remoteUser</name>

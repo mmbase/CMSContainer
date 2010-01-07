@@ -112,12 +112,12 @@ public class SingleSignOnFilter implements Filter{
       Set < String > authoritiesDB =authorityService.getAuthorityNamesForUser(ldapAuthentication.getUserId());
       
       for (Authority authority : ldapAuthentication.getAuthorities()) {
-         if (!allDBAuthorities.contains(authority)) {
+         if (!allDBAuthorities.contains(authority.getName())) {
             authorityService.createAuthority(null, authority.getName());
             authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority.getName());
          }
          else {                        
-            if (!authoritiesDB.contains(authority)) {
+            if (!authoritiesDB.contains(authority.getName())) {
                authenticationService.addAuthorityToUser(ldapAuthentication.getUserId(), authority.getName());
             }
          }
