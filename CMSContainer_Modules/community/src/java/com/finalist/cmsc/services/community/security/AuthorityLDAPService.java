@@ -94,8 +94,14 @@ public class AuthorityLDAPService  extends AbstractLDAPService implements Author
    }
 
    public Set<String> getAuthorityNames() {
-      // TODO Auto-generated method stub
-      return null;
+      AndFilter filter = new AndFilter();
+      filter.and(new EqualsFilter("objectClass", GROUP_CLASS_NAME));
+      List<Authority> groups= (List<Authority>)getLdapTemplate().search(GROUPS_BASE_DN, filter.encode(), new GroupContextMapper());
+      Set<String> groupNames = new HashSet<String>();
+      for (Authority authority : groups) {
+         groupNames.add(authority.getName());
+      }
+      return groupNames;
    }
 
 
