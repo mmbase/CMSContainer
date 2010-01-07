@@ -33,6 +33,7 @@
 				<mm:node referid="groupnode">
 					<c:set var="number"><mm:field name="number"/></c:set>
 				</mm:node>
+            <community:addAuthority value="${param.group}" />
 			</c:if>
 		</mm:cloud>
 		<script>
@@ -42,7 +43,7 @@
 	</c:when>
 	<c:otherwise>
 		<fmt:message key="select.group.intro" />:<br/>
-		<community:listGroups var="groupList" />
+		<community:listLDAPGroups var="groupList" />
 		<c:forEach var="group" items="${groupList}">
 		* <a href="?group=${group}">${group}</a><br/>
 		</c:forEach>
