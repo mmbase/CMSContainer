@@ -374,6 +374,19 @@
             <param-value>true</param-value>
         </init-param>
     </servlet>
+
+	<!--Community logout -->
+	<!--servlet>
+		<description>Returns xml content</description>
+		<servlet-name>CommunityLogoutServlet</servlet-name>
+		<servlet-class>com.finalist.cmsc.community.servlet.CommunityLogoutServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CommunityLogoutServlet</servlet-name>
+		<url-pattern>/LogoutServlet</url-pattern>
+	</servlet-mapping-->
+
     <!-- Installer -->
     <!-- <servlet>
      <servlet-name>install</servlet-name>
