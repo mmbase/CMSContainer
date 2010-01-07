@@ -52,7 +52,7 @@
 			resizeTreeDiv();
 	    	alphaImages();
 	    	for(count = 0; count < treeSize; count++) {
-			    ajaxTreeLoader.initTree(treeNumbers[count], treeDivs[count], undefined, undefined, true);
+			    ajaxTreeLoader.initTree(treeNumbers[count], treeDivs[count]);
 			}
         }
    </script>

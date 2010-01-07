@@ -6,12 +6,13 @@
     <parent>
         <groupId>org.cmscontainer.demos</groupId>
         <artifactId>cmsc-demo-base</artifactId>
-        <version>1.8-SNAPSHOT</version>
+        <version>1.7.1</version>
     </parent>
     
     <artifactId>cmsc-community</artifactId>
     <packaging>war</packaging>
     <name>CMS Container demo community web application</name>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cmscontainer.portlets</groupId>
@@ -39,5 +40,4 @@
 			<type>war</type>
 		</dependency>
 	</dependencies>
-	
 </project>

@@ -16,7 +16,6 @@
 
    <datasourcelist>
       <datasource builder="cronjobs" path="login-portlet/cronjobs.xml" />
-	 <!-- <datasource builder="cronjobs" path="sso/cronjobs.xml" />-->
    </datasourcelist>
 
    <relationsourcelist>

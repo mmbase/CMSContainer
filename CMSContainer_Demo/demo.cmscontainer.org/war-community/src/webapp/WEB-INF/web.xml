@@ -92,11 +92,7 @@
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-	<listener>
-		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
-	</listener>  
-	
-	<filter>
+    <filter>
       <filter-name>SecurityFilterChainProxy</filter-name>
       <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
       <init-param>
@@ -108,45 +104,7 @@
       <filter-name>SecurityFilterChainProxy</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
-<!--
-	 <filter>
-		  <filter-name>CAS Validation Filter</filter-name>
-    	<filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>
-    </filter>
-   
-    <filter>
-        <filter-name>CAS Single Sign Out Filter</filter-name>
-        <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
-    </filter>
-
-    <filter>
-        <filter-name>SSO Filter</filter-name>
-        <filter-class>com.finalist.cmsc.community.filter.SingleSignOnFilter</filter-class>
-    </filter>
-
-    <filter>
-      <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-      <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-    	<filter-name>CAS Validation Filter</filter-name>
-    	<url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-    	<filter-name>CAS Single Sign Out Filter</filter-name>
-    	<url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-    	<filter-name>SSO Filter</filter-name>
-    	<url-pattern>/*</url-pattern>
-    </filter-mapping>
--->
- 
+  
    <filter>
       <description>Filter catch all requests.</description>
       <display-name>DisableUrlSession Filter</display-name>
@@ -374,19 +332,6 @@
             <param-value>true</param-value>
         </init-param>
     </servlet>
-
-	<!--Community logout -->
-	<!--servlet>
-		<description>Returns xml content</description>
-		<servlet-name>CommunityLogoutServlet</servlet-name>
-		<servlet-class>com.finalist.cmsc.community.servlet.CommunityLogoutServlet</servlet-class>
-		<load-on-startup>5</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CommunityLogoutServlet</servlet-name>
-		<url-pattern>/LogoutServlet</url-pattern>
-	</servlet-mapping-->
-
     <!-- Installer -->
     <!-- <servlet>
      <servlet-name>install</servlet-name>

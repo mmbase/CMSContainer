@@ -2,8 +2,6 @@
  * this function can get the div of ajaxtree menu
  */
 var NAVIGATION = "CMSC-NAVIGATION";
-var SITECOOKIE = "SITECOOKIENAME";
-var HIDDEN = "HIDDEN";
 function getContextMenuDiv() {
    var menudiv = document.getElementById("_contextmenu");
    if (menudiv==null) {
@@ -77,7 +75,7 @@ var ajaxTreeHandler = {
 	selected  : null,
 	onSelect  : null, /* should be part of tree, not handler */
 	getId     : function() { return this.idPrefix + this.idCounter++; },
-	toggle    : function (oItem, useCookie) { this.all[oItem.id.replace('-plus','')].toggle(useCookie); },
+	toggle    : function (oItem) { this.all[oItem.id.replace('-plus','')].toggle(); },
 	select    : function (oItem) { this.all[oItem.id.replace('-icon','')].select(); },
 	focus     : function (oItem) { this.all[oItem.id.replace('-anchor','')].focus(); },
 	blur      : function (oItem) { this.all[oItem.id.replace('-anchor','')].blur(); },
@@ -213,9 +211,9 @@ var ajaxTreeHandler = {
 
 var onlyShowCollectionChannel = false;
 ajaxTreeLoader = {
-	initTree : function (persistentId, elementId, portletId, show, newHiddenIcon) {
+	initTree : function (persistentId, elementId, portletId, show) {
 		onlyShowCollectionChannel = show;
-		var treeAction = new AjaxTreeAction(newHiddenIcon);
+		var treeAction = new AjaxTreeAction();
 		treeAction.elementId = elementId;
 		treeAction.execute('inittree', persistentId, portletId);
 	},
@@ -237,8 +235,7 @@ ajaxTreeLoader = {
 /*
  * AjaxTreeAction class
  */
-function AjaxTreeAction(newHiddenIcon) {
-   this.newHiddenIcon = !!newHiddenIcon;
+function AjaxTreeAction() {
 }
 
 AjaxTreeAction.prototype.execute = function(action, persistentId, portletId) {
@@ -265,7 +262,7 @@ AjaxTreeAction.prototype.buildTree = function(request) {
 			}
 		else{
 		var treeXml = request.responseXML.getElementsByTagName("tree")[0];
-		var tree = this.createTree(treeXml, this.newHiddenIcon);
+		var tree = this.createTree(treeXml);
 		var element = document.getElementById(this.elementId);
 		element.innerHTML = tree.toString();
 				}
@@ -329,16 +326,11 @@ AjaxTreeAction.prototype.createTree = function(treeXml) {
 	var icon = treeXml.getAttribute("icon");
 	var openIcon = treeXml.getAttribute("openIcon");
 	var target = treeXml.getAttribute("target");
+	var open = treeXml.getAttribute("open");
 	var loaded = treeXml.getAttribute("loaded");
 	var persistentId = treeXml.getAttribute("persistentId");
 	var fragment = treeXml.getAttribute("fragment");
-   var open = treeXml.getAttribute("open");
-   if(HIDDEN == readCookie(SITECOOKIE, persistentId, "")) {
-      open = false;
-   }
-   if(this.newHiddenIcon && icon.lastIndexOf(".png") > 0){
-      icon = icon.replace(".png", "_close.png");
-   }
+
 	var tree = new AjaxTree(text, action, behavior, icon, openIcon, target, open, loaded, persistentId, fragment);
 	var options = treeXml.childNodes;
 	for (var i = 0 ; i < options.length ; i++) {
@@ -474,26 +466,10 @@ AjaxTreeAbstractNode.prototype.addOption = function (node) {
 	this.options[this.options.length] = node;
 }
 
-AjaxTreeAbstractNode.prototype.toggle = function(useCookie) {
+AjaxTreeAbstractNode.prototype.toggle = function() {
 	if (this.folder || !this.loaded) {
-		if (this.open) { 
-         if (useCookie) {
-            var rootId = document.getElementById(this.id).parentNode.id.substring(4);
-            if(rootId) {
-               writeCookie(SITECOOKIE, rootId, HIDDEN);
-            }
-         }
-         this.collapse();
-      }
-		else { 
-         if (useCookie) {
-            var rootId = document.getElementById(this.id).parentNode.id.substring(4);
-            if(rootId) {
-               clearCookie(SITECOOKIE, rootId);
-            }
-         }
-         this.expand(); 
-      }
+		if (this.open) { this.collapse(); }
+		else { this.expand(); }
 	}
 }
 
@@ -655,7 +631,7 @@ function AjaxTree(sText, sAction, sBehavior, sIcon, sOpenIcon, sTarget, sOpen, s
 	this.base(sText, sAction, sTarget, sLoaded, sPersistentId, sFragment);
 	this.icon      = sIcon || ajaxTreeConfig.rootIcon();
 	this.openIcon  = sOpenIcon || ajaxTreeConfig.openRootIcon();
-	this.open      = sOpen;
+	this.open      = sOpen == 'true' || true;
 	this.folder    = true;
 	this.rendered  = false;
 	this.onSelect  = null;
@@ -726,7 +702,7 @@ AjaxTree.prototype.toString = function() {
 	for (var i = 0; i < this.options.length; i++) {
 		sbOption[i] = this.options[i].toString(i,this.options.length);
 	}
-	var str = "<div id=\"" + this.id + "\" ondblclick=\"ajaxTreeHandler.toggle(this, true);\" class=\"ajax-tree-item\" style.position = 'absolute';" +
+	var str = "<div id=\"" + this.id + "\" ondblclick=\"ajaxTreeHandler.toggle(this);\" class=\"ajax-tree-item\" style.position = 'absolute';" +
 				"onkeydown=\"return ajaxTreeHandler.keydown(this, event)\"  oncontextmenu=\"ajaxTreeHandler.showContextMenu(this,event);return false\">";
 	var newIcon, newOpenIcon;
 	if(__isNeedShowCollectionChannel(this.icon)){

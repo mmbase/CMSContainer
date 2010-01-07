@@ -19,7 +19,6 @@ public class Stylesheet extends NodeBean {
 
 	private String title;
 	private String description;
-	private String text;
 	private String resource;
 	private String media;
 	private boolean overwriteable;
@@ -63,12 +62,4 @@ public class Stylesheet extends NodeBean {
 	public void setOverwriteable(boolean overwriteable) {
 		this.overwriteable = overwriteable;
 	}
-
-   public void setText(String text) {
-      this.text = text;
-   }
-
-   public String getText() {
-      return text;
-   }
 }

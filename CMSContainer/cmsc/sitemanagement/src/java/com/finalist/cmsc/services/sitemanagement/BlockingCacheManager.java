@@ -56,19 +56,19 @@ public class BlockingCacheManager {
 
        throw new CacheException("Cache " + name + " cannot be retrieved. Please create the cache first");
 
-//     // Create the cache
-//     synchronized (this) {
-//         if (manager == null) {
-//             //blockingCache = new BlockingCache(new CacheManager().getCache(name));
-//            //Create single CacheManager instance
-//            blockingCache = new BlockingCache(CacheManager.create().getCache(name));
-//         } else {
-//             blockingCache = new BlockingCache(manager.getCache(name));
-//         }
+//       // Create the cache
+//       synchronized (this) {
+//           if (manager == null) {
+//               //blockingCache = new BlockingCache(new CacheManager().getCache(name));
+//              //Create single CacheManager instance
+//              blockingCache = new BlockingCache(CacheManager.create().getCache(name));
+//           } else {
+//               blockingCache = new BlockingCache(manager.getCache(name));
+//           }
 //
-//         caches.put(name, blockingCache);
-//         return blockingCache;
-//     }
+//           caches.put(name, blockingCache);
+//           return blockingCache;
+//       }
    }
 
    /**
