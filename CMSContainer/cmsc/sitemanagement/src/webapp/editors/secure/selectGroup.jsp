@@ -33,7 +33,10 @@
 				<mm:node referid="groupnode">
 					<c:set var="number"><mm:field name="number"/></c:set>
 				</mm:node>
-            <community:addAuthority value="${param.group}" />
+            <community:useSSO var="sso" />
+            <c:if test="${sso}" >
+               <community:addAuthority value="${param.group}" />
+            </c:if>
 			</c:if>
 		</mm:cloud>
 		<script>
@@ -43,7 +46,12 @@
 	</c:when>
 	<c:otherwise>
 		<fmt:message key="select.group.intro" />:<br/>
-		<community:listLDAPGroups var="groupList" />
+      <c:if test="${sso}" >
+         <community:listLDAPGroups var="groupList" />
+      </c:if>
+      <c:if test="${! sso}" >
+         <community:listGroups var="groupList" />
+      </c:if>
 		<c:forEach var="group" items="${groupList}">
 		* <a href="?group=${group}">${group}</a><br/>
 		</c:forEach>
