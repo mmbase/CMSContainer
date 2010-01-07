@@ -41,7 +41,10 @@ public class AddAuthorityTag extends SimpleTagSupport {
       ctx.getAutowireCapableBeanFactory().autowireBeanProperties(this, Autowire.BY_NAME.value(), false);
 
       AuthorityService as = getAuthorityService();
-      as.createAuthority("", getValue());
+      boolean exist = as.authorityExists(getValue());
+      if(!exist){
+         as.createAuthority("", getValue());
+      }      
    }
    
    private AuthorityService authorityService;
