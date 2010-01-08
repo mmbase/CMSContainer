@@ -30,16 +30,17 @@ public class SecurePortalServlet extends PortalServlet {
 			log.debug("Page: allowed to see");
 			return super.doRender(request, response, path);
 		}
-      Cloud cloud = CloudUtil.getCloudFromThread();
-      Node node = cloud.getNode(item.getId());
-		UserRole role = NavigationUtil.getRole(cloud, node, false);
-	   if (SecurityUtil.isWriter(role)) {
-	     return super.doRender(request, response, path);
+       Cloud cloud = CloudUtil.getCloudFromThread();
+	   if (cloud != null) {
+		   Node node = cloud.getNode(item.getId());
+		   UserRole role = NavigationUtil.getRole(cloud, node, false);
+		   if (SecurityUtil.isWriter(role)) {
+			 return super.doRender(request, response, path);
+		   }
 	   }
 	   response.sendRedirect(getServletContext().getInitParameter("casServerLoginUrl")+"?service="+HttpUtil.getWebappUri(request)+path);
-	   
-		log.warn("Page: not allowed to see, no login page found!");
-		return false;
+       log.warn("Page: not allowed to see, no login page found!");
+	   return false;
 	}
 
 }
