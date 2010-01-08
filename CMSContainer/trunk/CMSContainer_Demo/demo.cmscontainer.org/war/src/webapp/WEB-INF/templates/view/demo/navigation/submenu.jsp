@@ -14,11 +14,13 @@
           </a>
         </li>
       <c:forEach var="page" items="${pages}">
-        <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
-          <a href="<cmsc:link dest="${page.id}"/>" title="<c:out value='${page.description}'/>">
-            <c:out value='${page.title}'/>
-          </a>
-        </li>
+         <community:pageReadable pageId="${page.id}" >
+         <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
+            <a href="<cmsc:link dest="${page.id}"/>" title="<c:out value='${page.description}'/>">
+               <c:out value='${page.title}'/>
+            </a>
+         </li>
+         </community:pageReadable>
       </c:forEach>
     </ul>
   </div>
