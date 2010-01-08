@@ -41,6 +41,8 @@ public class PageReadableTag extends BodyTagSupport {
       Node pageNode = cloud.getNode(getPageId());
       NodeList pagegroups = pageNode.getRelatedNodes("pagegroup");
       
+      if(pagegroups.size() == 0) return EVAL_BODY_INCLUDE;;
+      
       for(int i = 0; i < pagegroups.size(); i++){
          Node group = pagegroups.get(i);
          if(authorityNames.contains(group.getValue("name"))) 
