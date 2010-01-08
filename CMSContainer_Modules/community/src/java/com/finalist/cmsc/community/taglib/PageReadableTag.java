@@ -32,16 +32,16 @@ public class PageReadableTag extends BodyTagSupport {
    @Override
    public int doStartTag() throws JspException {
       super.doStartTag();
-      AuthorityService authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");   
-      org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      if(authentication == null) return SKIP_BODY;
-      Set<String> authorityNames = authorityService.getAuthorityNamesForUser(authentication.getName());
-      
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       Node pageNode = cloud.getNode(getPageId());
       NodeList pagegroups = pageNode.getRelatedNodes("pagegroup");
       
       if(pagegroups.size() == 0) return EVAL_BODY_INCLUDE;;
+      
+      AuthorityService authorityService = (AuthorityService) ApplicationContextFactory.getBean("authorityService");   
+      org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if(authentication == null) return SKIP_BODY;
+      Set<String> authorityNames = authorityService.getAuthorityNamesForUser(authentication.getName());
       
       for(int i = 0; i < pagegroups.size(); i++){
          Node group = pagegroups.get(i);
