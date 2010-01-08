@@ -14,13 +14,23 @@
           </a>
         </li>
       <c:forEach var="page" items="${pages}">
-         <community:pageReadable pageId="${page.id}" >
-         <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
-            <a href="<cmsc:link dest="${page.id}"/>" title="<c:out value='${page.description}'/>">
-               <c:out value='${page.title}'/>
-            </a>
-         </li>
-         </community:pageReadable>
+      	<community:useSSO var="sso" />
+			<c:if test="${sso}" >
+		         <community:pageReadable pageId="${page.id}" >
+		         <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
+		            <a href="<cmsc:link dest="${page.id}"/>" title="<c:out value='${page.description}'/>">
+		               <c:out value='${page.title}'/>
+		            </a>
+		         </li>
+		         </community:pageReadable>
+			</c:if>
+			<c:if test="${! sso}" >
+		         <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
+		            <a href="<cmsc:link dest="${page.id}"/>" title="<c:out value='${page.description}'/>">
+		               <c:out value='${page.title}'/>
+		            </a>
+		         </li>
+			</c:if>
       </c:forEach>
     </ul>
   </div>
