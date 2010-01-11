@@ -3,7 +3,7 @@
 <application name="workflow" maintainer="finalist.com" version="3" auto-deploy="true">
    <requirements>
       <requires name="contentrepository" maintainer="finalist.com" version="4" type="application"/>
-      <requires name="sitemanagement" maintainer="finalist.com" version="2" type="application"/>
+      <requires name="sitemanagement" maintainer="finalist.com" version="3" type="application"/>
    </requirements>
    <neededbuilderlist>
       <builder maintainer="mmbase.org" version="1">insrel</builder>
