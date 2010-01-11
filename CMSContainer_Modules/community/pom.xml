@@ -115,7 +115,7 @@
 
 	<!--CAS client-->
     <dependency>
-      <groupId>org.opensaml</groupId>
+      <groupId>opensaml</groupId>
       <artifactId>opensaml</artifactId>
       <version>1.1b</version>
       <scope>compile</scope>

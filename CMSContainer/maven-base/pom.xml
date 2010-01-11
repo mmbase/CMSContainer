@@ -683,12 +683,11 @@ See http://www.MMBase.org/license
          <url>http://download.java.net/maven/2/</url>
          <layout>default</layout>
       </repository>
-
-      <!--    <repository>-->
-      <!--      <id>jboss</id>-->
-      <!--      <name>JBoss maven 2 repository</name>-->
-      <!--      <url>http://repository.jboss.com/maven2</url>-->
-      <!--    </repository>-->
+      <repository>
+         <id>jboss</id>
+         <name>JBoss maven 2 repository</name>
+         <url>http://repository.jboss.com/maven2</url>
+      </repository>
 
    </repositories>
 
