@@ -1,6 +1,6 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
+<%@taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
 <cmsc:location var="cur" sitevar="site" />
 <cmsc:path var="listPath" />
 <cmsc:list-navigations var="pages" origin="${listPath[0]}" />
