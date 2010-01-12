@@ -95,7 +95,7 @@ and then perform the following steps.
       <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-3. Change the sprint-community.xml, uncomment the following beans
+3. Change the spring-community.xml, uncomment the following beans
 
 <!-- a PropertyPlaceholderConfigurer object which used to handle placeholder of the LDAP contextsource-->
 	<bean id="environmentConfigurer" class="com.finalist.cmsc.services.community.JndiPlaceholderConfigurer">
