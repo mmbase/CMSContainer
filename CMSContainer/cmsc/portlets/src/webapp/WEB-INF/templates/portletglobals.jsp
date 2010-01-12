@@ -9,6 +9,5 @@
 <%@ taglib uri="http://finalist.com/cmsc-basicmodel" prefix="cmsc-bm"%>
 <%@ taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg" %>
-<%@ taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
 <portlet:defineObjects />
 <cmsc:portlet-preferences />
