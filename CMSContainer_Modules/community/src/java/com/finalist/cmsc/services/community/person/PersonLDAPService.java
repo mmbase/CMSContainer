@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.finalist.cmsc.services.AbstractLDAPService;
 import com.finalist.cmsc.services.community.domain.PersonExportImportVO;
-import com.finalist.cmsc.services.community.security.AuthenticationService;
 import com.finalist.cmsc.services.community.security.Authority;
 
 /**
@@ -26,7 +25,6 @@ public class PersonLDAPService  extends AbstractLDAPService implements PersonSer
    public static final String RELATION_BASE_DN = "ou=Relations,ou=idstore,dc=nai,dc=nl"; 
    public static final String RELATION_CLASS_NAME = "naiIDStorePerson";
    
-   private AuthenticationService authenticationService;
    /**
     * {@inheritDoc}
     */
