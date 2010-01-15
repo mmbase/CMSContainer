@@ -9,12 +9,19 @@ import com.finalist.cmsc.util.HttpUtil;
 
 public class LogLinkTag extends AbstractSSOTag  {
 
+   private static final String CAS_LOGIN_LOCALE = "cas_login_locale";
    private String referurl;    
 
+   private String locale;
    
    public void setReferurl(String referurl) {
       this.referurl = referurl;
    }
+   
+   public void setLocale(String locale) {
+      this.locale = locale;
+   }
+   
    @Override
    protected String getValue() {
       PageContext ctx = (PageContext) getJspContext();
@@ -31,7 +38,8 @@ public class LogLinkTag extends AbstractSSOTag  {
       }
       org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if(authentication == null) {
-         link = getParameter("casServerLoginUrl")+"?service="+backUrl;
+         link = getParameter("casServerLoginUrl"+"_"+locale)+"?service="+backUrl;
+         req.getSession().setAttribute(CAS_LOGIN_LOCALE, locale);
       }
       else {
          link = HttpUtil.getWebappUri(req)+"LogoutServlet";
