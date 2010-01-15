@@ -131,9 +131,11 @@
 	<Environment name="ldap.password" value="secret" type="java.lang.String" />
 	<Environment name="ldap.type" value="simple" type="java.lang.String" />
 	<!--CAS filters settings-->
-	<Parameter name="casServerLoginUrl" value="https://replace.with.cashost/single-sign-on/login" override="false"/>
+	<Parameter name="casServerLoginUrl_en" value="https://replace.with.cashost/single-sign-on/login_en" override="false"/>
+	<Parameter name="casServerLoginUrl_nl" value="https://replace.with.cashost/single-sign-on/login_nl" override="false"/>
 	<Parameter name="serverName" value="http://replace.with.cmschost" override="false"/>
 	<Parameter name="casServerUrlPrefix" value="https://replace.with.cashost/single-sign-on" override="false"/>
 	<Parameter name="redirectAfterValidation" value="true" override="false"/>
-	<Parameter name="casServerLogoutUrl" value="https://replace.with.cashost/single-sign-on/logout" override="false"/>
+	<Parameter name="casServerLogoutUrl_en" value="https://replace.with.cashost/single-sign-on/logout_en" override="false"/>
+	<Parameter name="casServerLogoutUrl_nl" value="https://replace.with.cashost/single-sign-on/logout_nl" override="false"/>
 </Context>
