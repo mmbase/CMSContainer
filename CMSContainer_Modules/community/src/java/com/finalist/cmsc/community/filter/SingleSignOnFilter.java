@@ -101,7 +101,7 @@ public class SingleSignOnFilter implements Filter{
       }
       else {
          Authentication newAuthentication = authenticationService.createAuthentication(ldapAuthentication);
-         Person newPerson = personService.createPerson(personLDAP.getFirstName(), "", personLDAP.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
+         Person newPerson = personService.createPerson(personLDAP.getFirstName()==null?"":personLDAP.getFirstName(), "", personLDAP.getLastName()==null?"":personLDAP.getLastName(), newAuthentication.getId(), RegisterStatus.ACTIVE.getName(), new Date());
          newPerson.setEmail(personLDAP.getEmail());
          personService.updatePerson(newPerson);
       }
