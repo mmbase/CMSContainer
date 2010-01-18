@@ -87,10 +87,11 @@ public class SingleSignOnFilter implements Filter{
    }
    
    private void addPerson(String idStoreId, Authentication ldapAuthentication) {
-      Person person = personService.getPersonByUserId(ldapAuthentication.getUserId());
+      
       Person personLDAP= personLDAPService.getPersonByUserId(idStoreId);
-   
-      if (person != null) {
+      Authentication authentication = authenticationService.findAuthentication(ldapAuthentication.getUserId());
+      if (authentication != null) {
+         Person person = personService.getPersonByUserId(ldapAuthentication.getUserId());
          //update the information of person
          person.setFirstName(personLDAP.getFirstName());
          person.setLastName(personLDAP.getLastName());
