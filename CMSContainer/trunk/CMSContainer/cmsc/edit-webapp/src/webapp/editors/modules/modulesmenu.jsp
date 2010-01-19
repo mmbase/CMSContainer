@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%@include file="../globals.jsp"%><%@ 
-taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
+<%@include file="../globals.jsp"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
@@ -66,6 +65,14 @@ taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
                            <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.reference" /></a>
                         </li>
                      </mm:haspage>
+                     <c:if test="${sso}" >
+                        <mm:haspage page="/editors/community">
+                           <li class="groups">
+                              <c:url var="syncronizeGroups" value="/editors/community/syncronizeGroups.jsp"/>
+                              <a href="${syncronizeGroups}" target="rightpane"><fmt:message key="modules.groups" /></a>
+                           </li>
+                        </mm:haspage>
+                     </c:if>
                      <mm:haspage page="/editors/subsite/module-subsite.jsp">
                         <li class="versioning"><a href="<mm:url page="../subsite/SubSiteAction.do"/>" target="rightpane">
                            <fmt:message key="modules.subsite" />

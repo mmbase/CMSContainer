@@ -314,6 +314,7 @@ ul.shortcuts li.openoffice         {   background-image: url('../gfx/icons/down.
 ul.shortcuts li.glossary         {   background-image: url('../gfx/icons/glossary.png');}
 ul.shortcuts li.newsletter         {   background-image: url('../gfx/icons/mail.png');}
 ul.shortcuts li.community         {   background-image: url('../gfx/icons/rights.png');}
+ul.shortcuts li.groups         {   background-image: url('../gfx/icons/group.png');}
 
 div.side_block div.body
 {
@@ -830,6 +831,11 @@ div.editor div.body
    background-color: #fff;
    display: table;
    width: 100%;
+}
+
+div.editor div.body div.syn
+{
+   margin-bottom: 10px;
 }
 
 div.editor th a
