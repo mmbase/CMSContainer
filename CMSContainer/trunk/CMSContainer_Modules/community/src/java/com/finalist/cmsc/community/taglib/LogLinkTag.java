@@ -38,7 +38,11 @@ public class LogLinkTag extends AbstractSSOTag  {
       }
       org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if(authentication == null) {
-         link = getParameter("casServerLoginUrl"+"_"+locale)+"?service="+backUrl;
+         String defaultLoginUrl = "casServerLoginUrl";
+         if(locale != null) {
+            defaultLoginUrl += "_"+locale;
+         }
+         link = getParameter(defaultLoginUrl)+"?service="+backUrl;
          req.getSession().setAttribute(CAS_LOGIN_LOCALE, locale);
       }
       else {

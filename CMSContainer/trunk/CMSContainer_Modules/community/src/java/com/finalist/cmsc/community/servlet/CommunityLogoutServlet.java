@@ -27,7 +27,11 @@ public class CommunityLogoutServlet extends HttpServlet {
          locale = (String)request.getSession().getAttribute("cas_login_locale");       
       }
       request.getSession().invalidate();
-      response.sendRedirect(getServletContext().getInitParameter("casServerLogoutUrl"+"_"+(locale==null?"":locale)));
+      String defaultLogoutUrl = "casServerLogoutUrl";
+      if (locale != null) {
+         defaultLogoutUrl += "_"+locale;
+      }
+      response.sendRedirect(getServletContext().getInitParameter(defaultLogoutUrl));
     
       log.error("There is no right casServerLogoutUrl in the context.xml");
    }
