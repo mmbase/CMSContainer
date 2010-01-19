@@ -15,6 +15,7 @@ import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.security.UserRole;
+import com.finalist.cmsc.services.community.Community;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
 
@@ -30,7 +31,8 @@ public class SecurePortalServlet extends PortalServlet {
 			log.debug("Page: allowed to see");
 			return super.doRender(request, response, path);
 		}
-       Cloud cloud = CloudUtil.getCloudFromThread();
+		
+      Cloud cloud = CloudUtil.getCloudFromThread();
 	   if (cloud != null) {
 		   Node node = cloud.getNode(item.getId());
 		   UserRole role = NavigationUtil.getRole(cloud, node, false);
@@ -38,7 +40,19 @@ public class SecurePortalServlet extends PortalServlet {
 			 return super.doRender(request, response, path);
 		   }
 	   }
-	   response.sendRedirect(getServletContext().getInitParameter("casServerLoginUrl")+"?service="+HttpUtil.getWebappUri(request)+path);
+	   if (Community.isAuthenticated()) {
+	      String noRightPage = SiteManagement.getSiteFromPath(path).getUrlfragment()+"/403";
+	      response.sendRedirect(HttpUtil.getWebappUri(request)+noRightPage);
+	   }
+	   String locale = null;
+      if (request.getSession().getAttribute("cas_login_locale") != null) {
+         locale = (String)request.getSession().getAttribute("cas_login_locale");       
+      } 
+      String defaultLoginUrl = "casServerLoginUrl";
+      if (locale != null) {
+         defaultLoginUrl += "_"+locale;
+      }
+	   response.sendRedirect(getServletContext().getInitParameter(defaultLoginUrl)+"?service="+HttpUtil.getWebappUri(request)+path);
        log.warn("Page: not allowed to see, no login page found!");
 	   return false;
 	}
