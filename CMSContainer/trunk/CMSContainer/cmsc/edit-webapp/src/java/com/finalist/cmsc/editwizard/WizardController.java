@@ -265,7 +265,7 @@ public class WizardController {
                         node.commit();
                      }
                      if (wizardConfig.wiz.committed()) {
-                        addWorkFlowItem(node);
+                       // addWorkFlowItem(node);
                         //add version for asset element
                         try {
                            Versioning.addVersion(node);
