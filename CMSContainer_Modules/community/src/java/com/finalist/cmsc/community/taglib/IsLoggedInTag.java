@@ -12,6 +12,10 @@ public class IsLoggedInTag extends CommunityTagSupport  {
 
    private String var;
    
+   public void setVar(String var) {
+      this.var = var;
+   }
+
    @Override
    protected void doTagLogic() throws JspException, IOException {
       PageContext ctx = (PageContext) getJspContext();
