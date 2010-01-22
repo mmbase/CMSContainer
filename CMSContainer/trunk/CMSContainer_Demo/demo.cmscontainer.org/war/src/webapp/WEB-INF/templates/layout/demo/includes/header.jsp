@@ -13,7 +13,14 @@
   <cmsc:insert-stylesheet var="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl.css'/>" media="screen,projection,print" />
   <c:forEach var="style" items="${stylesheet}">
-    <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+   	<c:choose>  
+		<c:when test="${empty style.resource}"> 
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet/${style.id}.css" media="${style.media}" />
+		</c:when> 
+		<c:otherwise>
+		 <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+		</c:otherwise>
+	</c:choose> 
   </c:forEach>
   <!--[if IE]>
      <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl_ie.css'/>" media="screen,projection,print" />
