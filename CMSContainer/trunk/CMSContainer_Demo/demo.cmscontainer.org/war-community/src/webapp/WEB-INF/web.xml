@@ -359,7 +359,11 @@
             <param-value>true</param-value>
         </init-param>
     </servlet>
-
+	<servlet>
+		<description>Returns css text</description>
+		<servlet-name>stylesheet</servlet-name>
+		<servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
+	</servlet>
 	<!--Community logout -->
 	<!--servlet>
 		<description>Returns xml content</description>
@@ -387,6 +391,10 @@
         <servlet-name>install</servlet-name>
         <url-pattern>/install/install.page</url-pattern>
     </servlet-mapping> -->
+	<servlet-mapping>
+		<servlet-name>stylesheet</servlet-name>
+		<url-pattern>/stylesheet/*</url-pattern>
+	</servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>jforum</servlet-name>
