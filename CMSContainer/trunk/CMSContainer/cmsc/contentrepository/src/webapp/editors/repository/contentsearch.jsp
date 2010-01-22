@@ -5,6 +5,7 @@
                  com.finalist.cmsc.repository.RepositoryUtil"
 %><%@ page import="com.finalist.cmsc.security.UserRole" 
 %><%@ page import="com.finalist.cmsc.security.SecurityUtil" 
+%><%@ page import="net.sf.mmapps.modules.cloudprovider.CloudProviderFactory" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
@@ -136,7 +137,15 @@
                            <td nowrap>
                               <c:if test="${not empty onlytype}" >
                                  <html:hidden property="contenttypes" />
-                                 <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />Article
+                                 <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />
+								 <c:choose>
+                                        <c:when test="${onlytype != 'contentelement'}">
+                                                <%=CloudProviderFactory.getCloudProvider().getCloud().getNodeManager((String)request.getAttribute("onlytype")).getGUIName(NodeManager.GUI_SINGULAR, request.getLocale())%>
+                                        </c:when>
+                                        <c:otherwise>
+                                                <fmt:message key="searchform.contenttypes.all" />
+                                        </c:otherwise>
+                                 </c:choose>
                               </c:if>
                               <c:if test="${empty onlytype}" >
                                     <html:select style="width:145px" property="contenttypes" onchange="selectContenttype('${searchinit}');" >
