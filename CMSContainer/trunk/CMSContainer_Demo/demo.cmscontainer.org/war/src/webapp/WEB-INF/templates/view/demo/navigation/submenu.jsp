@@ -1,6 +1,9 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
+<mm:haspage page="/editors/community">
+  <%@taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
+  <community:useSSO var="sso" />
+</mm:haspage>
 <cmsc:location var="cur" sitevar="site" />
 <cmsc:path var="listPath" />
 <cmsc:list-navigations var="pages" origin="${listPath[0]}" />
@@ -14,7 +17,7 @@
           </a>
         </li>
       <c:forEach var="page" items="${pages}">
-      	<community:useSSO var="sso" />
+
 			<c:if test="${sso}" >
 		         <community:pageReadable pageId="${page.id}" >
 		         <li <cmsc:onpath origin="${page}">class="selected"</cmsc:onpath>>
