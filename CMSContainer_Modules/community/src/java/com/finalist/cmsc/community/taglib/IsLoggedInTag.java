@@ -22,20 +22,15 @@ public class IsLoggedInTag extends CommunityTagSupport  {
       HttpServletRequest req = (HttpServletRequest) ctx.getRequest();
 
       org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String value = "false";
       if(authentication != null) {
-         if (var != null) {
-            if (authentication.getName() != null) {
-               req.setAttribute(var,"true");
-            } else {
-               req.removeAttribute(var);
-            }
-         }
-         else {
-            ctx.getOut().print("true");
-         }
+         value = "true";
+      }
+      if (var != null) {
+         req.setAttribute(var, value);
       }
       else {
-         ctx.getOut().print("false");
+         ctx.getOut().print(value);
       }
    }
 
