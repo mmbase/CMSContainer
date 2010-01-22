@@ -277,7 +277,6 @@
 		<description>Returns css text</description>
 		<servlet-name>stylesheet</servlet-name>
 		<servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
@@ -315,7 +314,7 @@
 
 	<servlet-mapping>
 		<servlet-name>stylesheet</servlet-name>
-		<url-pattern>*.css</url-pattern>
+		<url-pattern>/stylesheet/*</url-pattern>
 	</servlet-mapping>
 	
 	<mime-mapping>
