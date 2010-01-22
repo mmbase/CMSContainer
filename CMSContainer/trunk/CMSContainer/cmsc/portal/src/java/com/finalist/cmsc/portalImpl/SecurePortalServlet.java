@@ -28,6 +28,10 @@ public class SecurePortalServlet extends PortalServlet {
 	
 	protected boolean doRender(HttpServletRequest request,
 			HttpServletResponse response, String path) throws IOException {
+	   String useSSO = SecureUtil.getEnvironment("useSSO");
+	   if(useSSO == null || "false".equalsIgnoreCase(useSSO)) {
+	      return super.doRender(request, response, path);
+	   }
 		NavigationItem item = SiteManagement.getNavigationItemFromPath(path);
 		if (SecureUtil.isAllowedToSee(item)) {
 			log.debug("Page: allowed to see");
