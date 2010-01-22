@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mmbase.bridge.Node;
 import org.mmbase.servlet.BridgeServlet;
 
 /**
@@ -29,19 +30,28 @@ public class StylesheetServlet extends BridgeServlet {
 
    @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      doRedirect(request, response);
+      renderText(request, response);
    }
 
    @Override
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      doRedirect(request, response);
+      renderText(request, response);
    }
 
-   private void doRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String text = null;
-      text = request.getParameter("text");
-
+   private void renderText(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String pathInfo = request.getPathInfo();
       response.setContentType("text/css");
-      response.getWriter().print(text);
+      String number = null;
+      if (pathInfo != null) {
+         number = pathInfo.replaceAll("/|.css", "");
+      }
+      if (number != null) {
+         if (number.matches("[0-9]+")) {
+            Node stylesheet= getAnonymousCloud().getNode(number);
+            String text = stylesheet.getStringValue("text");
+            response.getWriter().print(text);
+         }
+      }
+
    }
 }

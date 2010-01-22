@@ -9,6 +9,7 @@ Goal: Add a new field "text" to mm_stylesheet
 Type:  manual action
 --- Start script ---
 ALTER TABLE mm_stylesheet ADD text text default '';
+ALTER TABLE live_stylesheet ADD text text default '';
 --- End script ---
 Exceptions/errors/other problems and what to do:
 *
