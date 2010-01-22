@@ -1,5 +1,9 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
 <%@include file="../globals.jsp"%>
+<mm:haspage page="/editors/community">
+  <%@taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
+  <community:useSSO var="sso" />
+</mm:haspage>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
@@ -44,21 +48,21 @@
                            <a href="${newsletterUrl}" target="rightpane"><fmt:message key="modules.newsletter"/></a>
                         </li>
                      </mm:haspage>
-                     <community:useSSO var="sso" />
-                     <c:if test="${!sso}" >
-                        <mm:haspage page="/editors/community">
+
+                    <mm:haspage page="/editors/community">
+					    <community:useSSO var="sso" />
+                         <c:if test="${!sso}" >
                            <li class="users">
                              <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
                               <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
-                           </li>
-                        </mm:haspage>
-                        <mm:haspage page="/editors/community">
+                           </li>						  
                            <li class="users">
                               <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
                               <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
                            </li>
-                        </mm:haspage>
-                     </c:if>
+						 </c:if>
+                     </mm:haspage>
+                    
                      <mm:haspage page="/editors/community/preferencesearch.jsp">
                         <li class="community">
                            <c:url var="communityUrl" value="/editors/community/PreferenceAction.do?method=list&reload=true"/>
