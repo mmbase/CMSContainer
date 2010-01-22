@@ -137,7 +137,7 @@
                            <td nowrap>
                               <c:if test="${not empty onlytype}" >
                                  <html:hidden property="contenttypes" />
-                                 <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />Article
+                                 <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />
                                  <c:choose>
                                         <c:when test="${onlytype != 'contentelement'}">
                                                 <%=CloudProviderFactory.getCloudProvider().getCloud().getNodeManager((String)request.getAttribute("onlytype")).getGUIName(NodeManager.GUI_SINGULAR, request.getLocale())%>
