@@ -18,8 +18,7 @@
 
  <div class="editor" style="height:500px">
   <div class="body" style="padding:10px">
-
-
+<community:useSSO var="sso" />
 <c:choose>
 	<c:when test="${!empty param.group}">
 		<mm:cloud>
@@ -32,8 +31,7 @@
 				</mm:createnode>
 				<mm:node referid="groupnode">
 					<c:set var="number"><mm:field name="number"/></c:set>
-				</mm:node>
-            <community:useSSO var="sso" />
+				</mm:node>           
             <c:if test="${sso}" >
                <community:addAuthority value="${param.group}" />
             </c:if>
