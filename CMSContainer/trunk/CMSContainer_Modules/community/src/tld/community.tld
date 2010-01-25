@@ -130,6 +130,24 @@
       </attribute>
    </tag>
    <tag>
+      <name>register</name>
+      <tag-class>com.finalist.cmsc.community.taglib.RegisterTag</tag-class>
+      <body-content>scriptless</body-content>
+      <description>Link to resister page</description>
+      <attribute>
+         <name>var</name>
+         <description>JSP variable name to value of the path of register page.</description>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+         <name>locale</name>
+         <description>JSP variable name to value of locale.</description>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+      </attribute>
+   </tag>
+   <tag>
       <name>remoteUser</name>
       <tag-class>com.finalist.cmsc.community.taglib.RemoteUserTag</tag-class>
       <body-content>scriptless</body-content>
