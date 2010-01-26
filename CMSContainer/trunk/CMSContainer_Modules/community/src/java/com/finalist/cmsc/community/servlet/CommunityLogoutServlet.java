@@ -7,8 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+
+import com.finalist.cmsc.services.community.Community;
 
 @SuppressWarnings("serial")
 public class CommunityLogoutServlet extends HttpServlet {
@@ -28,13 +31,19 @@ public class CommunityLogoutServlet extends HttpServlet {
       if (request.getSession().getAttribute(CAS_LOGIN_LOCALE) != null) {
          locale = (String)request.getSession().getAttribute(CAS_LOGIN_LOCALE);       
       }
-      request.getSession().invalidate();
+     // request.getSession(false).removeAttribute(HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY);
+      HttpSession session = request.getSession(false);
+      if (session != null) {
+         session.invalidate();
+      }
+     
+      Community.logout();
+      
       String defaultLogoutUrl = CAS_SERVER_LOGOUT_URL;
       if (locale != null) {
          defaultLogoutUrl += "_"+locale;
       }
+      log.debug("Community logout url : "+defaultLogoutUrl);
       response.sendRedirect(getServletContext().getInitParameter(defaultLogoutUrl));
-    
-      log.error("There is no right casServerLogoutUrl in the context.xml");
    }
 }
