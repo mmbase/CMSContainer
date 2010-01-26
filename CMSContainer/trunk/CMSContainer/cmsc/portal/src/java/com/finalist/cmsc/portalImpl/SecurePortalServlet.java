@@ -49,6 +49,7 @@ public class SecurePortalServlet extends PortalServlet {
 	   if (Community.isAuthenticated()) {
 	      String noRightPage = SiteManagement.getSiteFromPath(path).getUrlfragment()+"/403";
 	      response.sendRedirect(HttpUtil.getWebappUri(request)+noRightPage);
+	      return true;
 	   }
 	   String locale = null;
       if (request.getSession().getAttribute(CAS_LOGIN_LOCALE) != null) {
@@ -65,9 +66,10 @@ public class SecurePortalServlet extends PortalServlet {
             request.getSession().setAttribute(CAS_LOGIN_LOCALE, site.getLanguage());
          }
       }
-	   response.sendRedirect(getServletContext().getInitParameter(loginUrl)==null?getServletContext().getInitParameter(DEFAULT_LOGIN_URL):getServletContext().getInitParameter(loginUrl)+"?service="+HttpUtil.getWebappUri(request)+path);
-       log.warn("Page: not allowed to see, no login page found!");
-	   return false;
+      String redirectUrl = getServletContext().getInitParameter(loginUrl)==null?getServletContext().getInitParameter(DEFAULT_LOGIN_URL):getServletContext().getInitParameter(loginUrl)+"?service="+HttpUtil.getWebappUri(request)+path;
+      log.debug("Community logout url : "+redirectUrl);
+      response.sendRedirect(redirectUrl);
+	   return true;
 	}
 
 }
