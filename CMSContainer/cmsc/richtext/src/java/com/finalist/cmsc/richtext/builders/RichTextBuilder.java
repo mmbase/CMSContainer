@@ -1,22 +1,36 @@
 package com.finalist.cmsc.richtext.builders;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.NodeManager;
+import org.mmbase.bridge.util.CloudUtil;
 import org.mmbase.core.CoreField;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
-import org.mmbase.storage.search.*;
+import org.mmbase.storage.search.FieldCompareConstraint;
+import org.mmbase.storage.search.SearchQueryException;
+import org.mmbase.storage.search.StepField;
 import org.mmbase.storage.search.implementation.BasicFieldValueConstraint;
 import org.mmbase.storage.search.implementation.NodeSearchQuery;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.finalist.cmsc.richtext.RichText;
 
@@ -417,7 +431,7 @@ public class RichTextBuilder extends MMObjectBuilder {
                else {
                   if (link.hasAttribute(RichText.HREF_ATTR) && !(link.getAttribute(RichText.HREF_ATTR).startsWith("#")) ) {
                      String href = link.getAttribute(RichText.HREF_ATTR);
-                     String name = link.getAttribute("name");
+                     String name = link.getFirstChild().getNodeValue();       
                      String owner = mmObj.getStringValue("owner");
                      MMObjectNode urlNode = createUrl(owner, href, name);
 
@@ -809,7 +823,14 @@ public class RichTextBuilder extends MMObjectBuilder {
          urlNode.setValue("title", href.trim());
       }
       urlNode.setValue("url", href.trim());
+      setLastModifier(urlNode);
       urlNode.insert(owner);
       return urlNode;
    }
+   
+   private void setLastModifier(MMObjectNode node) {
+      String username = CloudUtil.getCloudFromThread().getUser().getIdentifier();
+      node.setValue("lastmodifier", username);
+      node.setValue("lastmodifieddate", System.currentTimeMillis()/1000);
+   } 
 }
