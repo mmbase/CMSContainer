@@ -15,6 +15,7 @@
 	<link href="../../utils/ajaxtree/addressbar.css" type="text/css" rel="stylesheet" />
 	<link href="../../utils/ajaxtree/ajaxtree.css" type="text/css" rel="stylesheet" />
 
+	<script type="text/javascript" src="../../utils/cookies.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/ajaxtree.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/addressbar.js"></script>
 
