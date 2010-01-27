@@ -19,26 +19,38 @@ import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.community.Community;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
+import com.finalist.cmsc.util.ServerUtil;
 
 @SuppressWarnings("serial")
 public class SecurePortalServlet extends PortalServlet {
+   
+   private static Log log = LogFactory.getLog(SecurePortalServlet.class);
+   
    private static final String CAS_LOGIN_LOCALE = "cas_login_locale";
+   
    private static final String DEFAULT_LOGIN_URL = "casServerLoginUrl";
-	private static Log log = LogFactory.getLog(SecurePortalServlet.class);
-	
+   	
 	protected boolean doRender(HttpServletRequest request,
 			HttpServletResponse response, String path) throws IOException {
 	   String useSSO = SecureUtil.getEnvironment("useSSO");
 	   if(useSSO == null || "false".equalsIgnoreCase(useSSO)) {
 	      return super.doRender(request, response, path);
 	   }
+      Cloud cloud = CloudUtil.getCloudFromThread();
+      //In the staging side. deny community user and guest. redirect to 403 page.
+	   if (ServerUtil.isStaging() && cloud == null) {
+	      String noRightPage = SiteManagement.getSiteFromPath(path).getUrlfragment()+"/403";	     
+	      if (path != null && !path.endsWith("/403")) {
+   	      response.sendRedirect(HttpUtil.getWebappUri(request)+noRightPage);
+   	      return true;
+	      }
+	   }
 		NavigationItem item = SiteManagement.getNavigationItemFromPath(path);
 		if (SecureUtil.isAllowedToSee(item)) {
 			log.debug("Page: allowed to see");
 			return super.doRender(request, response, path);
-		}
-		
-      Cloud cloud = CloudUtil.getCloudFromThread();
+		}		
+      
 	   if (cloud != null) {
 		   Node node = cloud.getNode(item.getId());
 		   UserRole role = NavigationUtil.getRole(cloud, node, false);
