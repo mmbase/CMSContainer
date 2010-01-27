@@ -1,7 +1,7 @@
 <%@include file="/WEB-INF/templates/portletglobals.jsp" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <mm:haspage page="/editors/community">
-  <%@taglib uri="http://finalist.com/cmsc/community" prefix="community" %>
+    <jsp:include page="community.jsp"/>
   <community:useSSO var="sso" />
 </mm:haspage>
 <cmsc:location var="cur" sitevar="site" />
