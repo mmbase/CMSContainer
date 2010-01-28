@@ -38,7 +38,7 @@ public class SecurePortalServlet extends PortalServlet {
 	   }
       Cloud cloud = CloudUtil.getCloudFromThread();
       //In the staging side. deny community user and guest. redirect to 403 page.
-	   if (ServerUtil.isStaging() && cloud == null) {
+	   if (!ServerUtil.isSingle() && ServerUtil.isStaging() && cloud == null) {
 	      String noRightPage = SiteManagement.getSiteFromPath(path).getUrlfragment()+"/403";	     
 	      if (path != null && !path.endsWith("/403")) {
    	      response.sendRedirect(HttpUtil.getWebappUri(request)+noRightPage);
