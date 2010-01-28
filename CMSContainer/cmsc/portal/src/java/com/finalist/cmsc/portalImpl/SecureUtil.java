@@ -21,20 +21,9 @@ public class SecureUtil {
    private static final Logger log = Logger.getLogger(SecureUtil.class);
    
 	public static boolean isAllowedToSee(NavigationItem item) {
-		Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-		Node node = cloud.getNode(item.getId());
-		NodeList groups = node.getRelatedNodes("pagegroup");
-		if(groups.size() == 0) {
-			return true;
-		}		
-		for(NodeIterator i = groups.nodeIterator(); i.hasNext(); ) {
-			Node group = i.nextNode();
-			if(Community.hasAuthority(group.getStringValue("name"))) {
-				return true;
-			}
-		}
-		return false;
+	   return isReadable(Integer.toString(item.getId()));
 	}
+	
    public static String getEnvironment(String name) {
       String value = null;
       Context env = null;
@@ -60,5 +49,21 @@ public class SecureUtil {
          log.error("Get environment "+name+" error :"+e);
       }
       return value;
+   }   
+
+   public static boolean isReadable(String pageId) {
+      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
+      Node node = cloud.getNode(pageId);
+      NodeList groups = node.getRelatedNodes("pagegroup");
+      if(groups.size() == 0) {
+         return true;
+      }     
+      for(NodeIterator i = groups.nodeIterator(); i.hasNext(); ) {
+         Node group = i.nextNode();
+         if(Community.hasAuthority(group.getStringValue("name"))) {
+            return true;
+         }
+      }
+      return false;
    }
 }
