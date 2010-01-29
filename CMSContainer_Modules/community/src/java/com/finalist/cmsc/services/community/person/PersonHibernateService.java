@@ -578,4 +578,9 @@ public class PersonHibernateService extends HibernateService implements PersonSe
       return query;
    }
 
+   public String getGenderByUserId(String userId) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
 }
