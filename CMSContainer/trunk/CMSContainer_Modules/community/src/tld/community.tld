@@ -67,7 +67,18 @@
          <rtexprvalue>false</rtexprvalue>
       </attribute>
    </tag>
-
+   <tag>
+      <name>infix</name>
+      <tag-class>com.finalist.cmsc.community.taglib.InfixTag</tag-class>
+      <body-content>scriptless</body-content>
+      <description>Infix Name</description>
+      <attribute>
+         <name>var</name>
+         <description>JSP variable name to value of infix name in.</description>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+      </attribute>
+   </tag>
    <tag>
       <name>lastname</name>
       <tag-class>com.finalist.cmsc.community.taglib.LastnameTag</tag-class>
@@ -81,18 +92,17 @@
       </attribute>
    </tag>
    <tag>
-      <name>firstname</name>
-      <tag-class>com.finalist.cmsc.community.taglib.FirstnameTag</tag-class>
+      <name>gender</name>
+      <tag-class>com.finalist.cmsc.community.taglib.GenderTag</tag-class>
       <body-content>scriptless</body-content>
-      <description>First Name</description>
+      <description>Show Gender</description>
       <attribute>
          <name>var</name>
-         <description>JSP variable name to value of first name in.</description>
+         <description>JSP variable name to value of gender.</description>
          <required>false</required>
          <rtexprvalue>false</rtexprvalue>
       </attribute>
    </tag>
-
    <tag>
       <name>email</name>
       <tag-class>com.finalist.cmsc.community.taglib.EmailTag</tag-class>

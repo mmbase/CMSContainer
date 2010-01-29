@@ -27,6 +27,13 @@ import com.finalist.cmsc.services.community.security.Authority;
 public interface PersonService {
 
    Person getPersonByUserId(String userId);
+   
+   /**
+    * 
+    * @param the id of user
+    * @return gender of user
+    */
+   String getGenderByUserId(String userId);
 
    /**
     * Get a list of matching persons that match the given example. The fields that are set on the example Person are the

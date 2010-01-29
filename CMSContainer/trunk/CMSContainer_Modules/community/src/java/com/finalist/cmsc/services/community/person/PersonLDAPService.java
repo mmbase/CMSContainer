@@ -203,6 +203,24 @@ public class PersonLDAPService  extends AbstractLDAPService implements PersonSer
       // TODO Auto-generated method stub
       
    }
+   
+   private class GenderContextMapper extends AbstractContextMapper {
+
+      public Object doMapFromContext(DirContextOperations context) {
+         return getStringAttribute(context, "nai-gender");
+      }
+   }
+
+   public String getGenderByUserId(String userId) {
+      AndFilter filter = new AndFilter();
+      filter.and(new EqualsFilter("objectClass", RELATION_CLASS_NAME));
+      filter.and(new EqualsFilter("cn", userId));
+      List<String> groups = (List<String>)getLdapTemplate().search(RELATION_BASE_DN, filter.encode(), new GenderContextMapper());
+      if(groups.size() >= 1){
+         return groups.get(0);
+      }
+      return "unknown";
+   }
  
 
 }
