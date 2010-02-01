@@ -73,7 +73,7 @@
                 </positions>
             </editor>
             <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
-                <maxLength value="1024"/>
+                <maxLength value="512000"/>
             </datatype>
         </field>
         <field name="media">

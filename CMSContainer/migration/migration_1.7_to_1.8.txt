@@ -8,9 +8,38 @@ Name: Extended the current stylesheet options in CMSc with dynamic stylesheets, 
 Goal: Add a new field "text" to mm_stylesheet
 Type:  manual action
 --- Start script ---
-ALTER TABLE mm_stylesheet ADD text text default '';
-ALTER TABLE live_stylesheet ADD text text default '';
+ALTER TABLE mm_stylesheet ADD m_text TEXT;
+ALTER TABLE live_stylesheet ADD m_text TEXT;
 --- End script ---
+
+Check the layouts of your project. You should change the <c:forEach> that displays the stylesheets to something like this:
+
+--- Start JSP ---
+<c:forEach var="style" items="${stylesheet}">
+  <c:choose>  
+    <c:when test="${empty style.resource}"> 
+      <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet/${style.id}.css" media="${style.media}" />
+    </c:when> 
+    <c:otherwise>
+      <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+    </c:otherwise>
+  </c:choose> 
+</c:forEach>
+--- End JSP ---
+
+If you have overridden the web.xml file in your project, make sure it contains these declarations in the appropriate places
+--- Start XML ---
+<servlet>
+  <description>Returns css text</description>
+  <servlet-name>stylesheet</servlet-name>
+  <servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>stylesheet</servlet-name>
+  <url-pattern>/stylesheet/*</url-pattern>
+</servlet-mapping>
+--- End XML ---
+
 Exceptions/errors/other problems and what to do:
 *
 *
