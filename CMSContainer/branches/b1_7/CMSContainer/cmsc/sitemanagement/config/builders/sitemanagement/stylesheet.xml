@@ -61,6 +61,21 @@
                 <maxLength value="255"/>
             </datatype>
         </field>
+        <field name="text">
+            <gui>
+                <guiname xml:lang="nl">Text</guiname>
+                <guiname xml:lang="en">Tekst</guiname>
+                <guiname xml:lang="zh">文本</guiname>
+            </gui>
+            <editor>
+                <positions>
+                    <input>5</input>
+                </positions>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <maxLength value="512000"/>
+            </datatype>
+        </field>
         <field name="media">
             <gui>
                 <guiname xml:lang="nl">Media</guiname>
