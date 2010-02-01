@@ -12,8 +12,13 @@
       <cmsc:insert-stylesheet var="stylesheet" />
       <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl.css'/>" media="screen,projection,print" />
       <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/2column.css'/>" media="screen,projection,print" />
-         <c:forEach var="style" items="${stylesheet}">
-      <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+      <c:forEach var="style" items="${stylesheet}">
+         <c:if test="${style.resource eq ''}">
+            <link rel="stylesheet" type="text/css" href="/servlet/StylesheetServlet?text=${style.text}" media="${style.media}" />
+         </c:if>
+         <c:if test="${style.resource ne '' }">
+            <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+         </c:if>
       </c:forEach>
       <!--[if IE]>
          <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl_ie.css'/>" media="screen,projection,print" />

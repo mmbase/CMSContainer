@@ -32,4 +32,10 @@
 		<prompt xml:lang="zh">可覆盖</prompt>
 		<optionlist select="boolean" />
 	</field>
+	<field name="text" dtmaxlength="512000" ftype="text" rows="15">
+		<prompt xml:lang="en">Stylesheet body</prompt>
+		<prompt xml:lang="nl">Stylesheet tekst</prompt>
+		<prompt xml:lang="zh">脚本</prompt>
+		<optionlist select="boolean" />
+	</field>
 </form-schema>
