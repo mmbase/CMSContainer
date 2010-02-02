@@ -13,10 +13,10 @@
       <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/stijl.css'/>" media="screen,projection,print" />
       <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/css/2column.css'/>" media="screen,projection,print" />
       <c:forEach var="style" items="${stylesheet}">
-         <c:if test="${style.resource eq ''}">
+         <c:if test="${empty style.resource}">
             <link rel="stylesheet" type="text/css" href="/servlet/StylesheetServlet?text=${style.text}" media="${style.media}" />
          </c:if>
-         <c:if test="${style.resource ne '' }">
+         <c:if test="${not empty style.resource}">
             <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
          </c:if>
       </c:forEach>
@@ -28,23 +28,21 @@
       <cmscf:editresources />
       </head>
 
-
       <body>
-            <%@include file="includes/top.jsp" %>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">	
-		<tr>
-			<td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_1" /></td>
-			<td rowspan="3" width="25%"><cmsc:insert-portlet layoutid="column2_1" /></td>
-		</tr>
-		<tr>
-			<td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_2" /></td>
-		</tr>
-		<tr>
-			<td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_3" /></td>
-		</tr>
+         <%@include file="includes/top.jsp" %>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">   
+      <tr>
+         <td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_1" /></td>
+         <td rowspan="3" width="25%"><cmsc:insert-portlet layoutid="column2_1" /></td>
+      </tr>
+      <tr>
+         <td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_2" /></td>
+      </tr>
+      <tr>
+         <td valign="top" width="75%"><cmsc:insert-portlet layoutid="column1_3" /></td>
+      </tr>
 
-
-            <%@include file="includes/footer.jsp"%>
+      <%@include file="includes/footer.jsp"%>
 
       </body>
    </cmsc:screen>
