@@ -101,10 +101,10 @@ public class NewsletterServiceImpl implements NewsletterService {
       int maxAllowedBounce = newsletterNode.getIntValue("max_bounces");
 
       if (bouncesCount > maxAllowedBounce) {
-         subscriptionCAO.pause(subscriptionNode.getNumber());
+         subscriptionCAO.pause(subscriptionNode);
       }
       statisticCAO.logPublication(userId, newsletterId, StatisticResult.HANDLE.BOUNCE);
-      subscriptionCAO.updateLastBounce(subscriptionNode.getNumber());
+      subscriptionCAO.updateLastBounce(subscriptionNode);
    }
 
    private List<Newsletter> getAllNewsletterBySubscriber(String subscriber, boolean paging) {
