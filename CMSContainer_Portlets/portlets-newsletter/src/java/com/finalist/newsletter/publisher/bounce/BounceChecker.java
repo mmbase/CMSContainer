@@ -16,9 +16,9 @@ import com.finalist.newsletter.services.NewsletterService;
  * @author Mark Guo &lt;mark.guo@finalist.cn&gt;
  */
 public class BounceChecker extends Thread {
-   private Logger log = Logging.getLoggerInstance(BounceChecker.class.getName());
+   private Logger log = Logging.getLoggerInstance(BounceChecker.class);
 
-   private static int LISTENINGPORT = 25;
+   private static int listeningPort = 25;
    private static boolean running = false;
    private static boolean stop = false;
    private NewsletterService newsletterService;
@@ -32,7 +32,7 @@ public class BounceChecker extends Thread {
       BounceChecker.running = true;
 
       try {
-         ServerSocket server = new ServerSocket(LISTENINGPORT);
+         ServerSocket server = new ServerSocket(listeningPort);
 
          while (!stop) {
             ReceiveThread receiveThread = new ReceiveThread(server.accept());
@@ -56,7 +56,7 @@ public class BounceChecker extends Thread {
 
 
    public void setPort(int i) {
-      LISTENINGPORT = i;
+      listeningPort = i;
    }
 
    public static void shutdown() {
