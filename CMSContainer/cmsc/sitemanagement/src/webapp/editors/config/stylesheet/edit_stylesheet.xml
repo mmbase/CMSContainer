@@ -15,7 +15,7 @@
 		<prompt xml:lang="nl">Omschrijving</prompt>
 		<prompt xml:lang="zh">描述</prompt>
 	</field>
-	<field name="resource" dtmaxlength="255" ftype="line" dtrequired="true">
+	<field name="resource" dtmaxlength="255" ftype="line">
 		<prompt xml:lang="en">Resource</prompt>
 		<prompt xml:lang="nl">Style Sheet</prompt>
 		<prompt xml:lang="zh">样式表</prompt>
