@@ -273,7 +273,18 @@
 		<servlet-class>com.finalist.cmsc.repository.xml.XMLServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+   <!-- CMSC-1565 -->
+   <servlet>
+      <description>Returns css text</description>
+      <servlet-name>stylesheet</servlet-name>
+      <servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
+   </servlet>
 
+   <servlet-mapping>
+      <servlet-name>stylesheet</servlet-name>
+      <url-pattern>/stylesheet/*</url-pattern>
+   </servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>version</servlet-name>
