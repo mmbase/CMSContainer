@@ -23,6 +23,6 @@ public interface NewsletterService {
 
    public List<Newsletter> getNewsletters(String subscriber, String title, boolean paging);
 
-   void processBouncesOfPublication(String publicationId, String userId);
+   void processBouncesOfPublication(int publicationId, int userId);
 
 }

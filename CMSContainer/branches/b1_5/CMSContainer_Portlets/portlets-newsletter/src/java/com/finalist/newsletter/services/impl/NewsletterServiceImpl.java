@@ -92,20 +92,18 @@ public class NewsletterServiceImpl implements NewsletterService {
       }
    }
 
-   public void processBouncesOfPublication(String publicationId, String userId) {
+   public void processBouncesOfPublication(int publicationId, int userId) {
       // todo test.
-      int pId = Integer.parseInt(publicationId);
-      int uId = Integer.parseInt(userId);
-      int newsletterId = publicationCAO.getNewsletterId(pId);
+      int newsletterId = publicationCAO.getNewsletterId(publicationId);
       Node newsletterNode = newsletterCAO.getNewsletterNodeById(newsletterId);
-      Node subscriptionNode = subscriptionCAO.getSubscriptionNode(newsletterId, uId);
+      Node subscriptionNode = subscriptionCAO.getSubscriptionNode(newsletterId, userId);
       int bouncesCount = subscriptionNode.getIntValue("count_bounces");
-      int maxAllowedBonce = newsletterNode.getIntValue("max_bounces");
+      int maxAllowedBounce = newsletterNode.getIntValue("max_bounces");
 
-      if (bouncesCount > maxAllowedBonce) {
+      if (bouncesCount > maxAllowedBounce) {
          subscriptionCAO.pause(subscriptionNode.getNumber());
       }
-      statisticCAO.logPublication(uId, newsletterId, StatisticResult.HANDLE.BOUNCE);
+      statisticCAO.logPublication(userId, newsletterId, StatisticResult.HANDLE.BOUNCE);
       subscriptionCAO.updateLastBounce(subscriptionNode.getNumber());
    }
 
