@@ -98,25 +98,24 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
 
    public void modifySubscriptionStauts(Subscription subscription) {
       log.debug("Modify subscription status " + subscription.getId() + " to " + subscription.getStatus());
-      String stauts = subscription.getStatus().toString();
+      String status = subscription.getStatus().toString();
 
       Node record = cloud.getNode(subscription.getId());
-      if ("INACTIVE".equals(stauts)) {
+      if ("INACTIVE".equals(status)) {
          if (Publish.isPublished(record)) {
             Publish.unpublish(record);
          }
          record.deleteRelations();
          record.delete();
       } else {
-         record.setStringValue("status", stauts);
+         record.setStringValue("status", status);
          record.commit();         
       }
    }
 
-   public void pause(int subscriptionId) {
-      Node record = cloud.getNode(subscriptionId);
-      record.setStringValue("status", "PAUSED");
-      record.commit();
+   public void pause(Node subscriptionNode) {
+      subscriptionNode.setStringValue("status", "PAUSED");
+      subscriptionNode.commit();
    }
 
    public void modifySubscriptionFormat(Subscription subscription) {
@@ -185,14 +184,13 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
             subscription.getTerms().add(term);
          }
          return subscription;
-      } else {
-         log.debug("Get subscription failed,user " + userId + " may not subscripbe " + newsletterId);
-         return null;
       }
+      
+      log.debug("Get subscription failed, user " + userId + " may not subscribe " + newsletterId);
+      return null;
    }
 
    public Set<Term> getTerms(int subscriptionId) {
-
       List<Node> termList = cloud.getNode(subscriptionId).getRelatedNodes("term");
       Set<Term> terms = new HashSet<Term>();
 
@@ -256,7 +254,6 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       node.setStringValue("status", subscription.getStatus().toString());
       node.setDateValue("pausetill", subscription.getPausedTill());
       node.commit();
-
    }
 
    public List<Subscription> getSubscriptionByUserIdAndStatus(int userId, STATUS status) {
@@ -280,7 +277,6 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
    }
 
    public List<Node> getAllSubscriptions() {
-
       NodeQuery query = cloud.createNodeQuery();
       Step step = query.addStep(cloud.getNodeManager("subscriptionrecord"));
       query.setNodeStep(step);
@@ -379,9 +375,8 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       return terms;
    }
 
-   public void updateLastBounce(int subscriptionId) {
+   public void updateLastBounce(Node subscription) {
       // todo test.
-      Node subscription = getSubscriptionNodeById(subscriptionId);
       if (subscription.getIntValue("count_bounces") > 0) {
          subscription.setIntValue("count_bounces", subscription.getIntValue("count_bounces") + 1);
       } else {
@@ -407,7 +402,7 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       }
 
       if (null == subscriptionNode) {
-         log.debug("Get subscription failed,user " + userId + " may not subscripbe " + newsletterId);
+         log.debug("Get subscription failed, user " + userId + " may not subscribe " + newsletterId);
          return null;
       }
 
@@ -424,7 +419,6 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       if (StringUtils.isNotBlank(terms)) {
          Step termStep = query.addStep(termNodeManager);
          query.setNodeStep(termStep);
-         String nameLikeStr = null;
          String[] tmpTerms = terms.split(" ");
          for (String termName : tmpTerms) {
             SearchUtil.addLikeConstraint(query, termNodeManager.getField("name"), termName);
@@ -459,10 +453,10 @@ public class NewsletterSubscriptionCAOImpl extends AbstractCAO implements Newsle
       return subscribers;
    }
 
-   public void deleteSubscriptionsByAuthId(Long anthId) {
+   public void deleteSubscriptionsByAuthId(long authId) {
       NodeManager recordManager = cloud.getNodeManager("subscriptionrecord");
       Query query = recordManager.createQuery();
-      SearchUtil.addEqualConstraint(query, recordManager.getField("subscriber"), String.valueOf(anthId));
+      SearchUtil.addEqualConstraint(query, recordManager.getField("subscriber"), String.valueOf(authId));
       List<Node> subscriptions = query.getList();
       for (Node subscription : subscriptions) {         
          if (ServerUtil.isStaging()) {
