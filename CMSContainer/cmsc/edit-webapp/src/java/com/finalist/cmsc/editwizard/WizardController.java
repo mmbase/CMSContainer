@@ -344,14 +344,17 @@ public class WizardController {
                   if (PagesUtil.isPageType(editNode.getCloud().getNode(channelnr))) {
                      channelnr = RepositoryUtil.getRoot(editNode.getCloud());
                   }
+               }
+               else {
+                  channelnr = RepositoryUtil.getRoot(editNode.getCloud());
+                  //log.warn("AssetElement: Creationchannel was not found in session");
+               }
+               if (channelnr != null ) {
                   RepositoryUtil.addCreationChannel(editNode, channelnr);
                   AssetElementUtil.addOwner(editNode);
                   if (isMainWizard(ewconfig, wizardConfig)) {
                      RepositoryUtil.addAssetToChannel(editNode, channelnr);
                   }
-               }
-               else {
-                  log.warn("AssetElement: Creationchannel was not found in session");
                }
             }
          }
