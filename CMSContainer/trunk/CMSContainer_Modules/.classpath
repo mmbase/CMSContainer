@@ -31,7 +31,7 @@
 	<classpathentry kind="src" path="workflow/src/java"/>
 	<classpathentry kind="src" path="fileupload/src/java"/>
 	<classpathentry kind="src" path="linkvalidator/src/tests"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_7"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CMSContainer-1_8"/>
 	
   <classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/jsp-api/2.0/jsp-api-2.0.jar"/>
