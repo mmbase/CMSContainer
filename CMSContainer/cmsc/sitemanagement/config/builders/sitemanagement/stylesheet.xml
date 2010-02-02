@@ -63,8 +63,8 @@
         </field>
         <field name="text">
             <gui>
-                <guiname xml:lang="nl">Text</guiname>
-                <guiname xml:lang="en">Tekst</guiname>
+                <guiname xml:lang="nl">Tekst</guiname>
+                <guiname xml:lang="en">Text</guiname>
                 <guiname xml:lang="zh">文本</guiname>
             </gui>
             <editor>
