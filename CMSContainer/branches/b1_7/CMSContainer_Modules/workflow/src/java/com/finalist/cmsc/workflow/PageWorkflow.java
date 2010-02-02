@@ -138,6 +138,7 @@ public class PageWorkflow extends WorkflowManager {
          Node wf = getWorkflowNode(blockNode, "asset");
          if (wf != null) {
             changeWorkflow(wf, STATUS_PUBLISHED, "");
+            publishInternal(wf, blockNode);
          }
      }
       publish(page, TYPE_PAGE, publishNumbers);
