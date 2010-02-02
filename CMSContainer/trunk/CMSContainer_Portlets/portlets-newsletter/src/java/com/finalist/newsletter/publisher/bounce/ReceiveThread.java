@@ -105,14 +105,14 @@ public class ReceiveThread extends Thread {
       }
 
       if (line.toUpperCase().startsWith("RCPT TO:")) {
-         String recepient[] = parseAddress(line);
-         if (recepient.length != 2) {
+         String recipient[] = parseAddress(line);
+         if (recipient.length != 2) {
             writer.write("553 This user format is unknown here\r\n");
             writer.flush();
             return;
          }
 
-         String username = recepient[0];
+         String username = recipient[0];
          if (username.startsWith("bounce-")) {
             params = username.replace("bounce-", "").split("=");
             int pId = Integer.parseInt(params[0]);
@@ -132,7 +132,7 @@ public class ReceiveThread extends Thread {
          char[] last5chars = new char[5];
 
          int c;
-         StringBuffer data = new StringBuffer();
+         StringBuilder data = new StringBuilder();
          while (verifyEndSymbol(last5chars)) {
             while ((c = reader.read()) == -1) {
                try {
@@ -161,7 +161,6 @@ public class ReceiveThread extends Thread {
    }
 
    private boolean verifyEndSymbol(char[] last5chars) {
-
       boolean isreading;
       char[] endchars = {'\r', '\n', '.', '\r', '\n'};
       isreading = false;

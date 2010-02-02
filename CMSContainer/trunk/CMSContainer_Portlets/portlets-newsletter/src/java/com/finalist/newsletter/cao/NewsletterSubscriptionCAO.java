@@ -43,11 +43,11 @@ public interface NewsletterSubscriptionCAO {
 
    public List<Node> getSubscriptionsByTerms(int newsletterId, String terms);
 
-   void updateLastBounce(int subscriptionId);
+   void updateLastBounce(Node subscription);
 
    Node getSubscriptionNode(int newsletterId, int userId);
 
-   public void pause(int subscriptionId);
+   public void pause(Node subscriptionId);
 
    public Set<Node> getRecordByNewsletterAndName(int newsletterId, String termName);
 
@@ -59,5 +59,5 @@ public interface NewsletterSubscriptionCAO {
 
    public int countSubscription(int id);
 
-   public void deleteSubscriptionsByAuthId(Long anthId); 
+   public void deleteSubscriptionsByAuthId(long anthId); 
 }
