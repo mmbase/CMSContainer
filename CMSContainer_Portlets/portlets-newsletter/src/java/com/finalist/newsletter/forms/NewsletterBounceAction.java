@@ -30,7 +30,7 @@ public class NewsletterBounceAction extends DispatchAction {
       if (StringUtils.isNotEmpty(strOffset)) {
          offset = Integer.parseInt(strOffset);
       }
-      List<NewsletterBounce> bounces = NewsletterBounceUtil.getBounceRecord(offset * pageSize, pageSize, order,
+      List<NewsletterBounce> bounces = NewsletterBounceUtil.getBounceRecords(offset * pageSize, pageSize, order,
             direction);
       int count = NewsletterBounceUtil.getTotalCount();
       request.setAttribute("resultList", bounces);
