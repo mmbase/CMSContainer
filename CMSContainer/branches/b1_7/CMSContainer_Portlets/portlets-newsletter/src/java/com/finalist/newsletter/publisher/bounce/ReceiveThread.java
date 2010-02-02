@@ -115,7 +115,9 @@ public class ReceiveThread extends Thread {
          String username = recepient[0];
          if (username.startsWith("bounce-")) {
             params = username.replace("bounce-", "").split("=");
-            newsletterService.processBouncesOfPublication(params[0], params[1]);
+            int pId = Integer.parseInt(params[0]);
+            int uId = Integer.parseInt(params[1]);
+            newsletterService.processBouncesOfPublication(pId, uId);
          }
          writer.write("250 Yeah, OK. Bring on the data!\r\n");
          writer.flush();
