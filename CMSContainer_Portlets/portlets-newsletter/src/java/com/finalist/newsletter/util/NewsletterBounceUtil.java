@@ -18,7 +18,7 @@ import com.finalist.newsletter.domain.NewsletterBounce;
 import com.finalist.newsletter.services.CommunityModuleAdapter;
 public class NewsletterBounceUtil {
 
-   public static List<NewsletterBounce> getBounceRecord(int offset, int pageSize, String order, String direction) {
+   public static List<NewsletterBounce> getBounceRecords(int offset, int pageSize, String order, String direction) {
       List<NewsletterBounce> bounces = new ArrayList<NewsletterBounce>();
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeManager bounceManager = cloud.getNodeManager("newsletterbounce");
@@ -79,13 +79,12 @@ public class NewsletterBounceUtil {
    }
 
    public static void copyProperties(Node srcBounceNode, NewsletterBounce desBounce) {
-
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       desBounce.setId(srcBounceNode.getNumber());
       desBounce.setNewsletterId(srcBounceNode.getIntValue("newsletter"));
       desBounce.setUserId(srcBounceNode.getIntValue("userid"));
 
       if (srcBounceNode.getIntValue("newsletter") > 0) {
+         Cloud cloud = srcBounceNode.getCloud();
          Node publicationNode = cloud.getNode(srcBounceNode.getIntValue("newsletter"));
          desBounce.setNewsLetterTitle(publicationNode.getStringValue("title"));
       }
@@ -98,7 +97,6 @@ public class NewsletterBounceUtil {
 
       desBounce.setBounceDate(srcBounceNode.getDateValue("bouncedate"));
       desBounce.setBounceContent(srcBounceNode.getStringValue("content"));
-
    }
 
    public static NewsletterBounce getNewsletterBounce(int number) {
