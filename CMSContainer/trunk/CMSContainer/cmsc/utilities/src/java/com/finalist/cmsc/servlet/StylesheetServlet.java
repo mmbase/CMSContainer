@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.servlet.BridgeServlet;
 
@@ -46,10 +47,14 @@ public class StylesheetServlet extends BridgeServlet {
          number = pathInfo.replaceAll("/|.css", "");
       }
       if (number != null) {
-         if (number.matches("[0-9]+")) {
+         Cloud cloud = getAnonymousCloud();
+         if (number.matches("[0-9]+") && cloud != null && cloud.hasNode(number)) {
             Node stylesheet= getAnonymousCloud().getNode(number);
             String text = stylesheet.getStringValue("text");
             response.getWriter().print(text);
+         }
+         else {
+            response.getWriter().print("404 NOT FOUND page");
          }
       }
 
