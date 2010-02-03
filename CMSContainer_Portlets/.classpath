@@ -60,14 +60,14 @@
 	<classpathentry kind="var" path="M2_REPO/net/sf/jsr107cache/jsr107cache/1.0/jsr107cache-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.4/junit-4.4.jar" sourcepath="M2_REPO/junit/junit/4.4/junit-4.4-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar" sourcepath="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9-SNAPSHOT/mmbase-1.9-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9-SNAPSHOT/mmbase-cloudcontext-1.9-SNAPSHOT-classes.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9-SNAPSHOT/mmbase-crontab-1.9-SNAPSHOT-classes.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9-SNAPSHOT/mmbase-dove-1.9-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9-SNAPSHOT/mmbase-editwizard-1.9-SNAPSHOT-classes.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9-SNAPSHOT/mmbase-email-1.9-SNAPSHOT-classes.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9-SNAPSHOT/mmbase-resources-1.9-SNAPSHOT-classes.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9-SNAPSHOT/mmbase-taglib-1.9-SNAPSHOT-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9.2-20091118/mmbase-1.9.2-20091118.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9.2-20091118/mmbase-cloudcontext-1.9.2-20091118-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9.2-20091118/mmbase-crontab-1.9.2-20091118-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9.2-20091118/mmbase-dove-1.9.2-20091118.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9.2-20091118/mmbase-editwizard-1.9.2-20091118-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9.2-20091118/mmbase-email-1.9.2-20091118-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9.2-20091118/mmbase-resources-1.9.2-20091118-classes.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9.2-20091118/mmbase-taglib-1.9.2-20091118-classes.jar"/>
 	<classpathentry kind="var" path="M2_REPO/oro/oro/2.0.8/oro-2.0.8.jar" sourcepath="M2_REPO/oro/oro/2.0.8/oro-2.0.8-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/jsptags/com/pager-taglib/2.0.2/pager-taglib-2.0.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/pluto/pluto/1.0.1/pluto-1.0.1.jar"/>
