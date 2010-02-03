@@ -136,7 +136,7 @@
          <name>locale</name>
          <description>JSP variable name to value of locale.</description>
          <required>false</required>
-         <rtexprvalue>false</rtexprvalue>
+         <rtexprvalue>true</rtexprvalue>
       </attribute>
    </tag>
    <tag>
@@ -154,7 +154,7 @@
          <name>locale</name>
          <description>JSP variable name to value of locale.</description>
          <required>false</required>
-         <rtexprvalue>false</rtexprvalue>
+         <rtexprvalue>true</rtexprvalue>
       </attribute>
    </tag>
    <tag>
