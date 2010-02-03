@@ -1,6 +1,7 @@
 package com.finalist.newsletter.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,7 +18,6 @@ import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.navigation.PortletUtil;
 import com.finalist.cmsc.services.publish.Publish;
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.cao.impl.NewsletterPublicationCAOImpl;
 import com.finalist.newsletter.domain.EditionStatus;
 import com.finalist.newsletter.domain.Newsletter;
@@ -68,7 +68,7 @@ public abstract class NewsletterPublicationUtil {
          if (publicationNode != null) {
             String urlFragment = String.valueOf(publicationNode.getNumber());
             publicationNode.setStringValue("urlfragment", urlFragment);
-            publicationNode.setStringValue("publishdate", "null");
+            publicationNode.setDateValue("publishdate", new Date());
             publicationNode.setStringValue("status", Publication.STATUS.INITIAL.toString());
             publicationNode.commit();
 
@@ -79,10 +79,10 @@ public abstract class NewsletterPublicationUtil {
             if (copyContent == true) {
                PagesUtil.linkPortlets(publicationNode, layoutNode);
             }
-            return (publicationNode);
+            return publicationNode;
          }
       }
-      return (null);
+      return null;
    }
 
    public static void createDefaultTerm(Node newsletterNode) {
