@@ -36,6 +36,5 @@
 		<prompt xml:lang="en">Stylesheet body</prompt>
 		<prompt xml:lang="nl">Stylesheet tekst</prompt>
 		<prompt xml:lang="zh">脚本</prompt>
-		<optionlist select="boolean" />
 	</field>
 </form-schema>
