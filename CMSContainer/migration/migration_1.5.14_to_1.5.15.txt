@@ -1,0 +1,20 @@
+Migration document:
+
+From version: 1.5.14
+To version: 1.5.15
+
+
+Name: Alter two fields of the table subscriptionrecord
+Goal: Change the type of the two fields
+Type:  sql-script
+--- Start script ---
+ALTER TABLE mm_subscriptionrecord MODIFY  subscriber VARCHAR(11)
+ALTER TABLE mm_subscriptionrecord MODIFY  format VARCHAR(256)
+
+ALTER TABLE live_subscriptionrecord MODIFY  subscriber VARCHAR(11)
+ALTER TABLE live_subscriptionrecord MODIFY  format VARCHAR(256)
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
