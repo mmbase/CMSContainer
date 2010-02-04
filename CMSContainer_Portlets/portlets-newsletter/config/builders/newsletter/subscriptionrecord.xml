@@ -50,8 +50,8 @@
                     <input>3</input>
                 </positions>
             </editor>
-            <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes">
-                <maxLength value="10240"/>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+			   <maxLength value="11"/>
             </datatype>
         </field>
         <field name="format">
@@ -65,8 +65,8 @@
                     <input>4</input>
                 </positions>
             </editor>
-            <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes">
-                <maxLength value="10240"/>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <maxLength value="256"/>
             </datatype>
         </field>
         <field name="pausetill">
