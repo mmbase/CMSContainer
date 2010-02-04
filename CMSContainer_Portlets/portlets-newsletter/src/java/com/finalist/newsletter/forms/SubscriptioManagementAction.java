@@ -173,12 +173,12 @@ public class SubscriptioManagementAction extends DispatchActionSupport {
       for (Object[] result : qResults) {
          String tmpFullName = result[0].toString(); //Firstname
          if(StringUtils.isNotEmpty(result[1].toString())) { //If infix is not empty, add it
-            tmpFullName += " " + result[1].toString();
+            tmpFullName += " " + result[1].toString(); 
          }
          tmpFullName += " " + result[2].toString(); //Add Lastname
-         String tmpEmail = result[2].toString();
-         int tmpAuthenticationId = Integer.parseInt(result[3].toString());
-         String tmpUserName = result[4].toString();
+         String tmpEmail = result[3].toString(); //email field
+         int tmpAuthenticationId = Integer.parseInt(result[4].toString()); //authenticationId field
+         String tmpUserName = result[5].toString(); //userId field
          addToSubscriptionMap(results, tmpFullName, tmpUserName, tmpEmail, tmpAuthenticationId);
       }
       return results;
