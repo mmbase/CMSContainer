@@ -90,10 +90,10 @@
                <search>-1</search>
             </positions>
          </editor>
-         <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+         <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
          <db>
             <name>subscriber</name>
-            <type key="false" notnull="false" size="10240" state="persistent">STRING</type>
+            <type key="false" notnull="false" size="11" state="persistent">STRING</type>
          </db>
       </field>
       <field>
@@ -114,10 +114,10 @@
                <search>-1</search>
             </positions>
          </editor>
-         <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+         <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
          <db>
             <name>format</name>
-            <type key="false" notnull="false" size="10240" state="persistent">STRING</type>
+            <type key="false" notnull="false" size="256" state="persistent">STRING</type>
          </db>
       </field>
       <field>
