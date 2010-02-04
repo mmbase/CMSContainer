@@ -26,30 +26,6 @@
 
    <div class="editor">
       <div class="body">
-         <ul class="shortcuts">
-             <li class="new" style="text-decoration: none;">
-            <c:url var="addSuscriberUrl" value="/editors/community/SearchConditionalUser.do">
-               <c:param name="method" value="searchCandidateSubscriber"/>
-               <c:param name="newsletterId" value="${requestScope.newsletterId}"/>
-               <c:param name="path" value="${forwardPath}"/>
-            </c:url>
-            <c:url var="addUserUrl" value="/editors/community/userAddInitAction.do">
-               <c:param name="forward" value="newslettersubscribers"/>
-               <c:param name="newsletterId" value="${requestScope.newsletterId}"/>
-               <c:param name="path" value="${forwardPath}"/>
-            </c:url>
-
-               <a  href="${addSuscriberUrl}" title="<fmt:message key='newsletter.publication.link.newsubscriber'/>">
-                  <fmt:message key="newsletter.publication.link.newsubscriber"/>
-               </a>
-          </li>
-          <li class="new" style="text-decoration: none;">
-               <a  href="${addUserUrl}" title="<fmt:message key='newsletter.publication.link.newuser'/>">
-                  <fmt:message key="newsletter.publication.link.newuser"/>
-               </a>
-          </li>
-      </ul>
-
          <html:form action="editors/newsletter/NewsletterPublicationSubscriberSearch.do">
             <input type="hidden" name="method" value="subScriberSearch"/>
             <input type="hidden" name="newsletterId" value="${requestScope.newsletterId}"/>
@@ -84,10 +60,6 @@
          <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
          <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationSubscriberSearch.do">
-            <edit:ui-tcolumn title="" width="5%">
-               <a href="NewsletterSubscriberDelete.do?newsletterId=${requestScope.newsletterId}&authid=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/delete.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.user.unsubscribe'/>"/></a>
-               <a href="../community/userAddInitAction.do?authid=${result.id}&newsletterId=${requestScope.newsletterId}&forward=newslettersubscribers&path=/editors/newsletter/NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit_defaults.png'/>" width="16" height="16"  title="<fmt:message key='newsletter.icons.title.edituser'/>"/></a>
-            </edit:ui-tcolumn>
             <edit:ui-tcolumn titlekey="newsletter.publication.result.fullname" sort="fullname" width="20%">
                ${result.fullname}
             </edit:ui-tcolumn>
