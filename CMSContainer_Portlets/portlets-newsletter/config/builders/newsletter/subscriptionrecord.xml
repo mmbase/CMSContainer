@@ -66,7 +66,7 @@
                 </positions>
             </editor>
             <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
-                <maxLength value="256"/>
+                <maxLength value="255"/>
             </datatype>
         </field>
         <field name="pausetill">
