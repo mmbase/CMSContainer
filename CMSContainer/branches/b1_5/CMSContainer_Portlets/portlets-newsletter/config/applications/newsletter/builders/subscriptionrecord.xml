@@ -117,7 +117,7 @@
          <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
          <db>
             <name>format</name>
-            <type key="false" notnull="false" size="256" state="persistent">STRING</type>
+            <type key="false" notnull="false" size="255" state="persistent">STRING</type>
          </db>
       </field>
       <field>
