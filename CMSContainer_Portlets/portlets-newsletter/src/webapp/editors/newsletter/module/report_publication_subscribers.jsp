@@ -1,5 +1,7 @@
 <%@include file="globals.jsp" 
 %><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" 
+%><%@ page import="com.finalist.cmsc.navigation.NavigationUtil" 
+%><%@ page import="com.finalist.cmsc.security.*" 
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -7,7 +9,7 @@
    <cmscedit:head title="index.title">
       <script src="../repository/search.js" type="text/javascript"></script>
       <link href="<c:url value="/editors/css/newsletter.css"/>" rel="stylesheet" type="text/css">
-   </cmscedit:head>
+   </cmscedit:head> 
    <body>
    <edit:ui-tabs>
       <edit:ui-tab key="newsletter.publication.tabs.edit" >
@@ -23,11 +25,34 @@
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
    </edit:ui-tabs>
-
+<cmsc:rights nodeNumber="${requestScope.newsletterId}" var="rights"/>
    <div class="editor">
       <div class="body">
+	   <c:if test="${rights == 'webmaster'}">
+         <ul class="shortcuts">
+             <li class="new" style="text-decoration: none;">
+            <c:url var="addSuscriberUrl" value="/editors/community/SearchConditionalUser.do">
+               <c:param name="method" value="searchCandidateSubscriber"/>
+               <c:param name="newsletterId" value="${requestScope.newsletterId}"/>
+               <c:param name="path" value="${forwardPath}"/>
+            </c:url>
+            <c:url var="addUserUrl" value="/editors/community/userAddInitAction.do">
+               <c:param name="forward" value="newslettersubscribers"/>
+               <c:param name="newsletterId" value="${requestScope.newsletterId}"/>
+               <c:param name="path" value="${forwardPath}"/>
+            </c:url>
 
-
+               <a  href="${addSuscriberUrl}" title="<fmt:message key='newsletter.publication.link.newsubscriber'/>">
+                  <fmt:message key="newsletter.publication.link.newsubscriber"/>
+               </a>
+          </li>
+          <li class="new" style="text-decoration: none;">
+               <a  href="${addUserUrl}" title="<fmt:message key='newsletter.publication.link.newuser'/>">
+                  <fmt:message key="newsletter.publication.link.newuser"/>
+               </a>
+          </li>
+      </ul>
+	  </c:if>
          <html:form action="editors/newsletter/NewsletterPublicationSubscriberSearch.do">
             <input type="hidden" name="method" value="subScriberSearch"/>
             <input type="hidden" name="newsletterId" value="${requestScope.newsletterId}"/>
@@ -62,6 +87,12 @@
          <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
          <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationSubscriberSearch.do">
+		  <c:if test="${rights == 'webmaster'}">
+            <edit:ui-tcolumn title="" width="5%">
+               <a href="NewsletterSubscriberDelete.do?newsletterId=${requestScope.newsletterId}&authid=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/delete.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.user.unsubscribe'/>"/></a>
+               <a href="../community/userAddInitAction.do?authid=${result.id}&newsletterId=${requestScope.newsletterId}&forward=newslettersubscribers&path=/editors/newsletter/NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit_defaults.png'/>" width="16" height="16"  title="<fmt:message key='newsletter.icons.title.edituser'/>"/></a>
+            </edit:ui-tcolumn>
+			</c:if>
             <edit:ui-tcolumn titlekey="newsletter.publication.result.fullname" sort="fullname" width="20%">
                ${result.fullname}
             </edit:ui-tcolumn>
