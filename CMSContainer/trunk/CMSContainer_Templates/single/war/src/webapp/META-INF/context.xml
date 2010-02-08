@@ -95,7 +95,7 @@
 		on the host defined in the mmbaseroot.xml module. -->
 	<!-- <Environment name="mmbase/rmmci/RMIRegistryServer" value="localhost" type="java.lang.String" /> -->
 
-	<!-- Contains value 'live' or 'staging' to determine whether this server is Live or Staging. -->
+	<!-- Contains value 'live', 'staging' or 'single' to determine whether this server is Live, Staging or in Single mode. -->
 	<Environment name="server/LiveOrStaging" value="single" type="java.lang.String" />
 	<!-- This entry defines whether this server includes the servername to lookup portal pages. -->
 	<Environment name="server/useServerName" value="false" type="java.lang.String" />
