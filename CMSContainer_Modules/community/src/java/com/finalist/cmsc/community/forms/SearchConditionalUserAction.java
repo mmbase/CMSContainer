@@ -63,11 +63,13 @@ public class SearchConditionalUserAction extends DispatchAction {
 
       setPagingInformation(request);
       Map < String , String > map = getParameterMap(actionForm);
-      String active=request.getParameter("state"); 
+      String active=request.getParameter("active"); 
       if(null!=active){
          String authId=request.getParameter("authid");
-         Long authenticationId=Long.parseLong(authId);
-         personService.changeStateByAuthenticationId(authenticationId,active);
+         if (authId != null) {
+            Long authenticationId=Long.parseLong(authId);
+            personService.changeStateByAuthenticationId(authenticationId,active);
+         }
       }
       List < Person > persons = personService.getAssociatedPersons(map);
       int totalCount = personService.getAssociatedPersonsNum(map);
@@ -188,7 +190,7 @@ public class SearchConditionalUserAction extends DispatchAction {
 
    private Map < String , String > getParameterMap(ActionForm actionForm) {
       Map < String , String > map = ParameterMapper.wrap(actionForm).map("fullname", "fullName").map("username",
-            "userName").map("email", "emailAddr").map("group", "groups").map("group", "groupName").getMap();
+            "userName").map("email", "emailAddr").map("group", "groups").map("group", "groupName").map("state", "state").getMap();
       return map;
    }
 
