@@ -345,6 +345,13 @@ public class PersonHibernateService extends HibernateService implements PersonSe
          }
       }
 
+      if (conditions.containsKey("state")) {
+         String state = conditions.get("state").toString();
+         if (!"all".equalsIgnoreCase(state)) {
+            strb.append(" and lower(person.active) = '"+state.toLowerCase()+"'");
+         }
+      }
+
       strb.append(condition("and upper(authentication.userId) like '%@%'", "username", conditions));
       strb.append(condition("and upper(person.email) like '%@%'", "email", conditions));
 
