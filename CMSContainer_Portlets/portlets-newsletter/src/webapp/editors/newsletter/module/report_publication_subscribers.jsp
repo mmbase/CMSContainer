@@ -1,7 +1,10 @@
 <%@include file="globals.jsp" 
 %><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" 
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
+%><%@ page import="com.finalist.cmsc.navigation.NavigationUtil" 
+%><%@ page import="com.finalist.cmsc.security.*, org.mmbase.security.Rank" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
+<mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
    <cmscedit:head title="index.title">
@@ -24,10 +27,16 @@
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
    </edit:ui-tabs>
-<cmsc:rights nodeNumber="${requestScope.newsletterId}" var="rights"/>
+<% 
+UserRole role = NavigationUtil.getRole(cloud, cloud.getNode(request.getParameter("newsletterId")), false); 
+if (role != null ) { 
+	boolean hasRight = SecurityUtil.isWebmaster(role) && Rank.BASICUSER_INT < cloud.getUser().getRank().getInt();
+	pageContext.setAttribute("hasRight",hasRight);
+}
+%>
    <div class="editor">
       <div class="body">
-	  	<c:if test="${rights == 'webmaster'}">
+	  	<c:if test="${hasRight}">
          <ul class="shortcuts">
              <li class="new" style="text-decoration: none;">
             <c:url var="addSuscriberUrl" value="/editors/community/SearchConditionalUser.do">
@@ -87,7 +96,7 @@
          <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
          <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationSubscriberSearch.do">
-		 	<c:if test="${rights == 'webmaster'}">
+		 	<c:if test="${hasRight}">
               <edit:ui-tcolumn title="" width="5%">
                <a href="NewsletterSubscriberDelete.do?newsletterId=${requestScope.newsletterId}&authid=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/delete.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.user.unsubscribe'/>"/></a>
                <a href="../community/userAddInitAction.do?authid=${result.id}&newsletterId=${requestScope.newsletterId}&forward=newslettersubscribers&path=/editors/newsletter/NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit_defaults.png'/>" width="16" height="16"  title="<fmt:message key='newsletter.icons.title.edituser'/>"/></a>
@@ -114,4 +123,5 @@
    </div>
    </body>
 </html>
+</mm:cloud>
 </mm:content>
