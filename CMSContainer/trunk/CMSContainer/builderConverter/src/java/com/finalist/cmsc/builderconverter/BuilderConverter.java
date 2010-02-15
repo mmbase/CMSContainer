@@ -1,12 +1,13 @@
-package com.finalist.cmsc.mmbase;
+package com.finalist.cmsc.builderconverter;
 
 import java.io.*;
 
 import java.util.*;
 
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.*;
+
+import org.codehaus.plexus.util.DirectoryScanner;
 
 import com.finalist.cmsc.util.XmlUtil;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
@@ -24,6 +25,8 @@ public class BuilderConverter {
       else {
          throw new IllegalArgumentException("baseDirectory not provided");
       }
+      
+      System.out.println("Running...");
       
       
       String newBaseDirectory = baseDirectory;
@@ -447,29 +450,28 @@ public class BuilderConverter {
            // faulty path
            System.err.println("No tokens in path");
            return null;
-       } else {
-           String root = st.nextToken();
-           if (!e.getNodeName().equals(root)) {
-               // path should start with root element
-              System.err.println("path [" + path + "] with root (" + root + ") doesn't start with root element (" + e.getLocalName() + "): incorrect xml file" +
-                         "(" + e.getOwnerDocument().getDocumentURI() + ")");
-               return null;
-           }
-           OUTER:
-           while (st.hasMoreTokens()) {
-               String tag = st.nextToken();
-               NodeList nl = e.getChildNodes();
-               for(int i = 0; i < nl.getLength(); i++) {
-                   if (! (nl.item(i) instanceof Element)) continue;
-                   e = (Element) nl.item(i);
-                   String tagName = e.getNodeName();
-                   if (tagName == null || tagName.equals(tag) || "*".equals(tag)) continue OUTER;
-               }
-               // Handle error!
-               return null;
-           }
-           return e;
        }
+      String root = st.nextToken();
+        if (!e.getNodeName().equals(root)) {
+            // path should start with root element
+           System.err.println("path [" + path + "] with root (" + root + ") doesn't start with root element (" + e.getLocalName() + "): incorrect xml file" +
+                      "(" + e.getOwnerDocument().getDocumentURI() + ")");
+            return null;
+        }
+        OUTER:
+        while (st.hasMoreTokens()) {
+            String tag = st.nextToken();
+            NodeList nl = e.getChildNodes();
+            for(int i = 0; i < nl.getLength(); i++) {
+                if (! (nl.item(i) instanceof Element)) continue;
+                e = (Element) nl.item(i);
+                String tagName = e.getNodeName();
+                if (tagName == null || tagName.equals(tag) || "*".equals(tag)) continue OUTER;
+            }
+            // Handle error!
+            return null;
+        }
+        return e;
    }
 
    public static String getNodeTextValue(Node n, boolean trim) {
