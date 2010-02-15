@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="cmsc/contentrepository/src/java"/>
+	<classpathentry kind="src" path="builderConverter/src/java"/>
 	<classpathentry kind="src" path="cmsc/edit-webapp/src/java"/>
 	<classpathentry kind="src" path="cmsc/maintenance/src/java"/>
 	<classpathentry kind="src" path="cmsc/portal/src/java"/>
@@ -155,5 +156,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/org/codehaus/plexus/plexus-utils/1.5.8/plexus-utils-1.5.8.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
