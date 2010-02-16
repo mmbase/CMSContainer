@@ -13,4 +13,13 @@
     <packaging>war</packaging>
     <name>CMS Container demo web application</name>
 
+   <dependencies>
+      <dependency>
+         <groupId>org.cmscontainer.portlets</groupId>
+         <artifactId>cmsc-portlets-dynamicforms</artifactId>
+         <version>${cmsc.version}</version>
+         <type>war</type>
+      </dependency>
+   </dependencies>
+
 </project>
