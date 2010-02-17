@@ -2,6 +2,7 @@ package com.finalist.cmsc.util;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
@@ -139,6 +140,8 @@ public final class EmailSender {
          message.setText(body);
       }
 
+      // set the date header field
+      message.setSentDate(new Date());
       Transport.send(message);
    }
 
@@ -161,7 +164,7 @@ public final class EmailSender {
       return multipart;
    }
 
-   public static void  sendEmail(String emailFrom, String nameFrom, String emailTo,
+   public static void sendEmail(String emailFrom, String nameFrom, String emailTo,
          String subject, String body, String replyTo,String contentType)
          throws MessagingException, UnsupportedEncodingException,
          AddressException {
@@ -181,7 +184,8 @@ public final class EmailSender {
       }
       message.setHeader("Content-Transfer-Encoding", "quoted-printable");
       message.setSubject(subject);
-      message.setContent(body,contentType );
+      message.setContent(body,contentType);
+      message.setSentDate(new Date());
       Transport.send(message);
    }
    
