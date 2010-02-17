@@ -29,6 +29,7 @@ Type: manual action
 Steps:
 --- Start ---
 Run the main method in BuilderConverter class in CMSc_trunk\CMSContainer\builderConverter project.
+Use the builder directory as first parameter. In Windows, use C:\\projects, note the double slashes.
 --- End ---
 Exceptions/errors/other problems and what to do:
 *
@@ -101,7 +102,7 @@ INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastm
 --- End script ---
 
 
-Name: Upgrade mail.jar to latest 1.4.2 version in Tomcat/lib
+Name: Upgrade mail.jar to latest 1.4.3 version in Tomcat/lib
 Goal: 
 Type: do it yourself at all servers
 --- Start script ---
@@ -124,6 +125,17 @@ Check this setting for both staging and live environments at all production serv
 *
 *
 *
+
+Name: Compare your project with the CMSc template project
+Goal: Upgrade your web.xml and context.xml to the lastest standards 
+Type:  manual actions
+--- Start script ---
+- Compare your war-staging, war, war-live against the template project.
+--- End script ---
+*
+*
+*
+
 
 Name: Add a intro column and a body column in <prefix>_responseform table
 Goal: add intro field and body field in dynamic form & copy description field to intro field & after copying, clean the description field, CMSC-1272
@@ -177,17 +189,33 @@ Exceptions/errors/other problems and what to do:
 *
 
 
-Name: Update builder version in application XML, located in webapp/WEB-INF/config/applications/application-name.xml
-Goal: update contentrepository to version 4 
+Name: Update version number dependency in builders XML for using the latest contentrepository.
+Goal: update contentrepository to version 4
 Type:  manual action
 --- Start script ---
-The contentrepository field should be put to 4, otherwise it does not work with assets!!
+Search in all your XML files in your project
+The contentrepository version field should be put to 4, otherwise it does not work with assets!!
 
 --- End script ---
 Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+
+Name: Update version number dependency in builders XML for using the latest sitemanagement.
+Goal: update sitemanagement to version 2
+Type:  manual action
+--- Start script ---
+Search in all your XML files in your project
+The sitemanagement version field should be put to 2!!
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
+
 
 Name: Enable simple editors (optional)
 Goal: To enable the simple editors and let a group of users use them
