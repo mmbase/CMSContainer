@@ -3,6 +3,7 @@ package com.finalist.cmsc.util;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -138,7 +139,9 @@ public final class EmailSender {
       else {
          message.setText(body);
       }
-
+      
+      //set the date header field
+      message.setSentDate(new Date());
       Transport.send(message);
    }
 
@@ -182,6 +185,7 @@ public final class EmailSender {
       message.setHeader("Content-Transfer-Encoding", "quoted-printable");
       message.setSubject(subject);
       message.setContent(body,contentType );
+      message.setSentDate(new Date());
       Transport.send(message);
    }
    
