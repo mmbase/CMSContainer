@@ -32,7 +32,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="userid">
             <gui>
@@ -45,7 +45,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="content">
             <gui>
