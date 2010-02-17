@@ -72,7 +72,7 @@
                     <input>6</input>
                 </positions>
             </editor>
-            <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="bounced">
             <gui>
@@ -85,7 +85,7 @@
                     <input>7</input>
                 </positions>
             </editor>
-            <datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="process_status">
             <gui>
