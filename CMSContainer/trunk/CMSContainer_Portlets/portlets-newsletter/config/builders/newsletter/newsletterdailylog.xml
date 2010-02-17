@@ -22,7 +22,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="bounches">
             <gui>
@@ -35,7 +35,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="subscribe">
             <gui>
@@ -48,7 +48,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="unsubscribe">
             <gui>
@@ -61,7 +61,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="removed">
             <gui>
@@ -74,7 +74,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="logdate">
             <gui>
@@ -100,7 +100,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
         <field name="userid">
             <gui>
@@ -113,7 +113,7 @@
                     <input>1</input>
                 </positions>
             </editor>
-            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
         </field>
     </fieldlist>
 </builder>
