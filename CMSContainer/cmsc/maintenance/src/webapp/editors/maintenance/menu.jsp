@@ -88,6 +88,15 @@
                </li>
             <% } %>
          </mm:haspage>
+     <li class="advancedpublish">
+         <c:url var="checkIntegrityUrl" value="/editors/maintenance/checkintegrity.jsp"/>
+         <a href="${checkIntegrityUrl}" target="rightpane"><fmt:message key="maintenance.checkintegrity" /></a>
+      </li>
+     <li class="advancedpublish">
+         <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
+         <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
+      </li>
+         
 		<cmsc:hasfeature name="workflowitem">
         <li class="workflow">
            <a href="staging/workflow-remove.jsp" target="rightpane"><fmt:message key="maintenance.workflow" /></a>
@@ -111,14 +120,6 @@
        <li class="advancedpublish">
          <c:url var="logoutUrl" value="../logout.jsp"/>
          <a href="${logoutUrl}" target="rightpane"><fmt:message key="maintenance.logout" /></a>
-      </li>
-	  <li class="advancedpublish">
-         <c:url var="checkIntegrityUrl" value="/editors/maintenance/checkintegrity.jsp"/>
-         <a href="${checkIntegrityUrl}" target="rightpane"><fmt:message key="maintenance.checkintegrity" /></a>
-      </li>
-	  <li class="advancedpublish">
-         <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
-         <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
       </li>
     </ul>
 </mm:cloud>
