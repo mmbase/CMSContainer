@@ -55,7 +55,16 @@ public class SingleSignOnFilter implements Filter{
          HttpServletRequest request = (HttpServletRequest)sRequest;
          org.acegisecurity.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-         if(authentication == null) {   
+         String requestURI = request.getRequestURI().toString();
+         
+         if(!requestURI.toLowerCase().endsWith("css") &&
+            !requestURI.toLowerCase().endsWith("js") &&
+            !requestURI.toLowerCase().endsWith("png") &&
+            !requestURI.toLowerCase().endsWith("gif") &&
+            !requestURI.toLowerCase().endsWith("jpg") &&
+            !requestURI.toLowerCase().endsWith("jpeg") &&
+            !requestURI.toLowerCase().endsWith("ico")) {
+            
             String idStoreId = request.getRemoteUser();
             
             if (StringUtils.isNotEmpty(idStoreId)) {
@@ -77,7 +86,7 @@ public class SingleSignOnFilter implements Filter{
                authRequest.setDetails(user);
                SecurityContextHolder.getContext().setAuthentication(authRequest);
             }
-         }
+        }
       }
       filterChain.doFilter(sRequest, sResponse);
    }
