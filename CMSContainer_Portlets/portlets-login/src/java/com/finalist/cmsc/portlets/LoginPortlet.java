@@ -71,7 +71,7 @@ public class LoginPortlet extends AbstractLoginPortlet {
       String action = request.getParameter(ACTION_PARAMETER);
       PortletPreferences preferences = request.getPreferences();
       
-      if ("login".equals(action)) {
+      if ("login".equalsIgnoreCase(action)) {
          String userName = request.getParameter(ACEGI_SECURITY_FORM_USERNAME_KEY);
          String password = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
          String send_password =  request.getParameter(SEND_PASSWORD);
