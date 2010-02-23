@@ -257,14 +257,7 @@ ALTER TABLE mm_attachments MODIFY title text;
 ALTER TABLE live_attachments MODIFY title text;
 
 ALTER TABLE mm_cronjobs MODIFY config text NULL;
-ALTER TABLE mm_cronjobs ADD lastrun datetime NULL;
-ALTER TABLE mm_cronjobs ADD m_count integer;
-ALTER TABLE mm_cronjobs ADD lastcost integer;
-
 ALTER TABLE live_cronjobs MODIFY config text NULL;
-ALTER TABLE live_cronjobs ADD lastrun datetime NULL;
-ALTER TABLE live_cronjobs ADD m_count integer;
-ALTER TABLE live_cronjobs ADD lastcost integer;
 
 --Please check if the email-tables are empty before running the following lines!
 ALTER TABLE mm_email MODIFY mailtime datetime NULL;
