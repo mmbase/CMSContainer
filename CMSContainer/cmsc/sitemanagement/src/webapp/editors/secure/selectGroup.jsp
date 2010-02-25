@@ -16,8 +16,8 @@
      </div>
   </div>
 
- <div class="editor" style="height:500px">
-  <div class="body" style="padding:10px">
+ <div class="editor" style="height:450px;">
+  <div class="body" style="padding:10px; width: auto;">
 <community:useSSO var="sso" />
 <c:choose>
 	<c:when test="${!empty param.group}">
