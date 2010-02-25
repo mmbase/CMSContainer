@@ -1,6 +1,8 @@
 package com.finalist.cmsc.community.taglib;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +36,8 @@ public class ListLDAPGroupsTag extends SimpleTagSupport {
       HttpServletRequest req = (HttpServletRequest) pctx.getRequest();
 
       AuthorityService as = getAuthorityLDAPService();
-      Set < String > list = as.getAuthorityNames();
+      ArrayList<String> list = new ArrayList<String>(as.getAuthorityNames());
+      Collections.sort(list);
 
       if (var != null) {
          if (list != null) {
