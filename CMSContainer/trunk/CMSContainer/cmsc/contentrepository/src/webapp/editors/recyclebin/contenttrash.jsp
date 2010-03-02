@@ -13,7 +13,7 @@
      </script>
   </c:if>
 </cmscedit:head>
-<mm:import externid="direction" jspvar="direction">up</mm:import>
+<mm:import externid="direction" jspvar="direction">down</mm:import>
 <mm:import externid="sortBy" jspvar="sortBy">title</mm:import>
 <c:set var="olddirection" value="${direction}"/>
 <c:set var="direction">
