@@ -7,7 +7,7 @@
 <cmscedit:head title="recyclebin.title">
   <script src="recyclebin.js" type="text/javascript"></script>
 </cmscedit:head>
-<mm:import externid="direction" jspvar="direction">up</mm:import>
+<mm:import externid="direction" jspvar="direction">down</mm:import>
 <mm:import externid="orderby" jspvar="orderby">title</mm:import>
 <c:set var="extraparams" value="&direction=${direction}"/>
 	<c:set var="direction">

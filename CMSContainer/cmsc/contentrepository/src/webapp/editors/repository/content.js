@@ -58,7 +58,7 @@ function sortBy(orderColumn, channel) {
     }
     else {
        document.forms[0].order.value = orderColumn;
-       document.forms[0].direction.value = 'down';
+       document.forms[0].direction.value = 'up';
     }
     newDirection=document.forms[0].direction.value;
     type=document.forms[0].order.value;
