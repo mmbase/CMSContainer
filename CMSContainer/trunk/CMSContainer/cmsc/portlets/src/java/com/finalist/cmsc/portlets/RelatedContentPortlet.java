@@ -32,6 +32,11 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
     */
    private static final String CONTENTURL_ELEMENTID_PATTERN = "/content/([0-9]+)";
 
+   /**
+    * This regex pattern is used to match the elementId from a renderURL.
+    */
+   private static final String RENDERURL_ELEMENTID_PATTERN = "_([0-9]+)";
+   
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
       setPortletParameter(portletId, RELATED_PAGE, request.getParameter(RELATED_PAGE));
@@ -71,9 +76,11 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
     * tries to retrieve the element in the following order:
     *
     * <ol>
-    * <li>From contentelement node parameter of the specified portlet</li>
     * <li>From a given contentURL (assumes that the elementId we want is
     * exactly that elementId)</li>
+    * <li>From a given renderURL (assumes that the elementId we want is
+    * exactly that elementId)</li>
+    * <li>From contentelement node parameter of the specified portlet</li>
     * </ol>
     *
     * The first one to return a non <code>null</code> value will be returned.
@@ -88,17 +95,18 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
     *         otherwise.
     */
    protected String getRelatedElementId(RenderRequest request, String relatedPage, String relatedWindow) {
-      String elementId = null;
-      if (StringUtils.isNotEmpty(relatedPage) && StringUtils.isNotEmpty(relatedWindow)) {
-         elementId = getElementIdFromScreen(request, relatedPage, relatedWindow);
-         if (StringUtils.isEmpty(elementId)) {
-            elementId = getElementIdFromContentURL(request);
-         }
-      }
-
+      String elementId = getElementIdFromContentURL(request);
+	  if (StringUtils.isEmpty(elementId)) {
+		  elementId = getElementIdFromRenderURL(request);
+		  if (StringUtils.isEmpty(elementId)) {
+			  if (StringUtils.isNotEmpty(relatedPage) && StringUtils.isNotEmpty(relatedWindow)) {
+				  elementId = getElementIdFromScreen(request, relatedPage, relatedWindow);
+	          }
+	      }
+	  }
       return elementId;
    }
-
+   
    private String getElementIdFromScreen(RenderRequest req, String relatedPage, String relatedWindow) {
       Integer pageId = Integer.valueOf(relatedPage);
       NavigationItem item = SiteManagement.getNavigationItem(pageId);
@@ -123,6 +131,15 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
       return null;
    }
 
+   private String getElementIdFromRenderURL(RenderRequest req) {
+      String requestURL = getServletRequest(req).getRequestURL().toString();
+      Pattern pattern = Pattern.compile(RENDERURL_ELEMENTID_PATTERN);
+      Matcher matcher = pattern.matcher(requestURL);
+      if (matcher.find() && matcher.groupCount() >= 1) {
+         return matcher.group(1);
+      }
+      return null;
+   }
    private HttpServletRequest getServletRequest(RenderRequest req) {
       return (HttpServletRequest) ((PortletRequestImpl) req).getRequest();
    }
