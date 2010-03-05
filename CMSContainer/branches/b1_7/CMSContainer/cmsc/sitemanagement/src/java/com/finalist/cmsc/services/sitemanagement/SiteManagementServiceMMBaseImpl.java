@@ -27,6 +27,7 @@ import org.mmbase.security.Rank;
 import org.mmbase.security.UserContext;
 
 import com.finalist.cmsc.beans.om.*;
+import com.finalist.cmsc.mmbase.TreePathCache;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.security.LoginSession;
 import com.finalist.cmsc.util.ServerUtil;
@@ -399,5 +400,6 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    @Override
    public void resetSiteCache() {
       SiteModelManager.getInstance().resetSiteCache();
+      TreePathCache.clearAllCaches();
    }
 }
