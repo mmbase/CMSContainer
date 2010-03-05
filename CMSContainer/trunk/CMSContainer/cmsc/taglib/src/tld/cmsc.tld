@@ -759,6 +759,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>Default value when selected is not set.</description>
             <name>default</name>
             <required>false</required>
@@ -807,6 +813,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>Size of the list.</description>
             <name>size</name>
             <required>false</required>
@@ -849,6 +861,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>value attribute.</description>
             <name>value</name>
             <required>true</required>
@@ -871,6 +889,12 @@
             <description>JSP variable to set value.</description>
             <name>var</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>

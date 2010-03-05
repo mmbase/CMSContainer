@@ -759,6 +759,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>Default value when selected is not set.</description>
             <name>default</name>
             <required>false</required>
@@ -807,6 +813,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>Size of the list.</description>
             <name>size</name>
             <required>false</required>
@@ -849,6 +861,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>value attribute.</description>
             <name>value</name>
             <required>true</required>
@@ -871,6 +889,12 @@
             <description>JSP variable to set value.</description>
             <name>var</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>html input name.</description>
+            <name>name</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
@@ -1656,12 +1680,12 @@
         <path>/META-INF/tags/attachment.tag</path>
     </tag-file>
     <tag-file>
-        <description>Generates page header information of all the RSS feeds on the current page level.</description>
+        <!-- <description>Generates page header information of all the RSS feeds on the current page level.</description>  -->
         <name>feeds</name>
         <path>/META-INF/tags/feeds.tag</path>
     </tag-file>
     <tag-file>
-        <description>Override the mm:field tag and edit the richtext edit stuff when in edit modus.</description>
+        <!-- <description>Override the mm:field tag and edit the richtext edit stuff when in edit modus.</description> -->
         <name>field</name>
         <path>/META-INF/tags/field.tag</path>
     </tag-file>
