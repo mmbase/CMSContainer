@@ -46,7 +46,6 @@ import com.finalist.pluto.portalImpl.om.entity.impl.PortletEntityImpl;
 import com.finalist.pluto.portalImpl.om.servlet.impl.WebApplicationDefinitionImpl;
 import com.finalist.pluto.portalImpl.om.window.impl.PortletWindowImpl;
 import com.finalist.pluto.portalImpl.servlet.ServletObjectAccess;
-import com.finalist.pluto.portalImpl.servlet.ServletResponseImpl;
 
 /**
  * <p>
@@ -307,8 +306,7 @@ public class PortletFragment extends AbstractFragment {
          PrintWriter writer2 = new PrintWriter(storedWriter);
 
          // create a wrapped response which the Portlet will be rendered to
-         ServletResponseImpl wrappedResponse = (ServletResponseImpl) ServletObjectAccess.getStoredServletResponse(
-               response, writer2);
+         HttpServletResponse wrappedResponse = ServletObjectAccess.getStoredServletResponse(response, writer2);
 
          try {
             // render the Portlet to the wrapped response, to be output
@@ -334,7 +332,6 @@ public class PortletFragment extends AbstractFragment {
          catch (Exception e) {
             writer2.println(getErrorMsg(e));
          }
-
       }
       else {
          log.error("Error no servletDefinition!!!");
