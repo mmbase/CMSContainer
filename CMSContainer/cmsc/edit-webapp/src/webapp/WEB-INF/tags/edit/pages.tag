@@ -13,8 +13,8 @@
 <c:if test="${empty elementsPerPage}">
    <c:set var="elementsPerPage"><%=com.finalist.cmsc.mmbase.PropertiesUtil.getProperty("repository.search.results.per.page")%></c:set>
 </c:if>
-<c:set var="showPages" value="${empty showPages ? 5 :showPages }"/>
-<c:set var="pagesIndex" value="${empty pagesIndex ? 'center' :pagesIndex }"/>
+<c:set var="showPages" value="${empty showPages ? 5 : showPages }"/>
+<c:set var="pagesIndex" value="${empty pagesIndex ? 'center' : pagesIndex }"/>
 <c:set var="offset" value="${empty offset ? 0 : offset }"/>
 <c:set var="search" value="${empty search ? true : search }"/>
 <c:set var="pagesSize" value="${ cmsc:ceil(totalElements/elementsPerPage)}"/>
@@ -25,7 +25,7 @@
 <fmt:message key="pages.go" var="go"/>
 <fmt:message key="searchpages.showresults" var="searchresult">
    <fmt:param>${(totalElements>0)?(offset * elementsPerPage+1):0 }</fmt:param>
-   <fmt:param>${(totalElements>((offset+1)*elementsPerPage))?((offset+1)*elementsPerPage):totalElements }</fmt:param>
+   <fmt:param>${(totalElements>((offset+1)*elementsPerPage)) ? ((offset+1)*elementsPerPage) : totalElements }</fmt:param>
    <fmt:param>${totalElements}</fmt:param>
 </fmt:message>
 
@@ -67,7 +67,7 @@
       <c:if test="${pagesSize>1}">
          <td style="text-align:right;width:70%;">
             <fmt:message key="searchpages.page"/>:
-                <pg:pager id="${empty pageId?'pager':pageId}" items="${totalElements}" maxPageItems="${elementsPerPage}" maxIndexPages="${showPages}" 
+                <pg:pager id="${empty pageId ? 'pager' : pageId}" items="${totalElements}" maxPageItems="${elementsPerPage}" maxIndexPages="${showPages}" 
                  index="${pagesIndex}" isOffset="true" export="currentPage=pageNumber">
              
                <c:if test="${not search}">
