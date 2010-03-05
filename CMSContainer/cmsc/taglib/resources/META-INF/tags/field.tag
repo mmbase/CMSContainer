@@ -7,10 +7,10 @@
 %><%@ attribute name="container" required="false" rtexprvalue="true"
 %><%@ attribute name="containerclass" required="false" rtexprvalue="true"
 %><%@ attribute name="options" required="false" rtexprvalue="true"
-%><c:set var="edit" value="${empty edit ? false :edit }"/>
-<c:set var="container" value="${empty container ? 'div' :container }"/>
-<c:set var="containerclass" value="${empty containerclass ? name :containerclass }"/>
-<c:set var="istitle" value="${name eq 'title' || name eq 'subtitle' ? true :false }"/>
+%><c:set var="edit" value="${empty edit ? false : edit }"/>
+<c:set var="container" value="${empty container ? 'div' : container }"/>
+<c:set var="containerclass" value="${empty containerclass ? name : containerclass }"/>
+<c:set var="istitle" value="${name eq 'title' || name eq 'subtitle' ? true : false }"/>
 <c:if test="${edit || istitle}">
    <${container} id="content_${elementId}_${name}" class="${containerclass}">
 </c:if>
