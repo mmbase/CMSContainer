@@ -260,11 +260,11 @@ public class BulkUploadUtil {
       try {
          byte[] buffer = new byte[2048 * 1024];
          while ((entry = zip.getNextEntry()) != null) {
+            if (entry.isDirectory()) {
+                continue;
+            }
             long size = entry.getSize();
             if (maxFileSizeBiggerThan(size)) {
-               if (entry.isDirectory()) {
-                  continue;
-               }
                if ("images".equals(manager.getName()) && !isImage(entry.getName())) {
                   if (log.isDebugEnabled()) {
                      log.debug("Skipping " + entry.getName() + " because it is not an image");
@@ -282,8 +282,17 @@ public class BulkUploadUtil {
                      .createTransformer(checksumFactory.createParameters());
                ByteArrayOutputStream fileData = new ByteArrayOutputStream();
                int len = 0;
+               long entrySize = 0 ;
                while ((len = zip.read(buffer)) > 0) {
                   fileData.write(buffer, 0, len);
+                  entrySize += len;
+               }
+               if (entrySize <= 0) {
+                  notUploadedFiles.add(entry.getName());
+                  continue;
+               }
+               if (size <= 0) {
+                  size = entrySize;
                }
                String checkSum = transformer.transform(fileData.toByteArray());
                NodeQuery query = manager.createQuery();
