@@ -12,12 +12,42 @@
 	<cmscedit:head title="subsiterefresh.title">
 		<script type="text/javascript">
 			function refreshPages() {
-				refreshFrame('pages');
+				if( existFrameWithName('pages') ) {
+				   refreshFrame('pages');
+				}
 				if (window.opener) {
 					window.close();
 				}
 				document.location.href = '<mm:write referid="pagepath"/>';
 			}
+
+			function existFrameWithName(name, win, parentcall) {
+				if (!win) {
+				   if (!existFrameWithName(name, window)) {
+					  return false;
+				   }
+				   else {
+					  return true;
+				   }
+				}
+				if (win.name == name) {
+				   return true;
+				}
+				else {
+				   for (var i = 0; i < win.frames.length; i++) {
+					  if(existFrameWithName(name, win.frames[i], true)) {
+						 return true;
+					  }
+				   }
+				   if (win.parent && win != parent && !parentcall) {
+					  return existFrameWithName(name, win.parent);
+				   }
+				   if (win.opener) {
+					  return existFrameWithName(name, win.opener);
+				   }
+				   return false;
+			}
+         }
 		</script>
 	</cmscedit:head>
 	<body onload="refreshPages()">
