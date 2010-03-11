@@ -65,13 +65,13 @@ Type:  sql-script
 * Wait for finishing startup (editors should work)
 * Stop CMSC 1.6
 * Execute the following script on database:
-INSERT INTO mm_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_urls;
-INSERT INTO mm_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_attachments;
-INSERT INTO mm_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_images;
+INSERT INTO mm_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_urls WHERE number NOT IN ( SELECT number FROM mm_assetelement );
+INSERT INTO mm_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_attachments WHERE number NOT IN ( SELECT number FROM mm_assetelement );
+INSERT INTO mm_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from mm_images WHERE number NOT IN ( SELECT number FROM mm_assetelement );
 
-INSERT INTO live_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_urls;
-INSERT INTO live_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_attachments;
-INSERT INTO live_assetelement select number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_images;
+INSERT INTO live_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_urls WHERE number NOT IN ( SELECT number FROM live_assetelement );
+INSERT INTO live_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_attachments WHERE number NOT IN ( SELECT number FROM live_assetelement );
+INSERT INTO live_assetelement SELECT number,otype,owner,creationdate,lastmodifieddate,publishdate,expiredate,lastmodifier,creator,use_expirydate,title,description,m_status from live_images WHERE number NOT IN ( SELECT number FROM live_assetelement );
 --- End script ---
 *
 *
