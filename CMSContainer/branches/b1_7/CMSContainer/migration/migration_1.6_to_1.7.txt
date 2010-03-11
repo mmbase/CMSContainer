@@ -92,13 +92,13 @@ Type:  sql-script
 --- Start script ---
 * First start CMSC 1.6 for the first time (it needs to create the navigationitem tables!)
 * Execute the following script on database:
-INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_page;
-INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_rssfeed;
-INSERT INTO mm_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_pagealias;
+INSERT INTO mm_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_page WHERE number NOT IN ( SELECT number FROM mm_navigationitem );
+INSERT INTO mm_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_rssfeed WHERE number NOT IN ( SELECT number FROM mm_navigationitem );
+INSERT INTO mm_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from mm_pagealias WHERE number NOT IN ( SELECT number FROM mm_navigationitem );
 
-INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_page;
-INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_rssfeed;
-INSERT INTO live_navigationitem select number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_pagealias;
+INSERT INTO live_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_page WHERE number NOT IN ( SELECT number FROM live_navigationitem );
+INSERT INTO live_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_rssfeed WHERE number NOT IN ( SELECT number FROM live_navigationitem );
+INSERT INTO live_navigationitem SELECT number, otype, owner, creationdate, lastmodifieddate,publishdate,expiredate,lastmodifier,use_expirydate,urlfragment,title,description,inmenu,secure from live_pagealias WHERE number NOT IN ( SELECT number FROM live_navigationitem );
 --- End script ---
 
 
