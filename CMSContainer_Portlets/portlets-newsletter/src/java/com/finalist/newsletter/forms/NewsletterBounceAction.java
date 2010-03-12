@@ -14,6 +14,8 @@ import org.apache.struts.actions.DispatchAction;
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.newsletter.domain.NewsletterBounce;
 import com.finalist.newsletter.util.NewsletterBounceUtil;
+import com.finalist.newsletter.services.CommunityModuleAdapter;
+
 
 public class NewsletterBounceAction extends DispatchAction {
 
@@ -24,20 +26,46 @@ public class NewsletterBounceAction extends DispatchAction {
       if (StringUtils.isNotEmpty(PropertiesUtil.getProperty("repository.search.results.per.page"))) {
          pageSize = Integer.parseInt(PropertiesUtil.getProperty("repository.search.results.per.page"));
       }
+
+      String[] check_items = request.getParameterValues("chk_items");
+      
+      if(check_items != null && check_items.length > 0) {
+         String type = request.getParameter("type");
+         if ("bounce".equalsIgnoreCase(type)) {
+            for (String check_item : check_items) {
+               //delete bounce
+               NewsletterBounceUtil.deleteBounce(check_item);
+            }
+         }
+         else if ("member".equalsIgnoreCase(type)) {
+            for (String check_item : check_items) {
+               //delete member
+               String authId = NewsletterBounceUtil.deleteMember(check_item);
+               CommunityModuleAdapter.deleteSubscriber(authId);
+               
+            }
+         }
+      }
+
       String strOffset = request.getParameter("offset");
       String direction = request.getParameter("direction");
       String order = request.getParameter("order");
+      String newsletterId = request.getParameter("newsletterId");
       if (StringUtils.isNotEmpty(strOffset)) {
          offset = Integer.parseInt(strOffset);
       }
+      if(StringUtils.isNotEmpty(newsletterId) && "all".equalsIgnoreCase(newsletterId)) {
+         newsletterId = null;
+      }
       List<NewsletterBounce> bounces = NewsletterBounceUtil.getBounceRecords(offset * pageSize, pageSize, order,
-            direction);
-      int count = NewsletterBounceUtil.getTotalCount();
+            direction,newsletterId);
+      int count = NewsletterBounceUtil.getTotalCount(newsletterId);
       request.setAttribute("resultList", bounces);
       request.setAttribute("resultCount", count);
       request.setAttribute("offset", offset);
       request.setAttribute("direction", direction);
       request.setAttribute("order", order);
+      request.setAttribute("newsletterId", newsletterId);
       return mapping.findForward("success");
    }
 

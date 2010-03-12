@@ -20,6 +20,9 @@
       <edit:ui-tab key="newsletter.publication.tabs.subscribers">
          NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
+	  <edit:ui-tab key="newsletter.publication.tabs.bounces">
+        module/NewsletterBounceAction.do?method=list&newsletterId=${requestScope.newsletterId}
+      </edit:ui-tab>
        <edit:ui-tab key="newsletter.publication.tabs.terms">
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
