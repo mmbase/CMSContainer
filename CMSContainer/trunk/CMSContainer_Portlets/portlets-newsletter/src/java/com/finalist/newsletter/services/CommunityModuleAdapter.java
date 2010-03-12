@@ -81,4 +81,12 @@ public class CommunityModuleAdapter {
       }
       return null;
    }
+   
+   public static void deleteSubscriber(String authId) {
+      if(authId ==null) {
+         return;
+      }
+      AuthenticationService authenticationService = (AuthenticationService) ApplicationContextFactory.getApplicationContext().getBean("authenticationService");
+      authenticationService.deleteAuthentication(Long.parseLong(authId));
+   }
 }
