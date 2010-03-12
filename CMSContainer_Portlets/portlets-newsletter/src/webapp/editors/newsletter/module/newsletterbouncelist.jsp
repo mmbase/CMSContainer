@@ -22,9 +22,9 @@
 	</div>
  </a>
 </div>
+
 <div class="editor" style="height:500px">
-<div class="ruler_green"><div><fmt:message key="newsletter.term.search.result" /></div></div>
-<div class="body">
+
 <c:set var="pagerDOToffset"><%=request.getParameter("pager.offset")%></c:set>
 <form action="${actionUrl}" name="termForm" method="post">
 <input type="hidden" name="method" value="list"/>
@@ -32,15 +32,33 @@
 <input type="hidden" name="pager.offset" value="${pagerDOToffset}"/>
 <input type="hidden" name="direction" value="${direction}"/>
 <input type="hidden" name="order" value="${order}"/>
-
+<input type="hidden" name="type" value="${action}"/>
 <mm:import jspvar="resultCount" vartype="Integer">${resultCount}</mm:import>
 <mm:import externid="offset" jspvar="offset" vartype="Integer">${offset}</mm:import>
 <mm:import externid="direction" jspvar="direction" vartype="String">${direction}</mm:import>
 <mm:import externid="order" jspvar="order" vartype="String">${order}</mm:import>
+<br/>
+ <div style="margin-left:10px;margin-right:50px;font-size:12px;float:left"><fmt:message key="newsletter.bounce.newsletter.title"/></div>
+ <cmsc:select var="newsletterId"   default="${newsletterId}" onchange="document.forms[0].submit();">
+  <option value="all"><fmt:message key="newsletter.bounce.newsletter.all"/></option>
+  <mm:listnodes type="newsletter" orderby="subject">
+	 <mm:field name="number" id="newsletternumber" write="false" vartype="String" />
+	 <cmsc:option value="${newsletternumber}" name="${_node.title}" />
+  </mm:listnodes>
+  </cmsc:select>
+  <div class="ruler_green"><div><fmt:message key="newsletter.term.search.result" /></div></div>
+<div class="body">
 <c:if test="${resultCount > 0}">
 <edit:pages search="true" totalElements="${resultCount}" offset="${offset}"/>
+
+	<input type="button" class="button" style="margin-top:10px;margin-left:6px;margin-bottom:10px" value='<fmt:message key="newsletter.bounce.delete.bounce"/>' onclick="bounceDelete('<fmt:message key="newsletter.bounce.delete.confirm" />', 'termForm','bounce')"/>
+	<input type="button" class="button" style="margin-top:10px" value='<fmt:message key="newsletter.bounce.delete.member"/>' onclick="bounceDelete('<fmt:message key="newsletter.bounce.delete.confirm" />', 'termForm','member')"/>
+
    <table>
       <tr class="listheader">
+	  	<th width="80px"> <c:if test="${resultCount >1}">
+        <input type="checkbox"  name="selectall" class="checkbox" onclick="selectAll(this.checked, 'termForm', 'chk_');" value="on" style="margin:0px 0px 0px 4px !important;> margin:0px 0px !important;margin:0px 0px;"/><span style="padding-left:4px;position:absolute;text-transform:none"><fmt:message key="newsletter.bounce.selectall" /></span>
+        </c:if></th>
          <th><a href="javascript:sortBy('userName')"> <fmt:message key="newsletter.bounce.subscriber" /></a> </th>
          <th><a href="javascript:sortBy('newsLetterTitle')"><fmt:message key="newsletter.bounce.newsletter" /></a></th>
          <th><a href="javascript:sortBy('bouncedate')"><fmt:message key="newsletter.bounce.bouncedate" /></a></th>
@@ -50,6 +68,11 @@
                 <c:set var="useSwapStyle">true</c:set>
                 <c:forEach var="bounce" items="${resultList}" >
                <tr <c:if test="${useSwapStyle}">class="swap"</c:if>>
+			   	    <td>
+					  <c:if test="${resultCount >1}">
+					  <input type="checkbox"  name="chk_items" class="checkbox" value="${bounce.id}" onClick="document.forms['termForm'].elements.selectall.checked=false;"/>
+					  </c:if>
+                   <td >
                    <td >
                    <c:out  value="${bounce.userName}"/> 
                    </td>
