@@ -11,17 +11,27 @@
 </cmscedit:head>
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
-<div class="tabs">
-<a href="#">
-	<div class="tab_active">
-		<div class="body">
-		   <div class="title">
-			  <fmt:message key="newsletter.bounce.title" />
-		   </div>
-		</div>
-	</div>
- </a>
-</div>
+  <edit:ui-tabs>
+	 <c:if test="${not empty sessionScope.bounce_page_from && sessionScope.bounce_page_from != 'mainboard'}">
+		 <edit:ui-tab key="newsletter.publication.tabs.edit" >
+			../NewsletterPublicationManagement.do?newsletterId=${requestScope.newsletterId}
+		 </edit:ui-tab>
+		 <edit:ui-tab key="newsletter.publication.tabs.statistics" >
+			../NewsletterPublicationStatisticSearch.do?newsletterId=${requestScope.newsletterId}
+		 </edit:ui-tab>
+		 <edit:ui-tab key="newsletter.publication.tabs.subscribers">
+			../NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}
+		 </edit:ui-tab>
+	 </c:if>
+	 <edit:ui-tab key="newsletter.publication.tabs.bounces" active="true">
+		#
+	 </edit:ui-tab>
+	 <c:if test="${not empty sessionScope.bounce_page_from && sessionScope.bounce_page_from != 'mainboard'}">
+		 <edit:ui-tab key="newsletter.publication.tabs.terms">
+		   ../NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
+		</edit:ui-tab>
+	 </c:if>
+  </edit:ui-tabs>
 
 <div class="editor" style="height:500px">
 
@@ -40,7 +50,10 @@
 <br/>
  <div style="margin-left:10px;margin-right:50px;font-size:12px;float:left"><fmt:message key="newsletter.bounce.newsletter.title"/></div>
  <cmsc:select var="newsletterId"   default="${newsletterId}" onchange="document.forms[0].submit();">
+   <c:if test="${not empty sessionScope.bounce_page_from && sessionScope.bounce_page_from == 'mainboard'}">
   <option value="all"><fmt:message key="newsletter.bounce.newsletter.all"/></option>
+   </c:if>
+
   <mm:listnodes type="newsletter" orderby="subject">
 	 <mm:field name="number" id="newsletternumber" write="false" vartype="String" />
 	 <cmsc:option value="${newsletternumber}" name="${_node.title}" />
