@@ -27,6 +27,10 @@ public class NewsletterBounceAction extends DispatchAction {
          pageSize = Integer.parseInt(PropertiesUtil.getProperty("repository.search.results.per.page"));
       }
 
+      String from = request.getParameter("from");
+      if(from != null) {
+         request.getSession().setAttribute("bounce_page_from",from);
+      }
       String[] check_items = request.getParameterValues("chk_items");
       
       if(check_items != null && check_items.length > 0) {
