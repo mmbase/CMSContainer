@@ -23,6 +23,9 @@
       <edit:ui-tab key="newsletter.publication.tabs.subscribers" active="true">
          #
       </edit:ui-tab>
+	  <edit:ui-tab key="newsletter.publication.tabs.bounces">
+        module/NewsletterBounceAction.do?method=list&newsletterId=${requestScope.newsletterId}&from=newsletter
+      </edit:ui-tab>
       <edit:ui-tab key="newsletter.publication.tabs.terms">
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
