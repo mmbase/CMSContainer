@@ -66,7 +66,7 @@
          </td>
          <td>
             <p><a href="NewsletterPublicationAction.do"><fmt:message key="index.link.alleditions"/></a></p>
-            <p><a href="module/NewsletterBounceAction.do?method=list"><fmt:message key="index.link.bouncedemail"/></a></p>
+            <p><a href="module/NewsletterBounceAction.do?method=list&from=mainboard"><fmt:message key="index.link.bouncedemail"/></a></p>
          </td>
       </tr>
 </table>
