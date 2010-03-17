@@ -66,7 +66,10 @@ public final class PagesUtil {
 
    public static final String POS_FIELD = "pos";
 
-
+   public static final String PAGEPROPERTY = "pageproperty";
+   public static final String KEY_FIELD = "key";
+   public static final String VALUE_FIELD = "value";
+   
    private PagesUtil() {
       // utility
    }
@@ -561,4 +564,15 @@ public final class PagesUtil {
       }
    }
 
+   public static Map<String, String> getPageProperties(Node pageNode) {
+      NodeList propertyNodes = pageNode.getRelatedNodes(PAGEPROPERTY, RELATED, DESTINATION);
+      Map<String,String> pageProperties = new HashMap<String,String>();
+      if (propertyNodes != null && propertyNodes.size() > 0) {
+         for (Node node: propertyNodes) {
+            pageProperties.put(node.getStringValue(KEY_FIELD), node.getStringValue(VALUE_FIELD));
+         }
+      }
+      return pageProperties;
+  }
+   
 }

@@ -66,6 +66,7 @@
       <relation from="contentelement" to="page" type="inlinerel" />
 	
 	  <relation from="page" to="pagegroup" type="related" />
+	  <relation from="page" to="pageproperty" type="related" />
    </allowedrelationlist>
 
 
