@@ -83,6 +83,7 @@ public class PageNavigationItemManager implements NavigationItemManager {
       loadLayout(node, page);
       loadStylesheet(node, page);
       loadPageImages(node, page);
+      loadPageProperties(node, page);
       return page;
    }
 
@@ -109,6 +110,11 @@ public class PageNavigationItemManager implements NavigationItemManager {
    protected void loadPageImages(Node pageNode, Page page) {
       Map<String, List<Integer>> pageImages = PagesUtil.getPageImages(pageNode);
       page.setPageImages(pageImages);
+   }
+
+   protected void loadPageProperties(Node pageNode, Page page) {
+      Map<String, String> pageProperties = PagesUtil.getPageProperties(pageNode);
+      page.setPageProperties(pageProperties);
    }
 
    /**

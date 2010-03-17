@@ -23,6 +23,7 @@ public class Page extends NavigationItem {
    private int layout;
    private List<Integer> stylesheet = new ArrayList<Integer>();
    private Map<String,List<Integer>> pageImages = new HashMap<String,List<Integer>>();
+   private Map<String,String> pageProperties = new HashMap<String,String>();
 
 
    public int getLayout() {
@@ -34,6 +35,14 @@ public class Page extends NavigationItem {
       this.layout = layout;
    }
 
+   public Map<String, String> getPageProperties() {
+      return pageProperties;
+   }
+
+
+   public void setPageProperties(Map<String, String> pageProperties) {
+      this.pageProperties = pageProperties;
+   }
 
    public List<Integer> getStylesheet() {
       return stylesheet;

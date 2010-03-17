@@ -18,6 +18,7 @@
 	<relation destination="images" role="namedrel" />
 	<relation destination="layout" role="layoutrel" />
 	<relation destination="stylesheet" role="stylerel" />
+	<relation destination="pageproperty" role="related" />
 <!--
 	<relation destination="page" role="navrel" />
 	<relation destination="portlet" role="portletrel" />
