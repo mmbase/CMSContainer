@@ -1670,6 +1670,36 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <description>Insert one of the property of a page</description>
+        <name>insert-page-property</name>
+        <tag-class>com.finalist.cmsc.taglib.InsertPagePropertyTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>JSP variable to set property value.</description>
+            <name>var</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>The number of a page/site/newsletter</description>
+            <name>page</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>The method of inherit properties from parent page, options: "override" (to override the parent options), "directly" (to merge all the parent images) and "false" (for no inheritance, default)</description>
+            <name>inherit</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Key of the property of a page</description>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
 
     <tag-file>
         <name>flash</name>
