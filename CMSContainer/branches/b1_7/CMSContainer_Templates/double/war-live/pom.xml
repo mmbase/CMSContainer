@@ -26,19 +26,19 @@
             <groupId>org.cmscontainer.core</groupId>
             <artifactId>cmsc-contentrepository</artifactId>
             <version>${project.version}</version>
-			<classifier>classes</classifier>
+			<type>war</type>
         </dependency>
         <dependency>
             <groupId>org.cmscontainer.core</groupId>
             <artifactId>cmsc-security</artifactId>
             <version>${project.version}</version>
-			<classifier>classes</classifier>
+			<type>war</type>
         </dependency>
         <dependency>
             <groupId>org.cmscontainer.core</groupId>
             <artifactId>cmsc-sitemanagement</artifactId>
             <version>${project.version}</version>
-			<classifier>classes</classifier>
+			<type>war</type>
         </dependency>
 
     </dependencies>
