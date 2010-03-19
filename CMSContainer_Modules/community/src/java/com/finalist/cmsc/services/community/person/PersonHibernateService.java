@@ -95,7 +95,7 @@ public class PersonHibernateService extends HibernateService implements PersonSe
     * {@inheritDoc}
     */
    @Transactional
-   public Person createPerson(String firstName, String infix, String lastName, Long authenticationId,String active,Date registerDate) {
+   public Person createPerson(String firstName, String infix, String lastName, Object authenticationId,String active,Date registerDate) {
       if (firstName == null) {
          throw new IllegalArgumentException("Firstname is null. ");
       }
@@ -110,7 +110,7 @@ public class PersonHibernateService extends HibernateService implements PersonSe
       person.setFirstName(firstName);
       person.setInfix(infix);
       person.setLastName(lastName);
-      person.setAuthenticationId(authenticationId); // used to find account
+      person.setAuthenticationId((Long)authenticationId); // used to find account
       person.setActive(active);
       person.setRegisterDate(registerDate);
       getSession().save(person);
@@ -587,5 +587,10 @@ public class PersonHibernateService extends HibernateService implements PersonSe
       // TODO Auto-generated method stub
       return null;
    }
+
+public void setGenderByUserId(String userId, String gender) {
+	// TODO Auto-generated method stub
+	
+}
 
 }

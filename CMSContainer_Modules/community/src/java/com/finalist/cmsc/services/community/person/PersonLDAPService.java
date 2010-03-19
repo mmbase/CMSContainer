@@ -5,9 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
@@ -111,9 +117,107 @@ public class PersonLDAPService  extends AbstractLDAPService implements PersonSer
    }
 
    public Person createPerson(String firstName, String infix, String lastName,
-         Long authenticationId, String active, Date registerDate) {
-      // TODO Auto-generated method stub
-      return null;
+         Object authenticationId, String active, Date registerDate) {
+	   String email = (String)authenticationId;
+	   
+      // Create a new person and store it
+      Person person = new Person();
+      person.setFirstName(firstName); 
+      person.setInfix(infix);
+      person.setLastName(lastName);
+      person.setEmail(email); // used to find account
+      person.setActive(active);
+      person.setRegisterDate(registerDate);
+
+	   String storeId = generateNewIdStoreId(email);
+      person.setId(new Long(storeId.substring(storeId.lastIndexOf("@")+1)));
+
+	   BasicAttributes attributes = new BasicAttributes();
+	   
+       BasicAttribute relationClassAttribute = new BasicAttribute("objectClass");
+       relationClassAttribute.add(RELATION_CLASS_NAME);
+       attributes.put(relationClassAttribute);
+
+	   attributes.put(new BasicAttribute("nai-idStoreId", storeId));
+	   if(firstName != null) {
+		   attributes.put(new BasicAttribute("nai-firstname", firstName));
+	   }
+	   if(infix != null) {
+		   attributes.put(new BasicAttribute("nai-nameInfix", infix));
+	   }
+	   attributes.put(new BasicAttribute("nai-lastName", lastName));
+	   attributes.put(new BasicAttribute("nai-email", email));
+       if ("yes".equals(active)) {
+    	   attributes.put(new BasicAttribute("nai-active", RegisterStatus.ACTIVE.getName()));
+        }
+        else {
+     	   attributes.put(new BasicAttribute("nai-active", RegisterStatus.UNCONFIRMED.getName()));
+        }
+       attributes.put("nai-synchronisationStatus", "new");
+
+       attributes.put("cn", storeId);
+       attributes.put("sn", "Unused");
+
+       
+       DistinguishedName newItemDN = new DistinguishedName(RELATION_BASE_DN);
+       newItemDN.add("cn", storeId);
+	   
+	  getLdapTemplate().bind(newItemDN, null, attributes);
+
+      return person;
+   }
+
+   /**
+    * Generate a unique ID-store id, by looking in the LDAP database to ensure it is unique 
+    * @param emailAddress The email address to base the unique id on
+    * @return The generated unique id
+    * @throws ServiceException In case the emailAddress is already in use (currently) by a relation.
+    */
+   private synchronized String generateNewIdStoreId(String emailAddress) {
+       // We never create a new relation for an email address that already exists
+       if (getPersonByEmail(emailAddress) != null) {
+           throw new RuntimeException("Relation with email address "+emailAddress+" already exists");
+       }
+       // Find an unused id
+       int index = 1;
+       while (true) {
+           String candidateId = createUniqueId(emailAddress, index);
+           if (getPersonByUserId(candidateId) == null) {
+               // Use this id
+               return candidateId;
+           }
+           // Try another new id
+           index++;
+       }
+   }
+   
+   /**
+    * String function to create a unique id with the following properties:
+    *  - length < 64
+    *  - Based on email address, but possibly not containing all email characters. The id
+    *  itself is not an email address
+    *  - Includes suffix (this is important to ensure id is unique as long as suffix is unique)
+    * @param emailAddress The email address to use in the id
+    * @param suffix The extra number that must be included in the unique id
+    * @return The generated id
+    */
+   private String createUniqueId(String emailAddress, int suffix) {
+       // Create a string based on the suffix, that will be the end of the id
+       int maxIdLength = 64;
+       String suffixString = "@" + String.valueOf(suffix);
+       // Strip all non-Ascii Characters
+       StringBuilder uniqueId = new StringBuilder();
+       for (char emailAddressChar: emailAddress.toCharArray()) {
+           if (uniqueId.length() + suffixString.length() >= maxIdLength) {
+               // String will become too long
+               break;
+           }
+           // Do not include non-Ascii characters
+           if (String.valueOf(emailAddressChar).matches("[A-Za-z0-9\\.@]")) {
+               uniqueId.append(emailAddressChar);
+           }
+       }
+       return uniqueId.toString() + suffixString;
    }
 
    public boolean deletePersonByAuthenticationId(Long userId) {
@@ -162,8 +266,11 @@ public class PersonLDAPService  extends AbstractLDAPService implements PersonSer
    }
 
    public Person getPersonByEmail(String email) {
-      // TODO Auto-generated method stub
-      return null;
+      if (StringUtils.isBlank(email)) {
+          throw new IllegalArgumentException("UserId is not filled in. ");
+       }
+      // Person person = findPersonByUserId(userId);
+      return getNaiIDStorePersonByProperty("nai-email",email);
    }
 
    public List<PersonExportImportVO> getPersonExportImportVO() {
@@ -221,6 +328,18 @@ public class PersonLDAPService  extends AbstractLDAPService implements PersonSer
       }
       return "unknown";
    }
- 
 
+   public void setGenderByUserId(String userId, String gender) {
+       DistinguishedName itemDN = new DistinguishedName(RELATION_BASE_DN);
+       itemDN.add("cn", userId);
+
+	   BasicAttribute attr = new BasicAttribute("nai-gender", gender);
+	   ModificationItem item = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
+	   getLdapTemplate().modifyAttributes(itemDN, new ModificationItem[] {item});
+	   
+	   attr = new BasicAttribute("nai-synchronisationStatus", "changed");
+	   item = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
+	   getLdapTemplate().modifyAttributes(itemDN, new ModificationItem[] {item});
+
+   }
 }
