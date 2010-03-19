@@ -59,6 +59,7 @@ public class SubSiteAction extends PagerAction {
 	   SearchForm searchForm = (SearchForm) form;
 	   
       String subsite = request.getParameter("subsite");
+      String from = request.getParameter("from");
       
       /* Purpose of this file
        * - retrieve list of subsites
@@ -85,7 +86,10 @@ public class SubSiteAction extends PagerAction {
 	  }
       
       if (subsiteNode != null){
-    	  request.setAttribute("subsite", String.valueOf(subsiteNode.getNumber()));
+         request.setAttribute("subsite", String.valueOf(subsiteNode.getNumber()));
+      }
+      if (from != null) {
+         request.setAttribute("from", from);
       }
 	  
 	  if (subsiteNode == null){ //If there are no subsites at all, return empty list
