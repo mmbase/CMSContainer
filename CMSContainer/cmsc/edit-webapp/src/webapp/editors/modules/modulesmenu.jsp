@@ -75,7 +75,7 @@
                         </li>
                      </mm:haspage>
                      <mm:haspage page="/editors/subsite/module-subsite.jsp">
-                        <li class="versioning"><a href="<mm:url page="../subsite/SubSiteAction.do"/>" target="rightpane">
+                        <li class="versioning"><a href="<mm:url page="../subsite/SubSiteAction.do?from=module"/>" target="rightpane">
                            <fmt:message key="modules.subsite" />
                            </a> </li>
                      </mm:haspage>
