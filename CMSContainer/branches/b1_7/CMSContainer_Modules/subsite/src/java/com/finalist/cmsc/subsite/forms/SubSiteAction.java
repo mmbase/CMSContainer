@@ -51,6 +51,10 @@ public class SubSiteAction extends PagerAction {
 	   
       String subsite = (String) request.getSession().getAttribute("subsite");
       request.getSession().removeAttribute("subsite");
+      String from = request.getParameter("from");
+      if (StringUtils.isBlank(subsite) || !cloud.hasNode(subsite)) {
+         subsite = request.getParameter("subsite");
+      }
       
       /* Purpose of this file
        * - retrieve list of subsites
@@ -78,6 +82,9 @@ public class SubSiteAction extends PagerAction {
       
       if (subsiteNode != null){
     	  request.setAttribute("subsite", String.valueOf(subsiteNode.getNumber()));
+      }
+      if (from != null) {
+         request.setAttribute("from", from);
       }
 	  
 	  if (subsiteNode == null){ //If there are no subsites at all, return empty list
