@@ -11,6 +11,7 @@
 <mm:import externid="number" required="true" from="parameters"/>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <body>
+<mm:import externid="from" from="parameters" />
 <cmscedit:sideblock title="subsitedelete.title" titleClass="side_block_green">
 	<p>
 		<fmt:message key="subsitedelete.subtitle" /> <mm:node referid="number"><b><mm:field name="title"/></b></mm:node>
@@ -20,7 +21,7 @@
 	</p>
 	<form action="?">
 		<html:hidden property="number" value="${number}" />
-		<html:hidden property="fromModule" value="${fromModule}" />
+		<html:hidden property="from" value="${from}" />
 	   	<html:submit property="remove"><fmt:message key="subsitedelete.yes"/></html:submit>&nbsp;
 	   	<html:submit property="cancel"><fmt:message key="subsitedelete.no"/></html:submit>
 	</form>

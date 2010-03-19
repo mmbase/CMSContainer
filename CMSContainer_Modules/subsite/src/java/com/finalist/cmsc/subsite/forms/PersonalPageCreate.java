@@ -29,12 +29,13 @@ public class PersonalPageCreate extends MMBaseFormlessAction {
 
       String parentpage = getParameter(request, "parentpage", true);
       String action = getParameter(request, "action");
+      String from = getParameter(request, "from");
 
       if (StringUtils.isBlank(action)) {
          request.getSession().setAttribute("parentpage", parentpage);
 
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?action=create"
-               + "&contenttype=personalpage" + "&returnurl=" + mapping.findForward("returnurl").getPath());
+               + "&contenttype=personalpage" + "&returnurl=" + mapping.findForward("returnurl").getPath() + "?from=" + from);
          ret.setRedirect(true);
          return ret;
       }
@@ -50,11 +51,11 @@ public class PersonalPageCreate extends MMBaseFormlessAction {
             SubSiteUtil.createPersonalPageContentChannel(newPage);
             
             addToRequest(request, "showsubsite", ewnodelastedited);
-            ActionForward ret = mapping.findForward(SUCCESS);
+            ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?from=" + from);
             return ret;
          }
          request.getSession().removeAttribute("parentpage");
-         ActionForward ret = mapping.findForward(CANCEL);
+         ActionForward ret = new ActionForward(mapping.findForward(CANCEL).getPath() + "?from=" + from);
          return ret;
       }
    }
