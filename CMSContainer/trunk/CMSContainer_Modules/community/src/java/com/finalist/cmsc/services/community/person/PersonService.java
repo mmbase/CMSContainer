@@ -35,6 +35,10 @@ public interface PersonService {
     */
    String getGenderByUserId(String userId);
 
+   
+   void setGenderByUserId(String userId, String gender);
+
+
    /**
     * Get a list of matching persons that match the given example. The fields that are set on the example Person are the
     * criteria for the search.
@@ -59,7 +63,7 @@ public interface PersonService {
 
    Person getPersonByEmail(String email);
 
-   Person createPerson(String firstName, String infix, String lastName, Long authenticationId,String active,Date registerDate);
+   Person createPerson(String firstName, String infix, String lastName, Object authenticationId,String active,Date registerDate);
 
    /*
     * Save or update the person to the database

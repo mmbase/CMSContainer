@@ -77,9 +77,18 @@ public class AuthorityLDAPService  extends AbstractLDAPService implements Author
       return null;
    }
 
+   @SuppressWarnings("unchecked")
    public Authority findAuthorityByName(String authorityName) {
-      // TODO Auto-generated method stub
-      return null;
+      AndFilter filter = new AndFilter();
+      filter.and(new EqualsFilter("objectClass", GROUP_CLASS_NAME));
+      filter.and(new EqualsFilter("cn", authorityName));
+      List<Authority> groups= (List<Authority>)getLdapTemplate().search(GROUPS_BASE_DN, filter.encode(), new GroupContextMapper());
+      if(groups.size() > 0) {
+    	  return groups.get(0);
+      }
+      else {
+    	  return null;
+      }
    }
 
    public List<Authority> getAssociatedAuthorities(Map map,

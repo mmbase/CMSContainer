@@ -3,10 +3,15 @@ package com.finalist.cmsc.services.community.security;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
@@ -24,6 +29,10 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
    
    public static final String RELATION_BASE_DN = "ou=Relations,ou=idstore,dc=nai,dc=nl"; 
    public static final String RELATION_CLASS_NAME = "naiIDStorePerson";
+   
+   public static final String GROUPS_BASE_DN = "ou=Groups,ou=idstore,dc=nai,dc=nl"; 
+   public static final String GROUP_CLASS_NAME = "groupOfUniqueNames"; 
+
    private AuthorityService authorityLDAPService;
    
    @Required
@@ -94,16 +103,58 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
            }
        }
        return passwordString;
-   }   
-   public void addAuthorityToUser(String userId, String authority) {
-      // TODO Auto-generated method stub
-      
    }
+   
+   public void addAuthorityToUser(String userId, String authorityName) {
+//	   Authority authority = authorityLDAPService.findAuthorityByName(authorityName);
+	   AndFilter filter = new AndFilter();
+	   filter.and(new EqualsFilter("objectClass", GROUP_CLASS_NAME));
+	   filter.and(new EqualsFilter("cn", authorityName));
+
+	   Attributes groupAttributes = (Attributes) searchObject(GROUPS_BASE_DN, filter.encode(), getGroupMapper());
+
+	   if(groupAttributes == null) {
+		   log.warn("New group, create it!");
+	       groupAttributes = new BasicAttributes();
+	       BasicAttribute groupClassAttribute = new BasicAttribute("objectClass");
+	       groupClassAttribute.add(GROUP_CLASS_NAME);
+	       groupAttributes.put(groupClassAttribute);
+	       groupAttributes.put("cn", authorityName);
+	       groupAttributes.put("description", "NAi Group created by AuthenticationLDAPService");
+	       groupAttributes.put("uniqueMember", "cn="+userId);
+
+	       DistinguishedName newItemDN = new DistinguishedName(GROUPS_BASE_DN);
+	       newItemDN.add("cn", authorityName);
+	       getLdapTemplate().bind(newItemDN, null, groupAttributes);
+	   }
+	   else {
+		   log.warn("Old group, joining it!");
+	      groupAttributes.put("uniqueMember", "cn="+userId);
+	      DistinguishedName newItemDN = new DistinguishedName(GROUPS_BASE_DN);
+	      newItemDN.add("cn", authorityName);
+	      getLdapTemplate().rebind(newItemDN, null, groupAttributes);
+	   }
+	   log.warn("Done adding to group!");
+   }
+   
+   
+   
+   private ContextMapper getGroupMapper() {
+	   return new GroupContextMapper();
+   }
+
+   private class GroupContextMapper extends AbstractContextMapper  {
+      public Object doMapFromContext(DirContextOperations context) {
+    	  return context.getAttributes();
+      }
+  }
+
+
+
 
    public void addAuthorityToUserByAuthenticationId(String authId,
          String groupName) {
       // TODO Auto-generated method stub
-      
    }
 
    public boolean authenticate(String userId, String password) {
@@ -161,9 +212,13 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
       
    }
 
-   public void removeAuthorityFromUser(String userId, String authority) {
-      // TODO Auto-generated method stub
-      
+   public void removeAuthorityFromUser(String userId, String authorityName) {
+	   log.warn("This method is not implemented");
+//	   Authentication authentication = findAuthentication(userId);
+//	   Authority authority = authorityLDAPService.findAuthorityByName(authorityName);
+//	   if(authority != null) {
+//		   authentication.removeAuthority(authority);
+//	   }
    }
 
    public void setAuthenticationEnabled(String userId, boolean enabled) {
