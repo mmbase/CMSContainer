@@ -29,19 +29,17 @@ public class SubSiteEdit extends MMBaseFormlessAction {
          String subsite = request.getParameter("subsite");
          request.getSession().setAttribute("subsite", subsite);
          ActionForward ret = new ActionForward(mapping.findForward("openwizard").getPath() + "?objectnumber="
-               + objectnumber + "&returnurl=" + mapping.findForward("returnurl").getPath() + "?fromModule="
-               + request.getParameter("fromModule"));
+               + objectnumber + "&returnurl=" + mapping.findForward("returnurl").getPath()+"?from=" + request.getParameter("from"));
          ret.setRedirect(true);
          return ret;
       } else {
          String ewnodelastedited = getParameter(request, "ewnodelastedited");
          addToRequest(request, "showsubsite", ewnodelastedited);
-         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
-            return mapping.findForward("modulesuccess");
-         } else {
-            return mapping.findForward(SUCCESS);
-         }
+		if ("site".equalsIgnoreCase(getParameter(request, "from"))) {
+         return mapping.findForward(SUCCESS);
+      } else {
+         return mapping.findForward("modulesuccess");
+      }
       }
    }
-
 }
