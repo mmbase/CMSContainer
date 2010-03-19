@@ -32,6 +32,10 @@ public class SubSiteDelete extends MMBaseFormlessAction {
 
    public ActionForward execute(ActionMapping mapping, HttpServletRequest request, Cloud cloud) throws Exception {
 
+      String from = request.getParameter("from");
+      if (from != null) {
+         request.setAttribute("from", from);
+      }
       if (isRemoveAction(request)) {
          String objectnumber = getParameter(request, "number", true);
          Node subsiteNode = cloud.getNode(objectnumber);
@@ -43,24 +47,15 @@ public class SubSiteDelete extends MMBaseFormlessAction {
          if (isEditor) {
             NavigationUtil.deleteItem(subsiteNode);
          }
-         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
-            return mapping.findForward("modulesuccess");
-         } else {
-            return mapping.findForward(SUCCESS);
-         }
+         return mapping.findForward(SUCCESS);
       }
 
       if (isCancelAction(request)) {
-         if ("frommodule".equalsIgnoreCase(getParameter(request, "fromModule"))) {
-            return mapping.findForward("modulesuccess");
-         } else {
-            return mapping.findForward(SUCCESS);
-         }
+         return new ActionForward(mapping.findForward(SUCCESS).getPath() + "?from=" + from);
       }
-      request.setAttribute("fromModule", getParameter(request, "fromModule"));
 
       // neither remove or cancel, show confirmation page
-      return mapping.findForward("delete");
+      return new ActionForward(mapping.findForward("delete").getPath() + "?from=" + from);
    }
 
 

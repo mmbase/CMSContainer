@@ -59,9 +59,9 @@ public class SubSiteTreeItemRenderer implements NavigationTreeItemRenderer {
             element.addOption(renderer.createTreeOption("delete.png", "site.sub.remove", 
                   RESOURCEBUNDLE, "../subsite/SubSiteDelete.do?number=" + id));
             element.addOption(renderer.createTreeOption("subsite_new.png", "site.personal.new.page",
-            		RESOURCEBUNDLE, "../subsite/PersonalPageCreate.do?parentpage=" + id));
+            		RESOURCEBUNDLE, "../subsite/PersonalPageCreate.do?parentpage=" + id + "&from=site"));
             element.addOption(renderer.createTreeOption("personalpage_go.png", "site.personal.showpages",
-                  RESOURCEBUNDLE, "../subsite/SubSiteAction.do?subsite=" + id));
+                  RESOURCEBUNDLE, "../subsite/SubSiteAction.do?subsite=" + id + "&from=site"));
          }
          
          if (SecurityUtil.isChiefEditor(role)) {
