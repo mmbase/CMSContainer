@@ -38,7 +38,7 @@
 <mm:import externid="returnurl"/>
 
 <mm:import externid="subsite" from="parameters" />
-
+<mm:import externid="from" from="parameters" />
 
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
 
@@ -70,6 +70,8 @@
 	<html:hidden property="offset"/>
 	<html:hidden property="order"/>
 	<html:hidden property="direction"/>
+	<input type="hidden" name="from" value="${from}" />
+
 	<mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
 
 	<table>
@@ -143,7 +145,7 @@
 		   <td style="white-space: nowrap;">
 
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&fromModule=frommodule"
+         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&from=${from}"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
@@ -155,7 +157,7 @@
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>
          </c:if>
-          <a href="../subsite/SubSiteDelete.do?number=${nodenumber}"
+          <a href="../subsite/SubSiteDelete.do?number=${nodenumber}&from=${from}"
 		       title="<fmt:message key="pp.content.delete" />"><img src="../gfx/icons/delete.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.delete" />"
 		                                                       alt="<fmt:message key="pp.content.delete" />"/></a>
