@@ -49,12 +49,8 @@ public class SubSiteAction extends PagerAction {
        // Initialize
 	   SearchForm searchForm = (SearchForm) form;
 	   
-      String subsite = (String) request.getSession().getAttribute("subsite");
-      request.getSession().removeAttribute("subsite");
+      String subsite = request.getParameter("subsite");
       String from = request.getParameter("from");
-      if (StringUtils.isBlank(subsite) || !cloud.hasNode(subsite)) {
-         subsite = request.getParameter("subsite");
-      }
       
       /* Purpose of this file
        * - retrieve list of subsites
