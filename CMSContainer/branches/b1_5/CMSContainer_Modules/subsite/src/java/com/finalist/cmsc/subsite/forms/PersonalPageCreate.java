@@ -51,11 +51,11 @@ public class PersonalPageCreate extends MMBaseFormlessAction {
             SubSiteUtil.createPersonalPageContentChannel(newPage);
             
             addToRequest(request, "showsubsite", ewnodelastedited);
-            ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?from=" + from);
+            ActionForward ret = new ActionForward(mapping.findForward(SUCCESS).getPath() + "?from=" + from + "&subsite=" + parentpage);
             return ret;
          }
          request.getSession().removeAttribute("parentpage");
-         ActionForward ret = new ActionForward(mapping.findForward(CANCEL).getPath() + "?from=" + from);
+         ActionForward ret = new ActionForward(mapping.findForward(CANCEL).getPath() + "?from=" + from + "&subsite=" + parentpage);
          return ret;
       }
    }
