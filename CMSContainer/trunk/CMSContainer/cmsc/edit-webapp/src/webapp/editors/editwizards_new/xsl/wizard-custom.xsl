@@ -11,12 +11,4 @@
 
   <xsl:template name="extrajavascript-custom">
   </xsl:template>
-
-  <xsl:template match="command[@name=&apos;pagegroupselector&apos;]" mode="listnewbuttons">
-    <td class="listnew">
-      <a href="#" onclick="select_fid='{../@fid}';select_did='{../command[@name=&apos;add-item&apos;]/@value}';window.open('../../../../editors/secure/selectGroup.jsp', 'pagegroupselector', 'width=350,height=500,status=yes,toolbar=no,titlebar=no,scrollbars=yes,resizable=yes,menubar=no');" class="button">
-        <xsl:call-template name="prompt_search"/>
-      </a>
-    </td>
-  </xsl:template>
 </xsl:stylesheet>
