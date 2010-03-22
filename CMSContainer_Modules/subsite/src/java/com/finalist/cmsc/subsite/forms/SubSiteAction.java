@@ -21,6 +21,7 @@ import org.mmbase.bridge.util.Queries;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.storage.search.Constraint;
 import org.mmbase.storage.search.FieldValueDateConstraint;
+import org.mmbase.storage.search.SortOrder;
 import org.mmbase.storage.search.StepField;
 import org.mmbase.storage.search.implementation.BasicFieldValueDateConstraint;
 import org.mmbase.util.logging.Logger;
@@ -121,6 +122,9 @@ public class SubSiteAction extends PagerAction {
       searchForm.setKeywords(resultsPerPage);
       
       String direction = null;
+      if(SortOrder.ORDER_DESCENDING == searchForm.getDirection()){
+         direction = "DOWN";
+      }
       NodeQuery query = createLinkedElementsQuery(subsiteNode, order, direction, offset*maxNumber, maxNumber, -1, -1, -1);
 
       // Add the title constraint:
