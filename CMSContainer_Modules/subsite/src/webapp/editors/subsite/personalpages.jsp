@@ -37,7 +37,7 @@
 <mm:import externid="offset" jspvar="offset" vartype="Integer">0</mm:import>
 <mm:import externid="returnurl"/>
 
-<mm:import externid="subsite" from="parameters" />
+<mm:import externid="subsite" jspvar="subsiteold" from="parameters" />
 <mm:import externid="from" from="parameters" />
 
 <mm:cloud jspvar="cloud" loginpage="../../editors/login.jsp">
@@ -79,7 +79,7 @@
         <tr>
            <td style="width:105px"><fmt:message key="subsite.name" />:</td>
            <td>
-              <cmsc:select var="subsite" onchange="document.forms[0].submit();">
+              <cmsc:select var="subsite" default="${subsiteold}" onchange="document.forms[0].submit();">
               <mm:listnodes type="subsite" orderby="title">
                  <mm:field name="number" id="subsitenumber" write="false" vartype="String" />
                  <cmsc:option value="${subsitenumber}" name="${_node.title}" />
@@ -145,7 +145,15 @@
 		   <td style="white-space: nowrap;">
 
 		   <mm:field name="number"  write="false" id="nodenumber">
-         <a href="../subsite/SubSiteEdit.do?number=${nodenumber}&from=${from}"
+		<c:if test="${not empty subsiteold}" >
+			<c:set var="editPath" value="../subsite/SubSiteEdit.do?number=${nodenumber}&subsite=${subsiteold}&from=${from}" />
+			<c:set var="deletePath" value="../subsite/SubSiteDelete.do?number=${nodenumber}&subsite=${subsiteold}&from=${from}" />
+		</c:if>
+		<c:if test="${empty subsiteold}" >
+			<c:set var="editPath" value="../subsite/SubSiteEdit.do?number=${nodenumber}&subsite=${subsite}&from=${from}" />
+			<c:set var="deletePath" value="../subsite/SubSiteDelete.do?number=${nodenumber}&subsite=${subsite}&from=${from}" />
+		</c:if>
+         <a href="${editPath}"
 		       title="<fmt:message key="pp.content.edit" />"><img src="../gfx/icons/edit.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.edit" />"
 		                                                       alt="<fmt:message key="pp.content.edit" />"/></a>
@@ -157,7 +165,7 @@
                                                              title="<fmt:message key="pp.content.preview" />"
                                                              alt="<fmt:message key="pp.content.preview" />"/></a>
          </c:if>
-          <a href="../subsite/SubSiteDelete.do?number=${nodenumber}&from=${from}"
+          <a href="${deletePath}"
 		       title="<fmt:message key="pp.content.delete" />"><img src="../gfx/icons/delete.png" width="16" height="16"
 		                                                       title="<fmt:message key="pp.content.delete" />"
 		                                                       alt="<fmt:message key="pp.content.delete" />"/></a>
