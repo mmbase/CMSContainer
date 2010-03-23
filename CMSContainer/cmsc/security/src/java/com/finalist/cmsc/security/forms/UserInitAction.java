@@ -67,7 +67,7 @@ public class UserInitAction extends MMBaseAction {
          Node rankNode = iter.nextNode();
          String name = rankNode.getStringValue("name");
          String number = rankNode.getStringValue("number");
-         if("basic user".equalsIgnoreCase(name)){
+         if("basic user".equalsIgnoreCase(name) && userForm.getId() == -1){
             userForm.setRank(number);
          }
          userForm.addRank(number, name);
