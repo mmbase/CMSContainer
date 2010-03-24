@@ -12,6 +12,7 @@ package com.finalist.cmsc.portalImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -68,6 +69,8 @@ public class PortalErrorServlet extends PortalServlet {
 
    private static final String SIMPLE_404 = "(.*/editors/.*[.](jpg$|gif$|png$|css$|js$|ico$))|robots.txt";
 
+   private static final Pattern FILE_PATTERN = Pattern.compile(".*?\\D((?:session=.*?\\+)?\\d+(?:\\+.+?)?)(/.*)?");
+
    private Pattern excludePattern = Pattern.compile(SIMPLE_404);
 
    protected static final String[] vars = { ERROR_STATUS_CODE, ERROR_EXCEPTION_TYPE,
@@ -120,6 +123,22 @@ public class PortalErrorServlet extends PortalServlet {
                }
             }
             else {
+                if(statusCode == 404 && !ServerUtil.useServerName()) {
+                  Matcher m = FILE_PATTERN.matcher(path);
+                  String redirectPath = "";   
+                  if (m.matches()) {                  
+                     if (request.getContextPath() != null) {
+                        redirectPath = request.getContextPath()+"/error/nopreview.jsp";
+                     }
+                     else {
+                        redirectPath = "/error/nopreview.jsp";
+                     } 
+                  }
+                  if(!"".equals(redirectPath)) {
+                     response.sendRedirect(redirectPath);
+                     return;
+                  }
+               }
                List<Site> sites = SiteManagement.getSites();
                for (Site site2 : sites) {
                   if (SiteManagement.isNavigation(site2.getUrlfragment() + PATH_SP + statusCode)) {
