@@ -2,6 +2,7 @@
 <classpath>
 <!--  From CORE -->  
    <classpathentry kind="src" path="CMSContainer/cmsc/contentrepository/src/java" />
+   <classpathentry kind="src" path="CMSContainer/builderConverter/src/java"/>
    <classpathentry kind="src" path="CMSContainer/cmsc/edit-webapp/src/java" />
    <classpathentry kind="src" path="CMSContainer/cmsc/maintenance/src/java" />
    <classpathentry kind="src" path="CMSContainer/cmsc/portal/src/java" />
@@ -275,6 +276,7 @@
 	<classpathentry kind="var" path="M2_REPO/jaxb/jaxb-impl/20060426/jaxb-impl-20060426.jar"/>
 	<classpathentry kind="var" path="M2_REPO/jaxb/jsr173_1.0_api/20060426/jsr173_1.0_api-20060426.jar"/>
    
+	<classpathentry kind="var" path="M2_REPO/plexus/plexus-utils/1.0.1/plexus-utils-1.0.1.jar"/>
    
    <classpathentry kind="output" path="classes" />
 </classpath>
