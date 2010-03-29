@@ -123,7 +123,14 @@ public class PortalErrorServlet extends PortalServlet {
                }
             }
             else {
-                if(statusCode == 404 && !ServerUtil.useServerName()) {
+               List<Site> sites = SiteManagement.getSites();
+               for (Site site2 : sites) {
+                  if (SiteManagement.isNavigation(site2.getUrlfragment() + PATH_SP + statusCode)) {
+                     errorPageSite = site2;
+                     break;
+                  }
+               }
+               if(statusCode == 404 && ServerUtil.isStaging() && !ServerUtil.useServerName()) {
                   Matcher m = FILE_PATTERN.matcher(path);
                   String redirectPath = "";   
                   if (m.matches()) {                  
@@ -137,13 +144,6 @@ public class PortalErrorServlet extends PortalServlet {
                   if(!"".equals(redirectPath)) {
                      response.sendRedirect(redirectPath);
                      return;
-                  }
-               }
-               List<Site> sites = SiteManagement.getSites();
-               for (Site site2 : sites) {
-                  if (SiteManagement.isNavigation(site2.getUrlfragment() + PATH_SP + statusCode)) {
-                     errorPageSite = site2;
-                     break;
                   }
                }
             }
