@@ -100,7 +100,6 @@
    </classpathentry>
    <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4-sources.jar" />
    <classpathentry kind="var" path="M2_REPO/antlr/antlr/2.7.2/antlr-2.7.2.jar" />
-   <classpathentry kind="var" path="M2_REPO/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar" />
    <classpathentry kind="var" path="M2_REPO/mmapps/cloudprovider/1.2/cloudprovider-1.2.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://mmapps.sourceforge.net/cloudprovider/apidocs/" />
@@ -153,7 +152,6 @@
          <attribute name="javadoc_location" value="http://ehcache.org/apidocs/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/net/sf/jsr107cache/jsr107cache/1.0/jsr107cache-1.0.jar" />
    <classpathentry kind="var" path="M2_REPO/junit/junit/4.4/junit-4.4.jar" sourcepath="M2_REPO/junit/junit/4.4/junit-4.4-sources.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc" />
@@ -179,40 +177,40 @@
    <classpathentry kind="var" path="M2_REPO/xalan/xalan/2.7.1/xalan-2.7.1.jar" sourcepath="M2_REPO/xalan/xalan/2.7.1/xalan-2.7.1-sources.jar" />
    <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04-sources.jar" />
    <classpathentry kind="var" path="M2_REPO/org/json/json/20070829/json-20070829.jar" />
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/maven/maven-mmbase-plugin/1.9-SNAPSHOT/maven-mmbase-plugin-1.9-SNAPSHOT.jar" />
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9-SNAPSHOT/mmbase-1.9-SNAPSHOT.jar" sourcepath="/M2_REPO/org/mmbase/mmbase/1.9-SNAPSHOT/mmbase-1.9-SNAPSHOT.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/maven/maven-mmbase-plugin/1.9.2-20091118/maven-mmbase-plugin-1.9.2-20091118.jar" />
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9.2-20091118/mmbase-1.9.2-20091118.jar" sourcepath="/M2_REPO/org/mmbase/mmbase/1.9.2-20091118/mmbase-1.9.2-20091118.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9-SNAPSHOT/mmbase-cloudcontext-1.9-SNAPSHOT-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9.2-20091118/mmbase-cloudcontext-1.9.2-20091118-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9-SNAPSHOT/mmbase-crontab-1.9-SNAPSHOT-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9.2-20091118/mmbase-crontab-1.9.2-20091118-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9-SNAPSHOT/mmbase-dove-1.9-SNAPSHOT.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9.2-20091118/mmbase-dove-1.9.2-20091118.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9-SNAPSHOT/mmbase-editwizard-1.9-SNAPSHOT-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9.2-20091118/mmbase-editwizard-1.9.2-20091118-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9-SNAPSHOT/mmbase-email-1.9-SNAPSHOT-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9.2-20091118/mmbase-email-1.9.2-20091118-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9-SNAPSHOT/mmbase-resources-1.9-SNAPSHOT-classes.jar" />
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-rmmci/1.9-SNAPSHOT/mmbase-rmmci-1.9-SNAPSHOT.jar" />
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9-SNAPSHOT/mmbase-taglib-1.9-SNAPSHOT-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9.2-20091118/mmbase-resources-1.9.2-20091118-classes.jar" />
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-rmmci/1.9.2-20091118/mmbase-rmmci-1.9.2-20091118.jar" />
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9.2-20091118/mmbase-taglib-1.9.2-20091118-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/" />
       </attributes>
@@ -238,10 +236,10 @@
   <classpathentry kind="var" path="M2_REPO/hibernate/hibernate-annotations/3.3.0.GA/hibernate-annotations-3.3.0.GA.jar"/>
   <classpathentry kind="var" path="M2_REPO/hibernate/hibernate-commons-annotations/3.0.0.GA/hibernate-commons-annotations-3.0.0.GA.jar"/>
   <classpathentry kind="var" path="M2_REPO/hibernate/hibernate-entitymanager/3.3.1.GA/hibernate-entitymanager-3.3.1.GA.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/lucene/lucene-core/2.1.0/lucene-core-2.1.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/lucene/lucene-misc/2.1.0/lucene-misc-2.1.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/luceus/luceus-core/0.42/luceus-core-0.42.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/luceus/luceus-server/0.42/luceus-server-0.42.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/lucene/lucene-misc/2.4.1/lucene-misc-2.4.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/luceus/luceus-core/0.43/luceus-core-0.43.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/luceus/luceus-server/0.43/luceus-server-0.43.jar"/>
   <classpathentry kind="var" path="M2_REPO/poi/poi/2.5.1-final-20040804/poi-2.5.1-final-20040804.jar" sourcepath="M2_REPO/poi/poi/2.5.1-final-20040804/poi-2.5.1-final-20040804-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/poi/poi-scratchpad/2.5.1-final-20040804/poi-scratchpad-2.5.1-final-20040804.jar"/>
   <classpathentry kind="var" path="M2_REPO/spiffyframework/spiffy-with_source-all/0.05/spiffy-with_source-all-0.05.jar"/>
@@ -259,7 +257,6 @@
   <classpathentry kind="var" path="M2_REPO/org/jasig/cas/cas-client-core/3.1.9/cas-client-core-3.1.9.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/santuario/xmlsec/1.4.0/xmlsec-1.4.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/ldap/spring-ldap-core/1.3.0.RELEASE/spring-ldap-core-1.3.0.RELEASE.jar"/>
-
 
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="classes"/>
