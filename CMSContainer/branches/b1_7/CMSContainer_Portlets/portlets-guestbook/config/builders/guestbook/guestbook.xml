@@ -37,7 +37,9 @@
                     <input>6</input>
                 </positions>
             </editor>
-            <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes"/>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+            	<default value="50"/>
+            </datatype>
         </field>
     </fieldlist>
 </builder>
