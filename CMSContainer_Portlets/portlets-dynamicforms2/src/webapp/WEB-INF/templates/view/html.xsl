@@ -9,11 +9,4 @@
 
   <xsl:include href="dynamicform/form.xsl"/>
 
-	<xsl:template match="/">
-		<style type="text/css">
-		  @import url('<xsl:value-of select="$URLCONTEXT"/>css/dynamicforms.css');
-		</style>
-		<xsl:apply-templates select="form"/>
-	</xsl:template>
-
 </xsl:stylesheet>

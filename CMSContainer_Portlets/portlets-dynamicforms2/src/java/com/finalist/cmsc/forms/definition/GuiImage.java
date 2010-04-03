@@ -6,25 +6,31 @@ import com.finalist.cmsc.util.XmlUtil;
 
 public final class GuiImage {
 
+   private String title;
+   private String url;
    private String status;
-   private String titleUlr;
 
    public void render(Element root) {
       toXml(root);
+   }
+   
+   public void setTitle(String title) {
+      this.title = title;
    }
 
    public void setStatus(String status) {
       this.status = status;
    }
 
-   public void setTitleUlr(String titleUlr) {
-      this.titleUlr = titleUlr;
+   public void setUrl(String titleUrl) {
+      this.url = titleUrl;
    }
 
    public Element toXml(Element root) {
       Element image = XmlUtil.createChild(root, "image");
-      XmlUtil.createAttribute(image, "steptitleurl", titleUlr);
-      XmlUtil.createAttribute(image, "stepstatus", status);
+      XmlUtil.createAttribute(image, "title", title);
+      XmlUtil.createAttribute(image, "url", url);
+      XmlUtil.createAttribute(image, "status", status);
       return image;
    }
 }

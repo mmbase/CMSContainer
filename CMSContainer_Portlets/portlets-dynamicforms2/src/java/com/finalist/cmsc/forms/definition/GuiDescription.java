@@ -1,5 +1,6 @@
 package com.finalist.cmsc.forms.definition;
 
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Element;
 
 import com.finalist.cmsc.util.XmlUtil;
@@ -30,9 +31,12 @@ public final class GuiDescription {
    }
 
    public Element toXml(Element root) {
-      Element description = XmlUtil.createChildText(root, "description", value);
-      XmlUtil.createAttribute(description, "title", title);
-      return description;
+      if (StringUtils.isNotBlank(value)) {
+         Element description = XmlUtil.createChildText(root, "description", value);
+         XmlUtil.createAttribute(description, "title", title);
+         return description;
+      }
+      return null;
    }
 
 }

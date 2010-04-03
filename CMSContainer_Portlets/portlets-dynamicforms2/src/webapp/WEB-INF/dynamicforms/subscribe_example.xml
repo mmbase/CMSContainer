@@ -2,7 +2,7 @@
   <processor class="logger" />
   <processor class="dynamicforms" />
   <processor class="email">
-    <property name="emailpath" value="aanmeldinfo[0]/email" />
+    <property name="emailpath" value="aanmeldinfo-0/email" />
     <property name="emailaddresses" value="info@cmscontainer.org" />
     <property name="subject" value="aanmelding" />
     <property name="senderaddress" value="info@cmscontainer.org" />
@@ -65,7 +65,7 @@
   </object>
   <form title="Aanmeldingsformulier">
     <formstep name="aanmeldinfo" path="aanmeldinfo" completedobjects="false">
-      <stepinfo title="Aanmeldingsformulier" subtitle="Ja, ik doe mee!">
+      <stepinfo title="Aanmeldingsformulier">
         <description title=""></description>
       </stepinfo>
       <section title="Persoonlijke gegevens">

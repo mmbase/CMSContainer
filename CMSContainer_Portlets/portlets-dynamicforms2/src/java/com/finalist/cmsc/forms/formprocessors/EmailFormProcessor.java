@@ -42,6 +42,7 @@ public class EmailFormProcessor extends FormProcessor {
    
    private String before;
    private String after;
+   private String fieldNameOnly = "false";
    
    @Override
    public String processForm(ValueObject valueObject) {
@@ -62,7 +63,17 @@ public class EmailFormProcessor extends FormProcessor {
 
    @Override
    protected void processField(String path, String value) {
-      formFieldData.append(path).append(" : ").append(value).append(lineSeparator).append(OUTLOOK_LINE_BREAK_PREVENTER);
+      String name;
+      if (Boolean.valueOf(fieldNameOnly)) {
+         name = ValuePathUtil.getFieldName(path);
+      }
+      else {
+         name = path;
+      }
+      if (value == null) {
+         value = "";
+      }
+      formFieldData.append(name).append(" : ").append(value).append(lineSeparator).append(OUTLOOK_LINE_BREAK_PREVENTER);
    }
    
    private boolean sendEmail(String userEmailAddress, String responseformData, DataSource attachment) {
@@ -223,5 +234,15 @@ public class EmailFormProcessor extends FormProcessor {
    
    public void setAfter(String after) {
       this.after = after;
+   }
+
+   
+   public String getFieldNameOnly() {
+      return fieldNameOnly;
+   }
+
+   
+   public void setFieldNameOnly(String fieldNameOnly) {
+      this.fieldNameOnly = fieldNameOnly;
    }
 }

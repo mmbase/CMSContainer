@@ -16,9 +16,9 @@ public final class DataField {
    private String title;
    private String datapattern;
    private DataType datatype;
-   private double max = Double.MAX_VALUE;
+   private double max = Double.NaN;
    private long maxlength = Long.MAX_VALUE;
-   private double min = Double.MIN_VALUE;
+   private double min = Double.NaN;
    private long minlength = 0;
    private String name;
    private List<Option> options = new ArrayList<Option>();

@@ -8,7 +8,6 @@ import com.finalist.cmsc.forms.value.*;
 
 public abstract class FormProcessor {
 
-   @SuppressWarnings("unused") 
    public String processForm(ValueObject valueObject, Map<String, List<String>> parameters) {
       return processForm(valueObject);
    }
@@ -37,7 +36,6 @@ public abstract class FormProcessor {
       }
    }
    
-   @SuppressWarnings("unused")
    protected void processField(String path, String value) {
       // nothing
    }
