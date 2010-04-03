@@ -5,90 +5,51 @@
 	<xsl:include href="dynamicform/navigation.xsl"/>
 	
 	<xsl:template match="formstep[@guitype='readonly']">
-			<xsl:if test="stepinfo/stepimages">
-			<p>
-				<xsl:for-each select="stepinfo/stepimages/image">
-					<xsl:choose>
-						<xsl:when test="@stepstatus = 'active' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_active.gif"/>
-						</xsl:when>
-						<xsl:when test="@stepstatus = 'finished' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_finished.gif"/>
-						</xsl:when>
-						<xsl:when test="@stepstatus = 'future' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_future.gif"/>
-						</xsl:when>
-						<xsl:when test="@stepstatus = 'lastactive' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_last_active.gif"/>
-						</xsl:when>
-						<xsl:when test="@stepstatus = 'lastfinished' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_last_finished.gif"/>
-						</xsl:when>
-						<xsl:when test="@stepstatus = 'lastfuture' ">
-							<img alt="" src="{$URLCONTEXT}gfx/dynamicforms/i_step_last_future.gif"/>
-						</xsl:when>
-					</xsl:choose>
-					<img alt="Stap 1" src="{@steptitleurl}"/>
-					<xsl:if test="@stepstatus = 'active' or @stepstatus = 'finished' or @stepstatus = 'future' ">
-						<br/>
-					</xsl:if>
+		<xsl:if test="stepinfo/images">
+			<ul class="stepinfo-images">
+				<xsl:for-each select="stepinfo/images/image">
+					<li class="stepimage-{@status}">
+						<img alt="{@title}" title="{@title}" src="{@url}"/>
+					</li>
 				</xsl:for-each>
-			</p>
+			</ul>
 		</xsl:if>
-		<p>
-		</p>
 		<xsl:for-each select="stepinfo/description">
-			<p>
-				<h4>
+			<p class="stepinfo-description">
+				<span class="stepinfo-description-title">
 					<xsl:value-of disable-output-escaping="yes" select="@title"/>
-				</h4>
+				</span>
 				<xsl:value-of disable-output-escaping="yes" select="."/>
 			</p>
 		</xsl:for-each>
-		<p> </p>
 		<xsl:choose>
 			<xsl:when test="list and not(section)">
-				<form name="{$NAMESPACE}form"  action="{$ACTIONURL}" method="post">
-					<xsl:value-of select="//default-form-params" disable-output-escaping="yes"/>
-          <input type="hidden" name="currentStep" id="currentStep" value="{@name}"/>
-          <input type="hidden" name="sequence" id="sequence" value="{@sequence}"/>
+				<form action="{$ACTIONURL}" method="post" id="{$NAMESPACE}form">
+					<div class="form-hidden-params">
+						<xsl:value-of select="//default-form-params" disable-output-escaping="yes"/>
+						<input type="hidden" name="currentStep" id="currentStep" value="{@name}"/>
+						<input type="hidden" name="sequence" id="sequence" value="{@sequence}"/>
+					</div>
 					<xsl:apply-templates select="list" mode="readonly"/>
 					<div class="cform">
 						<xsl:apply-templates select="navigation"/>
 					</div>
 				</form>
 			</xsl:when>
-			<xsl:when test="list and section">
-				<xsl:if test="stepinfo/@title and stepinfo/@title !='' ">
-					<div class="ctabletitle">
-						<xsl:value-of disable-output-escaping="yes" select="stepinfo/@title"/>
-					</div>
-				</xsl:if>
-				<div class="cform">
-					<form name="{$NAMESPACE}form" action="{$ACTIONURL}" method="post">
-						<xsl:value-of select="//default-form-params" disable-output-escaping="yes"/>
-            <input type="hidden" name="currentStep" id="currentStep" value="{@name}"/>
-            <input type="hidden" name="sequence" id="sequence" value="{@sequence}"/>
-						<xsl:apply-templates select="section | list" mode="readonly"/>
-						<xsl:apply-templates select="navigation"/>
-					</form>
-				</div>
-			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="stepinfo/@title and stepinfo/@title !='' ">
-					<div class="ctabletitle">
+					<div class="ctitle">
 						<xsl:value-of disable-output-escaping="yes" select="stepinfo/@title"/>
 					</div>
 				</xsl:if>
 				<div class="cform">
-					<form name="{$NAMESPACE}fomr" action="{$ACTIONURL}" method="post">
-						<xsl:value-of select="//default-form-params" disable-output-escaping="yes"/>
-            <input type="hidden" name="currentStep" id="currentStep" value="{@name}"/>
-            <input type="hidden" name="sequence" id="sequence" value="{@sequence}"/>
-						<fieldset>
-						<legend><span><xsl:value-of select="stepinfo/@subtitle"/></span></legend>
-						<xsl:apply-templates select="section" mode="readonly"/>
-						</fieldset>
+					<form action="{$ACTIONURL}" method="post" id="{$NAMESPACE}form">
+						<div class="form-hidden-params">
+							<xsl:value-of select="//default-form-params" disable-output-escaping="yes"/>
+							<input type="hidden" name="currentStep" id="currentStep" value="{@name}"/>
+							<input type="hidden" name="sequence" id="sequence" value="{@sequence}"/>
+						</div>
+						<xsl:apply-templates select="section | list" mode="readonly"/>
 						<xsl:apply-templates select="navigation"/>
 					</form>
 				</div>

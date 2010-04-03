@@ -9,11 +9,11 @@
     <xsl:param name="NAMESPACE" />
 
 	<xsl:template match="form">
-	 
+	<!--  
 	<style type="text/css">
 	  @import url('<xsl:value-of select="$URLCONTEXT"/>css/dynamicforms.css');
 	</style>
-	
+	 -->
 		<xsl:apply-templates select="formstep[@active='true' ]"/>
 	</xsl:template>
 </xsl:stylesheet>

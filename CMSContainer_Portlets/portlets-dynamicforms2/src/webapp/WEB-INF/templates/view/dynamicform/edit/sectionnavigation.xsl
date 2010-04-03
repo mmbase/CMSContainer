@@ -2,10 +2,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="navigation">
 		<xsl:for-each select="description">
-			<p>
-				<h4>
+			<p class="navigation-description">
+				<span class="navigation-description-title">
 					<xsl:value-of disable-output-escaping="yes" select="@title"/>
-				</h4>
+				</span>
 				<xsl:value-of disable-output-escaping="yes" select="."/>
 			</p>
 		</xsl:for-each>

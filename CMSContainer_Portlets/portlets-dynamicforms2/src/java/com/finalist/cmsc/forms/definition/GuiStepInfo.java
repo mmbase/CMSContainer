@@ -9,10 +9,9 @@ import com.finalist.cmsc.util.XmlUtil;
 
 public final class GuiStepInfo {
 
+   private String title;
    private GuiDescription description;
    private List<GuiImage> images = new ArrayList<GuiImage>();
-   public String subtitle;
-   public String title;
 
    public void addImage(GuiImage image) {
       images.add(image);
@@ -26,10 +25,6 @@ public final class GuiStepInfo {
       return images;
    }
 
-   public String getSubtitle() {
-      return subtitle;
-   }
-
    public String getTitle() {
       return title;
    }
@@ -37,23 +32,20 @@ public final class GuiStepInfo {
    public void render(Element root) {
       Element stepinfo = toXml(root);
       stepinfo.setAttribute("title", title);
-      stepinfo.setAttribute("subtitle", subtitle);
       if (description != null) {
          description.render(stepinfo);
       }
-      Element imagesElement = XmlUtil.createChild(stepinfo, "stepimages");
-      for (GuiImage image : images) {
-         image.render(imagesElement);
+      if (!images.isEmpty()) {
+         Element imagesElement = XmlUtil.createChild(stepinfo, "images");
+         for (GuiImage image : images) {
+            image.render(imagesElement);
+         }
       }
    }
 
 
    public void setDescription(GuiDescription description) {
       this.description = description;
-   }
-
-   public void setSubtitle(String subtitle) {
-      this.subtitle = subtitle;
    }
 
    public void setTitle(String title) {
