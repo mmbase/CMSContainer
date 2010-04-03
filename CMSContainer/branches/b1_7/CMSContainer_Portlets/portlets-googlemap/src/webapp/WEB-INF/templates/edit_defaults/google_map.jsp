@@ -13,29 +13,26 @@
 
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.address" />:</td>
-				<td><input type="text" name="address" value="${address}" /></td>
+				<td><cmsc:text var="address" name="param_address" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.info" />:</td>
-				<td><input type="text" name="info" value="${info}" /></td>
-			</tr>
+				<td><cmsc:text var="info" name="param_info" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.key" />:</td>
-				<td><input type="text" name="key" value="${key}" /></td>
+				<td><cmsc:text var="key" name="param_key" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.height" />:</td>
-				<td><cmsc:text var="height" /></td>
+				<td><cmsc:text var="height" name="param_height" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.width" />:</td>
-				<td><cmsc:text var="width" /></td>
+				<td><cmsc:text var="width" name="param_width" /></td>
 			</tr>
-	
 			<%-- Save button --%>
 			<c:import url="sections/savebutton.jsp" />
-			
 		</table>
 	</form>
 </div>
