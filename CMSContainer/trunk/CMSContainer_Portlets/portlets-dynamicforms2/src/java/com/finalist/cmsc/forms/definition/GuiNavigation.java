@@ -26,6 +26,10 @@ public class GuiNavigation {
       }
    }
 
+   public GuiDescription getDescription() {
+      return description;
+   }
+   
    public void setDescription(GuiDescription description) {
       this.description = description;
    }
@@ -34,4 +38,5 @@ public class GuiNavigation {
       Element navigation = XmlUtil.createChild(root, "navigation");
       return navigation;
    }
+
 }

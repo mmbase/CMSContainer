@@ -13,7 +13,8 @@ public final class GuiSection {
    private List<Object> fields = new ArrayList<Object>();
    private GuiNavigation navigation;
    private String title;
-
+   private GuiDescription description;
+   
    public void addField(GuiField field) {
       fields.add(field);
    }
@@ -37,6 +38,18 @@ public final class GuiSection {
       return title;
    }
 
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public GuiDescription getDescription() {
+      return description;
+   }
+   
+   public void setDescription(GuiDescription description) {
+      this.description = description;
+   }
+   
    public boolean isValid(ValueObject object) {
       boolean valid = true;
       for (Object field : fields) {
@@ -56,6 +69,9 @@ public final class GuiSection {
 
    public void render(Element root, ValueObject object, String namePath, boolean rendercompleted) {
       Element section = toXml(root);
+      if (description != null) {
+         description.render(section);
+      }
       for (Object field : fields) {
          if ((rendercompleted && object.isCompleted()) || !rendercompleted) {
             if (field instanceof GuiFieldset) {
@@ -69,10 +85,6 @@ public final class GuiSection {
       if (navigation != null) {
          navigation.render(section);
       }
-   }
-
-   public void setTitle(String title) {
-      this.title = title;
    }
 
    public Element toXml(Element root) {

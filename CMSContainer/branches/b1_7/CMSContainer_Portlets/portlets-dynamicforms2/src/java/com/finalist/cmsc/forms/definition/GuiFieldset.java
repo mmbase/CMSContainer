@@ -6,6 +6,7 @@ import java.util.List;
 import org.w3c.dom.Element;
 
 import com.finalist.cmsc.forms.validation.FieldsetValidator;
+import com.finalist.cmsc.forms.validation.ValidationError;
 import com.finalist.cmsc.forms.value.ValueObject;
 import com.finalist.cmsc.util.XmlUtil;
 

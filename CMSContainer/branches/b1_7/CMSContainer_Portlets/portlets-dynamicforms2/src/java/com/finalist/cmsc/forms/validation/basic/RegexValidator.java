@@ -2,6 +2,7 @@ package com.finalist.cmsc.forms.validation.basic;
 
 import java.util.regex.PatternSyntaxException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,7 +16,11 @@ public class RegexValidator extends FieldValidator {
    private String regexp;
 
    public RegexValidator(String datapattern) {
-      super("validator.regex.message");
+      this("validator.regex.message", datapattern);
+   }
+   
+   public RegexValidator(String key, String datapattern) {
+      super(key);
       if (datapattern == null) {
          Log.warn("No regular expression passed to validator!");
       }
@@ -26,20 +31,20 @@ public class RegexValidator extends FieldValidator {
     * @see com.finalist.cmsc.forms.validation.FieldValidator#validate(com.finalist.cmsc.forms.value.ValueField)
     */
    @Override
-   public boolean validate(ValueField field) {
-      // it's also possible to set the pattern as a property (defined in GuiField)
+   public final boolean validate(ValueField field) {
       if (regexp == null || "".equals(regexp)) {
          Log.error("Regular expression for validation is empty");
+         return false;
       }
 
-      if (!field.isRequired()) {
-         if (field.getStringValue() == null || "".equals(field.getStringValue())) {
-            return true;
+      if (field.isRequired()) {
+         if (StringUtils.isEmpty(field.getStringValue())) {
+            return false;
          }
       }
       else {
-         if (field.getStringValue() == null || "".equals(field.getStringValue())) {
-            return false;
+         if (StringUtils.isEmpty(field.getStringValue())) {
+            return true;
          }
       }
 

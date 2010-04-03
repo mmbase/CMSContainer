@@ -5,6 +5,7 @@
 	<xsl:include href="dynamicform/edit/hiddenfield.xsl"/>
 	<xsl:include href="dynamicform/readonly/fieldset.xsl"/>
 	<xsl:include href="dynamicform/readonly/sectionnavigation.xsl"/>
+	
 	<xsl:template match="section" mode="readonly">
 		<div>
 			<xsl:attribute name="class"><xsl:choose><xsl:when test="position() mod 2 = 0">roweven</xsl:when><xsl:when test="position() mod 2 = 1">rowodd</xsl:when></xsl:choose></xsl:attribute>
@@ -12,11 +13,11 @@
 				<xsl:apply-templates select="navigation" mode="readonly"/>
 				<h3><xsl:value-of select="@title"/></h3>
 			</div>
-			<p>
-        <table border="0" cellspacing="0" cellpadding="0">
-      		<xsl:apply-templates select="field | fieldset" mode="readonly"/>
-        </table>
-			</p>
+			<div>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<xsl:apply-templates select="field | fieldset" mode="readonly"/>
+				</table>
+			</div>
 		</div>
 	</xsl:template>
 </xsl:stylesheet>

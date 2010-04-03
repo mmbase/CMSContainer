@@ -49,7 +49,7 @@ public class ValidationError {
       if (params.isEmpty()) {
          return pattern;
       }
-      return MessageFormat.format(pattern, params);
+      return MessageFormat.format(pattern, params.toArray());
    }
    
 }

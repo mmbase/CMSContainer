@@ -13,6 +13,10 @@ public abstract class FieldsetValidator extends FieldValidator {
       super("validator.fieldset.message");
    }
 
+   public FieldsetValidator(String key) {
+      super(key);
+   }
+   
    /**
     * Validates the submitted values based on the specified configuration.
     * @param fields list of fields in the fieldset

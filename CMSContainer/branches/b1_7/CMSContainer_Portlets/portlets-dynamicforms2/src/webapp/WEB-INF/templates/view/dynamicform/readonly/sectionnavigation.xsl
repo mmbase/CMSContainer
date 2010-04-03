@@ -3,10 +3,12 @@
 	<xsl:template match="navigation" mode="readonly">
 			<xsl:apply-templates select="navitem" mode="readonly"/>
 	</xsl:template>
+	
 	<xsl:template match="navitem" mode="readonly">
 		<div class="{@class}">
-					<a class="tablelink" >
-				<xsl:attribute name="href">javascript:setstepvalue('');readonlysubmit();</xsl:attribute><xsl:value-of select="@title"/></a>
+			<a class="tablelink">
+				<xsl:attribute name="href">javascript:setstepvalue('');readonlysubmit();</xsl:attribute><xsl:value-of select="@title"/>
+			</a>
 		</div>
 	</xsl:template>
 </xsl:stylesheet>

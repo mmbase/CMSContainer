@@ -19,7 +19,7 @@ public class RequiredValidator extends FieldValidator {
       }
       if (field.getValue() != null) {
          if (field.getValue().getClass().isInstance(new String())) {
-            return !"".equals(field.getValue());
+            return !"".equals(field.getValue().toString().trim());
          }
          else
             return true;

@@ -27,7 +27,6 @@ public final class GuiField {
    private int rows = -1;
    private String title;
    private String tooltip;
-   private String tooltipname;
 
    private List<FieldValidator> validators = new ArrayList<FieldValidator>();
 
@@ -149,11 +148,6 @@ public final class GuiField {
       return tooltip;
    }
 
-
-   public String getTooltipname() {
-      return tooltipname;
-   }
-
    public boolean isRequired() {
       return dataField.isRequired();
    }
@@ -227,10 +221,6 @@ public final class GuiField {
       this.tooltip = tooltip;
    }
 
-   public void setTooltipname(String tooltipname) {
-      this.tooltipname = tooltipname;
-   }
-
    private Element toXml(Element root) {
       Element field = XmlUtil.createChild(root, "field");
       dataField.toXml(field);
@@ -245,7 +235,6 @@ public final class GuiField {
 
       if (StringUtils.isNotBlank(tooltip)) {
          Element tooltipElement = XmlUtil.createChild(field, "tooltip");
-         XmlUtil.createAttribute(tooltipElement, "name", tooltipname);
          XmlUtil.createText(tooltipElement, tooltip);
       }
 

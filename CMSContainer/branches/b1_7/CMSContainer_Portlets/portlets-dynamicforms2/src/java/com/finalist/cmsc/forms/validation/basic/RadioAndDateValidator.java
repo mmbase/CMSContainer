@@ -10,6 +10,10 @@ import com.finalist.cmsc.forms.value.ValueObject;
 
 public class RadioAndDateValidator extends FieldsetValidator {
 
+   public RadioAndDateValidator() {
+      super("validator.fieldset.radioanddate.message");
+   }
+
    /** 
     * @see com.finalist.cmsc.forms.validation.FieldValidator#validate(com.finalist.cmsc.forms.value.ValueField)
     */

@@ -10,35 +10,18 @@
 		<xsl:for-each select="optionlist/option">
 			<tr>
 				<xsl:if test="position() = 1">
-					<td class="label" rowspan="{$optioncount}">
-						<xsl:choose>
-							<xsl:when test="$errorMsg != ''">
-								<xsl:attribute name="class">redtext</xsl:attribute>
-								<img src="{$URLCONTEXT}gfx/dynamicforms/i_alert.gif" alt="Fout" width="14" height="14" border="0" align="absmiddle"/>&#160;
-				</xsl:when>
-							<xsl:otherwise>
-								<xsl:attribute name="class">label</xsl:attribute>
-							</xsl:otherwise>
-						</xsl:choose>
-						<label for="{$fieldname}">
-							<xsl:value-of select="$fieldtitle" disable-output-escaping="yes"/>
-							<xsl:if test="$fieldrequired = 'true' and $fieldtitle != '&#160;'">
-								<xsl:text> </xsl:text>*
-					</xsl:if>
-						</label>
-						<xsl:choose>
-							<xsl:when test="$errorMsg != ''">
-								<div class="redtext">
-									<xsl:value-of select="$errorMsg"/>
-								</div>
-							</xsl:when>
-						</xsl:choose>
-					</td>
+					<xsl:call-template name="field_label">
+						<xsl:with-param name="fieldtitle" select="$fieldtitle"/>
+						<xsl:with-param name="fieldname" select="$fieldname"/>
+						<xsl:with-param name="fieldrequired" select="$fieldrequired"/>
+						<xsl:with-param name="errorMsg" select="$errorMsg"/>
+						<xsl:with-param name="rowspan" select="$optioncount"/>
+					</xsl:call-template>
 				</xsl:if>
 				<td class="field">
 					<input name="{$fieldname}" id="{@value}" type="checkbox" value="{@value}">
 						<xsl:if test="@selected = 'true' ">
-							<xsl:attribute name="checked">true</xsl:attribute>
+							<xsl:attribute name="checked">checked</xsl:attribute>
 						</xsl:if>
 						<xsl:value-of select="."/>
 					</input>

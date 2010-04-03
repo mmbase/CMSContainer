@@ -17,23 +17,26 @@ import com.finalist.cmsc.forms.definition.DataObject;
 
 public class ValuePathUtil {
 
-   private static final char ITEM_END = ']';
-
-   private static final char ITEM_START = '[';
+   private static final char ITEM_SEP = '-';
 
    private static final char PATH_SEP = '/';
 
-   private static final char NAME_SEP = '|';
+   private static final char NAME_SEP = ':';
    
    public static ValueObject getObjectFromPath(ValueObject data, String searchpath) {
       return getObjectFromPath(data, searchpath, PATH_SEP);
    }
 
+   public static void main(String[] args) {
+      StringTokenizer tokenizer = new StringTokenizer("aanmeldinfo:0", String.valueOf('/'));
+      System.out.println(tokenizer.hasMoreTokens());
+   }
+   
    private static ValueObject getObjectFromPath(ValueObject data, String searchpath, char separator) {
       StringTokenizer tokenizer = new StringTokenizer(searchpath, String.valueOf(separator));
       if (tokenizer.hasMoreTokens()) {
          String name = tokenizer.nextToken();
-         if (name.indexOf(ITEM_START) > -1) name = name.substring(0, name.indexOf(ITEM_START));
+         if (name.indexOf(ITEM_SEP) > -1) name = name.substring(0, name.indexOf(ITEM_SEP));
          if (name.equals(data.getName())) {
             if (!tokenizer.hasMoreTokens()) return data;
 
@@ -41,10 +44,10 @@ public class ValuePathUtil {
             while (tokenizer.hasMoreTokens()) {
                name = tokenizer.nextToken();
                int position = 0;
-               if (name.endsWith(String.valueOf(ITEM_END))) {
-                  String positionstring = name.substring(name.indexOf(ITEM_START) + 1, name.indexOf(ITEM_END));
+               if (name.indexOf(ITEM_SEP) > -1) {
+                  String positionstring = name.substring(name.indexOf(ITEM_SEP) + 1);
                   position = Integer.parseInt(positionstring);
-                  name = name.substring(0, name.indexOf(ITEM_START));
+                  name = name.substring(0, name.indexOf(ITEM_SEP));
                }
 
                result = result.getObject(name, position);
@@ -70,6 +73,14 @@ public class ValuePathUtil {
       return getFieldFromPath(data, formname, PATH_SEP);
    }
    
+   public static String getFieldName(String formname) {
+      int fieldIndex = formname.lastIndexOf(NAME_SEP);
+      if(fieldIndex > -1) {
+         return formname.substring(fieldIndex + 1);
+      }
+      return formname;
+   }
+   
    private static ValueField getFieldFromPath(ValueObject data, String formname, char separator) {
       int fieldIndex = formname.lastIndexOf(separator);
       if(fieldIndex > -1) {
@@ -87,7 +98,7 @@ public class ValuePathUtil {
       StringTokenizer tokenizer = new StringTokenizer(searchpath, String.valueOf(PATH_SEP));
       if (tokenizer.hasMoreTokens()) {
          String name = tokenizer.nextToken();
-         if (name.indexOf(ITEM_START) > -1) name = name.substring(0, name.indexOf(ITEM_START));
+         if (name.indexOf(ITEM_SEP) > -1) name = name.substring(0, name.indexOf(ITEM_SEP));
          if (name.equals(data.getName())) {
             if (!tokenizer.hasMoreTokens()) {
                data.deleteObjects();
@@ -98,11 +109,10 @@ public class ValuePathUtil {
             while (tokenizer.hasMoreTokens()) {
                name = tokenizer.nextToken();
                int position = 0;
-               if (name.endsWith(String.valueOf(ITEM_END))) {
-                  String positionstring = name.substring(name.indexOf(ITEM_START) + 1, name
-                        .indexOf(ITEM_END));
+               if (name.indexOf(ITEM_SEP) > -1) {
+                  String positionstring = name.substring(name.indexOf(ITEM_SEP) + 1);
                   position = Integer.parseInt(positionstring);
-                  name = name.substring(0, name.indexOf(ITEM_START));
+                  name = name.substring(0, name.indexOf(ITEM_SEP));
                }
 
                resultList = result.getList(name);
@@ -157,7 +167,7 @@ public class ValuePathUtil {
          if (name.equals(object.getName())) {
             ValueObject result = object;
             DataObject dataObject = object.getDataObject();
-            createdPath = name + ITEM_START + "0" + ITEM_END;
+            createdPath = name + ITEM_SEP + '0';
             while (tokenizer.hasMoreTokens()) {
                name = tokenizer.nextToken();
                DataObject dataObject2 = dataObject.getObject(name);
@@ -167,7 +177,7 @@ public class ValuePathUtil {
                }
                ValueObject newValueObject = new ValueObject(dataObject2);
                result.addObject(newValueObject);
-               createdPath += PATH_SEP + name + ITEM_START + (result.getList(name).size() - 1) + ITEM_END;
+               createdPath += PATH_SEP + name + ITEM_SEP + (result.getList(name).size() - 1);
                result = newValueObject;
                dataObject = dataObject2;
             }
@@ -180,8 +190,8 @@ public class ValuePathUtil {
       if (path == null || "".equals(path)) {
          return namePath;
       }
-      if (!namePath.endsWith(String.valueOf(ITEM_END))) {
-         namePath += ITEM_START + "0" + ITEM_END;
+      if (namePath.indexOf(ITEM_SEP) < 0) {
+         namePath += ITEM_SEP + "0";
       }
       if (path.startsWith(namePath)) {
          return path.replace(PATH_SEP, NAME_SEP);
@@ -192,7 +202,7 @@ public class ValuePathUtil {
    }
 
    public static String createNamePath(String namePath, String path, int i) {
-      return createNamePath(namePath, path) + ITEM_START + i + ITEM_END;
+      return createNamePath(namePath, path) + ITEM_SEP + i;
    }
 
    public static String getParent(String path) {
