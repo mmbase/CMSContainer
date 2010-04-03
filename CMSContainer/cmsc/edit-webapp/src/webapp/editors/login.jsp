@@ -40,7 +40,7 @@ function setFocusOnFirstInput() {
 	<cmscedit:sideblock title="login.title">
       &nbsp;
 <!-- restricted url: <mm:write referid="referrer" />  -->
-      <form method="post" action="<mm:url page='/editors/' />" target="_top">
+      <form method="post" action="<mm:url page='/editors/index.jsp' />" target="_top">
          <input type="hidden" name="command" value="login" />
          <input type="hidden" name="cloud" value="mmbase" /><!-- also default -->
          <input type="hidden" name="authenticate" value="name/password" />
