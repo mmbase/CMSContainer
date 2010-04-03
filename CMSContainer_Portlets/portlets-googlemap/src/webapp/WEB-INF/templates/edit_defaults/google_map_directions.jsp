@@ -12,12 +12,20 @@
 			<c:import url="sections/viewselector.jsp" />
 
 			<tr>
-				<td colspan="2"><fmt:message key="edit_defaults.address" />:</td>
-				<td><cmsc:text var="address" name="param_address" /></td>
+				<td colspan="2"><fmt:message key="edit_defaults.addressFrom" />:</td>
+				<td><cmsc:text var="addressFrom" name="param_addressFrom" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><fmt:message key="edit_defaults.info" />:</td>
-				<td><cmsc:text var="info" name="param_info" /></td>
+				<td colspan="2"><fmt:message key="edit_defaults.infoFrom" />:</td>
+				<td><cmsc:text var="infoFrom" name="param_infoFrom" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><fmt:message key="edit_defaults.addressTo" />:</td>
+				<td><cmsc:text var="addressTo" name="param_addressTo" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><fmt:message key="edit_defaults.infoTo" />:</td>
+				<td><cmsc:text var="infoTo" name="param_infoTo" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><fmt:message key="edit_defaults.key" />:</td>
@@ -31,6 +39,15 @@
 				<td colspan="2"><fmt:message key="edit_defaults.width" />:</td>
 				<td><cmsc:text var="width" name="param_width" /></td>
 			</tr>
+			<tr>
+				<td colspan="2"><fmt:message key="edit_defaults.heightDirections" />:</td>
+				<td><cmsc:text var="heightDirections" name="param_heightDirections" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><fmt:message key="edit_defaults.widthDirections" />:</td>
+				<td><cmsc:text var="widthDirections" name="param_widthDirections" /></td>
+			</tr>
+			
 			<%-- Save button --%>
 			<c:import url="sections/savebutton.jsp" />
 		</table>
