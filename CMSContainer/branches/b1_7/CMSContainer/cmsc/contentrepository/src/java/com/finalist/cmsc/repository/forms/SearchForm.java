@@ -21,6 +21,7 @@ public class SearchForm extends PagerForm {
    private String search = "true";
    private String parentchannelpath = "";
    private String index = "";
+   private String workflowstate = "0";
 
 
    public String getContenttypes() {
@@ -189,5 +190,16 @@ public class SearchForm extends PagerForm {
    public String getIndex() {
       return index;
    }
+   
+   
+   public String getWorkflowstate() {
+       return workflowstate;
+    }
+
+   
+    public void setWorkflowstate(String workflowstate) {
+       this.workflowstate = workflowstate;
+    }
+
 
 }
