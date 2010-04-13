@@ -200,6 +200,4 @@ public class SearchForm extends PagerForm {
     public void setWorkflowstate(String workflowstate) {
        this.workflowstate = workflowstate;
     }
-
-
 }

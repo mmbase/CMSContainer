@@ -8,8 +8,14 @@
 %><%@ page import="com.finalist.cmsc.security.SecurityUtil"
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html:html xhtml="true">
 
+<!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
+<c:set var="hasWorkflow" value="false"/>
+<mm:haspage page="/editors/workflow">
+   <c:set var="hasWorkflow" value="true"/>
+</mm:haspage>
+
+<html:html xhtml="true">
 <mm:import externid="action">search</mm:import><%-- either: search, link, of select --%>
 <mm:import externid="mode" id="mode">basic</mm:import>
 <mm:import externid="returnurl"/>
@@ -235,6 +241,21 @@
                            <td><fmt:message key="searchform.number" /></td>
                            <td><html:text style="width:145px" property="objectid"/></td>
                         </tr>
+                         <c:if test="${hasWorkflow}">
+                           <tr height="31px">
+                              <td><fmt:message key="searchform.workflowstate" /></td>
+                              <td>
+                                 <html:select style="width:145px" property="workflowstate" size="1">
+                                    <html:option value="0"> - </html:option>
+                                    <html:option value="1"><fmt:message key="asset.status.finished" /></html:option>
+                                    <html:option value="2"><fmt:message key="asset.status.approved" /></html:option>
+                                    <html:option value="3"><fmt:message key="asset.status.published" /></html:option>
+                                    <html:option value="4"><fmt:message key="asset.status.onlive" /></html:option>
+                                 </html:select>
+                              </td>
+                              <td colspan="2">&nbsp;</td>
+                           </tr>
+                         </c:if>
                         <tr>
                            <td></td>
                            <td></td>
@@ -366,12 +387,6 @@
       </c:if>
    </select>
    </div>
-
-<!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
-<c:set var="hasWorkflow" value="false"/>
-<mm:haspage page="/editors/workflow">
-   <c:set var="hasWorkflow" value="true"/>
-</mm:haspage>
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">

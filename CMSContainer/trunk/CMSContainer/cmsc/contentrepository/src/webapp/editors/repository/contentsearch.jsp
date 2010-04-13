@@ -8,6 +8,13 @@
 %><%@ page import="net.sf.mmapps.modules.cloudprovider.CloudProviderFactory" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
+<c:set var="hasWorkflow" value="false"/>
+<mm:haspage page="/editors/workflow">
+   <c:set var="hasWorkflow" value="true"/>
+</mm:haspage>
+
 <html:html xhtml="true">
 <cmscedit:head title="search.title">
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
@@ -274,6 +281,21 @@
                         <td><fmt:message key="searchform.number" /></td>
                         <td><html:text style="width:145px" property="objectid"/></td>
                      </tr>
+                     <c:if test="${hasWorkflow}">
+                       <tr height="31px">
+                          <td><fmt:message key="searchform.workflowstate" /></td>
+                          <td>
+                             <html:select style="width:145px" property="workflowstate" size="1">
+                                <html:option value="0"> - </html:option>
+                                <html:option value="1"><fmt:message key="content.status.finished" /></html:option>
+                                <html:option value="2"><fmt:message key="content.status.approved" /></html:option>
+                                <html:option value="3"><fmt:message key="content.status.published" /></html:option>
+                                <html:option value="4"><fmt:message key="content.status.onlive" /></html:option>
+                             </html:select>
+                          </td>
+                          <td colspan="2">&nbsp;</td>
+                       </tr>
+                     </c:if>
                      <tr>
                         <td></td>
                         <td></td>
@@ -387,12 +409,6 @@
 
    <div class="ruler_green"><div><fmt:message key="searchform.results" /></div></div>
    <div class="body">
-
-<!-- we check to see if we have workflow, this is done by looking if the editors for the workflow are on the HD -->
-<c:set var="hasWorkflow" value="false"/>
-<mm:haspage page="/editors/workflow">
-   <c:set var="hasWorkflow" value="true"/>
-</mm:haspage>
 
    <%-- Now print if no results --%>
    <mm:isempty referid="results">

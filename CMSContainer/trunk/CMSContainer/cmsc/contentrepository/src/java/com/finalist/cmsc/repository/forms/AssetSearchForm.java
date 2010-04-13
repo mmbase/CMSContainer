@@ -20,6 +20,7 @@ public class AssetSearchForm extends PagerForm {
    private String parentchannelpath = "";
    private String searchShow = "list";
    private String insertAsset = "insertAsset";
+   private String workflowstate = "0";
    
    public String getAssettypes() {
       return assettypes;
@@ -148,4 +149,14 @@ public class AssetSearchForm extends PagerForm {
    public String getInsertAsset() {
       return insertAsset;
    }
+
+
+   public String getWorkflowstate() {
+       return workflowstate;
+    }
+
+   
+    public void setWorkflowstate(String workflowstate) {
+       this.workflowstate = workflowstate;
+    }
 }
