@@ -149,4 +149,14 @@ public class AssetSearchForm extends PagerForm {
    public String getInsertAsset() {
       return insertAsset;
    }
+
+
+   public String getWorkflowstate() {
+       return workflowstate;
+    }
+
+   
+    public void setWorkflowstate(String workflowstate) {
+       this.workflowstate = workflowstate;
+    }
 }
