@@ -11,11 +11,6 @@
             <prompt xml:lang="nl">Naam</prompt>
             <prompt xml:lang="zh">关键字</prompt>
         </field>
-        <field ftype="data" name="type">
-            <prompt xml:lang="en">Type</prompt>
-            <prompt xml:lang="nl">Type</prompt>
-            <prompt xml:lang="zh">类型</prompt>
-        </field>
         <field ftype="startwizard" wizardname="config/portletparameteroption/portletparameteroption" inline="true" />
     </item>
 

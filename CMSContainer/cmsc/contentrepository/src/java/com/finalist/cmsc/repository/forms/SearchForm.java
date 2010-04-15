@@ -191,4 +191,14 @@ public class SearchForm extends PagerForm {
       return index;
    }
 
+
+   public String getWorkflowstate() {
+       return workflowstate;
+    }
+
+   
+    public void setWorkflowstate(String workflowstate) {
+       this.workflowstate = workflowstate;
+    }
+
 }
