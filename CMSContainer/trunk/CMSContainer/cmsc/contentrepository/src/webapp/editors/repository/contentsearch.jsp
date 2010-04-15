@@ -281,7 +281,6 @@
                         <td><fmt:message key="searchform.number" /></td>
                         <td><html:text style="width:145px" property="objectid"/></td>
                      </tr>
-<%--
                      <c:if test="${hasWorkflow}">
                        <tr height="31px">
                           <td><fmt:message key="searchform.workflowstate" /></td>
@@ -297,7 +296,6 @@
                           <td colspan="2">&nbsp;</td>
                        </tr>
                      </c:if>
---%>
                      <tr>
                         <td></td>
                         <td></td>
