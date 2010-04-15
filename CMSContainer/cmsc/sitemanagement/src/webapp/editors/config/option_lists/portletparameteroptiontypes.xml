@@ -5,8 +5,4 @@
         <prompt xml:lang="nl">Textbox</prompt>
         <prompt xml:lang="en">Textbox</prompt>
     </option>
-    <option id="2">
-        <prompt xml:lang="nl">Keuzelijst</prompt>
-        <prompt xml:lang="en">Select</prompt>
-    </option>
 </optionlist>
