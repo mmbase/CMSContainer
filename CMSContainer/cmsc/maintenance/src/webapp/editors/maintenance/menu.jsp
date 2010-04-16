@@ -96,6 +96,11 @@
          <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
          <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
       </li>
+     <li class="advancedpublish">
+         <c:url var="supportcleanerUrl" value="supportcleaner.jsp"/>
+         <a href="${supportcleanerUrl}" target="rightpane"><fmt:message key="maintenance.supportcleaner" /></a>
+      </li>
+
          
 		<cmsc:hasfeature name="workflowitem">
         <li class="workflow">
