@@ -49,6 +49,9 @@
 			
 			<%-- Click to page options --%>
 			<c:import url="sections/clicktopage.jsp" />
+            
+			<%-- Parameters --%>
+			<c:import url="sections/portletparameters.jsp" />
 			
 			<%-- Save button --%>
 			<c:import url="sections/savebutton.jsp" />

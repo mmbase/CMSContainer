@@ -9,7 +9,10 @@
    <action include="config/multiportletdefinition/delete_multiportletdefinition.xml"/>
    <action include="config/multiportletdefinition/load_multiportletdefinition.xml"/>
 
-   <lists include="config/option_lists/all_optionlists.xml"/>
+    <lists include="config/option_lists/all_optionlists.xml" />
+    <lists>
+        <optionlist include="config/option_lists/portletparameteroptiontypes.xml" />
+    </lists>
 
    <steps>
       <step form-schema="edit_multiportletdefinition"/>
