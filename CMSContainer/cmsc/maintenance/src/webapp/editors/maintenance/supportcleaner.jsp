@@ -9,7 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml/DTD/transitional.dtd">
 <html xmlns="http://www.w3.org/TR/xhtml">
         <head>
-            <title>Cleaner</title>
+            <title>Support cleaner</title>
             <meta http-equiv="pragma" value="no-cache" />
             <meta http-equiv="expires" value="0" />
             <link href="../style.css" type="text/css" rel="stylesheet" />
@@ -26,16 +26,20 @@
                     <%-- Update URL fragments --%>
                     <mm:listnodes type="site">
                         <mm:field name="title" write="false" jspvar="title" />
-                        <mm:import externid="${_node.number}_urlfragment" from="parameters" id="urlfragment" />
+                        <mm:import externid="${_node.number}_urlfragment" from="parameters" id="urlfragment" reset="true" />
                         <mm:present referid="urlfragment">
-                            <mm:setfield name="urlfragment">${urlfragment}</mm:setfield>
-                            <p>Set URL fragment of ${title} to ${urlfragment}</p>
+                            <c:if test="${not empty urlfragment}">
+                                <mm:setfield name="urlfragment">${urlfragment}</mm:setfield>
+                                <p>Set URL fragment of ${title} to ${urlfragment}</p>
+                            </c:if>
                         </mm:present>
         
-                        <mm:import externid="${_node.number}_stagingfragment" from="parameters" id="stagingfragment" />
+                        <mm:import externid="${_node.number}_stagingfragment" from="parameters" id="stagingfragment" reset="true" />
                         <mm:present referid="stagingfragment">
-                            <mm:setfield name="stagingfragment">${stagingfragment}</mm:setfield>
-                            <p>Set staging fragment of ${title} to ${stagingfragment}</p>
+                            <c:if test="${not empty stagingfragment}">
+                                <mm:setfield name="stagingfragment">${stagingfragment}</mm:setfield>
+                                <p>Set staging fragment of ${title} to ${stagingfragment}</p>
+                            </c:if>
                         </mm:present>
                     </mm:listnodes>
         
@@ -53,12 +57,12 @@
                 </mm:present>
                 
                 <%-- List all sites --%>
-                <form method="post" action="cleaner.jsp" name="save">
+                <form method="post" action="supportcleaner.jsp" name="save">
                     <h3>URL's</h3>
                     <table>
                         <mm:listnodes type="site">
-                            <mm:import externid="${_node.number}_urlfragment" from="parameters" id="urlfragment" />
-                            <mm:import externid="${_node.number}_stagingfragment" from="parameters" id="stagingfragment" />
+                            <mm:import externid="${_node.number}_urlfragment" from="parameters" id="urlfragment" reset="true" />
+                            <mm:import externid="${_node.number}_stagingfragment" from="parameters" id="stagingfragment" reset="true" />
                             <tr>
                                 <th colspan="3" align="left" colspan="2"><mm:field name="title" />
                                 </td>
