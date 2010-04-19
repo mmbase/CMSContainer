@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <builder extends="object" maintainer="finalist.com" name="portletparameter" version="1" xmlns="http://www.mmbase.org/xmlns/builder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mmbase.org/xmlns/builder http://www.mmbase.org/xmlns/builder.xsd">
     <names>
-        <singular xml:lang="nl">portletparameter</singular>
-        <singular xml:lang="en">portletparameter</singular>
-        <singular xml:lang="zh">portlet参数</singular>
-        <plural xml:lang="nl">portletparameter</plural>
-        <plural xml:lang="en">portletparameter</plural>
-        <plural xml:lang="zh">portlet参数</plural>
+        <singular xml:lang="nl">portletparameteroption</singular>
+        <singular xml:lang="en">portletparameteroption</singular>
+        <singular xml:lang="zh">portlet参数option</singular>
+        <plural xml:lang="nl">portletparameteroptions</plural>
+        <plural xml:lang="en">portletparameteroptions</plural>
+        <plural xml:lang="zh">portlet参数options</plural>
     </names>
     <fieldlist>
         <field name="key">
