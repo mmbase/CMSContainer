@@ -41,7 +41,7 @@
 </mm:present>
 
 <mm:present referid="action">
-	<mm:url page="/editors/repository/SearchInitAction.do" id="contenturl" write="false" >
+	<mm:url page="/editors/repository/ContentSearchAction.do" id="contenturl" write="false" >
 		<mm:param name="action" value="${action}" />
 		<mm:param name="position" value="${position}" />
 		<mm:param name="title" value="${initsearchtext}" />
