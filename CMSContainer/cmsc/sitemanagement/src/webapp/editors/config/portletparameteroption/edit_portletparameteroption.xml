@@ -5,6 +5,11 @@
     <title xml:lang="en">Dynamic parameters</title>
     <title xml:lang="zh">参数</title>
 
+    <field name="label" dtrequired="true">
+        <prompt xml:lang="en">Label</prompt>
+        <prompt xml:lang="nl">Label</prompt>
+        <prompt xml:lang="zh">名称</prompt>
+    </field>
     <field name="key" dtrequired="true" dtmaxlength="30">
         <prompt xml:lang="en">Key</prompt>
         <prompt xml:lang="nl">Naam</prompt>

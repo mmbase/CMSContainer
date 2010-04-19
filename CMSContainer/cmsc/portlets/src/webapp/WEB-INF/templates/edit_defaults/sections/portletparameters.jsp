@@ -7,10 +7,13 @@
 <mm:cloud method="asis">
     <mm:node number="${portletId}" notfound="skip">
         <mm:relatednodes type="portletparameteroption" role="parameterrel">
+
             <mm:field name="key" jspvar="key" write="false" />
             <mm:field name="type" jspvar="type" write="false" />
             <mm:field name="value" jspvar="value" write="false" />
-            <mm:import externid="${key}" from="parameters" id="storedValue" reset="true" />
+
+            <mm:import externid="${key}" from="request" id="storedValue" reset="true" />
+
             <mm:first>
                 <tr>
                     <td colspan="3">
@@ -19,7 +22,7 @@
                 </tr>
             </mm:first>
             <tr>
-                <td>${key}</td>
+                <td><mm:field name="label" /></td>
                 <td>&nbsp;</td>
                 <td>
                     <c:if test="${type eq TEXTBOX}">
