@@ -6,9 +6,9 @@
     <title xml:lang="zh">参数</title>
 
     <item>
-        <field ftype="data" name="key">
-            <prompt xml:lang="en">Key</prompt>
-            <prompt xml:lang="nl">Naam</prompt>
+        <field ftype="data" name="label">
+            <prompt xml:lang="en">Label</prompt>
+            <prompt xml:lang="nl">Label</prompt>
             <prompt xml:lang="zh">关键字</prompt>
         </field>
         <field ftype="startwizard" wizardname="config/portletparameteroption/portletparameteroption" inline="true" />
