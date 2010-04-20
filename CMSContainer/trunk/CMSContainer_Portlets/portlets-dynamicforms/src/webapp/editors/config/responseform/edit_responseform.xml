@@ -84,4 +84,5 @@
       <prompt xml:lang="zh">感谢 HTML</prompt>
    </field>
    <list include="config/formfield/search_responseform_posrel_formfield.xml" />
+   <list include="config/contentelement/search_responseform_posrel_contentelement.xml" />
 </form-schema>
