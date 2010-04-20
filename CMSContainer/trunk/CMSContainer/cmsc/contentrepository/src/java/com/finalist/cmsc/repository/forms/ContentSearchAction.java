@@ -149,7 +149,6 @@ public class ContentSearchAction extends PagerAction {
          query.setNodeStep(contentStep);
       }
       
-      
       // Search on Workflow status when needed, onlive basicly means not in workflow rel
       String workflowstate = searchForm.getWorkflowstate();
       if(!StringUtils.isEmpty(workflowstate)) {
@@ -160,6 +159,7 @@ public class ContentSearchAction extends PagerAction {
                workflowstate);
          SearchUtil.addConstraint(query, workflowConstraint);
       }
+      
       // Order the result by:
       String order = searchForm.getOrder();
 
