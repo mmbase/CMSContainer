@@ -12,6 +12,7 @@ package com.finalist.portlets.responseform;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
@@ -27,8 +28,10 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.mmbase.RelationUtil;
+import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.portlets.ContentPortlet;
 import com.finalist.cmsc.services.publish.Publish;
+import org.mmbase.bridge.Node;
 import com.finalist.cmsc.util.EmailSender;
 import com.finalist.cmsc.util.ServerUtil;
 
@@ -162,6 +165,21 @@ public class ResponseFormPortlet extends ContentPortlet {
          }
          else {
             request.getPortletSession().setAttribute("confirm", "confirm");
+            
+            Cloud cloud = getCloudForAnonymousUpdate();
+            Node responseForm = cloud.getNode(contentelement);
+            NodeList relatedContentElementList = SearchUtil.findRelatedOrderedNodeList(responseForm, "contentelement", "posrel", "posrel.pos");            
+            NodeIterator relatedContentElementIterator = relatedContentElementList.nodeIterator();
+            while (relatedContentElementIterator.hasNext()) {
+               Node relatedContentElement = relatedContentElementIterator.nextNode();
+               String url  = getContentUrl(relatedContentElement);
+               HttpServletResponse httpResponse = (HttpServletResponse) response;
+               try {
+                   httpResponse.sendRedirect(url);
+               } catch (IOException ioex) {
+                   getLogger().error("Redirect failed");
+               }
+            }
          }
       }
       else {
@@ -487,4 +505,9 @@ public class ResponseFormPortlet extends ContentPortlet {
       return maxFileSize * MEGABYTE;
    }
 
+   private String getContentUrl(Node node) {
+       return ResourcesUtil.getServletPathWithAssociation("content", "/content/*", node.getStringValue("number"), node
+             .getStringValue("title"));
+    }
+   
 }

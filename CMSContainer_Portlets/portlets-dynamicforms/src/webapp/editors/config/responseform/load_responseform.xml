@@ -23,4 +23,6 @@
    <relation destination="contentchannel" role="creationrel" />
    <relation destination="contentchannel" role="contentrel" />
    <relation destination="formfield" role="posrel" />
+   <relation destination="contentelement" role="posrel" />
+   
 </action>
