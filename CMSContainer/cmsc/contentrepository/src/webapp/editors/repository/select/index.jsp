@@ -41,7 +41,9 @@
 </mm:present>
 
 <mm:present referid="action">
-	<mm:url page="/editors/repository/SearchInitAction.do" id="contenturl" write="false" >
+	<%-- CMSC-1662 We automaticly want to search if a complete search is submitted --%>
+	<c:set var="page" value="${(empty type)?'/editors/repository/SearchInitAction.do':'/editors/repository/ContentSearchAction.do'}"/>
+	<mm:url page="${page}" id="contenturl" write="false" >
 		<mm:param name="action" value="${action}" />
 		<mm:param name="position" value="${position}" />
 		<mm:param name="title" value="${initsearchtext}" />
