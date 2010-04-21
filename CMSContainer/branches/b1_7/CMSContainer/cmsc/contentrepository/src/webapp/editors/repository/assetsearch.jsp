@@ -241,21 +241,22 @@
                            <td><fmt:message key="searchform.number" /></td>
                            <td><html:text style="width:145px" property="objectid"/></td>
                         </tr>
-                         <c:if test="${hasWorkflow}">
-                           <tr height="31px">
-                              <td><fmt:message key="searchform.workflowstate" /></td>
-                              <td>
-                                 <html:select style="width:145px" property="workflowstate" size="1">
-                                    <html:option value="0"> - </html:option>
-                                    <html:option value="1"><fmt:message key="asset.status.finished" /></html:option>
-                                    <html:option value="2"><fmt:message key="asset.status.approved" /></html:option>
-                                    <html:option value="3"><fmt:message key="asset.status.published" /></html:option>
-                                    <html:option value="4"><fmt:message key="asset.status.onlive" /></html:option>
-                                 </html:select>
-                              </td>
-                              <td colspan="2">&nbsp;</td>
-                           </tr>
-                         </c:if>
+                     <c:if test="${hasWorkflow}">
+                       <tr height="31px">
+                          <td><fmt:message key="searchform.workflowstate" /></td>
+                          <td>
+                             <html:select style="width:145px" property="workflowstate" size="1">
+                                <html:option value=""><fmt:message key="content.status.all" /></html:option>
+                                <html:option value="draft"><fmt:message key="content.status.draft" /></html:option>
+                                <html:option value="finished"><fmt:message key="content.status.finished" /></html:option>
+                                <html:option value="approved"><fmt:message key="content.status.approved" /></html:option>
+                                <html:option value="published"><fmt:message key="content.status.published" /></html:option>
+<%--                                <html:option value="onlive"><fmt:message key="content.status.onlive" /></html:option> --%>
+                             </html:select>
+                          </td>
+                          <td colspan="2">&nbsp;</td>
+                       </tr>
+                     </c:if>
                         <tr>
                            <td></td>
                            <td></td>

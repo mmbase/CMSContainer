@@ -122,6 +122,17 @@ public class AssetSearchAction extends AbstractAssetSearch {
          query.setNodeStep(assetStep);
       }
    
+      // Search on Workflow status when needed, onlive basicly means not in workflow rel
+      String workflowstate = searchForm.getWorkflowstate();
+      if(!StringUtils.isEmpty(workflowstate)) {
+         NodeManager workflowNodeManager = cloud.getNodeManager("workflowitem");  
+      	Step workflowStep = query.addRelationStep(workflowNodeManager, "workflowrel", "SOURCE").getNext();
+         StepField workflowStatusField = query.createStepField(workflowStep, workflowNodeManager.getField("status"));
+         FieldValueConstraint workflowConstraint = query.createConstraint(workflowStatusField, FieldCompareConstraint.EQUAL,
+               workflowstate);
+         SearchUtil.addConstraint(query, workflowConstraint);
+      }
+      
       // Order the result by:
       String order = searchForm.getOrder();
    
