@@ -136,7 +136,11 @@ var ajaxTreeHandler = {
 
 		//setting menu's location
 		menudiv.style.top=evt.clientY + 'px';
-		menudiv.style.left=evt.clientX + 'px';
+		var styleLeft = evt.clientX;
+		if(styleLeft > 110) {
+			styleLeft = 110;
+		}
+		menudiv.style.left=styleLeft + 'px';
 
 
 		//show context menu
