@@ -33,7 +33,14 @@
                         <select name="nodeparam_${key}">
                         <c:forEach var="item" items="${values}">
                             <c:set var="option" value="${fn:split(item, '=')}" />
-                                    <option name="${option[0]}">${option[1]}</option>
+                            <c:choose>
+                                <c:when test="${option[1] eq storedValue}">
+                                    <option selected="selected" value="${option[1]}">${option[0]}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${option[1]}">${option[0]}</option>
+                                </c:otherwise>
+                            </c:choose>
                         </c:forEach>
                         </select>
                     </c:if>
