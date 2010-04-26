@@ -274,3 +274,27 @@ Exceptions/errors/other problems and what to do:
 *
 *
 *
+
+
+Name: convert community to new style using filter
+Goal: 
+Type: changes in web.xml files.
+--- Start ---
+In both the staging and live web.xml:
+Put the following text just below the "Set Character Encoding Filter" </filter>:
+   <!--JavaEE authentication for Community Module-->
+   <filter>
+     <filter-name>PortalFilter</filter-name>
+     <filter-class>com.finalist.cmsc.login.filter.PortalFilter</filter-class>   
+   </filter> 
+Put the following text just below the "CharacterEncoding" </filter-mapping>:
+   <!--JavaEE authentication for Community Module-->
+   <filter-mapping>
+     <filter-name>PortalFilter</filter-name>
+     <url-pattern>/*</url-pattern>    
+   </filter-mapping>
+--- End ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
