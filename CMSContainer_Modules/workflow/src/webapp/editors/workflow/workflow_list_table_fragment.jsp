@@ -154,7 +154,7 @@
              <mm:param name="number" value="${number}"/>
              <mm:param name="returnurl" value="/editors/workflow/${returnAction}?status=${param.status}&workflowNodetype=${param.workflowNodetype}"/>
            </mm:url>
-           <a href="${deleteAction}" ">
+           <a href="${deleteAction}">
              <img src="../gfx/icons/delete.png" title="<fmt:message key="workflow.item.delete" />"
               alt="<fmt:message key="workflow.item.delete"/>"/></a>
         </c:if>
