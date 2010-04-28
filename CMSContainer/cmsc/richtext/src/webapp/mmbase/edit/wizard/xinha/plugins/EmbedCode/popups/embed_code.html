@@ -67,9 +67,7 @@ function onPreview() {
 <form name="embededCodeForm" action="#">
 <div style="padding:10px">
     <div>
-        <p>
-            Embeded Code:
-        </p>
+        <table><tr><td>Embeded Code:</td></tr></table>
         <div style="float:left;width:70%">
             <textarea name="embededCode" id="embededCode" style="width:100%;height:100%" onblur="return onPreview();" ></textarea>
         </div>
@@ -79,9 +77,7 @@ function onPreview() {
         </div>
     </div>
     <div style="clear:both;padding-top:10px;">
-        <p>
-            Preview:
-        </p>
+        <table><tr><td>Preview:</td></tr></table>
         <div>
             <iframe id="previewFrame" style="width:100%;height:380px"></iframe>
         </div>
