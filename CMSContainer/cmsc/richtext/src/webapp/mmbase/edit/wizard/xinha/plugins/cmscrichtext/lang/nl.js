@@ -57,7 +57,7 @@
   "Search for an element" : "Zoek naar een ander contenttype",
   "Page" : "Pagina",
   "Search for a page" : "Zoek naar een pagina",
-  "New Url" : "Nieuwe URL",
+  "New URL" : "Nieuwe URL",
   "Enter new url" : "Nieuwe URL",
 
   // Insert Image
@@ -70,6 +70,5 @@
   "For browsers that don't support images": "Voor browsers die afbeeldingen niet ondersteunen",
   "Positioning of this image": "Positie van deze afbeelding",
   "Image Preview:": "Voorbeeld van afbeelding:",
-  "You must enter the URL": "De URL is verplicht"
-	  
+  "You must enter the URL": "De URL is verplicht"  
 };

@@ -270,6 +270,10 @@ function setDimensionForImages(editor) {
 		}
 	}
 }
+function i18n(str) {
+    return (Xinha._lc(str, 'cmscrichtext'));
+  }
+
 
 Xinha.prototype._createLink = function(link) {
 	var editor = this;
@@ -313,7 +317,7 @@ Xinha.prototype._createLink = function(link) {
             }
             else titleNoLink = sel_value;
          	outparam = {
-               	f_href   : "Click \"New Url\" to enter URL",
+               	f_href   : i18n("Click \"New Url\" to enter URL"),
                 f_destination : null,
                	f_title   : titleNoLink,
 				f_tooltip : '',
