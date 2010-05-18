@@ -167,6 +167,7 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          int maxElements = Integer.parseInt(preferences.getValue(MAX_ELEMENTS, "-1"));
          if (maxElements <= 0) {
             maxElements = DEFAULT_MAX_ELEMENTS;
+            req.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
          }
          int elementsPerPage = Integer.parseInt(preferences.getValue(ELEMENTS_PER_PAGE, "-1"));
          if (elementsPerPage <= 0) {
