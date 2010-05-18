@@ -566,7 +566,12 @@
 			xmlhttp.send(null);
 		}
 		]]>
-		ajaxFunction();
+		var oldInits = inits;
+		inits = function() {
+			oldInits();
+            ajaxFunction();
+		}
+		
         function layoutsearch(value){
 			if(value != null){
 				doAdd("|" + value, '<xsl:value-of select="../command[@name=&apos;add-item&apos;]/@cmd" />' );
