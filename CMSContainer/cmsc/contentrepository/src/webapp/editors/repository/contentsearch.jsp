@@ -141,7 +141,7 @@
                            <td style="width:80px" width="80px" nowrap><fmt:message key="searchform.searchfortitle" /></td>
                            <td style="width:217px" width="217px" nowrap><html:text property="title" style="width:145px" value="${title}"/></td>
                            <td style="width:90px" width="90px" nowrap><fmt:message key="searchform.contenttype" /></td>
-                           <td nowrap>
+                           <td>
                               <c:if test="${not empty onlytype}" >
                                  <html:hidden property="contenttypes" />
                                  <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />
