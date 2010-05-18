@@ -50,6 +50,7 @@
 		<mm:param name="contenttypes" value="${type}" />
 		<mm:param name="onlytype" value="${type}" />
 		<mm:param name="relationOriginNode" value="${relationOriginNode}" />
+		<mm:param name="overrideTypeName" value="${param.overrideTypeName}" />
 	</mm:url>
 </mm:present>
 
