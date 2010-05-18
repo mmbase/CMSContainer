@@ -146,8 +146,12 @@
                                  <html:hidden property="contenttypes" />
                                  <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />
 								 <c:choose>
+								 		<c:when test="${!empty param.overrideTypeName}">
+								 			${param.overrideTypeName}
+								 			<input name="overrideTypeName" value="${param.overrideTypeName}" type="hidden"/>
+								 		</c:when>
                                         <c:when test="${onlytype != 'contentelement'}">
-                                                <%=CloudProviderFactory.getCloudProvider().getCloud().getNodeManager((String)request.getAttribute("onlytype")).getGUIName(NodeManager.GUI_SINGULAR, request.getLocale())%>
+                                                <%=cloud.getNodeManager((String)request.getAttribute("onlytype")).getGUIName()%>
                                         </c:when>
                                         <c:otherwise>
                                                 <fmt:message key="searchform.contenttypes.all" />

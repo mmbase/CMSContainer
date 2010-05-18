@@ -1,4 +1,4 @@
-<%@page language="java" contentType="text/html;charset=utf-8"
+<%@page language="java" contentType="text/html;charset=utf-8" 
 %><%@include file="globals.jsp"
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit" 
 %><%@page import="com.finalist.cmsc.repository.AssetElementUtil,
