@@ -136,11 +136,11 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
    
 
    @Override
-	public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException, IOException {
-		super.processEditDefaults(request, response);
+	public void doEditDefaults(RenderRequest req, RenderResponse res) throws PortletException, IOException {
+		super.doEditDefaults(req, res);
 
-		if(request.getAttribute(MAX_ELEMENTS) == null) {
-			request.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
+		if(req.getAttribute(MAX_ELEMENTS) == null) {
+			req.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
 		}
 	}
 
