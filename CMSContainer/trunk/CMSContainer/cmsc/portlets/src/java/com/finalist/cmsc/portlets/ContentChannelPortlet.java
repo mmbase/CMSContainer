@@ -133,8 +133,19 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       }
    }
 
+   
 
-   protected void addContentElements(RenderRequest req, String channel) {
+   @Override
+	public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+		super.processEditDefaults(request, response);
+
+		if(request.getAttribute(MAX_ELEMENTS) == null) {
+			request.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
+		}
+	}
+
+
+	protected void addContentElements(RenderRequest req, String channel) {
       String elementId = req.getParameter(ELEMENT_ID);
       if (StringUtils.isEmpty(elementId)) {
          PortletPreferences preferences = req.getPreferences();
@@ -167,7 +178,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          int maxElements = Integer.parseInt(preferences.getValue(MAX_ELEMENTS, "-1"));
          if (maxElements <= 0) {
             maxElements = DEFAULT_MAX_ELEMENTS;
-            req.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
          }
          int elementsPerPage = Integer.parseInt(preferences.getValue(ELEMENTS_PER_PAGE, "-1"));
          if (elementsPerPage <= 0) {
