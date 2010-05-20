@@ -16,6 +16,10 @@
       <prompt xml:lang="nl">URL-fragment</prompt>
       <prompt xml:lang="zh">URL-片段</prompt>
    </field>
+   <field name="link" dtpattern="\://" dtmaxlength="255">   
+      <prompt xml:lang="en">Link</prompt>
+      <prompt xml:lang="nl">Link</prompt>
+   </field>   
    <field name="maximum" dtrequired="true">
       <prompt xml:lang="en">Maximum (amount)</prompt>
       <prompt xml:lang="nl">Maximum (aantal)</prompt>
