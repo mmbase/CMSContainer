@@ -16,7 +16,7 @@
       <prompt xml:lang="nl">URL-fragment</prompt>
       <prompt xml:lang="zh">URL-片段</prompt>
    </field>
-   <field name="link" dtpattern="\://" dtmaxlength="255">   
+   <field name="link" dtpattern="\://" dtmaxlength="255" dtrequired="false">   
       <prompt xml:lang="en">Link</prompt>
       <prompt xml:lang="nl">Link</prompt>
    </field>   
