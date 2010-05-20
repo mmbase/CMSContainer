@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mmbase.bridge.*;
@@ -46,12 +47,17 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
       if (item instanceof RssFeed) {
          RssFeed rssFeed = (RssFeed) item;
 
+         String rssLink = rssFeed.getLink();
+         if (StringUtils.isEmpty(rssLink)) {
+             rssLink = getSiteUrl(request, rssFeed);
+         }         
+         
          Document doc = XmlUtil.createDocument();
          Element rss = XmlUtil.createRoot(doc, "rss");
          XmlUtil.createAttribute(rss, "version", "2.0");
          Element channel = XmlUtil.createChild(rss, "channel");
-         XmlUtil.createChildText(channel, "title", rssFeed.getTitle());
-         XmlUtil.createChildText(channel, "link", getSiteUrl(request, rssFeed));
+         XmlUtil.createChildText(channel, "title", rssFeed.getTitle());         
+         XmlUtil.createChildText(channel, "link", rssLink);
          XmlUtil.createChildText(channel, "language", rssFeed.getLanguage());
          XmlUtil.createChildText(channel, "description", rssFeed.getDescription());
          XmlUtil.createChildText(channel, "copyright", rssFeed.getCopyright());
