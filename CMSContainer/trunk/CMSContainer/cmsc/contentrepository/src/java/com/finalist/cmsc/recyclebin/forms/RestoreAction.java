@@ -71,7 +71,13 @@ public class RestoreAction extends MMBaseFormlessAction {
          }
 
       }
-      ActionForward ret = new ActionForward(returnurl+"&fresh=true");
+      ActionForward ret;
+      if(returnurl.contains(".jsp?")) {
+    	  ret = new ActionForward(returnurl+"&fresh=true");
+      } else {
+    	  ret = new ActionForward(returnurl+"?fresh=true");
+      }
+    	  
       ret.setRedirect(true);
      // addToRequest(request, "fresh", "true");
       return ret;
