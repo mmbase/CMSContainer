@@ -29,7 +29,7 @@
 		<prompt xml:lang="nl">Omschrijving</prompt>
 		<prompt xml:lang="zh">描述</prompt>
 	</field>
-	<field name="lisitename" dtmaxlength="40" dtrequired="true">
+	<field name="linsitename" dtmaxlength="40" dtrequired="true">
       <prompt xml:lang="en">Language independent site name</prompt>
       <prompt xml:lang="nl">Taalonafhankelijke sitenaam</prompt>
       <prompt xml:lang="zh">语言独立名</prompt>
