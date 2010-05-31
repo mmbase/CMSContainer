@@ -58,7 +58,7 @@
                 <maxLength value="2"/>
             </datatype>
         </field>
-        <field name="lisitename">
+        <field name="linsitename">
             <gui>
                 <guiname xml:lang="nl">Taalonafhankelijke naam</guiname>
                 <guiname xml:lang="en">Language independent name</guiname>
