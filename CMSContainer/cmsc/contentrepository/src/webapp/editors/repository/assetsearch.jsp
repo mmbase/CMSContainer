@@ -243,7 +243,7 @@
                         </tr>
                      <c:if test="${hasWorkflow}">
                        <tr height="31px">
-                          <td><fmt:message key="searchform.workflowstate" /></td>
+                          <td><fmt:message key="searchform.state" /></td>
                           <td>
                              <html:select style="width:145px" property="workflowstate" size="1">
                                 <html:option value=""><fmt:message key="content.status.all" /></html:option>
