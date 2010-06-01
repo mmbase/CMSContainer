@@ -247,10 +247,10 @@
                           <td>
                              <html:select style="width:145px" property="workflowstate" size="1">
                                 <html:option value=""><fmt:message key="content.status.all" /></html:option>
-                                <html:option value="draft"><fmt:message key="content.status.draft" /></html:option>
-                                <html:option value="finished"><fmt:message key="content.status.finished" /></html:option>
-                                <html:option value="approved"><fmt:message key="content.status.approved" /></html:option>
-                                <html:option value="published"><fmt:message key="content.status.published" /></html:option>
+                                <html:option value="draft"><fmt:message key="asset.status.draft" /></html:option>
+                                <html:option value="finished"><fmt:message key="asset.status.finished" /></html:option>
+                                <html:option value="approved"><fmt:message key="asset.status.approved" /></html:option>
+                                <html:option value="published"><fmt:message key="asset.status.published" /></html:option>
 <%--                                <html:option value="onlive"><fmt:message key="content.status.onlive" /></html:option> --%>
                              </html:select>
                           </td>
