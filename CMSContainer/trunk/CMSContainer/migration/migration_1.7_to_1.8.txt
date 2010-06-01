@@ -75,3 +75,16 @@ drop table temp;
 Exceptions/errors/other problems and what to do:
 *
 *
+
+Name: Update version number dependency in builders XML for using the latest sitemanagement.
+Goal: update sitemanagement to version 3
+Type:  manual action
+--- Start script ---
+Search in all your XML files in your project
+The sitemanagement version field should be put to 3!!
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
