@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Insert/Modify Embeded Code</title>
+<script type="text/javascript" src="../../../popups/popup.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
+   
+  <script type="text/javascript">
+    window.resizeTo(520, 530);
+    Xinha = window.opener.Xinha;
+
+    function i18n(str) {
+      return (Xinha._lc(str, 'cmscrichtext'));
+    }
+
+    function onTargetChanged() {
+      var f = document.getElementById("f_other_target");
+      if (this.value == "_other") {
+        f.style.visibility = "visible";
+        f.select();
+        f.focus();
+      } else f.style.visibility = "hidden";
+    }
+
+function Init() {
+      __dlg_translate('cmscrichtext');
+      __dlg_init();
+      document.getElementById("embededCode").focus();
+}
+
+function onOK() {
+      // pass data back to the calling window
+      var fields = ["embededCode"];
+      var param = new Object();
+      for (var i in fields) {
+            var id = fields[i];
+            var el = document.getElementById(id);
+            param[id] = el.value;
+      }
+
+      __dlg_close(param);
+      return false;
+}
+
+function onPreview() {
+    var code = document.getElementById('embededCode').value;
+	var re = /<embed([\s\S]*?)<\/embed>/g;
+    code = code.match(re);
+    var iframe = document.getElementById("previewFrame");
+    var doc = iframe.contentWindow.document ;
+    if(iframe.contentDocument){
+        doc = iframe.contentDocument;
+    }
+    if(code){
+       doc.open();
+       doc.write(code);
+       doc.close();
+    }
+};
+
+</script>
+
+</head>
+
+<body class="dialog" onLoad="Init()">
+<div class="title">Insert/Modify Embeded Code</div>
+<form name="embededCodeForm" action="#">
+<div style="padding:10px">
+    <div>
+        <table><tr><td>Embeded Code:</td></tr></table>
+        <div style="float:left;width:70%">
+            <textarea name="embededCode" id="embededCode" style="width:100%;height:100%" onblur="return onPreview();" ></textarea>
+        </div>
+        <div style="float:right;width:20%;padding: 5px">
+          <button type="button" name="preview" onClick="return onPreview();">Preview</button><br/>
+          <button type="button" name="ok" onClick="return onOK();">OK</button>
+        </div>
+    </div>
+    <div style="clear:both;padding-top:10px;">
+        <table><tr><td>Preview:</td></tr></table>
+        <div>
+            <iframe id="previewFrame" style="width:100%;height:380px"></iframe>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
