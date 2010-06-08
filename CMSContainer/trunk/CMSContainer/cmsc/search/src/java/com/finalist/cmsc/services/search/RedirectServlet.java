@@ -121,7 +121,7 @@ public class RedirectServlet extends BridgeServlet {
 
         if (redirect != null) {
             if (this.forwardRequest) {
-                if (redirect.indexOf("://") > -1 && (ServerUtil.useServerName()) {
+                if (redirect.indexOf("://") > -1 && (ServerUtil.useServerName())) {
                     // not a valid forward dispatch url, but it might be converted to one.
                     String currentHost = request.getServerName();
                     int hostIndex = redirect.indexOf("://" + currentHost);
