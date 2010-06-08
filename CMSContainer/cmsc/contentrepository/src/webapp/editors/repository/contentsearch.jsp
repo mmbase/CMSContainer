@@ -126,6 +126,7 @@
             <html:hidden property="direction"/>
             <html:hidden property="index" value="${param.index}"/>
             <input type="hidden" name="deleteContentRequest"/>
+            <html:hidden property="overrideTypeName" value="${param.overrideTypeName}"/>
             <mm:present referid="returnurl"><input type="hidden" name="returnurl" value="<mm:write referid="returnurl"/>"/></mm:present>
                      <mm:compare referid="mode" value="advanced" >
                         <a href="#" onclick="selectTab('basic');"><input type="button" class="button" value="<fmt:message key="search.simple.search" />"/></a>
@@ -179,13 +180,25 @@
                         <td nowrap>
                            <c:if test="${not empty onlytype}" >
                               <html:hidden property="contenttypes" />
-                              <input type="hidden" value="${onlytype}" style="width:145px" name="onlytype" />Article
+                              <input type="hidden" style="width:145px" value="${onlytype}" name="onlytype" />
+         					<c:choose>
+					 		<c:when test="${!empty param.overrideTypeName}">
+					 			${param.overrideTypeName}
+					 			<input name="overrideTypeName" value="${param.overrideTypeName}" type="hidden"/>
+					 		</c:when>
+                                     <c:when test="${onlytype != 'contentelement'}">
+                                             <%=cloud.getNodeManager((String)request.getAttribute("onlytype")).getGUIName()%>
+                                     </c:when>
+                                     <c:otherwise>
+                                             <fmt:message key="searchform.contenttypes.all" />
+                                     </c:otherwise>
+                              </c:choose>
                            </c:if>
                            <c:if test="${empty onlytype}" >
-                              <html:select property="contenttypes" style="width:145px" onchange="selectContenttype('${searchinit}');" >
-                                 <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
-                                 <html:optionsCollection name="typesList" value="value" label="label"/>
-                              </html:select>
+                                 <html:select style="width:145px" property="contenttypes" onchange="selectContenttype('${searchinit}');" >
+                                    <html:option value="contentelement">&lt;<fmt:message key="searchform.contenttypes.all" />&gt;</html:option>
+                                    <html:optionsCollection name="typesList" value="value" label="label"/>
+                                 </html:select>
                            </c:if>
                         </td>
                      </tr>
