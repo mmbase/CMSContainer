@@ -100,7 +100,7 @@ public class RedirectServlet extends BridgeServlet {
                 pageInfo = Search.findDetailPageForContent(node, request.getServerName());
             }
             else {
-                pageInfo = Search.findDetailPageForContent(node);
+                pageInfo = Search.findDetailPageForContent(node, request.getParameter("server"));
             }
 
             if (pageInfo != null) {
@@ -121,7 +121,7 @@ public class RedirectServlet extends BridgeServlet {
 
         if (redirect != null) {
             if (this.forwardRequest) {
-                if (redirect.indexOf("://") > -1 && ServerUtil.useServerName()) {
+                if (redirect.indexOf("://") > -1 && (ServerUtil.useServerName()) {
                     // not a valid forward dispatch url, but it might be converted to one.
                     String currentHost = request.getServerName();
                     int hostIndex = redirect.indexOf("://" + currentHost);
