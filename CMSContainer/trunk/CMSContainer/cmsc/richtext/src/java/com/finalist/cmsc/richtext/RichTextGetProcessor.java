@@ -9,6 +9,7 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.richtext;
 
+import java.net.URLEncoder;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +26,9 @@ import org.w3c.dom.*;
 import org.w3c.dom.NodeList;
 
 import com.finalist.cmsc.mmbase.ResourcesUtil;
+import com.finalist.cmsc.navigation.NavigationInfo;
+import com.finalist.cmsc.navigation.NavigationUtil;
+import com.finalist.cmsc.util.ServerUtil;
 
 @SuppressWarnings("serial")
 public class RichTextGetProcessor implements ParameterizedProcessorFactory {
@@ -260,6 +264,10 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                      }
                   }
                   url = getContentUrl(destinationNode);
+                  if(!ServerUtil.useServerName() && url.contains("/content/")) {
+                  	NavigationInfo info = NavigationUtil.getNavigationInfo(cloud);
+//                  	url += "?server="+URLEncoder.encode(request.getServerName());
+                  }
                }
             }
 
