@@ -21,13 +21,6 @@
             <classifier>classes</classifier>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.cmscontainer.core</groupId>
-            <artifactId>cmsc-sitemanagement</artifactId>
-            <version>${project.version}</version>
-            <classifier>classes</classifier>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
     <build>
         <testSourceDirectory>src/tests</testSourceDirectory>
