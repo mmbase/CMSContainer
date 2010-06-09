@@ -22,6 +22,8 @@ import org.mmbase.bridge.jsp.taglib.util.Attribute;
 import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.ServerUtil;
+import com.finalist.pluto.portalImpl.core.PortalEnvironment;
+import com.finalist.pluto.portalImpl.core.PortalURL;
 
 @SuppressWarnings("serial")
 public class ContentUrlTag extends NodeReferrerTag {
@@ -73,7 +75,11 @@ public class ContentUrlTag extends NodeReferrerTag {
                url = makeAbsolute(url);
             }
             if(!ServerUtil.useServerName()) {
-            	url += "?server="+URLEncoder.encode(pageContext.getRequest().getServerName());
+               PortalEnvironment env = PortalEnvironment.getPortalEnvironment((HttpServletRequest)pageContext.getRequest());
+               PortalURL currentURL = env.getRequestedPortalURL();
+               String path = currentURL.getGlobalNavigationAsString();
+               String server = (path.indexOf("/") != -1)?(path.substring(0, path.indexOf("/"))):path;
+            	url += "?server="+server;
             }
          }
       }

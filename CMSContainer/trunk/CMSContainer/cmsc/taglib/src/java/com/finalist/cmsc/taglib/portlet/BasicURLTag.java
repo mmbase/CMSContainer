@@ -20,6 +20,8 @@ import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.ServerUtil;
+import com.finalist.pluto.portalImpl.core.PortalEnvironment;
+import com.finalist.pluto.portalImpl.core.PortalURL;
 
 /**
  * Supporting class for the <CODE>actionURL</CODE> and <CODE>renderURL</CODE>
@@ -133,7 +135,11 @@ public abstract class BasicURLTag extends TagSupport {
          urlString = HttpUtil.makeAbsolute((HttpServletRequest) pageContext.getRequest(), urlString);
       }
       if(!ServerUtil.useServerName() && urlString.contains("/content/")) {
-         urlString += "?server="+URLEncoder.encode(pageContext.getRequest().getServerName());
+         PortalEnvironment env = PortalEnvironment.getPortalEnvironment((HttpServletRequest)pageContext.getRequest());
+         PortalURL currentURL = env.getRequestedPortalURL();
+         String path = currentURL.getGlobalNavigationAsString();
+         String server = (path.indexOf("/") != -1)?(path.substring(0, path.indexOf("/"))):path;
+         urlString += "?server="+server;
       }
       
       if (var == null) {
