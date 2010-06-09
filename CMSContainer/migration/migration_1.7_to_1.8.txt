@@ -15,7 +15,8 @@ ALTER TABLE live_stylesheet ADD m_text TEXT;
 Check the layouts of your project. You should change the <c:forEach> that displays the stylesheets to something like this:
 
 --- Start JSP ---
-<c:forEach var="style" items="${stylesheet}">
+<cmsc:insert-stylesheet var="stylesheets" />
+<c:forEach var="style" items="${stylesheets}">
   <c:choose>  
     <c:when test="${empty style.resource}"> 
       <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet/${style.id}.css" media="${style.media}" />
