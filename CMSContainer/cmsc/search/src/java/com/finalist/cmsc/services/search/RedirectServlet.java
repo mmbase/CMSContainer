@@ -10,6 +10,7 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.services.search;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.*;

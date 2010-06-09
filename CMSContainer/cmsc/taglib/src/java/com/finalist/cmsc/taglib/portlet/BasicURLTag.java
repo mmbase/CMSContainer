@@ -1,6 +1,7 @@
 package com.finalist.cmsc.taglib.portlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -130,6 +131,9 @@ public abstract class BasicURLTag extends TagSupport {
       }
       if (absolute) {
          urlString = HttpUtil.makeAbsolute((HttpServletRequest) pageContext.getRequest(), urlString);
+      }
+      if(!ServerUtil.useServerName() && urlString.contains("/content/")) {
+         urlString += "?server="+URLEncoder.encode(pageContext.getRequest().getServerName());
       }
       
       if (var == null) {
