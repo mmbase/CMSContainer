@@ -197,6 +197,7 @@ public class AssetSearchAction extends AbstractAssetSearch {
          SearchUtil.addConstraint(query, titleConstraint);
       }
       
+      // also search for creator
       if (StringUtils.isNotEmpty(searchForm.getTitle())) {
          queryStringComposer.addParameter(AssetElementUtil.CREATOR_FIELD, searchForm.getTitle());
          Field field = nodeManager.getField(AssetElementUtil.CREATOR_FIELD);
