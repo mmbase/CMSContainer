@@ -333,7 +333,7 @@ public class ContentSearchAction extends PagerAction {
       Field keywordField = nodeManager.getField(ContentElementUtil.KEYWORD_FIELD);
       for (String keyword : keywords) {
          Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
-         SearchUtil.addConstraint(query, keywordConstraint);
+         SearchUtil.addORConstraint(query, keywordConstraint);
       }
    }
 
