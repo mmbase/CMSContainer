@@ -218,11 +218,11 @@ public class ContentSearchAction extends PagerAction {
       }
 
       // Add the title constraint:
-      if (StringUtils.isNotEmpty(searchForm.getTitle())) {
-
-         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchForm.getTitle().trim());
+      String searchTitle = searchForm.getTitle().trim();
+      if (StringUtils.isNotEmpty(searchTitle)) {
+         queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchTitle);
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
-         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
+         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchTitle);
          SearchUtil.addConstraint(query, titleConstraint);
       }
 
