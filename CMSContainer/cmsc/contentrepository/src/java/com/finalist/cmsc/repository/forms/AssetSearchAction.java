@@ -189,12 +189,14 @@ public class AssetSearchAction extends AbstractAssetSearch {
       }
    
       // Add the title constraint:
-      if (StringUtils.isNotEmpty(searchForm.getTitle())) {
-         queryStringComposer.addParameter(AssetElementUtil.TITLE_FIELD, searchForm.getTitle());
+      String searchTitle = searchForm.getTitle().trim();
+      if (StringUtils.isNotEmpty(searchTitle)) {
+         queryStringComposer.addParameter(AssetElementUtil.TITLE_FIELD, searchTitle);
          Field field = nodeManager.getField(AssetElementUtil.TITLE_FIELD);
-         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
+         Constraint titleConstraint = SearchUtil.createLikeConstraint(query, field, searchTitle);
          SearchUtil.addConstraint(query, titleConstraint);
       }
+      
       if (StringUtils.isNotEmpty(searchForm.getTitle())) {
          queryStringComposer.addParameter(AssetElementUtil.CREATOR_FIELD, searchForm.getTitle());
          Field field = nodeManager.getField(AssetElementUtil.CREATOR_FIELD);
