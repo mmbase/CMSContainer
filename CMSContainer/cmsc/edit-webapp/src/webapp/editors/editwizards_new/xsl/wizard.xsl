@@ -1210,6 +1210,7 @@
                </xsl:if>
             </input>
             <xsl:call-template name="prompt_uploaded"/>
+            <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
             <xsl:value-of select="upload/@name"/>
             <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
                <xsl:if test="upload/@size &lt; 2048">
