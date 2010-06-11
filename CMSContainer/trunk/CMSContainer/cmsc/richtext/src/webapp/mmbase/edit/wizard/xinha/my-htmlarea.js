@@ -64,7 +64,7 @@ setupDefaultConfig = function(xinha_config) {
 
 	xinha_config.toolbar = [
       ["popupeditor"],
-      ["separator","formatblock","bold","italic","underline","strikethrough"],
+      ["separator","formatblock","bold","italic","underline"],
       ["separator","subscript","superscript"],
       ["linebreak","separator"],
       ["separator","insertorderedlist","insertunorderedlist"],
