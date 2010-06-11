@@ -228,8 +228,8 @@ public class ContentSearchAction extends PagerAction {
 
       // if in simple search mode, add input to the keyword search too
       // And add ordinary keywords
-      List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
-      addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
+      // List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
+      // addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
 
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
@@ -335,6 +335,7 @@ public class ContentSearchAction extends PagerAction {
          Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
          SearchUtil.addConstraint(query, keywordConstraint);
       }
+      SearchUtil.a
    }
 
    private void massDeleteContent(String deleteContent, Cloud cloud) {
