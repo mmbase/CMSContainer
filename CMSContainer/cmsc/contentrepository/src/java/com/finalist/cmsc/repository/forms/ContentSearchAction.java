@@ -335,7 +335,6 @@ public class ContentSearchAction extends PagerAction {
          Constraint keywordConstraint = SearchUtil.createLikeConstraint(query, keywordField, keyword);
          SearchUtil.addConstraint(query, keywordConstraint);
       }
-      SearchUtil.a
    }
 
    private void massDeleteContent(String deleteContent, Cloud cloud) {
