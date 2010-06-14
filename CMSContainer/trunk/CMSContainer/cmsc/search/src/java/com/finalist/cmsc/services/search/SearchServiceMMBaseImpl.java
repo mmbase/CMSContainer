@@ -319,10 +319,7 @@ public class SearchServiceMMBaseImpl extends SearchService {
              }
          }
 
-         String host = null;
-         if (ServerUtil.useServerName()) {
-            host = SiteManagement.getSite(page);
-         }
+         String host = SiteManagement.getSite(page);
 
          String pagePath = SiteManagement.getPath(page, !ServerUtil.useServerName());
          Layout layout = SiteManagement.getLayout(page.getLayout());
