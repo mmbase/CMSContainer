@@ -265,6 +265,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                         name = destinationNode.getStringValue("name");
                      }
                   }
+                  url = getContentUrl(destinationNode);
                }
             }
 
