@@ -105,7 +105,11 @@ public class RedirectServlet extends BridgeServlet {
             }
 
             if (pageInfo != null) {
-                PortalURL u = new PortalURL(pageInfo.getHost(), request, pageInfo.getPath());
+            	 String host = null;
+            	 if(ServerUtil.useServerName()) {
+            	 	 host = pageInfo.getHost();
+            	 }
+                PortalURL u = new PortalURL(host, request, pageInfo.getPath());
                 String elementId = String.valueOf(node.getNumber());
                 // When contentelement and the same number then it is a contentportlet
                 if (! ( "contentelement".equals(pageInfo.getParametername())
