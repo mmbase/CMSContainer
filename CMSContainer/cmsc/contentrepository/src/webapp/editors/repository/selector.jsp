@@ -110,21 +110,19 @@
          <ul class="shortcuts">
             
             <mm:node number="<%= RepositoryUtil.ALIAS_TRASH %>">
-               <mm:field name="number" jspvar="trashNumber" vartype="Integer">
+               <mm:field name="number" id="trashNumber" write="false" />
                
-                  <cmsc:rights nodeNumber="<%=trashNumber.intValue()%>" var="rolename"/>
-                  <c:if test="${rolename eq 'webmaster'}">
-                     <li class="trashbin">
-                        <mm:countrelations id="contentNum"type="contentelement" searchdir="destination" role="contentrel"><mm:write write="false" /></mm:countrelations>
-                        <mm:countrelations id="assetNum" type="assetelement" searchdir="source" role="creationrel"><mm:write write="false" /></mm:countrelations>
-                        <a href="<mm:url page="../recyclebin/contenttrash.jsp"/>" target="content" >
-                           <fmt:message key="selector.recyclebin" />
-                           (<c:out value="${contentNum+assetNum}" />)
-                        </a>
-                     </li>
-                  </c:if>
-                  
-               </mm:field>
+               <cmsc:rights nodeNumber="${trashNumber}" var="rolename"/>
+               <c:if test="${rolename eq 'webmaster'}">
+                  <li class="trashbin">
+                     <mm:countrelations id="contentNum"type="contentelement" searchdir="destination" role="contentrel"><mm:write write="false" /></mm:countrelations>
+                     <mm:countrelations id="assetNum" type="assetelement" searchdir="source" role="creationrel"><mm:write write="false" /></mm:countrelations>
+                     <a href="<mm:url page="../recyclebin/contenttrash.jsp"/>" target="content" >
+                        <fmt:message key="selector.recyclebin" />
+                        (<c:out value="${contentNum+assetNum}" />)
+                     </a>
+                  </li>
+               </c:if>
             </mm:node>
          
          </ul>
