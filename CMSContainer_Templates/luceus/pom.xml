@@ -69,6 +69,11 @@
 			<artifactId>luceus-highlighter</artifactId>
 			<version>${luceus.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.luceus</groupId>
+			<artifactId>luceus-translation</artifactId>
+			<version>${luceus.version}</version>
+		</dependency>
 		
       <dependency>
          <groupId>org.apache.lucene</groupId>
