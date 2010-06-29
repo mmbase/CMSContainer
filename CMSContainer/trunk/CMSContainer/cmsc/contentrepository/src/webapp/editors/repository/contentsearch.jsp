@@ -555,13 +555,13 @@
                      <a href="<cmsc:contenturl number="${nodenumber}"/>" target="_blank"><img src="../gfx/icons/preview.png" alt="<fmt:message key="searchform.icon.preview.title" />" title="<fmt:message key="searchform.icon.preview.title" />" /></a>
                   </mm:field>
                <a href="#" onclick="showItem(<mm:field name="number"/>);"><img src="../gfx/icons/info.png" alt="<fmt:message key="searchform.icon.info.title" />" title="<fmt:message key="searchform.icon.info.title" />" /></a>
-                  <mm:compare referid="action" value="search">
                      <mm:haspage page="/editors/versioning">
                         <c:url value="/editors/versioning/ShowVersions.do" var="showVersions">
                            <c:param name="nodenumber"><mm:field name="number" /></c:param>
                         </c:url>
                         <a href="#" onclick="openPopupWindow('versioning', 750, 550, '${showVersions}')"><img src="../gfx/icons/versioning.png" alt="<fmt:message key="searchform.icon.versioning.title" />" title="<fmt:message key="searchform.icon.versioning.title" />" /></a>
                      </mm:haspage>
+                     <mm:compare referid="action" value="search">
                      <cmsc:hasfeature name="responseform">
                         <c:set var="typeval">
                                <mm:nodeinfo type="type" />
