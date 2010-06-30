@@ -26,3 +26,14 @@ Add above the ControllerFilter <filter-mapping>:
 
 --- End script ---
 
+
+
+
+Name: Compare project's overwrite in insert-inline link and Xinha env with CMSc versions
+Goal: add fixes to project
+Type:  manual action
+--- Start script ---
+- compare project's overwrites near /war/src/webapp/mmbase/edit/wizard/xinha/*
+- take over fixes in CMSc to project!
+--- End script ---
+
