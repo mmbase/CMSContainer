@@ -77,7 +77,7 @@
   "Insert/Modify Embeded Code": "Invoegen bewerken embed content",
   "Embeded Code:": "Embed Code:",
   "Preview:": "Voorbeeld:",
-  "Click \"New Url\" to enter URL": "Klik op \"Nieuwe Url\" om URL in te voeren",
+  "Search existing URL with \'URL\' or click \'New Url\'": "Zoek bestaande URL met \'URL\' of klik \'Nieuwe URL\' ",
   "Size": "Formaat",
   "Width:": "Breedte:",
   "Height:": "Hoogte:",

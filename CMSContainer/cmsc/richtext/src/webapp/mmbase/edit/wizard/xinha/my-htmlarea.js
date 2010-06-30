@@ -317,7 +317,7 @@ Xinha.prototype._createLink = function(link) {
             }
             else titleNoLink = sel_value;
          	outparam = {
-               	f_href   : i18n("Click \"New Url\" to enter URL"),
+               	f_href   : i18n("Search existing URL with \'URL\' or click \'New Url\'"),
                 f_destination : null,
                	f_title   : titleNoLink,
 				f_tooltip : '',
