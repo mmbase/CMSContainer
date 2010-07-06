@@ -135,10 +135,11 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
       String requestURL = getServletRequest(req).getRequestURL().toString();
       Pattern pattern = Pattern.compile(RENDERURL_ELEMENTID_PATTERN);
       Matcher matcher = pattern.matcher(requestURL);
-      if (matcher.find() && matcher.groupCount() >= 1) {
-         return matcher.group(1);
+      String value = null;
+      while (matcher.find() && matcher.groupCount() >= 1) {
+         value = matcher.group(1);
       }
-      return null;
+      return value;
    }
    private HttpServletRequest getServletRequest(RenderRequest req) {
       return (HttpServletRequest) ((PortletRequestImpl) req).getRequest();
