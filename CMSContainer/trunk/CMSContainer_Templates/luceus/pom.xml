@@ -97,14 +97,14 @@
 			<version>2.3</version>
 		</dependency>
 		<dependency>
-			<groupId>pdfbox</groupId>
+			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
-			<version>0.7.3-dev-20051205</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>fontbox</groupId>
+			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>fontbox</artifactId>
-			<version>0.1.0-dev-20051205</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.textmining</groupId>
