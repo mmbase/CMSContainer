@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<builder extends="object" maintainer="finalist.com" name="portletparameter" version="1" xmlns="http://www.mmbase.org/xmlns/builder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mmbase.org/xmlns/builder http://www.mmbase.org/xmlns/builder.xsd">
+    <names>
+        <singular xml:lang="nl">portletparameteroption</singular>
+        <singular xml:lang="en">portletparameteroption</singular>
+        <singular xml:lang="zh">portlet参数option</singular>
+        <plural xml:lang="nl">portletparameteroptions</plural>
+        <plural xml:lang="en">portletparameteroptions</plural>
+        <plural xml:lang="zh">portlet参数options</plural>
+    </names>
+    <fieldlist>
+        <field name="label">
+            <gui>
+                <guiname xml:lang="nl">Label</guiname>
+                <guiname xml:lang="en">Label</guiname>
+                <guiname xml:lang="zh">键</guiname>
+            </gui>
+            <editor>
+                <positions>
+                    <input>4</input>
+                    <list>4</list>
+                    <search>4</search>
+                </positions>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <required value="true" />
+                <maxLength value="40" />
+            </datatype>
+        </field>
+        <field name="key">
+            <gui>
+                <guiname xml:lang="nl">Naam</guiname>
+                <guiname xml:lang="en">Key</guiname>
+                <guiname xml:lang="zh">键</guiname>
+            </gui>
+            <editor>
+                <positions>
+                    <input>4</input>
+                    <list>4</list>
+                    <search>4</search>
+                </positions>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <required value="true" />
+                <maxLength value="40" />
+            </datatype>
+        </field>
+        <field name="type">
+            <gui>
+                <guiname xml:lang="nl">Type</guiname>
+                <guiname xml:lang="en">Type</guiname>
+                <guiname xml:lang="zh">类型</guiname>
+            </gui>
+            <editor>
+                <positions>
+                    <input>6</input>
+                </positions>
+            </editor>
+            <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+        </field>
+        <field name="value">
+            <gui>
+                <guiname xml:lang="nl">Waarde</guiname>
+                <guiname xml:lang="en">Value</guiname>
+                <guiname xml:lang="zh">值</guiname>
+            </gui>
+            <editor>
+                <positions>
+                    <input>5</input>
+                    <list>5</list>
+                    <search>5</search>
+                </positions>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <maxLength value="4000" />
+            </datatype>
+        </field>
+    </fieldlist>
+</builder>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        
+<!--
+CacheManager Configuration
+==========================
+An ehcache.xml corresponds to a single CacheManager.
+
+See instructions below or the ehcache schema (ehcache.xsd) on how to configure.
+
+System property tokens can be specified in this file which are replaced when the configuration
+is loaded. For example multicastGroupPort=${multicastGroupPort} can be replaced with the
+System property either from an environment variable or a system property specified with a
+command line switch such as -DmulticastGroupPort=4446.
+
+The attributes of <ehcache> are:
+* name - an optional name for the CacheManager.  The name is optional and primarily used 
+for documentation or to distinguish Terracotta clustered cache state.  With Terracotta 
+clustered caches, a combination of CacheManager name and cache name uniquely identify a 
+particular cache store in the Terracotta clustered memory.
+* updateCheck - an optional boolean flag specifying whether this CacheManager should check
+for new versions of Ehcache over the Internet.  If not specified, updateCheck="true".
+* monitoring - an optional setting that determines whether the CacheManager should 
+automatically register the SampledCacheMBean with the system MBean server.  Currently,
+this monitoring is only useful when using Terracotta and thus the "autodetect" value 
+will detect the presence of Terracotta and register the MBean.  Other allowed values 
+are "on" and "off".  The default is "autodetect".
+-->    
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+             updateCheck="false" monitoring="autodetect">
+    
+    <!--
+    Mandatory Default Cache configuration. These settings will be applied to caches
+    created programmtically using CacheManager.add(String cacheName).
+
+    The defaultCache has an implicit name "default" which is a reserved cache name.
+    -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            overflowToDisk="true"
+            diskPersistent="false"
+            />
+
+    <cache name="com.finalist.cmsc.beans.om.PortletDefinition"
+        maxElementsInMemory="100"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+
+    <cache name="com.finalist.cmsc.beans.om.Portlet"
+        maxElementsInMemory="3000"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+
+    <cache name="com.finalist.cmsc.beans.om.Layout"
+        maxElementsInMemory="100"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+
+    <cache name="com.finalist.cmsc.beans.om.Stylesheet"
+        maxElementsInMemory="100"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+
+    <cache name="com.finalist.cmsc.beans.om.View"
+        maxElementsInMemory="100"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+
+    <cache name="com.finalist.cmsc.beans.om.NavigationItem"
+        maxElementsInMemory="1000"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />  
+
+    <cache name="PortletCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        overflowToDisk="false"
+        diskPersistent="false"
+        />
+        
+</ehcache>

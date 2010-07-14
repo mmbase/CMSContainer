@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+<list role="related" destination="pageproperty" minoccurs="0" maxoccurs="*" ordertype="string" >
+	
+	<title xml:lang="nl">Properties</title>
+	<title xml:lang="en">Properties</title>
+	<title xml:lang="zh">页面属性</title>
+
+	<item>
+		<field ftype="line" name="key" dtmaxlength="100">
+			<prompt xml:lang="en">Key</prompt>
+			<prompt xml:lang="nl">Sleutel</prompt>
+			<prompt xml:lang="zh">属性</prompt>
+		</field>
+		<field ftype="line" name="value" dtmaxlength="100">
+			<prompt xml:lang="en">Value</prompt>
+			<prompt xml:lang="nl">Waarde</prompt>
+			<prompt xml:lang="zh">属性值</prompt>
+		</field>
+	</item>	
+
+	<command name="insert" objectnumber="new">
+		<prompt xml:lang="en">New</prompt>
+		<prompt xml:lang="nl">Nieuw</prompt>
+		<prompt xml:lang="zh">新建</prompt>
+	</command>
+
+	<action type="create">
+		<relation role="related">
+			<object type="pageproperty" />
+		</relation>
+	</action>
+</list>
