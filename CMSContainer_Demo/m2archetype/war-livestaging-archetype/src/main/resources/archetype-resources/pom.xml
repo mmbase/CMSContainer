@@ -7,11 +7,11 @@
     <packaging>pom</packaging>
 	<name>cmsc-livestaging-base</name>
 	<properties>
-		<cmsc.version>1.8.3-SNAPSHOT</cmsc.version>
-		<cmscportlets.version>1.8.3-SNAPSHOT</cmscportlets.version>
-		<cmscmodules.version>1.8.3-SNAPSHOT</cmscmodules.version>
+		<cmsc.version>1.8.3</cmsc.version>
+		<cmscportlets.version>1.8.3</cmscportlets.version>
+		<cmscmodules.version>1.8.3</cmscmodules.version>
 		<mmbase.version>1.8.6-20080927</mmbase.version>
-		<mmbasermmci.version>1.8.3-SNAPSHOT-20061020</mmbasermmci.version>
+		<mmbasermmci.version>1.8.3-20061020</mmbasermmci.version>
 	</properties>
 	<modules>
 		<module>war</module>
