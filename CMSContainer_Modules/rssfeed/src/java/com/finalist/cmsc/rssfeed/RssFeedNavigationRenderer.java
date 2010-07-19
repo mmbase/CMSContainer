@@ -80,22 +80,7 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
             maxNumber = -1;
          }
 
-         Set<Node> channelSet = new HashSet<Node>();
-         if (RepositoryUtil.isCollectionChannel(Integer.toString(rssFeed.getChannel()))) {
-            channelSet.addAll(RssFeedUtil.getChildrenChannelsForCollection(contentNode));
-         } else {
-            channelSet.add(contentNode);
-         }
-
-         Date lastChange = null;
-         boolean first = true;
-
-         if (channelSet.size() > 0) {
-            for (Node node : channelSet) {
-               lastChange = buildItemsPerChannel(request, channel, contentTypesList, cloud, node, maxAgeInDays, useLifecycle, maxNumber, lastChange, first);
-               if (first) first = false;
-            }
-         }
+         Date lastChange = buildItemsPerChannel(request, channel, contentTypesList, cloud, contentNode, maxAgeInDays, useLifecycle, maxNumber, null, true);
 
          if (lastChange != null) {
             XmlUtil.createChildText(channel, "lastBuildDate", formatRFC822Date.format(lastChange));
@@ -111,8 +96,8 @@ public class RssFeedNavigationRenderer implements NavigationItemRenderer {
       }
    }
 
-   private Date buildItemsPerChannel(HttpServletRequest request, Element channel, List<String> contentTypesList, Cloud cloud, Node contentNode, int maxAgeInDays, boolean useLifecycle, int maxNumber, Date lastChange, boolean first) {
-      NodeQuery query = RepositoryUtil.createLinkedContentQuery(contentNode, contentTypesList, ContentElementUtil.PUBLISHDATE_FIELD, "down", useLifecycle, null, 0, maxNumber, -1, -1, -1);
+   private Date buildItemsPerChannel(HttpServletRequest request, Element channel, List<String> contentTypesList, Cloud cloud, Node contentChannel, int maxAgeInDays, boolean useLifecycle, int maxNumber, Date lastChange, boolean first) {
+      NodeQuery query = RepositoryUtil.createLinkedContentQuery(contentChannel, contentTypesList, ContentElementUtil.PUBLISHDATE_FIELD, "down", useLifecycle, null, 0, maxNumber, -1, -1, -1, null);
       // Add constraint: max age in days
       if (maxAgeInDays > 0) {
          SearchUtil.addDayConstraint(query, cloud.getNodeManager(RepositoryUtil.CONTENTELEMENT), ContentElementUtil.PUBLISHDATE_FIELD, "-" + maxAgeInDays);
