@@ -387,25 +387,27 @@ Xinha.prototype._createLink = function(link) {
 				}
 			}
 		}
-        a.href = param.f_href.trim();
-		a.target = param.f_target.trim();
-		a.title = param.f_tooltip.trim();
+		if(a != null) {
+			a.href = param.f_href.trim();
+			a.target = param.f_target.trim();
+			a.title = param.f_tooltip.trim();
 
-            if (Xinha.is_ie) {
-                  a.destination = param.f_destination.trim();
-                  if (!a.destination && a.relationID) {
-                        a.relationID = "";
-                  }
-            }
-            else {
-                  a.setAttribute("destination", param.f_destination.trim());
-                  if (!a.getAttribute("destination") && a.getAttribute("relationID")) {
-                        a.removeAttribute("relationID");
-                  }
-            }
-		   if(!Xinha.is_ie){
-            editor.selectNodeContents(a);
-         }
+	        if (Xinha.is_ie) {
+	            a.destination = param.f_destination.trim();
+	            if (!a.destination && a.relationID) {
+	                a.relationID = "";
+	            }
+	        }
+	        else {
+	            a.setAttribute("destination", param.f_destination.trim());
+	            if (!a.getAttribute("destination") && a.getAttribute("relationID")) {
+	                a.removeAttribute("relationID");
+	            }
+	        }
+	        if(!Xinha.is_ie){
+	        	editor.selectNodeContents(a);
+	        }
+		}
 		editor.updateToolbar();
 	},
 	outparam);
