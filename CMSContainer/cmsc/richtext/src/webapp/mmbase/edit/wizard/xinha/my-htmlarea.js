@@ -438,7 +438,7 @@ Xinha.prototype._insertImage = function(image) {
                 }
                 var img = image;
                 if (!img) {
-                  if ( Xinha.is_ie ) {
+                  if ( Xinha.is_ie && Xinha.ie_version < 8 ) {
                     var sel = editor._getSelection();
                     var range = editor._createRange(sel);
                     editor._doc.execCommand("insertimage", false, param.f_url);
