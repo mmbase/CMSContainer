@@ -55,6 +55,46 @@
 			    ajaxTreeLoader.initTree(treeNumbers[count], treeDivs[count], undefined, undefined, true);
 			}
         }
+
+        function siteSortUp(id) {
+            var tree = document.getElementById("tree");
+            var aboveId = null;
+            var passed = false;
+            for(var count = 0; count < tree.childNodes.length; count++) {
+				var node = tree.childNodes[count];
+				if(!passed && node != null && node.id != undefined) {
+					if(node.id == "tree"+id) {
+						passed = true;
+					}
+					else if(node.id.indexOf("tree") == 0) {
+						aboveId = node.id.substring(4,node.id.length);
+					}
+				}
+            }
+            siteSortSwap(id, aboveId);
+        }
+
+        function siteSortDown(id) {
+            var tree = document.getElementById("tree");
+            var belowId = null;
+            var justPassed = false;
+            for(var count = 0; count < tree.childNodes.length; count++) {
+				var node = tree.childNodes[count];
+				if(node != null && node.id != undefined) {
+					if(node.id == "tree"+id) {
+						justPassed = true;
+					}
+					else if(justPassed && node.id.indexOf("tree") == 0) {
+						belowId = node.id.substring(4,node.id.length);
+						justPassed = false;
+					}
+				}
+            }
+            siteSortSwap(id, belowId);
+        }
+		function siteSortSwap(id1, id2) {
+			document.location = "?do=sortSite&id1="+id1+"&id2="+id2;
+        }
    </script>
 </cmscedit:head>
 <body onload="loadFunction();">
