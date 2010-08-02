@@ -32,3 +32,19 @@ Type:  manual action
 - compare project's overwrites near /war/src/webapp/mmbase/edit/wizard/xinha/*
 - take over fixes in CMSc to project!
 --- End script ---
+
+
+
+
+Name: Hand-sortable sites
+Goal: Add pos field to site builder
+Type: SQL Script
+--- Start script ---
+ALTER TABLE mm_site ADD COLUMN pos int(11);
+ALTER TABLE live_site ADD COLUMN pos int(11);
+
+CREATE TABLE temp_site_pos (number int(11), pos int(11));
+INSERT INTO temp_site_pos SELECT a.number, (SELECT count(*) FROM mm_site b WHERE a.number > b.number) FROM mm_site a;
+UPDATE mm_site SET pos = (SELECT pos FROM temp_site_pos WHERE mm_site.number = temp_site_pos.number);
+DROP TABLE temp_site_pos;
+--- End script ---
