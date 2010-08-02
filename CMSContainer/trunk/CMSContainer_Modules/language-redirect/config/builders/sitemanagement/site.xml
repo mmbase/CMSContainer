@@ -133,5 +133,24 @@
                 <maxLength value="40"/>
             </datatype>
         </field>
+		<field name="pos">
+			<descriptions>
+				<description xml:lang="en">Position number, useful for ordering the relations</description>
+				<description xml:lang="nl">Postitie of volgordenummer, te gebruiken voor het sorteren van de relaties</description>
+			</descriptions>
+			<gui>
+				<guiname xml:lang="en">Position</guiname>
+				<guiname xml:lang="fr">Placent</guiname>
+				<guiname xml:lang="nl">Positie</guiname>
+			</gui>
+			<editor>
+				<positions>
+					<input>9</input>
+					<list>9</list>
+					<search>9</search>
+				</positions>
+			</editor>
+			<datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+        </field>        
     </fieldlist>
 </builder>
