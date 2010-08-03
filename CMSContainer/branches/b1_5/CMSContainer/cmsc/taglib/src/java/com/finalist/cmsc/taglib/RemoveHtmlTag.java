@@ -9,6 +9,7 @@ public class RemoveHtmlTag extends SimpleTagSupport {
    private String html;
    private String var;
    private Integer maxlength;
+   private Integer minlength = 0;
 
 
    public void setHtml(String html) {
@@ -26,18 +27,23 @@ public class RemoveHtmlTag extends SimpleTagSupport {
    }
 
 
+   public void setMinlength(Integer minlength) {
+      this.minlength = minlength;
+   }
+
+
    @Override
    public void doTag() {
       PageContext ctx = (PageContext) getJspContext();
       HttpServletRequest request = (HttpServletRequest) ctx.getRequest();
 
-      html = removeHtml(maxlength, html);
+      html = removeHtml(maxlength, minlength, html);
 
       request.setAttribute(var, html);
    }
 
 
-   private static String removeHtml(Integer maxlength, String html) {
+   private static String removeHtml(Integer maxlength, Integer minlength, String html) {
       StringBuffer result = new StringBuffer();
       int startIndex = 0;
       boolean keepGoing = true;
@@ -57,10 +63,10 @@ public class RemoveHtmlTag extends SimpleTagSupport {
       String resultHtml = result.toString();
       if (maxlength != null && resultHtml.length() > maxlength) {
          int cropIndex = resultHtml.lastIndexOf(".", maxlength);
-         if (cropIndex == -1) {
+         if (cropIndex < minlength) {
             cropIndex = resultHtml.lastIndexOf(" ", maxlength);
          }
-         if (cropIndex == -1) {
+         if (cropIndex < minlength) {
             cropIndex = maxlength;
          }
          resultHtml = resultHtml.substring(0, cropIndex) + " ...";
