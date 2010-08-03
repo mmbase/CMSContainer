@@ -994,6 +994,14 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>The minimum length allowed. This is not a guarantee, but otherwise the tag might clip off a big 
+            chunck when clipping on a '.' 
+            </description>
+            <name>minlength</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
     <tag>
         <description>Sort a list</description>
