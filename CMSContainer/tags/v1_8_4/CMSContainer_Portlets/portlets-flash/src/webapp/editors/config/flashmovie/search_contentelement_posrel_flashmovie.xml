@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+
+<list role="posrel" destination="flashmovie" minoccurs="0" maxoccurs="*" orderby="field[@name='pos']">
+	<action include="config/flashmovie/load_flashmovie.xml" />
+	<title xml:lang="nl">Flash applicatie</title>
+	<title xml:lang="en">Flash application</title>
+
+	<item>
+		<title>Flash applicatie</title>
+		<description></description>
+		<field name="title" ftype="data">
+			<prompt>Title</prompt>
+		</field>
+		<field ftype="startwizard" inline="true" wizardname="config/flashmovie/flashmovie" />
+	</item>
+
+	<command name="startwizard" inline="true" wizardname="config/flashmovie/flashmovie" objectnumber="new">
+		<prompt>New</prompt>
+	</command>
+
+	<command name="search" nodepath="flashmovie" age="-1" fields="title,description">
+		<prompt xml:lang="en">Search flash application</prompt>
+		<prompt xml:lang="nl">Zoek flash applicatie</prompt>
+		<search-filter>
+			<name xml:lang="en">Title / Description</name>
+			<name xml:lang="nl">Titel / Omschrijving</name>
+			<search-fields>[title]|[description]</search-fields>
+		</search-filter>
+		<search-filter>
+			<name xml:lang="en">Title contains</name>
+			<name xml:lang="nl">Titel bevat</name>
+			<search-fields>[title]</search-fields>
+		</search-filter>
+		<search-filter>
+			<name xml:lang="en">Description contains</name>
+			<name xml:lang="nl">Omschrijving bevat</name>
+			<search-fields>[description]</search-fields>
+		</search-filter>
+	</command>
+
+
+	<action type="create">
+		<relation role="posrel">
+			<field name="pos">{sum(//relation[@role='posrel' and @firstitem='true']/field[@name='pos'])-{$pos}}</field>
+			<object type="flashmovie" />
+		</relation>
+	</action>
+	<action type="delete" />
+</list>

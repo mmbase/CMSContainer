@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portletdefinition exportsource="jdbc:mysql://localhost/flash" timestamp="20080519133835">
+	<!--  
+		<node number="638" owner="default">
+			<title>Flash portlet</title>
+			<description>Flash portlet</description>
+			<definition>flashportlet</definition>
+			<type>multiple</type>
+		</node>
+	-->
+</portletdefinition>
