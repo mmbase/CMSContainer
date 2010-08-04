@@ -64,14 +64,16 @@ public class TagRelatedPortlet extends RelatedContentPortlet {
 	}
 
 	private String getIdFromScreen(RenderRequest req, String relatedPage, String relatedWindow, String var) {
-		Integer pageId = Integer.valueOf(relatedPage);
-		NavigationItem item = SiteManagement.getNavigationItem(pageId);
-		if (item instanceof Page) {
-			Page page = (Page) item;
-			int portletId = page.getPortlet(relatedWindow);
-			Portlet portlet = SiteManagement.getPortlet(portletId);
-			if (portlet != null) {
-				return portlet.getParameterValue(var);
+		if(relatedPage != null && relatedPage.length() > 0) {
+			Integer pageId = Integer.valueOf(relatedPage);
+			NavigationItem item = SiteManagement.getNavigationItem(pageId);
+			if (item instanceof Page) {
+				Page page = (Page) item;
+				int portletId = page.getPortlet(relatedWindow);
+				Portlet portlet = SiteManagement.getPortlet(portletId);
+				if (portlet != null) {
+					return portlet.getParameterValue(var);
+				}
 			}
 		}
 		return null;
@@ -81,16 +83,18 @@ public class TagRelatedPortlet extends RelatedContentPortlet {
 	protected void doEditDefaults(RenderRequest req, RenderResponse res)
 			throws IOException, PortletException {
 		String relatedPage = req.getPreferences().getValue(RELATED_PAGE, null);
-		Integer pageid = Integer.valueOf(relatedPage);
-		String pagepath = SiteManagement.getPath(pageid, true);
-
-		if (pagepath != null) {
-			Set<String> positions = SiteManagement.getPagePositions(pageid
-					.toString());
-			List<String> orderedPositions = new ArrayList<String>(positions);
-			Collections.sort(orderedPositions);
-			setAttribute(req, "relatedPagepositions", new ArrayList<String>(
-					orderedPositions));
+		if(relatedPage != null && relatedPage.length() > 0) {
+			Integer pageid = Integer.valueOf(relatedPage);
+			String pagepath = SiteManagement.getPath(pageid, true);
+	
+			if (pagepath != null) {
+				Set<String> positions = SiteManagement.getPagePositions(pageid
+						.toString());
+				List<String> orderedPositions = new ArrayList<String>(positions);
+				Collections.sort(orderedPositions);
+				setAttribute(req, "relatedPagepositions", new ArrayList<String>(
+						orderedPositions));
+			}
 		}
 		super.doEditDefaults(req, res);
 	}
