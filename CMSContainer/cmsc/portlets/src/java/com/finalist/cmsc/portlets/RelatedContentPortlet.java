@@ -35,7 +35,8 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
    /**
     * This regex pattern is used to match the elementId from a renderURL.
     */
-   private static final String RENDERURL_ELEMENTID_PATTERN = "_([0-9]+)";
+   private static final String RENDERURL_ELEMENTID_WINDOW_REPLACE = "WINDOW";
+   private static final String RENDERURL_ELEMENTID_PATTERN = RENDERURL_ELEMENTID_WINDOW_REPLACE+"_elementId/1_([0-9]+)";
    
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
@@ -97,7 +98,7 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
    protected String getRelatedElementId(RenderRequest request, String relatedPage, String relatedWindow) {
       String elementId = getElementIdFromContentURL(request);
 	  if (StringUtils.isEmpty(elementId)) {
-		  elementId = getElementIdFromRenderURL(request);
+		  elementId = getElementIdFromRenderURL(request, relatedWindow);
 		  if (StringUtils.isEmpty(elementId)) {
 			  if (StringUtils.isNotEmpty(relatedPage) && StringUtils.isNotEmpty(relatedWindow)) {
 				  elementId = getElementIdFromScreen(request, relatedPage, relatedWindow);
@@ -131,9 +132,9 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
       return null;
    }
 
-   private String getElementIdFromRenderURL(RenderRequest req) {
+   private String getElementIdFromRenderURL(RenderRequest req, String relatedWindow) {
       String requestURL = getServletRequest(req).getRequestURL().toString();
-      Pattern pattern = Pattern.compile(RENDERURL_ELEMENTID_PATTERN);
+      Pattern pattern = Pattern.compile(RENDERURL_ELEMENTID_PATTERN.replaceAll(RENDERURL_ELEMENTID_WINDOW_REPLACE, relatedWindow));
       Matcher matcher = pattern.matcher(requestURL);
       String value = null;
       while (matcher.find() && matcher.groupCount() >= 1) {
@@ -141,6 +142,7 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
       }
       return value;
    }
+   
    private HttpServletRequest getServletRequest(RenderRequest req) {
       return (HttpServletRequest) ((PortletRequestImpl) req).getRequest();
    }
