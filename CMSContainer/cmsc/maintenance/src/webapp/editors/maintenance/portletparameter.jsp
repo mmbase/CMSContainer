@@ -12,55 +12,69 @@
 <cmscedit:head title="threads.title" />
 <body>
 <b>Portlet parameter instead of node parameters:</b><br/>
-	<mm:list path="portletparameter,portlet,page" constraints="portletparameter.key='relatedPage'">
-		<c:set var="pageNumber"><mm:field name="page.number"/></c:set>
-		<c:set var="portletNumber"><mm:field name="portlet.number"/></c:set>
-		<c:set var="portletParameterNumber"><mm:field name="portletparameter.number"/></c:set>
-
-		<mm:node number="${pageNumber}">
-			<mm:field name="path"/>
-		</mm:node>
-
-		<mm:remove referid="portlet"/>
-		<mm:node number="${portletNumber}" id="portlet">
-			<mm:field name="title"/>
-		</mm:node>
-		
-		<c:set var="size" value="0"/>
-		<mm:list path="portlet,nodeparameter" constraints="portlet.number = ${portletNumber}">
-			<mm:first><c:set var="size"><mm:size/></c:set></mm:first>
-		</mm:list>
-		<c:if test="${size == 0}">
-			<c:set var="key"><mm:field name="portletparameter.key"/></c:set>
-			<c:set var="value"><mm:field name="portletparameter.value"/></c:set>
-			<c:set var="nodetype"><mm:node number="${value}" notfound="skip"><mm:nodeinfo type="type"/></mm:node></c:set>
-			<c:if test="${nodetype != 'page' && nodetype != 'site'}">
-				<mm:listnodes type="remotenodes" constraints="sourcenumber=${value}">
-					<c:set var="value"><mm:field name="destinationnumber"/></c:set>
-				</mm:listnodes>
-			</c:if>
-			<mm:remove referid="nodeparameter"/>
-			<mm:createnode type="nodeparameter" id="nodeparameter">
-				<mm:setfield name="key">${key}</mm:setfield>
-				<mm:setfield name="value">${value}</mm:setfield>
-			</mm:createnode>
-			
-			<mm:createrelation role="parameterrel" source="portlet" destination="nodeparameter"/>
-			
-			<%try{ %>
-			<mm:deletenode number="${portletParameterNumber}" deleterelations="true"/>
-			<% }catch (Exception e) {
-			} %>
-			// created node parameter and removed portlet parameter
-		</c:if>
-		<c:if test="${size > 0}">
-			<b>Already has node parameter, fix by hand!</b>
-		</c:if>
-		<br/>
-	</mm:list>
-	
     <% if (ServerUtil.isStaging()) { %>	
-		<br/><br/><b>Related portlets with no node parameters (only on staging):</b><br/>
+		<mm:list path="portletparameter,portlet,page" constraints="portletparameter.key='relatedPage'">
+			<c:set var="pageNumber"><mm:field name="page.number"/></c:set>
+			<c:set var="portletNumber"><mm:field name="portlet.number"/></c:set>
+			<c:set var="portletParameterNumber"><mm:field name="portletparameter.number"/></c:set>
+	
+			<mm:node number="${pageNumber}">
+				<mm:field name="path"/>
+			</mm:node>
+	
+			<mm:remove referid="portlet"/>
+			<mm:node number="${portletNumber}" id="portlet">
+				<mm:field name="title"/>
+			</mm:node>
+			
+			<c:set var="size" value="0"/>
+			<mm:list path="portlet,nodeparameter" constraints="portlet.number = ${portletNumber}">
+				<mm:first><c:set var="size"><mm:size/></c:set></mm:first>
+			</mm:list>
+			<c:if test="${size == 0}">
+				<c:set var="key"><mm:field name="portletparameter.key"/></c:set>
+				<c:set var="value"><mm:field name="portletparameter.value"/></c:set>
+				<mm:remove referid="nodeparameter"/>
+				<mm:createnode type="nodeparameter" id="nodeparameter">
+					<mm:setfield name="key">${key}</mm:setfield>
+					<mm:setfield name="value">${value}</mm:setfield>
+				</mm:createnode>
+				
+				<mm:createrelation role="parameterrel" source="portlet" destination="nodeparameter"/>
+				
+				<%try{ %>
+				<mm:deletenode number="${portletParameterNumber}" deleterelations="true"/>
+				<% }catch (Exception e) {
+				} %>
+
+				<mm:node referid="nodeparameter" jspvar="node">
+					<% 
+					CloudInfo localCloudInfo = CloudInfo.getCloudInfo(cloud);
+					int remoteCloudNumber = org.mmbase.remotepublishing.CloudManager.getLocalCloudNumber("live.server");
+			      	CloudInfo remoteCloudInfo = CloudInfo.getCloudInfo(remoteCloudNumber);
+			      	PublishManager.createNodeAndRelations(localCloudInfo, node, remoteCloudInfo);
+					
+					%>
+				</mm:node>
+
+				<mm:node referid="portlet" jspvar="node">
+					<% 
+					CloudInfo localCloudInfo = CloudInfo.getCloudInfo(cloud);
+			      	PublishManager.updateNodeAndRelations(localCloudInfo, node);
+					%>
+				</mm:node>
+
+				// created node parameter and removed portlet parameter
+
+
+			</c:if>
+			<c:if test="${size > 0}">
+				<b>Already has node parameter, fix by hand!</b>
+			</c:if>
+			<br/>
+		</mm:list>
+	
+		<br/><br/><b>Related portlets with no node parameters:</b><br/>
 		<mm:list path="portletdefinition,portlet,page" constraints="portletdefinition.definition='relatedcontentportlet'">
 			<c:set var="pageNumber"><mm:field name="page.number"/></c:set>
 			<c:set var="portletNumber"><mm:field name="portlet.number"/></c:set>
