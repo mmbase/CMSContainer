@@ -40,7 +40,7 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
    
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
-      setPortletParameter(portletId, RELATED_PAGE, request.getParameter(RELATED_PAGE));
+      setPortletNodeParameter(portletId, RELATED_PAGE, request.getParameter(RELATED_PAGE));
       setPortletParameter(portletId, RELATED_WINDOW, request.getParameter(RELATED_WINDOW));
    }
 
