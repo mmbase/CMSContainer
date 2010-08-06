@@ -17,7 +17,9 @@ import com.finalist.newsletter.domain.Publication;
 import com.finalist.newsletter.services.NewsletterPublicationService;
 
 /**
+ * 
  * @author Lisa
+ * @version
  */
 public class NewsletterPublicationAction extends DispatchActionSupport {
 
@@ -36,7 +38,7 @@ public class NewsletterPublicationAction extends DispatchActionSupport {
 
    /**
     * protected unspecified function, doing default newsletter publication
-    *
+    * 
     * @param mapping
     * @param form
     * @param request
@@ -45,10 +47,10 @@ public class NewsletterPublicationAction extends DispatchActionSupport {
     * @throws Exception
     */
    protected ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-                                       HttpServletResponse response) throws Exception {
-
+         HttpServletResponse response) throws Exception {
+      
       log.debug("No parameter specified, go to newsletterPublicationSearch.jsp showing search results");
-
+      
       PagingUtils.initStatusHolder(request);
       List<Publication> publications;
       int resultCount = publicationService.searchPublication("", "", "", "", false).size();
@@ -62,15 +64,15 @@ public class NewsletterPublicationAction extends DispatchActionSupport {
 
    /**
     * specified function searchNewsletterPublication, could search newsletter publication with form
-    *
-    * @param mapping  Description of Parameter
-    * @param form     Description of Parameter
-    * @param request  Description of Parameter
+    * 
+    * @param mapping Description of Parameter
+    * @param form Description of Parameter
+    * @param request Description of Parameter
     * @param response Description of Parameter
     * @return Showing the searchNewsletterPublication result
     */
    public ActionForward searchNewsletterPublication(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-                                                    HttpServletResponse response) {
+         HttpServletResponse response) {
       log.debug("parameter specified, search newsletter publication ");
 
       PagingUtils.initStatusHolder(request);

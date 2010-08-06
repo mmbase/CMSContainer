@@ -5,11 +5,9 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-
 
 import com.finalist.cmsc.services.workflow.Workflow;
 import com.finalist.cmsc.struts.MMBaseAction;
@@ -44,7 +42,7 @@ public class PageWorkflowPublishAction extends MMBaseAction {
 		} else {
 		
    		if (tmpAction.equals(WorkflowUtil.ACTION_PUBLISH)) {
-   		   response.getWriter().print(StringUtils.replace(rbundle.getString("publish.published"), "{0}", Integer.toString(nodes.size())));
+   		   response.getWriter().print(rbundle.getString("publish.published"));
    		} else {
    		   if (tmpAction.equals(WorkflowUtil.ACTION_ACCEPT)) {
 	               tmpAction = "approv";

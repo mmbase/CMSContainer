@@ -12,9 +12,7 @@ import org.mmbase.remotepublishing.PublishManager;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.navigation.NavigationUtil;
-import com.finalist.cmsc.navigation.PagesUtil;
-import com.finalist.cmsc.repository.AssetElementUtil;
+import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.util.ServerUtil;
 
@@ -52,7 +50,7 @@ public class CleanerModule extends Module implements Runnable {
       if (ServerUtil.isReadonly()) {
          return;
       }
-
+      
       // Initialize the module.
       String intervalStr = getInitParameter("interval");
       if (intervalStr == null) {
@@ -62,6 +60,8 @@ public class CleanerModule extends Module implements Runnable {
          interval = Integer.parseInt(intervalStr) * 1000;
       }
 
+      
+      
       // Start thread to wait for mmbase to be up and running.
       Thread cleaner = new Thread(this);
       cleaner.setDaemon(true);
@@ -103,7 +103,6 @@ public class CleanerModule extends Module implements Runnable {
       try {
          Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
          cleanContentElements(cloud);
-         cleanAssetElements(cloud);
          cleanPages(cloud);
       }
       catch (Throwable t) {
@@ -139,34 +138,6 @@ public class CleanerModule extends Module implements Runnable {
                // remotesnodes data
                // just log the stacktrace and don't interrupt cleaning of other
                // contentelements
-               log.error(Logging.stackTrace(e));
-            }
-         }
-      }
-   }
-
-
-   private void cleanAssetElements(Cloud cloud) {
-      NodeQuery elementsQuery = AssetElementUtil.getNodeManager(cloud).createQuery();
-      AssetElementUtil.addLifeCycleInverseConstraint(elementsQuery, System.currentTimeMillis());
-
-      elementsQuery.setCachePolicy(CachePolicy.NEVER);
-
-      NodeList queryNodes = AssetElementUtil.getNodeManager(cloud).getList(elementsQuery);
-      if (!queryNodes.isEmpty()) {
-         NodeIterator ni = queryNodes.nodeIterator();
-         while (ni.hasNext()) {
-            Node element = ni.nextNode();
-            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") " + element.getNumber());
-            try {
-               PublishManager.unLinkNode(element);
-               element.delete(false);
-            }
-            catch (Exception e) {
-               // for some reason cleaning will fail because of invalid
-               // remotesnodes data
-               // just log the stacktrace and don't interrupt cleaning of other
-               // assetelements
                log.error(Logging.stackTrace(e));
             }
          }

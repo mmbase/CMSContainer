@@ -11,9 +11,7 @@ import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.beans.om.Page;
 import com.finalist.cmsc.navigation.*;
-import com.finalist.cmsc.navigation.publish.PagePublisher;
 import com.finalist.cmsc.navigation.tree.PageTreeItemRenderer;
-import com.finalist.cmsc.services.publish.Publisher;
 
 /**
  * NavigationItemManager implementation for Page types.
@@ -83,7 +81,6 @@ public class PageNavigationItemManager implements NavigationItemManager {
       loadLayout(node, page);
       loadStylesheet(node, page);
       loadPageImages(node, page);
-      loadPageProperties(node, page);
       return page;
    }
 
@@ -112,18 +109,13 @@ public class PageNavigationItemManager implements NavigationItemManager {
       page.setPageImages(pageImages);
    }
 
-   protected void loadPageProperties(Node pageNode, Page page) {
-      Map<String, String> pageProperties = PagesUtil.getPageProperties(pageNode);
-      page.setPageProperties(pageProperties);
-   }
-   
    /**
     * publishing of sites and pages is done by the publish module
     *
     * @see com.finalist.cmsc.navigation.NavigationItemManager#getPublisher(org.mmbase.bridge.Cloud, java.lang.String)
     */
-   public Publisher getPublisher(Cloud cloud, String type) {
-      return new PagePublisher(cloud);
+   public Object getPublisher(Cloud cloud, String type) {
+      return null;
    }
 
    /**

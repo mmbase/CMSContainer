@@ -14,7 +14,7 @@ import java.util.*;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -27,7 +27,6 @@ import org.mmbase.security.Rank;
 import org.mmbase.security.UserContext;
 
 import com.finalist.cmsc.beans.om.*;
-import com.finalist.cmsc.mmbase.TreePathCache;
 import com.finalist.cmsc.services.Properties;
 import com.finalist.cmsc.services.security.LoginSession;
 import com.finalist.cmsc.util.ServerUtil;
@@ -191,9 +190,10 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
       }
       else {
          stylesheets = getStylesheetForPage(pagesToRoot.get(0));
-
+         
          // loop through pages
 			for (int count = 1; count < pagesToRoot.size(); count++) {
+			   
 			   Page page = pagesToRoot.get(count);
 			   List<Stylesheet> pageSheets = getStylesheetForPage(page);
 			   if (!pageSheets.isEmpty()) {
@@ -400,6 +400,5 @@ public class SiteManagementServiceMMBaseImpl extends SiteManagementService {
    @Override
    public void resetSiteCache() {
       SiteModelManager.getInstance().resetSiteCache();
-      TreePathCache.clearAllCaches();
    }
 }

@@ -15,7 +15,7 @@
 		<prompt xml:lang="nl">Omschrijving</prompt>
 		<prompt xml:lang="zh">描述</prompt>
 	</field>
-	<field name="resource" dtmaxlength="255" ftype="line" >
+	<field name="resource" dtmaxlength="255" ftype="line" dtrequired="true">
 		<prompt xml:lang="en">Resource</prompt>
 		<prompt xml:lang="nl">Style Sheet</prompt>
 		<prompt xml:lang="zh">样式表</prompt>
@@ -31,10 +31,5 @@
 		<prompt xml:lang="nl">Overwriteable</prompt>
 		<prompt xml:lang="zh">可覆盖</prompt>
 		<optionlist select="boolean" />
-	</field>
-	<field name="text" dtmaxlength="512000" ftype="text" rows="15">
-		<prompt xml:lang="en">Stylesheet body</prompt>
-		<prompt xml:lang="nl">Stylesheet tekst</prompt>
-		<prompt xml:lang="zh">脚本</prompt>
 	</field>
 </form-schema>

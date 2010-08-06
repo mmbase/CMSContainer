@@ -27,37 +27,18 @@ public class LanguageRedirectUtil {
       // Get the cloud. 
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       
-      // Is there sites with the given language? 
-      NodeList foreignSites = SearchUtil.findNodeList(cloud, SiteUtil.SITE, "language", language);
+      // Is there a site with the given language? 
+      Node foreignSite = SearchUtil.findNode(cloud, SiteUtil.SITE, "language", language);
       
-      if (foreignSites == null) {
-         log.error("No sites where found with the language\"" + language + "\".");
+      if (foreignSite == null) {
+         log.error("No site was found with the language\"" + language + "\".");
          return null;
       }
       
       try {
       
-    	 // Get the node with the id given in the id parameter.
-     	 Node pageOrSiteNode = cloud.getNode(id);
-    	 
-     	 // get site for the node we have, to see what lag
-     	 Node site = NavigationUtil.getSiteFromPath(cloud, NavigationUtil.getPathToRootString(pageOrSiteNode, true));
-     	 String siteLangKey = site.getFieldValue("linsitename").toString(); 
-         Node foreignSite = null;
-         
-         for(Node aSite:foreignSites) {
-        	 String siteKey = aSite.getFieldValue("linsitename").toString();
-        	 if(siteLangKey.equals(siteKey)) {
-        		 foreignSite = aSite;
-        	 }
-         }
-         
-         if (foreignSite == null) {
-             log.error("No site was found with the language independed sitekey\"" + siteLangKey + "\".");
-             return null;
-         }
-         
-         
+         // Get the node with the id given in the id parameter.
+         Node pageOrSiteNode = cloud.getNode(id);
          NodeManager nodeManager = pageOrSiteNode.getNodeManager();
          log.debug("The nodemanager of the current node's name is: " + nodeManager.getName());
          

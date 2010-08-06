@@ -2,8 +2,7 @@
   Editwizard cascading style sheet.
 */
 div.buttonscontent  {
-	text-align: right;
-	height:39px;
+        text-align: right;
 } 
 
 /* CMS Container style  */
@@ -62,14 +61,14 @@ div.tabs div.tab_active div.body
 	clear: both;
 	display: inline;	
 }
-div.tabs a.valid div.tab_active  div.title
+div.tabs div.tab_active a.valid
 {
 	padding-top: 17px;
 	color: #313728;
 	font-size: 14px;
 	float: left;	
 }
-div.tabs a.notvalid div.tab_active  div.title
+div.tabs div.tab_active a.notvalid
 {
 	padding-top: 17px;
 	color: #cc0000;
@@ -100,14 +99,14 @@ div.tabs div.tab div.body
 	clear: both;
 	display: inline;
 }
-div.tabs a.valid div.tab  div.body  div.title
+div.tabs div.tab div.body a.valid
 {
 	padding-top: 14px;
    color: #64676f;
    font-size: 14px;
 	float: left;			
 }
-div.tabs a.notvalid div.tab  div.body  div.title
+div.tabs div.tab div.body a.notvalid
 {
 	padding-top: 17px;
 	color: #cc0000;
@@ -658,9 +657,5 @@ div.messagebox_red div.box div.body table
 	margin: 0 10px;
 	color: #ffffff;	
 	background-color: #cc0000 !important;		
-}
-/*To fix the issue that the hand can't appear in IE,*/
-div.tabs a{
-   cursor:hand;
 }
 

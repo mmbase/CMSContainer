@@ -19,7 +19,12 @@
 
 
     <div class="heading">
-      <cmsc:field elementid="${elementId}" name="title" edit="${edit}" container="h2"/>
+      <h2 id="content_${elementId}_title"><mm:field name="title"/></h2>
+	  <c:if test="${edit}">
+		  <script type="text/javascript">
+			new InPlaceEditor.Local('content_${elementId}_title');
+		  </script>
+	  </c:if>
     </div>
     <div class="content">
       <div class="eventinfo">
@@ -31,37 +36,33 @@
       <cmsc-bm:linkedimages width="220" position="top-left" style="float: left; padding: 0px 20px 20px 0px;" />
       <cmsc-bm:linkedimages width="220" position="top-right" style="float: right; padding: 0px 0px 20px 20px;" />
 
-   <cmsc:field elementid="${elementId}" name="intro" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
+      <mm:field name="intro" escape="none">
+        <mm:isnotempty>
+          <p class="intro" id="content_${elementId}_intro"><mm:write /></p>
+          <c:if test="${edit}">
+          
+  		  	<script type="text/javascript">
+				new InPlaceEditor.Local('content_${elementId}_intro', {minHeight:300, htmlarea:true, formId:'contentportlet'});
+		  	</script>
+		  </c:if>
+        </mm:isnotempty>
+      </mm:field>
 
-   <cmsc:field elementid="${elementId}" name="body" edit="${edit}" options="minHeight:300, htmlarea:true, formId:'contentportlet'"/>
+	<c:if test="${edit}">
+		<div id="content_${elementId}_body">
+	</c:if>
+      <mm:field name="body" escape="none">
+        <mm:isnotempty>
+          <p class="body"><mm:write /></p>
+        </mm:isnotempty>
+      </mm:field>
+	<c:if test="${edit}">
+		</div>
+	  	<script type="text/javascript">
+			new InPlaceEditor.Local('content_${elementId}_body', {minHeight:300, htmlarea:true, formId:'contentportlet'});
+	  	</script>
+	</c:if>
        
-      <div class="divider3"></div>
-
-      <mm:listrelationscontainer type="images" role="imagerel" searchdir="destination">
-        <mm:sortorder field="order" />
-        <mm:constraint field="pos" value="gallery" />
-        
-        <mm:listrelations>
-          <mm:first>
-            <div style="width: 100%;">
-            <h3 style="font-size: 1em;"><fmt:message key="view.article.gallery" /></h3>
-          </mm:first>
-          <mm:node number="${_node.dnumber}">
-            <a href=" <mm:image template="s(600)" />" rel="lightbox[gallery]" title="${_node.description}">
-            <%--
-              thumbnails are rendered by the basic CMSC image tag,
-              popup is set to 'false' since a lightbox-popup effect is used.
-            --%>
-              <cmsc-bm:image width="125" popup="false" />
-            </a>
-          </mm:node>
-
-          <mm:last>
-            </div>
-          </mm:last>
-        </mm:listrelations>
-      </mm:listrelationscontainer>
-
       <div class="divider3"></div>
        
       <%-- related articles --%>
@@ -95,7 +96,7 @@
               href="<mm:field name="url" escape="text/html/attribute" />" 
               title="<mm:field name="description" escape="text/html/attribute" />"
               target="_blank"
-            ><mm:field name="title" escape="text/xml" /></a>
+            ><mm:field name="name" escape="text/xml" /></a>
           </li>
           
         <mm:last></ul></mm:last>          

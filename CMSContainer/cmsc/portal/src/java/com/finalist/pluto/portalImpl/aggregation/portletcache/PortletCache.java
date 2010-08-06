@@ -13,11 +13,10 @@ public class PortletCache extends BlockingCache {
 
 	private static PortletCache cache = new PortletCache();
 
-   
    public PortletCache() throws CacheException {
       super(CacheManager.create().getCache("PortletCache"));
    }
-   
+	
 	/**
 	 * The cache key is: page number, portlet position and parameters
 	 * 

@@ -4,8 +4,6 @@
    <field name="name" />
    <field name="title" />
    <field name="description" />
-   <field name="intro" />
-   <field name="body" />
    <field name="saveanswer" />
    <field name="emailaddresses" />
    <field name="emailsubject" />
@@ -23,6 +21,4 @@
    <relation destination="contentchannel" role="creationrel" />
    <relation destination="contentchannel" role="contentrel" />
    <relation destination="formfield" role="posrel" />
-   <relation destination="contentelement" role="posrel" />
-   
 </action>

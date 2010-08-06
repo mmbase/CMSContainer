@@ -15,15 +15,13 @@
 
    <div class="content">
       <div class="tabs">
-	    <a href="#">
           <div class="tab_active">
             <div class="body">
-               <div class="title">
-                  <fmt:message key="savedform.title.content" />
+               <div>
+                  <a href="#"><fmt:message key="savedform.title.content" /></a>
                </div>
             </div>
-          </div>
-		 </a>
+         </div>
       </div>
    </div>
    <div class="editor"> 

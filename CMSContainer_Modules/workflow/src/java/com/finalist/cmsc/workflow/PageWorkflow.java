@@ -21,7 +21,6 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
 import com.finalist.cmsc.navigation.*;
-import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.security.Role;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.publish.Publish;
@@ -54,13 +53,14 @@ public class PageWorkflow extends WorkflowManager {
    public Node createFor(Node page, String remark) {
       synchronized (page) {
          if (hasWorkflow(page)) {
-            return getWorkflows(page).getNode(0);
+            return (Node) getWorkflows(page).get(0);
          }
-         
-         Node wfItem = createFor(TYPE_PAGE, remark, null);
-         RelationUtil.createRelation(wfItem, page, WORKFLOWREL);
-         log.debug("Workflow " + wfItem.getNumber() + " created for page " + page.getNumber());
-         return wfItem;
+         else {
+            Node wfItem = createFor(TYPE_PAGE, remark);
+            RelationUtil.createRelation(wfItem, page, WORKFLOWREL);
+            log.debug("Workflow " + wfItem.getNumber() + " created for page " + page.getNumber());
+            return wfItem;
+         }
       }
    }
 
@@ -133,14 +133,6 @@ public class PageWorkflow extends WorkflowManager {
       else {
          page = getPageNode(node);
       }
-      List<Node> blockNodes = AssetElementUtil.findAssetRelatedNodes(page);
-      for (Node blockNode: blockNodes) {
-         Node wf = getWorkflowNode(blockNode, "asset");
-         if (wf != null) {
-            changeWorkflow(wf, STATUS_PUBLISHED, "");
-            publishInternal(wf, blockNode);
-         }
-     }
       publish(page, TYPE_PAGE, publishNumbers);
    }
 
@@ -186,7 +178,7 @@ public class PageWorkflow extends WorkflowManager {
       List<Node> path = NavigationUtil.getPathToRoot(node);
       path.remove(path.size() - 1);
       for (Node pathElement : path) {
-         if ((!Publish.isPublished(pathElement) && !Publish.inPublishQueue(pathElement))
+         if (!Publish.isPublished(pathElement)
                && (publishNumbers == null || !publishNumbers.contains(pathElement.getNumber()))) {
             errors.add(pathElement);
          }

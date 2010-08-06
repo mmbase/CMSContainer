@@ -15,7 +15,7 @@
       <prompt xml:lang="nl">Tekst</prompt>
       <prompt xml:lang="zh">主体</prompt>
    </field>
-   <field name="pagesize" dtrequired="true" dtmin="1" >
+   <field name="pagesize">
       <prompt xml:lang="en">Number of message per page</prompt>
       <prompt xml:lang="nl">Aantal berichten per pagina</prompt>
       <prompt xml:lang="zh">每页信息数</prompt>

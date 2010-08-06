@@ -20,13 +20,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-
 public class CheckboxTag extends SimpleTagSupport {
 
 	public String var;
-	public String name;
 	public String value;
 	public Object selected;
 	public boolean checked;
@@ -35,7 +31,7 @@ public class CheckboxTag extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		PageContext ctx = (PageContext) getJspContext();
 
-		ctx.getOut().print("<input type=\"checkbox\" class=\"checkbox\" style=\"width:15px;\" name=\"" + StringEscapeUtils.escapeXml(name) + "\" value=\"" + value + "\" ");
+		ctx.getOut().print("<input type=\"checkbox\" class=\"checkbox\" style=\"width:15px;\" name=\"" + var + "\" value=\"" + value + "\" ");
 		if (isSelected(ctx.getRequest()) == true || this.checked == true) {
 			ctx.getOut().print("checked=\"checked\"");
 		}
@@ -84,16 +80,10 @@ public class CheckboxTag extends SimpleTagSupport {
 		return false;
 	}
 
-    public void setVar(String var) {
-        this.var = var;
-        if (StringUtils.isEmpty(name)) {
-            name = var;
-        }
-    }
+	public void setVar(String var) {
+		this.var = var;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
 	public void setSelected(Object selected) {
 		this.selected = selected;

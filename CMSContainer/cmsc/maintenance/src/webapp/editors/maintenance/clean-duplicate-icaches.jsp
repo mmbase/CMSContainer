@@ -10,15 +10,13 @@
 <mm:cloud jspvar="cloud" rank="basic user" method="http">
 
 <div class="tabs">
-  <a href="#">
-	  <div class="tab_active">
-		 <div class="body">
-			<div class="title">
-			   <fmt:message key="maintenance.icaches.cleanduplicates" />
-			</div>
-		 </div>
-	  </div>
-  </a>
+  <div class="tab_active">
+     <div class="body">
+        <div>
+           <a href="#"><fmt:message key="maintenance.icaches.cleanduplicates" /></a>
+        </div>
+     </div>
+  </div>
 </div>
 
 <div class="editor">

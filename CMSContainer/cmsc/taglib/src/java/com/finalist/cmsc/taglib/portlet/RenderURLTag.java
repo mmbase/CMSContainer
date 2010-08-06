@@ -1,14 +1,11 @@
 package com.finalist.cmsc.taglib.portlet;
 
-import java.net.URLEncoder;
-
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.pluto.PortletURLImpl;
 
 /**

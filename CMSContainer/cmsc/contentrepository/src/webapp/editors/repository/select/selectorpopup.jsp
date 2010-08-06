@@ -8,7 +8,6 @@
 	<link href="../../utils/ajaxtree/addressbar.css" type="text/css" rel="stylesheet" />
 	<link href="../../utils/ajaxtree/ajaxtree.css" type="text/css" rel="stylesheet" />
 
-	<script type="text/javascript" src="../../utils/cookies.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/ajaxtree.js"></script>
 	<script type="text/javascript" src="../../utils/ajaxtree/addressbar.js"></script>
 
@@ -19,12 +18,12 @@
 		ajaxTreeConfig.role = '${param.role}';
 
 		function selectItem(channel, path) {
-			opener.selectChannel(channel, path, '${param.fieldName}', '${param.fieldPathName}');
+         opener.selectChannel(channel, path, '${param.fieldName}', '${param.fieldPathName}');
 			close();
 		}
-      function loadFunction(show) {
+      function loadFunction() {
 		alphaImages();
-		ajaxTreeLoader.initTree('', 'tree_div', '', show);
+		ajaxTreeLoader.initTree('', 'tree_div');
       }
 	</script>
 
@@ -41,7 +40,7 @@
 		}
 	</style>
 </cmscedit:head>
-<body style="overflow: auto" onload="loadFunction(${onlycollection});">
+<body style="overflow: auto" onload="loadFunction();">
 	<cmscedit:sideblock title="selector.title">
         <c:if test="${param.message != null}"><h2>${param.message}</h2></c:if>
 		<mm:cloud jspvar="cloud" loginpage="../../login.jsp">

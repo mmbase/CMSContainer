@@ -3,8 +3,7 @@
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="index.title">
-</cmscedit:head>
+<cmscedit:head title="index.title"/>
 <body>
    <edit:ui-tabs>
       <edit:ui-tab key="index.title" active="true">
@@ -66,7 +65,7 @@
          </td>
          <td>
             <p><a href="NewsletterPublicationAction.do"><fmt:message key="index.link.alleditions"/></a></p>
-            <p><a href="module/NewsletterBounceAction.do?method=list&from=mainboard"><fmt:message key="index.link.bouncedemail"/></a></p>
+            <p><a href="module/NewsletterBounceAction.do?method=list"><fmt:message key="index.link.bouncedemail"/></a></p>
          </td>
       </tr>
 </table>

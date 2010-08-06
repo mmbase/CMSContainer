@@ -56,7 +56,7 @@ public final class SiteUtil {
 
    public static NodeList getSites(Cloud cloud) {
       NodeManager sitesManager = cloud.getNodeManager(SITE);
-		return sitesManager.getList(null, "pos", null);
+      return sitesManager.getList(sitesManager.createQuery());
    }
 
 

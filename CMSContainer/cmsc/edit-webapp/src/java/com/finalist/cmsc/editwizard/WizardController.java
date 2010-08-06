@@ -4,11 +4,7 @@
  */
 package com.finalist.cmsc.editwizard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,28 +14,24 @@ import org.mmbase.applications.editwizard.Config;
 import org.mmbase.applications.editwizard.Config.WizardConfig;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.bridge.NodeManager;
 import org.mmbase.security.Rank;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
-import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.Role;
 import com.finalist.cmsc.security.UserRole;
 import com.finalist.cmsc.services.versioning.Versioning;
 import com.finalist.cmsc.services.versioning.VersioningException;
-import com.finalist.cmsc.services.workflow.Workflow;
 
 /**
  * @author Nico Klasens This class contains code which extends wizard.jsp
  */
 public class WizardController {
-   
+
    /**
     * MMbase logging system
     */
@@ -51,7 +43,6 @@ public class WizardController {
    protected static final String NEW_OBJECT = "new";
 
    protected static final String SESSION_CONTENTTYPE = "contenttype";
-   protected static final String SESSION_ASSETTYPE = "assettype";
    protected static final String SESSION_CREATION = "creation";
    protected static final String SESSION_READONLY = "readonly";
 
@@ -77,21 +68,15 @@ public class WizardController {
 
       HttpSession session = request.getSession();
       String objectnr = config.objectNumber;
-      String elementtype = null;
+      String contenttype = null;
       if (objectnr != null && NEW_OBJECT.equals(objectnr)) {
-         String contenttype = (String) session.getAttribute(SESSION_CONTENTTYPE);
-         String assettype = (String) session.getAttribute(SESSION_ASSETTYPE);
-         if(StringUtils.isNotBlank(contenttype)){
-            elementtype = contenttype;
-         }else if (StringUtils.isNotBlank(assettype)){
-            elementtype = assettype;
-         }
+         contenttype = (String) session.getAttribute(SESSION_CONTENTTYPE);
       }
       else {
          Node node = cloud.getNode(objectnr);
-         elementtype = node.getNodeManager().getName();
+         contenttype = node.getNodeManager().getName();
       }
-      log.debug("elementtype " + elementtype);
+      log.debug("contenttype " + contenttype);
 
       String readonly = (String) session.getAttribute(SESSION_READONLY);
       if (StringUtils.isBlank(readonly)) {
@@ -104,9 +89,9 @@ public class WizardController {
       log.debug("readonly " + readonly);
 
       Node creationNode = null;
-      if (StringUtils.isNotBlank(elementtype)) {
+      if (StringUtils.isNotEmpty(contenttype)) {
          String creation = (String) session.getAttribute(SESSION_CREATION);
-         if (StringUtils.isNotBlank(creation)) {
+         if (StringUtils.isNotEmpty(creation)) {
             creationNode = cloud.getNode(creation);
          }
          if (creationNode == null && objectnr != null && !NEW_OBJECT.equals(objectnr)) {
@@ -114,10 +99,9 @@ public class WizardController {
 
             if (PagesUtil.isPageType(node)) {
                creationNode = node;
-               //Node repositoryRootNode = RepositoryUtil.getRootNode(node.getCloud());
                session.setAttribute(SESSION_CREATION, "" + creationNode.getNumber());
             }
-            if (ContentElementUtil.isContentType(elementtype) || AssetElementUtil.isAssetType(elementtype)) {
+            if (ContentElementUtil.isContentType(contenttype)) {
                if (RepositoryUtil.hasCreationChannel(node)) {
                   creationNode = RepositoryUtil.getCreationChannel(node);
                   session.setAttribute(SESSION_CREATION, "" + creationNode.getNumber());
@@ -162,7 +146,7 @@ public class WizardController {
          }
       }
 
-      openWizard(request, ewconfig, config, cloud, params, userrole, elementtype);
+      openWizard(request, ewconfig, config, cloud, params, userrole, contenttype);
 
       log.debug("params = " + params);
       return params;
@@ -170,7 +154,7 @@ public class WizardController {
 
 
    public void openWizard(HttpServletRequest request, Config ewconfig, Config.WizardConfig config, Cloud cloud,
-         Map<String, String> params, UserRole userrole, String elementtype) {
+         Map<String, String> params, UserRole userrole, String contenttype) {
       // nothing to do
    }
 
@@ -202,7 +186,7 @@ public class WizardController {
          }
 
          Node editNode = null;
-         String elementtype = null;
+         String contenttype = null;
 
          String objectnr = wizardConfig.objectNumber;
          log.debug("objectnr " + objectnr);
@@ -224,178 +208,56 @@ public class WizardController {
          }
 
          if (editNode != null) {
-            elementtype = editNode.getNodeManager().getName();
             if (ContentElementUtil.isContentElement(editNode)) {
-               closeContentElement(session, editNode, objectnr, ewconfig, wizardConfig);
-            } else if (AssetElementUtil.isAssetElement(editNode)) {
-               closeAssetElement(session, editNode, objectnr, ewconfig, wizardConfig);
-            } 
-         // create createrel for asset elements.and add asset elements to workflow.
+               if (NEW_OBJECT.equals(objectnr)) {
+                  String channelnr = (String) session.getAttribute(SESSION_CREATION);
+                  log.debug("Creation " + channelnr);
 
-            List<String> typesList = new ArrayList<String>();
-            List<NodeManager> types = AssetElementUtil.getAssetTypes(editNode.getCloud());
-            List<String> hiddenTypes = AssetElementUtil.getHiddenAssetTypes();
-            for (NodeManager manager : types) {
-               String name = manager.getName();
-               if (!hiddenTypes.contains(name)) {
-                  typesList.add(name);
-               }
-            }
-            for (int i = 0 ; i < typesList.size(); i++) {
-               NodeList assets = editNode.getRelatedNodes(typesList.get(i));
-               if(assets.size() > 0 ){
-                  for( int j = 0 ; j < assets.size() ;j++) {
-                     Node node = assets.getNode(j);
-                     if (!RepositoryUtil.hasCreationChannel(node)) {
-                        String channelnr = (String) session.getAttribute(SESSION_CREATION);
-                        if (PagesUtil.isPageType(editNode)) {
-                           channelnr = RepositoryUtil.getRoot(node.getCloud());
-                        }
-                        //if the channel is not exist get root channel .used for adding pages
-                        if (StringUtils.isBlank(channelnr)) {
-                           channelnr = RepositoryUtil.getRoot(node.getCloud());
-                        }
-                        log.debug("Creation " + channelnr);
-
-                        if (StringUtils.isNotEmpty(channelnr)) {
-                           RepositoryUtil.addCreationChannel(node, channelnr);
-                        } 
-                     }
-                     if(ContentElementUtil.getAuthor(node) == null){
-                        node.commit();
-                     }
-                     if (wizardConfig.wiz.committed()) {
-                       // addWorkFlowItem(node);
-                        //add version for asset element
-                        try {
-                           Versioning.addVersion(node);
-                        }
-                        catch (VersioningException e) {
-                           log.error("Add version error for node:" + node.getNumber(), e);
+                  // this has creation channel check is needed, because with it
+                  // will create double creationchannels when first "save" and
+                  // then "save and close"
+                  if (!RepositoryUtil.hasCreationChannel(editNode)) {
+                     if (StringUtils.isNotEmpty(channelnr)) {
+                        RepositoryUtil.addCreationChannel(editNode, channelnr);
+                        ContentElementUtil.addOwner(editNode);
+                        if (isMainWizard(ewconfig, wizardConfig)) {
+                           RepositoryUtil.addContentToChannel(editNode, channelnr);
                         }
                      }
-                  }
-               }
-            }
-         }
-         log.debug("contenttype " + elementtype);
-
-         closeWizard(request, ewconfig, wizardConfig, cloud, editNode, elementtype);
-      }
-   }
-
-
-   private void closeContentElement(HttpSession session, Node editNode, String objectnr, Config ewconfig, Config.WizardConfig wizardConfig) {
-      if (NEW_OBJECT.equals(objectnr)) {
-            String channelnr = (String) session.getAttribute(SESSION_CREATION);
-            log.debug("Creation " + channelnr);
-
-            // this has creation channel check is needed, because with it
-            // will create double creationchannels when first "save" and
-            // then "save and close"
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotBlank(channelnr)) {
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
-                  ContentElementUtil.addOwner(editNode);
-                  if (isMainWizard(ewconfig, wizardConfig)) {
-                     RepositoryUtil.addContentToChannel(editNode, channelnr);
+                     else {
+                        log.warn("ContentElement: Creationchannel was not found in session");
+                     }
                   }
                }
                else {
-                  log.warn("ContentElement: Creationchannel was not found in session");
-               }
-            }
-         }
-         else {
-            if (!ContentElementUtil.hasOwner(editNode)) {
-               ContentElementUtil.addOwner(editNode);
-            }
+                  if (!ContentElementUtil.hasOwner(editNode)) {
+                     ContentElementUtil.addOwner(editNode);
+                  }
 
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               String channelnr = (String) session.getAttribute(SESSION_CREATION);
-               log.debug("Creation " + channelnr);
+                  if (!RepositoryUtil.hasCreationChannel(editNode)) {
+                     String channelnr = (String) session.getAttribute(SESSION_CREATION);
+                     log.debug("Creation " + channelnr);
 
-               if (StringUtils.isNotEmpty(channelnr)) {
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
-               }
-            }
-         }   
-         try {
-            if (wizardConfig.wiz.committed()) {
-               Versioning.addVersion(editNode);
-            }
-         }
-         catch (VersioningException e) {
-            log.error("Problem while adding version for node : " + objectnr, e);
-         }
-   }
-
-
-   private void closeAssetElement(HttpSession session, Node editNode, String objectnr, Config ewconfig, Config.WizardConfig wizardConfig) {
-      if (NEW_OBJECT.equals(objectnr)) {
-            String channelnr = (String) session.getAttribute(SESSION_CREATION);
-            log.debug("Creation " + channelnr);
-
-            // this has creation channel check is needed, because with it
-            // will create double creationchannels when first "save" and
-            // then "save and close"
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               if (StringUtils.isNotBlank(channelnr)) {
-                  if (PagesUtil.isPageType(editNode.getCloud().getNode(channelnr))) {
-                     channelnr = RepositoryUtil.getRoot(editNode.getCloud());
+                     if (StringUtils.isNotEmpty(channelnr)) {
+                        RepositoryUtil.addCreationChannel(editNode, channelnr);
+                     }
                   }
                }
-               else {
-                  channelnr = RepositoryUtil.getRoot(editNode.getCloud());
-                  //log.warn("AssetElement: Creationchannel was not found in session");
-               }
-               if (channelnr != null ) {
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
-                  AssetElementUtil.addOwner(editNode);
-                  if (isMainWizard(ewconfig, wizardConfig)) {
-                     RepositoryUtil.addAssetToChannel(editNode, channelnr);
+
+               try {
+                  if (wizardConfig.wiz.committed()) {
+                     Versioning.addVersion(editNode);
                   }
                }
-            }
-         }
-         else {
-            if (!AssetElementUtil.hasOwner(editNode)) {
-               AssetElementUtil.addOwner(editNode);
-            }
-
-            if (!RepositoryUtil.hasCreationChannel(editNode)) {
-               String channelnr = (String) session.getAttribute(SESSION_CREATION);
-               log.debug("Creation " + channelnr);
-
-               if (StringUtils.isNotEmpty(channelnr)) {
-                  if (PagesUtil.isPageType(editNode.getCloud().getNode(channelnr))) {
-                     channelnr = RepositoryUtil.getRoot(editNode.getCloud());
-                  }
-                  RepositoryUtil.addCreationChannel(editNode, channelnr);
+               catch (VersioningException e) {
+                  log.error("Problem while adding version for node : " + objectnr, e);
                }
             }
+            contenttype = editNode.getNodeManager().getName();
          }
-         addWorkFlowItem(editNode);
-         try {
-            if (wizardConfig.wiz.committed()) {
-               Versioning.addVersion(editNode);
-            }
-         }
-         catch (VersioningException e) {
-            log.error("Problem while adding version for node : " + objectnr, e);
-         }
-   }
+         log.debug("contenttype " + contenttype);
 
-
-   protected void addWorkFlowItem(Node editNode) {
-      if(!Workflow.isWorkflowElement(editNode)) {
-         return;
-      }
-      if (!Workflow.hasWorkflow(editNode)) { 
-         Workflow.create(editNode, ""); 
-      } 
-      else { 
-         Workflow.addUserToWorkflow(editNode);
+         closeWizard(request, ewconfig, wizardConfig, cloud, editNode, contenttype);
       }
    }
 

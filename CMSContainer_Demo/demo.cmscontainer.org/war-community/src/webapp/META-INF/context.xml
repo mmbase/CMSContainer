@@ -46,19 +46,6 @@
 		driverClassName="com.mysql.jdbc.Driver" 
 		url="jdbc:mysql://localhost:3306/community?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;useServerPrepStmts=false" />
 
-   <Resource name="jdbc/jforum" auth="Container" type="javax.sql.DataSource"
-      removeAbandoned="true"
-      removeAbandonedTimeout="60"
-      logAbandoned="true"
-      maxActive="10"
-      maxIdle="1"
-      maxWait="10000"
-      username="cmsc"
-      password="cmsc"
-      driverClassName="com.mysql.jdbc.Driver"
-      factory="org.apache.commons.dbcp.BasicDataSourceFactory"
-      url="jdbc:mysql://localhost:3306/cmscjforum?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;useServerPrepStmts=false" /> 
-
 	<!-- zeroDateTimeBehavior=convertToNull 
 		Datetimes with all-zero components ('0000-00-00 ...') - These values can not be represented reliably
 		in Java. Connector/J 3.0.x always converted them to NULL when being read from a ResultSet.
@@ -114,33 +101,12 @@
 	<Environment name="mmbase/imaging/ImageConvert.ConverterRoot" value="" type="java.lang.String" />
 
 	<!-- Contains value 'live' or 'staging' to determine whether this server is Live or Staging. -->
-	<Environment name="server/LiveOrStaging" value="single" type="java.lang.String" />
+	<Environment name="server/LiveOrStaging" value="staging" type="java.lang.String" />
 	<!-- This entry defines whether this server includes the servername to lookup portal pages. -->
 	<Environment name="server/useServerName" value="false" type="java.lang.String" />
 	<!--  Contains value 'true' or 'false' to indicate whether or not this is the production system -->
 	<Environment name="server/production" value="false" type="java.lang.String" />	
 	<!--  Contains value 'true' or 'false' to indicate whether or not the application is in readonly mode -->
 	<Environment name="server/readonly" value="false" type="java.lang.String" />	
-	<!--Contains value 'true' or 'false' to indicate whether or not the application uses SSO-->
-	<Environment name="useSSO" value="true" type="java.lang.String" />
-	<!--Contains value 'true' or 'false' to indicate whether or not the application uses LDAP-->
-	<Environment name="useLDAP" value="true" type="java.lang.String" />
-	<!--LDAP server settings-->
-	<Environment name="ldap.url" value="ldap://192.168.4.67" type="java.lang.String" />
-	<Environment name="ldap.userDn" value="cn=Manager,dc=nai,dc=nl" type="java.lang.String" />
-	<Environment name="ldap.password" value="secret" type="java.lang.String" />
-	<Environment name="ldap.type" value="simple" type="java.lang.String" />
-	<!--CAS filters settings-->
-	<Parameter name="casServerLoginUrl" value="https://replace.with.cashost/single-sign-on/login_en" override="false"/>
-	<Parameter name="casServerLoginUrl_en" value="https://replace.with.cashost/single-sign-on/login_en" override="false"/>
-	<Parameter name="casServerLoginUrl_nl" value="https://replace.with.cashost/single-sign-on/login_nl" override="false"/>
-	<Parameter name="serverName" value="http://replace.with.cmschost" override="false"/>
-	<Parameter name="casServerUrlPrefix" value="https://replace.with.cashost/single-sign-on" override="false"/>
-	<Parameter name="redirectAfterValidation" value="true" override="false"/>
-	<Parameter name="casServerLogoutUrl" value="https://replace.with.cashost/single-sign-on/logout_en" override="false"/>
-	<Parameter name="casServerLogoutUrl_en" value="https://replace.with.cashost/single-sign-on/logout_en" override="false"/>
-	<Parameter name="casServerLogoutUrl_nl" value="https://replace.with.cashost/single-sign-on/logout_nl" override="false"/>
-	<Parameter name="casServerRegisterUrl" value="https://replace.with.cashost/single-sign-on/register_en" override="false"/>
-	<Parameter name="casServerRegisterUrl_en" value="https://replace.with.cashost/single-sign-on/register_en" override="false"/>
-	<Parameter name="casServerRegisterUrl_nl" value="https://replace.with.cashost/single-sign-on/register_nl" override="false"/> 
+
 </Context>

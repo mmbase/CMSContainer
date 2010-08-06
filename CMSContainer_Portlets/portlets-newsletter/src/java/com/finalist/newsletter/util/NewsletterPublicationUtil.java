@@ -18,6 +18,7 @@ import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;
 import com.finalist.cmsc.navigation.PortletUtil;
 import com.finalist.cmsc.services.publish.Publish;
+import com.finalist.cmsc.util.ServerUtil;
 import com.finalist.newsletter.cao.impl.NewsletterPublicationCAOImpl;
 import com.finalist.newsletter.domain.EditionStatus;
 import com.finalist.newsletter.domain.Newsletter;
@@ -159,7 +160,7 @@ public abstract class NewsletterPublicationUtil {
    }
    
    public static String getNewsletterPath(Node newsletterPublicationNode) {
-      return NavigationUtil.getPathToRootString(newsletterPublicationNode, true);
+      return NavigationUtil.getPathToRootString(newsletterPublicationNode, !ServerUtil.useServerName());
    }
    
    public static STATUS getStatus(Cloud cloud, int publicationId) {

@@ -11,7 +11,6 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.mmbase.applications.crontab.AbstractCronJob;
@@ -22,7 +21,6 @@ import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-
 import com.finalist.cmsc.mmbase.PropertiesUtil;
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 import com.finalist.cmsc.services.publish.Publish;
@@ -226,28 +224,26 @@ public class NewsletterCronJob extends AbstractCronJob {
    @Override
    public void init() {
       log.info("Start Newsletter CronJob");
-
-      if ("on".equalsIgnoreCase(PropertiesUtil.getProperty(BOUNCE_CHECKER))) {
-         NewsletterService newsletterService = (NewsletterService) ApplicationContextFactory.getBean(NEWSLETTER_SERVICES);
-         BounceChecker checker = new BounceChecker(newsletterService);
-         if(StringUtils.isNotBlank(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT))) {
-            try {
-               checker.setPort(Integer.parseInt(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT)));
-            }
-            catch(NumberFormatException e) {
-               log.info("Set bounce checker port error! set it default value 25");
-               checker.setPort(25);
-            }
-         }
-         if (!checker.isRunning() && (ServerUtil.isStaging() || ServerUtil.isSingle())) {
-            checker.start();
-         }
-      }
+	  if ("on".equalsIgnoreCase(PropertiesUtil.getProperty(BOUNCE_CHECKER))) {
+		  NewsletterService newsletterService = (NewsletterService) ApplicationContextFactory.getBean("newsletterServices");
+		  BounceChecker checker = new BounceChecker(newsletterService);
+		  if(StringUtils.isNotBlank(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT))) {
+			 try {
+				checker.setPort(Integer.parseInt(PropertiesUtil.getProperty(BOUNCE_CHECKER_BINDING_PORT)));
+			 }
+			 catch(NumberFormatException e) {
+				log.info("Set bounce checker port error! set it default value 25");
+				checker.setPort(25);
+			 }
+		  }
+		  if (!checker.isRunning() && (ServerUtil.isStaging() || ServerUtil.isSingle())) {
+			 checker.start();
+		  }
+	  }
    }
 
    @Override
    public void run() {
-      log.info("Running Newsletter CronJob for newsletter 1" );
       if (ServerUtil.isSingle() || ServerUtil.isStaging()) {
          List<Node> newslettersToPublish = getNewslettersToPublish();
          for (int newsletterIterator = 0; newsletterIterator < newslettersToPublish.size(); newsletterIterator++) {
@@ -255,7 +251,7 @@ public class NewsletterCronJob extends AbstractCronJob {
             newsletterNode.setDateValue("lastcreateddate", new Date());
             newsletterNode.commit();
             int newsletterNumber = newsletterNode.getNumber();
-            log.info("Running Newsletter CronJob for newsletter " + newsletterNumber);
+            log.debug("Running Newsletter CronJob for newsletter " + newsletterNumber);
             // NewsletterPublicationUtil.createPublication(newsletterNumber,
             // true);
             Node publicationNode = NewsletterPublicationUtil.createPublication(newsletterNumber, true);

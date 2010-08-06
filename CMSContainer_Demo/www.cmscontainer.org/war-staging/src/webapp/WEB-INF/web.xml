@@ -25,7 +25,7 @@
 	<!-- 
 		Whether the mm:url tag (and other URL producing tags) should produce relative URL's (relative to
 		the page on which the mm:url is called).  You might try to set this to 'true' if you desire only
-		relative urls in your site. This is an experimental option, which is known not to work in
+		relative urls in your site. This is an expirimental option, which is known not to work in
 		certain situations (like redirects).
 	-->
 	<context-param>
@@ -88,7 +88,7 @@
       <description>Filter catch all requests.</description>
       <display-name>CloudThread Filter</display-name>
       <filter-name>CloudThreadFilter</filter-name>
-      <filter-class>org.mmbase.servlet.CloudThreadFilter</filter-class>
+      <filter-class>net.sf.mmapps.commons.web.CloudThreadFilter</filter-class>
    </filter>
 
    <filter>
@@ -114,15 +114,6 @@
       </init-param>
    </filter>
 
-   <filter>
-      <filter-name>FrameworkFilter</filter-name>
-      <filter-class>org.mmbase.framework.FrameworkFilter</filter-class>
-      <init-param>
-         <param-name>excludes</param-name>
-         <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
-      </init-param>
-   </filter>
-   
    <filter-mapping>
       <filter-name>DisableUrlSessionFilter</filter-name>
       <url-pattern>/*</url-pattern>
@@ -141,11 +132,6 @@
    <filter-mapping>
       <filter-name>ControllerFilter</filter-name>
       <url-pattern>/*</url-pattern>
-   </filter-mapping>
-
-   <filter-mapping>
-      <filter-name>FrameworkFilter</filter-name>
-      <url-pattern>/mmbase/*</url-pattern>
    </filter-mapping>
 
     <servlet>
@@ -196,7 +182,7 @@
 	<!-- The MMBase image serving servlet. -->
 	<servlet>
 		<servlet-name>images</servlet-name>
-		<servlet-class>com.finalist.cmsc.repository.ImageServlet</servlet-class>
+		<servlet-class>org.mmbase.servlet.ImageServlet</servlet-class>
 		<init-param>
 			<!-- Expire time of original images. Cached images never expire. -->
 			<param-name>expire</param-name>
@@ -381,16 +367,4 @@
 		<env-entry-value>true</env-entry-value>
 	</env-entry>
 
-	<env-entry>
-		<description>MMbase CloudContext Security: allow all read operations on nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/readall</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
-	<env-entry>
-		<description>MMbase CloudContext Security: Disable checks on context of nodes</description>
-		<env-entry-name>mmbase-builders/mmbasecontexts/disableContextChecks</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>true</env-entry-value>
-	</env-entry>
 </web-app>

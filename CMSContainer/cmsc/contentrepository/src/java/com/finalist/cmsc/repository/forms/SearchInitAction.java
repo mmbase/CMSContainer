@@ -1,30 +1,23 @@
 package com.finalist.cmsc.repository.forms;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
+
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.NodeManager;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.LabelValueBean;
+import org.mmbase.bridge.*;
 import org.mmbase.storage.search.SortOrder;
 
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
 
-public class SearchInitAction extends MMBaseAction {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-   private static final String SEARCHOPTIONS = "searchoptions";
-   private static final String TITLE = "title";
-   private static final String TYPES_LIST = "typesList";
-   private static final String PORTLET_ID = "portletId";
-   private static final String POSITION = "position";
-   private static final String ONLYTYPE = "onlytype";
-   private static final String RELATIONORIGINNODE = "relationOriginNode"; 
+public class SearchInitAction extends MMBaseAction {
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -32,10 +25,6 @@ public class SearchInitAction extends MMBaseAction {
 
       SearchForm searchForm = (SearchForm) form;
 
-      String portletId = request.getParameter(PORTLET_ID);
-      String position = request.getParameter(POSITION);
-      String onlytype = request.getParameter(ONLYTYPE);
-      
       if (StringUtils.isEmpty(searchForm.getExpiredate())) {
          searchForm.setExpiredate("0");
       }
@@ -49,31 +38,26 @@ public class SearchInitAction extends MMBaseAction {
       }
 
       if (StringUtils.isEmpty(searchForm.getOrder())) {
-         searchForm.setOrder(TITLE);
+         searchForm.setOrder("title");
       }
 
       if (searchForm.getDirection() != SortOrder.ORDER_DESCENDING) {
          searchForm.setDirection(SortOrder.ORDER_ASCENDING);
       }
+      List<LabelValueBean> typesList = new ArrayList<LabelValueBean>();
 
-      List<NodeManager> types;
-      if(StringUtils.isEmpty(portletId)){
-    	  types = ContentElementUtil.getContentTypes(cloud);
-      } else {
-         types = ContentElementUtil.getAllowedContentTypes(cloud, portletId);
-          if(types.size() == 0){
-        	     types = ContentElementUtil.getContentTypes(cloud);
-          }
+      List<NodeManager> types = ContentElementUtil.getContentTypes(cloud);
+      List<String> hiddenTypes = ContentElementUtil.getHiddenTypes();
+      for (NodeManager manager : types) {
+         String name = manager.getName();
+         if (!hiddenTypes.contains(name)) {
+            LabelValueBean bean = new LabelValueBean(manager.getGUIName(), name);
+            typesList.add(bean);
+         }
       }
-      addToRequest(request,TYPES_LIST, ContentElementUtil.getValidTypesList(cloud, types));
-      addToRequest(request, PORTLET_ID, portletId);
-      addToRequest(request, POSITION, position);
-      addToRequest(request, TITLE, searchForm.getTitle());
-      addToRequest(request, ONLYTYPE, onlytype);
-      
-      String originNodeId = request.getParameter(RELATIONORIGINNODE);
-      request.getSession().setAttribute(RELATIONORIGINNODE, originNodeId);
-      return mapping.findForward(SEARCHOPTIONS);
-}
+      addToRequest(request, "typesList", typesList);
+
+      return mapping.findForward("searchoptions");
+   }
 
 }

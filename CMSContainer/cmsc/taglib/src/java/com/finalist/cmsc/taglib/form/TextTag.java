@@ -21,23 +21,18 @@ import org.apache.commons.lang.StringUtils;
 
 public class TextTag extends SimpleTagSupport {
    public String var;
-   public String name;
    public String value;
+
 
    public void setVar(String var) {
       this.var = var;
-      if (StringUtils.isEmpty(name)) {
-         name = var;
-      }
    }
-   
-   public void setName(String name) {
-      this.name = name;
-   }
+
 
    public void setValue(String value) {
       this.value = value;
    }
+
 
    @Override
    public void doTag() throws IOException {
@@ -51,11 +46,11 @@ public class TextTag extends SimpleTagSupport {
       }
       else {
          if (StringUtils.isNotEmpty(value)) {
-            inputValue = value;
+            inputValue = attValue;
          }
       }
       ctx.getOut().print(
-            "<input type=\"text\" " + "name=\"" + StringEscapeUtils.escapeXml(name) + "\" " + "value=\"" + StringEscapeUtils.escapeHtml(inputValue)
+            "<input type=\"text\" " + "name=\"" + var + "\" " + "value=\"" + StringEscapeUtils.escapeHtml(inputValue)
                   + "\" />");
    }
 

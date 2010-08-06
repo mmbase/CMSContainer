@@ -19,6 +19,10 @@ function massDelete(confirmmessage) {
    }   
 }
 
+function setOffset(offset) {
+   document.forms[0].offset.value = offset;
+   document.forms[0].submit();
+}
 function showItem(objectnumber) {
    openPopupWindow("showItem", 500, 500, 'NewsletterBounceAction.do?method=getItem&objectnumber=' + objectnumber);
 }
@@ -69,35 +73,4 @@ function formatDate(str){
       newdate = '0'+newdate;
    }
    return newdate;
-}
-
-function bounceDelete(confirmmessage,form,type) {
-	if (confirmmessage) {	
-		var itemChecked = false;
-		var elements = document.getElementsByName("chk_items");
-		if(elements.length){
-			for(var i = 0 ; i< elements.length; i++){
-			if(elements[i].checked)
-			  itemChecked = true;
-			}
-		}
-		if(itemChecked == false) {
-			return;
-		}
-		else if (itemChecked == true) {
-		   if (confirm(confirmmessage)) {
-			    document.forms[form].type.value = type;
-				document.forms[form].submit();
-		   }
-		}
-   }
-}
-
-function selectAll(value, formName, elementPrefix) {
-   var elements = document.forms[formName].elements;
-   for (var i = 0; i < elements.length; i++) {
-      if (elements[i].name.indexOf(elementPrefix) == 0) {
-          elements[i].checked = value;
-      }
-   }
 }

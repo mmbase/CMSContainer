@@ -20,8 +20,6 @@ public class SearchForm extends PagerForm {
    private String mode = "basic";
    private String search = "true";
    private String parentchannelpath = "";
-   private String index = "";
-   private String workflowstate = "";
 
 
    public String getContenttypes() {
@@ -100,11 +98,7 @@ public class SearchForm extends PagerForm {
 
 
    public void setTitle(String title) {
-      if (this.title != null) {
-         this.title = title.trim();
-      } else {
-         this.title = title; 
-      }
+      this.title = title;
    }
 
 
@@ -114,11 +108,7 @@ public class SearchForm extends PagerForm {
 
 
    public void setObjectid(String objectid) {
-      if (this.objectid != null) {
-         this.objectid = objectid.trim();
-      } else {
-         this.objectid = objectid;
-      }
+      this.objectid = objectid;
    }
 
 
@@ -180,25 +170,5 @@ public class SearchForm extends PagerForm {
    public void setKeywords(String keywords) {
       this.keywords = keywords;
    }
-
-
-   public void setIndex(String index) {
-      this.index = index;
-   }
-
-
-   public String getIndex() {
-      return index;
-   }
-
-
-   public String getWorkflowstate() {
-       return workflowstate;
-    }
-
-   
-    public void setWorkflowstate(String workflowstate) {
-       this.workflowstate = workflowstate;
-    }
 
 }

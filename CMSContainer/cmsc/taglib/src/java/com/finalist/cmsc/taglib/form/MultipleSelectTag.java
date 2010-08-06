@@ -20,13 +20,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-
 public class MultipleSelectTag extends SimpleTagSupport {
 
    private String var;
-   public String name;
    private List<String> selected;
    private int size = 0;
 
@@ -48,7 +44,7 @@ public class MultipleSelectTag extends SimpleTagSupport {
          }
       }
 
-      ctx.getOut().print("<select name=\"" + StringEscapeUtils.escapeXml(name) + "\"");
+      ctx.getOut().print("<select name=\"" + var + "\"");
 
       if (size > 0) {
          ctx.getOut().print(" size=\"" + size + "\"");
@@ -68,16 +64,11 @@ public class MultipleSelectTag extends SimpleTagSupport {
       return var;
    }
 
+
    public void setVar(String var) {
       this.var = var;
-      if (StringUtils.isEmpty(name)) {
-         name = var;
-      }
    }
-   
-   public void setName(String name) {
-      this.name = name;
-   }
+
 
    public boolean isSelected(String key) {
       if (selected != null) {
@@ -88,9 +79,11 @@ public class MultipleSelectTag extends SimpleTagSupport {
       return (false);
    }
 
+
    public int getSize() {
       return size;
    }
+
 
    public void setSize(int size) {
       if (size > 0) {

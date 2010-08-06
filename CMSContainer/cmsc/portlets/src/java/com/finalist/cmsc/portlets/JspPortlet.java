@@ -19,6 +19,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import com.finalist.cmsc.portalImpl.PortalConstants;
+import com.finalist.pluto.portalImpl.core.CmscPortletMode;
 
 /**
  * @author Wouter Heijke
@@ -37,13 +38,24 @@ public class JspPortlet extends CmscPortlet {
       getLogger().debug("===>MenuPortlet.EDIT mode");
       PortletPreferences preferences = request.getPreferences();
       String portletId = preferences.getValue(PortalConstants.CMSC_OM_PORTLET_ID, null);
-      if (portletId != null) {
-         // get the values submitted with the form
-         setPortletView(portletId, request.getParameter(VIEW));
+
+      String action = request.getParameter("action");
+      if (action == null) {
+         response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
       }
-      else {
-         getLogger().error("No portletId");
-      }
+      else
+         if (action.equals("edit")) {
+            if (portletId != null) {
+               // get the values submitted with the form
+               setPortletView(portletId, request.getParameter(VIEW));
+            }
+            else {
+               getLogger().error("No portletId");
+            }
+         }
+         else {
+            getLogger().error("Unknown action: '" + action + "'");
+         }
       super.processEditDefaults(request, response);
    }
 

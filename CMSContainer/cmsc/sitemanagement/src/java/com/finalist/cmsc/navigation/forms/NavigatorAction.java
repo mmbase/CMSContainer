@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 
 import org.apache.struts.action.*;
 import org.mmbase.bridge.*;
-import org.mmbase.security.Rank;
 
 import com.finalist.cmsc.mmbase.TreeUtil;
 import com.finalist.cmsc.navigation.*;
@@ -31,31 +30,14 @@ public class NavigatorAction extends TreeAction {
 
    @Override
    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-   		HttpServletResponse response, Cloud cloud) throws Exception {
-   	
-   	String doParam = request.getParameter("do");
-   	if(doParam != null && doParam.equals("sortSite") && cloud.getUser().getRank() == Rank.ADMIN) {
-   		doSiteSort(cloud, request.getParameter("id1"), request.getParameter("id2"));
-   	}
+         HttpServletResponse response, Cloud cloud) throws Exception {
 
-      JstlUtil.setResourceBundle(request, "cmsc-site"); 
+      JstlUtil.setResourceBundle(request, "cmsc-site");
       return super.execute(mapping, form, request, response, cloud);
    }
 
 
-   private void doSiteSort(Cloud cloud, String id1, String id2) {
-   	Node node1 = cloud.getNode(id1); 
-		int pos1 = node1.getIntValue("pos");
-   	Node node2 = cloud.getNode(id2); 
-		int pos2 = node2.getIntValue("pos");
-		node1.setIntValue("pos", pos2);
-		node1.commit();
-		node2.setIntValue("pos", pos1);
-		node2.commit();
-	}
-
-
-	@Override
+   @Override
    protected Node getRootNode(Cloud cloud) {
       return null;
    }

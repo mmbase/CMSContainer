@@ -11,9 +11,8 @@ package com.finalist.cmsc.navigation;
 
 import java.util.*;
 
-
-import org.mmbase.bridge.util.CloneUtil;
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.CloneUtil;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -66,10 +65,7 @@ public final class PagesUtil {
 
    public static final String POS_FIELD = "pos";
 
-   public static final String PAGEPROPERTY = "pageproperty";
-   public static final String KEY_FIELD = "key";
-   public static final String VALUE_FIELD = "value";
-   
+
    private PagesUtil() {
       // utility
    }
@@ -564,15 +560,4 @@ public final class PagesUtil {
       }
    }
 
-   public static Map<String, String> getPageProperties(Node pageNode) {
-      NodeList propertyNodes = pageNode.getRelatedNodes(PAGEPROPERTY, RELATED, DESTINATION);
-      Map<String,String> pageProperties = new HashMap<String,String>();
-      if (propertyNodes != null && propertyNodes.size() > 0) {
-         for (Node node: propertyNodes) {
-            pageProperties.put(node.getStringValue(KEY_FIELD), node.getStringValue(VALUE_FIELD));
-         }
-      }
-      return pageProperties;
-  }
-   
 }

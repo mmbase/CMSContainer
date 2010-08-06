@@ -150,7 +150,7 @@ public class AuthenticationHibernateService extends HibernateService implements 
    @SuppressWarnings("unchecked")
    private Authentication findAuthenticationByCriteria(Criteria criteria) {
       List authenticationList = criteria.list();
-      return authenticationList.size() >= 1 ? (Authentication) authenticationList.get(0) : null;
+      return authenticationList.size() == 1 ? (Authentication) authenticationList.get(0) : null;
    }
 
    private String encodePassword(String password, String salt) {

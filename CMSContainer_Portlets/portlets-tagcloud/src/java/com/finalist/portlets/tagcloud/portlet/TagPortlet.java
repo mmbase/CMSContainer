@@ -29,4 +29,5 @@ public class TagPortlet extends AbstractContentPortlet {
 	protected void saveParameters(ActionRequest request, String portletId) {
 		setPortletParameter(portletId, "tag", request.getParameter("tag"));
 	}
+
 }

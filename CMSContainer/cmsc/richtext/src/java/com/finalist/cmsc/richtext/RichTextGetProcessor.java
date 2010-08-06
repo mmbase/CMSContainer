@@ -9,16 +9,11 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.richtext;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Field;
+import org.mmbase.bridge.*;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.Relation;
-import org.mmbase.bridge.RelationList;
 import org.mmbase.datatypes.processors.ParameterizedProcessorFactory;
 import org.mmbase.datatypes.processors.Processor;
 import org.mmbase.security.Rank;
@@ -26,8 +21,7 @@ import org.mmbase.util.functions.Parameter;
 import org.mmbase.util.functions.Parameters;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 import org.w3c.dom.NodeList;
 
 import com.finalist.cmsc.mmbase.ResourcesUtil;
@@ -112,7 +106,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
          Relation inlineRel = iter.next();
          inlineImages.put(inlineRel.getStringValue(RichText.REFERID_FIELD), inlineRel);
       }
-      
+
       // transform all images
       NodeList imglist = doc.getElementsByTagName(RichText.IMG_TAGNAME);
       log.debug("" + imglist.getLength() + " images found in richtext.");
@@ -145,7 +139,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
             log.debug("Creating image by relation " + imgidrel);
 
             if (!inlineImages.containsKey(imgidrel)) {
-               if (isAnonymousVisitor(cloud)) {
+               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
                   org.w3c.dom.Node parentNode = image.getParentNode();
                   parentNode.removeChild(image);
                }
@@ -192,7 +186,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                }
             }
 
-            if (isAnonymousVisitor(cloud)) {
+            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
                image.removeAttribute(RichText.RELATIONID_ATTR);
                if (image.hasAttribute(RichText.DESTINATION_ATTR)) {
                   image.removeAttribute(RichText.DESTINATION_ATTR);
@@ -206,6 +200,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       }
    }
 
+
    /**
     * Find a tags in the text and replace them with valid links
     */
@@ -218,7 +213,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
             String idrel = aElement.getAttribute(RichText.RELATIONID_ATTR);
 
             if (!inlineLinks.containsKey(String.valueOf(idrel))) {
-               if (isAnonymousVisitor(cloud)) {
+               if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
                   org.w3c.dom.Node parentNode = aElement.getParentNode();
                   org.w3c.dom.Node nextSibling = aElement.getNextSibling();
                   while (nextSibling != null && nextSibling.getNodeType() == org.w3c.dom.Node.ATTRIBUTE_NODE) {
@@ -252,7 +247,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
             }
             else {
                if ("urls".equals(builderName)) {
-                  name = destinationNode.getStringValue(RichText.TITLE_FIELD);
+                  name = destinationNode.getStringValue("name");
                   url = destinationNode.getStringValue("url");
                   url = url.replaceAll("&(?!amp;)", "&amp;");
                }
@@ -281,7 +276,7 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
                aElement.setAttribute(RichText.TITLE_ATTR, name);
             }
 
-            if (isAnonymousVisitor(cloud)) {
+            if (cloud.getUser().getRank() == Rank.ANONYMOUS) {
                aElement.removeAttribute(RichText.RELATIONID_ATTR);
                if (aElement.hasAttribute(RichText.DESTINATION_ATTR)) {
                   aElement.removeAttribute(RichText.DESTINATION_ATTR);
@@ -291,7 +286,8 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       }
    }
 
-   protected String getContentUrl(Node node) {
+
+   private String getContentUrl(Node node) {
       String title = null;
 
       //Check for the existence of title field of the node
@@ -302,10 +298,5 @@ public class RichTextGetProcessor implements ParameterizedProcessorFactory {
       String id = node.getStringValue("number");
       return ResourcesUtil.getServletPathWithAssociation("content", "/content/*", id, title);
    }
-
-   protected boolean isAnonymousVisitor(Cloud cloud) {
-      return cloud.getUser().getRank() == Rank.ANONYMOUS;
-   }
-
 
 }

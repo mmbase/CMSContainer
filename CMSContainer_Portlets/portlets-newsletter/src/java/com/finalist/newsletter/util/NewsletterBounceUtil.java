@@ -16,9 +16,10 @@ import org.mmbase.bridge.util.SearchUtil;
 
 import com.finalist.newsletter.domain.NewsletterBounce;
 import com.finalist.newsletter.services.CommunityModuleAdapter;
+
 public class NewsletterBounceUtil {
 
-   public static List<NewsletterBounce> getBounceRecords(int offset, int pageSize, String order, String direction,String newsletter) {
+   public static List<NewsletterBounce> getBounceRecords(int offset, int pageSize, String order, String direction) {
       List<NewsletterBounce> bounces = new ArrayList<NewsletterBounce>();
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeManager bounceManager = cloud.getNodeManager("newsletterbounce");
@@ -27,9 +28,6 @@ public class NewsletterBounceUtil {
          query.setMaxNumber(pageSize);
          query.setOffset(offset);
          Queries.addSortOrders(query, order, direction);
-      }
-      if(newsletter != null) {
-         SearchUtil.addEqualConstraint(query, bounceManager.getField("newsletter"), newsletter);
       }
       NodeList bounceNodes = query.getList();
       bounces = convertNodeListToList(bounceNodes);
@@ -41,9 +39,6 @@ public class NewsletterBounceUtil {
 
    private static List<NewsletterBounce> newsletterSort(List<NewsletterBounce> bounces, int offset, int pageSize,
          String direction, String order) {
-      if(bounces == null) {
-         return null;
-      }
       ComparisonUtil comparator = new ComparisonUtil();
       comparator.setFields_user(new String[] { order });
       Collections.sort(bounces, comparator);
@@ -58,15 +53,9 @@ public class NewsletterBounceUtil {
       return bounces;
    }
 
-   public static int getTotalCount(String newsletter) {
+   public static int getTotalCount() {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      NodeList bounces ;
-      if (newsletter != null) {
-         bounces = SearchUtil.findNodeList(cloud, "newsletterbounce","newsletter",newsletter);
-      }
-      else {
-         bounces = SearchUtil.findNodeList(cloud, "newsletterbounce");
-      }
+      NodeList bounces = SearchUtil.findNodeList(cloud, "newsletterbounce");
       if (bounces != null) {
          return bounces.size();
       }
@@ -117,33 +106,5 @@ public class NewsletterBounceUtil {
       NewsletterBounce bounce = new NewsletterBounce();
       copyProperties(bounceNode, bounce);
       return bounce;
-   }
-   
-   public static void deleteBounce(String number) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      Node bounceNode = cloud.getNode(number);
-      bounceNode.delete();
-   }
-   
-   public static String deleteMember(String number) {
-      Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
-      Node bounceNode = cloud.getNode(number);
-      String userid = bounceNode.getStringValue("userid");
-      
-      if(userid != null) {
-         bounceNode.setValue("userid", null);
-         bounceNode.commit();
-         NodeManager bounceManager = cloud.getNodeManager("newsletterbounce");
-         NodeQuery query = bounceManager.createQuery();
-         SearchUtil.addEqualConstraint(query, bounceManager.getField("userid"), userid);
-         NodeList bounces = query.getList();
-         if(bounces != null && bounces.size() > 0) {
-            for (Node bounce: bounces) {
-               bounce.setValue("userid", null);
-               bounce.commit();
-            }
-         }
-      }
-      return userid;
    }
 }

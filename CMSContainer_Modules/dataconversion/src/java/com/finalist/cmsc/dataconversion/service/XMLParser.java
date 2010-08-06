@@ -45,5 +45,10 @@ public class XMLParser {
        factory.setValidating(true);       
        return  builder.parse(inputSource);
     }
-  
+    
+    public static boolean DTDValidator(Document dom) {
+       boolean flag = true;
+
+      return flag; 
+    }   
 }

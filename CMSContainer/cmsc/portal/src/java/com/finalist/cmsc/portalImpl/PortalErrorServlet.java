@@ -12,7 +12,6 @@ package com.finalist.cmsc.portalImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -68,8 +67,6 @@ public class PortalErrorServlet extends PortalServlet {
    public static final String ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
 
    private static final String SIMPLE_404 = "(.*/editors/.*[.](jpg$|gif$|png$|css$|js$|ico$))|robots.txt";
-
-   private static final Pattern FILE_PATTERN = Pattern.compile(".*?\\D((?:session=.*?\\+)?\\d+(?:\\+.+?)?)(/.*)?");
 
    private Pattern excludePattern = Pattern.compile(SIMPLE_404);
 
@@ -128,22 +125,6 @@ public class PortalErrorServlet extends PortalServlet {
                   if (SiteManagement.isNavigation(site2.getUrlfragment() + PATH_SP + statusCode)) {
                      errorPageSite = site2;
                      break;
-                  }
-               }
-               if(statusCode == 404 && ServerUtil.isStaging() && !ServerUtil.useServerName()) {
-                  Matcher m = FILE_PATTERN.matcher(path);
-                  String redirectPath = "";   
-                  if (m.matches()) {                  
-                     if (request.getContextPath() != null) {
-                        redirectPath = request.getContextPath()+"/error/nopreview.jsp";
-                     }
-                     else {
-                        redirectPath = "/error/nopreview.jsp";
-                     } 
-                  }
-                  if(!"".equals(redirectPath)) {
-                     response.sendRedirect(redirectPath);
-                     return;
                   }
                }
             }

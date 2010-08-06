@@ -50,7 +50,7 @@
 
 		<% 
 		CloudInfo localCloudInfo = CloudInfo.getDefaultCloudInfo();
-		int remoteCloudNumber = org.mmbase.remotepublishing.CloudManager.getLocalCloudNumber("live.server");
+		int remoteCloudNumber = org.mmbase.remotepublishing.builders.PublishingQueueBuilder.getCloudNumber("live.server");
         CloudInfo remoteCloudInfo = CloudInfo.getCloudInfo(remoteCloudNumber);
 		%>
 

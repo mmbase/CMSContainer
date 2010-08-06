@@ -21,16 +21,6 @@ public class SearchForm extends ActionForm {
    private String group;
 
    private String option;
-   
-   private String state;
-
-   public String getState() {
-      return state;
-   }
-
-   public void setState(String state) {
-      this.state = state;
-   }
 
    public String getOption() {
       return option;

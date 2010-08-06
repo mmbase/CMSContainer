@@ -82,21 +82,8 @@
                   <c:url var="publishQueueUrl" value="/editors/maintenance/staging/remove-publishqueue.jsp"/>
                   <a href="${publishQueueUrl}" target="rightpane"><fmt:message key="maintenance.publish.remove-publishqueue" /></a>
                </li>
-               <li class="advancedpublish">
-                  <c:url var="repairStagingUrlsUrl" value="/editors/maintenance/richtext/repair-staging-urls.jsp"/>
-                  <a href="${repairStagingUrlsUrl}" target="rightpane"><fmt:message key="maintenance.richtext.repairStagingUrls" /></a>
-               </li>
             <% } %>
          </mm:haspage>
-     <li class="advancedpublish">
-         <c:url var="checkIntegrityUrl" value="/editors/maintenance/checkintegrity.jsp"/>
-         <a href="${checkIntegrityUrl}" target="rightpane"><fmt:message key="maintenance.checkintegrity" /></a>
-      </li>
-     <li class="advancedpublish">
-         <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
-         <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
-      </li>
-         
 		<cmsc:hasfeature name="workflowitem">
         <li class="workflow">
            <a href="staging/workflow-remove.jsp" target="rightpane"><fmt:message key="maintenance.workflow" /></a>

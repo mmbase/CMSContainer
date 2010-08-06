@@ -1,7 +1,7 @@
 <edit:ui-table items="${personForShow}" var="person" size="${totalCount}"
                requestURI="/editors/community/SearchConditionalUser.do" bulkbox="true">
-   <edit:ui-tcolumn title="" width="70px" checkboxlabel="community.selectall">
-      <input type="checkbox" name="chk_" value="${person.authId}"/>
+   <edit:ui-tcolumn title="" width="62px">
+      <input type="checkbox" name="chk_" value="${person.authId}"/>&nbsp;
       <c:if test="${not hiddenOperation}">
       <a href="${pageContext.request.contextPath }/editors/community/userAddInitAction.do?authid=${person.authId}&&group=${groupName},${option}">
       <img  src="<cmsc:staticurl page='/editors/gfx/icons/edit.png'/>" width="16" height="16" title="<fmt:message key="community.search.edit"/>"></a>
@@ -32,7 +32,7 @@
    <edit:ui-tcolumn titlekey="community.search.memberOf">
       ${person.groups}
    </edit:ui-tcolumn>
-   <edit:ui-tcolumn titlekey="community.search.state" sort="person.active">
+   <edit:ui-tcolumn titlekey="community.search.state">
 		<select onchange="selectState('${pageContext.request.contextPath }/editors/community/SearchConditionalUser.do?page=${page}&sortby=${param.sortby}&dir=${param.dir}&authid=${person.authId}',this)" >
 			<option value="${person.active}">${person.active}</option>
 			<option value="Unconfirmed"><fmt:message key="community.search.state.unconfirmed"/> </option>
@@ -60,7 +60,7 @@
     }
  })();
  function selectState(url,ele){
-   surl=url+"&active="+ele.value
+   surl=url+"&state="+ele.value
    //	alert(surl);
 	window.location.href =surl;
  }

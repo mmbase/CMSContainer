@@ -24,23 +24,16 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class SelectTag extends SimpleTagSupport {
 
    public String var;
-   public String name;
-
+   
    public String onchange;
 
    public String selected;
 
    public String defaultValue;
 
+
    public void setVar(String var) {
       this.var = var;
-      if (StringUtils.isEmpty(name)) {
-         name = var;
-      }
-   }
-   
-   public void setName(String name) {
-      this.name = name;
    }
 
    public void setOnchange(String onchange) {
@@ -63,7 +56,7 @@ public class SelectTag extends SimpleTagSupport {
          myOnChange = " " + "onchange=\"" + StringEscapeUtils.escapeXml(onchange) + "\"";  
       } 
       
-      ctx.getOut().print("<select name=\"" + StringEscapeUtils.escapeXml(name) + "\"" + myOnChange + ">");
+      ctx.getOut().print("<select name=\"" + StringEscapeUtils.escapeXml(var) + "\"" + myOnChange + ">");
       JspFragment frag = getJspBody();
       if (frag != null) {
          frag.invoke(null);

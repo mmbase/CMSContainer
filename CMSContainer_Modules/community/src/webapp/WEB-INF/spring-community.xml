@@ -64,7 +64,6 @@
   <bean name="authorityService" class="com.finalist.cmsc.services.community.security.AuthorityHibernateService" />
   <bean name="preferenceService" class="com.finalist.cmsc.services.community.preferences.PreferenceHibernateService" />
   <bean name="personService" class="com.finalist.cmsc.services.community.person.PersonHibernateService" />
-  <bean name="groupsService" class="com.finalist.cmsc.services.community.security.GroupsService" />
 
    <!-- Actions -->
    <bean name="/editors/community/PreferenceAction" class="com.finalist.cmsc.community.forms.PreferenceAction">
@@ -86,38 +85,4 @@
    <import resource="spring-security.xml"/>
    <!-- Services Holder-->
    <bean id="contextHolder" class="com.finalist.cmsc.services.community.ApplicationContextFactory"/>
-   <!--LdapTemplate-->
-   <!--LDAP setting. when using SSO uncomment the following elements-->
-<!-- a PropertyPlaceholderConfigurer object which used to handle placeholder of the LDAP contextsource
-	<bean id="environmentConfigurer" class="com.finalist.cmsc.services.community.JndiPlaceholderConfigurer">
-		<property name="placeholderPrefix" value="$env{"/>
-	</bean>-->
-<!-- LDAP Context Source
-	<bean id="naiLDAPcontextSource"	class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="urls">
-			<list>
-			<value>$env{ldap.url}</value>
-			</list>
-		</property>
-		<property name="userDn"	value="$env{ldap.userDn}" />
-		<property name="password" value="$env{ldap.password}" />
-		<property name="baseEnvironmentProperties">
-			<map>
-				<entry>
-				<key><value>java.naming.security.authentication</value></key>
-				<value>$env{ldap.type}</value>
-				</entry>
-			</map>
-		</property>
-	</bean>
-   <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-	   <property name="contextSource" ref="naiLDAPcontextSource"/>
-   </bean>
-   
-   <bean id="personLDAPService" class="com.finalist.cmsc.services.community.person.PersonLDAPService"/>
-
-   <bean id="authenticationLDAPService" class="com.finalist.cmsc.services.community.security.AuthenticationLDAPService"/>
-
-   <bean id="authorityLDAPService" class="com.finalist.cmsc.services.community.security.AuthorityLDAPService"/>
-   -->
 </beans>

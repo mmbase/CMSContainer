@@ -1,22 +1,17 @@
 package com.finalist.cmsc.security.forms;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.MessageResources;
+import org.apache.struts.action.ActionForm;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeIterator;
 import org.mmbase.bridge.NodeList;
 
-import com.finalist.cmsc.security.SecurityUtil;
 import com.finalist.cmsc.struts.MMBaseAction;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Nico Klasens
@@ -65,30 +60,13 @@ public class UserInitAction extends MMBaseAction {
       NodeList ranks = cloud.getNodeManager("mmbaseranks").getList(null, "rank", "down");
       for (NodeIterator iter = ranks.nodeIterator(); iter.hasNext();) {
          Node rankNode = iter.nextNode();
-         String name = rankNode.getStringValue("name");
-         String number = rankNode.getStringValue("number");
-         if("basic user".equalsIgnoreCase(name) && userForm.getId() == -1){
-            userForm.setRank(number);
-         }
-         userForm.addRank(number, name);
-      }      
+         userForm.addRank(rankNode.getStringValue("number"), rankNode.getStringValue("name"));
+      }
       NodeList contexts = cloud.getNodeManager("mmbasecontexts").getList(null, "name", "down");
       for (NodeIterator iter = contexts.nodeIterator(); iter.hasNext();) {
          Node contextNode = iter.nextNode();
          userForm.addContext(contextNode.getStringValue("number"), contextNode.getStringValue("name"));
       }
-      Node userNode = SecurityUtil.getUserNode(cloud);
-      String language = userNode.getStringValue("language");
-      Locale locale;
-      if(StringUtils.isEmpty(language)){
-         locale = request.getLocale();
-      }else{
-         locale = new Locale(language);
-      }
-      MessageResources resources = getResources(request, "SECURITY");
-      userForm.resetStatuses();
-      userForm.addStatus("1", resources.getMessage(locale, "user.status.active"));
-      userForm.addStatus("-1", resources.getMessage(locale, "user.status.disabled"));
       return mapping.findForward(SUCCESS);
    }
 }

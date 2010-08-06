@@ -9,7 +9,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.mmbase.bridge.util.NodeFieldComparator;
+import net.sf.mmapps.commons.bridge.NodeFieldComparator;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.*;
@@ -390,7 +390,7 @@ public class XMLController {
             if (fieldsAsAttribute) {
                nodeElement.setAttribute(fieldName, val);
             }
-            else if (Field.TYPE_BINARY != type) {
+            else {
                Element element = document.createElement(fieldName);
                element.appendChild(document.createTextNode(val));
                nodeElement.appendChild(element);

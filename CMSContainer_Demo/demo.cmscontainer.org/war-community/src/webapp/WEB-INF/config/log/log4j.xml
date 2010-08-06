@@ -122,17 +122,6 @@
 	  <appender-ref ref="sqllogfile" />
 	</logger>
 
-<!-- Query logging in MMBase, see file /MMBase/core/src/main/config/utils/querylogging.xml -->
-   <logger name="org.mmbase.QUERIES" additivity="false">
-     <level class="&mmlevel;" value ="warn" />
-     <appender-ref ref="sqllogfile" />
-   </logger>
-   
-   <logger name="org.mmbase.STACK.QUERIES" additivity="false">
-     <level class="&mmlevel;" value ="warn" />
-     <appender-ref ref="sqllogfile" />
-   </logger>
-   
   <!--
   STDERR is a special Category, to wich stderr will be written
   (always with level 'warn' or higher)

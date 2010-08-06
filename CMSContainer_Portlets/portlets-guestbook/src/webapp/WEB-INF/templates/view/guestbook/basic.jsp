@@ -63,7 +63,7 @@
 		<c:set var="elementsPerPage" >
 			<mm:field name="pagesize"><mm:isnotempty><mm:write /></mm:isnotempty></mm:field>
 		</c:set>
-		<c:if test="${empty elementsPerPage or elementsPerPage lt 1}">
+		<c:if test="${elementsPerPage == -1}">
 			<c:set var="elementsPerPage" value="50"/>
 		</c:if>
 		<mm:relatednodescontainer type="guestmessage" role="posrel">

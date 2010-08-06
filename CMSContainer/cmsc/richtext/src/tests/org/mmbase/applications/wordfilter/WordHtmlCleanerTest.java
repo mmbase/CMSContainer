@@ -11,7 +11,7 @@ public class WordHtmlCleanerTest extends TestCase {
 
    /**
     * Test for NIJ-385. Bold tags with only spaces in it where reduced to a self closing tag, which will
-    * render all following text bold in IE.<br/>
+    * render al following text bold in IE.<br/>
     * E.g. The following html <code>&lt;b&gt; &lt;/b&gt;</code> would be cleaned as <code>&lt;b/&gt;</code>. 
     */
    public void testEmptyTagsCleaner() {
@@ -60,15 +60,15 @@ public class WordHtmlCleanerTest extends TestCase {
     * these lists are created by adding spaces and tabs before and behind the dots of the lists.
     */
    public void testFixLists() {
-      String input = "<p style=\"margin-left: 53.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Wingdings;\">Â§<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n\r"+
+      String input = "<p style=\"margin-left: 53.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Wingdings;\">§<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n\r"+
                      "</span></span><!--[endif]--><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Een</p>"+
-                     "<p style=\"margin-left: 53.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Wingdings;\">Â§<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                     "<p style=\"margin-left: 53.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Wingdings;\">§<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                      "</span></span><!--[endif]--><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Twee</p>";
       doTestFilter(input, "<ul><li>Een</li><li>Twee</li></ul>");
 
-      String input2 = "<p style=\"margin-left: 89.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Symbol;\">Â·<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+      String input2 = "<p style=\"margin-left: 89.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Symbol;\">·<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                      "</span></span><!--[endif]-->Een</p>"+
-                     "<p style=\"margin-left: 89.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Symbol;\">Â·<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                     "<p style=\"margin-left: 89.4pt; text-indent: -18pt;\" class=\"MsoNormal\"><!--[if !supportLists]--><span style=\"font-family: Symbol;\">·<span style=\"font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
                      "</span></span><!--[endif]-->Twee</p>";
       doTestFilter(input2, "<ul><li>Een</li><li>Twee</li></ul>");
 
@@ -77,7 +77,7 @@ public class WordHtmlCleanerTest extends TestCase {
    }
    
    /**
-    * CMSC-416: FP: Problems with line breaks in hidden if blocks
+    * CMSC-416: FP: Problems with linebreaks in hidden if blocks
     */
    public void testLinebreaksInHtmlIfComments() {
       doTestFilter("te<!--[if !supportLineBreaknewLine]-->x<!--[endif]-->st", "test");
@@ -93,36 +93,36 @@ public class WordHtmlCleanerTest extends TestCase {
      * As specified in NIJ-780, only a single <br/> should be the result of a replaced <p></p>
      */
     public void testReplaceParagraphSingleBr() {
-      doTestFilter("<p>This is paragraph</p><p>paragraph 2</p>", "This is paragraph<br/><br/>paragraph 2");
+    	doTestFilter("<p>This is paragraph</p><p>paragraph 2</p>", "This is paragraph<br/><br/>paragraph 2");
     }
     
-   /**
+	/**
      * As specified in NIJ-780, h1 till h7 should be replaced by a <strong>...</strong><br/>
      */
     public void testReplaceHeaderEnd() {
-      for(int count = 1; count <= 7; count++) {
-         doTestFilter("<h"+count+">Header</h"+count+">", "<strong>Header</strong>");
+    	for(int count = 1; count <= 7; count++) {
+    		doTestFilter("<h"+count+">Header</h"+count+">", "<strong>Header</strong>");
             doTestFilter("<h"+count+">Header</h"+count+"><p>paragraph 2</p>", "<strong>Header</strong><br/>paragraph 2");
-      }
+    	}
     }
 
-   /**
-    * See CMSC-931, youtube failed because <param> tags were mis-identified for <p> tags
+	/**
+	 * See CMSC-931, youtube failed because <param> tags were mis-identified for <p> tags
      */ 
     public void testYoutube() {
-      String code = "<object width=\"425\" height=\"355\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"355\"></embed></object>";
-      String expected = "<object height=\"355\" width=\"425\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\"/><param name=\"wmode\" value=\"transparent\"/><embed height=\"355\" src=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\" type=\"application/x-shockwave-flash\" width=\"425\" wmode=\"transparent\"/></object>";
-      doTestFilter(code, expected);
+    	String code = "<object width=\"425\" height=\"355\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/MI4TO5vhzRM&hl=en\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"425\" height=\"355\"></embed></object>";
+    	String expected = "<object height=\"355\" width=\"425\"><param name=\"movie\" value=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\"/><param name=\"wmode\" value=\"transparent\"/><embed height=\"355\" src=\"http://www.youtube.com/v/MI4TO5vhzRM&amp;hl=en\" type=\"application/x-shockwave-flash\" width=\"425\" wmode=\"transparent\"/></object>";
+    	doTestFilter(code, expected);
     }
 
     public void testAbbrTag() {
-      String text = "before<abbr title=\"long version\">lv</abbr>after";
-      doTestFilter(text, text);
+    	String text = "before<abbr title=\"long version\">lv</abbr>after";
+    	doTestFilter(text, text);
     }
 
     public void testSpacingTag() {
-      String text = "Nu nieuw op televisie : <a href=\"www.nu.nl\">boer</a> <b>zoekt</b> <i>vrouw</i>";
-      doTestFilter(text, text);
+    	String text = "Nu nieuw op televisie : <a href=\"www.nu.nl\">boer</a> <b>zoekt</b> <i>vrouw</i>";
+    	doTestFilter(text, text);
     }
 
     private void doTestFilter(String input, String expected) {

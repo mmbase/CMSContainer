@@ -9,12 +9,7 @@ See http://www.MMBase.org/license
 */
 package com.finalist.cmsc.navigation.tree;
 
-import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
-
-import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
-import org.mmbase.security.Rank;
 
 import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.security.SecurityUtil;
@@ -70,33 +65,11 @@ public class SiteTreeItemRenderer implements NavigationTreeItemRenderer {
                    "../workflow/masspublish.jsp?number=" + id));
           }
        }
-       Cloud cloud = parentNode.getCloud();
-       if (cloud.getUser().getRank() == Rank.ADMIN) {
-      	 int pos = cloud.getNode(id).getIntValue("pos");
-      	 if(!firstSite(cloud, pos)) {
-	          element.addOption(renderer.createTreeOption("up.png", "site.page.sorting.up",
-	                "javascript:siteSortUp('"+id+"');"));
-      	 }
-      	 if(!lastSite(cloud, pos)) {
-	          element.addOption(renderer.createTreeOption("down.png", "site.page.sorting.down",
-	                "javascript:siteSortDown('"+id+"');"));
-      	 }
-       }
        element.addOption(renderer.createTreeOption("rights.png", "site.page.rights",
              "../usermanagement/pagerights.jsp?number=" + id));
        
        return element;
     }
-
-	private boolean firstSite(Cloud cloud, int pos) {
-		NodeList list = cloud.getNodeManager(SiteUtil.SITE).getList("pos < "+pos, null, null);
-		return (list.size() == 0);
-	}
-
-	private boolean lastSite(Cloud cloud, int pos) {
-		NodeList list = cloud.getNodeManager(SiteUtil.SITE).getList("pos > "+pos, null, null);
-		return (list.size() == 0);
-	}
 
 	public void addParentOption(NavigationRenderer renderer, TreeElement element, String parentId) {
 		// has no parent

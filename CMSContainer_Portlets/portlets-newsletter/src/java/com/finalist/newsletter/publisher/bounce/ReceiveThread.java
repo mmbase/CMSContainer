@@ -24,13 +24,11 @@ public class ReceiveThread extends Thread {
    private BufferedReader reader = null;
    private BufferedWriter writer = null;
    private NewsletterService newsletterService;
-   private String[] params;
+   private  String[] params;
 
    private SMTPSTATUS status = SMTPSTATUS.INIT;
-
    public ReceiveThread() {
    }
-
    public ReceiveThread(Socket socket) {
       this.socket = socket;
    }
@@ -172,7 +170,6 @@ public class ReceiveThread extends Thread {
       }
       return isreading;
    }
-
    /**
     * Interrupt method, is called only during shutdown
     */

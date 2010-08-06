@@ -1,10 +1,8 @@
 package com.finalist.newsletter.forms;
 
 import org.apache.struts.action.ActionForm;
-
 /**
  * using for searching newsletter subscriber by full name, user name, email, term
- *
  * @author Lisa
  */
 public class NewsletterSubscriberSearchForm extends ActionForm {
@@ -21,7 +19,8 @@ public class NewsletterSubscriberSearchForm extends ActionForm {
    }
 
    /**
-    * @param fullname the fullname to set
+    * @param fullname
+    *           the fullname to set
     */
    public void setFullname(String fullname) {
       this.fullname = fullname;
@@ -35,7 +34,8 @@ public class NewsletterSubscriberSearchForm extends ActionForm {
    }
 
    /**
-    * @param username the username to set
+    * @param username
+    *           the username to set
     */
    public void setUsername(String username) {
       this.username = username;
@@ -49,7 +49,8 @@ public class NewsletterSubscriberSearchForm extends ActionForm {
    }
 
    /**
-    * @param email the email to set
+    * @param email
+    *           the email to set
     */
    public void setEmail(String email) {
       this.email = email;
@@ -63,7 +64,8 @@ public class NewsletterSubscriberSearchForm extends ActionForm {
    }
 
    /**
-    * @param term the term to set
+    * @param term
+    *           the term to set
     */
    public void setTerm(String term) {
       this.term = term;

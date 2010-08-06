@@ -20,9 +20,6 @@
       <edit:ui-tab key="newsletter.publication.tabs.subscribers">
          NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
-	  <edit:ui-tab key="newsletter.publication.tabs.bounces">
-        module/NewsletterBounceAction.do?method=list&newsletterId=${requestScope.newsletterId}&from=newsletter
-      </edit:ui-tab>
        <edit:ui-tab key="newsletter.publication.tabs.terms">
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
@@ -64,7 +61,7 @@
 	  <c:remove var="needajax"/>
 	  </c:if>
 
-      <div class="body">
+	  <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationManagement.do">
             <edit:ui-tcolumn title="" width="5%"><nobr>
              <cmsc:rights nodeNumber="${result.id}" var="rights"/>
