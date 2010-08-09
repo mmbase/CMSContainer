@@ -678,6 +678,11 @@ See http://www.MMBase.org/license
          <layout>legacy</layout>
       </repository>
       <repository>
+         <id>cmsc</id>
+         <name>CMS Container repository m2</name>
+         <url>http://www.cmscontainer.org/files/maven2/</url>
+      </repository>
+      <repository>
          <id>maven2-repository.dev.java.net</id>
          <name>Java.net Repository for Maven</name>
          <url>http://download.java.net/maven/2/</url>
