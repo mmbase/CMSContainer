@@ -1,0 +1,91 @@
+MMigration document:
+
+Part: core
+From version: 1.7
+To version: 1.8
+
+Name: Extended the current stylesheet options in CMSc with dynamic stylesheets, from the database
+Goal: Add a new field "text" to mm_stylesheet
+Type:  manual action
+--- Start script ---
+ALTER TABLE mm_stylesheet ADD m_text TEXT;
+ALTER TABLE live_stylesheet ADD m_text TEXT;
+--- End script ---
+
+Check the layouts of your project. You should change the <c:forEach> that displays the stylesheets to something like this:
+
+--- Start JSP ---
+<cmsc:insert-stylesheet var="stylesheets" />
+<c:forEach var="style" items="${stylesheets}">
+  <c:choose>  
+    <c:when test="${empty style.resource}"> 
+      <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet/${style.id}.css" media="${style.media}" />
+    </c:when> 
+    <c:otherwise>
+      <link rel="stylesheet" type="text/css" href="<cmsc:staticurl page='/${style.resource}'/>" media="${style.media}" />
+    </c:otherwise>
+  </c:choose> 
+</c:forEach>
+--- End JSP ---
+
+If you have overridden the web.xml file in your project, make sure it contains these declarations in the appropriate places
+--- Start XML ---
+<servlet>
+  <description>Returns css text</description>
+  <servlet-name>stylesheet</servlet-name>
+  <servlet-class>com.finalist.cmsc.servlet.StylesheetServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>stylesheet</servlet-name>
+  <url-pattern>/stylesheet/*</url-pattern>
+</servlet-mapping>
+--- End XML ---
+
+Exceptions/errors/other problems and what to do:
+*
+*
+*
+
+
+
+Name: Alter two fields of the table subscriptionrecord
+Goal: Change the type of the two fields
+Type:  sql-script
+--- Start script ---
+ALTER TABLE mm_subscriptionrecord MODIFY  subscriber VARCHAR(11);
+ALTER TABLE mm_subscriptionrecord MODIFY  format VARCHAR(255);
+
+ALTER TABLE live_subscriptionrecord MODIFY  subscriber VARCHAR(11);
+ALTER TABLE live_subscriptionrecord MODIFY  format VARCHAR(255);
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+
+
+Name: Remove from workflow db script
+Goal: Missing upgrade script for the 1.7 release, made to remove stuff from the workflow
+Type:  sql-script
+--- Start script ---
+create table temp (number int(11));
+insert into temp (select max(number) as x from mm_archive group by original_node);
+update mm_archive set onlive = 1, publish = 1 where number in (select number from temp);
+drop table temp;
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+
+Name: Update version number dependency in builders XML for using the latest sitemanagement.
+Goal: update sitemanagement to version 3
+Type:  manual action
+--- Start script ---
+Search in all your XML files in your project
+The sitemanagement version field should be put to 3!!
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
