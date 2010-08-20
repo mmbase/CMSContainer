@@ -129,7 +129,7 @@ public class AuthenticationLDAPService extends AbstractLDAPService implements Au
 	   }
 	   else {
 		   log.warn("Old group, joining it!");
-	      groupAttributes.put("uniqueMember", "cn="+userId);
+	      groupAttributes.get("uniqueMember").add("cn="+userId);
 	      DistinguishedName newItemDN = new DistinguishedName(GROUPS_BASE_DN);
 	      newItemDN.add("cn", authorityName);
 	      getLdapTemplate().rebind(newItemDN, null, groupAttributes);
