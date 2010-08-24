@@ -133,6 +133,9 @@ public class RelatedContentPortlet extends AbstractContentPortlet {
    }
 
    private String getElementIdFromRenderURL(RenderRequest req, String relatedWindow) {
+   	if(relatedWindow == null) {
+   		return null;
+   	}
       String requestURL = getServletRequest(req).getRequestURL().toString();
       Pattern pattern = Pattern.compile(RENDERURL_ELEMENTID_PATTERN.replaceAll(RENDERURL_ELEMENTID_WINDOW_REPLACE, relatedWindow));
       Matcher matcher = pattern.matcher(requestURL);
