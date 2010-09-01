@@ -80,7 +80,12 @@ public class ContentUrlTag extends NodeReferrerTag {
 	               PortalURL currentURL = env.getRequestedPortalURL();
 	               String path = currentURL.getGlobalNavigationAsString();
 	               String server = (path.indexOf("/") != -1)?(path.substring(0, path.indexOf("/"))):path;
-	            	url += "?server="+server;
+	               if(url.contains("?")) {
+	               	url += "&server="+server;
+	               }
+	               else {
+	               	url += "?server="+server;
+	               }
                }
             }
          }

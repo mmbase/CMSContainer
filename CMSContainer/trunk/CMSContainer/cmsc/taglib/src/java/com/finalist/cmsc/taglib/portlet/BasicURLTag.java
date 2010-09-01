@@ -139,7 +139,12 @@ public abstract class BasicURLTag extends TagSupport {
          PortalURL currentURL = env.getRequestedPortalURL();
          String path = currentURL.getGlobalNavigationAsString();
          String server = (path.indexOf("/") != -1)?(path.substring(0, path.indexOf("/"))):path;
-         urlString += "?server="+server;
+         if(urlString.contains("?")) {
+         	urlString += "&server="+server;
+         }
+         else {
+         	urlString += "?server="+server;
+         }
       }
       
       if (var == null) {
