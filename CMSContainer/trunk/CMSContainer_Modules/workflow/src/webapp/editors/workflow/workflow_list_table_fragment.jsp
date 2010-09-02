@@ -164,10 +164,6 @@
        <mm:node number="${number}"> <mm:nodeinfo type="guitype"/> </mm:node>
    </td>
    <td style="white-space: nowrap;">
-   		<c:if test="${status == 'published'  && interval >= 60000}">
-		<fmt:formatNumber type="number" maxFractionDigits="0"
-            value="${interval/60000}" />
-		</c:if>
       <mm:field jspvar="value" write="false" name="${type}.${field}"/>
       <c:if test="${fn:length(value) > 50}">
          <c:set var="value">${fn:substring(value,0,49)}...</c:set>
