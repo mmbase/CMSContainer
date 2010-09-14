@@ -68,7 +68,7 @@ public class DeleteAction extends MMBaseFormlessAction {
       String returnurl = getParameter(request, "returnurl");
       
       ActionForward ret;
-      if(returnurl.contains(".jsp?")) {
+      if(returnurl != null && returnurl.contains(".jsp?")) {
     	  ret = new ActionForward(returnurl+"&fresh=true");
       } else {
     	  ret = new ActionForward(returnurl+"?fresh=true");
