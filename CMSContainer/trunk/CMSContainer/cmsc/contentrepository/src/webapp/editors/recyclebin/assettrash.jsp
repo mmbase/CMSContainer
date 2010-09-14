@@ -54,13 +54,13 @@
                   <c:when test="${rolename eq 'webmaster'}">
 
                      <mm:import id="parentchannel" jspvar="parentchannel"><%= RepositoryUtil.ALIAS_TRASH %></mm:import>
-                     <mm:import jspvar="returnurl" id="returnurl">/editors/recyclebin/index.jsp</mm:import>
+                     <mm:import jspvar="returnurl" id="returnurl">/editors/recyclebin/assettrash.jsp</mm:import>
                      
                      <div class="body">
                          <p>
                              <fmt:message key="recyclebin.channel" />
                          </p>
-                        <form name="deleteForm" action="DeleteAction.do" method="post">
+                        <form name="deleteForm" action="DeleteAction.do?returnurl=${returnurl}" method="post">
                            <input type="hidden" name="action" value="deleteall" />
                            <input type="hidden" name="type" value="asset" />
                            <ul class="shortcuts">
