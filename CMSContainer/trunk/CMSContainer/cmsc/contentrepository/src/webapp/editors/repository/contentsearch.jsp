@@ -16,10 +16,16 @@
 </mm:haspage>
 
 <html:html xhtml="true">
+<mm:import externid="mode" id="mode">basic</mm:import>
 <cmscedit:head title="search.title">
       <script src="../../mmbase/edit/wizard/javascript/validator.js" type="text/javascript"></script>
       <script src="content.js" type="text/javascript"></script>
       <script src="search.js" type="text/javascript"></script>
+      <mm:compare referid="mode" value="advanced" inverse="true">
+      <%--
+         NFK-446 There is no (mass) move on the advanced search screen,
+         use default selectChannel() behavior
+      --%>
 	  <script type="text/javascript">
 			function selectChannel(channel, path) {
 				var newDirection=document.forms[0].direction.value;
@@ -33,6 +39,7 @@
 			addLoadEvent(alert('${param.message}'));
 			</c:if>
 	  </script>
+    </mm:compare>
     <c:if test="${not empty requestScope.refreshChannels}">
         <script>
         refreshFrame('channels');
@@ -44,7 +51,6 @@
 <mm:import externid="action">search</mm:import><%-- either: search, link, of select --%>
 <mm:import externid="portletId" from="parameters" />
 <mm:import externid="position" from="parameters" />
-<mm:import externid="mode" id="mode">basic</mm:import>
 <mm:import externid="returnurl"/>
 <mm:import externid="linktochannel"/>
 <mm:import externid="parentchannel" jspvar="parentchannel"/>
