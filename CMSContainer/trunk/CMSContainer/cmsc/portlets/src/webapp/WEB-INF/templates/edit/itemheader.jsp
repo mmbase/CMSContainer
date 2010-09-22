@@ -32,4 +32,4 @@
       <span class="handle" style="float: left;"><cmsc:editorMessage key="edit.drag" /></span>
    </cmsc:isallowededit>
 </c:if>
-</mm:cloud>
+</div>
