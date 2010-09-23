@@ -15,6 +15,7 @@ import javax.servlet.jsp.JspException;
 
 public class PagerTag extends com.jsptags.navigation.pager.PagerTag {
 
+   private static final long serialVersionUID = 1L;
    private PortletURL renderUrl;
 
 
@@ -40,6 +41,7 @@ public class PagerTag extends com.jsptags.navigation.pager.PagerTag {
 
    public int doStartTag() throws JspException {
       renderUrl = getRenderUrl();
+      addParam("elementId",null); //If the elementId is available, add it.
       return super.doStartTag();
    }
 
@@ -53,7 +55,7 @@ public class PagerTag extends com.jsptags.navigation.pager.PagerTag {
 
          if (values != null) {
             for (String value2 : values) {
-               renderUrl.setParameter(name, value);
+               renderUrl.setParameter(name, value2);
             }
          }
       }
@@ -62,7 +64,7 @@ public class PagerTag extends com.jsptags.navigation.pager.PagerTag {
 
    protected String getOffsetUrl(int pageOffset) {
       // resetting offset parameter in PortletURL.
-      // Pager method removed the offset parameter agai, but that is not
+      // Pager method removed the offset parameter again, but that is not
       // possible with the PortletURL
       renderUrl.setParameter(idOffsetParam, String.valueOf(pageOffset));
       return renderUrl.toString();
