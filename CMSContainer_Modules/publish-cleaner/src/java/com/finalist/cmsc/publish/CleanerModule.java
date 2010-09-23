@@ -125,11 +125,15 @@ public class CleanerModule extends Module implements Runnable {
          while (ni.hasNext()) {
             Node element = ni.nextNode();
             log.info("Deleting expired node (" + element.getNodeManager().getName() + ") " + element.getNumber());
+            
             try {
                List<Node> nodes = new ArrayList<Node>();
                ContentElementUtil.findContentBlockNodes(element, nodes, true, true);
 
+               int i = 0;
                for (Node deleteNode : nodes) {
+                  i++;
+                  log.debug(i+") Deleting expired node (" + deleteNode.getNodeManager().getName() + ") " + deleteNode.getNumber());
                   PublishManager.unLinkNode(deleteNode);
                   deleteNode.delete(false);
                }
