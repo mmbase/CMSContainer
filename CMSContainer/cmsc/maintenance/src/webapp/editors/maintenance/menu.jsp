@@ -86,6 +86,10 @@
                   <c:url var="repairStagingUrlsUrl" value="/editors/maintenance/richtext/repair-staging-urls.jsp"/>
                   <a href="${repairStagingUrlsUrl}" target="rightpane"><fmt:message key="maintenance.richtext.repairStagingUrls" /></a>
                </li>
+               <li class="advancedpublish">
+                   <c:url var="assetcleanerUrl" value="/editors/maintenance/assetcleaner.jsp"/>
+                   <a href="${assetcleanerUrl}" target="rightpane"><fmt:message key="maintenance.assetcleaner" /></a>
+               </li>
             <% } %>
          </mm:haspage>
      <li class="advancedpublish">
