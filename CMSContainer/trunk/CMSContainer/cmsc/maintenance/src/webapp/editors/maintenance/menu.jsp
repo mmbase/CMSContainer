@@ -86,11 +86,14 @@
                   <c:url var="repairStagingUrlsUrl" value="/editors/maintenance/richtext/repair-staging-urls.jsp"/>
                   <a href="${repairStagingUrlsUrl}" target="rightpane"><fmt:message key="maintenance.richtext.repairStagingUrls" /></a>
                </li>
+            <% } %>
                <li class="advancedpublish">
                    <c:url var="assetcleanerUrl" value="/editors/maintenance/assetcleaner.jsp"/>
                    <a href="${assetcleanerUrl}" target="rightpane"><fmt:message key="maintenance.assetcleaner" /></a>
                </li>
-            <% } %>
+
+
+
          </mm:haspage>
      <li class="advancedpublish">
          <c:url var="checkIntegrityUrl" value="/editors/maintenance/checkintegrity.jsp"/>
@@ -100,6 +103,10 @@
          <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
          <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
       </li>
+               <li class="advancedpublish">
+                   <c:url var="assetcleanerUrl" value="/editors/maintenance/assetcleaner.jsp"/>
+                   <a href="${assetcleanerUrl}" target="rightpane"><fmt:message key="maintenance.assetcleaner" /></a>
+               </li>
          
 		<cmsc:hasfeature name="workflowitem">
         <li class="workflow">
@@ -125,6 +132,7 @@
          <c:url var="logoutUrl" value="../logout.jsp"/>
          <a href="${logoutUrl}" target="rightpane"><fmt:message key="maintenance.logout" /></a>
       </li>
+
     </ul>
 </mm:cloud>
          </div>
