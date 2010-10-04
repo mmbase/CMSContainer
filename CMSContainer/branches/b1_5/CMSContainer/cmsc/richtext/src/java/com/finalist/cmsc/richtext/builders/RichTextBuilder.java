@@ -682,9 +682,9 @@ public class RichTextBuilder extends MMObjectBuilder {
          log.debug("Found image with title " + title + " and alt tekst " + alt);
 
          MMObjectNode imageNode = mmb.getMMObject("images").getNewNode(owner);
-         imageNode.setValue("title", title);
+         imageNode.setValue("title", title.trim());
          imageNode.setValue("handle", baos.toByteArray());
-         imageNode.setValue("description", alt);
+         imageNode.setValue("description", alt.trim());
          imageNode.insert(owner);
          return imageNode;
       }
@@ -701,12 +701,12 @@ public class RichTextBuilder extends MMObjectBuilder {
    protected MMObjectNode createUrl(String owner, String href, String name) {
       MMObjectNode urlNode = mmb.getMMObject("urls").getNewNode(owner);
       if (StringUtils.isNotEmpty(name)) {
-         urlNode.setValue("name", name);
+         urlNode.setValue("name", name.trim());
       }
       else {
-         urlNode.setValue("name", href);
+         urlNode.setValue("name", href.trim());
       }
-      urlNode.setValue("url", href);
+      urlNode.setValue("url", href.trim());
       urlNode.insert(owner);
       return urlNode;
    }
