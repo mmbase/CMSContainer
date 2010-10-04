@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.mmbase.applications.wordfilter.WordHtmlCleaner;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.NodeManager;
@@ -271,8 +272,8 @@ public class RichTextBuilder extends MMObjectBuilder {
 
 
    /**
-    * resolve links in the richtextfield en make inlinerel of it. Add the id to
-    * the anchortag so that the link can be resolved in the frontend en point to
+    * resolve links in the richtextfield and make inlinerel of it. Add the id to
+    * the anchortag so that the link can be resolved in the frontend and point to
     * the correct article.
     */
    protected void resolveLinks(Document doc, List<String> idsList, MMObjectNode mmObj) {
@@ -289,6 +290,17 @@ public class RichTextBuilder extends MMObjectBuilder {
          if (link.hasAttribute(RichText.DESTINATION_ATTR)
                && "undefined".equalsIgnoreCase(link.getAttribute(RichText.DESTINATION_ATTR))) {
             link.removeAttribute(RichText.DESTINATION_ATTR);
+         }
+         
+         //Check for broken and bad destinations and clean them, so the user can try it again.
+         if (link.hasAttribute(RichText.DESTINATION_ATTR)
+               && !NumberUtils.isNumber(link.getAttribute(RichText.DESTINATION_ATTR))) {
+            log.info("While searching for a destinationId, no number was found. Found:" + link.getAttribute(RichText.DESTINATION_ATTR));
+            link.removeAttribute(RichText.DESTINATION_ATTR);
+            if (link.hasAttribute(RichText.HREF_ATTR)) { //Also remove href, preventing bad URLs being created
+               link.removeAttribute(RichText.HREF_ATTR);
+            }
+            continue; //Continue to next element; nothing to fix the link.
          }
          if (link.hasAttribute(RichText.RELATIONID_ATTR)
                && "undefined".equalsIgnoreCase(link.getAttribute(RichText.RELATIONID_ATTR))) {
