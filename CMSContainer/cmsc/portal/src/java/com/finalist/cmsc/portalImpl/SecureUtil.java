@@ -23,8 +23,8 @@ public class SecureUtil {
 	public static boolean isAllowedToSee(NavigationItem item) {
 	   return isReadable(Integer.toString(item.getId()));
 	}
-	
-   public static String getEnvironment(String name) {
+
+   public static String getEnvironment(String name, String defaultValue) {
       String value = null;
       Context env = null;
       Context context = null;
@@ -46,7 +46,12 @@ public class SecureUtil {
             }
          }
       } catch (NamingException e) {
-         log.error("Get environment "+name+" error :"+e);
+         if(defaultValue == null) {
+            log.error("Get environment "+name+" error :"+e);
+         }
+         else {
+            return defaultValue;
+         }
       }
       return value;
    }   
