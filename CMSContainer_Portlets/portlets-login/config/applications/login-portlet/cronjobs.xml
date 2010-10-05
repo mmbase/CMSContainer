@@ -5,6 +5,6 @@
       <crontime>5 2 * * *</crontime>
       <classfile>com.finalist.cmsc.login.RegisterCleanCronJob</classfile>
       <config></config>
-      <type>2</type>
+      <type>1</type> <!-- must be one -->
    </node>
 </cronjobs>
