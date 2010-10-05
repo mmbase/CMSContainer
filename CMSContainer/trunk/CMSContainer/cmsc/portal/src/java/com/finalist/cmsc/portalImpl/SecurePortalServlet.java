@@ -32,7 +32,7 @@ public class SecurePortalServlet extends PortalServlet {
    	
 	protected boolean doRender(HttpServletRequest request,
 			HttpServletResponse response, String path) throws IOException {
-	   String useSSO = SecureUtil.getEnvironment("useSSO");
+	   String useSSO = SecureUtil.getEnvironment("useSSO", "false");
 	   if(useSSO == null || "false".equalsIgnoreCase(useSSO)) {
 	      return super.doRender(request, response, path);
 	   }
