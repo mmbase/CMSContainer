@@ -6,7 +6,7 @@
 		<crontime>0 */12 * * *</crontime>
 		<classfile>com.finalist.cmsc.tasks.TaskCronJob</classfile>
 		<config></config>
-		<type>2</type> <!-- canbemore -->
+		<type>1</type> <!-- must be one -->
 	</node>
 
 </cronjobs>
