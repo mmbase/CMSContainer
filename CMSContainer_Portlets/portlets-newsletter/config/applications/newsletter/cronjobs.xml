@@ -5,20 +5,20 @@
       <crontime>*/5 * * * *</crontime>
       <classfile>com.finalist.newsletter.NewsletterCronJob</classfile>
       <config></config>
-      <type>2</type>
+      <type>1</type>
    </node>
    <node number="104973" owner="default">
       <name>Publication Sent CronJob</name>
       <crontime>*/5 * * * *</crontime>
       <classfile>com.finalist.newsletter.PublicationSentCronJob</classfile>
       <config></config>
-      <type>2</type>
+      <type>1</type>
    </node>
    <node number="104974" owner="default">
       <name>Newsletter LogRecord CronJob</name>
       <crontime>0 */6 * * *</crontime>
       <classfile>com.finalist.newsletter.NewsletterSumLogsCronJob</classfile>
       <config></config>
-      <type>2</type>
+      <type>1</type><!-- must be one -->
    </node>
 </cronjobs>
