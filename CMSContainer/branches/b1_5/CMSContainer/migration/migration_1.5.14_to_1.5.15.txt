@@ -19,6 +19,8 @@ Exceptions/errors/other problems and what to do:
 *
 *
 
+
+** Do not do this! It breaks the icaches. Update to 1.5.16 instead **
 Name: Image caching improvement
 Goal: add value to paramvalue field
 Type:  user action

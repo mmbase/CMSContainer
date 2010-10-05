@@ -240,7 +240,7 @@
 		<init-param>
 			<!-- Field of image node to use for 'last modified' -->
 			<param-name>lastmodifiedfield</param-name>
-			<param-value>lastmodifieddate</param-value>
+			<param-value></param-value>
 		</init-param>
 		<init-param>
 			<!-- Whether to filter jpeg image for meta xml data -->
