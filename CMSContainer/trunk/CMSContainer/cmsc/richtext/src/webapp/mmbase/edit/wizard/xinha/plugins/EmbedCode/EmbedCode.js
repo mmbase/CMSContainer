@@ -36,10 +36,10 @@ EmbedCode.prototype._lc = function(string) {
 };
 
 EmbedCode.prototype.onGenerate = function() {
-  this.editor.addEditorStylesheet(Xinha.getPluginDir("EmbedCode") + '/embed-code.css');
+  //this.editor.addEditorStylesheet(Xinha.getPluginDir("EmbedCode") + '/embed-code.css');
  
 };
-//inwardHtml & outwardHtml are used for change video to image while swiitching modes
+//inwardHtml & outwardHtml are used for change video to image while switching modes
 //EmbedCode.prototype.inwardHtml = function(html)
 //{
 //        return html;
