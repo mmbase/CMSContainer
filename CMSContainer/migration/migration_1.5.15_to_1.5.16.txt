@@ -28,3 +28,14 @@ to:
 *
 *
 
+Name: Set cronjobs at run single instance only
+Goal: prevent multiple instances of cronjob classes
+Type: user action
+--- Start script ---
+update mm_cronjobs set m_type='1'; 
+update live_cronjobs set m_type='1';
+--- End script ---
+*
+*
+*
+ 
