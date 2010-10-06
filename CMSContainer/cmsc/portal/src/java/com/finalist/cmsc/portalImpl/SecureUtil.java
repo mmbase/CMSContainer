@@ -23,6 +23,10 @@ public class SecureUtil {
 	public static boolean isAllowedToSee(NavigationItem item) {
 	   return isReadable(Integer.toString(item.getId()));
 	}
+	
+   public static String getEnvironment(String name) {
+      return getEnvironment(name, null);
+   }
 
    public static String getEnvironment(String name, String defaultValue) {
       String value = null;
