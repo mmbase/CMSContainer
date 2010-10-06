@@ -1,0 +1,15 @@
+Migration document:
+
+From version: 1.8.5
+To version: 1.8.6
+
+Name: Set cronjobs at run single instance only
+Goal: prevent multiple instances of cronjob classes
+Type: user action
+--- Start script ---
+update mm_cronjobs set m_type='1'; 
+update live_cronjobs set m_type='1';
+--- End script ---
+*
+*
+*
