@@ -78,7 +78,7 @@ See http://www.MMBase.org/license
     <junit.version>4.4</junit.version>
 
     <pluto.version>1.0.1</pluto.version>
-    <mmbase.version>1.9.2-20091118</mmbase.version>
+    <mmbase.version>1.9-SNAPSHOT</mmbase.version>
   </properties>
 
 	<developers>
