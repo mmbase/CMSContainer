@@ -51,7 +51,7 @@ public class SecureUtil {
          }
       } catch (NamingException e) {
          if(defaultValue == null) {
-            log.error("Get environment "+name+" error :"+e);
+            log.warn("Get environment "+name+" error :"+e);
          }
          else {
             return defaultValue;
