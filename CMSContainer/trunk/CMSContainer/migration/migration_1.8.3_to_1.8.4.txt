@@ -48,3 +48,22 @@ INSERT INTO temp_site_pos SELECT a.number, (SELECT count(*) FROM mm_site b WHERE
 UPDATE mm_site SET pos = (SELECT pos FROM temp_site_pos WHERE mm_site.number = temp_site_pos.number);
 DROP TABLE temp_site_pos;
 --- End script ---
+
+
+
+Name: Update version number dependency in builders XML for using the latest sitemanagement.
+Goal: update sitemanagement to version 3
+Type:  manual action
+--- Start script ---
+1. Search in all your project for sitemanagement.xml.
+Compare it against CMSc trunk version, and update missing fields!
+
+2. Also search for sitemanagement references in all XMLs in your project.
+Update sitemanagement version field to version 3.
+
+--- End script ---
+Exceptions/errors/other problems and what to do:
+*
+*
+*
+
