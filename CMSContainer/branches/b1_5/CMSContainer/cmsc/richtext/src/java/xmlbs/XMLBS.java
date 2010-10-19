@@ -264,7 +264,7 @@ public class XMLBS {
             TextToken txt = (TextToken) tok;
             if (txt.isWhiteSpace()) {
             	Token previous = tokens.get(i-1);
-            	if(((TagToken)previous).isCloseTag()) {
+            	if((previous instanceof TagToken) && ((TagToken)previous).isCloseTag()) {
                 	txt.setData(" ");
             	}
             	else {
