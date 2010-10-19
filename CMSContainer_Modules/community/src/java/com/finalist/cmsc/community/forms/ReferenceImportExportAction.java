@@ -282,7 +282,7 @@ public class ReferenceImportExportAction extends DispatchAction {
             Preference pre = addPreference(communityVO);
             preferences.add(pre);
             personExImVO.setPreferences(preferences);
-            if (null != groupId && groupId != "0" && groupId != "") {
+            if (StringUtils.isNotEmpty(groupId) && !groupId.equals("0")) {
                personExImVO.setAuthorityId(new Long(groupId));
             }
             personVOMap.put(authUserId, personExImVO);
