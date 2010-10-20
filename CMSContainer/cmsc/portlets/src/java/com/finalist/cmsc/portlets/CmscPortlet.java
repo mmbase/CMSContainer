@@ -215,7 +215,6 @@ public class CmscPortlet extends GenericPortlet {
       response.setPortletMode(PortletMode.VIEW);
    }
 
-   @SuppressWarnings("unused")
    protected void saveParameters(ActionRequest request, String portletId) {
       // convenience method
    }
