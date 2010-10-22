@@ -540,7 +540,7 @@
 <!-- EHcache used for cmsc sitemanagement -->		
    		<dependency>
 			<groupId>ehcache</groupId>
-			<artifactId>ehcache</artifactId>
+			<artifactId>ehcache-core</artifactId>
 			<version>1.7.0</version>
 			<type>jar</type>
 			<properties>
