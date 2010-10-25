@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+
 import com.finalist.cmsc.services.community.ApplicationContextFactory;
 
 
@@ -17,10 +20,15 @@ import com.finalist.cmsc.services.community.ApplicationContextFactory;
  */
 public class GroupsService {
    
+   private static final Logger log = Logger.getLogger(GroupsService.class);
+   
    public List<String> syncronizeGroupsFromIDstore(){
       List<String> results = new ArrayList<String>();
       AuthorityService authorityLDAPService = getAuthorityLDAPService();
-      Set < String > list = authorityLDAPService.getAuthorityNames();
+      if (authorityLDAPService == null) {
+         return results;
+      }
+      Set <String> list = authorityLDAPService.getAuthorityNames();
       Iterator<String> iter = list.iterator();
       while(iter.hasNext()){
          String authorityName = iter.next();
@@ -34,7 +42,15 @@ public class GroupsService {
    }
    
    private AuthorityLDAPService getAuthorityLDAPService() {
-      return (AuthorityLDAPService)ApplicationContextFactory.getBean("authorityLDAPService");
+      AuthorityLDAPService authLDAPService;
+      try {
+         authLDAPService = (AuthorityLDAPService)ApplicationContextFactory.getBean("authorityLDAPService");
+      }
+      catch (NoSuchBeanDefinitionException e) {
+         log.info("No LDAP service defined and used.");
+         authLDAPService = null;
+      }
+      return authLDAPService;
    }
 
    private AuthorityService getAuthorityHibernateService() {
