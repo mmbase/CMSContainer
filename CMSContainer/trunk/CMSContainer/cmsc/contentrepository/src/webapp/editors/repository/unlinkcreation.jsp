@@ -29,7 +29,7 @@
 <c:if test="${not empty action && action =='massmove'}">
    <c:set value="contentMassDelete.do" var="url"/>
 </c:if>
-<mm:import externid="returnurl" />
+<mm:import externid="returnurl"/>
 <mm:import externid="offset" />
 <mm:import externid="orderby" />
 <mm:import externid="direction" />
@@ -55,7 +55,7 @@
    <mm:import id="channelnumber"><mm:field name="number"/></mm:import>
    
    <mm:compare referid="channelnumber" referid2="creationnumber" inverse="true">
-        <mm:url page="${url}" id="url" write="false" >
+        <mm:url page="${url}" id="channelurl" write="false" >
            <mm:param name="action" value="unlink"/>
            <mm:param name="channelnumber" value="$creationnumber"/>
            <mm:param name="objectnumber" value="$contentnumber"/>
@@ -74,16 +74,14 @@
            </mm:present>
         </mm:url>
         <li>
-           <a href="<mm:write referid="url"/>">
-            <mm:field name="path"/>
-         </a>
+           <a href="<mm:write referid="channelurl" escape="none"/>"><mm:field name="path"/></a>
       </li>
    </mm:compare>
 </mm:list>
 
 <mm:node referid="trashchannel">
    <mm:import id="trashnumber"><mm:field name="number"/></mm:import>
-   <mm:url page="${url}" id="trashurl" write="false" >
+   <mm:url page="${url}" id="trashurl" escapeamps="false" write="false" >
       <mm:param name="action" value="unlink"/>
       <mm:param name="channelnumber" value="$creationnumber"/>
       <mm:param name="objectnumber" value="$contentnumber"/>
@@ -107,7 +105,6 @@
    </div>
    <div class="side_block_end"></div>
 </div>   
-
 
 </mm:cloud>
 </body>
