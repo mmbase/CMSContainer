@@ -13,3 +13,12 @@ update live_cronjobs set m_type='1';
 *
 *
 *
+
+
+Name: Compare project's possibly overwritten my-htmlarea.js file with CMSc version. CMSC-1721 changed it
+Goal: add fixes to project
+Type:  manual action
+--- Start script ---
+- compare project's overwrites my-htmlarea.js near /war/src/webapp/mmbase/edit/wizard/xinha/my-htmlarea.js
+- take over fixes in CMSc to project!
+--- End script ---
