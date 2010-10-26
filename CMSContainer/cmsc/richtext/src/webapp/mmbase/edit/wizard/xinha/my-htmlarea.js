@@ -328,46 +328,65 @@ Xinha.prototype._createLink = function(link) {
 	this._popupDialog( editor.config.URIs.link, function(param) {
       	if (!param) { return false; } //user must have pressed cancel
 		var a = link;
-		if ( !a ){
-                  try
-			{
-                        editor._doc.execCommand("createlink", false, param.f_href);
-                        a = editor.getParentElement();
-                        var sel = editor._getSelection();
-                        var range = editor._createRange(sel);
-                        if(editor._selectionEmpty(sel))
-                        {
-                              editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + " 'destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
-                        }
-                        else{
-                        	if (!Xinha.is_ie) {
-                                if (a == null || !(/^a$/i.test(a.tagName))) {
-                                    a = range.startContainer;
-                                    if ( ! ( /^a$/i.test(a.tagName) ) ) {
-                                          a = a.nextSibling;
-                                          if ( a === null ) {
-                                                a = range.startContainer.parentNode; 
-                                          }
-                                    }
-                                }
-                            }
-                            else{//for ie
-                                while (a) {
-                                   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
-                                   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
-                                   if (/^img$/i.test(a.tagName)){a = a.parentNode;} //for image node, its parentNode is <a>
-                                }
-                            }
-                        	//deal with link and image node
-                            if(/^a$/i.test(a.tagName)){
-                                if(!(/^img$/i.test(a.firstChild.tagName))){
-                                    a.innerHTML = param.f_title.trim();
-                                }
-                            }
-                        }
+		if (!a){
+            try {
+			// Remove the possible spaces around a selection, before creating a <a>-tag
+			// This prevents the createlink and getParentElement to fail.
+			if (Xinha.is_ie) {
+				var sel = editor._getSelection();
+				if (sel.type == "Text") { 
+					// When selecting an image inside the A-tag, type = control which fails.
+					var range = editor._createRange(sel);
+					range.findText(range.htmlText.trim()); // create a new range, without spaces
+					range.select(); // select this new range to create a link with
+				}
+			}
+
+			//Now let the browser create a link (a-tag)
+			editor._doc.execCommand("createlink", false, param.f_href);
+
+			var sel = editor._getSelection();
+			var range = editor._createRange(sel);
+			a = editor.getParentElement();
+                  
+			if(editor._selectionEmpty(sel)) {
+				editor.insertHTML("<a href='" + param.f_href + "' title='" + param.f_tooltip + " 'destination='"+ param.f_destination + "'>" + param.f_title+ "</a>");
+			}
+          else {
+        	if (!Xinha.is_ie) {
+                if (a == null || !(/^a$/i.test(a.tagName))) {
+                    a = range.startContainer;
+                    if ( ! ( /^a$/i.test(a.tagName) ) ) {
+                          a = a.nextSibling;
+                          if ( a === null ) {
+                                a = range.startContainer.parentNode; 
+                          }
+                    }
+                }
+            }
+            else {//for ie
+                while (a) {
+                   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+                   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
+                   a = a.parentNode; //not found, so try a level higher in the tree.
+                }
+            }
+        	if (a === null){
+        		//The A-tag could not be found, so the new link should be removed to be sure.
+        		editor._doc.execCommand("unlink", false, null);
+        		editor.updateToolbar();
+        		return false;
+        	}
+        	//deal with link and image node
+            if(/^a$/i.test(a.tagName)){
+                if(!(/^img$/i.test(a.firstChild.tagName))){
+                    a.innerHTML = param.f_title.trim();
+                }
+            }
+            }
 			} catch(ex) {}
 		}
-		else
+		else //If a was true:
 		{
 			var href = param.f_href.trim();
 			editor.selectNodeContents(a);
