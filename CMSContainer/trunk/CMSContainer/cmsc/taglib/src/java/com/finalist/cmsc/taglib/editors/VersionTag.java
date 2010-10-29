@@ -9,12 +9,12 @@ import com.finalist.util.version.VersionUtil;
 
 public class VersionTag extends SimpleTagSupport {
 
-   private static String TYPE_APPLICATION = "application";
-   private static String TYPE_CMSC = "cmsc";
-   private static String TYPE_MMBASE = "mmbase";
-   private static String TYPE_LIBS = "libs";
+   private static final String TYPE_APPLICATION = "application";
+   private static final String TYPE_CMSC = "cmsc";
+   private static final String TYPE_MMBASE = "mmbase";
+   private static final String TYPE_LIBS = "libs";
    
-   private static String UNKNOWN = "unknown/mixed";
+   private static final String UNKNOWN = "unknown/mixed";
 
    private String type = TYPE_APPLICATION;
    private String var;

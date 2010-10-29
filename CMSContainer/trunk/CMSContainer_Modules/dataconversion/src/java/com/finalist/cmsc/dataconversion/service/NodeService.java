@@ -109,7 +109,7 @@ public class NodeService {
             Relation relate = RelationUtil.createRelation(sourceNode, desNode, data.getDestinationRelationType());
             relate.commit();
          }
-         else if(data.getType() == Constants.ROOT_CATEGORY_TYPE){
+         else if(data.getType().equals(Constants.ROOT_CATEGORY_TYPE)){
             Iterator<Integer> iterator = data.getIdentifiers().keySet().iterator();
             Integer sourceId = data.getRelateId();
             Node sourceNode = cloud.getNode(sourceId.intValue()); 

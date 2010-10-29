@@ -129,7 +129,7 @@ public class ValueField {
 
 
    public Boolean isArray() {
-      if (value == null) return null;
+      if (value == null) return Boolean.FALSE;
       return new Boolean(value.getClass().isArray());
    }
 

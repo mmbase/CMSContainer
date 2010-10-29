@@ -2186,7 +2186,7 @@ public class Diff_Match_Patch {
      */
     public boolean equals(Object d) {
       try {
-        return (((Diff) d).operation == this.operation)
+        return (d != null && ((Diff) d).operation == this.operation)
                && (((Diff) d).text.equals(this.text));
       } catch (ClassCastException e) {
         return false;

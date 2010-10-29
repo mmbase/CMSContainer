@@ -173,17 +173,17 @@ public class Conversion {
    private void saveType(Node item, List<Data> sources) throws Exception {
 
       for (Data data : sources) {
-         if (data.getType() != Constants.RELATION_DATA_TYPE) {
-            if (data.getType() == Constants.ENTITY_TYPE) {
+         if (!data.getType().equals(Constants.RELATION_DATA_TYPE)) {
+            if (data.getType().equals(Constants.ENTITY_TYPE)) {
                log.info(String.format(" ----> begin to save type [%s]", data.getDestinationType()));
             }
             else
-               if (data.getType() == Constants.RELATION_TYPE) {
+               if (data.getType().equals(Constants.RELATION_TYPE)) {
                   log.info(String.format(" ----> begin to save type [%s]", data
                         .getDestinationRelationType()));
                }
                else
-                  if (data.getType() == Constants.SELF_RELATION_TYPE) {
+                  if (data.getType().equals(Constants.SELF_RELATION_TYPE)) {
                      log.info(String.format(" ----> begin to save type [%s]", data
                            .getSourceRelationType()));
                   }
