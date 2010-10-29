@@ -1,13 +1,14 @@
 <%@page language="java" contentType="text/html;charset=UTF-8" %>
- <%@include file="globals.jsp" %>
- <%@ page import="com.finalist.cmsc.maintenance.sql.*" %>
+<%@include file="globals.jsp"%>
+<mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@ page import="com.finalist.cmsc.maintenance.sql.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html:html xhtml="true">
-    <cmscedit:head title="Ongebruikte assets">
+    <cmscedit:head title="maintenance.assetcleaner">
         <link href="style.css" type="text/css" rel="stylesheet"/>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             $("#checkall").click(function() {
@@ -21,12 +22,12 @@
     </cmscedit:head>
 
     <body>
-        <mm:cloud jspvar="cloud" rank="basic user" method="http">
+        <mm:cloud jspvar="cloud" loginpage="../login.jsp" rank="administrator">
             <div class="tabs">
                 <a href="#">
                     <div class="tab_active">
                         <div class="body">
-                            <div class="title">Ongebruikte assets</div>
+                            <div class="title"><fmt:message key="maintenance.assetcleaner" /></div>
                         </div>
                     </div>
                 </a>
@@ -65,7 +66,7 @@
                         <tr>
                             <td><input type="checkbox" name="delete" value="${number}" class="deletebox" /></td>
                             <td>
-                                <a href="#" onclick="Popup=window.open('../resources/attachmentinfo.jsp?objectnumber=${number}','Bijlage details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=500,height=500,left=430,top=23'); return false;">
+                                <a href="#" onclick="window.open('../resources/attachmentinfo.jsp?objectnumber=${number}','details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=500,left=430,top=23'); return false;">
                                   <mm:field name="title">
                                     <mm:isnotempty>
                                       <mm:write />
@@ -91,7 +92,7 @@
                         <tr valign="top">
                             <td><input type="checkbox" name="delete" value="${number}" class="deletebox" /></td>
                             <td>
-                                <a href="#" onclick="Popup=window.open('../resources/imageinfo.jsp?objectnumber=${number}','Afbeelding details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=500,height=500,left=430,top=23'); return false;">
+                                <a href="#" onclick="window.open('../resources/imageinfo.jsp?objectnumber=${number}','details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=500,left=430,top=23'); return false;">
                                   <img src="<mm:image width="100" />" style="float: left;" />&nbsp;&nbsp;&nbsp;
                                   <mm:field name="title">
                                     <mm:isnotempty>
@@ -112,11 +113,10 @@
             <input type="submit" name="action" value="Verwijderen"/>
         </form>
 
-
                 </div>
             </div>
         </mm:cloud>
 
-
     </body>
 </html:html>
+</mm:content>
