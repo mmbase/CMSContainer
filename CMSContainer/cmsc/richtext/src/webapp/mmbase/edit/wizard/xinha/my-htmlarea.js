@@ -192,67 +192,90 @@ function setWidthForTables(editor) {
 }
 
 HTMLArea.prototype._insertInlineLink = function(link) {
-        var editor = this;
-        var outparam = null;
-        if (typeof link == "undefined") {
-            link = this.getParentElement();
-            while (link) {
-        	   if (/^a$/i.test(link.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
-        	   if (/^body$/i.test(link.tagName)) { link = null; break } //Stop searching when Body-tag is found, don't go too deep.
-        	   link = link.parentNode;
+    var editor = this;
+    var outparam = null;
+    if (typeof link == "undefined") {
+        link = this.getParentElement();
+        while (link) {
+    	   if (/^a$/i.test(link.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+    	   if (/^body$/i.test(link.tagName)) { link = null; break } //Stop searching when Body-tag is found, don't go too deep.
+    	   link = link.parentNode;
+        }
+    }
+    if (link) outparam = {
+            f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
+            f_destination : HTMLArea.is_ie ? link.destination : link.getAttribute("destination"),
+            f_title  : link.title,
+            f_target : link.target
+    };
+    this._popupDialog("insertinline_link.html", function(param) {
+	if (!param) { return false; } //user must have pressed cancel
+    var a = link;
+    if (!a) {
+		// Remove the possible spaces around a selection, before creating a <a>-tag
+		// This prevents the createlink and getParentElement to fail.
+		if (HTMLArea.is_ie) {
+			var sel = editor._getSelection();
+			if (sel.type == "Text") { 
+				// When selecting an image inside the A-tag, type = control which fails.
+				var range = editor._createRange(sel);
+				range.findText(range.htmlText.trim()); // create a new range, without spaces
+				range.select(); // select this new range to create a link with
+			}
+		}
+
+		//Now let the browser create a link (a-tag)
+        editor._doc.execCommand("createlink", false, param.f_href);
+        a = editor.getParentElement();
+        var sel = editor._getSelection();
+        var range = editor._createRange(sel);
+        if (!HTMLArea.is_ie) {
+            if (a == null || !(/^a$/i.test(a.tagName))) {
+                a = range.startContainer;
+                if ( ! ( /^a$/i.test(a.tagName) ) ) {
+                      a = a.nextSibling;
+                      if ( a === null ) {
+                            a = range.startContainer.parentNode;
+                      }
+                }
             }
         }
-        if (link) outparam = {
-                f_href   : HTMLArea.is_ie ? editor.stripBaseURL(link.href) : link.getAttribute("href"),
-                f_destination : HTMLArea.is_ie ? link.destination : link.getAttribute("destination"),
-                f_title  : link.title,
-                f_target : link.target
-             };
-        this._popupDialog("insertinline_link.html", function(param) {
-                if (!param)
-                        return false;
-                var a = link;
-                if (!a) {
-                    editor._doc.execCommand("createlink", false, param.f_href);
-                    a = editor.getParentElement();
-                    var sel = editor._getSelection();
-                    var range = editor._createRange(sel);
-                    if (!HTMLArea.is_ie) {
-	                    if (a == null || !(/^a$/i.test(a.tagName))) {
-	                        a = range.startContainer;
-	                        if ( ! ( /^a$/i.test(a.tagName) ) ) {
-	                              a = a.nextSibling;
-	                              if ( a === null ) {
-	                                    a = range.startContainer.parentNode;
-	                              }
-	                        }
-	                    }
-                    }
-                    else {
-                        while (a) {
-                     	   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
-                     	   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
-                     	   a = a.parentNode;
-                        }
-                    }
-                } else a.href = param.f_href.trim();
-
-                a.title = param.f_title.trim();
-                if (HTMLArea.is_ie) {
-                  a.destination = param.f_destination.trim();
-                  if (!a.destination && a.relationID) {
-                    a.relationID = "";
-                  }
-                }
-                else {
-                  a.setAttribute("destination", param.f_destination.trim());
-                  if (!a.getAttribute("destination") && a.getAttribute("relationID")) {
-                    a.removeAttribute("relationID");
-                  }
-                }
-                a.target = param.f_target.trim();
-                editor.selectNodeContents(a);
-                editor.updateToolbar();
+        else {//for ie
+            while (a) {
+         	   if (/^a$/i.test(a.tagName)) break; //Search for the enclosing A tag, if found: continue and use it.
+         	   if (/^body$/i.test(a.tagName)) { a = null; break } //Stop searching when Body-tag is found, don't go too deep.
+         	   a = a.parentNode; //not found, so try a level higher in the tree.
+            }
+        }
+        if (a === null){
+    		//The A-tag could not be found, so the new link should be removed to be sure.
+    		editor._doc.execCommand("unlink", false, null);
+    		editor.updateToolbar();
+    		return false;
+    	}
+                    
+    } 
+    else { //If a was true:
+    	a.href = param.f_href.trim();
+    }
+	if(a != null) {
+        a.title = param.f_title.trim();
+        if (HTMLArea.is_ie) {
+          a.destination = param.f_destination.trim();
+          if (!a.destination && a.relationID) {
+            a.relationID = "";
+          }
+        }
+        else {
+          a.setAttribute("destination", param.f_destination.trim());
+          if (!a.getAttribute("destination") && a.getAttribute("relationID")) {
+            a.removeAttribute("relationID");
+          }
+        }
+        a.target = param.f_target.trim();
+        editor.selectNodeContents(a);
+    }
+    editor.updateToolbar();
   }, outparam);
 };
 
