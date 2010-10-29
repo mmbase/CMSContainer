@@ -22,3 +22,12 @@ Type:  manual action
 - compare project's overwrites my-htmlarea.js near /war/src/webapp/mmbase/edit/wizard/xinha/my-htmlarea.js
 - take over fixes in CMSc to project!
 --- End script ---
+
+
+Name: MMBase upgrade to 1.9.5
+Goal: make your project also use the right jars.
+Type:  manual action
+--- Start script ---
+- Open your .classpath of your project
+- Replace "1.9.2-20091118" with "1.9.5" 
+--- End script ---

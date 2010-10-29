@@ -76,40 +76,40 @@
          <attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/maven/maven-mmbase-plugin/1.9.2-20091118/maven-mmbase-plugin-1.9.2-20091118.jar"/>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9.2-20091118/mmbase-1.9.2-20091118.jar" sourcepath="/M2_REPO/org/mmbase/mmbase/1.9.2-20091118/mmbase-1.9.2-20091118.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/maven/maven-mmbase-plugin/1.9.5/maven-mmbase-plugin-1.9.5.jar"/>
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase/1.9.5/mmbase-1.9.5.jar" sourcepath="/M2_REPO/org/mmbase/mmbase/1.9.5/mmbase-1.9.5.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9.2-20091118/mmbase-cloudcontext-1.9.2-20091118-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-cloudcontext/1.9.5/mmbase-cloudcontext-1.9.5-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9.2-20091118/mmbase-crontab-1.9.2-20091118-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-crontab/1.9.5/mmbase-crontab-1.9.5-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9.2-20091118/mmbase-dove-1.9.2-20091118.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-dove/1.9.5/mmbase-dove-1.9.5.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9.2-20091118/mmbase-editwizard-1.9.2-20091118-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-editwizard/1.9.5/mmbase-editwizard-1.9.5-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9.2-20091118/mmbase-email-1.9.2-20091118-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-email/1.9.5/mmbase-email-1.9.5-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
    </classpathentry>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9.2-20091118/mmbase-resources-1.9.2-20091118-classes.jar"/>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-rmmci/1.9.2-20091118/mmbase-rmmci-1.9.2-20091118.jar"/>
-   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9.2-20091118/mmbase-taglib-1.9.2-20091118-classes.jar">
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-resources/1.9.5/mmbase-resources-1.9.5-classes.jar"/>
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-rmmci/1.9.5/mmbase-rmmci-1.9.5.jar"/>
+   <classpathentry kind="var" path="M2_REPO/org/mmbase/mmbase-taglib/1.9.5/mmbase-taglib-1.9.5-classes.jar">
       <attributes>
          <attribute name="javadoc_location" value="http://www.mmbase.org/development/api/1.9/"/>
       </attributes>
