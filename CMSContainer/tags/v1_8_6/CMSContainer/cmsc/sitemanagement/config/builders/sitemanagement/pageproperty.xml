@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<builder extends="object" maintainer="finalist.com" name="pageproperty" version="1"
+    xmlns="http://www.mmbase.org/xmlns/builder"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mmbase.org/xmlns/builder http://www.mmbase.org/xmlns/builder.xsd">
+    <names>
+        <singular xml:lang="nl">Page Property</singular>
+        <singular xml:lang="en">Page Property</singular>
+        <singular xml:lang="zh">页面属性</singular>
+        <plural xml:lang="nl">Page Property</plural>
+        <plural xml:lang="en">Page Property</plural>
+        <plural xml:lang="zh">页面属性</plural>
+    </names>
+    <fieldlist>       
+        <!-- Page property fields -->
+        <field name="key">
+            <gui>
+                <guiname xml:lang="nl">Sleutel</guiname>
+                <guiname xml:lang="en">Key</guiname>
+                <guiname xml:lang="zh">属性关键字</guiname>
+            </gui>
+            <editor>
+                <positions/>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <maxLength value="100"/>
+            </datatype>
+        </field>
+        <field name="value">
+            <gui>
+                <guiname xml:lang="en">Waarde</guiname>
+                <guiname xml:lang="nl">Value</guiname>
+                <guiname xml:lang="zh">属性值</guiname>
+            </gui>
+            <editor>
+                <positions/>
+            </editor>
+            <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
+                <maxLength value="100"/>
+            </datatype>
+        </field>
+    </fieldlist>
+</builder>

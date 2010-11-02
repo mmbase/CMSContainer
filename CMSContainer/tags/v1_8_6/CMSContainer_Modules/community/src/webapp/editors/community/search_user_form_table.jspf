@@ -1,0 +1,35 @@
+<table border="0">
+   <tbody>
+      <tr>
+         <td style="width:116px"><fmt:message key="community.search.fullname"/></td>
+         <td><html:text style="width: 200px" property="fullName"/></td>
+      </tr>
+      <tr>
+         <td style="width:116px"><fmt:message key="community.search.username"/></td>
+         <td><html:text style="width: 200px" property="userName"/></td>
+      </tr>
+      <tr>
+         <td style="width:116px"><fmt:message key="community.search.emailAddress"/></td>
+         <td><html:text style="width: 200px" property="emailAddr"/></td>
+      </tr>
+      <tr>
+         <td style="width:116px"><fmt:message key="community.search.groups"/></td>
+         <td><html:text style="width: 200px" property="groups"/></td>
+      </tr>
+      <tr>
+         <td style="width:116px"><fmt:message key="community.search.state"/></td>
+         <td>
+	 <html:select property="state">
+		<html:option value="All"><fmt:message key="community.search.state.all"/></html:option>
+		<html:option value="Unconfirmed"><fmt:message key="community.search.state.unconfirmed"/></html:option> 
+		<html:option value="Active"><fmt:message key="community.search.state.active"/></html:option> 
+		<html:option value="Blocked"><fmt:message key="community.search.state.blocked"/></html:option> 
+	 </html:select> 
+	 </td>
+      </tr>
+      <tr>
+         <td style="width:116px"></td>
+         <td><input type="submit" value="<fmt:message key="community.search.searchbatton"/>" name="submitButton"/></td>
+      </tr>
+   </tbody>
+</table> 
