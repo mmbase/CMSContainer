@@ -457,20 +457,19 @@ Xinha.prototype._insertImage = function(image) {
                 }
                 var img = image;
                 if (!img) {
-                  if ( Xinha.is_ie && Xinha.ie_version < 8 ) {
+                  if ( Xinha.is_ie && Xinha.ie_version < 8) {
                     var sel = editor._getSelection();
                     var range = editor._createRange(sel);
                     editor._doc.execCommand("insertimage", false, param.f_url);
-                    img = range.parentElement();
+        			img = range.parentElement();
                     // wonder if this works...
                     if ( img.tagName.toLowerCase() != "img" ) {
                       img = img.previousSibling;
-                    }
+        			}
                    }
-                   else {
+                   else { //for Firefox and IE8+ and others
                     img = document.createElement('img');
-                    img.src = param.f_url;
-                    editor.insertNodeAtSelection(img);
+                    img.src = param.f_url; //The SRC is already known, so set it.
                     if ( !img.tagName ) {
                       // if the cursor is at the beginning of the document
                       img = range.startContainer.firstChild;
@@ -508,6 +507,11 @@ Xinha.prototype._insertImage = function(image) {
                               break;
                             case "f_destination"  : Xinha.is_ie ? img.destination = value : img.setAttribute("destination", value); break;
                         }
+                }
+                //All attributes/parameters for img are set. Now add the HTML Node, so all is stored.
+                //for Firefox and IE8+ and others. IE6 and IE7 already have the right attributes.
+                if ( ! (Xinha.is_ie && Xinha.ie_version < 8)) {
+                	editor.insertNodeAtSelection(img);
                 }
         }, outparam);
 };
