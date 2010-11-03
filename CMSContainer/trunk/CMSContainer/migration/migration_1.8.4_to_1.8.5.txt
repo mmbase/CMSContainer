@@ -8,5 +8,5 @@ Name: Fix related portlets
 Goal: the node parameters of these
 Type: Manual script
 --- Start script ---
-run the publishnode.jsp maintenance page on staging
+run the portletparameter.jsp maintenance page on staging
 --- End script ---
