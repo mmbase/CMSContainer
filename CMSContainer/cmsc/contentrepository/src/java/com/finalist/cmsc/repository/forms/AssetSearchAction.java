@@ -189,7 +189,7 @@ public class AssetSearchAction extends AbstractAssetSearch {
       }
    
       // Add the title constraint:
-      String searchTitle = searchForm.getTitle().trim();
+      String searchTitle = searchForm.getTitle();
       if (StringUtils.isNotEmpty(searchTitle)) {
          queryStringComposer.addParameter(AssetElementUtil.TITLE_FIELD, searchTitle);
          Field field = nodeManager.getField(AssetElementUtil.TITLE_FIELD);
@@ -198,10 +198,10 @@ public class AssetSearchAction extends AbstractAssetSearch {
       }
       
       // also search for creator
-      if (StringUtils.isNotEmpty(searchForm.getTitle())) {
-         queryStringComposer.addParameter(AssetElementUtil.CREATOR_FIELD, searchForm.getTitle());
+      if (StringUtils.isNotEmpty(searchTitle)) {
+         queryStringComposer.addParameter(AssetElementUtil.CREATOR_FIELD, searchTitle);
          Field field = nodeManager.getField(AssetElementUtil.CREATOR_FIELD);
-         Constraint creatorConstraint = SearchUtil.createLikeConstraint(query, field, searchForm.getTitle());
+         Constraint creatorConstraint = SearchUtil.createLikeConstraint(query, field, searchTitle);
          SearchUtil.addORConstraint(query, creatorConstraint);
       }
    

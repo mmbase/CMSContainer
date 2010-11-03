@@ -218,7 +218,7 @@ public class ContentSearchAction extends PagerAction {
       }
 
       // Add the title constraint:
-      String searchTitle = searchForm.getTitle().trim();
+      String searchTitle = searchForm.getTitle();
       if (StringUtils.isNotEmpty(searchTitle)) {
          queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchTitle);
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
