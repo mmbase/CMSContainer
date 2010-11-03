@@ -51,7 +51,14 @@
   }
 %>
 
+<mm:import externid="offset" jspvar="offset">0</mm:import>
+<form method="post">
+  Offset <input type="text" name="offset" value="${offset}"/>
+  <input type="submit" name="action" value="Refresh"/><br/>
+</form>
+
         <form method="post" action="#">
+            <br/>
             <table>
                 <tr><th colspan="3">Bijlagen</th></tr>
                 <tr>
@@ -59,7 +66,7 @@
                     <th>Titel</th>
                     <th width="100" align="right">Grootte</th>
                 </tr>
-                <mm:listnodes type="attachments" orderby="size" directions="DOWN">
+                <mm:listnodes type="attachments" orderby="size" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:compare referid="relations" value="0">
                         <mm:field name="number" write="false" jspvar="number" />
@@ -85,7 +92,7 @@
                 <tr><td colspan="3">&nbsp;</td></tr>
                 <tr><th colspan="3">Afbeeldingen</th></tr>
 
-                <mm:listnodes type="images" orderby="filesize" directions="DOWN">
+                <mm:listnodes type="images" orderby="filesize" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:compare referid="relations" value="0">
                         <mm:field name="number" write="false" jspvar="number" />
