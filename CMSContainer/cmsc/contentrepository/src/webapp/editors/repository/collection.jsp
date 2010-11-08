@@ -5,8 +5,7 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="collection.title">
-</cmscedit:head>
+<cmscedit:head title="collection.title" />
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
      <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
@@ -14,15 +13,13 @@
 
       <div class="tabs">
          <!-- actieve TAB -->
-		 <a name="activetab">
-			 <div class="tab_active">
-				<div class="body">
-				   <div class="title">
-					  <fmt:message key="collection.title" />
-				   </div>
-				</div>
-			 </div>
-		 </a>
+         <div class="tab_active">
+            <div class="body">
+               <div>
+                  <a name="activetab"><fmt:message key="collection.title" /></a>
+               </div>
+            </div>
+         </div>
       </div>
 
     <div class="editor">

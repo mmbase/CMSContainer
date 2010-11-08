@@ -23,19 +23,4 @@ public class DummyVersioningService extends VersioningService {
    public void removeVersions(Node node) {
       // nothing
    }
-   
-   @Override
-   public void setPublishVersion(Node node) {
-      
-   }
-   
-   @Override
-   public boolean isOnLive(Node node) {
-      return false;
-   }
-   
-   @Override
-   public String toXml(Node node) {
-      return null;
-   }
 }

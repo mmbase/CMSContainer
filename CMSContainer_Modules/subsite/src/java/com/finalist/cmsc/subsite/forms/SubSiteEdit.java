@@ -1,13 +1,16 @@
 /*
- * 
- * This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source
- * Initiative.
- * 
- * The license (Mozilla version 1.0) can be read at the MMBase site. See http://www.MMBase.org/license
+
+This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.
+
+The license (Mozilla version 1.0) can be read at the MMBase site.
+See http://www.MMBase.org/license
+
  */
 package com.finalist.cmsc.subsite.forms;
 
 import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,7 +35,8 @@ public class SubSiteEdit extends MMBaseFormlessAction {
                + objectnumber + "&returnurl=" + mapping.findForward("returnurl").getPath() + URLEncoder.encode("?from=" + request.getParameter("from") + "&subsite=" + subsite));
          ret.setRedirect(true);
          return ret;
-      } else {
+      }
+      else {
          String ewnodelastedited = getParameter(request, "ewnodelastedited");
          addToRequest(request, "showsubsite", ewnodelastedited);
 		if ("site".equalsIgnoreCase(getParameter(request, "from"))) {
@@ -40,6 +44,6 @@ public class SubSiteEdit extends MMBaseFormlessAction {
       } else {
          return new ActionForward(mapping.findForward("modulesuccess").getPath() + "?from=" + request.getParameter("from") + "&subsite=" + subsite);
       }
-      }
    }
+  }
 }

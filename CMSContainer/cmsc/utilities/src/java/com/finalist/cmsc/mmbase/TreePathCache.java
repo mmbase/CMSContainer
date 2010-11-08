@@ -48,12 +48,6 @@ public final class TreePathCache {
         replaceCache(getCache(nodeManagerName), node, newPath);
     }
 
-    public static void clearAllCaches() {
-       synchronized (treeCaches) {
-          treeCaches.clear();
-       }
-    }
-
     private static BidiMap getCache(String nodeManagerName) {
         synchronized (treeCaches) {
             if (treeCaches.containsKey(nodeManagerName)) {

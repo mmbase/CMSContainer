@@ -7,7 +7,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 
 import com.finalist.cmsc.navigation.NavigationUtil;
 import com.finalist.cmsc.navigation.PagesUtil;

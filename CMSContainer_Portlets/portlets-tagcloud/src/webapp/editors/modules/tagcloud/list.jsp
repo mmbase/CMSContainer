@@ -68,15 +68,13 @@
 	
 	<div class="tabs">
 	    <!-- active TAB -->
-		<a name="activetab">
-			<div class="tab_active">
-				<div class="body">
-					<div class="title">
-						<fmt:message key="tagcloud.title"/>
-					</div>
-				</div>
-			</div>
-		</a>
+	    <div class="tab_active">
+	        <div class="body">
+	            <div>
+	                <a name="activetab"><fmt:message key="tagcloud.title"/></a>
+	            </div>
+	        </div>
+	    </div>
 	</div>
 	
 	<div class="editor">

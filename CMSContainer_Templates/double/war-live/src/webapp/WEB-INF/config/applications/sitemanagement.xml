@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE application PUBLIC "-//MMBase/DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
-<application name="sitemanagement" maintainer="finalist.com" version="3" auto-deploy="true">
+<application name="sitemanagement" maintainer="finalist.com" version="1" auto-deploy="true">
    <requirements>
-      <requires name="contentrepository" maintainer="finalist.com" version="4" type="application"/>
+      <requires name="contentrepository" maintainer="finalist.com" version="2" type="application" />
    </requirements>
    <neededbuilderlist>
       <!-- These are the application specific relation builders -->
@@ -16,7 +16,6 @@
       <builder maintainer="finalist.com" version="0">stylerel</builder>
       <builder maintainer="finalist.com" version="0">viewrel</builder>
       <!-- These are the application specific builders -->
-      <builder maintainer="finalist.com" version="0">navigationitem</builder>
       <builder maintainer="finalist.com" version="1">layout</builder>
       <builder maintainer="finalist.com" version="0">namedrel</builder>
       <builder maintainer="finalist.com" version="0">nodeparameter</builder>
@@ -24,7 +23,6 @@
       <builder maintainer="finalist.com" version="1">portlet</builder>
       <builder maintainer="finalist.com" version="0">portletdefinition</builder>
       <builder maintainer="finalist.com" version="1">portletparameter</builder>
-      <builder maintainer="finalist.com" version="1">portletparameteroption</builder>
       <builder maintainer="finalist.com" version="1">properties</builder>
       <builder maintainer="finalist.com" version="1">site</builder>
       <builder maintainer="finalist.com" version="0">stylesheet</builder>
@@ -56,7 +54,6 @@
       <relation from="portlet" to="nodeparameter" type="parameterrel" />
       <relation from="portlet" to="portletdefinition" type="definitionrel" />
       <relation from="portlet" to="portletparameter" type="parameterrel" />
-      <relation from="portletdefinition" to="portletparameteroption" type="parameterrel" />
       <relation from="portlet" to="view" type="viewrel" />
       <relation from="portletdefinition" to="typedef" type="allowrel" />
       <relation from="portletdefinition" to="view" type="allowrel" />
@@ -66,9 +63,6 @@
       <relation from="view" to="typedef" type="allowrel" />
       <relation from="contentelement" to="page" type="posrel" />
       <relation from="contentelement" to="page" type="inlinerel" />
-	
-	  <relation from="page" to="pagegroup" type="related" />
-	  <relation from="page" to="pageproperty" type="related" />
    </allowedrelationlist>
 
 
@@ -76,7 +70,6 @@
    <!-- A testdata/back up skelet is generated. If the testdata is not available, it will still work. -->
       <!--<datasource builder="portlet" path="sitemanagement/portlet.xml" />-->
       <!--<datasource builder="portletparameter" path="sitemanagement/portletparameter.xml" />-->
-      <!--<datasource builder="portletparameteroption" path="sitemanagement/portletparameteroption.xml" />-->
       <!--<datasource builder="view" path="sitemanagement/view.xml" />-->
       <!--<datasource builder="page" path="sitemanagement/page.xml" />-->
       <!--<datasource builder="layout" path="sitemanagement/layout.xml" />-->

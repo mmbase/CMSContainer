@@ -11,4 +11,5 @@
 
   <xsl:template name="extrajavascript-custom">
   </xsl:template>
+  
 </xsl:stylesheet>

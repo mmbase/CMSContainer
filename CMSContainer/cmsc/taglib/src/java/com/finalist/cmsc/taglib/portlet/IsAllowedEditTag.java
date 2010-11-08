@@ -11,7 +11,7 @@ import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.Role;
 import com.finalist.cmsc.security.UserRole;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 
 @SuppressWarnings("serial")
 public class IsAllowedEditTag extends TagSupport {

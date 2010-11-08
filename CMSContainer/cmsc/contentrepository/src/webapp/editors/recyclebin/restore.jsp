@@ -4,21 +4,21 @@
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
-<cmscedit:head title="recyclebin.restore.title" >
-</cmscedit:head>
+<cmscedit:head title="recyclebin.restore.title" />
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" method='http'>
+
+
     <div class="tabs">
-	   <a href="#">
-			<div class="tab_active">
-				<div class="body">
-					<div class="title">
-					   <fmt:message key="recyclebin.restore.title" />
-					</div>
-				</div>
-			</div>
-		</a>
+        <div class="tab_active">
+            <div class="body">
+                <div>
+                    <a href="#"><fmt:message key="recyclebin.restore.title" /></a>
+                </div>
+            </div>
+        </div>
     </div>
+
 	<div class="editor">
 		<div class="body">
 		

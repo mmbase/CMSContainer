@@ -56,15 +56,13 @@
 <body onload="sendRequest()">
 <mm:cloud jspvar="cloud" >
       <div class="tabs">
-	    <a href="#" >
-			 <div class="tab_active">
-				<div class="body">
-				   <div class="title">
-					  <fmt:message key="dataconversion.title" />
-				   </div>
-				</div>
-			 </div>
-		 </a>
+         <div class="tab_active">
+            <div class="body">
+               <div>
+                  <a href="#" ><fmt:message key="dataconversion.title" /></a>
+               </div>
+            </div>
+         </div>
       </div> 
    <div class="editor" style="height:500px">
    <div style="height:100px"></div>

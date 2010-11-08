@@ -179,7 +179,7 @@ public class ReferenceImportExportAction extends DispatchAction {
       ReferenceImportUploadForm myForm = (ReferenceImportUploadForm) form;
       FormFile myFile = myForm.getFile();
       byte[] fileData = myFile.getFileData();
-    //  String contentType = myFile.getContentType();
+     // String contentType = myFile.getContentType();
       String fileName = myFile.getFileName();
       boolean isXML = "xml".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));
       boolean isCSV = "csv".equalsIgnoreCase(fileName.substring(fileName.lastIndexOf(".")+1));
@@ -282,7 +282,7 @@ public class ReferenceImportExportAction extends DispatchAction {
             Preference pre = addPreference(communityVO);
             preferences.add(pre);
             personExImVO.setPreferences(preferences);
-            if (StringUtils.isNotEmpty(groupId) && !groupId.equals("0")) {
+            if (null != groupId && groupId != "0" && groupId != "") {
                personExImVO.setAuthorityId(new Long(groupId));
             }
             personVOMap.put(authUserId, personExImVO);

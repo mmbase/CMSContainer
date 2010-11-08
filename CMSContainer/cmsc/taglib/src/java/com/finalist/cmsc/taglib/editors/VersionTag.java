@@ -9,12 +9,10 @@ import com.finalist.util.version.VersionUtil;
 
 public class VersionTag extends SimpleTagSupport {
 
-   private static final String TYPE_APPLICATION = "application";
-   private static final String TYPE_CMSC = "cmsc";
-   private static final String TYPE_MMBASE = "mmbase";
-   private static final String TYPE_LIBS = "libs";
-   
-   private static final String UNKNOWN = "unknown/mixed";
+   private static String TYPE_APPLICATION = "application";
+   private static String TYPE_CMSC = "cmsc";
+   private static String TYPE_MMBASE = "mmbase";
+   private static String TYPE_LIBS = "libs";
 
    private String type = TYPE_APPLICATION;
    private String var;
@@ -40,9 +38,7 @@ public class VersionTag extends SimpleTagSupport {
       else {
          throw new IllegalArgumentException("No type not found, see tld for list of types.");
       }
-      if(version == null) {
-      	version = UNKNOWN;
-      }
+
       if (var == null) {
          ctx.getOut().write(version.toString());
       }

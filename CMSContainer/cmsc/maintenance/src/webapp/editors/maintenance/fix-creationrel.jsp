@@ -38,11 +38,8 @@ For all contentelements without a deletionrel this script fix elements that lack
    
    <mm:listnodes type="contentelement">
       <c:set var="number"><mm:field name="number"/></c:set>
-      
-      <c:set var="nodeTitle" value="element has no title field"/>
-      <mm:hasfield name="title">
       <c:set var="nodeTitle"><mm:field name="title"/></c:set>
-      </mm:hasfield>
+      
       <c:set var="hasCreationrel" value="${false}"/>
       <c:set var="hasContentrel" value="${false}"/>
       <c:set var="hasDeletionrel" value="${false}"/>
@@ -64,7 +61,7 @@ For all contentelements without a deletionrel this script fix elements that lack
       
       <mm:node number="${number}" id="currentNode"/>
       <%-- Not intersted in deleted contentelement --%>
-      <%-- <c:if test="${!hasDeletionrel}"> --%>
+      <c:if test="${!hasDeletionrel}">
          
          <%-- checks for missing creationrel and missing contentrel, then we but them in LostAndFound --%>
          <c:if test="${!hasCreationrel && !hasContentrel}">
@@ -103,7 +100,7 @@ For all contentelements without a deletionrel this script fix elements that lack
          </c:if>
       
       <%-- end if !hasDeletionrel --%>
-      <%-- </c:if> --%>
+      </c:if>
       
    </mm:listnodes>
 

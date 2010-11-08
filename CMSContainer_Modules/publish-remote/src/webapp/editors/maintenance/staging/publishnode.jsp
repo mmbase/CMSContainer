@@ -28,9 +28,9 @@ String cloud1 = request.getParameter("cloud1");
 if (cloud1 != null && !"".equals(cloud1)) {
     CloudInfo localCloudInfo = CloudInfo.getCloudInfo(cloud);
 	if (!PublishManager.isPublished(localCloudInfo, node)) {
-      int remoteCloudNumber = org.mmbase.remotepublishing.CloudManager.getLocalCloudNumber(cloud1);
-      CloudInfo remoteCloudInfo = CloudInfo.getCloudInfo(remoteCloudNumber);
-      PublishManager.createNodeAndRelations(localCloudInfo, node, remoteCloudInfo);
+		int remoteCloudNumber = org.mmbase.remotepublishing.builders.PublishingQueueBuilder.getCloudNumber(cloud1);
+	    CloudInfo remoteCloudInfo = CloudInfo.getCloudInfo(remoteCloudNumber);
+		PublishManager.createNodeAndRelations(localCloudInfo, node, remoteCloudInfo);
 	}
 	else {
 		PublishManager.updateNodesAndRelations(localCloudInfo, node);

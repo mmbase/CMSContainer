@@ -1,100 +1,81 @@
 package com.finalist.util.http;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
-
 public class HttpUtil {
 
-   private static Log log = LogFactory.getLog(HttpUtil.class);
-   
+   private static final String SITE_ENCODING = "cp1252";
+
+   private static ThreadLocal<HttpClient> httpClient = new ThreadLocal<HttpClient>();
+
+   private static Log log;
+
+
+   protected static Log getLogger() {
+      if (log == null) {
+         log = LogFactory.getLog(HttpUtil.class);
+      }
+      return log;
+   }
+
+
    public static String doGet(String url, Map<String, Object> parameterMap) throws PageNotFoundException {
-      GetMethod method = new GetMethod(url);
-      if (parameterMap != null) {
-         StringBuffer queryString = createQueryString(parameterMap);
-         method.setQueryString(queryString.toString());
-      }
-      
-      return doRequest(url, method);
+      return doRequest(url, new GetMethod(url), parameterMap);
    }
 
-   private static StringBuffer createQueryString(Map<String, Object> parameterMap) {
-      StringBuffer queryString = new StringBuffer();
-      for (Iterator<String> i = parameterMap.keySet().iterator(); i.hasNext();) {
-         String key = i.next();
-         Object objectValue = parameterMap.get(key);
-         String value = null;
-         if (objectValue instanceof String) {
-            value = (String) objectValue;
-         }
-         if (objectValue instanceof String[]) {
-            value = ((String[]) objectValue)[0];
-         }
-
-         try {
-            String queryKey = URLEncoder.encode(key, "UTF-8");
-            String queryValue = URLEncoder.encode(value, "UTF-8");
-
-            queryString.append(queryKey);
-            queryString.append("=");
-            queryString.append(queryValue);
-            if (i.hasNext()) {
-               queryString.append("&");
-            }
-         }
-         catch (UnsupportedEncodingException e) {
-            log.debug("" + e.getMessage(), e);
-         }
-      }
-      return queryString;
-   }
 
    public static String doPost(String url, Map<String, Object> parameterMap) throws PageNotFoundException {
-      PostMethod method = new PostMethod(url);
-      if (parameterMap != null) {
-         for (Iterator<String> i = parameterMap.keySet().iterator(); i.hasNext();) {
-            String key = i.next();
-            Object objectValue = parameterMap.get(key);
-            String value = null;
-            if (objectValue instanceof String) {
-               value = (String) objectValue;
-            }
-            if (objectValue instanceof String[]) {
-               value = ((String[]) objectValue)[0];
-            }
-            method.addParameter(key, value);
-         }
-      }
-      return doRequest(url, method);
+      return doRequest(url, new PostMethod(url), parameterMap);
    }
 
-   public static String doRequest(String url, HttpMethod method)
+
+   public static String doRequest(String url, HttpMethod method, Map<String, Object> parameterMap)
          throws PageNotFoundException {
       String result;
       try {
+         if (parameterMap != null) {
+            StringBuffer queryString = new StringBuffer();
+            for (Iterator<String> i = parameterMap.keySet().iterator(); i.hasNext();) {
+               String key = i.next();
+               Object objectValue = parameterMap.get(key);
+               String value = null;
+               if (objectValue instanceof String) {
+                  value = (String) objectValue;
+               }
+               if (objectValue instanceof String[]) {
+                  value = ((String[]) objectValue)[0];
+               }
+
+               queryString.append(URLEncoder.encode(key, SITE_ENCODING));
+               queryString.append("=");
+               queryString.append(URLEncoder.encode(value, SITE_ENCODING));
+               if (i.hasNext()) {
+                  queryString.append("&");
+               }
+            }
+            method.setQueryString(queryString.toString());
+
+         }
+
          int response = getHttpClient().executeMethod(method);
 
-         if (response == HttpStatus.SC_NOT_FOUND || response == HttpStatus.SC_FORBIDDEN) {
-            throw new PageNotFoundException("Page does not exist: " + url);   
-         }
-         
          if (response != HttpStatus.SC_OK) {
-            log.info(" HTTP response code: " + response);
+            getLogger().info(" HTTP response code: " + response);
          }
+
          result = method.getResponseBodyAsString();
       }
       catch (IOException e) {
@@ -120,126 +101,23 @@ public class HttpUtil {
 
       return result;
    }
-   
+
+
    private static HttpClient getHttpClient() {
-      return getHttpClient("Jakarta Commons-HttpClient/3.0 (CMS Container)", true, 0, 10);
-   }
-   
-   public static HttpClient getHttpClient(String userAgent, boolean useProxy, int timeout, int retry) {
-      if (log.isDebugEnabled()) {
-         log.debug("A new HttpClient instance is needed ...");
-      }
+      if (httpClient.get() == null) {
 
-      if (StringUtils.isEmpty(userAgent)) {
-         // Some web servers don't allow the default user-agent sent by httpClient
-         userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)"; 
-      }
-      
-      HttpClient cl = new HttpClient(new MultiThreadedHttpConnectionManager());
-      cl.getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
+         HttpClient client = new HttpClient();
+         client.getParams().setParameter(HttpMethodParams.USER_AGENT,
+               "Jakarta Commons-HttpClient/3.0 (CMS Container Server Side Include Portlet)");
+         client.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, SITE_ENCODING);
 
-      if (timeout > 0) {
-         cl.getParams().setParameter(HttpConnectionManagerParams.SO_TIMEOUT, timeout);
-         cl.getParams().setParameter(HttpConnectionManagerParams.CONNECTION_TIMEOUT, timeout);
-      }
-      
-      if (retry > 1) {
          // Retry 10 times, even when request was already fully sent
-         DefaultHttpMethodRetryHandler retryhandler = new DefaultHttpMethodRetryHandler(retry, true);
-         cl.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, retryhandler);
-      }
-      
-      HostConfiguration hc = new EasySSLHostConfiguration();
+         DefaultHttpMethodRetryHandler retryhandler = new DefaultHttpMethodRetryHandler(10, true);
+         client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, retryhandler);
 
-      HttpState state = new HttpState();
-      cl.setHostConfiguration(hc);
-      cl.setState(state);
-      if (useProxy) {
-         addProxy(cl);
+         httpClient.set(client);
       }
 
-      if (log.isDebugEnabled()) {
-         log.debug("New HttpClient instance created.");
-      }
-      return cl;
+      return httpClient.get();
    }
-
-   public static void addProxy(HttpClient cl) {
-      HostConfiguration hc = cl.getHostConfiguration();
-      HttpState state = cl.getState();
-      
-      String proxyHost = getProxyHost();
-      if (StringUtils.isNotEmpty(proxyHost)) {
-         int proxyPort = getProxyPort();
-         hc.setProxy(proxyHost, proxyPort);
-
-         if (log.isDebugEnabled()) {
-            log.debug("Proxy Host:" + proxyHost);
-            log.debug("Proxy Port:" + proxyPort);
-         }
-
-         String proxyUser = getProxyUser();
-         String proxyPassword = getProxyPassword();
-         if (StringUtils.isNotEmpty(proxyUser) && proxyPassword != null) {
-            if (log.isDebugEnabled()) {
-               log.debug("Proxy User:" + proxyUser);
-            }
-
-            Credentials credentials;
-
-            String proxyNtlmHost = getProxyNtlmHost();
-            if (StringUtils.isNotEmpty(proxyNtlmHost)) {
-               credentials = new NTCredentials(proxyUser, 
-                     proxyPassword, proxyNtlmHost, getProxyNtlmDomain());
-            }
-            else {
-               credentials = new UsernamePasswordCredentials(proxyUser, proxyPassword);
-            }
-
-            state.setProxyCredentials(AuthScope.ANY, credentials);
-         }
-      }
-      else {
-         if (log.isDebugEnabled()) {
-            log.debug("Not using a proxy");
-         }
-      }
-   }
-
-   public static  String getProxyHost() {
-      return getProxySetting("http.proxyHost");
-   }
-
-   public static  int getProxyPort() {
-      String value = getProxySetting("http.proxyPort");
-      if (StringUtils.isNotEmpty(value)) {
-         return Integer.parseInt(value);
-      }
-      return -1;
-   }
-
-   public static  String getProxyUser() {
-      return getProxySetting("http.proxyUser");
-   }
-
-   public static  String getProxyPassword() {
-      return getProxySetting("http.proxyPassword");
-   }
-
-   public static  String getProxyNtlmHost() {
-      return getProxySetting("http.auth.ntlm.host");
-   }
-
-   public static  String getProxyNtlmDomain() {
-      return getProxySetting("http.auth.ntlm.domain");
-   }
-
-   public static  String getProxySetting(String setting) {
-      String value = PropertiesUtil.getProperty(setting);
-      if (StringUtils.isEmpty(value)) {
-         value = System.getProperty(setting);
-      }
-      return value;
-   }
-
 }

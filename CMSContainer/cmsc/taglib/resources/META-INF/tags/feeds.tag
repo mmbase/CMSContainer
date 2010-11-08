@@ -13,10 +13,10 @@
 	<cmsc:link dest='${rss}' var="rssurl" />
 	<c:choose>
 		<c:when test="${mode eq 'link'}">
-	<a href="${rssurl}" title="${rss.title}" class="cmsc_rssfeed"><img src="${imgIcon}" alt="${_node.title}" />${rss.title}</a>
+	<a href="${rssurl}" title="${rss.title}"><img src="${imgIcon}" alt="${_node.title}" />${rss.title}</a>
 		</c:when>
 		<c:when test="${mode eq 'icon'}">
-	<a href="${rssurl}" title="${rss.title}" class="cmsc_rssfeed"><img src="${imgIcon}" alt="${rss.title}" /></a>
+	<a href="${rssurl}" title="${rss.title}"><img src="${imgIcon}" alt="${rss.title}" /></a>
 		</c:when>
 		<c:otherwise>
 	<link rel="alternate" type="application/rss+xml" href="${rssurl}" title="${rss.title}" /> 

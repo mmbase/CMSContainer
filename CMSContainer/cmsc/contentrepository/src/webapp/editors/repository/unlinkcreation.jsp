@@ -9,15 +9,13 @@
 <body>
 <mm:cloud jspvar="cloud" rank="basic user" method='http'>
 <div class="tabs">
-    <a href="#">
-		<div class="tab_active">
-			<div class="body">
-				<div class="title">
-				  <fmt:message key="unlinkcreation.title" />
-				</div>
-			</div>
-		</div>
-	</a>
+    <div class="tab_active">
+        <div class="body">
+            <div>
+                <a href="#"><fmt:message key="unlinkcreation.title" /></a>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="editor">
    <div class="body">
@@ -29,7 +27,7 @@
 <c:if test="${not empty action && action =='massmove'}">
    <c:set value="contentMassDelete.do" var="url"/>
 </c:if>
-<mm:import externid="returnurl"/>
+<mm:import externid="returnurl" />
 <mm:import externid="offset" />
 <mm:import externid="orderby" />
 <mm:import externid="direction" />
@@ -74,7 +72,7 @@
            </mm:present>
         </mm:url>
         <li>
-           <a href="<mm:write referid="channelurl" escape="none"/>"><mm:field name="path"/></a>
+           <a href="<mm:write referid="channelurl"/>"><mm:field name="path"/></a>
       </li>
    </mm:compare>
 </mm:list>
@@ -105,6 +103,7 @@
    </div>
    <div class="side_block_end"></div>
 </div>   
+
 
 </mm:cloud>
 </body>

@@ -9,14 +9,11 @@ import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
 import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.navigation.NavigationItemManager;
-import com.finalist.cmsc.navigation.NavigationItemRenderer;
-import com.finalist.cmsc.navigation.NavigationTreeItemRenderer;
+import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.rssfeed.beans.om.RssFeed;
 import com.finalist.cmsc.rssfeed.publish.RssFeedPublisher;
 import com.finalist.cmsc.rssfeed.tree.RssFeedTreeItemRenderer;
 import com.finalist.cmsc.rssfeed.util.RssFeedUtil;
-import com.finalist.cmsc.services.publish.Publisher;
 
 public class RssFeedNavigationItemManager implements NavigationItemManager {
 
@@ -72,12 +69,7 @@ public class RssFeedNavigationItemManager implements NavigationItemManager {
 
       Node contentChannel = RssFeedUtil.getContentChannel(node);
       if (contentChannel != null) {
-         rssFeed.setChannel(contentChannel.getNumber());
-      }
-      
-      Node collectionChannel = RssFeedUtil.getCollectionChannel(node);
-      if (collectionChannel != null) {
-      rssFeed.setChannel(collectionChannel.getNumber());
+         rssFeed.setContentChannel(contentChannel.getNumber());
       }
 
       return rssFeed;
@@ -86,7 +78,7 @@ public class RssFeedNavigationItemManager implements NavigationItemManager {
    /**
     * @see com.finalist.cmsc.navigation.NavigationItemManager#getPublisher(org.mmbase.bridge.Cloud, java.lang.String)
     */
-   public Publisher getPublisher(Cloud cloud, String type) {
+   public Object getPublisher(Cloud cloud, String type) {
       if (type.equals(getTreeManager())) {
          return new RssFeedPublisher(cloud);
       }

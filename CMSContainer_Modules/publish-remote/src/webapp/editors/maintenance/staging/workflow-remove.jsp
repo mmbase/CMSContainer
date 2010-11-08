@@ -15,19 +15,19 @@
 <mm:import externid="action"/>
 
 <form method="post">
-   <select name="username">
-      <mm:listnodes type="user" orderby="username">
-         <option value="${_node.username}" <c:if test="${username eq _node.username}">selected="selected"</c:if>>${_node.username}</option>
-      </mm:listnodes>
-   </select>
-   <select name="status">
-      <option value="draft">draft</option>
-      <option value="finished" <c:if test="${status eq 'finished'}">selected="selected"</c:if>>finished</option>
-      <option value="approved" <c:if test="${status eq 'approved'}">selected="selected"</c:if>>approved</option>
-      <option value="published" <c:if test="${status eq 'published'}">selected="selected"</c:if>>published</option>
+	<select name="username">
+		<mm:listnodes type="user" orderby="username">
+			<option value="${_node.username}" <c:if test="${username eq _node.username}">selected="selected"</c:if>>${_node.username}</option>
+		</mm:listnodes>
+	</select>
+	<select name="status">
+		<option value="draft">draft</option>
+		<option value="finished" <c:if test="${status eq 'finished'}">selected="selected"</c:if>>finished</option>
+		<option value="approved" <c:if test="${status eq 'approved'}">selected="selected"</c:if>>approved</option>
+		<option value="published" <c:if test="${status eq 'published'}">selected="selected"</c:if>>published</option>
       <option value="all" <c:if test="${status eq 'all'}">selected="selected"</c:if>>All workflows</option>
-   </select>
-   <input type="submit" name="action" value="remove"/>
+	</select>
+	<input type="submit" name="action" value="remove"/>
    <input type="submit" name="action" value="view"/>
 </form>
 
@@ -41,19 +41,19 @@ status: <mm:write referid="status" /><br />
    <mm:listnodes>
       <mm:relatednodescontainer type="workflowitem" role="creatorrel">
        <c:if test="${status ne 'all' }">
-         <mm:constraint field="status" operator="EQUAL" value="${status}" casesensitive="true"/>
+         <mm:constraint field="status" operator="EQUAL" value="${status}" />
        </c:if>
-         <mm:relatednodes>
+      	<mm:relatednodes>
          <mm:present referid="action">
          <c:if test="${action eq 'remove'}">
-            workflow <mm:field name="number" />/<mm:field name="status" /> deleted <br />
-            <mm:deletenode deleterelations="true" />
+      	   workflow <mm:field name="number" />/<mm:field name="status" /> deleted <br />
+      	   <mm:deletenode deleterelations="true" />
          </c:if>
          <c:if test="${action eq 'view'}">
             Found workflow: <mm:field name="number" />/<mm:field name="status" /><br />
          </c:if>
          </mm:present>
-      </mm:relatednodes>
+     	</mm:relatednodes>
       </mm:relatednodescontainer>
     </mm:listnodes>
 </mm:listnodescontainer>

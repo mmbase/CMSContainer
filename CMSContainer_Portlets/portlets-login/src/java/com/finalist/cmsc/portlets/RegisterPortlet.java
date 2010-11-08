@@ -166,11 +166,11 @@ public class RegisterPortlet extends AbstractLoginPortlet {
             }
          } else {
             if (!isExistingUserAllowed()) {
-               errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
+                errorMessages.put(ACEGI_SECURITY_DEFAULT, "register.user.exists");
             } else {
-               authId = authenticationId;
-               response.setRenderParameter("active", "subscribed");
-               request.getPortletSession().setAttribute("active", "subscribed");
+                authId = authenticationId;
+                response.setRenderParameter("active", "subscribed");
+                request.getPortletSession().setAttribute("active", "subscribed");
             }
          }
       }
@@ -186,7 +186,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
       }
    }
 
-
+   
    @Override
    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
       String screenId = (String) request.getAttribute(PortalConstants.CMSC_OM_PAGE_ID);
@@ -236,7 +236,7 @@ public class RegisterPortlet extends AbstractLoginPortlet {
        String lastName = request.getParameter(ACEGI_SECURITY_FORM_LASTNAME_KEY);
        String passwordText = request.getParameter(ACEGI_SECURITY_FORM_PASSWORD_KEY);
        String passwordConfirmation = request.getParameter(ACEGI_SECURITY_FORM_PASSWORDCONF_KEY);
-
+ 
       if (StringUtils.isBlank(firstName)) {
          errorMessages.put(ACEGI_SECURITY_FORM_FIRSTNAME_KEY, "register.firstname.empty");
       }

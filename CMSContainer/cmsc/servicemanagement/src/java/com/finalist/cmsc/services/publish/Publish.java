@@ -28,8 +28,8 @@ public class Publish {
    }
 
 
-   public static void publishRelations(Node node, NodeList nodes) {
-      cService.publishRelations(node, nodes);
+   public static void publish(Node node, NodeList nodes) {
+      cService.publish(node, nodes);
    }
 
 
@@ -81,15 +81,7 @@ public class Publish {
    }
 
    public static String getRemoteNavigationUrl(String serverName, String appPath) {
-      return cService.getRemoteNavigationUrl(serverName, appPath);
-   }
    
-   public static boolean inPublishQueue(Node node) {
-      return cService.inPublishQueue(node);
-   }
-
-
-   public static void updateUser(Node userNode, String password) {
-      cService.updateUser(userNode, password);
+      return cService.getRemoteNavigationUrl(serverName, appPath);
    }
 }

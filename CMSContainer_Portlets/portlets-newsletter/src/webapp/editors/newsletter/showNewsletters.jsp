@@ -34,7 +34,7 @@
       <script src="<c:url value='/js/transparent_png.js'/>" type="text/javascript"></script>
 
       <!--the reset button needs  -->
-	  <script src="<c:url value='/editors/newsletter/newsletter.js'/>" type="text/javascript"></script>
+      <script src="<c:url value='/editors/newsletter/newsletter.js'/>" type="text/javascript"></script>
       <script language="javascript"> 
          function submits(){
          var startDate = document.getElementsByName("startDate");
@@ -56,15 +56,15 @@
       </script>
 
       <div class="tabs">
-	    <a name="activetab">
          <div class="tab_active">
             <div class="body">
-               <div class="title">                  
-                 <fmt:message key="newsletterlog.newsletter.log" /> 
+               <div>
+                  <a name="activetab">
+                     <fmt:message key="newsletterlog.newsletter.log" /> 
+                  </a>
                </div>
             </div>
          </div>
-		</a>
       </div>
 
       <div class="editor">

@@ -22,7 +22,7 @@
    <mm:param name="popup" value="true" />
 </mm:url>
 
-<a href="<mm:write referid="editurl" escape="none" />" target="cmsc_element_edit" 
+<a href="<mm:write referid="editurl"/>" target="cmsc_element_edit" 
    onclick="openPopupWindow('cmsc_element_edit', '750', '550')" class="portal_button" style="float: left;">
 	<cmsc:editorMessage key="edit.fulledit" />
 </a>
@@ -32,4 +32,3 @@
       <span class="handle" style="float: left;"><cmsc:editorMessage key="edit.drag" /></span>
    </cmsc:isallowededit>
 </c:if>
-</div>

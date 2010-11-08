@@ -1,16 +1,12 @@
 <%@include file="globals.jsp" 
 %><%@ taglib uri="http://finalist.com/cmsc" prefix="cmsc" 
 %><%@ taglib prefix="edit" tagdir="/WEB-INF/tags/edit"
-%><%@ page import="com.finalist.cmsc.navigation.NavigationUtil" 
-%><%@ page import="com.finalist.cmsc.security.*, org.mmbase.security.Rank" 
 %><mm:content type="text/html" encoding="UTF-8" expires="0">
-<mm:cloud jspvar="cloud" rank="basic user" loginpage="../login.jsp">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
    <cmscedit:head title="index.title">
       <script src="../repository/search.js" type="text/javascript"></script>
       <link href="<c:url value="/editors/css/newsletter.css"/>" rel="stylesheet" type="text/css">
-	  <link rel="stylesheet" type="text/css" href="<c:url value="/editors/css/main_extension.css"/>" />
    </cmscedit:head>
    <body>
    <edit:ui-tabs>
@@ -23,23 +19,13 @@
       <edit:ui-tab key="newsletter.publication.tabs.subscribers" active="true">
          #
       </edit:ui-tab>
-	  <edit:ui-tab key="newsletter.publication.tabs.bounces">
-        module/NewsletterBounceAction.do?method=list&newsletterId=${requestScope.newsletterId}&from=newsletter
-      </edit:ui-tab>
       <edit:ui-tab key="newsletter.publication.tabs.terms">
          NewsletterTermSearch.do?newsletterId=${requestScope.newsletterId}
       </edit:ui-tab>
    </edit:ui-tabs>
-<% 
-UserRole role = NavigationUtil.getRole(cloud, cloud.getNode(request.getParameter("newsletterId")), false); 
-if (role != null ) { 
-	boolean hasRight = SecurityUtil.isWebmaster(role) && Rank.BASICUSER_INT < cloud.getUser().getRank().getInt();
-	pageContext.setAttribute("hasRight",hasRight);
-}
-%>
+
    <div class="editor">
       <div class="body">
-	  	<c:if test="${hasRight}">
          <ul class="shortcuts">
              <li class="new" style="text-decoration: none;">
             <c:url var="addSuscriberUrl" value="/editors/community/SearchConditionalUser.do">
@@ -62,8 +48,7 @@ if (role != null ) {
                   <fmt:message key="newsletter.publication.link.newuser"/>
                </a>
           </li>
-        </ul>
-	  </c:if>
+      </ul>
 
          <html:form action="editors/newsletter/NewsletterPublicationSubscriberSearch.do">
             <input type="hidden" name="method" value="subScriberSearch"/>
@@ -99,12 +84,10 @@ if (role != null ) {
          <div class="ruler_green"><div>&nbsp;<fmt:message key="newsletter.publication.result"/>&nbsp;</div></div>
          <div class="body">
          <edit:ui-table items="${results}" var="result" size="${resultCount}" requestURI="/editors/newsletter/NewsletterPublicationSubscriberSearch.do">
-		 	<c:if test="${hasRight}">
-              <edit:ui-tcolumn title="" width="5%">
+            <edit:ui-tcolumn title="" width="5%">
                <a href="NewsletterSubscriberDelete.do?newsletterId=${requestScope.newsletterId}&authid=${result.id}"><img src="<cmsc:staticurl page='/editors/gfx/icons/delete.png'/>" width="16" height="16" title="<fmt:message key='newsletter.icons.title.user.unsubscribe'/>"/></a>
                <a href="../community/userAddInitAction.do?authid=${result.id}&newsletterId=${requestScope.newsletterId}&forward=newslettersubscribers&path=/editors/newsletter/NewsletterPublicationSubscriberSearch.do?newsletterId=${requestScope.newsletterId}"><img src="<cmsc:staticurl page='/editors/gfx/icons/edit_defaults.png'/>" width="16" height="16"  title="<fmt:message key='newsletter.icons.title.edituser'/>"/></a>
-              </edit:ui-tcolumn>
-			</c:if>
+            </edit:ui-tcolumn>
             <edit:ui-tcolumn titlekey="newsletter.publication.result.fullname" sort="fullname" width="20%">
                ${result.fullname}
             </edit:ui-tcolumn>
@@ -126,5 +109,4 @@ if (role != null ) {
    </div>
    </body>
 </html>
-</mm:cloud>
 </mm:content>

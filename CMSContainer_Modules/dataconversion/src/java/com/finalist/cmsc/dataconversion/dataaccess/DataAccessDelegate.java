@@ -1,12 +1,8 @@
 package com.finalist.cmsc.dataconversion.dataaccess;
 
 import java.util.HashMap;
-import java.util.List;
-
 import javax.sql.DataSource;
 import org.w3c.dom.Element;
-
-import com.finalist.cmsc.dataconversion.service.Data;
 
 public class DataAccessDelegate {
    
@@ -33,9 +29,5 @@ public class DataAccessDelegate {
    public static DataAccessor getDataAccessor(Element element,DataSource dataSource) {
       ElementMeta elementMeta = new ElementMeta(element); 
       return new DataAccessor(dataSource,elementMeta);
-   }
-
-   public static List<String> getResOfRelation(Data reldata, DataSource dataSource) {
-      return new DataAccessor(dataSource).getResOfRelation(reldata);
    }
 }

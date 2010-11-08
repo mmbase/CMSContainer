@@ -74,10 +74,6 @@
          unknown="false" validate="false" name="searchForm">
          <forward name="success" path="/editors/community/addUserToGroup.jsp" redirect="false" />
       </action>
-	  <action path="/editors/community/UserBulkDelete" type="com.finalist.cmsc.community.forms.UserBulkDeleteAction"
-         unknown="false" validate="false" name="searchForm">
-         <forward name="success" path="/editors/community/SearchConditionalUser.do" redirect="false" />
-      </action>
       <!-- ==========select user add to group ============-->
      <action path="/editors/community/AddUserToGroup" type="com.finalist.cmsc.community.forms.AddUserToGroupAction"
          unknown="false" validate="false" name="searchForm" scope="request">
@@ -102,11 +98,6 @@
          <forward name="success" path="/editors/community/import_success.jsp"/>
       </action>
       <action path="/editors/community/ReferenceImportAction" scope="request" forward="/editors/community/import.jsp"></action> 
-      <!-- ======Syncronize Groups From ID store====== -->
-	   <action path="/editors/community/SyncronizeGroupsFromIDstoreAction" type="com.finalist.cmsc.community.forms.SyncronizeGroupsFromIDstoreAction"
-         unknown="false" validate="false">
-         <forward name="success" path="/editors/community/syncronizeGroups.jsp" redirect="false" />
-      </action>
    </action-mappings>
    <message-resources parameter="cmsc-community" key="COMMUNITY" />
 </struts-config>

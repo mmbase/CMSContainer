@@ -15,15 +15,13 @@
 <mm:node referid="parent" jspvar="node">
 
    <div class="tabs">
-      <a name="activetab">
-		  <div class="tab_active">
-			 <div class="body">
-				<div class="title">
-				   <fmt:message key="channelreorder.title" />
-				</div>
-			 </div>
-		  </div>
-	  </a>
+      <div class="tab_active">
+         <div class="body">
+            <div>
+               <a name="activetab"><fmt:message key="channelreorder.title" /></a>
+            </div>
+         </div>
+      </div>
    </div>
    <div class="editor">
 

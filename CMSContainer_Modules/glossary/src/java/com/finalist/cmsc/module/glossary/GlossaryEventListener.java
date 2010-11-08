@@ -6,8 +6,8 @@ import org.mmbase.bridge.Node;
 import org.mmbase.core.event.Event;
 import org.mmbase.core.event.NodeEvent;
 import org.mmbase.core.event.NodeEventListener;
+import org.mmbase.remotepublishing.util.PublishUtil;
 
-import com.finalist.cmsc.services.publish.Publish;
 import com.finalist.cmsc.util.ServerUtil;
 
 public class GlossaryEventListener implements NodeEventListener {
@@ -24,8 +24,7 @@ public class GlossaryEventListener implements NodeEventListener {
          String oldTerm = (String)event.getOldValue("term");
          if(oldTerm != null) {
             glossary.removeTerm(oldTerm);
-            Node node = CloudProviderFactory.getCloudProvider().getCloud().getNode(event.getNodeNumber());
-            Publish.unpublish(node);
+            PublishUtil.removeNode(event.getNodeNumber());
          }
          break;
       case Event.TYPE_NEW:
@@ -33,8 +32,7 @@ public class GlossaryEventListener implements NodeEventListener {
          if(newTerm != null) {
             glossary.addTerm(newTerm, (String)event.getNewValue("definition"));
             if(ServerUtil.isStaging()) {
-               Node node = CloudProviderFactory.getCloudProvider().getCloud().getNode(event.getNodeNumber());
-               Publish.publish(node);
+               PublishUtil.publishOrUpdateNode(event.getNodeNumber());
             }
          }
          break;
@@ -65,8 +63,7 @@ public class GlossaryEventListener implements NodeEventListener {
          
          if(changed) {
             if(ServerUtil.isStaging()) {
-               Node node = CloudProviderFactory.getCloudProvider().getCloud().getNode(event.getNodeNumber());
-               Publish.publish(node);
+               PublishUtil.publishOrUpdateNode(event.getNodeNumber());
             }
          }
          break;

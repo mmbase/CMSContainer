@@ -27,17 +27,6 @@ import com.finalist.cmsc.services.community.security.Authority;
 public interface PersonService {
 
    Person getPersonByUserId(String userId);
-   
-   /**
-    * 
-    * @param the id of user
-    * @return gender of user
-    */
-   String getGenderByUserId(String userId);
-
-   
-   void setGenderByUserId(String userId, String gender);
-
 
    /**
     * Get a list of matching persons that match the given example. The fields that are set on the example Person are the
@@ -63,7 +52,7 @@ public interface PersonService {
 
    Person getPersonByEmail(String email);
 
-   Person createPerson(String firstName, String infix, String lastName, Object authenticationId,String active,Date registerDate);
+   Person createPerson(String firstName, String infix, String lastName, Long authenticationId,String active,Date registerDate);
 
    /*
     * Save or update the person to the database
@@ -100,8 +89,4 @@ public interface PersonService {
 
    public List<Authority> getAllAuthorities();
    
-   public List<Object[]> getSubscribersRelatedInfo(Set<Long> authenticationIds, String fullName, String userName, String email, boolean paging);
-   
-   public int getSubscribersRelatedInfoCount(Set<Long> authenticationIds, String fullName, String userName, String email, boolean paging);
-
 }

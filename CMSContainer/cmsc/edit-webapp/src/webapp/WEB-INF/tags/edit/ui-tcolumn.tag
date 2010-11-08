@@ -3,7 +3,6 @@
 <%@ attribute name="title" rtexprvalue="true" required="false" %>
 <%@ attribute name="sort" rtexprvalue="true" required="false" %>
 <%@ attribute name="width" rtexprvalue="true" required="false" %>
-<%@ attribute name="checkboxlabel" rtexprvalue="true" required="false" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -22,10 +21,7 @@
             </c:when>
             <c:when test="${'' eq title}">
                <c:if test="${not empty bulkbox && size > 1}">
-                  <input type="checkbox"  name="selectall"  onclick="selectAll(this.checked, 'selectform', 'chk_');" value="on"  style="margin:0px 0px 0px 4px !important;> margin:0px 0px !important;margin:0px 0px;"/>
-		  <c:if test="${not empty checkboxlabel}">
-		     <span style="padding-left:4px;position:absolute;text-transform:none"><fmt:message key="${checkboxlabel}" /></span>
-		  </c:if>
+                  <input type="checkbox"  name="selectall"  onclick="selectAll(this.checked, 'selectform', 'chk_');" value="on"/>
              </c:if>
              <c:if test="${empty bulkbox}">
                 &nbsp;
@@ -33,7 +29,12 @@
             </c:when>
          </c:choose>
       </c:set>
-      <th width="${not empty width ? width : ''}">
+      <c:if test="${empty width}">
+         <th>
+      </c:if>
+      <c:if test="${not empty width}">
+         <th width='${width}'>
+      </c:if>
          <c:choose>
             <c:when test="${not empty sort}">
                <a href="<%=request.getContextPath()%>${requestScope.sortlink}page=${page}&sortby=${sort}&dir=${dir}">

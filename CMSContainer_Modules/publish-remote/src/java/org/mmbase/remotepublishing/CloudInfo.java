@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.BridgeException;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
@@ -73,7 +72,7 @@ public class CloudInfo {
     
     private static CloudInfo getCloudInfo(Node localCloudNode) {
        if (localCloudNode == null) {
-            throw new IllegalArgumentException("Cloud node can not be null");
+          throw new BridgeException("Local cloud node is null");
        }
         if (instanceMap.containsKey(localCloudNode.getNumber())){
             return instanceMap.get(localCloudNode.getNumber());
@@ -88,6 +87,11 @@ public class CloudInfo {
         return cloudInfo;
     }
     
+    /**
+     * 
+     * @param remoteCloudName
+     * @return
+     */
     public static CloudInfo getCloudInfoByName(String remoteCloudName) { 
         // FIXME: Does every cloud node have same name in different clouds?
         Node cloudNode = CloudManager.getCloudNodeByName(getDefaultCloudInfo().getCloud(), remoteCloudName);
@@ -186,7 +190,7 @@ public class CloudInfo {
         CloudInfo localCloudInfo = getDefaultCloudInfo();
         while (iterator.hasNext()) {
             CloudInfo cloudInfo = iterator.next();
-            if (url==null || StringUtils.isBlank(url)) {
+            if (url==null || "".equals(url.trim())) {
                 //url==null means set all remote cloud invalid.
                 if (cloudInfo.getNumber()==localCloudInfo.getNumber()) {
                     //if it is local cloud, ignore

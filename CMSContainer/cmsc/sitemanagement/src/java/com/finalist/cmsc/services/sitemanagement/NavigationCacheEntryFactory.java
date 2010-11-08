@@ -9,18 +9,15 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.mmbase.bridge.Node;
-import org.mmbase.core.event.Event;
-import org.mmbase.core.event.NodeEvent;
-import org.mmbase.core.event.RelationEvent;
+import org.mmbase.core.event.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.navigation.NavigationItemManager;
-import com.finalist.cmsc.navigation.NavigationManager;
-import com.finalist.cmsc.navigation.PagesUtil;
+import com.finalist.cmsc.navigation.*;
 
 public class NavigationCacheEntryFactory extends MMBaseCacheEntryFactory {
 
@@ -46,7 +43,7 @@ public class NavigationCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
     @Override
-    protected Object loadEntry(Object key) throws Exception {
+    protected Serializable loadEntry(Serializable key) throws Exception {
         Node node = getNode(key);
         if (node == null) {
            log.debug("NavigationItem not found: " + key);

@@ -2,7 +2,6 @@ package com.finalist.cmsc.navigation;
 
 import org.mmbase.bridge.*;
 
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.tree.TreeModel;
 
 /**
@@ -15,15 +14,9 @@ import com.finalist.tree.TreeModel;
  */
 public class NavigationTreeModel implements TreeModel {
    private Node site;
-   private boolean strictPageOnly = false;
 
    public NavigationTreeModel(Node site) {
       this.site = site;
-   }
-   
-   public NavigationTreeModel(Node site, boolean strictPageOnly) {
-      this.site = site;
-      this.strictPageOnly = strictPageOnly;
    }
    
    /**
@@ -37,12 +30,8 @@ public class NavigationTreeModel implements TreeModel {
     * @see com.finalist.tree.TreeModel#getChildCount(java.lang.Object)
     */
    public int getChildCount(Object parent) {
-       if (strictPageOnly) {
-          return NavigationUtil.getStrictPageChildCount((Node) parent);
-       }
-       else {
-          return NavigationUtil.getChildCount((Node) parent);
-       }
+       int childCount = NavigationUtil.getChildCount((Node) parent);
+       return childCount;
    }
  
    /**
@@ -58,12 +47,6 @@ public class NavigationTreeModel implements TreeModel {
    public Object getChild(Object parent, int index) {
       Node parentNode = (Node)parent;
       NodeList pages = NavigationUtil.getOrderedChildren(parentNode); 
-      if (strictPageOnly) {
-         pages = NavigationUtil.getStrictPageOrderedChildren(parentNode);
-      }
-      else {
-         pages = NavigationUtil.getOrderedChildren(parentNode); 
-      }
 
       if (pages.size() > index) {
          return pages.get(index);

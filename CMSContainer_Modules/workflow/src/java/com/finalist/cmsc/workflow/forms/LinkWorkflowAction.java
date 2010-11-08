@@ -9,16 +9,11 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.workflow.forms;
 
+import org.mmbase.bridge.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.NodeManager;
-import org.mmbase.bridge.NodeQuery;
-
-import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.workflow.LinkWorkflow;
 import com.finalist.cmsc.workflow.WorkflowManager;
+import com.finalist.cmsc.repository.RepositoryUtil;
 
 public class LinkWorkflowAction extends WorkflowAction {
 
@@ -50,8 +45,5 @@ public class LinkWorkflowAction extends WorkflowAction {
       }
       return wfQuery;
    }
-   
-   @Override
-   protected void addAllcontentListToRequest(HttpServletRequest request, Cloud cloud, String orderby,String status, String laststatus) {
-   }
+
 }

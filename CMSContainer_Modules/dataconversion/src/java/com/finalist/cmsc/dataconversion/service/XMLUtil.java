@@ -1,9 +1,12 @@
 package com.finalist.cmsc.dataconversion.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -102,12 +105,35 @@ public class XMLUtil {
     	  return null;
       }
    }
-
+   
+   public static String[] getAllTableNames(Document dom) {
+      String[] tableNames = new String[0];
+      
+      Set<String> set = new HashSet<String>();      
+      NodeList dataType = dom.getElementsByTagName("datatype");
+      add(dataType,set);
+      NodeList  relationList = dom.getElementsByTagName("related");
+      add(relationList,set);
+      
+      return set.toArray(tableNames);
+   }
+   
+   private static void add(NodeList nodes,Set<String> set) {
+      
+      for(int i = 0 ; i < nodes.getLength();i++) {
+         String tableName = ((Element)nodes.item(i)).getAttribute("destinationtype");
+         set.add(tableName);
+         
+         String rel = ((Element)nodes.item(i)).getAttribute("destinationtype");
+         if(StringUtils.isNotEmpty(rel)) {
+            set.add(rel);
+         }
+      }      
+   }
    
    public static Element getElementByTableName(String name,Element element) {
-      if(element.getAttribute("sourcetype").equalsIgnoreCase(name)) {
+      if(element.getAttribute("sourcetype").equalsIgnoreCase(name))
          return element;
-      }
       NodeList relationList = element.getElementsByTagName("related");
       Element ele = null;
       for(int i = 0 ; i < relationList.getLength(); i++) {
@@ -117,22 +143,6 @@ public class XMLUtil {
          }
       }
       return ele;
-   }
-
-   public static String getReverseRelationType(Element element) {
-      return element.getAttribute("reverse");
-   }
-
-   public static Element[] getRelateChildNodes(Element element) {
-      Element[] elements = new Element[0];
-      List<Element> list = new ArrayList<Element>();      
-      NodeList relationList = element.getElementsByTagName("relateddatatype");
-      for(int i = 0 ; i < relationList.getLength() ; i++) {
-         if(((Element)relationList.item(i)).getParentNode() == element) {
-            list.add((Element)relationList.item(i));
-         }
-      }
-     return list.toArray(elements);
    }
    
  

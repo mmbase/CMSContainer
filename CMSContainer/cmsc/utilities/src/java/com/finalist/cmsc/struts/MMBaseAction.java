@@ -13,7 +13,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
 import org.apache.struts.action.*;
@@ -52,7 +52,7 @@ public abstract class MMBaseAction extends Action {
                   }
                }
                else {
-                  return redirectLogin(request, response);
+                  return redirectLogin(request);
                }
             }
          }
@@ -64,7 +64,7 @@ public abstract class MMBaseAction extends Action {
          Rank requiredRank = getRequiredRank();
          if (requiredRank != null) {
             if (requiredRank.getInt() > cloud.getUser().getRank().getInt()) {
-               return redirectLogin(request, response);
+               return redirectLogin(request);
             }
          }
       }
@@ -109,15 +109,7 @@ public abstract class MMBaseAction extends Action {
    }
 
 
-   /**
-    * @deprecated Use {@link #redirectLogin(HttpServletRequest, HttpServletResponse)} instead.
-    */
    protected ActionForward redirectLogin(HttpServletRequest req) {
-      return redirectLogin(req, null);
-   }
-   
-   
-   protected ActionForward redirectLogin(HttpServletRequest req, HttpServletResponse resp) {
       // could not create a cloud on the session
       String loginForward = "/editors/login.jsp";
       String referrer = req.getRequestURL().toString()

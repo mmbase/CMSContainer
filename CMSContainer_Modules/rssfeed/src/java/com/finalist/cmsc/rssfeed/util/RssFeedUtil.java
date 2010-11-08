@@ -1,8 +1,6 @@
 package com.finalist.cmsc.rssfeed.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -26,29 +24,17 @@ public class RssFeedUtil {
    }
    
    public static List<String> getAllowedTypes(Node node) {
-      List<String> types = new ArrayList<String>();
-      NodeList typedefs = node.getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
-      for (Iterator<Node> iter = typedefs.iterator(); iter.hasNext();) {
-         Node typedef = iter.next();
-         types.add(typedef.getStringValue("name"));
-      }
-      return types;
-   }
+       List<String> types = new ArrayList<String>();
+       NodeList typedefs = node.getRelatedNodes(TYPEDEF, ALLOWREL, DESTINATION);
+       for (Iterator<Node> iter = typedefs.iterator(); iter.hasNext();) {
+          Node typedef = iter.next();
+          types.add(typedef.getStringValue("name"));
+       }
+       return types;
+    }
 
-   public static Node getContentChannel(Node node) {
-      return SearchUtil.findRelatedNode(node, RepositoryUtil.CONTENTCHANNEL, "related");
-   }
-
-   public static Node getCollectionChannel(Node node) {
-      NodeList list = RepositoryUtil.getCollectionChannels(node);
-      if(list.size() > 0) {
-         return list.getNode(0);
-      }
-      return null;
-   }
-
-   public static NodeList getChildrenChannelsForCollection(Node node) {
-      return RepositoryUtil.getContentChannelsForCollection(node);
-   }
+    public static Node getContentChannel(Node node) {
+        return SearchUtil.findRelatedNode(node, RepositoryUtil.CONTENTCHANNEL, "related");
+    }
 
 }

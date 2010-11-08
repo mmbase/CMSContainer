@@ -9,18 +9,16 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeIterator;
-import org.mmbase.bridge.NodeList;
+import java.io.Serializable;
+
+import org.mmbase.bridge.*;
 import org.mmbase.core.event.NodeEvent;
 import org.mmbase.core.event.RelationEvent;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.beans.MMBaseNodeMapper;
-import com.finalist.cmsc.beans.om.NodeParameter;
-import com.finalist.cmsc.beans.om.Portlet;
-import com.finalist.cmsc.beans.om.PortletParameter;
+import com.finalist.cmsc.beans.om.*;
 import com.finalist.cmsc.navigation.PortletUtil;
 
 public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
@@ -37,7 +35,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    @Override
-   protected Object loadEntry(Object key) {
+   protected Serializable loadEntry(Serializable key) {
       return loadPortlet((Integer) key);
    }
 
@@ -126,7 +124,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#getKey(org.mmbase.core.event.NodeEvent)
+    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#getKey(org.mmbase.core.event.NodeEvent)
     */
    @Override
    protected Integer getKey(NodeEvent event) {
@@ -171,7 +169,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#isNodeEvent(org.mmbase.core.event.NodeEvent)
+    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#isNodeEvent(org.mmbase.core.event.NodeEvent)
     */
    @Override
    protected boolean isNodeEvent(NodeEvent event) {
@@ -181,7 +179,7 @@ public class PortletCacheEntryFactory extends MMBaseCacheEntryFactory {
 
 
    /**
-    * @see com.finalist.cmsc.services.sitemanagement.MMBaseCacheEntryFactory#isRelationEvent(org.mmbase.core.event.RelationEvent)
+    * @see net.sf.mmapps.commons.portalImpl.services.sitemanagement.MMBaseCacheEntryFactory#isRelationEvent(org.mmbase.core.event.RelationEvent)
     */
    @Override
    protected boolean isRelationEvent(RelationEvent event) {

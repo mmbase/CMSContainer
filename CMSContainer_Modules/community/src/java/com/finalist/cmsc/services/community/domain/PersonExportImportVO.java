@@ -10,7 +10,6 @@ public class PersonExportImportVO extends Person {
    private Authentication authentication;
 
    private List < Preference > preferences;
-   
    private Long authorityId = new Long(0);
 
    public Authentication getAuthentication() {

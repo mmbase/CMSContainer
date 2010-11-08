@@ -9,11 +9,8 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.services.sitemanagement;
 
-import java.util.ArrayList;
+import java.util.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Element;
@@ -22,14 +19,7 @@ import net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import com.finalist.cmsc.beans.om.Layout;
-import com.finalist.cmsc.beans.om.NavigationItem;
-import com.finalist.cmsc.beans.om.Page;
-import com.finalist.cmsc.beans.om.Portlet;
-import com.finalist.cmsc.beans.om.PortletDefinition;
-import com.finalist.cmsc.beans.om.Site;
-import com.finalist.cmsc.beans.om.Stylesheet;
-import com.finalist.cmsc.beans.om.View;
+import com.finalist.cmsc.beans.om.*;
 
 public class SiteModelManager extends SelfPopulatingCacheManager {
 
@@ -52,7 +42,7 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
    public static SiteModelManager getInstance() {
       return siteModelManager;
    }
-   
+
    private SiteModelManager() throws CacheException {
       super();
 
@@ -427,5 +417,6 @@ public class SiteModelManager extends SelfPopulatingCacheManager {
       Layout layout = getLayout(layoutid);
       return layout.getNames();
    }
+
 
 }

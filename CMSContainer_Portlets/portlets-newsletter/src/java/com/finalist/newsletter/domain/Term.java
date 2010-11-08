@@ -6,6 +6,7 @@ public class Term {
    private boolean subscription = false;
 
 
+
    public boolean isSubscription() {
       return subscription;
    }
@@ -34,7 +35,7 @@ public class Term {
    public boolean equals(Object obj) {
       if (obj instanceof Term) {
          Term term = (Term) obj;
-         if (this.name.equals(term.name)) {
+         if(this.name.equals(term.name)){
             return true;
          }
       }

@@ -3,20 +3,11 @@ package com.finalist.cmsc.util;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.mmbase.applications.email.SendMail;
@@ -99,7 +90,7 @@ public final class EmailSender {
     * @param toAddresses The list of email addresses of the receivers 
     * @param subject The subject of the email 
     * @param body The body of the email 
-	 * @param fileName The name of the attachment
+    * @param fileName The name of the attachment
     * @param attachment Binary part to add to the message
     * @param replyTo Address as reply-to header in the message
     * @throws MessagingException message send failed
@@ -139,9 +130,7 @@ public final class EmailSender {
       else {
          message.setText(body);
       }
-      
-      //set the date header field
-      message.setSentDate(new Date());
+
       Transport.send(message);
    }
 
@@ -185,7 +174,6 @@ public final class EmailSender {
       message.setHeader("Content-Transfer-Encoding", "quoted-printable");
       message.setSubject(subject);
       message.setContent(body,contentType );
-      message.setSentDate(new Date());
       Transport.send(message);
    }
    

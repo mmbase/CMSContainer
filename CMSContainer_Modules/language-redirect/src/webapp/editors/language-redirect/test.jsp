@@ -7,21 +7,20 @@
 <head>
 	<title><fmt:message key="test.title" /></title>
 	<link href="../css/main.css" type="text/css" rel="stylesheet" />
+
 	<script type="text/javascript" src="../utils/transparent_png.js" ></script>
 </head>
 
 <body>
 
  <div class="tabs">
-   <a href="#">
-     <div class="tab_active">
+    <div class="tab_active">
 	      <div class="body">
-			  <div class="title">
-					<fmt:message key="test.title" />
-			  </div>
+          <div>
+	            <a href="#"><fmt:message key="test.title" /></a>
+          </div>
      		</div>
 	   </div>
-	</a>
  </div>
 
 <div class="editor" style="height:500px">

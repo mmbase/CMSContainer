@@ -6,7 +6,6 @@ import com.finalist.cmsc.beans.om.NavigationItem;
 import com.finalist.cmsc.beans.om.Page;
 import com.finalist.cmsc.navigation.NavigationTreeItemRenderer;
 import com.finalist.cmsc.portalImpl.PageNavigationItemManager;
-import com.finalist.cmsc.services.publish.Publisher;
 import com.finalist.cmsc.subsite.beans.om.SubSite;
 import com.finalist.cmsc.subsite.publish.SubSitePublisher;
 import com.finalist.cmsc.subsite.tree.SubSiteTreeItemRenderer;
@@ -36,7 +35,7 @@ public class SubSiteNavigationItemManager extends PageNavigationItemManager {
         return SubSite.class;
     }
     
-    public Publisher getPublisher(Cloud cloud, String type) {
+    public Object getPublisher(Cloud cloud, String type) {
 		return new SubSitePublisher(cloud);  
 	}
 

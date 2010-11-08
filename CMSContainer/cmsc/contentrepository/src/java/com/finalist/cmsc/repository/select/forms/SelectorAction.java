@@ -9,25 +9,18 @@ See http://www.MMBase.org/license
  */
 package com.finalist.cmsc.repository.select.forms;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.mmbase.bridge.Cloud;
-import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
+
+import org.apache.struts.action.*;
+import org.mmbase.bridge.*;
 
 import com.finalist.cmsc.mmbase.TreeUtil;
-import com.finalist.cmsc.repository.RepositoryInfo;
-import com.finalist.cmsc.repository.RepositoryTreeModel;
-import com.finalist.cmsc.repository.RepositoryUtil;
+import com.finalist.cmsc.repository.*;
 import com.finalist.cmsc.repository.select.SelectRenderer;
 import com.finalist.cmsc.util.bundles.JstlUtil;
 import com.finalist.tree.TreeInfo;
@@ -44,8 +37,6 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
          HttpServletResponse response, Cloud cloud) throws Exception {
 
       String action = request.getParameter("action");
-      String portletId = request.getParameter("portletId");
-      String from = request.getParameter("onlycollection");
       if (StringUtils.isEmpty(action)) {
          RepositoryInfo info = new RepositoryInfo(RepositoryUtil.getRepositoryInfo(cloud));
          cloud.setProperty("Selector" + RepositoryInfo.class.getName(), info);
@@ -57,20 +48,11 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
       }
 
       addToRequest(request, "actionname", mapping.getPath());
-      addToRequest(request, "portletId", portletId);
-      addToRequest(request, "onlycollection", from);
 
       JstlUtil.setResourceBundle(request, "cmsc-repository");
       return super.execute(mapping, form, request, response, cloud);
    }
 
-   protected String getLinkPattern(HttpServletRequest request) {
-      String portletId = request.getParameter("portletId");
-      if (StringUtils.isNotBlank(portletId)) {
-         return super.getLinkPattern() + "&portletId=" + portletId;
-      }
-      return super.getLinkPattern();
-   }
 
    @Override
    protected String getChannelId(HttpServletRequest request, Cloud cloud) {
@@ -111,7 +93,7 @@ public class SelectorAction extends com.finalist.cmsc.struts.SelectorAction {
    protected AjaxTree getTree(HttpServletRequest request, HttpServletResponse response, Cloud cloud, TreeInfo info,
          String persistentid) {
       RepositoryTreeModel model = new RepositoryTreeModel(cloud, contentChannelOnly);
-      SelectAjaxRenderer chr = new SelectRenderer(response, getLinkPattern(request), getTarget());
+      SelectAjaxRenderer chr = new SelectRenderer(response, getLinkPattern(), getTarget());
       AjaxTree t = new AjaxTree(model, chr, info);
       t.setImgBaseUrl("../../gfx/icons/");
       return t;

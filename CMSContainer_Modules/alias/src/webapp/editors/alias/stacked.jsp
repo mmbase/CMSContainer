@@ -27,15 +27,13 @@
 
 <div class="tabs">
     <!-- active TAB -->
-	<a name="activetab">
-		<div class="tab_active">
-			<div class="body">
-				<div class="title">
-					<fmt:message key="stacked.title" />
-				</div>
-			</div>
-		</div>
-	</a>
+    <div class="tab_active">
+        <div class="body">
+            <div>
+                <a name="activetab"><fmt:message key="stacked.title" /></a>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="editor">
    <div class="body">
@@ -63,7 +61,7 @@
 
 				<c:set var="targetUrl" value=""/>
 				<mm:relatednodes type="urls" role="related" searchdir="destination" >
-					<c:set var="targetName"><mm:field name="title"/></c:set>
+					<c:set var="targetName"><mm:field name="name"/></c:set>
 					<c:set var="targetUrl"><mm:field name="url"/></c:set>
 					<c:set var="targetType" value="url"/>
 					<c:set var="targetIcon" value="urls.png"/>

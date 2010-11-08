@@ -35,6 +35,7 @@ public abstract class CommunityTagSupport extends SimpleTagSupport {
       PageContext pctx = (PageContext) getJspContext();
       ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(pctx.getServletContext());
       ctx.getAutowireCapableBeanFactory().autowireBeanProperties(this, Autowire.BY_NAME.value(), false);
+
       doTagLogic();
    }
 

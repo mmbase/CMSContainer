@@ -1,33 +1,30 @@
 package com.finalist.cmsc.services.versioning;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import com.finalist.cmsc.mmbase.PropertiesUtil;
+import com.finalist.cmsc.repository.xml.XMLController;
+import com.finalist.cmsc.security.SecurityUtil;
 import org.apache.commons.lang.math.NumberUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Field;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
 import org.mmbase.bridge.NodeManager;
 import org.mmbase.bridge.NodeQuery;
 import org.mmbase.bridge.util.SearchUtil;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.finalist.cmsc.mmbase.PropertiesUtil;
-import com.finalist.cmsc.repository.xml.XMLController;
-import com.finalist.cmsc.security.SecurityUtil;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 /**
  * Implementation of the VersioningService.
@@ -36,7 +33,6 @@ import com.finalist.cmsc.security.SecurityUtil;
  */
 public class VersioningServiceMMBaseImpl extends VersioningService {
 
-   private static final String ONLIVE = "onlive";
    private final XMLController xmlController;
 
 
@@ -64,7 +60,9 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       Cloud cloud = node.getCloud();
       NodeManager nodeManager = cloud.getNodeManager(ARCHIVE);
       try {
-         boolean needNewVersion = false;
+         String data = xmlController.toXml(node, false);
+         byte[] bytes = data.getBytes("UTF-8");
+
          NodeManager manager = cloud.getNodeManager(ARCHIVE);
          NodeQuery query = manager.createQuery();
          SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
@@ -74,43 +72,32 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
          String formerArchiveXml = null;
          if (archiveNodeList.size() > 0) {
             Node formerYoungestArchive = archiveNodeList.getNode(archiveNodeList.size() - 1);
-            long interval = (new Date().getTime() - formerYoungestArchive.getDateValue("date").getTime()) / (60 * 1000);
-            // Only archive a node when it is more than 5 minutes since last archiving.
-            if (interval >= 5) {
-               needNewVersion = true;
-               formerArchiveXml = new String(formerYoungestArchive.getByteValue(NODE_DATA), "UTF-8");
-            } else {
-               log.debug("Not archived, because it is less than 5 minutes from last archiving.");
-            }
-         } else {
-            needNewVersion = true;
+            formerArchiveXml = new String(formerYoungestArchive.getByteValue(NODE_DATA), "UTF-8");
          }
-         if (needNewVersion) {
-            String data = xmlController.toXml(node, false);
-            byte[] bytes = data.getBytes("UTF-8");
+         if (!data.equals(formerArchiveXml)) {
+            Node archive = nodeManager.createNode();
+            archive.setByteValue(NODE_DATA, bytes);
+            archive.setIntValue(ORIGINAL_NODE, node.getNumber());
+            archive.setDateValue(DATE, new Date());
+            archive.setIntValue("author_number", SecurityUtil.getUserNode(cloud).getNumber());
+            archive.commit();
 
-            if (!data.equals(formerArchiveXml)) {
-               Node archive = nodeManager.createNode();
-               archive.setByteValue(NODE_DATA, bytes);
-               archive.setIntValue(ORIGINAL_NODE, node.getNumber());
-               archive.setDateValue(DATE, new Date());
-               archive.setIntValue("author_number", SecurityUtil.getUserNode(cloud).getNumber());
-               archive.commit();
-
-               String property = PropertiesUtil.getProperty("max.archivenodes");
-               int maxArchiveNodes = NumberUtils.toInt(property, DEFAULT_MAX_ARCHIVES_NODES);
-               int count = 0;
-               // loop cause we do want to remove all obsolete archivenodes in case
-               // that the maximum is lowered.
-               while (archiveNodeList.size() + 1 - count > maxArchiveNodes) {
-                  Node archiveNode = archiveNodeList.getNode(count++);
-                  archiveNode.delete();
-               }
-            } else {
-               log.debug("Not archived, because data is equals to latest archivenode.");
+            String property = PropertiesUtil.getProperty("max.archivenodes");
+            int maxArchiveNodes = NumberUtils.toInt(property, DEFAULT_MAX_ARCHIVES_NODES);
+            int count = 0;
+            // loop cause we do want to remove all obsolete archivenodes in case
+            // that the maximum is lowered.
+            while (archiveNodeList.size() + 1 - count > maxArchiveNodes) {
+               Node archiveNode = archiveNodeList.getNode(count++);
+               archiveNode.delete();
             }
          }
-      } catch (Exception e) {
+         else {
+            log.debug("Not archived, because data is equals to latest archivenode.");
+         }
+
+      }
+      catch (Exception e) {
          log.error("Exception while adding a version for node " + node.getNumber(), e);
          throw new VersioningException("", e);
       }
@@ -169,11 +156,11 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
       Document document = parser.parse(new InputSource(new StringReader(xml)));
       NodeManager nodeManager = n.getNodeManager();
       String nodeManagerName = nodeManager.getName();
-      org.w3c.dom.NodeList nodeManagerTag = document.getElementsByTagName(nodeManagerName);
+      NodeList nodeManagerTag = document.getElementsByTagName(nodeManagerName);
       if (nodeManagerTag.getLength() == 0) {
          throw new VersioningException("Could not match xml with given node!");
       }
-      org.w3c.dom.NodeList fields = nodeManagerTag.item(0).getChildNodes();
+      NodeList fields = nodeManagerTag.item(0).getChildNodes();
       for (int i = 0; i < fields.getLength(); i++) {
          org.w3c.dom.Node field = fields.item(i);
          String name = field.getNodeName();
@@ -199,81 +186,5 @@ public class VersioningServiceMMBaseImpl extends VersioningService {
             }
          }
       }
-   }
-   
-   @Override
-   public void setPublishVersion(Node node) {
-      String data = "";
-      try {
-         data = xmlController.toXml(node, false);
-      }
-      catch (Exception e) {
-         log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
-      }
-      org.mmbase.bridge.NodeList archiveNodeList = findRelatedVersions(node);
-      String formerArchiveXml = null;
-      for (int i = 0 ; i < archiveNodeList.size() ; i++) {
-         Node versionNode = archiveNodeList.getNode(i);
-         try {
-            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
-         } 
-         catch (UnsupportedEncodingException e) {
-            log.error("UnsupportedEncodingException while change charset,", e);
-         }
-         if (data.equals(formerArchiveXml)) {
-            versionNode.setBooleanValue("publish", true);
-            versionNode.setBooleanValue(ONLIVE, true);
-         }
-         else {
-            versionNode.setBooleanValue(ONLIVE, false);
-         }
-         versionNode.commit();
-      }
-   }
-   
-   @Override
-   public boolean isOnLive(Node node) {
-
-      String data = "";
-      try {
-         data = xmlController.toXml(node, false);
-      }
-      catch (Exception e) {
-         log.error("Exception while set publish mark on  a version for node " + node.getNumber(), e);
-      }
-      org.mmbase.bridge.NodeList archiveNodeList = findRelatedVersions(node);
-      String formerArchiveXml = null;
-      for (int i = 0 ; i < archiveNodeList.size() ; i++) {
-         Node versionNode = archiveNodeList.getNode(i);
-         try {
-            formerArchiveXml = new String(versionNode.getByteValue(NODE_DATA), "UTF-8");
-         } 
-         catch (UnsupportedEncodingException e) {
-            log.error("UnsupportedEncodingException while change charset,", e);
-         }
-         if (data.equals(formerArchiveXml) && versionNode.getBooleanValue(ONLIVE)) {
-            return true;
-         }
-      }
-      return false;
-   }
-   
-   public NodeList findRelatedVersions(Node node) {
-      NodeManager manager = node.getCloud().getNodeManager(ARCHIVE);
-      NodeQuery query = manager.createQuery();
-      SearchUtil.addEqualConstraint(query, manager, ORIGINAL_NODE, node.getNumber());
-      SearchUtil.addSortOrder(query, manager, DATE, "UP");
-      return manager.getList(query); 
-   }
-   
-   public String toXml(Node node) {
-      String data = null;
-      try {
-         data = xmlController.toXml(node, false);
-      }
-      catch (Exception e) {
-         log.error("Exception while chanslate a node to XMl, node number= " + node.getNumber(), e);
-      }  
-      return data;
    }
 }

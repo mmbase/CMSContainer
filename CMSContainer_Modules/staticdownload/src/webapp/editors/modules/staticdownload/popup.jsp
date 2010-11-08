@@ -9,15 +9,13 @@
 </head>
 
     <div class="tabs">
-	 <a href="#">
         <div class="tab_active">
             <div class="body">
-                <div class="title">
-                   <fmt:message key="download.${param.field}.title" />
+                <div>
+                    <a href="#"><fmt:message key="download.${param.field}.title" /></a>
                 </div>
             </div>
         </div>
-		</a>
     </div>
 <body>
 	<div class="editor" style="width: auto;">

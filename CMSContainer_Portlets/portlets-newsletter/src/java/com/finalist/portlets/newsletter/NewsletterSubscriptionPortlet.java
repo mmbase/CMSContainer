@@ -81,22 +81,18 @@ public class NewsletterSubscriptionPortlet extends JspPortlet {
    public void processView(ActionRequest request, ActionResponse response) throws PortletException, IOException {
       PortletPreferences preferences = request.getPreferences();
 	  //a flag shows if the subscriptions status updated
-      String isChanged = "false";
+	  String isChanged = "false";
       String[] allNewsletters = preferences.getValues(ALLOWED_NEWSLETTERS, null);
       String[] newsletters = request.getParameterValues(SUBSCRIPTIONS);
       NewsletterSubscriptionServices services = (NewsletterSubscriptionServices) ApplicationContextFactory.getBean("subscriptionServices");
       int subscriberId = CommunityModuleAdapter.getCurrentUserId();
-      if(subscriberId == -1) {
-         response.setRenderParameter("isChanged", isChanged);
-         return ;
-      }
       List<Subscription> allSubscribtions = services.getSubscriptions(allNewsletters, subscriberId);
       
       if(newsletters == null) {
          for (Subscription subscription : allSubscribtions) {
             services.terminateUserSubscription(Integer.toString(subscription.getId()));
          }
-		 if (allSubscribtions.size() > 0) {
+         if (allSubscribtions.size() > 0) {
             isChanged = "true";
          }
       }

@@ -47,11 +47,6 @@ public class NewsletterPublicationPublish extends MMBaseFormlessAction {
    private static final String ACTION_CANCEL = "cancel";
    
    /**
-    * name of submit button in jsp to confirm
-    */
-   private static final String ACTION_CONFIRM = "confirm";
-   
-   /**
     * System property to allow skipping the Freeze or Approve action 
     */
    public static final String NEWSLETTER_FREEZE_PROPERTY = "newsletter.workflow.allow.skip.freezing";
@@ -134,8 +129,8 @@ public class NewsletterPublicationPublish extends MMBaseFormlessAction {
       return getParameter(request, ACTION_CANCEL) != null;
    }
 
-
    private boolean isSendAction(HttpServletRequest request) {
-      return getParameter(request, ACTION_CONFIRM) != null || getParameter(request, ACTION_REMOVE) != null;
+      return getParameter(request, ACTION_REMOVE) != null;
    }
+
 }

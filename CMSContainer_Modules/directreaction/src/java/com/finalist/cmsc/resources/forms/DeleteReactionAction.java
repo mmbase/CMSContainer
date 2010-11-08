@@ -27,11 +27,7 @@ public class DeleteReactionAction extends DeleteSecondaryContentAction {
           MMBaseAction.ADMINISTRATOR.equals(cloud.getUser().getRank().toString())) {
          log.debug("deleting secondary content: " + number);
          Cloud remoteCloud = ReactionUtil.getRemoteCloud(cloud);
-         
-         /* Only remove the relations because the an event listener will remove the reaction 
-          * @see com.finalist.cmsc.directreaction.ContentElementEventListener
-          */
-         remoteCloud.getNode(number).deleteRelations();
+         remoteCloud.getNode(number).delete(true);
       }
       else {
          log.warn("Could not delete direct reaction, because user was not siteadmin or admin: " + number + " ("

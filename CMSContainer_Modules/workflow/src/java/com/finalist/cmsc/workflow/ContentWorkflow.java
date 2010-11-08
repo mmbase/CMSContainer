@@ -17,7 +17,6 @@ import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 import com.finalist.cmsc.mmbase.RelationUtil;
-import com.finalist.cmsc.repository.AssetElementUtil;
 import com.finalist.cmsc.repository.ContentElementUtil;
 import com.finalist.cmsc.repository.RepositoryUtil;
 import com.finalist.cmsc.security.UserRole;
@@ -30,10 +29,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
    private static final Logger log = Logging.getLoggerInstance(ContentWorkflow.class.getName());
 
    public static final String TYPE_CONTENT = "content";
-   public static final String NODETYPE_ARTICLE = "article";
-   public static final String NODETYPE_BANNERS = "banners";
-   public static final String NODETYPE_LINK = "link";
-   public static final String NODETYPE_FAQITEM = "faqitem";
 
 
    public ContentWorkflow(Cloud cloud) {
@@ -48,7 +43,7 @@ public class ContentWorkflow extends RepositoryWorkflow {
             return (Node) getWorkflows(content).get(0);
          }
          else {
-            Node wfItem = createFor(TYPE_CONTENT, remark, content.getNodeManager().getName());
+            Node wfItem = createFor(TYPE_CONTENT, remark);
             RelationUtil.createRelation(wfItem, content, WORKFLOWREL);
             log.debug("Workflow " + wfItem.getNumber() + " created for content " + content.getNumber());
             return wfItem;
@@ -141,14 +136,6 @@ public class ContentWorkflow extends RepositoryWorkflow {
       else {
          content = getContentNode(node);
       }
-      List<Node> blockNodes = AssetElementUtil.findAssetRelatedNodes(content);
-      for (Node blockNode: blockNodes) {
-         Node wf = getWorkflowNode(blockNode, "asset");
-         if (wf != null) {
-            //changeWorkflow(wf, STATUS_PUBLISHED, "");
-            //publishInternal(wf, blockNode);
-         }
-     }
       publish(content, TYPE_CONTENT, publishNumbers);
    }
 

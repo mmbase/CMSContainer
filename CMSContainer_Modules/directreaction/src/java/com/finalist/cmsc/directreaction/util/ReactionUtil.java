@@ -21,9 +21,6 @@ public class ReactionUtil {
       //Utility only
    }
    
-   private static final String REACTION = "reaction";
-
-
    /**
     * Warning, this method is untested
     * 
@@ -86,16 +83,5 @@ public class ReactionUtil {
       }
       
       return Publish.getRemoteCloud(cloud);
-   }
-
-
-   public static boolean isReaction(String node) {
-      Node reacion = CloudProviderFactory.getCloudProvider().getCloud().getNode(node);
-      return isReaction(reacion);
-   }
-
-
-   public static boolean isReaction(Node node) {
-      return REACTION.equals(node.getNodeManager().getName());
    }
 }

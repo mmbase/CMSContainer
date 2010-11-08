@@ -61,8 +61,9 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
 
    protected static final String ARCHIVE_PAGE = "archivepage";
    protected static final String START_INDEX = "startindex";
-
+   
    protected static final int DEFAULT_MAX_ELEMENTS = 100;
+
 
    @Override
    protected void saveParameters(ActionRequest request, String portletId) {
@@ -133,17 +134,8 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
       }
    }
 
-   
 
-   @Override
-	public void doEditDefaults(RenderRequest req, RenderResponse res) throws PortletException, IOException {
-   	// set the default for the maximum elements
-		req.setAttribute(MAX_ELEMENTS, DEFAULT_MAX_ELEMENTS);
-		super.doEditDefaults(req, res);
-	}
-
-
-	protected void addContentElements(RenderRequest req, String channel) {
+   protected void addContentElements(RenderRequest req, String channel) {
       String elementId = req.getParameter(ELEMENT_ID);
       if (StringUtils.isEmpty(elementId)) {
          PortletPreferences preferences = req.getPreferences();
@@ -260,7 +252,6 @@ public class ContentChannelPortlet extends AbstractContentPortlet {
          setMetaData(req, elementId);
       }
    }
-
 
    protected int countContentElements(RenderRequest req, List<String> contenttypes, String channel, int offset,
          String orderby, String direction, String archive, int elementsPerPage, int year, int month, int day,

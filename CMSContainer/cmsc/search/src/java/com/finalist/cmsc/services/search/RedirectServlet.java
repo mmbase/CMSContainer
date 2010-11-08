@@ -10,7 +10,6 @@ See http://www.MMBase.org/license
 package com.finalist.cmsc.services.search;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.*;
@@ -101,15 +100,11 @@ public class RedirectServlet extends BridgeServlet {
                 pageInfo = Search.findDetailPageForContent(node, request.getServerName());
             }
             else {
-                pageInfo = Search.findDetailPageForContent(node, request.getParameter("server"));
+                pageInfo = Search.findDetailPageForContent(node);
             }
 
             if (pageInfo != null) {
-            	 String host = null;
-            	 if(ServerUtil.useServerName()) {
-            	 	 host = pageInfo.getHost();
-            	 }
-                PortalURL u = new PortalURL(host, request, pageInfo.getPath());
+                PortalURL u = new PortalURL(pageInfo.getHost(), request, pageInfo.getPath());
                 String elementId = String.valueOf(node.getNumber());
                 // When contentelement and the same number then it is a contentportlet
                 if (! ( "contentelement".equals(pageInfo.getParametername())
@@ -126,7 +121,7 @@ public class RedirectServlet extends BridgeServlet {
 
         if (redirect != null) {
             if (this.forwardRequest) {
-                if (redirect.indexOf("://") > -1 && (ServerUtil.useServerName())) {
+                if (redirect.indexOf("://") > -1 && ServerUtil.useServerName()) {
                     // not a valid forward dispatch url, but it might be converted to one.
                     String currentHost = request.getServerName();
                     int hostIndex = redirect.indexOf("://" + currentHost);

@@ -7,11 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.w3c.dom.Document;
 
 /**
  * @author <a href="mailto:nico@klasens.net"> Nico Klasens </A>
@@ -32,9 +29,6 @@ public final class XsltUtil {
 
    /** Source if of type File */
    private static final int SOURCE_FILE = 5;
-
-   /** Source if of type Document */
-   private static final int SOURCE_DOCUMENT = 6;
 
    /** Transformation factory */
    private TransformerFactory factory = null;
@@ -117,11 +111,6 @@ public final class XsltUtil {
    private final Source createSource(Object source, int sourceType) throws IOException {
 
       switch (sourceType) {
-         case SOURCE_DOCUMENT: // '\006'
-            Document doc = (Document) source;
-            DOMSource domSource = new DOMSource(doc);
-            return domSource;
-
          case SOURCE_FILE: // '\005'
             File file = (File) source;
             StreamSource streamsource4 = new StreamSource(file);
@@ -214,10 +203,6 @@ public final class XsltUtil {
       if (obj instanceof InputStream) {
          return SOURCE_INPUT_STREAM;
       }
-      if (obj instanceof Document) {
-         return SOURCE_DOCUMENT;
-      }
-
       return 0;
    }
 

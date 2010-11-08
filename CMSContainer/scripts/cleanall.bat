@@ -1,8 +1,7 @@
 @ECHO OFF
-call clean ..
+call clean ..\cmsc
 call clean ..\..\CMSContainer_Modules
 call clean ..\..\CMSContainer_Portlets
-call clean ..\..\CMSContainer_Templates
 
 set APPLICATION=%1
 IF exist "%APPLICATION%" GOTO okAppName

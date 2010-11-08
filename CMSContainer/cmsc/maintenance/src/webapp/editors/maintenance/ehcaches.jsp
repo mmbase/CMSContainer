@@ -4,6 +4,7 @@
 
 <%@page import="com.finalist.pluto.portalImpl.aggregation.portletcache.PortletCache"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
 <%@page import="net.sf.ehcache.Cache"%>
 <%@page import="net.sf.ehcache.CacheManager"%>
 
@@ -43,6 +44,7 @@
 			Size: <%=cache.getSize() %><br/>
 			Hits: <%=hits %><br/>
 			Misses: <%=misses %><br/>
+         Memory: <%=cache.calculateInMemorySize() / 1024 %>KB - (<%=(cache.calculateInMemorySize()/1024) / (cache.getSize()+1) %>KB/entry)<br/>
 			<b>Performance: <%= new DecimalFormat("0.##").format((hits*100f)/(hits+misses))%>%</b><br/>
 			</p>
 			
@@ -54,6 +56,7 @@
 				}
 			}
 			--%>
+         
 		</div>
 		<% } %>
   </div>

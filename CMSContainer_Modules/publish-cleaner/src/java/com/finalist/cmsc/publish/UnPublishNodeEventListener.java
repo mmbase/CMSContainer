@@ -23,12 +23,10 @@ public class UnPublishNodeEventListener implements NodeEventListener, RelationEv
    public void notify(NodeEvent event) {
       if (event.getType() == Event.TYPE_DELETE) {
          int nodeNumber = event.getNodeNumber();
+         Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
 
-         if (log.isDebugEnabled()) {
-            Cloud cloud = CloudProviderFactory.getCloudProvider().getAdminCloud();
-            if (PublishManager.isImported(cloud.getNode(nodeNumber))) {
-                log.debug("node removed but not unlinked: " + nodeNumber);
-            }
+         if (log.isDebugEnabled() && PublishManager.isImported(cloud.getNode(nodeNumber))) {
+            log.debug("node removed but not unlinked: " + nodeNumber);
          }
       }
    }

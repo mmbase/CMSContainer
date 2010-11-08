@@ -32,7 +32,7 @@ public class RestoreAction extends MMBaseFormlessAction {
        
       String objectnumber = getParameter(request, "objectnumber");
       Node objectNode = cloud.getNode(objectnumber);
-      String returnurl = getParameter(request, "returnurl");
+
       NodeList contentchannels = RepositoryUtil.getDeletionChannels(objectNode);
       if (contentchannels.size() > 0) {
          if (contentchannels.size() == 1) {
@@ -50,36 +50,13 @@ public class RestoreAction extends MMBaseFormlessAction {
             else {
                addToRequest(request, "content", objectNode);
                addToRequest(request, "contentchannels", contentchannels);
-               addToRequest(request, "returnurl", returnurl);
+               addToRequest(request, "returnurl", getParameter(request, "returnurl"));
                return mapping.findForward("restore");
             }
          }
       }
-      else {
-         String channelnumber = getParameter(request, "channelnumber");
-         if (StringUtils.isNotEmpty(channelnumber)) {
-            Node channelNode = cloud.getNode(channelnumber);
-            RepositoryUtil.addContentToChannel(objectNode, channelNode);
-            Workflow.create(objectNode, null);
-         }
-         else {
-            contentchannels = RepositoryUtil.getAllContentChannels(cloud);
-            addToRequest(request, "content", objectNode);
-            addToRequest(request, "contentchannels", contentchannels);
-            addToRequest(request, "returnurl", returnurl);
-            return mapping.findForward("restore");
-         }
-
-      }
-      ActionForward ret;
-      if(returnurl.contains(".jsp?")) {
-    	  ret = new ActionForward(returnurl+"&fresh=true");
-      } else {
-    	  ret = new ActionForward(returnurl+"?fresh=true");
-      }
-    	  
+      ActionForward ret = new ActionForward(getParameter(request, "returnurl"));
       ret.setRedirect(true);
-     // addToRequest(request, "fresh", "true");
       return ret;
    }
 }

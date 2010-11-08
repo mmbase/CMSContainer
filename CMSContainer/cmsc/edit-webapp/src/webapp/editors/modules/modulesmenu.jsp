@@ -1,7 +1,5 @@
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
-<%@page import="com.finalist.cmsc.portalImpl.SecureUtil" %>
 <%@include file="../globals.jsp"%>
-<c:set var="sso"><%= SecureUtil.getEnvironment("useSSO")%></c:set>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html:html xhtml="true">
@@ -30,10 +28,10 @@
 							</mm:haspage>
 							<mm:haspage page="/editors/resources/reactionsearch.jsp">
                         <mm:haspage page="/editors/resources/globals.jsp">
-								<li class="reactions"> <a href="<mm:url page="../resources/ReactionInitAction.do"/>" target="rightpane">
-									<fmt:message key="modules.reactions" />
-									</a> </li>
-							</mm:haspage>
+   								<li class="reactions"> <a href="<mm:url page="../resources/ReactionInitAction.do"/>" target="rightpane">
+   									<fmt:message key="modules.reactions" />
+   									</a> </li>
+                        </mm:haspage>      
 							</mm:haspage>
 							<mm:haspage page="/editors/versioning/modules.jsp">
 								<li class="versioning"> <a href="<mm:url page="../versioning/modules.jsp"/>" target="rightpane">
@@ -46,28 +44,18 @@
                            <a href="${newsletterUrl}" target="rightpane"><fmt:message key="modules.newsletter"/></a>
                         </li>
                      </mm:haspage>
-
-                     <c:if test="${!sso}" >
-								<mm:haspage page="/editors/community">
-                           <li class="users">
-                             <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
-                              <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
-                           </li>						  
-                           <li class="users">
-                              <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
-                              <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
-                           </li>
-								</mm:haspage>
-							</c:if>
-                     <c:if test="${sso}" >
-                        <mm:haspage page="/editors/community/syncronizeGroups.jsp">
-                           <li class="groups">
-                              <c:url var="syncronizeGroups" value="/editors/community/syncronizeGroups.jsp"/>
-                              <a href="${syncronizeGroups}" target="rightpane"><fmt:message key="modules.groups" /></a>
-                           </li>
-                        </mm:haspage>
-                     </c:if>
-                    
+                     <mm:haspage page="/editors/community">
+                        <li class="users">
+                          <c:url var="communityManagement" value="/editors/community/SearchConditionalUser.do"/>
+                           <a href="${communityManagement}" target="rightpane"><fmt:message key="modules.community" /></a>
+                        </li>
+                     </mm:haspage>
+                     <mm:haspage page="/editors/community">
+                        <li class="users">
+                           <c:url var="communityUrl" value="/editors/community/ReferenceImportExportAction.do?action=listGroups"/>
+                           <a href="${communityUrl}" target="rightpane"><fmt:message key="modules.community.data" /></a>
+                        </li>
+                     </mm:haspage>
                      <mm:haspage page="/editors/community/preferencesearch.jsp">
                         <li class="community">
                            <c:url var="communityUrl" value="/editors/community/PreferenceAction.do?method=list&reload=true"/>

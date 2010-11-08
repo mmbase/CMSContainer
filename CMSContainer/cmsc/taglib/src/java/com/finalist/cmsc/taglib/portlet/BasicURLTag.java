@@ -1,7 +1,6 @@
 package com.finalist.cmsc.taglib.portlet;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +19,6 @@ import com.finalist.cmsc.mmbase.ResourcesUtil;
 import com.finalist.cmsc.services.sitemanagement.SiteManagement;
 import com.finalist.cmsc.util.HttpUtil;
 import com.finalist.cmsc.util.ServerUtil;
-import com.finalist.pluto.portalImpl.core.PortalEnvironment;
-import com.finalist.pluto.portalImpl.core.PortalURL;
 
 /**
  * Supporting class for the <CODE>actionURL</CODE> and <CODE>renderURL</CODE>
@@ -134,18 +131,6 @@ public abstract class BasicURLTag extends TagSupport {
       if (absolute) {
          urlString = HttpUtil.makeAbsolute((HttpServletRequest) pageContext.getRequest(), urlString);
       }
-      if(!ServerUtil.useServerName() && urlString.contains("/content/")) {
-         PortalEnvironment env = PortalEnvironment.getPortalEnvironment((HttpServletRequest)pageContext.getRequest());
-         PortalURL currentURL = env.getRequestedPortalURL();
-         String path = currentURL.getGlobalNavigationAsString();
-         String server = (path.indexOf("/") != -1)?(path.substring(0, path.indexOf("/"))):path;
-         if(urlString.contains("?")) {
-         	urlString += "&server="+server;
-         }
-         else {
-         	urlString += "?server="+server;
-         }
-      }
       
       if (var == null) {
          try {
@@ -183,23 +168,23 @@ public abstract class BasicURLTag extends TagSupport {
          link = SiteManagement.getPath(item, !ServerUtil.useServerName());
       }
       else {
-         //Throw error, should use this function with full path!
-         throw new IllegalArgumentException("item == null; getLink should be called with full page path!");
+         link = page;
+         //Throw error in from CMSC 1.6: illegal argument exception, should use this with full path
       }
 
       return link;
    }
 
-   
    public String getHost() {
       String host = null;
       if (ServerUtil.useServerName()) {
          NavigationItem item = SiteManagement.convertToNavigationItem(page);
-         host = SiteManagement.getSite(item);
+         if (item != null) {
+            host = SiteManagement.getSite(item);
+         }
       }
       return host;
    }
-
 
    /**
     * Returns the portletMode.

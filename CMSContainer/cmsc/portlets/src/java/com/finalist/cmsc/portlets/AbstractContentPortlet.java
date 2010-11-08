@@ -16,7 +16,7 @@ import java.util.*;
 
 import javax.portlet.*;
 
-import org.mmbase.bridge.util.CloudUtil;
+import net.sf.mmapps.commons.bridge.CloudUtil;
 import net.sf.mmapps.modules.cloudprovider.CloudProvider;
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
@@ -119,7 +119,7 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
                // get the values submitted with the form
                Enumeration<String> parameterNames = request.getParameterNames();
 
-               // currently supporting one Node
+               // currently supperting one Node
                Map<String, Node> nodesMap = new HashMap<String, Node>();
                while (parameterNames.hasMoreElements()) {
                   // the parameterformat is "content_NUMBER_FIELD"
@@ -268,6 +268,15 @@ public abstract class AbstractContentPortlet extends CmscPortlet {
       }
    }
 
+   @Override
+   public void processView(ActionRequest request, ActionResponse response) throws PortletException,
+         IOException {
+      /*
+       * Freek: I moved all the reaction stuff to the tags in the reaciton module. (see there) I am
+       * not entirely sure if the line below is still required... but think so.
+       */
+      response.setPortletMode(CmscPortletMode.EDIT_DEFAULTS);
+   }
 
    @Override
    protected void doView(RenderRequest req, RenderResponse res) throws PortletException,

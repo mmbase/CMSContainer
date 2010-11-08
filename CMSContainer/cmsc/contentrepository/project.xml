@@ -12,52 +12,40 @@ See http://www.MMBase.org/license
     <name>CMS Container contentrepository</name>
     <shortDescription>CMS Container contentrepository</shortDescription>
 	<dependencies>
-		<dependency>
+   		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-servicemanagement</artifactId>
 			<version>${cmsc.version}</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
+   		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-security</artifactId>
 			<version>${cmsc.version}</version>
 			<type>jar</type>
 		</dependency>
-   	<dependency>
-			<groupId>finalist</groupId>
-			<artifactId>cmsc-richtext</artifactId>
-			<version>${cmsc.version}</version>
-			<type>jar</type>
-		</dependency>
-   	<dependency>
+   		<dependency>
 			<groupId>finalist</groupId>
 			<artifactId>cmsc-utilities</artifactId>
 			<version>${cmsc.version}</version>
 			<type>jar</type>
 		</dependency>
 
-		<dependency>
+   		<dependency>
 			<groupId>mmbase</groupId>
 			<artifactId>mmbase</artifactId>
 			<version>${mmbase.version}</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
+   		<dependency>
 			<groupId>mmbase</groupId>
 			<artifactId>mmbase-editwizard</artifactId>
 			<version>${mmbase.version}</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
+   		<dependency>
 			<groupId>mmbase</groupId>
 			<artifactId>mmbase-crontab</artifactId>
-			<version>${mmbase.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>mmbase</groupId>
-			<artifactId>mmbase-cloudcontext</artifactId>
 			<version>${mmbase.version}</version>
 			<type>jar</type>
 		</dependency>

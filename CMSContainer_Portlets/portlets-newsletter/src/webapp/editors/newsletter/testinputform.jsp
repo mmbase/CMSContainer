@@ -57,14 +57,14 @@
             <td><fmt:message key="testinput.email"/></td>
             <td><input type="text" name="email" id="email" style="width:170px"/></td>
          </tr>
-         <!-- 
+         <!--
          <tr>
             <td><fmt:message key="testinput.mimetype"/></td>
             <td>
                <select name="mimetype" id="mimetype">
                 <option value="text/html">text/html</option>
                 <option value="text/plain">text/plain</option>
-               </select>            
+             </select>
             </td>
         </tr>
         -->

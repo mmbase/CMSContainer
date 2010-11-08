@@ -9,12 +9,7 @@
 	<script src="content.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		function selectElement(element, title, url) {
-			if(window.top.opener.selectElement) {
-				window.top.opener.selectElement(element, title, url);
-			}
-			else {
-				window.top.opener.selectContent(element, title, url);
-			}
+			window.top.opener.selectElement(element, title, url);
 			window.top.close();
 		}
 	</script>
@@ -22,45 +17,36 @@
 	<body>
 <mm:cloud jspvar="cloud" rank="basic user" loginpage="../../login.jsp">
 	  <mm:import externid="parentchannel" jspvar="parentchannel" vartype="Integer" from="parameters" required="true"/>
-	  <mm:import externid="portletId" from="parameters" />
 
 <mm:node number="$parentchannel" jspvar="parentchannelnode">
 
     <div class="tabs">
-		 <a href="#">
-			<div class="tab_active">
-				<div class="body">
-					<div class="title">
-						<fmt:message key="content.title" />
-					</div>
-				</div>
-			</div>
-		</a>
+        <div class="tab_active">
+            <div class="body">
+                <div>
+                    <a href="#"><fmt:message key="content.title" /></a>
+                </div>
+            </div>
+        </div>
     </div>
 	<div class="editor">
 		<div class="body">
-<!--  		
+		
 	<p>
 		<fmt:message key="content.channel" >
 		 	<fmt:param ><mm:field name="name"/></fmt:param>
 		 </fmt:message>	
 	</p>
--->
+
 	<div style="clear:both; height:10px;"></div>
 	</div>	
-  <div class="ruler_green"><div><fmt:message key="content.content" ><fmt:param ><mm:field name="path"/></fmt:param></fmt:message></div></div>
+  <div class="ruler_green"><div><fmt:message key="content.content" /></div></div>
   <div class="body">
 	 <mm:import id="lastotype"/>
  
-    <mm:node number="$portletId" notfound="skip">
-      <mm:relatednodes type="typedef" id="typedefnodes" >
-      </mm:relatednodes>
-    </mm:node>
+	 
 
 <mm:relatednodescontainer path="contentrel,contentelement" searchdirs="destination" element="contentelement">
-	<c:if test="${not empty typedefnodes}" >
-	   <mm:constraint field="contentelement.otype" operator="IN" referid="typedefnodes" />           
-	</c:if>
 	<mm:sortorder field="contentelement.otype" direction="up" />
 	<mm:sortorder field="contentrel.pos" direction="up" />
 	
@@ -96,11 +82,7 @@
 		<td nowrap>
         	<a href="javascript:info('<mm:field name="number" />')"><img src="../../gfx/icons/info.png" width="16" height="16" alt="<fmt:message key="content.info" />"/></a>
 			<mm:import id="url">javascript:selectElement('<mm:field name="number"/>', '<mm:field name="title" escape="js-single-quotes"/>', '<cmsc:staticurl page="/content/" /><mm:field name="number"/>');</mm:import>
-         <mm:field jspvar="elementId" name="number">
-         <c:if test='${sessionScope.relationOriginNode != elementId}'>
-           	<a href="<mm:write referid="url"/>"><img src="../../gfx/icons/link.png" width="16" height="16" alt="<fmt:message key="content.link" />"/></a>
-         </c:if>
-         </mm:field>
+        	<a href="<mm:write referid="url"/>"><img src="../../gfx/icons/link.png" width="16" height="16" alt="<fmt:message key="content.link" />"/></a>
 		</td>
 		<td width="100%">
 		   <mm:field name="title"/>

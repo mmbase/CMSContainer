@@ -45,7 +45,7 @@ public class CommunityModuleAdapter {
 
    public static int getCurrentUserId() {
       Person person = getCurrentUser();
-      if (null == person || !"active".equalsIgnoreCase(person.getActive())) {
+      if (null == person) {
          return -1;
       }
 
@@ -80,13 +80,5 @@ public class CommunityModuleAdapter {
          return authentication.getUserId();
       }
       return null;
-   }
-   
-   public static void deleteSubscriber(String authId) {
-      if(authId ==null) {
-         return;
-      }
-      AuthenticationService authenticationService = (AuthenticationService) ApplicationContextFactory.getApplicationContext().getBean("authenticationService");
-      authenticationService.deleteAuthentication(Long.parseLong(authId));
    }
 }

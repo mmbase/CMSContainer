@@ -24,7 +24,8 @@ public class Data {
    
    private String relationType;
    
-   private String reverse ;
+   public Data() {    
+   }
    
    public Data(Byte type) {
       this.type = type;
@@ -108,13 +109,5 @@ public class Data {
 
    public void setRelationType(String relationType) {
       this.relationType = relationType;
-   }
-
-   public String getReverse() {
-      return reverse;
-   }
-
-   public void setReverse(String reverse) {
-      this.reverse = reverse;
    }
 }

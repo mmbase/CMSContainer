@@ -67,7 +67,7 @@ public class XmlUtil {
      * @param format The OutputFormat to use for the serialization
      * @return document as <code>String</code>.
      */
-    public static String serializeDocument(Document doc, Properties format) {
+    private static String serializeDocument(Document doc, Properties format) {
         CharArrayWriter caw = null;
 		try {
 			caw = new CharArrayWriter();
@@ -166,9 +166,9 @@ public class XmlUtil {
 
     /**
      * create Output format for xml
-     * Be careful, Textnodes will be formatted and indented too.
+     * Be carefull, Textnodes will be fomormatted and indented too.
      * @param indent - indent xml
-     * @param omitComments - omit comments
+     * @param omitComments - omit tcomments
      * @param omitDocumentType - omit document type
      * @param omitXMLDeclaration - omit xml declaration
      * @return output format
@@ -414,28 +414,16 @@ public class XmlUtil {
         return toDocument(stream, true);
     }
 
-    /**
-     * Returns a W3C Document representation of the stream.
-     * @param stream The input stream with the xml to convert
-     * @param validate should the xml be validated
-     * @return DOM structure
-     */
-    public static Document toDocument(InputStream stream, boolean validate) {
-       return toDocument(stream, validate, true);
-    }
-    
    /**
     * Returns a W3C Document representation of the stream.
     * @param stream The input stream with the xml to convert
-    * @param validate should the xml be validated
-    * @param ignoreComments specifies that this code will ignore comments.
+     * @param validate should the xml be validated
     * @return DOM structure
     */
-   public static Document toDocument(InputStream stream, boolean validate, boolean ignoreComments) {
+   public static Document toDocument(InputStream stream, boolean validate) {
       try {
          DocumentBuilderFactory builderFactory = getFactory();
          builderFactory.setValidating(validate);
-         builderFactory.setIgnoringComments(ignoreComments);
          DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
          Document doc = docBuilder.parse(stream);
 

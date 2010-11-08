@@ -3,14 +3,14 @@
 
 <cmsc:location var="cur" sitevar="site" />
 <cmsc:path var="listPath" />
-<cmsc:list-navigations var="pages" origin="${listPath[0]}" />
+<cmsc:list-pages var="pages" origin="${listPath[0]}" />
        
 <div id="menu">
   <div class="center">
     <ul>
         <li <c:if test="${cur eq site}">class="selected"</c:if>>
           <a href="<cmsc:link dest="${site.id}"/>" title="Overzicht">
-            <fmt:message key="view.submenu.home"/>
+          	<fmt:message key="view.submenu.home"/>
           </a>
         </li>
       <c:forEach var="page" items="${pages}">

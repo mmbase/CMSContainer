@@ -26,10 +26,6 @@ import org.mmbase.util.logging.Logging;
 
 public class HttpUtil {
 
-    private static final String UTF_8 = "UTF-8";
-    private static final String TEXT_XML = "text/xml";
-    private static final String TEXT_JSON = "text/json";
-    
     private static final String IDENT = "   ";
     private static final String ENDL = "\n";
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -188,36 +184,28 @@ public class HttpUtil {
     }
 
     public static ServletOutputStream getOutputStreamForXml(HttpServletResponse response) throws IOException {
-        return getOutputStream(response, UTF_8, TEXT_XML);
+        return getOutputStreamForXml(response, "UTF-8");
     }
 
-    public static ServletOutputStream getOutputStreamForJson(HttpServletResponse response) throws IOException {
-       return getOutputStream(response, UTF_8, TEXT_JSON);
-    }
-
-    public static ServletOutputStream getOutputStream(HttpServletResponse response, String encoding, String contentType) throws IOException {
-        setResponse(response, encoding, contentType);
+    public static ServletOutputStream getOutputStreamForXml(HttpServletResponse response, String encoding) throws IOException {
+        setResponseForXml(response, encoding);
         ServletOutputStream out = response.getOutputStream();
         return out;
     }
     
     public static PrintWriter getWriterForXml(HttpServletResponse response) throws IOException {
-        return getWriter(response, UTF_8, TEXT_XML);
-    }
-    
-    public static PrintWriter getWriterForJson(HttpServletResponse response) throws IOException {
-       return getWriter(response, UTF_8, TEXT_JSON);
+        return getWriterForXml(response, "UTF-8");
     }
 
-    public static PrintWriter getWriter(HttpServletResponse response, String encoding, String contentType) throws IOException {
-        setResponse(response, encoding, contentType);
+    public static PrintWriter getWriterForXml(HttpServletResponse response, String encoding) throws IOException {
+        setResponseForXml(response, encoding);
         PrintWriter out = response.getWriter();
         return out;
     }
 
-    public static void setResponse(HttpServletResponse response, String encoding, String contentType) {
+    public static void setResponseForXml(HttpServletResponse response, String encoding) {
         response.setCharacterEncoding(encoding);
-        response.setContentType(contentType);
+        response.setContentType("text/xml");
     }
 
     /**

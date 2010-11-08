@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
-import org.mmbase.bridge.NodeList;
 
 import com.finalist.cmsc.navigation.*;
 import com.finalist.cmsc.security.Role;
@@ -45,8 +44,6 @@ public class SiteCreate extends MMBaseFormlessAction {
 				}
 
 				Node newSite = cloud.getNode(ewnodelastedited);
-				newSite.setIntValue("pos", getMaxPos(cloud)+1);
-				newSite.commit();
 				Node layoutNode = PagesUtil.getLayout(newSite);
 				PagesUtil.linkPortlets(newSite, layoutNode);
 
@@ -59,16 +56,6 @@ public class SiteCreate extends MMBaseFormlessAction {
 			}
 			ActionForward ret = mapping.findForward(CANCEL);
 			return ret;
-		}
-	}
-
-	private int getMaxPos(Cloud cloud) {
-		NodeList list = cloud.getNodeManager("site").getList(null, "pos", "down");
-		if(list.size() > 0) {
-			return list.get(0).getIntValue("pos");
-		}
-		else {
-			return 0;
 		}
 	}
 

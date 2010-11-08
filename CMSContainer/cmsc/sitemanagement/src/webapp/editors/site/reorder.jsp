@@ -15,15 +15,13 @@
 <mm:node referid="parent" jspvar="node">
 
    <div class="tabs">
-    <a name="activetab">
       <div class="tab_active">
          <div class="body">
-            <div class="title">
-              <fmt:message key="pagereorder.title" />
+            <div>
+               <a name="activetab"><fmt:message key="pagereorder.title" /></a>
             </div>
          </div>
       </div>
-	  </a>
    </div>
    <div class="editor">
 

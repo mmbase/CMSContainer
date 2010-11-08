@@ -1,0 +1,41 @@
+Migration document:
+
+From version: 1.5.15
+To version: 1.5.16
+
+
+Name: Image caching improvement - Undo change from 1.5.14
+Goal: remove value at paramvalue field
+Type:  user action
+--- Start script ---
+The specific change in web.xml is:
+
+<!-- the MMBase image serving servlet. -->
+<servlet>
+      ....
+      
+change:
+ <!-- Field of image node to use for 'last modified' -->
+ <param-name>lastmodifiedfield</param-name>
+ <param-value>lastmodifieddate</param-value> 
+
+to:
+ <!-- Field of image node to use for 'last modified' -->
+ <param-name>lastmodifiedfield</param-name>
+ <param-value></param-value>
+--- End script ---
+*
+*
+*
+
+Name: Set cronjobs at run single instance only
+Goal: prevent multiple instances of cronjob classes
+Type: user action
+--- Start script ---
+update mm_cronjobs set m_type='1'; 
+update live_cronjobs set m_type='1';
+--- End script ---
+*
+*
+*
+ 

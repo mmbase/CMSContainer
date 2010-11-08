@@ -31,34 +31,4 @@
             <keywords>map,position,gencode</keywords>
         </portlet-info>
     </portlet>
-    
-    <portlet>
-        <description>the google map directions portlet</description>
-        <portlet-name>googlemapdirectionsportlet</portlet-name>
-        <display-name>Google Map Directions Portlet</display-name>
-        <portlet-class>com.finalist.portlets.googlemap.GoogleMapPortlet</portlet-class>
-        <init-param>
-            <name>template.edit_defaults</name>
-            <value>google_map_directions.jsp</value>
-        </init-param>
-        <init-param>
-            <name>template.help</name>
-            <value>google_map.jsp</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>VIEW</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-            <portlet-mode>EDIT_DEFAULTS</portlet-mode>
-            <portlet-mode>DELETE</portlet-mode>
-        </supports>
-        <supported-locale>en</supported-locale>
-        <supported-locale>nl</supported-locale>
-        <resource-bundle>com.finalist.portlets.googlemap.GoogleMapPortlet</resource-bundle>
-        <portlet-info>
-            <title>Google Map Portlet</title>
-            <short-title>GoogleMap Directions</short-title>
-            <keywords>map,position,geocode,directions</keywords>
-        </portlet-info>
-    </portlet>
 </portlet-app>

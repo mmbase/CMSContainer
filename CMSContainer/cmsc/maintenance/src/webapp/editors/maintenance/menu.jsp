@@ -1,9 +1,8 @@
-<%@page language="java" contentType="text/html;charset=UTF-8"
-%><%@include file="globals.jsp"
-%><%@page import="com.finalist.cmsc.util.ServerUtil"
-%><mm:content type="text/html" encoding="UTF-8" expires="0">
+<%@page language="java" contentType="text/html;charset=UTF-8"%>
+<%@include file="globals.jsp"%>
+<%@page import="com.finalist.cmsc.util.ServerUtil"%>
+<mm:content type="text/html" encoding="UTF-8" expires="0">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
 <html:html xhtml="true">
 <cmscedit:head title="maintenance.title" />
 <body>
@@ -36,7 +35,7 @@
            <c:url var="checksumUrl" value="/editors/maintenance/compute-checksums.jsp"/>
            <a href="${checksumUrl}" target="rightpane"><fmt:message key="maintenance.checksum" /></a>
         </li>
-        <% if (ServerUtil.isStaging() || ServerUtil.isSingle()) { %>
+        <% if (ServerUtil.isStaging()) { %>
         <li class="advancedpublish">
            <c:url var="cleanNVPUrl" value="/editors/maintenance/clean-non-visible-portlets.jsp"/>
            <a href="${cleanNVPUrl}" target="rightpane"><fmt:message key="maintenance.cleannonvisportlets"/></a>
@@ -51,7 +50,7 @@
            <a href="${fixCreationrels}" target="rightpane"><fmt:message key="maintenance.creationrels.create"/></a>
         </li>
 
-		  <mm:haspage page="/editors/publish-remote">
+			<mm:haspage page="/editors/publish-remote">
             <li class="advancedpublish">
                <c:url var="compareUrl" value="/editors/maintenance/compare-models.jsp"/>
                <a href="${compareUrl}" target="rightpane"><fmt:message key="maintenance.publish.compare" /></a>
@@ -83,27 +82,8 @@
                   <c:url var="publishQueueUrl" value="/editors/maintenance/staging/remove-publishqueue.jsp"/>
                   <a href="${publishQueueUrl}" target="rightpane"><fmt:message key="maintenance.publish.remove-publishqueue" /></a>
                </li>
-               <li class="advancedpublish">
-                  <c:url var="repairStagingUrlsUrl" value="/editors/maintenance/richtext/repair-staging-urls.jsp"/>
-                  <a href="${repairStagingUrlsUrl}" target="rightpane"><fmt:message key="maintenance.richtext.repairStagingUrls" /></a>
-               </li>
             <% } %>
-        </mm:haspage>
-      <% if (ServerUtil.isStaging() || ServerUtil.isSingle()) { %>
-      <li class="advancedpublish">
-          <c:url var="assetcleanerUrl" value="/editors/maintenance/assetcleaner.jsp"/>
-          <a href="${assetcleanerUrl}" target="rightpane"><fmt:message key="maintenance.assetcleaner" /></a>
-      </li>
-      <% } %>
-     <li class="advancedpublish">
-         <c:url var="checkIntegrityUrl" value="/editors/maintenance/checkintegrity.jsp"/>
-         <a href="${checkIntegrityUrl}" target="rightpane"><fmt:message key="maintenance.checkintegrity" /></a>
-      </li>
-     <li class="advancedpublish">
-         <c:url var="showprocesslistUrl" value="/editors/maintenance/showdbprocesslist.jsp"/>
-         <a href="${showprocesslistUrl}" target="rightpane"><fmt:message key="maintenance.showdbprocesslist" /></a>
-      </li>
-         
+         </mm:haspage>
 		<cmsc:hasfeature name="workflowitem">
         <li class="workflow">
            <a href="staging/workflow-remove.jsp" target="rightpane"><fmt:message key="maintenance.workflow" /></a>
@@ -128,7 +108,6 @@
          <c:url var="logoutUrl" value="../logout.jsp"/>
          <a href="${logoutUrl}" target="rightpane"><fmt:message key="maintenance.logout" /></a>
       </li>
-
     </ul>
 </mm:cloud>
          </div>
