@@ -1,0 +1,16 @@
+Migration document:
+
+From version: 1.5.12
+To version: 1.5.13
+
+
+Name: upgrade ehcache to 1.7.0 
+Goal: Keep the dependencies updated with the latest CMSc changes
+Type: do it yourself
+--- Start script ---
+cache the ehcache version in the project.xml in maven-base to 1.7.0 en remove the ehcache-components dependency
+(for inspiration, see the CMSContainer_Templates project
+--- End script ---
+*
+*
+*
