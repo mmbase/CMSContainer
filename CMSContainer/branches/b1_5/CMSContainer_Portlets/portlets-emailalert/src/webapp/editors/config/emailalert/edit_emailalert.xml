@@ -35,7 +35,7 @@
       <prompt xml:lang="en">Confirmation email body</prompt>
       <prompt xml:lang="zh">确认邮件主体</prompt>
    </field>
-   <field name="senderemailaddress" dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%\+])+@(([a-zA-Z0-9\.\-])+.)+([a-zA-Z0-9]{2,4})+$">
+   <field name="senderemailaddress" dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%+])+@(([a-zA-Z0-9\.\-])+\.)+([a-zA-Z0-9]{2,4})+$">
       <prompt xml:lang="nl">Afzender email</prompt>
       <prompt xml:lang="en">Sender email</prompt>
       <prompt xml:lang="zh">发送邮件</prompt>
