@@ -46,12 +46,12 @@
       <prompt xml:lang="nl">Copyright tekst</prompt>
       <prompt xml:lang="zh">版权</prompt>
    </field>
-   <field name="email_managing_editor" dtmaxlength="100"  dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%\+])+@(([a-zA-Z0-9\.\-])+.)+([a-zA-Z0-9]{2,4})+$">
+   <field name="email_managing_editor" dtmaxlength="100"  dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%+])+@(([a-zA-Z0-9\.\-])+\.)+([a-zA-Z0-9]{2,4})+$">
       <prompt xml:lang="en">Email editor</prompt>
       <prompt xml:lang="nl">Email redacteur</prompt>
       <prompt xml:lang="zh">Email编辑</prompt>
    </field>
-   <field name="email_webmaster" dtmaxlength="100"  dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%\+])+@(([a-zA-Z0-9\.\-])+.)+([a-zA-Z0-9]{2,4})+$">
+   <field name="email_webmaster" dtmaxlength="100"  dtrequired="true" dtpattern="^([a-zA-Z0-9_\.\-%+])+@(([a-zA-Z0-9\.\-])+\.)+([a-zA-Z0-9]{2,4})+$">
       <prompt xml:lang="en">Email webmaster</prompt>
       <prompt xml:lang="nl">Email webmaster</prompt>
       <prompt xml:lang="zh">Email管理员</prompt>
