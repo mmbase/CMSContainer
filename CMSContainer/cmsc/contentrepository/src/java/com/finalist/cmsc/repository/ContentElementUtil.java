@@ -117,7 +117,7 @@ public final class ContentElementUtil {
    }
 
    public static boolean isContentElementField(Field field) {
-      Cloud cloud = field.getNodeManager().getCloud();;
+      Cloud cloud = field.getNodeManager().getCloud();
       return cloud.getNodeManager(CONTENTELEMENT).hasField(field.getName());
    }
 
@@ -222,7 +222,7 @@ public final class ContentElementUtil {
       if (withRelation) {
          RelationIterator relations = node.getRelations().relationIterator();
          while (relations.hasNext()) {
-            Relation rel = (Relation) relations.next();
+            Relation rel = relations.next();
             if (!nodes.contains(rel)) {
                nodes.add(rel);
             }
@@ -435,9 +435,8 @@ public final class ContentElementUtil {
       Date archiveDate = content.getDateValue(ARCHIVEDATE_FIELD);
       if ("old".equalsIgnoreCase(archive)) {
          return archiveDate.getTime() < date;
-      } else {
-         return archiveDate.getTime() >= date;
       }
+      return archiveDate.getTime() >= date;
    }
 
    /**

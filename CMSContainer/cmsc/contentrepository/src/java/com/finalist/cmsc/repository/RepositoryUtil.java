@@ -1468,9 +1468,8 @@ public final class RepositoryUtil {
 
       if (role != null && roleName.equals(role.getRole().getName())) {
          return true;
-      } else {
-         return false;
       }
+      return false;
    }
 
    /**
@@ -1559,9 +1558,9 @@ public final class RepositoryUtil {
                copiedNodes.put(Integer.valueOf(sourceChild.getNumber()), Integer.valueOf(destChild.getNumber()));
                cloned = true;
                // Logging
-               if (destChild.getNodeManager().hasField("name")) {
+               //if (destChild.getNodeManager().hasField("name")) {
                   // output.append(destChild.getFieldValue("name") + " of ");
-               }
+               //}
                output.append(rel.getNodeManager().getName() + " cloned (" + sourceNode.getNumber() + "|" + destChild.getNumber() + ");");
             } else {
                // Retrieve the already cloned node from the Map
