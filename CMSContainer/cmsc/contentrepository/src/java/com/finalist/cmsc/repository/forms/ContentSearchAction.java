@@ -218,7 +218,7 @@ public class ContentSearchAction extends PagerAction {
       }
 
       // Add the title constraint:
-      String searchTitle = searchForm.getTitle();
+      final String searchTitle = searchForm.getTitle();
       if (StringUtils.isNotEmpty(searchTitle)) {
          queryStringComposer.addParameter(ContentElementUtil.TITLE_FIELD, searchTitle);
          Field field = nodeManager.getField(ContentElementUtil.TITLE_FIELD);
@@ -228,8 +228,11 @@ public class ContentSearchAction extends PagerAction {
 
       // if in simple search mode, add input to the keyword search too
       // And add ordinary keywords
-      // List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
-      // addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
+      final String searchKeywords = searchForm.getKeywords();
+      if (StringUtils.isNotEmpty(searchKeywords)) {
+         List<String> keywords = searchKeywords(request.getParameter(MODE), searchForm);
+         addKeyConstraint(searchForm, nodeManager, queryStringComposer, query, keywords);
+      }
 
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {

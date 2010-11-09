@@ -100,7 +100,7 @@ public class SearchForm extends PagerForm {
 
 
    public void setTitle(String title) {
-      if (this.title != null) {
+      if (title != null) {
          this.title = title.trim();
       } else {
          this.title = title; 
@@ -114,7 +114,7 @@ public class SearchForm extends PagerForm {
 
 
    public void setObjectid(String objectid) {
-      if (this.objectid != null) {
+      if (objectid != null) {
          this.objectid = objectid.trim();
       } else {
          this.objectid = objectid;
@@ -178,7 +178,11 @@ public class SearchForm extends PagerForm {
 
 
    public void setKeywords(String keywords) {
-      this.keywords = keywords;
+      if (keywords != null) {
+         this.keywords = keywords.trim();
+      } else {
+         this.keywords = keywords;
+      }
    }
 
 
