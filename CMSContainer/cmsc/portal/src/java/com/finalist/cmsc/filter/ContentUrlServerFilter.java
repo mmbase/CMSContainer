@@ -23,9 +23,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.finalist.pluto.portalImpl.core.PortalEnvironment;
 import com.finalist.pluto.portalImpl.core.PortalURL;
 
@@ -34,8 +31,6 @@ import com.finalist.pluto.portalImpl.core.PortalURL;
  */
 public class ContentUrlServerFilter implements Filter {
 
-   private static final Log log = LogFactory.getLog(ContentUrlServerFilter.class);
-    
    private static final String CONTENTURL_PATTERN = "\"(/[-a-zA-Z0-9/]*?/content/[0-9]*?/[-_a-zA-Z0-9]*?)\"";
    private static final int REPLACE_GROUP = 1;
    private static final String SERVER_URL_PARAMETER = "?server=";
@@ -52,11 +47,12 @@ public class ContentUrlServerFilter implements Filter {
 
       String path = getPath((HttpServletRequest)request);
       if (path == null || excludePattern == null || !excludePattern.matcher(path).find()) {
-
-	   	PrintWriter out = response.getWriter();
-
 	   	CharResponseWrapper wrapper = new CharResponseWrapper((HttpServletResponse)response);
 	   	chain.doFilter(request, wrapper);
+	   	
+	   	//now the PrintWriter can be created with the proper encoding, set by other filters.
+	   	PrintWriter out = response.getWriter(); 
+
 	   	if(wrapper.getContentType() != null && wrapper.getContentType().startsWith("text/html")) {
 	   	   String output = wrapper.toString(); 
 	   	   Matcher m = PATTERN.matcher(output);
@@ -81,6 +77,7 @@ public class ContentUrlServerFilter implements Filter {
 	   	   	output = newOutput.toString();
 	   	   }
 	   	   response.setContentLength(output.length());
+
 	   	   out.write(output);
 	   	} else {
 	   	   out.write(wrapper.toString());
