@@ -108,7 +108,11 @@ public class UserForm extends MMBaseForm {
 
 
    public void setUsername(String username) {
-      this.username = username;
+      if (username != null) {
+         this.username = username.trim();
+      } else {
+         this.username = username; 
+      }
    }
 
 
@@ -138,7 +142,11 @@ public class UserForm extends MMBaseForm {
 
 
    public void setEmail(String email) {
-      this.email = email;
+      if (email != null) {
+         this.email = email.trim();
+      } else {
+         this.email = email; 
+      }
    }
 
 
@@ -178,7 +186,11 @@ public class UserForm extends MMBaseForm {
 
 
    public void setSurname(String surname) {
-      this.surname = surname;
+      if (surname != null) {
+         this.surname = surname.trim();
+      } else {
+         this.surname = surname; 
+      }
    }
 
 
@@ -188,7 +200,11 @@ public class UserForm extends MMBaseForm {
 
 
    public void setFirstname(String firstname) {
-      this.firstname = firstname;
+      if (firstname != null) {
+         this.firstname = firstname.trim();
+      } else {
+         this.firstname = firstname; 
+      }
    }
 
 
