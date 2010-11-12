@@ -465,12 +465,16 @@ public final class SecurityUtil {
          }
     }
 
-    public static Node getContext(Cloud cloud) {
-       // int newContext = Contexts.getBuilder().getDefaultContextNode().getNumber();
-       // Node newContextNode = cloud.getNode(newContext);
-        //return newContextNode;
-       return null;
-    }
+    /**
+     * Retrieve the default context from the cloud
+     * @param cloud
+     * @return default context node
+     */
+   public static Node getContext(Cloud cloud) {
+      int newContext = Contexts.getBuilder().getDefaultContextNode().getNumber();
+      Node newContextNode = cloud.getNode(newContext);
+      return newContextNode;
+   }
 
     public static String getFullname(Node user) {
         checkUser(user);
