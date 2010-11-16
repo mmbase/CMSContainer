@@ -27,9 +27,10 @@ public class DoublePortlets extends SqlAction {
          records++;
          int nodeNumber = rs.getInt(getFieldname("number"));
          String portletName = rs.getString(getFieldname("name"));
-         result.append(" " + " page-number:" + nodeNumber + ", portlet name: " + portletName + "<br />");
+         int cnt = rs.getInt(getFieldname("cnt"));
+         result.append(" page-number:" + nodeNumber + ", portlet name: " + portletName + ", count=" + cnt + "<br />");
       }
-      result.append("Number of page nodes with double portlets at same position found = " + records);
+      result.append("<br/>Number of page nodes with double portlets at same position found = " + records);
       return result.toString();
    }
 
