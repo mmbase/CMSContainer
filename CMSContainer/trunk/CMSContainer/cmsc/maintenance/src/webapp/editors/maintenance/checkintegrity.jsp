@@ -12,7 +12,7 @@
    <div class="editor">
     <div class="body">
       <h2>Check integrity of MMBase database.</h2>
-      <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">
+      <mm:cloud jspvar="cloud" loginpage="../login.jsp" rank="administrator">
       <mm:log jspvar="log">
       <form method="post">
          <input type="hidden" name="action" value="check"/>

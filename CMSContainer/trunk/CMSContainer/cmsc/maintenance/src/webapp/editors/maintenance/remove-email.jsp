@@ -7,7 +7,7 @@
 </head>
     <body>
        <h2>email-remove-all</h2>
-<mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">
+<mm:cloud jspvar="cloud" loginpage="../login.jsp" rank="administrator">
 <mm:log jspvar="log">
 
 <mm:import externid="username"/>

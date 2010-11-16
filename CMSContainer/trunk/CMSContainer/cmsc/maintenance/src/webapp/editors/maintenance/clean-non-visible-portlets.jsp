@@ -20,7 +20,7 @@
 	  </a>
       <div class="editor">
         <div class="body">
-          <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">
+          <mm:cloud jspvar="cloud" loginpage="../login.jsp" rank="administrator">
           <% if (ServerUtil.isStaging()) { %>
             <mm:log jspvar="log">
             <mm:import externid="confirm"/>

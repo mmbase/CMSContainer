@@ -10,7 +10,7 @@
 
 <body>
     <h2>Searcher</h2>
-   <mm:cloud jspvar="cloud" loginpage="../editors/login.jsp" rank="administrator">
+   <mm:cloud jspvar="cloud" loginpage="../login.jsp" rank="administrator">
    <mm:log jspvar="log">
    
       <form method="post">
