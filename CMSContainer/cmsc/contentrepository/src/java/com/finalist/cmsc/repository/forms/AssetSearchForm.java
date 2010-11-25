@@ -14,6 +14,7 @@ public class AssetSearchForm extends PagerForm {
    private String personal;
    private String useraccount;
    private String title;
+   private String description;
    private String objectid;
    private String mode = "basic";
    private String search = "true";
@@ -74,11 +75,23 @@ public class AssetSearchForm extends PagerForm {
       return title;
    }
 
+   public String getDescription() {
+      return description;
+   }
+
    public void setTitle(String title) {
       if (this.title != null) {
          this.title = title.trim();
       } else {
          this.title = title;
+      }
+   }
+
+   public void setDescription(String description) {
+      if (this.description != null) {
+         this.description = description.trim();
+      } else {
+         this.description = description;
       }
    }
 

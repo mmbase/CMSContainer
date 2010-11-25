@@ -204,7 +204,18 @@ public class AssetSearchAction extends AbstractAssetSearch {
          Constraint creatorConstraint = SearchUtil.createLikeConstraint(query, field, searchTitle);
          SearchUtil.addORConstraint(query, creatorConstraint);
       }
-   
+
+      // Set the description constraint
+      if (StringUtils.isNotEmpty(searchForm.getDescription())) {   
+         String searchDescription = searchForm.getDescription();
+         queryStringComposer.addParameter(AssetElementUtil.DESCRIPTION_FIELD, searchDescription);
+         Field field = nodeManager.getField(AssetElementUtil.DESCRIPTION_FIELD);
+         Constraint descriptionConstraint = SearchUtil.createLikeConstraint(query, field, searchDescription);
+         SearchUtil.addConstraint(query, descriptionConstraint);
+
+      }
+
+
       // Set the objectid constraint
       if (StringUtils.isNotEmpty(searchForm.getObjectid())) {
          String stringObjectId = searchForm.getObjectid();

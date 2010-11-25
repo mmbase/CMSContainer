@@ -56,6 +56,7 @@ public final class AssetElementUtil {
 
    public static final String NUMBER_FIELD = "number";
    public static final String TITLE_FIELD = "title";
+   public static final String DESCRIPTION_FIELD = "description";
    public static final String NAME_FIELD = "name";
    public static final String CREATIONDATE_FIELD = "creationdate";
    public static final String PUBLISHDATE_FIELD = "publishdate";

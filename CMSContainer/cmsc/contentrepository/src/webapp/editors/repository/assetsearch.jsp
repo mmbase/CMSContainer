@@ -241,8 +241,9 @@
                            <td><fmt:message key="searchform.number" /></td>
                            <td><html:text style="width:145px" property="objectid"/></td>
                         </tr>
-                     <c:if test="${hasWorkflow}">
                        <tr height="31px">
+                     <c:choose>
+                     <c:when test="${hasWorkflow}">
                           <td><fmt:message key="searchform.state" /></td>
                           <td>
                              <html:select style="width:145px" property="workflowstate" size="1">
@@ -254,9 +255,15 @@
 <%--                                <html:option value="onlive"><fmt:message key="content.status.onlive" /></html:option> --%>
                              </html:select>
                           </td>
-                          <td colspan="2">&nbsp;</td>
+                     </c:when>
+                     <c:otherwise>
+                       <td colspan="2">&nbsp;</td>
+                     </c:otherwise>
+                     </c:choose>
+                           <td><fmt:message key="searchform.description" /></td>
+                           <td><html:text style="width:145px" property="description"/></td>
                        </tr>
-                     </c:if>
+
                         <tr>
                            <td></td>
                            <td></td>
