@@ -80,7 +80,7 @@ public class AssetSearchForm extends PagerForm {
    }
 
    public void setTitle(String title) {
-      if (this.title != null) {
+      if (title != null) {
          this.title = title.trim();
       } else {
          this.title = title;
@@ -88,7 +88,7 @@ public class AssetSearchForm extends PagerForm {
    }
 
    public void setDescription(String description) {
-      if (this.description != null) {
+      if (description != null) {
          this.description = description.trim();
       } else {
          this.description = description;
@@ -100,7 +100,7 @@ public class AssetSearchForm extends PagerForm {
    }
 
    public void setObjectid(String objectid) {
-      if (this.objectid != null) {
+      if (objectid != null) {
          this.objectid = objectid.trim();
       } else {
 	      this.objectid = objectid;
