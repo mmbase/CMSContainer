@@ -163,4 +163,11 @@ public class ChangeProfileForm extends ActionForm {
    public String getUsername() {
       return username;
    }
+   
+   /**
+    * Reset boolean checkboxes; otherwise you can't turn them off.
+    */
+   public void reset(ActionMapping mapping, HttpServletRequest request) {
+      emailSignal = false;
+   }
 }

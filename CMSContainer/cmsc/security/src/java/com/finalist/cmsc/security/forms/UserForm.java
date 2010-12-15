@@ -374,4 +374,11 @@ public class UserForm extends MMBaseForm {
          this.description = description;
       }
    }
+   
+   /**
+    * Reset boolean checkboxes; otherwise you can't turn them off.
+    */
+   public void reset(ActionMapping mapping, HttpServletRequest request) {
+      emailSignal = false;
+   }
 }
