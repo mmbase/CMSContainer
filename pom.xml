@@ -14,7 +14,7 @@ See http://www.MMBase.org/license
 	<parent>
 		<groupId>org.cmscontainer</groupId>
 		<artifactId>cmsc-project</artifactId>
-		<version>1.8.7-SNAPSHOT</version>
+		<version>1.8.7</version>
 		<relativePath>CMSContainer/pom.xml</relativePath>
 	</parent>
 
