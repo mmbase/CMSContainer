@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!DOCTYPE form-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+
+<form-schema id="edit_flashmovie">
+	<title xml:lang="nl">Flash applicatie</title>
+	<title xml:lang="en">Flash application</title>
+
+	<field name="title" dtrequired="true">
+		<prompt xml:lang="en">Title</prompt>
+		<prompt xml:lang="nl">Titel</prompt>
+		<prompt xml:lang="zh">标题</prompt>
+	</field>
+	<field name="description" ftype="text" rows="3">
+		<prompt xml:lang="en">Description</prompt>
+		<prompt xml:lang="nl">Omschrijving</prompt>
+		<prompt xml:lang="zh">描述</prompt>
+	</field>
+	<field name="alt_text" ftype="html">
+		<prompt xml:lang="en">Alternative Text</prompt>
+		<prompt xml:lang="nl">Alternatieve Tekst</prompt>
+	</field>
+
+	<list include="config/attachments/search_flashmovie_posrel_attachments.xml" />
+	<list include="config/images/search_flashmovie_imagerel_images.xml" />
+
+</form-schema>
+
+
+
+
+
+
+
+
+

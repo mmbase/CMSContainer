@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+	<New class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg>mail/Session</Arg>
+		<Arg>
+			<New class="org.eclipse.jetty.jndi.factories.MailSessionReference">
+				<Set name="properties">
+					<New class="java.util.Properties">
+						<Put name="mail.smtp.host">MISSING.MAILSERVER</Put>
+					</New>
+				</Set>
+			</New>
+		</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg>jdbc/cmsc</Arg>
+		<Arg>
+			<New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+				<Set name="driverClass">com.mysql.jdbc.Driver</Set>
+				<Set name="jdbcUrl">jdbc:mysql://localhost:3306/cmsc?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;useServerPrepStmts=false</Set>
+				<Set name="user">cmsc</Set>
+				<Set name="password">cmsc</Set>
+			</New>
+		</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/mmbaseroot/datasource-context</Arg>
+		<Arg type="java.lang.String">java:comp/env</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/mmbaseroot/datasource</Arg>
+		<Arg type="java.lang.String">jdbc/cmsc</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/mmbaseroot/database</Arg>
+		<Arg type="java.lang.String">mysql-cmsc</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/imaging/ImageConvertClass</Arg>
+		<Arg type="java.lang.String">org.mmbase.module.builders.ConvertImageMagick</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/imaging/ImageConvert.ConverterCommand</Arg>
+		<Arg type="java.lang.String">convert</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/imaging/ImageConvert.ConverterRoot</Arg>
+		<Arg type="java.lang.String"></Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">server/LiveOrStaging</Arg>
+		<Arg type="java.lang.String">single</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">server/useServerName</Arg>
+		<Arg type="java.lang.String">false</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">server/production</Arg>
+		<Arg type="java.lang.String">false</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">server/readonly</Arg>
+		<Arg type="java.lang.String">false</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	
+	<!-- Put the mmbase datadir also in the target directory -->
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg type="java.lang.String">mmbase/mmbaseroot/datadir</Arg>
+		<Arg type="java.lang.String">target/datadir</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+</Configure>
