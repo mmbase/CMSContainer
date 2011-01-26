@@ -28,6 +28,7 @@
          </div>
       </div>
    </c:if>
+   <c:if test="${results != null}">
    <div class="ruler_green" >
       <div><fmt:message key="community.groups.result"/></div>
    </div>
@@ -41,6 +42,21 @@
          </c:if>
       </div>
    </div>
+   </c:if>
+
+   <div class="ruler_green" >
+      <div><fmt:message key="community.groups.list"/></div>
+   </div>
+   <div class="body">
+      <div class="syn">
+         <ul>
+            <mm:listnodes type="pagegroup" orderby="name">
+               <li><mm:field name="name" /></li>
+            </mm:listnodes>
+         </ul>
+      </div>
+   </div>
+
 </div>
 </body>
 </html:html>
