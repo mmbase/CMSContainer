@@ -11,6 +11,9 @@
 			<%-- View selector --%>
 			<c:import url="sections/viewselector.jsp" />
 			
+			<%-- Parameters --%>
+			<c:import url="sections/portletparameters.jsp" />
+
 			<%-- Save button --%>
 			<c:import url="sections/savebutton.jsp" />
 			
