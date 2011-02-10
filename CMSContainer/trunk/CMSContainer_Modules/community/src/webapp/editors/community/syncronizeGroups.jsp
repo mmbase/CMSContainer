@@ -47,12 +47,20 @@
    <div class="ruler_green" >
       <div><fmt:message key="community.groups.list"/></div>
    </div>
+   
+   <c:if test="${sso}" >
+      <community:listLDAPGroups var="groupList" />
+   </c:if>
+   <c:if test="${! sso}" >
+      <community:listGroups var="groupList" />
+   </c:if>   
+ 
    <div class="body">
-      <div class="syn">
+      <div class="syn">     
          <ul>
-            <mm:listnodes type="pagegroup" orderby="name">
-               <li><mm:field name="name" /></li>
-            </mm:listnodes>
+		   <c:forEach var="group" items="${groupList}">
+		   		<li>${group}</li>
+		   </c:forEach>           
          </ul>
       </div>
    </div>
