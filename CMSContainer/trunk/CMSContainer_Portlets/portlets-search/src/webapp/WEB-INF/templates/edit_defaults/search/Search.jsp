@@ -59,6 +59,9 @@
 				</td>
 			</tr>
 
+			<%-- Parameters --%>
+			<c:import url="../sections/portletparameters.jsp" />
+
 			<%-- Save button --%>
 			<c:import url="../sections/savebutton.jsp" />
 			
