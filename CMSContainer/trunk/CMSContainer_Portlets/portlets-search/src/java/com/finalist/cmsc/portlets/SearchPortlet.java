@@ -58,7 +58,9 @@ public class SearchPortlet extends CmscPortlet {
     */
    @Override
    public void processEditDefaults(ActionRequest request, ActionResponse response) throws PortletException {
-      getLogger().debug("===>SearchPortlet.EDIT_DEFAULTS mode");
+      super.processEditDefaults(request, response);
+	   
+	  getLogger().debug("===>SearchPortlet.EDIT_DEFAULTS mode");
 
       String action = request.getParameter(ACTION_PARAM);
       if (action == null) {
