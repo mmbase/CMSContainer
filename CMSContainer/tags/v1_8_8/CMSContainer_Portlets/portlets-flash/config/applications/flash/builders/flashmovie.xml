@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<builder 
+	xmlns="http://www.mmbase.org/xmlns/builder" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.mmbase.org/xmlns/builder http://www.mmbase.org/xmlns/builder.xsd"
+	extends="contentelement" 
+	maintainer="finalist.com" 
+	name="flashmovie" 
+	version="1"
+>
+	<status>active</status>
+	<searchage>70</searchage>
+	<names>
+		<singular xml:lang="nl">Flash applicatie</singular>
+		<singular xml:lang="en">Flash application</singular>
+		<plural xml:lang="nl">Flash applicaties</plural>
+		<plural xml:lang="en">Flash applications</plural>
+	</names>
+	<descriptions>
+		<description xml:lang="nl"></description>
+		<description xml:lang="en"></description>
+	</descriptions>
+	<properties></properties>
+
+	<fieldlist>
+		<field>
+			<descriptions>
+				<description xml:lang="nl"></description>
+				<description xml:lang="en"></description>
+			</descriptions>
+			<gui>
+				<guiname xml:lang="nl">Alternatieve tekst</guiname>
+				<guiname xml:lang="en">Alternative text</guiname>
+			</gui>
+			<editor>
+				<positions>
+					<input>3</input>
+					<list>3</list>
+					<search>3</search>
+				</positions>
+			</editor>
+			<datatype base="cmscrichtext" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+			<db>
+				<name>alt_text</name>
+				<type key="false" notnull="false" size="64000" state="persistent">STRING</type>
+			</db>
+		</field>
+	</fieldlist>
+</builder>
