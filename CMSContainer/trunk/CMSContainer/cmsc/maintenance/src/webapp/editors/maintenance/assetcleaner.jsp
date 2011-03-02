@@ -1,7 +1,10 @@
 <%@page language="java" contentType="text/html;charset=UTF-8" %>
 <%@include file="globals.jsp"%>
 <mm:content type="text/html" encoding="UTF-8" expires="0">
+
 <%@ page import="com.finalist.cmsc.maintenance.sql.*" %>
+<%@ page import="org.mmbase.remotepublishing.CloudInfo" %>
+<%@ page import="org.mmbase.remotepublishing.PublishManager" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -44,6 +47,10 @@
       org.mmbase.bridge.Node node = cloud.getNode(nid);
       String type = node.getNodeManager().getName();
       String title = node.getStringValue("title");
+
+      CloudInfo localCloudInfo = CloudInfo.getDefaultCloudInfo();
+      PublishManager.deletePublishedNode(localCloudInfo, Integer.parseInt(nid));
+
       node.deleteRelations();
       node.delete();
       out.println("Verwijderd " + type + ": " + title + "<br />");
