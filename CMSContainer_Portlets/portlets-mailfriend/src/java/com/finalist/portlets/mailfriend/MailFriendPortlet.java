@@ -41,6 +41,7 @@ public class MailFriendPortlet extends ContentPortlet {
             String fromemail = request.getParameter("fromemail");
             String toemail = request.getParameter("toemail");
             String toname = request.getParameter("toname");
+            String userMessage = request.getParameter("message");
             String articleNumber = request.getParameter("articleNumber");
             if (StringUtils.isBlank(articleNumber)) {
                errorMessages.put("article", "view.error.noarticle");
@@ -67,7 +68,7 @@ public class MailFriendPortlet extends ContentPortlet {
             if (errorMessages.size() == 0) {
                Cloud cloud = getCloudForAnonymousUpdate();
                Node mailfriend = cloud.getNode(contentelement);
-               boolean sent = sendEmail(cloud, toname, toemail, fromname, fromemail, mailfriend, request, articleNumber);
+               boolean sent = sendEmail(cloud, toname, toemail, fromname, fromemail, mailfriend, request, articleNumber, userMessage);
                if (!sent) {
                   errorMessages.put("sendemail", "view.error.sendemail");
                }
@@ -78,6 +79,7 @@ public class MailFriendPortlet extends ContentPortlet {
                parameterMap.put("fromemail", fromemail);
                parameterMap.put("toemail", toemail);
                parameterMap.put("toname", toname);
+               parameterMap.put("message", userMessage);
                parameterMap.put("articleNumber", articleNumber);
                request.getPortletSession().setAttribute("errormessages", errorMessages);
                request.getPortletSession().setAttribute("parameterMap", parameterMap);
@@ -99,7 +101,7 @@ public class MailFriendPortlet extends ContentPortlet {
 
 
    private boolean sendEmail(Cloud cloud, String toname, String toemail, String fromname, String fromemail,
-         Node mailfriend, ActionRequest request, String articleNumber) {
+         Node mailfriend, ActionRequest request, String articleNumber, String userMessage) {
       boolean sent = false;
       StringBuffer link = new StringBuffer();
       link.append(request.getScheme());
@@ -116,6 +118,8 @@ public class MailFriendPortlet extends ContentPortlet {
       message = message.replace("#VRIEND#", toname);
       message = message.replace("#URL#", link.toString());
       message = message.replace("#AFZENDER#", fromname);
+      message = message.replace("#BERICHT#", userMessage);
+
       subject = subject.replace("#AFZENDER#", fromname);
       try {
          EmailUtil.send(cloud, null, toemail, fromname, fromemail, subject, message);
