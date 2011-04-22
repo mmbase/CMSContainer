@@ -101,7 +101,7 @@ public class MailFriendPortlet extends ContentPortlet {
 
 
    private boolean sendEmail(Cloud cloud, String toname, String toemail, String fromname, String fromemail,
-         Node mailfriend, ActionRequest request, String articleNumber, userMessage) {
+         Node mailfriend, ActionRequest request, String articleNumber, String userMessage) {
       boolean sent = false;
       StringBuffer link = new StringBuffer();
       link.append(request.getScheme());
