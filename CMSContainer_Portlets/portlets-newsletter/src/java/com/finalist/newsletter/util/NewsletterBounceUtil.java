@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.Node;
 import org.mmbase.bridge.NodeList;
@@ -28,8 +29,8 @@ public class NewsletterBounceUtil {
          query.setOffset(offset);
          Queries.addSortOrders(query, order, direction);
       }
-      if(newsletter != null) {
-         SearchUtil.addEqualConstraint(query, bounceManager.getField("newsletter"), newsletter);
+      if(StringUtils.isNotEmpty(newsletter)) {
+         SearchUtil.addEqualConstraint(query, bounceManager.getField("newsletter"), Integer.parseInt(newsletter));
       }
       NodeList bounceNodes = query.getList();
       bounces = convertNodeListToList(bounceNodes);
@@ -61,8 +62,8 @@ public class NewsletterBounceUtil {
    public static int getTotalCount(String newsletter) {
       Cloud cloud = CloudProviderFactory.getCloudProvider().getCloud();
       NodeList bounces ;
-      if (newsletter != null) {
-         bounces = SearchUtil.findNodeList(cloud, "newsletterbounce","newsletter",newsletter);
+      if(StringUtils.isNotEmpty(newsletter)) {
+         bounces = SearchUtil.findNodeList(cloud, "newsletterbounce", "newsletter", Integer.parseInt(newsletter));
       }
       else {
          bounces = SearchUtil.findNodeList(cloud, "newsletterbounce");

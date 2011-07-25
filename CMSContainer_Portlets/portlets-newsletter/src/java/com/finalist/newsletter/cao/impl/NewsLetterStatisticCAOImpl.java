@@ -248,8 +248,8 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setNodeStep(parameterStep);
       Queries.addSortOrders(query, "logdate", "DOWN");
       query.setMaxNumber(3);
-      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), String.valueOf(newsletterId));
-      SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), String.valueOf(userId));
+      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), newsletterId);
+      SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), userId);
       NodeList logs = query.getList();
       if (logs.size() < 2) {
          isLog = true;
@@ -278,8 +278,8 @@ public class NewsLetterStatisticCAOImpl implements NewsLetterStatisticCAO {
       query.setNodeStep(parameterStep);
       Queries.addSortOrders(query, "logdate", "DOWN");
       query.setMaxNumber(1);
-      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), Integer.valueOf(newsletterId));
-      SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), Integer.valueOf(userId));
+      SearchUtil.addEqualConstraint(query, logNodeManager.getField("newsletter"), newsletterId);
+      SearchUtil.addEqualConstraint(query, logNodeManager.getField("userid"), userId);
       FieldValueConstraint liConstraint = query.createConstraint((query.getStepField(logNodeManager.getField("bounches"))),
             FieldCompareConstraint.GREATER, Integer.valueOf(0));
       SearchUtil.addConstraint(query, liConstraint);
