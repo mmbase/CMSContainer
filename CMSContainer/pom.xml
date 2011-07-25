@@ -14,7 +14,7 @@ See http://www.MMBase.org/license
 	<parent>
 		<groupId>org.cmscontainer</groupId>
 		<artifactId>cmsc-parent</artifactId>
-		<version>1.8.8</version>
+		<version>1.8.9-SNAPSHOT</version>
 		<relativePath>maven-base/pom.xml</relativePath>
 	</parent>
 
@@ -23,7 +23,7 @@ See http://www.MMBase.org/license
 	<packaging>pom</packaging>
 
 	<properties>
-		<cmsc.version>1.8.8</cmsc.version>
+		<cmsc.version>1.8.9-SNAPSHOT</cmsc.version>
       <luceus.version>0.44</luceus.version>
       <lucene.version>2.4.1</lucene.version>
 	</properties>
