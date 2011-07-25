@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.cmscontainer.core</groupId>
         <artifactId>cmsc-core</artifactId>
-        <version>1.8.8</version>
+        <version>1.8.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>cmsc-servicemanagement</artifactId>
