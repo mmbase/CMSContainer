@@ -32,7 +32,7 @@ $transform.documentationHelper.getXML($transform.getJavaDoc($item))
       <firstname>Rudie</firstname>
       <surname>Ekkelenkamp</surname>
       <affiliation>
-        <orgname>Finalist IT Group</orgname>
+        <orgname>Finalist</orgname>
         <address>
                <street>Stationsplein 45</street>,
                <postcode>3013 AK </postcode>

@@ -14,13 +14,13 @@
 	<groupId>finalist</groupId>
 	<currentVersion>${application.version}</currentVersion>
 	<organization>
-		<name>Finalist IT Group</name>
+		<name>Finalist</name>
 		<url>http://www.finalist.com</url>
-		<logo>http://www.finalist.com/beeld-basis/logo-finalist.gif</logo>
+		<logo>http://www.finalist.nl/sites/all/themes/finalist/logo.png</logo>
 	</organization>
 	<inceptionYear>2007</inceptionYear>
 	<package>com.finalist</package>
-	<logo>http://www.finalist.com/beeld-basis/logo-finalist.gif</logo>
+	<logo>http://www.finalist.nl/sites/all/themes/finalist/logo.png</logo>
 	<shortDescription>CMS container</shortDescription>
 	<licenses>
 		<license>
@@ -28,13 +28,13 @@
 			<url>http://www.mozilla.org/MPL/</url>
 		</license>
 	</licenses>
-	<issueTrackingUrl>http://jira.finalist.com</issueTrackingUrl>
+	<issueTrackingUrl>https://jira.finalist.com/browse/CMSC</issueTrackingUrl>
 	<developers>
 		<developer>
 			<name>Nico Klasens</name>
 			<id>nklasens</id>
 			<email>nico@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>

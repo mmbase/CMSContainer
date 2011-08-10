@@ -1,5 +1,5 @@
 <%-- 
-Info http://jira.finalist.com/browse/NIJ-855
+Info https://jira.finalist.com/browse/NIJ-855
  --%>
 
 <%@page language="java" contentType="text/html;charset=UTF-8"%>
