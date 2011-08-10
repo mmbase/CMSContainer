@@ -23,7 +23,7 @@ See http://www.MMBase.org/license
 	<inceptionYear>2005</inceptionYear>
 	
 	<organization>
-		<name>Finalist IT Group</name>
+		<name>Finalist</name>
 		<url>http://www.finalist.com</url>
 	</organization>
 
@@ -42,7 +42,7 @@ See http://www.MMBase.org/license
 
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.finalist.com/browse/CMSC</url>
+    <url>https://jira.finalist.com/browse/CMSC</url>
   </issueManagement>
 
   <ciManagement>
@@ -86,7 +86,7 @@ See http://www.MMBase.org/license
 			<name>Nico Klasens</name>
 			<id>nklasens</id>
 			<email>nico@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>
@@ -94,7 +94,7 @@ See http://www.MMBase.org/license
 			<name>Freek Punt</name>
 			<id>fpunt</id>
 			<email>freek@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>

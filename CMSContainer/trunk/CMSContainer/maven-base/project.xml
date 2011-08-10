@@ -14,13 +14,13 @@
 	<groupId>finalist</groupId>
 	<currentVersion>${cmsc.version}</currentVersion>
 	<organization>
-		<name>Finalist IT Group</name>
+		<name>Finalist</name>
 		<url>http://www.finalist.com</url>
-		<logo>http://www.finalist.com/beeld-basis/logo-finalist.gif</logo>
+		<logo>http://www.finalist.nl/sites/all/themes/finalist/logo.png</logo>
 	</organization>
 	<inceptionYear>2005</inceptionYear>
 	<package>com.finalist</package>
-	<logo>http://www.finalist.com/beeld-basis/logo-finalist.gif</logo>
+	<logo>http://www.finalist.nl/sites/all/themes/finalist/logo.png</logo>
 	<shortDescription>CMS Container</shortDescription>
 	<licenses>
 		<license>
@@ -28,7 +28,7 @@
 			<url>http://www.mozilla.org/MPL/</url>
 		</license>
 	</licenses>
-	<issueTrackingUrl>http://jira.finalist.com/browse/CMSC</issueTrackingUrl>
+	<issueTrackingUrl>https://jira.finalist.com/browse/CMSC</issueTrackingUrl>
 	<repository>
 		<connection>scm:cvs:pserver:guest@cvs.mmbase.org:/var/cvs:contributions/CMSContainer</connection>
 		<developerConnection>scm:cvs:pserver:${maven.username}@cvs.mmbase.org:/var/cvs:contributions/CMSContainer</developerConnection>
@@ -39,7 +39,7 @@
 			<name>Nico Klasens</name>
 			<id>nklasens</id>
 			<email>nico@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>
@@ -47,7 +47,7 @@
 			<name>Wouter Heijke</name>
 			<id>wheijke</id>
 			<email>wouter@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>
@@ -55,7 +55,7 @@
 			<name>Diederick Lawson</name>
 			<id>dlawson</id>
 			<email>diederick@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>
@@ -63,7 +63,7 @@
 			<name>Freek Punt</name>
 			<id>fpunt</id>
 			<email>freek@finalist.com</email>
-			<organization>Finalist IT Group</organization>
+			<organization>Finalist</organization>
 			<url>http://www.finalist.com</url>
 			<timezone>1</timezone>
 		</developer>
