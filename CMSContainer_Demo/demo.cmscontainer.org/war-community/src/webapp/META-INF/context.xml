@@ -35,6 +35,7 @@
 		url="jdbc:mysql://localhost:3306/cmsc?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;useServerPrepStmts=false" />
 
     <Resource name="jdbc/Community" auth="Container" type="javax.sql.DataSource"
+		validationQuery="SELECT 1"
 		removeAbandoned="true" 
 		removeAbandonedTimeout="60"
 		logAbandoned="true" 
