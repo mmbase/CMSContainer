@@ -14,7 +14,7 @@ See http://www.MMBase.org/license
 	<parent>
 		<groupId>org.cmscontainer</groupId>
 		<artifactId>cmsc-parent</artifactId>
-		<version>1.8.9-SNAPSHOT</version>
+		<version>1.8.9</version>
 		<relativePath>maven-base/pom.xml</relativePath>
 	</parent>
 
