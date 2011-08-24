@@ -23,7 +23,7 @@ See http://www.MMBase.org/license
 	<packaging>pom</packaging>
 
 	<properties>
-		<cmsc.version>1.8.9-SNAPSHOT</cmsc.version>
+		<cmsc.version>1.8.9</cmsc.version>
       <luceus.version>0.44</luceus.version>
       <lucene.version>2.4.1</lucene.version>
 	</properties>
