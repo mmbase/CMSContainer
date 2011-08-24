@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+
+<wizard-schema id="subject">
+	<title xml:lang="nl">Flash applicatie</title>
+	<title xml:lang="en">Flash application</title>
+
+	<action include="config/flashmovie/create_flashmovie.xml" />
+	<action include="config/flashmovie/delete_flashmovie.xml" />
+	<action include="config/flashmovie/load_flashmovie.xml" />
+
+	<lists>
+		<optionlist include="config/option_lists/boolean.xml" />
+		<optionlist include="config/option_lists/Legend.xml" />
+		<optionlist include="config/option_lists/ImagePosition.xml" />
+		<optionlist include="config/option_lists/ImageCrop.xml" />
+	</lists>
+	<steps>
+		<step form-schema="edit_flashmovie" />
+	</steps>
+	<form-schema id="edit_flashmovie" extends="config/flashmovie/edit_flashmovie.xml" />
+</wizard-schema>
