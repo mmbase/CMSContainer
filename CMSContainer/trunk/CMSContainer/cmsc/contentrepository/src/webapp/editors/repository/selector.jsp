@@ -115,7 +115,7 @@
                <cmsc:rights nodeNumber="${trashNumber}" var="rolename"/>
                <c:if test="${rolename eq 'webmaster'}">
                   <li class="trashbin">
-                     <mm:countrelations id="contentNum"type="contentelement" searchdir="destination" role="contentrel"><mm:write write="false" /></mm:countrelations>
+                     <mm:countrelations id="contentNum" type="contentelement" searchdir="destination" role="contentrel"><mm:write write="false" /></mm:countrelations>
                      <mm:countrelations id="assetNum" type="assetelement" searchdir="source" role="creationrel"><mm:write write="false" /></mm:countrelations>
                      <a href="<mm:url page="../recyclebin/contenttrash.jsp"/>" target="content" >
                         <fmt:message key="selector.recyclebin" />
