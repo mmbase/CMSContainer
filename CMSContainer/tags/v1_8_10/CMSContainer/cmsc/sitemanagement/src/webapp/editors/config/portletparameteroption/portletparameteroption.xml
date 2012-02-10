@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+<wizard-schema id="portletparameteroption">
+    <title xml:lang="nl">Dynamische parameter</title>
+    <title xml:lang="en">Dynamic parameter</title>
+    <title xml:lang="zh">参数</title>
+
+    <action include="config/portletparameteroption/create_portletparameteroption.xml" />
+    <action include="config/portletparameteroption/delete_portletparameteroption.xml" />
+    <action include="config/portletparameteroption/load_portletparameteroption.xml" />
+
+    <lists include="config/option_lists/all_optionlists.xml" />
+    <lists>
+        <optionlist include="config/option_lists/portletparameteroptiontypes.xml" />
+    </lists>
+
+    <steps>
+        <step form-schema="edit_portletparameteroption" />
+    </steps>
+    <form-schema id="edit_portletparameteroption" extends="config/portletparameteroption/edit_portletparameteroption.xml" />
+</wizard-schema>
