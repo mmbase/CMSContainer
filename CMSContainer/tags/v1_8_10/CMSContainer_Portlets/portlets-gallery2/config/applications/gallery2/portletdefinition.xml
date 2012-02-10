@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<portletdefinition exportsource="jdbc:mysql://localhost/gallery2" timestamp="20090605171010">
-	<node number="102343" owner="default">
-		<title>Gallery2Portlet</title>
-		<description>Gallery2Portlet</description>
-		<definition>gallery2portlet</definition>
-		<type>multiple</type>
-	</node>
-</portletdefinition>
