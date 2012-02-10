@@ -48,7 +48,7 @@ public class SiteCacheLoader {
 
     public Map<String, PageTree> loadPageTreeMap() {
         Cloud cloud = getCloud();
-        Map<String, PageTree> newtrees = new HashMap<String, PageTree>();
+        Map<String, PageTree> newtrees = new LinkedHashMap<String, PageTree>(); //Guarantee the 'put' ordering
 
         List<NavigationItemManager> navigationManagers = getNavigationManagers();
         for (NavigationItemManager nim : navigationManagers) {
@@ -73,10 +73,8 @@ public class SiteCacheLoader {
         return newtrees;
     }
 
-    @SuppressWarnings("unchecked")
     private void loadTrees(Map<String, PageTree> newtrees, Cloud cloud, String nodeType, String fragmentField) {
-        NodeManager sitesManager = cloud.getNodeManager(nodeType);
-        NodeList sites = sitesManager.getList(sitesManager.createQuery());
+        NodeList sites = SiteUtil.getSites(cloud); 
         for (Iterator<Node> iter = sites.iterator(); iter.hasNext();) {
            Node siteNode = iter.next();
            int siteId = siteNode.getNumber();
@@ -85,7 +83,6 @@ public class SiteCacheLoader {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void loadNavigationItems(Cloud cloud, String nodeType, String fragmentField, Map<Integer, String> itemUrlFragments) {
         NodeManager manager = cloud.getNodeManager(nodeType);
 
