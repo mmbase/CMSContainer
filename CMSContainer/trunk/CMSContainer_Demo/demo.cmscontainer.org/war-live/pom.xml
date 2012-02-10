@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.cmscontainer.demos</groupId>
         <artifactId>cmsc-demo-base</artifactId>
-        <version>1.8.10-SNAPSHOT</version>
+        <version>1.8.10</version>
     </parent>
     
     <artifactId>cmsc-demo-live</artifactId>

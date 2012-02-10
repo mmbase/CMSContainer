@@ -14,7 +14,7 @@ See http://www.MMBase.org/license
   <artifactId>cmsc-parent</artifactId>
   <packaging>pom</packaging>
   <name>CMS Container Parent</name>
-  <version>1.8.10-SNAPSHOT</version>
+  <version>1.8.10</version>
 
   <description>
     CMS Container is an open source Content Management System.
