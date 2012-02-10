@@ -1,0 +1,1 @@
+build cleanbuild ..\..\CMSContainer_Demo\demo.cmscontainer.org && build deploy-tomcat ..\..\CMSContainer_Demo\demo.cmscontainer.org

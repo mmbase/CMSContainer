@@ -1,0 +1,33 @@
+Migration document:
+
+From version: 1.8.5
+To version: 1.8.6
+
+Name: Set cronjobs at run single instance only
+Goal: prevent multiple instances of cronjob classes
+Type: user action
+--- Start script ---
+update mm_cronjobs set m_type='1'; 
+update live_cronjobs set m_type='1';
+--- End script ---
+*
+*
+*
+
+
+Name: Compare project's possibly overwritten my-htmlarea.js file with CMSc version. CMSC-1721 and CMSC-1746 changed it
+Goal: add fixes to project
+Type:  manual action
+--- Start script ---
+- compare project's overwrites my-htmlarea.js near /war/src/webapp/mmbase/edit/wizard/xinha/my-htmlarea.js
+- take over fixes in CMSc to project!
+--- End script ---
+
+
+Name: MMBase upgrade to 1.9.5
+Goal: make your project also use the right jars.
+Type:  manual action
+--- Start script ---
+- Open your .classpath of your project
+- Replace "1.9.2-20091118" with "1.9.5" 
+--- End script ---
