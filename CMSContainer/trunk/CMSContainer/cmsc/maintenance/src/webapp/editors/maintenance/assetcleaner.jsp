@@ -122,6 +122,58 @@
                         </tr>
                     </mm:compare>
                 </mm:listnodes>
+                
+                <tr><td colspan="3">&nbsp;</td></tr>
+                <tr><th colspan="3">Onbereikbare URLs (ongebruikt)</th></tr>
+
+                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
+                    <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:compare referid="relations" value="0">
+                        <mm:field name="number" write="false" jspvar="number" />
+                        <tr valign="top">
+                            <td><input type="checkbox" name="delete" value="${number}" class="deletebox" /></td>
+                            <td>
+                                <a href="#" onclick="window.open('../resources/urlinfo.jsp?objectnumber=${number}','details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=500,left=430,top=23'); return false;">
+                                  <mm:field name="title">
+                                    <mm:isnotempty>
+                                      <mm:write />
+                                    </mm:isnotempty>
+                                    <mm:isempty>
+                                      Geen titel
+                                    </mm:isempty>
+                                </mm:field>
+                                </a>
+                            </td>
+                            <td align="right"><mm:field name="url" /></td>
+                        </tr>
+                    </mm:compare>
+                </mm:listnodes>
+                
+                <tr><td colspan="3">&nbsp;</td></tr>
+                <tr><th colspan="3">Onbereikbare URLs (gebruikt!!!)</th></tr>
+
+                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
+                    <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:compare referid="relations" value="0" inverse="true">
+                        <mm:field name="number" write="false" jspvar="number" />
+                        <tr valign="top">
+                            <td><input type="checkbox" name="delete" value="${number}" class="deletebox" /></td>
+                            <td>
+                                <a href="#" onclick="window.open('../resources/urlinfo.jsp?objectnumber=${number}','details','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=500,left=430,top=23'); return false;">
+                                  <mm:field name="title">
+                                    <mm:isnotempty>
+                                      <mm:write />
+                                    </mm:isnotempty>
+                                    <mm:isempty>
+                                      Geen titel
+                                    </mm:isempty>
+                                </mm:field>
+                                </a>
+                            </td>
+                            <td align="right"><mm:field name="url" /></td>
+                        </tr>
+                    </mm:compare>
+                </mm:listnodes>
 
             </table>
             <input type="submit" name="action" value="Verwijderen"/>
