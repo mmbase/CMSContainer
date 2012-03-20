@@ -75,6 +75,8 @@
                 </tr>
                 <mm:listnodes type="attachments" orderby="size" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
+                    <c:set var="relations" value="${relations + navRelations}"/>
                     <mm:compare referid="relations" value="0">
                         <mm:field name="number" write="false" jspvar="number" />
                         <tr>
@@ -101,6 +103,8 @@
 
                 <mm:listnodes type="images" orderby="filesize" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
+                    <c:set var="relations" value="${relations + navRelations}"/>
                     <mm:compare referid="relations" value="0">
                         <mm:field name="number" write="false" jspvar="number" />
                         <tr valign="top">
@@ -128,6 +132,8 @@
 
                 <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
+                    <c:set var="relations" value="${relations + navRelations}"/>
                     <mm:compare referid="relations" value="0">
                         <mm:field name="number" write="false" jspvar="number" />
                         <tr valign="top">
@@ -154,6 +160,8 @@
 
                 <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
+                    <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
+                    <c:set var="relations" value="${relations + navRelations}"/>
                     <mm:compare referid="relations" value="0" inverse="true">
                         <mm:field name="number" write="false" jspvar="number" />
                         <tr valign="top">
