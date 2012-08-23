@@ -185,6 +185,7 @@
 
             </table>
             <input type="submit" name="action" value="Verwijderen"/>
+            <input type="hidden" name="offset" value="${offset}"/>
         </form>
 
                 </div>
