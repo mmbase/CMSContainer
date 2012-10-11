@@ -59,8 +59,9 @@
 %>
 
 <mm:import externid="offset" jspvar="offset">0</mm:import>
+<mm:import externid="maxassets" jspvar="maxassets">150</mm:import>
 <form method="post">
-  Offset <input type="text" name="offset" value="${offset}"/>
+  Offset <input type="text" name="offset" value="${offset}"/> - Max-assets <input type="text" name="maxassets" value="${maxassets}"/>
   <input type="submit" name="action" value="Refresh"/><br/>
 </form>
 
@@ -73,7 +74,7 @@
                     <th>Titel</th>
                     <th width="100" align="right">Grootte</th>
                 </tr>
-                <mm:listnodes type="attachments" orderby="size" directions="DOWN" max="150" offset="${offset}">
+                <mm:listnodes type="attachments" orderby="size" directions="DOWN" max="${maxassets}" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
                     <c:set var="relations" value="${relations + navRelations}"/>
@@ -101,7 +102,7 @@
                 <tr><td colspan="3">&nbsp;</td></tr>
                 <tr><th colspan="3">Afbeeldingen</th></tr>
 
-                <mm:listnodes type="images" orderby="filesize" directions="DOWN" max="150" offset="${offset}">
+                <mm:listnodes type="images" orderby="filesize" directions="DOWN" max="${maxassets}" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
                     <c:set var="relations" value="${relations + navRelations}"/>
@@ -130,7 +131,7 @@
                 <tr><td colspan="3">&nbsp;</td></tr>
                 <tr><th colspan="3">Onbereikbare URLs (ongebruikt)</th></tr>
 
-                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
+                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="${maxassets}" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
                     <c:set var="relations" value="${relations + navRelations}"/>
@@ -158,7 +159,7 @@
                 <tr><td colspan="3">&nbsp;</td></tr>
                 <tr><th colspan="3">Onbereikbare URLs (gebruikt!!!)</th></tr>
 
-                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="150" offset="${offset}">
+                <mm:listnodes type="urls" constraints="valid = 0" orderby="lastmodifieddate" directions="DOWN" max="${maxassets}" offset="${offset}">
                     <mm:countrelations type="contentelement" write="false" jspvar="relations" />
                     <mm:countrelations type="navigationitem" write="false" jspvar="navRelations" />
                     <c:set var="relations" value="${relations + navRelations}"/>
@@ -186,6 +187,7 @@
             </table>
             <input type="submit" name="action" value="Verwijderen"/>
             <input type="hidden" name="offset" value="${offset}"/>
+            <input type="hidden" name="maxassets" value="${maxassets}"/>
         </form>
 
                 </div>
