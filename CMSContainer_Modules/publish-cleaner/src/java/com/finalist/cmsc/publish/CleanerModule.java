@@ -124,7 +124,7 @@ public class CleanerModule extends Module implements Runnable {
          NodeIterator ni = queryNodes.nodeIterator();
          while (ni.hasNext()) {
             Node element = ni.nextNode();
-            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") " + element.getNumber());
+            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") (content) " + element.getNumber());
             
             try {
                List<Node> nodes = new ArrayList<Node>();
@@ -133,7 +133,7 @@ public class CleanerModule extends Module implements Runnable {
                int i = 0;
                for (Node deleteNode : nodes) {
                   i++;
-                  log.debug(i+") Deleting expired node (" + deleteNode.getNodeManager().getName() + ") " + deleteNode.getNumber());
+                  log.info(i+") Deleting expired node (" + deleteNode.getNodeManager().getName() + ") (content) " + deleteNode.getNumber());
                   PublishManager.unLinkNode(deleteNode);
                   deleteNode.delete(false);
                }
@@ -161,7 +161,7 @@ public class CleanerModule extends Module implements Runnable {
          NodeIterator ni = queryNodes.nodeIterator();
          while (ni.hasNext()) {
             Node element = ni.nextNode();
-            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") " + element.getNumber());
+            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") (asset) " + element.getNumber());
             try {
                PublishManager.unLinkNode(element);
                element.delete(false);
@@ -189,7 +189,7 @@ public class CleanerModule extends Module implements Runnable {
          NodeIterator ni = queryNodes.nodeIterator();
          while (ni.hasNext()) {
             Node element = ni.nextNode();
-            log.info("Deleting expired node (" + element.getNodeManager().getName() + "} " + element.getNumber());
+            log.info("Deleting expired node (" + element.getNodeManager().getName() + ") (page) " + element.getNumber());
             try {
                deletePage(element);
             }
@@ -209,6 +209,7 @@ public class CleanerModule extends Module implements Runnable {
       NodeList pages = NavigationUtil.getChildren(element);
       for (Iterator<Node> iter = pages.iterator(); iter.hasNext();) {
          Node childPage = iter.next();
+         log.info("Deleting expired node (" + childPage.getNodeManager().getName() + ") (child-page) " + childPage.getNumber());
          deletePage(childPage);
       }
 
