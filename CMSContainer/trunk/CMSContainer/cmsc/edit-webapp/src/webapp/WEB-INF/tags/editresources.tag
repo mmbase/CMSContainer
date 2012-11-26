@@ -18,8 +18,8 @@
           var editor_names = [ name ];
           var xinha_plugins = createDefaultPlugins;
           var xinha_config = createDefaultConfig();
-          var editor = HTMLArea.makeEditors(editor_names , xinha_config, xinha_plugins);
-          HTMLArea.startEditors(editor);
+          var editor = Xinha.makeEditors(editor_names, xinha_config, xinha_plugins);
+          Xinha.startEditors(editor);
 		}
 	</script>
 
