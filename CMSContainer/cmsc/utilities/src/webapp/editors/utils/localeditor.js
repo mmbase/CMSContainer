@@ -15,8 +15,9 @@ inplaceeditor_xinha_init = inplaceeditor_xinha_init ? inplaceeditor_xinha_init :
 //   'SuperClean',
    'TableOperations'
   ];
+  
   // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-  if(!HTMLArea.loadPlugins(xinha_plugins, inplaceeditor_xinha_init)) return;
+  if(!Xinha.loadPlugins(xinha_plugins, inplaceeditor_xinha_init)) return;
   xinha_config = createDefaultConfig();
 }
 
