@@ -120,6 +120,7 @@ public class CleanerModule extends Module implements Runnable {
       elementsQuery.setCachePolicy(CachePolicy.NEVER);
 
       NodeList queryNodes = ContentElementUtil.getNodeManager(cloud).getList(elementsQuery);
+      log.info("CleanerModule found " + queryNodes.size() + " nodes.");
       if (!queryNodes.isEmpty()) {
          NodeIterator ni = queryNodes.nodeIterator();
          while (ni.hasNext()) {
